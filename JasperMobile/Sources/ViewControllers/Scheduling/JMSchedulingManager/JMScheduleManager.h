@@ -33,15 +33,10 @@
 
 #import "JMResourcesListLoader.h"
 
-@class JSScheduleResponse;
-@class JSScheduleRequest;
-@class JSScheduleSummary;
-
 @interface JMScheduleManager : NSObject
-- (void)loadSchedulesWithCompletion:(void (^)(NSArray <JSScheduleSummary *> *, NSError *))completion;
-- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleSummary *> *, NSError *))completion;
-- (void)loadScheduleInfoWithScheduleId:(NSInteger)scheduleId completion:(void(^)(JSScheduleResponse *, NSError *))completion;
-- (void)createJobWithData:(JSScheduleResponse *)jobData completion:(void (^)(JSScheduleResponse *, NSError *))completion;
-- (void)updateSchedule:(JSScheduleResponse *)schedule completion:(void(^)(JSScheduleResponse *, NSError *))completion;
+- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleLookup *> *, NSError *))completion;
+- (void)loadScheduleInfoWithScheduleId:(NSInteger)scheduleId completion:(void(^)(JSScheduleMetadata *, NSError *))completion;
+- (void)createJobWithData:(JSScheduleMetadata *)jobData completion:(void (^)(JSScheduleMetadata *, NSError *))completion;
+- (void)updateSchedule:(JSScheduleMetadata *)schedule completion:(void(^)(JSScheduleMetadata *, NSError *))completion;
 - (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void (^)(NSError *))completion;
 @end

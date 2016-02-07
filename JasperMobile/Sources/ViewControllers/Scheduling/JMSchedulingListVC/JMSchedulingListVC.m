@@ -30,13 +30,10 @@
 #import "JMScheduleManager.h"
 #import "JMScheduleCell.h"
 #import "JMScheduleResourcesListVC.h"
-#import "JSScheduleResponse.h"
-#import "JSScheduleJobState.h"
-#import "JSScheduleSummary.h"
 #import "JMNewScheduleVC.h"
 
 @interface JMSchedulingListVC () <UITableViewDelegate, UITableViewDataSource, JMScheduleCellDelegate>
-@property (nonatomic, copy) NSArray <JSScheduleSummary *> *scheduleSummaries;
+@property (nonatomic, copy) NSArray <JSScheduleLookup *> *scheduleSummaries;
 @property (nonatomic) JMScheduleManager *schedulesManager;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) UIRefreshControl *refreshControl;
@@ -50,7 +47,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"schedules.title", nil);
+    self.title = self.resourceLookup ? self.resourceLookup.label : JMCustomLocalizedString(@"schedules.title", nil);
 
     self.view.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
 
@@ -88,7 +85,7 @@
     JMScheduleCell *jobCell = [tableView dequeueReusableCellWithIdentifier:@"JMScheduleCell" forIndexPath:indexPath];
     jobCell.delegate = self;
 
-    JSScheduleSummary *job = self.scheduleSummaries[indexPath.row];
+    JSScheduleLookup *job = self.scheduleSummaries[indexPath.row];
     jobCell.titleLabel.text = [NSString stringWithFormat:@"%@ (state: %@)", job.label, job.state.value];
     jobCell.detailLabel.text = [NSString stringWithFormat:@"%@ (next run: %@)", job.scheduleDescription ?: @"", [self dateStringFromDate:job.state.nextFireTime]];
 
@@ -102,7 +99,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    JSScheduleSummary *scheduleSummary = self.scheduleSummaries[indexPath.row];
+    JSScheduleLookup *scheduleSummary = self.scheduleSummaries[indexPath.row];
     [self editSchedule:scheduleSummary];
 }
 
@@ -110,7 +107,7 @@
 - (void)refresh
 {
     __weak __typeof(self) weakSelf = self;
-    [self.schedulesManager loadSchedulesForResourceLookup:self.resourceLookup completion:^(NSArray <JSScheduleResponse *> *jobs, NSError *error) {
+    [self.schedulesManager loadSchedulesForResourceLookup:self.resourceLookup completion:^(NSArray <JSScheduleLookup *> *jobs, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
         [strongSelf.refreshControl endRefreshing];
 
@@ -134,7 +131,7 @@
     }
 }
 
-- (void)editSchedule:(JSScheduleSummary *)schedule
+- (void)editSchedule:(JSScheduleLookup *)schedule
 {
     JMNewScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
     newScheduleVC.resourceLookup = self.resourceLookup;
@@ -143,7 +140,7 @@
     [self.navigationController pushViewController:newScheduleVC animated:YES];
 }
 
-- (void)deleteSchedule:(JSScheduleSummary *)scheduleSummary
+- (void)deleteSchedule:(JSScheduleLookup *)scheduleSummary
 {
     __weak __typeof(self) weakSelf = self;
     [self.schedulesManager deleteJobWithJobIdentifier:scheduleSummary.jobIdentifier
@@ -167,7 +164,7 @@
 - (void)scheduleCellDidReceiveDeleteScheduleAction:(JMScheduleCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    JSScheduleSummary *scheduleSummary = self.scheduleSummaries[indexPath.row];
+    JSScheduleLookup *scheduleSummary = self.scheduleSummaries[indexPath.row];
 
     [self deleteSchedule:scheduleSummary];
 }

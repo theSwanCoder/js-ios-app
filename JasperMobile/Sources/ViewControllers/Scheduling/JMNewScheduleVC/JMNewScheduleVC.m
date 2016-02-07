@@ -29,9 +29,6 @@
 #import "JMNewScheduleVC.h"
 #import "JMScheduleManager.h"
 #import "JMNewScheduleCell.h"
-#import "JSScheduleResponse.h"
-//#import "JSScheduleRequest.h"
-#import "JSScheduleSummary.h"
 
 NSString *const kJMJobLabel = @"kJMJobLabel";
 NSString *const kJMJobOutputFileURI = @"kJMJobOutputFileURI";
@@ -41,7 +38,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 @interface JMNewScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) JSScheduleResponse *scheduleResponse;
+@property (nonatomic, strong) JSScheduleMetadata *scheduleResponse;
 @property (nonatomic, strong) NSArray *jobRepresentationProperties;
 @property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @property (strong, nonatomic) JMScheduleManager *scheduleManager;
@@ -195,7 +192,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
                 case JMScheduleModeNew: {
 
                     [self.scheduleManager createJobWithData:self.scheduleResponse
-                                                 completion:^(JSScheduleResponse *job, NSError *error) {
+                                                 completion:^(JSScheduleMetadata *job, NSError *error) {
                                                     if (error) {
                                                          [JMUtils presentAlertControllerWithError:error completion:nil];
                                                      } else {
@@ -211,7 +208,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
                 case JMScheduleModeEdit: {
 
                     [self.scheduleManager updateSchedule:self.scheduleResponse
-                                              completion:^(JSScheduleResponse *job, NSError *error) {
+                                              completion:^(JSScheduleMetadata *job, NSError *error) {
                                                   if (error) {
                                                       [JMUtils presentAlertControllerWithError:error completion:nil];
                                                   } else {
@@ -261,7 +258,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     switch (self.mode) {
         case JMScheduleModeNew: {
             NSString *resourceFolder = [self.resourceLookup.uri stringByDeletingLastPathComponent];
-            self.scheduleResponse = [JSScheduleResponse new];
+            self.scheduleResponse = [JSScheduleMetadata new];
             self.scheduleResponse.reportUnitURI = self.resourceLookup.uri;
             self.scheduleResponse.label = self.resourceLookup.label;
             self.scheduleResponse.baseOutputFilename = [self filenameFromLabel:self.resourceLookup.label];
@@ -272,7 +269,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
         }
         case JMScheduleModeEdit: {
             // TODO: add loading indicator
-            [self.scheduleManager loadScheduleInfoWithScheduleId:self.scheduleSummary.jobIdentifier completion:^(JSScheduleResponse *schedule, NSError *error) {
+            [self.scheduleManager loadScheduleInfoWithScheduleId:self.scheduleSummary.jobIdentifier completion:^(JSScheduleMetadata *schedule, NSError *error) {
                 if (schedule) {
                     self.scheduleResponse = schedule;
                     [self.tableView reloadData];

@@ -31,8 +31,6 @@
 @since 2.3
 */
 
-@class JSScheduleResponse;
-@class JSScheduleSummary;
 typedef NS_ENUM(NSInteger, JMScheduleMode) {
     JMScheduleModeNew,
     JMScheduleModeEdit,
@@ -40,7 +38,7 @@ typedef NS_ENUM(NSInteger, JMScheduleMode) {
 
 @interface JMNewScheduleVC : JMBaseViewController
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, strong) JSScheduleSummary *scheduleSummary;
+@property (nonatomic, strong) JSScheduleLookup *scheduleSummary;
 @property (nonatomic, assign) JMScheduleMode mode;
 @property (nonatomic, copy) void(^exitBlock)(void);
 @end
