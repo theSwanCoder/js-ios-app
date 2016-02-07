@@ -22,7 +22,7 @@
 
 
 //
-//  JMSchedulingManager.h
+//  JMSchedulingListVC.h
 //  TIBCO JasperMobile
 //
 
@@ -30,15 +30,7 @@
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.3
 */
+#import "JMBaseCollectionViewController.h"
 
-#import "JMResourcesListLoader.h"
-
-@class JSScheduleJobResource;
-@class JSScheduleJob;
-
-@interface JMSchedulingManager : NSObject
-@property (nonatomic, readonly) NSArray *jobs;
-- (void)loadJobsWithCompletion:(void (^)(NSArray <JSScheduleJobResource *> *jobs, NSError *error))completion;
-- (void)createJobWithData:(JSScheduleJob *)jobData completion:(void (^)(JSScheduleJob *job, NSError *error))completion;
-- (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void (^)(NSError *error))completion;
+@interface JMSchedulingListVC : JMBaseViewController
 @end

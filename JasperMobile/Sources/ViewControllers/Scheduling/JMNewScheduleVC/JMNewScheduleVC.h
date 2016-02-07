@@ -22,7 +22,7 @@
 
 
 //
-//  JMNewJobCell.h
+//  JMNewScheduleVC.h
 //  TIBCO JasperMobile
 //
 
@@ -31,15 +31,14 @@
 @since 2.3
 */
 
-@protocol JMNewJobCellDelegate;
+typedef NS_ENUM(NSInteger, JMScheduleMode) {
+    JMScheduleModeNew,
+    JMScheduleModeEdit,
+};
 
-@interface JMNewJobCell : UITableViewCell <UITextFieldDelegate>
-@property(nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UITextField *valueTextField;
-@property (nonatomic, weak) NSObject <JMNewJobCellDelegate> *delegate;
-@end
-
-@protocol JMNewJobCellDelegate
-@optional
-- (void)jobCell:(JMNewJobCell *)cell didChangeValue:(NSString *)newValue;
+@interface JMNewScheduleVC : JMBaseViewController
+@property (nonatomic, strong) JSResourceLookup *resourceLookup;
+@property (nonatomic, strong) JSScheduleLookup *scheduleSummary;
+@property (nonatomic, assign) JMScheduleMode mode;
+@property (nonatomic, copy) void(^exitBlock)(void);
 @end

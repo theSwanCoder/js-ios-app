@@ -22,7 +22,7 @@
 
 
 //
-//  JMNewJobVC.h
+//  JMScheduleCell.h
 //  TIBCO JasperMobile
 //
 
@@ -31,7 +31,16 @@
 @since 2.3
 */
 
-@interface JMNewJobVC : JMBaseViewController
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, copy) void(^exitBlock)(void);
+@protocol JMScheduleCellDelegate;
+
+@interface JMScheduleCell : UITableViewCell
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *detailLabel;
+@property (nonatomic, weak) NSObject <JMScheduleCellDelegate> *delegate;
+@end
+
+@protocol JMScheduleCellDelegate
+@optional
+- (void)scheduleCellDidReceiveDeleteScheduleAction:(JMScheduleCell *)cell;
+- (void)scheduleCellDidReceiveEditScheduleAction:(JMScheduleCell *)cell;
 @end

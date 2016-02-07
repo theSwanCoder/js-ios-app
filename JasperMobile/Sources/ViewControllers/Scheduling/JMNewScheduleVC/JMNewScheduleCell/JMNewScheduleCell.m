@@ -22,14 +22,14 @@
 
 
 //
-//  JMNewJobCell.m
+//  JMNewScheduleCell.m
 //  TIBCO JasperMobile
 //
 
-#import "JMNewJobCell.h"
+#import "JMNewScheduleCell.h"
 
 
-@implementation JMNewJobCell
+@implementation JMNewScheduleCell
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -47,7 +47,7 @@
     if (range.length == 1) {
         // remove symbol
         changedString = [currentString stringByReplacingCharactersInRange:range withString:@""];
-    } else if (range.location == 0 && range.length > 1) {
+    } else if (range.location == 0 && range.length == string.length) {
         // autocompleted text
         changedString = string;
     } else {

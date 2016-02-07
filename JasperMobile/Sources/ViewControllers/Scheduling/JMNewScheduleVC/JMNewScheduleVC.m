@@ -22,14 +22,13 @@
 
 
 //
-//  JMNewJobVC.m
+//  JMNewScheduleVC.m
 //  TIBCO JasperMobile
 //
 
-#import "JMNewJobVC.h"
-#import "JMSchedulingManager.h"
-#import "JSScheduleJob.h"
-#import "JMNewJobCell.h"
+#import "JMNewScheduleVC.h"
+#import "JMScheduleManager.h"
+#import "JMNewScheduleCell.h"
 
 NSString *const kJMJobLabel = @"kJMJobLabel";
 NSString *const kJMJobOutputFileURI = @"kJMJobOutputFileURI";
@@ -37,21 +36,34 @@ NSString *const kJMJobOutputFolderURI = @"kJMJobOutputFolderURI";
 NSString *const kJMJobFormat = @"kJMJobFormat";
 NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
-@interface JMNewJobVC() <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate>
+@interface JMNewScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) JSScheduleJob *job;
+@property (nonatomic, strong) JSScheduleMetadata *scheduleResponse;
 @property (nonatomic, strong) NSArray *jobRepresentationProperties;
 @property (weak, nonatomic) IBOutlet UIButton *createJobButton;
+@property (strong, nonatomic) JMScheduleManager *scheduleManager;
 @end
 
-@implementation JMNewJobVC
+@implementation JMNewScheduleVC
 
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"New Job";
+
+    if (self.mode == JMScheduleModeNew) {
+        self.title = @"New Schedule";
+        [self.createJobButton setTitle:JMCustomLocalizedString(@"schedules.new.job.button.create", nil)
+                              forState:UIControlStateNormal];
+    } else if (self.mode == JMScheduleModeEdit) {
+        self.title = @"Edit Schedule";
+        [self.createJobButton setTitle:@"Update"
+                              forState:UIControlStateNormal];
+    }
+
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+
+    self.scheduleManager = [JMScheduleManager new];
 
     // date text field
     UIDatePicker *datePicker = [[UIDatePicker alloc]init];
@@ -60,33 +72,23 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
                    action:@selector(updateDate:)
          forControlEvents:UIControlEventValueChanged];
 
-    [self createJobRepresentation];
-    NSString *resourceURI = self.resourceLookup.uri;
-    NSString *resourceFolder = [resourceURI stringByDeletingLastPathComponent];
-    self.job = [JSScheduleJob jobWithReportURI:self.resourceLookup.uri
-                                         label:self.resourceLookup.label
-                                outputFilename:nil
-                                     folderURI:resourceFolder
-                                       formats:nil
-                                     startDate:nil];
-    [self.createJobButton setTitle:JMCustomLocalizedString(@"schedules.new.job.button.create", nil)
-                          forState:UIControlStateNormal];
+    [self createScheduleRepresentationProperties];
+
+    [self createScheduleRepresentation];
 }
 
 #pragma mark - Actions
 - (void)updateDate:(UIDatePicker *)sender
 {
-    self.job.startDate = sender.date;
-    // reset trigger
-    self.job.trigger = nil;
+    self.scheduleResponse.trigger.startDate = sender.date;
 
     // find text field for date
     NSInteger rowDateCell = [self.jobRepresentationProperties indexOfObject:kJMJobStartDate];
     NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell inSection:0];
-    JMNewJobCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
+    JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
 
     // set new value
-    dateCell.valueTextField.text = [self dateStringFromDate:self.job.startDate];
+    dateCell.valueTextField.text = [self dateStringFromDate:self.scheduleResponse.trigger.startDate];
 }
 
 - (void)setDate:(UIButton *)sender
@@ -94,10 +96,10 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     // find text field for date
     NSInteger rowDateCell = [self.jobRepresentationProperties indexOfObject:kJMJobStartDate];
     NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell inSection:0];
-    JMNewJobCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
+    JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
 
     // set new value
-    dateCell.valueTextField.text = [self dateStringFromDate:self.job.startDate];
+    dateCell.valueTextField.text = [self dateStringFromDate:self.scheduleResponse.trigger.startDate];
     [dateCell.valueTextField resignFirstResponder];
 }
 
@@ -116,13 +118,13 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
     NSInteger rowFormatCell = [self.jobRepresentationProperties indexOfObject:kJMJobFormat];
     NSIndexPath *formatCellIndexPath = [NSIndexPath indexPathForRow:rowFormatCell inSection:0];
-    JMNewJobCell *formatCell = [self.tableView cellForRowAtIndexPath:formatCellIndexPath];
+    JMNewScheduleCell *formatCell = [self.tableView cellForRowAtIndexPath:formatCellIndexPath];
 
     for (NSString *format in availableFormats) {
         [alertController addActionWithLocalizedTitle:format style:UIAlertActionStyleDefault
                                              handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                 self.job.outputFormats = @[format.uppercaseString];
-                                                 formatCell.valueTextField.text = self.job.outputFormats.firstObject;
+                                                 self.scheduleResponse.outputFormats = @[format.uppercaseString];
+                                                 formatCell.valueTextField.text = self.scheduleResponse.outputFormats.firstObject;
                                              }];
     }
 
@@ -148,7 +150,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMNewJobCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JMNewJobCell" forIndexPath:indexPath];
+    JMNewScheduleCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
 
     NSString *jobProperty = self.jobRepresentationProperties[indexPath.row];
 
@@ -156,20 +158,20 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     NSString *propertyValue;
     if ([jobProperty isEqualToString:kJMJobLabel]) {
         propertyTitle = JMCustomLocalizedString(@"schedules.new.job.label", nil);
-        propertyValue = self.job.label;
+        propertyValue = self.scheduleResponse.label;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
         propertyTitle = JMCustomLocalizedString(@"schedules.new.job.output.file.name", nil);
-        propertyValue = self.job.baseOutputFilename;
+        propertyValue = self.scheduleResponse.baseOutputFilename;
     }  else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
         propertyTitle = JMCustomLocalizedString(@"schedules.new.job.output.file.path", nil);
-        propertyValue = self.job.folderURI;
+        propertyValue = self.scheduleResponse.folderURI;
     } else if ([jobProperty isEqualToString:kJMJobFormat]) {
         propertyTitle = JMCustomLocalizedString(@"schedules.new.job.format", nil);
-        propertyValue = self.job.outputFormats.firstObject;
+        propertyValue = self.scheduleResponse.outputFormats.firstObject;
         cell.valueTextField.userInteractionEnabled = NO;
     } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
         propertyTitle = JMCustomLocalizedString(@"schedules.new.job.start.date", nil);
-        propertyValue = [self dateStringFromDate:self.job.startDate];
+        propertyValue = [self dateStringFromDate:self.scheduleResponse.trigger.startDate];
         [self setupToolbarForTextField:cell.valueTextField];
     }
 
@@ -186,16 +188,39 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 {
     [self validateJobWithCompletion:^(BOOL success, NSError *error) {
         if (success) {
-            [self createJobWithCompletion:^(NSError *error) {
-                if (error) {
-                    [JMUtils presentAlertControllerWithError:error completion:nil];
-                } else {
-                    if (self.exitBlock) {
-                        self.exitBlock();
-                    }
-                    [self.navigationController popViewControllerAnimated:YES];
+            switch (self.mode) {
+                case JMScheduleModeNew: {
+
+                    [self.scheduleManager createJobWithData:self.scheduleResponse
+                                                 completion:^(JSScheduleMetadata *job, NSError *error) {
+                                                    if (error) {
+                                                         [JMUtils presentAlertControllerWithError:error completion:nil];
+                                                     } else {
+                                                         if (self.exitBlock) {
+                                                             self.exitBlock();
+                                                         }
+                                                        [self.navigationController popViewControllerAnimated:YES];
+                                                     }
+                                                 }];
+
+                    break;
                 }
-            }];
+                case JMScheduleModeEdit: {
+
+                    [self.scheduleManager updateSchedule:self.scheduleResponse
+                                              completion:^(JSScheduleMetadata *job, NSError *error) {
+                                                  if (error) {
+                                                      [JMUtils presentAlertControllerWithError:error completion:nil];
+                                                  } else {
+                                                      if (self.exitBlock) {
+                                                          self.exitBlock();
+                                                      }
+                                                      [self.navigationController popViewControllerAnimated:YES];
+                                                  }
+                                              }];
+                    break;
+                }
+            }
         } else {
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
@@ -203,33 +228,21 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 }
 
 #pragma mark - JMNewJobCellDelegate
-- (void)jobCell:(JMNewJobCell *)cell didChangeValue:(NSString *)newValue
+- (void)jobCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     NSString *jobProperty = self.jobRepresentationProperties[indexPath.row];
     if ([jobProperty isEqualToString:kJMJobLabel]) {
-        self.job.label = newValue;
+        self.scheduleResponse.label = newValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
-        self.job.baseOutputFilename = newValue;
+        self.scheduleResponse.baseOutputFilename = newValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
-        self.job.folderURI = newValue;
+        self.scheduleResponse.folderURI = newValue;
     }
 }
 
 #pragma mark - Helpers
-- (void)createJobWithCompletion:(void(^)(NSError *error))completion
-{
-    if (!completion) {
-        return;
-    }
-
-    JMSchedulingManager *jobsManager = [JMSchedulingManager new];
-    [jobsManager createJobWithData:self.job completion:^(JSScheduleJob *job, NSError *error) {
-        completion(error);
-    }];
-}
-
-- (void)createJobRepresentation
+- (void)createScheduleRepresentationProperties
 {
     self.jobRepresentationProperties = @[
             kJMJobLabel,
@@ -238,6 +251,35 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
             kJMJobFormat,
             kJMJobStartDate
     ];
+}
+
+- (void)createScheduleRepresentation
+{
+    switch (self.mode) {
+        case JMScheduleModeNew: {
+            NSString *resourceFolder = [self.resourceLookup.uri stringByDeletingLastPathComponent];
+            self.scheduleResponse = [JSScheduleMetadata new];
+            self.scheduleResponse.reportUnitURI = self.resourceLookup.uri;
+            self.scheduleResponse.label = self.resourceLookup.label;
+            self.scheduleResponse.baseOutputFilename = [self filenameFromLabel:self.resourceLookup.label];
+            self.scheduleResponse.folderURI = resourceFolder;
+            self.scheduleResponse.outputFormats = [self defaultFormats];
+            self.scheduleResponse.trigger.startDate = [NSDate date];
+            break;
+        }
+        case JMScheduleModeEdit: {
+            // TODO: add loading indicator
+            [self.scheduleManager loadScheduleInfoWithScheduleId:self.scheduleSummary.jobIdentifier completion:^(JSScheduleMetadata *schedule, NSError *error) {
+                if (schedule) {
+                    self.scheduleResponse = schedule;
+                    [self.tableView reloadData];
+                } else {
+                    [JMUtils presentAlertControllerWithError:error completion:nil];
+                }
+            }];
+            break;
+        }
+    }
 }
 
 - (NSString *)dateStringFromDate:(NSDate *)date
@@ -278,9 +320,9 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
     NSString *message;
 
-    if (!self.job.baseOutputFilename) {
+    if (!self.scheduleResponse.baseOutputFilename) {
         message = JMCustomLocalizedString(@"schedules.error.empty.filename", nil);
-    } else if (!self.job.outputFormats.count) {
+    } else if (!self.scheduleResponse.outputFormats.count) {
         message = JMCustomLocalizedString(@"schedules.error.empty.format", nil);
     }
 
@@ -292,6 +334,17 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     } else {
         completion(YES, nil);
     }
+}
+
+- (NSArray *)defaultFormats
+{
+    return @[kJS_CONTENT_TYPE_PDF.uppercaseString];
+}
+
+- (NSString *)filenameFromLabel:(NSString *)label
+{
+    NSString *filename = [label stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    return filename;
 }
 
 @end

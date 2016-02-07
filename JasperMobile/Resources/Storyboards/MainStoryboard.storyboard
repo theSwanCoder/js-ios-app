@@ -807,10 +807,10 @@
             </objects>
             <point key="canvasLocation" x="-1247" y="-1559"/>
         </scene>
-        <!--SchedulingVC-->
+        <!--Scheduling ListVC-->
         <scene sceneID="SBY-Uz-NA1">
             <objects>
-                <viewController storyboardIdentifier="JMSchedulingVC" id="i2c-8Z-AhN" customClass="JMSchedulingVC" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMSchedulingListVC" id="i2c-8Z-AhN" customClass="JMSchedulingListVC" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mG4-X3-HGD"/>
                         <viewControllerLayoutGuide type="bottom" id="wPR-fb-MzC"/>
@@ -835,7 +835,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMJobCell" rowHeight="70" id="SlF-FM-HC0" customClass="JMJobCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMScheduleCell" rowHeight="70" id="SlF-FM-HC0" customClass="JMScheduleCell">
                                         <rect key="frame" x="0.0" y="18" width="600" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SlF-FM-HC0" id="nhD-vx-F8L">
@@ -924,10 +924,10 @@
             </objects>
             <point key="canvasLocation" x="-490" y="-2273"/>
         </scene>
-        <!--New JobVC-->
+        <!--New ScheduleVC-->
         <scene sceneID="340-MM-7JM">
             <objects>
-                <viewController storyboardIdentifier="JMNewJobVC" id="Rfc-7O-lBF" customClass="JMNewJobVC" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMNewScheduleVC" id="Rfc-7O-lBF" customClass="JMNewScheduleVC" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gIg-cO-5KQ"/>
                         <viewControllerLayoutGuide type="bottom" id="fID-P4-Zex"/>
@@ -946,7 +946,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMNewJobCell" id="MKQ-VM-tbH" customClass="JMNewJobCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMNewScheduleCell" id="MKQ-VM-tbH" customClass="JMNewScheduleCell">
                                         <rect key="frame" x="0.0" y="18" width="580" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MKQ-VM-tbH" id="S6T-zm-Iq6">
