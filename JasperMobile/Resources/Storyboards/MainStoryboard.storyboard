@@ -807,10 +807,10 @@
             </objects>
             <point key="canvasLocation" x="-1247" y="-1559"/>
         </scene>
-        <!--Scheduling ListVC-->
+        <!--Schedules ListVC-->
         <scene sceneID="SBY-Uz-NA1">
             <objects>
-                <viewController storyboardIdentifier="JMSchedulingListVC" id="i2c-8Z-AhN" customClass="JMSchedulingListVC" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMSchedulingListVC" id="i2c-8Z-AhN" customClass="JMSchedulesListVC" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mG4-X3-HGD"/>
                         <viewControllerLayoutGuide type="bottom" id="wPR-fb-MzC"/>

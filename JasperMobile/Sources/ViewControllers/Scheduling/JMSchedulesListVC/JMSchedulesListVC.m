@@ -22,16 +22,16 @@
 
 
 //
-//  JMSchedulingListVC.h
+//  JMSchedulesListVC.h
 //  TIBCO JasperMobile
 //
 
-#import "JMSchedulingListVC.h"
+#import "JMSchedulesListVC.h"
 #import "JMScheduleManager.h"
 #import "JMScheduleCell.h"
 #import "JMNewScheduleVC.h"
 
-@interface JMSchedulingListVC () <UITableViewDelegate, UITableViewDataSource, JMScheduleCellDelegate>
+@interface JMSchedulesListVC () <UITableViewDelegate, UITableViewDataSource, JMScheduleCellDelegate>
 @property (nonatomic, copy) NSArray <JSScheduleLookup *> *scheduleSummaries;
 @property (nonatomic) JMScheduleManager *schedulesManager;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -39,7 +39,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *noJobsLabel;
 @end
 
-@implementation JMSchedulingListVC
+@implementation JMSchedulesListVC
 
 #pragma mark - LifeCycle
 

@@ -22,7 +22,7 @@
 
 
 //
-//  JMSchedulingListVC.h
+//  JMSchedulesListVC.h
 //  TIBCO JasperMobile
 //
 
@@ -32,5 +32,5 @@
 */
 #import "JMBaseCollectionViewController.h"
 
-@interface JMSchedulingListVC : JMBaseViewController
+@interface JMSchedulesListVC : JMBaseViewController
 @end
