@@ -92,9 +92,10 @@
         action = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn ;
     }
 
-    if ([self isExternalScreenAvailable]) {
-        action |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
-    }
+    // TODO: We need come up with another approach to control a resource which is being presented on tv.
+//    if ([self isExternalScreenAvailable]) {
+//        action |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+//    }
     return action;
 }
 
