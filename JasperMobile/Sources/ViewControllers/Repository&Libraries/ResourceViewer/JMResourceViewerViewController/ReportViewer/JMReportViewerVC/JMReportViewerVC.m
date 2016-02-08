@@ -197,9 +197,16 @@
     }
 
     CGFloat initialScaleViewport = 0.75;
-    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-    if (isCompactWidth) {
-        initialScaleViewport = 0.25;
+    if ([JMUtils isSupportVisualize]) {
+        BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+        if (isCompactWidth) {
+            initialScaleViewport = 0.25;
+        }
+    } else {
+        initialScaleViewport = 2;
+        if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
+            initialScaleViewport = 1;
+        }
     }
 
     if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
@@ -452,15 +459,23 @@
         if (success) {
             toolbar.enable = YES;
             [strongSelf.report updateCurrentPage:toPage];
-            // fix an issue in webview after zooming and changing page (black areas)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
-                runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
-                [((JMJavascriptNativeBridge *)[strongSelf reportLoader].bridge) sendRequest:runRequest];
-            });
-            
-            if ([strongSelf isContentOnTV]) {
+            if (![JMUtils isSupportVisualize]) {
+                // fix an issue in webview after zooming and changing page (black areas)
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if ([strongSelf isContentOnTV]) {
+                        if ([strongSelf.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+                            [strongSelf.reportLoader updateViewportScaleFactorWithValue:3];
+                        }
+                    } else {
+                        JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
+                        runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
+                        [((JMJavascriptNativeBridge *)[strongSelf reportLoader].bridge) sendRequest:runRequest];
+                    }
+                });
+            }
+
+            if ([strongSelf isContentOnTV]) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [strongSelf.controlsViewController updateInterface];
                 });
             }
@@ -834,9 +849,15 @@
 #pragma mark - Work with external screen
 - (UIView *)viewToShowOnExternalWindow
 {
-    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.reportLoader updateViewportScaleFactorWithValue:0.75];
+    CGFloat initialScaleViewport = 0.75;
+    if (![JMUtils isSupportVisualize]) {
+        initialScaleViewport = 3;
     }
+
+    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+    }
+
     UIView *view = [UIView new];
     UIView *reportView = self.webView;
 

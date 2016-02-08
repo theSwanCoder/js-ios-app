@@ -30,6 +30,7 @@
 #import "NSObject+Additions.h"
 #import "JMReportViewerVC.h"
 #import "JMJavascriptNativeBridgeProtocol.h"
+#import "JMJavascriptRequest.h"
 
 @interface JSReportLoader (LoadHTML)
 - (void)startLoadReportHTML;
@@ -62,6 +63,14 @@
     [self.bridge reset];
 }
 
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"changeInitialZoom(%@);";
+    request.parametersAsString = @(scaleFactor).stringValue;
+    [self.bridge sendRequest:request];
+}
+
 #pragma mark - Private API
 - (void)startLoadReportHTML
 {
@@ -72,11 +81,12 @@
     if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
         initialZoom = 1;
     }
-    jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"INITIAL_ZOOM" withString:@(initialZoom).stringValue];
     [self.bridge injectJSInitCode:jsMobile];
     [self.bridge startLoadHTMLString:self.report.HTMLString
                              baseURL:[NSURL URLWithString:self.report.baseURLString]];
-    
+
+    [self updateViewportScaleFactorWithValue:initialZoom];
+
     [super startLoadReportHTML];
 }
 
