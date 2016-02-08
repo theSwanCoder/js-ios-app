@@ -302,7 +302,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 {
     CGFloat homeScreenImageTopConstantStartValue = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? 15 : 40;
     CGFloat serverScreenImageTopConstantStartValue = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? 15 : 40;
-    CGFloat titleViewTopConstant = -215;
+    CGFloat titleViewTopConstant = -180;
 
     switch (introPage) {
         case JMOnboardIntroPageWelcome: {
@@ -342,8 +342,13 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             self.serverScreenImageWidthConstraint.constant = (CGFloat) (self.serverScreenImage.image.size.width * 0.2);
 
             // reports screens
-            self.reportScreenIpadCenterXConstraint.constant = (CGFloat) (self.reportScreenIpadImage.image.size.width / 6.0);
-            self.reportScreenIphoneCenterXConstraint.constant = -self.reportScreenIphoneImage.image.size.width;
+            if ([JMUtils isIphone]) {
+                self.reportScreenIpadCenterXConstraint.constant = 50;
+                self.reportScreenIphoneCenterXConstraint.constant = - (CGFloat) self.reportScreenIphoneImage.image.size.width / 2;
+            } else {
+                self.reportScreenIpadCenterXConstraint.constant = (CGFloat) (self.reportScreenIpadImage.image.size.width / 6.0);
+                self.reportScreenIphoneCenterXConstraint.constant = -self.reportScreenIphoneImage.image.size.width;
+            }
 
             break;
         }
@@ -481,7 +486,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 
     if (velocity.y < 0) { // move up
         if (self.homeScreenImageTopConstraint.constant < homeScreenImageTopConstantMaxValue) {
-            self.homeScreenImageTopConstraint.constant += kDefaultStepValue;
+            self.homeScreenImageTopConstraint.constant += kDefaultStepValue * 2;
 
             self.homeScreenImageWidthConstraint.constant -= kDefaultStepValue;
             self.homeScreenImageHeightConstraint.constant = self.homeScreenImageWidthConstraint.constant * k;
@@ -608,7 +613,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
         }
     } else { // move down
         if (self.serverScreenImageTopConstraint.constant < serverScreenImageTopConstantMaxValue) {
-            self.serverScreenImageTopConstraint.constant += kDefaultStepValue;
+            self.serverScreenImageTopConstraint.constant += kDefaultStepValue * 2;
 
             self.serverScreenImageWidthConstraint.constant -= kDefaultStepValue;
             self.serverScreenImageHeightConstraint.constant = self.serverScreenImageWidthConstraint.constant * k;
