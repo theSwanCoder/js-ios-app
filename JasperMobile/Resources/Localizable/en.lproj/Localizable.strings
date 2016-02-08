@@ -306,7 +306,8 @@
 "schedules.title" = "Schedules";
 "schedules.no.jobs.message" = "No jobs are scheduled.";
 // New Job
-"schedules.new.job.label" = "Schedule Label";
+"schedules.new.job.label" = "Label";
+"schedules.new.job.description" = "Description";
 "schedules.new.job.button.create" = "Create Schedule";
 "schedules.new.job.output.file.name" = "Output File Name";
 "schedules.new.job.output.file.path" = "Repository Output Folder";

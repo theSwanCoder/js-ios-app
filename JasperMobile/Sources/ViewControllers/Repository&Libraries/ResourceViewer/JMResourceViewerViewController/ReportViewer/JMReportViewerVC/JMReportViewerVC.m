@@ -918,8 +918,9 @@
 - (void)scheduleReport {
     JMNewScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
     newJobVC.resourceLookup = self.resourceLookup;
-    newJobVC.exitBlock = ^() {
-
+    newJobVC.exitBlock = ^(void){
+        [ALToastView toastInView:self.navigationController.view
+                        withText:JMCustomLocalizedString(@"Schedule was created successfully.", nil)];
     };
     [self.navigationController pushViewController:newJobVC animated:YES];
 }

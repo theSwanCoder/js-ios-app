@@ -30,6 +30,7 @@
 #import "JMScheduleManager.h"
 #import "JMScheduleCell.h"
 #import "JMNewScheduleVC.h"
+#import "ALToastView.h"
 
 @interface JMSchedulesListVC () <UITableViewDelegate, UITableViewDataSource, JMScheduleCellDelegate>
 @property (nonatomic, copy) NSArray <JSScheduleLookup *> *scheduleSummaries;
@@ -122,6 +123,10 @@
     JMNewScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
     newScheduleVC.scheduleSummary = schedule;
     newScheduleVC.mode = JMScheduleModeEdit;
+    newScheduleVC.exitBlock = ^(void){
+            [ALToastView toastInView:self.navigationController.view
+                            withText:JMCustomLocalizedString(@"Schedule was updated successfully.", nil)];
+    };
     [self.navigationController pushViewController:newScheduleVC animated:YES];
 }
 

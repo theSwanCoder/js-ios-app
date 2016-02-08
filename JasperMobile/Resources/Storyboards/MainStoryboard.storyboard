@@ -936,18 +936,18 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="r35-PB-Kd6">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="r35-PB-Kd6">
                                 <rect key="frame" x="10" y="10" width="580" height="456"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="9S0-B7-cZO">
-                                    <rect key="frame" x="0.0" y="78" width="580" height="0.0"/>
+                                    <rect key="frame" x="0.0" y="148" width="580" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMNewScheduleCell" id="MKQ-VM-tbH" customClass="JMNewScheduleCell">
-                                        <rect key="frame" x="0.0" y="18" width="580" height="60"/>
+                                        <rect key="frame" x="0.0" y="50" width="580" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MKQ-VM-tbH" id="S6T-zm-Iq6">
                                             <rect key="frame" x="0.0" y="0.0" width="580" height="59"/>
@@ -982,6 +982,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="titleLabel" destination="Bc3-If-IeA" id="1nq-XG-f5W"/>
                                             <outlet property="valueTextField" destination="3S9-aJ-DWe" id="Efb-YH-29D"/>
@@ -3022,7 +3023,7 @@ your business wherever you are.</string>
         <image name="unchecked_checkbox" width="36" height="36"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="oxr-uc-6Tm"/>
-        <segue reference="u8A-tJ-Bk9"/>
+        <segue reference="jnS-QV-dMA"/>
+        <segue reference="wE2-un-rgX"/>
     </inferredMetricsTieBreakers>
 </document>
