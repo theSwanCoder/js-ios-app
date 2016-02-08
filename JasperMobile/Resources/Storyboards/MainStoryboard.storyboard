@@ -1529,7 +1529,7 @@ your business wherever you are.</string>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="73" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="oKw-Zu-Tu2">
                                 <rect key="frame" x="10" y="10" width="580" height="456"/>
-                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NumberCell" id="zwN-Xt-HZN" customClass="JMNumberInputControlCell">
                                         <rect key="frame" x="0.0" y="50" width="580" height="73"/>
@@ -1943,11 +1943,18 @@ your business wherever you are.</string>
                                 <rect key="frame" x="10" y="476" width="580" height="50"/>
                                 <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="LVR-OW-QRc"/>
+                                    <constraint firstAttribute="height" constant="50" id="LVR-OW-QRc">
+                                        <variation key="widthClass=compact" constant="30"/>
+                                    </constraint>
                                 </constraints>
                                 <state key="normal" title="Button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="applyButtonDidTap:" destination="lfF-9E-neQ" eventType="touchUpInside" id="akZ-Ic-Jtf"/>
                                 </connections>
@@ -3015,7 +3022,7 @@ your business wherever you are.</string>
         <image name="unchecked_checkbox" width="36" height="36"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="u8A-tJ-Bk9"/>
         <segue reference="oxr-uc-6Tm"/>
+        <segue reference="u8A-tJ-Bk9"/>
     </inferredMetricsTieBreakers>
 </document>
