@@ -133,18 +133,9 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
             if (error) {
                 [JMUtils presentAlertControllerWithError:error completion:nil];
             } else {
-                // verify https scheme
-                NSString *scheme = [NSURL URLWithString:serverProfile.serverUrl].scheme;
-                BOOL isHTTPSScheme = [scheme isEqualToString:@"https"];
-                if (isHTTPSScheme) {
-                    if ([strongSelf.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
-                        [strongSelf.delegate serverGridControllerDidSelectProfile:serverProfile];
-                    }
-                } else {
-                    // show alert about http
-                    [self showSecurityHTTPAlertForServerProfile:serverProfile];
+                if ([strongSelf.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
+                    [strongSelf.delegate serverGridControllerDidSelectProfile:serverProfile];
                 }
-
             }
         }
     }];
