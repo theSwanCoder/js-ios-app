@@ -20,21 +20,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  JMServerProfile.m
+//  JMAccountOptionCell.h
 //  TIBCO JasperMobile
 //
 
-#import "JMServerProfile.h"
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.4
+ */
 
-@implementation JMServerProfile
+#import <UIKit/UIKit.h>
+#import "JMAccountOption.h"
 
-@dynamic alias;
-@dynamic askPassword;
-@dynamic keepSession;
-@dynamic organization;
-@dynamic serverUrl;
-@dynamic favorites;
-@dynamic savedResources;
+@class JMAccountOptionCell;
+
+@protocol JMAccountOptionCellDelegate <NSObject>
+-(void)reloadTableViewCell:(JMAccountOptionCell *)cell;
+
+@end
+
+@interface JMAccountOptionCell : UITableViewCell
+@property (nonatomic, strong) JMAccountOption *accountOption;
+
+@property (nonatomic, weak) id <JMAccountOptionCellDelegate> delegate;
+
+- (void) updateDisplayingOfErrorMessage;
 
 @end

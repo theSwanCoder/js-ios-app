@@ -20,21 +20,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  JMServerProfile.m
+//  JMAccountOptionsViewController.h
 //  TIBCO JasperMobile
 //
 
-#import "JMServerProfile.h"
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.4
+ */
 
-@implementation JMServerProfile
+#import <UIKit/UIKit.h>
+#import "JMEditabledViewController.h"
 
-@dynamic alias;
-@dynamic askPassword;
-@dynamic keepSession;
-@dynamic organization;
-@dynamic serverUrl;
-@dynamic favorites;
-@dynamic savedResources;
+@protocol JMAccountOptionsViewControllerDelegate <NSObject>
 
+@optional
+- (void)accountOptionsDidChanged;
+
+@end
+
+@interface JMAccountOptionsViewController : JMEditabledViewController
+@property (nonatomic, weak) IBOutlet id <JMAccountOptionsViewControllerDelegate> delegate;
 @end

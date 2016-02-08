@@ -98,6 +98,9 @@
 "menuitem.saveditems.description" = "View Items Saved on this device";
 "menuitem.favorites.description" = "Browse your favorite items";
 
+// Account options
+"account.options.title" = "Account options";
+
 /* Resource views */
 
 "resources.loading.msg" = "Loading.\nPlease wait...";

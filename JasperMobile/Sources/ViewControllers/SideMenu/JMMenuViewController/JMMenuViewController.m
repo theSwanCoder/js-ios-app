@@ -35,6 +35,7 @@
 #import "JMSavedItemsCollectionViewController.h"
 #import "JMFavoritesCollectionViewController.h"
 #import "JMAboutViewController.h"
+#import "JMAccountOptionsViewController.h"
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
@@ -44,7 +45,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonStateNotification,
 };
 
-@interface JMMenuViewController() <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
+@interface JMMenuViewController() <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate, JMAccountOptionsViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *serverNameLabel;
@@ -103,6 +104,15 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     [super viewWillAppear:animated];
 
     [self.tableView reloadData];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    UIViewController *destVC = segue.destinationViewController;
+    if ([destVC isKindOfClass:[JMAccountOptionsViewController class]]) {
+        JMAccountOptionsViewController *accVC = (JMAccountOptionsViewController *)destVC;
+        accVC.delegate = self;
+    }
 }
 
 #pragma mark - Public API
@@ -384,6 +394,13 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         JMMenuItem *savedItem = [self menuItemWithType:JMResourceTypeSavedItems];
         savedItem.showNotes = YES;
     }
+}
+
+#pragma mark - JMAccountOptionsViewControllerDelegate
+
+- (void)accountOptionsDidChanged
+{
+    [self updateServerInfo];
 }
 
 @end

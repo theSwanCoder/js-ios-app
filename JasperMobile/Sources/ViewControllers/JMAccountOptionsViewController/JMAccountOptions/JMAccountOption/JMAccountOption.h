@@ -20,21 +20,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  JMServerProfile.m
+//  JMAccountOption.h
 //  TIBCO JasperMobile
 //
 
-#import "JMServerProfile.h"
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.4
+ */
 
-@implementation JMServerProfile
+#import <Foundation/Foundation.h>
 
-@dynamic alias;
-@dynamic askPassword;
-@dynamic keepSession;
-@dynamic organization;
-@dynamic serverUrl;
-@dynamic favorites;
-@dynamic savedResources;
+@interface JMAccountOption : NSObject
+
+@property (nonatomic, strong) NSString *titleString;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) id        optionValue;
+@property (nonatomic, strong) NSString *cellIdentifier;
 
 @end

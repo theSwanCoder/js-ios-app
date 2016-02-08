@@ -20,21 +20,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-//
-//  JMServerProfile.m
-//  TIBCO JasperMobile
-//
 
-#import "JMServerProfile.h"
+#import "JMBooleanAccountOptionCell.h"
 
-@implementation JMServerProfile
+@implementation JMBooleanAccountOptionCell
+-(void)setAccountOption:(JMAccountOption *)accountOption
+{
+    [super setAccountOption:accountOption];
+    self.checkBoxButton.selected = [accountOption.optionValue boolValue];
+}
 
-@dynamic alias;
-@dynamic askPassword;
-@dynamic keepSession;
-@dynamic organization;
-@dynamic serverUrl;
-@dynamic favorites;
-@dynamic savedResources;
+#pragma mark - Actions
+- (IBAction)checkButtonTapped:(id)sender
+{
+    self.checkBoxButton.selected = !self.checkBoxButton.selected;
+    self.accountOption.optionValue = @(self.checkBoxButton.selected);
+}
 
 @end

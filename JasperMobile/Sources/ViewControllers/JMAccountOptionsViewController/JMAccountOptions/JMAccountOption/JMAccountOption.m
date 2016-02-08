@@ -20,21 +20,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-//
-//  JMServerProfile.m
-//  TIBCO JasperMobile
-//
 
-#import "JMServerProfile.h"
+#import "JMAccountOption.h"
 
-@implementation JMServerProfile
+@implementation JMAccountOption
 
-@dynamic alias;
-@dynamic askPassword;
-@dynamic keepSession;
-@dynamic organization;
-@dynamic serverUrl;
-@dynamic favorites;
-@dynamic savedResources;
+- (id)init
+{
+    self = [super init];
+    if (self) {
+    }
+    return self;
+}
+
+- (void)setOptionValue:(id)optionValue
+{
+    if (optionValue != _optionValue) {
+        _optionValue = optionValue;
+        self.errorString = nil;
+    }
+}
 
 @end

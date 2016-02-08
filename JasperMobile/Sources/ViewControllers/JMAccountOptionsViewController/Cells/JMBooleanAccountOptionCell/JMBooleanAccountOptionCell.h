@@ -21,20 +21,21 @@
  */
 
 //
-//  JMServerProfile.m
+//  JMBooleanAccountOptionCell.h
 //  TIBCO JasperMobile
 //
 
-#import "JMServerProfile.h"
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 1.9
+ */
 
-@implementation JMServerProfile
+#import <UIKit/UIKit.h>
+#import "JMAccountOptionCell.h"
 
-@dynamic alias;
-@dynamic askPassword;
-@dynamic keepSession;
-@dynamic organization;
-@dynamic serverUrl;
-@dynamic favorites;
-@dynamic savedResources;
+@interface JMBooleanAccountOptionCell : JMAccountOptionCell
+@property (weak, nonatomic) IBOutlet UIButton *checkBoxButton;
+
+- (IBAction)checkButtonTapped:(id)sender;
 
 @end
