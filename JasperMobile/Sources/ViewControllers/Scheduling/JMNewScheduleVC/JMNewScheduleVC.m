@@ -38,9 +38,10 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 @interface JMNewScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *createJobButton;
+@property (weak, nonatomic) UIDatePicker *datePicker;
 @property (nonatomic, strong) JSScheduleMetadata *scheduleResponse;
 @property (nonatomic, strong) NSArray *jobRepresentationProperties;
-@property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @property (strong, nonatomic) JMScheduleManager *scheduleManager;
 @end
 
@@ -65,13 +66,6 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
     self.scheduleManager = [JMScheduleManager new];
 
-    // date text field
-    UIDatePicker *datePicker = [[UIDatePicker alloc]init];
-    [datePicker setDate:[NSDate date]];
-    [datePicker addTarget:self
-                   action:@selector(updateDate:)
-         forControlEvents:UIControlEventValueChanged];
-
     [self createScheduleRepresentationProperties];
 
     [self createScheduleRepresentation];
@@ -93,6 +87,8 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 - (void)setDate:(UIButton *)sender
 {
+    self.scheduleResponse.trigger.startDate = self.datePicker.date;
+
     // find text field for date
     NSInteger rowDateCell = [self.jobRepresentationProperties indexOfObject:kJMJobStartDate];
     NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell inSection:0];
@@ -292,13 +288,15 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 - (void)setupToolbarForTextField:(UITextField *)textField
 {
-    UIDatePicker *datePicker = [[UIDatePicker alloc]init];
-    [datePicker setDate:[NSDate date]];
-    [datePicker addTarget:self
-                   action:@selector(updateDate:)
-         forControlEvents:UIControlEventValueChanged];
-    textField.inputView = datePicker;
-
+    if (!self.datePicker) {
+        UIDatePicker *datePicker = [[UIDatePicker alloc]init];
+        [datePicker setDate:[NSDate date]];
+        [datePicker addTarget:self
+                       action:@selector(updateDate:)
+             forControlEvents:UIControlEventValueChanged];
+        textField.inputView = datePicker;
+        self.datePicker = datePicker;
+    }
 
     UIToolbar *toolbar = [[UIToolbar alloc] init];
     [toolbar sizeToFit];
