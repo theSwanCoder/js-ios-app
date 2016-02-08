@@ -45,12 +45,15 @@
 
 - (void) setupSegmentedControlAppearence
 {
+    NSArray <JSInputControlOption *>*allOptions = self.cell.inputControlDescriptor.state.options;
     NSString *availableTitle = JMCustomLocalizedString(@"report.viewer.options.multiselect.available.title", nil);
-    availableTitle = [availableTitle stringByAppendingFormat:@": %zd", self.cell.inputControlDescriptor.state.options.count];
+    availableTitle = [availableTitle stringByAppendingFormat:@": %zd", allOptions.count];
     [self.itemsSegmentedControl setTitle:availableTitle forSegmentAtIndex:0];
     
     NSString *selectedTitle = JMCustomLocalizedString(@"report.viewer.options.multiselect.selected.title", nil);
-    selectedTitle = [selectedTitle stringByAppendingFormat:@": %zd", self.selectedValues.count];
+    NSArray <JSInputControlOption *> *selectedOptions = [allOptions filteredArrayUsingPredicate:[self selectedValuesPredicate]];
+    NSInteger selectedOptionsCount = selectedOptions.count;
+    selectedTitle = [selectedTitle stringByAppendingFormat:@": %zd", selectedOptionsCount];
     [self.itemsSegmentedControl setTitle:selectedTitle forSegmentAtIndex:1];
 }
 
