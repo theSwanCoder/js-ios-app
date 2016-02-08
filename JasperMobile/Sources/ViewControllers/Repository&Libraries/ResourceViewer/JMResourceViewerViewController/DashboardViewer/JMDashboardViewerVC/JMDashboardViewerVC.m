@@ -352,7 +352,7 @@
     }
 
     if ([self isInputControlsAvailable]) {
-        menuActions |= JMMenuActionsViewAction_Edit;
+        menuActions |= JMMenuActionsViewAction_EditFilters;
     }
     return menuActions;
 }
@@ -385,7 +385,7 @@
             }];
             break;
         }
-        case JMMenuActionsViewAction_Edit: {
+        case JMMenuActionsViewAction_EditFilters: {
             [self showInputControlsVC];
             break;
         }

@@ -55,6 +55,8 @@
             return @"action.title.filter";
         case JMMenuActionsViewAction_Edit:
             return @"action.title.edit";
+        case JMMenuActionsViewAction_EditFilters:
+            return @"action.title.edit.filters";
         case JMMenuActionsViewAction_Refresh:
             return @"action.title.refresh";
         case JMMenuActionsViewAction_Save:
@@ -98,6 +100,8 @@
         case JMMenuActionsViewAction_Filter:
             return @"filter_action";
         case JMMenuActionsViewAction_Edit:
+            return @"filter_action";
+        case JMMenuActionsViewAction_EditFilters:
             return @"filter_action";
         case JMMenuActionsViewAction_Refresh:
             return @"refresh_action";

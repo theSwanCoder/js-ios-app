@@ -104,6 +104,9 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
             @(JMMenuActionsViewAction_Edit) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Edit
                                                                        available:NO
                                                                          enabled:YES],
+            @(JMMenuActionsViewAction_EditFilters) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_EditFilters
+                                                                       available:NO
+                                                                         enabled:YES],
             @(JMMenuActionsViewAction_Sort) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Sort
                                                                        available:NO
                                                                          enabled:YES],

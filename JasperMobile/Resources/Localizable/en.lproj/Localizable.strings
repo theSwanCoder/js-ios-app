@@ -230,6 +230,7 @@
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
 "action.title.edit" = "Edit Values";
+"action.title.edit.filters" = "Filters";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";

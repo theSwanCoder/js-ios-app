@@ -40,19 +40,20 @@ typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
     JMMenuActionsViewAction_Refresh         = 1 << 2,
     JMMenuActionsViewAction_Filter          = 1 << 3,
     JMMenuActionsViewAction_Edit            = 1 << 4,
-    JMMenuActionsViewAction_Sort            = 1 << 5,
-    JMMenuActionsViewAction_Save            = 1 << 6,
-    JMMenuActionsViewAction_Delete          = 1 << 7,
-    JMMenuActionsViewAction_Rename          = 1 << 8,
-    JMMenuActionsViewAction_SelectAll       = 1 << 9,
-    JMMenuActionsViewAction_ClearSelections = 1 << 10,
-    JMMenuActionsViewAction_Run             = 1 << 11,
-    JMMenuActionsViewAction_Print           = 1 << 12,
-    JMMenuActionsViewAction_Info            = 1 << 13,
-    JMMenuActionsViewAction_OpenIn          = 1 << 14,
-    JMMenuActionsViewAction_Schedule        = 1 << 15,
-    JMMenuActionsViewAction_ShowExternalDisplay = 1 << 16,
-    JMMenuActionsViewAction_HideExternalDisplay = 1 << 17
+    JMMenuActionsViewAction_EditFilters     = 1 << 5,
+    JMMenuActionsViewAction_Sort            = 1 << 6,
+    JMMenuActionsViewAction_Save            = 1 << 7,
+    JMMenuActionsViewAction_Delete          = 1 << 8,
+    JMMenuActionsViewAction_Rename          = 1 << 9,
+    JMMenuActionsViewAction_SelectAll       = 1 << 10,
+    JMMenuActionsViewAction_ClearSelections = 1 << 11,
+    JMMenuActionsViewAction_Run             = 1 << 12,
+    JMMenuActionsViewAction_Print           = 1 << 13,
+    JMMenuActionsViewAction_Info            = 1 << 14,
+    JMMenuActionsViewAction_OpenIn          = 1 << 15,
+    JMMenuActionsViewAction_Schedule        = 1 << 16,
+    JMMenuActionsViewAction_ShowExternalDisplay = 1 << 17,
+    JMMenuActionsViewAction_HideExternalDisplay = 1 << 18
 };
 
 @interface JMMenuAction : NSObject
