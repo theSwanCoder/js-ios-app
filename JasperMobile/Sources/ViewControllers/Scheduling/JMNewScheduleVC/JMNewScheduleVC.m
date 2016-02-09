@@ -29,12 +29,9 @@
 #import "JMNewScheduleVC.h"
 #import "JMScheduleManager.h"
 #import "JMNewScheduleCell.h"
+#import "JMNewScheduleBoolenCell.h"
+#import "JMNewScheduleVCSection.h"
 
-typedef NS_ENUM(NSInteger, JMNewScheduleTableViewSection) {
-    JMNewScheduleTableViewSectionMain,
-    JMNewScheduleTableViewSectionOutputOptions,
-    JMNewScheduleTableViewSectionSchedule,
-};
 
 NSString *const kJMJobLabel = @"kJMJobLabel";
 NSString *const kJMJobDescription = @"kJMJobDescription";
@@ -42,13 +39,15 @@ NSString *const kJMJobOutputFileURI = @"kJMJobOutputFileURI";
 NSString *const kJMJobOutputFolderURI = @"kJMJobOutputFolderURI";
 NSString *const kJMJobFormat = @"kJMJobFormat";
 NSString *const kJMJobStartDate = @"kJMJobStartDate";
+NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 
-@interface JMNewScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate>
+@interface JMNewScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate, JMNewScheduleBoolenCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @property (weak, nonatomic) UIDatePicker *datePicker;
 @property (nonatomic, strong) JSScheduleMetadata *scheduleResponse;
-@property (nonatomic, strong) NSDictionary *sections;
+//@property (nonatomic, strong) NSDictionary *sections;
+@property (nonatomic, strong) NSArray <JMNewScheduleVCSection *> *sections;
 @property (strong, nonatomic) JMScheduleManager *scheduleManager;
 @end
 
@@ -84,10 +83,11 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     self.scheduleResponse.trigger.startDate = sender.date;
 
     // find text field for date
-    NSDictionary *sectionRepresentaion = self.sections[@(JMNewScheduleTableViewSectionSchedule)];
-    NSArray *rows = sectionRepresentaion[@"rows"];
+    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
+    NSArray *rows = section.rows;
     NSInteger rowDateCell = [rows indexOfObject:kJMJobStartDate];
-    NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell inSection:0];
+    NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell
+                                                        inSection:JMNewScheduleVCSectionTypeSchedule];
     JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
 
     // set new value
@@ -99,11 +99,11 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     self.scheduleResponse.trigger.startDate = self.datePicker.date;
 
     // find text field for date
-    NSDictionary *sectionRepresentaion = self.sections[@(JMNewScheduleTableViewSectionSchedule)];
-    NSArray *rows = sectionRepresentaion[@"rows"];
+    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
+    NSArray *rows = section.rows;
     NSInteger rowDateCell = [rows indexOfObject:kJMJobStartDate];
     NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell
-                                                        inSection:JMNewScheduleTableViewSectionSchedule];
+                                                        inSection:JMNewScheduleVCSectionTypeSchedule];
     JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
 
     // set new value
@@ -124,11 +124,11 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
                                                                             cancelButtonTitle:@"dialog.button.cancel"
                                                                       cancelCompletionHandler:nil];
 
-    NSDictionary *sectionRepresentaion = self.sections[@(JMNewScheduleTableViewSectionOutputOptions)];
-    NSArray *rows = sectionRepresentaion[@"rows"];
+    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeOutputOptions];
+    NSArray *rows = section.rows;
     NSInteger rowFormatCell = [rows indexOfObject:kJMJobFormat];
     NSIndexPath *formatCellIndexPath = [NSIndexPath indexPathForRow:rowFormatCell
-                                                          inSection:JMNewScheduleTableViewSectionOutputOptions];
+                                                          inSection:JMNewScheduleVCSectionTypeOutputOptions];
     JMNewScheduleCell *formatCell = [self.tableView cellForRowAtIndexPath:formatCellIndexPath];
 
     for (NSString *format in availableFormats) {
@@ -147,9 +147,8 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    NSDictionary *sectionRepresentaion = self.sections[@(JMNewScheduleTableViewSectionOutputOptions)];
-    NSArray *rows = sectionRepresentaion[@"rows"];
-    NSString *jobProperty = rows[indexPath.row];
+    JMNewScheduleVCSection *section = self.sections[indexPath.section];
+    NSString *jobProperty = section.rows[indexPath.row];
     if ([jobProperty isEqualToString:kJMJobFormat]) {
         [self selectFormat:nil];
     }
@@ -158,7 +157,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.sections.allKeys.count;
+    return self.sections.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -174,8 +173,8 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     titleLabel.backgroundColor = [UIColor clearColor];
 
-    NSDictionary *sectionRepresentaion = self.sections[@(section)];
-    NSString *sectionTitle = sectionRepresentaion[@"title"];
+    JMNewScheduleVCSection *scheduleVCSection = self.sections[section];
+    NSString *sectionTitle = scheduleVCSection.title;
 
     titleLabel.text = [sectionTitle uppercaseString];
     [titleLabel sizeToFit];
@@ -194,49 +193,64 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSDictionary *sectionRepresentaion = self.sections[@(section)];
-    NSArray *rows = sectionRepresentaion[@"rows"];
+    JMNewScheduleVCSection *scheduleVCSection = self.sections[section];
+    NSArray *rows = scheduleVCSection.rows;
 
     return rows.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMNewScheduleCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
+    UITableViewCell *cell;
 
-    NSString *propertyTitle;
-    NSString *propertyValue;
-
-    NSDictionary *sectionRepresentaion = self.sections[@(indexPath.section)];
-    NSArray *rows = sectionRepresentaion[@"rows"];
-    NSString *jobProperty = rows[indexPath.row];
+    JMNewScheduleVCSection *section = self.sections[indexPath.section];
+    NSString *jobProperty = section.rows[indexPath.row];
 
     if ([jobProperty isEqualToString:kJMJobLabel]) {
-        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.label", nil);
-        propertyValue = self.scheduleResponse.label;
+        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.label", nil);
+        scheduleCell.valueTextField.text = self.scheduleResponse.label;
+        scheduleCell.delegate = self;
+        cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobDescription]) {
-        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.description", nil);
-        propertyValue = self.scheduleResponse.scheduleDescription;
+        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.description", nil);
+        scheduleCell.valueTextField.text = self.scheduleResponse.scheduleDescription;
+        scheduleCell.delegate = self;
+        cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
-        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.output.file.name", nil);
-        propertyValue = self.scheduleResponse.baseOutputFilename;
+        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.output.file.name", nil);
+        scheduleCell.valueTextField.text = self.scheduleResponse.baseOutputFilename;
+        scheduleCell.delegate = self;
+        cell = scheduleCell;
     }  else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
-        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.output.file.path", nil);
-        propertyValue = self.scheduleResponse.folderURI;
+        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.output.file.path", nil);
+        scheduleCell.valueTextField.text = self.scheduleResponse.folderURI;
+        scheduleCell.delegate = self;
+        cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobFormat]) {
-        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.format", nil);
-        propertyValue = self.scheduleResponse.outputFormats.firstObject;
-        cell.valueTextField.userInteractionEnabled = NO;
+        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.format", nil);
+        scheduleCell.valueTextField.text = self.scheduleResponse.outputFormats.firstObject;
+        scheduleCell.valueTextField.userInteractionEnabled = NO;
+        scheduleCell.delegate = self;
+        cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
-        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.start.date", nil);
-        propertyValue = [self dateStringFromDate:self.scheduleResponse.trigger.startDate];
-        [self setupToolbarForTextField:cell.valueTextField];
+        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.start.date", nil);
+        scheduleCell.valueTextField.text = [self dateStringFromDate:self.scheduleResponse.trigger.startDate];
+        [self setupToolbarForTextField:scheduleCell.valueTextField];
+        scheduleCell.delegate = self;
+        cell = scheduleCell;
+    } else if ([jobProperty isEqualToString:kJMJobStartImmediately]) {
+        JMNewScheduleBoolenCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleBoolenCell" forIndexPath:indexPath];
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.start.immediately", nil);
+        scheduleCell.uiSwitch.on = self.scheduleResponse.trigger.startType == JSScheduleTriggerStartTypeImmediately;
+        scheduleCell.delegate = self;
+        cell = scheduleCell;
     }
-
-    cell.titleLabel.text = propertyTitle;
-    cell.valueTextField.text = propertyValue;
-
-    cell.delegate = self;
 
     return cell;
 }
@@ -289,9 +303,8 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 - (void)jobCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    NSDictionary *sectionRepresentaion = self.sections[@(indexPath.section)];
-    NSArray *rows = sectionRepresentaion[@"rows"];
-    NSString *jobProperty = rows[indexPath.row];
+    JMNewScheduleVCSection *section = self.sections[indexPath.section];
+    NSString *jobProperty = section.rows[indexPath.row];
 
     if ([jobProperty isEqualToString:kJMJobLabel]) {
         self.scheduleResponse.label = newValue;
@@ -304,32 +317,66 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     }
 }
 
+#pragma mark - JMNewScheduleBoolenCellDelegate
+- (void)scheduleCell:(JMNewScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue
+{
+    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
+    NSArray *scheduleRows;
+    if (newValue) {
+        self.scheduleResponse.trigger.startType = JSScheduleTriggerStartTypeImmediately;
+        scheduleRows = @[
+                kJMJobStartImmediately,
+        ];
+    } else {
+        self.scheduleResponse.trigger.startType = JSScheduleTriggerStartTypeAtDate;
+        scheduleRows = @[
+                kJMJobStartImmediately,
+                kJMJobStartDate,
+        ];
+    }
+    section.rows = scheduleRows;
+
+    NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeSchedule];
+    [self.tableView reloadSections:sectionIndecies withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
 #pragma mark - Helpers
 - (void)createScheduleRepresentationProperties
 {
-    self.sections = @{
-            @(JMNewScheduleTableViewSectionMain) : @{
-                    @"title" : @"Main",
-                    @"rows" : @[
-                            kJMJobLabel,
-                            kJMJobDescription
-                    ],
-            },
-            @(JMNewScheduleTableViewSectionOutputOptions) : @{
-                    @"title" : @"Output Options",
-                    @"rows" : @[
-                            kJMJobOutputFileURI,
-                            kJMJobOutputFolderURI,
-                            kJMJobFormat,
-                    ],
-            },
-            @(JMNewScheduleTableViewSectionSchedule) : @{
-                    @"title" : @"Schedule Start",
-                    @"rows" : @[
-                        kJMJobStartDate
-                    ],
-            },
-    };
+    JMNewScheduleVCSection *mainSection = [JMNewScheduleVCSection sectionWithTitle:@"Main"
+                                                                              type:JMNewScheduleVCSectionTypeMain
+                                                                              rows:@[
+                                                                                      kJMJobLabel,
+                                                                                      kJMJobDescription,
+                                                                              ]];
+
+    JMNewScheduleVCSection *outputOptionsSection = [JMNewScheduleVCSection sectionWithTitle:@"Output Options"
+                                                                              type:JMNewScheduleVCSectionTypeOutputOptions
+                                                                              rows:@[
+                                                                                      kJMJobOutputFileURI,
+                                                                                      kJMJobOutputFolderURI,
+                                                                                      kJMJobFormat,
+                                                                              ]];
+
+    NSArray *scheduleRows;
+    if (self.scheduleResponse.trigger.startType == JSScheduleTriggerStartTypeImmediately) {
+        scheduleRows = @[
+                kJMJobStartImmediately,
+        ];
+    } else {
+        scheduleRows = @[
+                kJMJobStartImmediately,
+                kJMJobStartDate,
+        ];
+    }
+    JMNewScheduleVCSection *scheduleSection = [JMNewScheduleVCSection sectionWithTitle:@"Schedule Start"
+                                                                              type:JMNewScheduleVCSectionTypeSchedule
+                                                                              rows:scheduleRows];
+    self.sections = @[
+            mainSection,
+            outputOptionsSection,
+            scheduleSection
+    ];
 }
 
 - (void)createScheduleRepresentation

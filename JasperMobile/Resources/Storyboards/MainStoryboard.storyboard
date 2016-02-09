@@ -941,7 +941,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="9S0-B7-cZO">
-                                    <rect key="frame" x="0.0" y="148" width="580" height="0.0"/>
+                                    <rect key="frame" x="0.0" y="208" width="580" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
@@ -986,6 +986,39 @@
                                         <connections>
                                             <outlet property="titleLabel" destination="Bc3-If-IeA" id="1nq-XG-f5W"/>
                                             <outlet property="valueTextField" destination="3S9-aJ-DWe" id="Efb-YH-29D"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMNewScheduleBoolenCell" id="znw-aI-v6a" customClass="JMNewScheduleBoolenCell">
+                                        <rect key="frame" x="0.0" y="110" width="580" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="znw-aI-v6a" id="klQ-WF-c9F">
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="59"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lCJ-xn-9eW">
+                                                    <rect key="frame" x="8" y="21" width="38" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="752" verticalHuggingPriority="752" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="opu-3i-HmP">
+                                                    <rect key="frame" x="523" y="14" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="switchChangedValue:" destination="znw-aI-v6a" eventType="valueChanged" id="PsG-WL-4ML"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="opu-3i-HmP" firstAttribute="centerY" secondItem="klQ-WF-c9F" secondAttribute="centerY" id="0OO-jI-0VA"/>
+                                                <constraint firstItem="lCJ-xn-9eW" firstAttribute="centerY" secondItem="klQ-WF-c9F" secondAttribute="centerY" id="6d1-cD-OPI"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="lCJ-xn-9eW" secondAttribute="leading" id="CZn-8C-sb2"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="opu-3i-HmP" secondAttribute="trailing" id="DAW-7n-oLR"/>
+                                                <constraint firstItem="opu-3i-HmP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lCJ-xn-9eW" secondAttribute="trailing" constant="10" id="neG-dG-A1m"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="titleLabel" destination="lCJ-xn-9eW" id="R9y-2b-vT6"/>
+                                            <outlet property="uiSwitch" destination="opu-3i-HmP" id="ea5-Vn-PeT"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

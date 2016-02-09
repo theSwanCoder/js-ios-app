@@ -313,6 +313,7 @@
 "schedules.new.job.output.file.path" = "Repository Output Folder";
 "schedules.new.job.format" = "Format";
 "schedules.new.job.start.date" = "Run once at:";
+"schedules.new.job.start.immediately" = "Start immediately";
 "schedules.new.job.output.format" = "Output Format"; //title of alert
 "schedules.error.domain" = "Validation of creating new schedule job";
 "schedules.error.empty.filename" = "File name is empty";
