@@ -50,29 +50,30 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     NSNumber *latestAppVersion = [self latestAppVersion];
     NSNumber *currentAppVersion = [self currentAppVersion];
     if (currentAppVersion != nil && [currentAppVersion compare:latestAppVersion] == NSOrderedSame) return;
-    
+
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMDefaultsIntroDidApear];
+    [[JMSessionManager sharedManager] logout];
 
     if ([[JMCoreDataManager sharedInstance] isMigrationNeeded]) {
         [[JMCoreDataManager sharedInstance] migrate:nil];
     }
-    
+
     NSMutableDictionary *versionsToUpdate = [NSMutableDictionary dictionary];
-    
+
     // Add update methods
     versionsToUpdate[@1.9] = [NSValue valueWithPointer:@selector(update_1_9)];
     BOOL updateDidSuccess = YES;
     for (NSNumber *version in versionsToUpdate.allKeys) {
         if (version.doubleValue <= currentAppVersion.doubleValue) continue;
-        
+
         SEL selector = [versionsToUpdate[version] pointerValue];
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:selector]];
         invocation.selector = selector;
         invocation.target = self;
         [invocation invoke];
-        
+
         [invocation getReturnValue:&updateDidSuccess];
-        
+
         if (updateDidSuccess) {
             // Update app version for each migration. This allows to track which migration was failed
             [self updateAppVersionTo:version];
