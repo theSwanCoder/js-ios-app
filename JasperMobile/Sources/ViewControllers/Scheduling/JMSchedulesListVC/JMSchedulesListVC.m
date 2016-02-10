@@ -64,7 +64,6 @@
     self.refreshControl = refreshControl;
 
     self.noJobsLabel.text = JMCustomLocalizedString(@"schedules.no.jobs.message", nil);
-    [self showNoJobsLabel:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -147,6 +146,7 @@
                                                [strongSelf.tableView deleteRowsAtIndexPaths:@[indexPath]
                                                                            withRowAnimation:UITableViewRowAnimationLeft];
 
+                                               [strongSelf updateNoJobsLabelAppearence];
                                            }];
 }
 
