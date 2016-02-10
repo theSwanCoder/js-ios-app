@@ -47,7 +47,7 @@
     if (range.length == 1) {
         // remove symbol
         changedString = [currentString stringByReplacingCharactersInRange:range withString:@""];
-    } else if (range.location == 0 && range.length == string.length) {
+    } else if (range.location == 0 && range.length > 1) {
         // autocompleted text
         changedString = string;
     } else {
