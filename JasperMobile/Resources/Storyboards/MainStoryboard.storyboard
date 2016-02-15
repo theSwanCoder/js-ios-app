@@ -166,6 +166,9 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.20392156859999999" green="0.21960784310000001" blue="0.25490196079999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <accessibility key="accessibilityConfiguration" identifier="JMSideApplicationMenuAccessibilityId" label="Side Application Menu">
+                            <bool key="isElement" value="YES"/>
+                        </accessibility>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="mtY-8Y-ro8" secondAttribute="trailing" id="059-bh-YCz"/>
                             <constraint firstItem="hU8-xn-4eY" firstAttribute="top" secondItem="mtY-8Y-ro8" secondAttribute="bottom" id="36F-8F-rei"/>
@@ -178,6 +181,9 @@
                             <constraint firstItem="hU8-xn-4eY" firstAttribute="leading" secondItem="bS6-YF-kth" secondAttribute="leading" id="mlS-Vd-kfA"/>
                             <constraint firstItem="mtY-8Y-ro8" firstAttribute="top" secondItem="bS6-YF-kth" secondAttribute="topMargin" id="tLw-Da-lHj"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="NO"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <connections>
                         <outlet property="appVersionLabel" destination="gEl-Hw-lLg" id="TbC-gt-FDe"/>

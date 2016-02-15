@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JMBaseCollectionView">
@@ -86,6 +86,9 @@ Please Wait...</string>
                 </searchBar>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <accessibility key="accessibilityConfiguration" identifier="JMBaseCollectionContentViewAccessibilityId" label="Base Collection Content View">
+                <bool key="isElement" value="YES"/>
+            </accessibility>
             <constraints>
                 <constraint firstItem="YRF-It-dh7" firstAttribute="leading" secondItem="4nu-5s-lk1" secondAttribute="leading" id="6XI-hM-8Km"/>
                 <constraint firstItem="cyn-B9-2jg" firstAttribute="leading" secondItem="4nu-5s-lk1" secondAttribute="leading" id="8X1-kH-Abh"/>
@@ -107,6 +110,9 @@ Please Wait...</string>
                 <constraint firstItem="QyO-Hj-Qu3" firstAttribute="top" secondItem="C7s-iG-Tb2" secondAttribute="bottom" id="vjq-ty-ihy"/>
                 <constraint firstItem="Xz8-Cf-2if" firstAttribute="leading" secondItem="4nu-5s-lk1" secondAttribute="leading" id="ziY-ST-P3r"/>
             </constraints>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="NO"/>
+            </userDefinedRuntimeAttributes>
             <point key="canvasLocation" x="254" y="326"/>
         </view>
     </objects>

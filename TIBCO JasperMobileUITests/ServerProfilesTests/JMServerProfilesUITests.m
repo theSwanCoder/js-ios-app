@@ -1,61 +1,50 @@
 //
-//  JMLibraryUITests.m
+//  JMServerProfilesUITests.m
 //  TIBCO JasperMobile
 //
-//  Created by Aleksandr Dakhno on 2/11/16.
+//  Created by Aleksandr Dakhno on 2/14/16.
 //  Copyright © 2016 TIBCO JasperMobile. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
 
-//NSString *const kJMTestProfileURL = @"http://192.168.88.55:8088/jasperserver-pro-62";
-NSString *const kJMTestProfileURL = @"http://mobiledemo2.jaspersoft.com/jasperserver-pro";
 NSString *const kJMTestProfileName = @"Test Profile";
+//NSString *const kJMTestProfileURL = @"http://192.168.88.55:8088/jasperserver-pro-62";
 //NSString *const kJMTestProfileCredentialsUsername = @"superuser";
 //NSString *const kJMTestProfileCredentialsPassword = @"superuser";
 
+NSString *const kJMTestProfileURL = @"http://mobiledemo2.jaspersoft.com/jasperserver-pro";
 NSString *const kJMTestProfileCredentialsUsername = @"phoneuser";
 NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
 
-@interface JMLibraryUITests : XCTestCase
+@interface JMServerProfilesUITests : XCTestCase
 @property(nonatomic, strong) XCUIApplication *application;
 @end
 
-@implementation JMLibraryUITests
+@implementation JMServerProfilesUITests
 
 - (void)setUp {
     [super setUp];
     
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-    
-    // In UI tests it is usually best to stop immediately when a failure occurs.
     self.continueAfterFailure = NO;
-    // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-//    [[[XCUIApplication alloc] init] launch];
-
-    // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     
     self.application = [[XCUIApplication alloc] init];
     [self.application launch];
+    
     [self createTestProfile];
     [self loginWithTestProfile];
 }
 
-- (void)testThatLibraryPageHasTitleLibrary
+- (void)testThatListOfServerProfilesVisible
 {
-    [self givenThatLibraryPageOnScreen];
-
-    XCUIElement *libraryNavBar = self.application.navigationBars[@"Library"];
-    if (!libraryNavBar.exists) {
-        XCTFail(@"Library page isn't on screen.");
-    }
+    
 }
 
 - (void)tearDown {
-    [self logout];
-    [self removeTestProfile];
-    self.application = nil;
+//    [self logout];
+//    [self removeTestProfile];
     
+    self.application = nil;
     [super tearDown];
 }
 
@@ -157,16 +146,22 @@ NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
 
 - (void)givenThatLibraryPageOnScreen
 {
+    // Intro Page
     XCUIElement *skipIntroButton = self.application.buttons[@"Skip Intro"];
     if (skipIntroButton.exists) {
         [skipIntroButton tap];
     }
     
-    XCUIElement *rateAppLateButton = self.application.buttons[@"Skip Intro"];
-    if (rateAppLateButton.exists) {
-        [rateAppLateButton tap];
+    // Rate Alert
+    XCUIElement *rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
+    if (rateAlert.exists) {
+        XCUIElement *rateAppLateButton = rateAlert.collectionViews.buttons[@"No, thanks"];
+        if (rateAppLateButton.exists) {
+            [rateAppLateButton tap];
+        }
     }
     
+    // Verify Library Page
     XCUIElement *libraryPageView = self.application.otherElements[@"JMLibraryPageAccessibilityId"];
     if (libraryPageView.exists) {
         NSLog(@"Library page on screen");
@@ -278,14 +273,14 @@ NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
         [testProfile tap];
         
         // TODO: how better to use this case
-//        XCUIElement *unknownServerAlert = self.application.alerts[@"Unknown server"];
-//        if (unknownServerAlert.exists) {
-//            XCUIElement *okButton = unknownServerAlert.collectionViews.buttons[@"OK"];
-//            if (okButton.exists) {
-//                [okButton tap];
-//            }
-//            XCTFail(@"Server Profile doesn't be select (maybe it turned off)");
-//        }
+        //        XCUIElement *unknownServerAlert = self.application.alerts[@"Unknown server"];
+        //        if (unknownServerAlert.exists) {
+        //            XCUIElement *okButton = unknownServerAlert.collectionViews.buttons[@"OK"];
+        //            if (okButton.exists) {
+        //                [okButton tap];
+        //            }
+        //            XCTFail(@"Server Profile doesn't be select (maybe it turned off)");
+        //        }
     } else {
         XCTFail(@"Test profile doesn't visible or exist");
     }
@@ -336,6 +331,7 @@ NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
     }
 }
 
+// TODO: move to shared methods
 - (void)tryOpenSideApplicationMenu
 {
     XCUIElement *menuButton = self.application.navigationBars[@"Library"].buttons[@"menu icon"];
