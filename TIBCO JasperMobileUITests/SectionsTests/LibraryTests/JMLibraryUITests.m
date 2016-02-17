@@ -7,8 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-
-NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
+#import "JMUITestConstants.h"
 
 @interface JMLibraryUITests : XCTestCase
 @property(nonatomic, strong) XCUIApplication *application;
@@ -27,13 +26,214 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
     
     self.application = [[XCUIApplication alloc] init];
     [self.application launch];
+    
+    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
+    if (loginPageView.exists) {
+        [self loginWithTestProfile];
+    }
 }
 
 - (void)tearDown {
-    
-    self.application = nil;
+    //self.application = nil;
     
     [super tearDown];
+}
+
+#pragma mark - Setup Helpers
+- (void)selectTestProfile
+{
+    [self givenThatLoginPageOnScreen];
+    [self tryOpenServerProfilesPage];
+    
+    [self givenThatServerProfilesPageOnScreen];
+    
+    XCUIElement *testProfile = self.application.collectionViews.staticTexts[@"Test Profile"];
+    BOOL isTestProfileExists = testProfile.exists;
+    if (isTestProfileExists) {
+        [self trySelectNewTestServerProfile];
+    } else {
+        [self tryOpenNewServerProfilePage];
+        
+        [self givenThatNewProfilePageOnScreen];
+        [self tryCreateNewTestServerProfile];
+        
+        [self givenThatServerProfilesPageOnScreen];
+        [self trySelectNewTestServerProfile];
+    }
+}
+
+- (void)loginWithTestProfile
+{
+    [self givenThatLoginPageOnScreen];
+    [self selectTestProfile];
+    
+    [self givenThatLoginPageOnScreen];
+    [self tryEnterTestCredentials];
+    
+    [self givenThatLoginPageOnScreen];
+    [self tryTapLoginButton];
+}
+
+- (void)logout
+{
+    [self givenThatLibraryPageOnScreen];
+    [self tryOpenSideApplicationMenu];
+    
+    [self tryOpenPageWithName:@"Log Out"];
+}
+
+#pragma mark - 
+- (void)tryOpenServerProfilesPage
+{
+    XCUIElement *serverProfileTextField = self.application.textFields[@"JMLoginPageServerProfileTextFieldAccessibilityId"];
+    if (serverProfileTextField.exists) {
+        [serverProfileTextField tap];
+    } else {
+        XCTFail(@"Server profile text field doesn't exist.");
+    }
+}
+
+- (void)tryOpenNewServerProfilePage
+{
+    XCUIElement *addProfileButton = self.application.buttons[@"JMServerProfilesPageAddNewProfileButtonAccessibilityId"];
+    if (addProfileButton.exists) {
+        [addProfileButton tap];
+    } else {
+        XCTFail(@"Add new profile button doesn't exist.");
+    }
+}
+
+- (void)tryCreateNewTestServerProfile
+{
+    XCUIElementQuery *tablesQuery = self.application.tables;
+    
+    // Find Profile Name TextField
+    XCUIElement *profileNameTextFieldElement = tablesQuery.textFields[@"Profile name"];
+    if (profileNameTextFieldElement.exists) {
+        [profileNameTextFieldElement tap];
+        [profileNameTextFieldElement typeText:kJMTestProfileName];
+    } else {
+        XCTFail(@"Profile Name text field doesn't exist.");
+    }
+    
+    // Close keyboard
+    XCUIElement *doneButton = self.application.toolbars.buttons[@"Done"];
+    if (doneButton.exists) {
+        [doneButton tap];
+    } else {
+        XCTFail(@"Done button on keyboard doesn't exist.");
+    }
+    
+    // Find Profile URL TextField
+    XCUIElement *profileURLTextFieldElement = tablesQuery.textFields[@"Server address"];
+    if (profileURLTextFieldElement.exists) {
+        [profileURLTextFieldElement tap];
+        [profileURLTextFieldElement typeText:kJMTestProfileURL];
+    } else {
+        XCTFail(@"Profile URL text field doesn't exist.");
+    }
+    
+    // Close keyboard
+    doneButton = self.application.toolbars.buttons[@"Done"];
+    if (doneButton.exists) {
+        [doneButton tap];
+    } else {
+        XCTFail(@"Done button on keyboard doesn't exist.");
+    }
+    
+    // Save a new created profile
+    XCUIElement *saveButton = self.application.buttons[@"Save"];
+    if (saveButton.exists) {
+        [saveButton tap];
+    } else {
+        XCTFail(@"Create new profile button doesn't exist.");
+    }
+    
+    // Confirm if need http end point
+    XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
+    if (securityWarningAlert.exists) {
+        XCUIElement *securityWarningAlertOkButton = securityWarningAlert.collectionViews.buttons[@"ok"];
+        if (securityWarningAlertOkButton.exists) {
+            [securityWarningAlertOkButton tap];
+        } else {
+            XCTFail(@"'Ok' button on security warning alert doesn't exist.");
+        }
+    }
+}
+
+- (void)tryBackToLoginPageFromProfilesPage
+{
+    XCUIElement *backButton = [[[self.application.navigationBars[@"Server Profiles"] childrenMatchingType:XCUIElementTypeButton] matchingIdentifier:@"Back"] elementBoundByIndex:0];
+    if (backButton.exists) {
+        [backButton tap];
+    } else {
+        XCTFail(@"'Back' button on Profiles page doesn't exist.");
+    }
+}
+
+- (void)trySelectNewTestServerProfile
+{
+    XCUIElement *testProfile = self.application.collectionViews.staticTexts[@"Test Profile"];
+    if (testProfile.exists) {
+        [testProfile tap];
+        
+        // TODO: how better to use this case
+        //        XCUIElement *unknownServerAlert = self.application.alerts[@"Unknown server"];
+        //        if (unknownServerAlert.exists) {
+        //            XCUIElement *okButton = unknownServerAlert.collectionViews.buttons[@"OK"];
+        //            if (okButton.exists) {
+        //                [okButton tap];
+        //            }
+        //            XCTFail(@"Server Profile doesn't be select (maybe it turned off)");
+        //        }
+    } else {
+        XCTFail(@"Test profile doesn't visible or exist");
+    }
+}
+
+- (void)tryEnterTestCredentials
+{
+    XCUIElement *usernameTextField = self.application.textFields[@"JMLoginPageUserNameTextFieldAccessibilityId"];
+    if (usernameTextField.exists) {
+        [usernameTextField tap];
+        [usernameTextField typeText:kJMTestProfileCredentialsUsername];
+    } else {
+        XCTFail(@"User name text field doesn't exist");
+    }
+    
+    // Close keyboard
+    XCUIElement *doneButton = self.application.buttons[@"Done"];
+    if (doneButton.exists) {
+        [doneButton tap];
+    } else {
+        XCTFail(@"Done button on keyboard doesn't exist.");
+    }
+    
+    XCUIElement *passwordSecureTextField = self.application.secureTextFields[@"JMLoginPagePasswordTextFieldAccessibilityId"];
+    if (passwordSecureTextField.exists) {
+        [passwordSecureTextField tap];
+        [passwordSecureTextField typeText:kJMTestProfileCredentialsPassword];
+    } else {
+        XCTFail(@"Password text field doesn't exist");
+    }
+    
+    // Close keyboard
+    doneButton = self.application.buttons[@"Done"];
+    if (doneButton.exists) {
+        [doneButton tap];
+    } else {
+        XCTFail(@"Done button on keyboard doesn't exist.");
+    }
+}
+
+- (void)tryTapLoginButton
+{
+    XCUIElement *loginButton = self.application.buttons[@"JMLoginPageLoginButtonAccessibilityId"];
+    if (loginButton.exists) {
+        [loginButton tap];
+    } else {
+        XCTFail(@"'Login' button doesn't exist.");
+    }
 }
 
 #pragma mark - Test 'Main' features
@@ -48,7 +248,9 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 - (void)testThatLibraryContainsListOfCells
 {
     [self givenThatLibraryPageOnScreen];
-    [self verifyThatCollectionViewContainsCells];
+    
+    [self givenThatCellsAreVisible];
+    [self givenThatCollectionViewContainsListOfCells];
     
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
@@ -120,8 +322,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    
-    [self verifyThatCollectionViewContainsCells];
+    [self givenThatCellsAreVisible];
     
     // start find some text
     [self trySearchText:kJMTestLibrarySearchTextExample];
@@ -140,7 +341,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    [self verifyThatCollectionViewContainsCells];
+    [self givenThatCellsAreVisible];
     
     // start find wrong text
     XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
@@ -172,7 +373,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    [self verifyThatCollectionViewContainsCells];
+    [self givenThatCellsAreVisible];
     
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
@@ -194,7 +395,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    [self verifyThatCollectionViewContainsCells];
+    [self givenThatCellsAreVisible];
     
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
@@ -202,6 +403,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
         [self givenThatCollectionViewContainsListOfCells];
         
         [self tryChangeViewPresentationFromListToGrid];
+        [self givenThatCellsAreVisible];
         [self verifyThatCollectionViewContainsGridOfCells];
         
         // Change Page to Repository
@@ -211,6 +413,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
         // Change Page to Library
         [self tryOpenLibraryPage];
         [self verifyThatCurrentPageIsLibrary];
+        [self givenThatCellsAreVisible];
         
         [self verifyThatCollectionViewContainsGridOfCells];
         
@@ -223,6 +426,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
+    [self givenThatCellsAreVisible];
     [self givenThatCollectionViewContainsListOfCells];
 
     [self tryChangeViewPresentationFromListToGrid];
@@ -240,7 +444,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCellsAreVisible];
     
     [self verifyThatCellsSortedByName];
 }
@@ -249,7 +453,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCellsAreVisible];
     
     [self trySortByCreationDate];
     [self givenThatCellsAreVisible];
@@ -261,7 +465,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCellsAreVisible];
     
     [self trySortByModifiedDate];
     [self verifyThatCellsSortedByModifiedDate];
@@ -272,7 +476,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCellsAreVisible];
     
     [self verifyThatCellsFiltredByAll];
 }
@@ -281,7 +485,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCellsAreVisible];
     
     [self tryFilterByReports];
     [self verifyThatCellsFiltredByReports];
@@ -291,61 +495,77 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCellsAreVisible];
     
     [self tryFilterByDashboards];
     [self verifyThatCellsFiltredByDashboards];
 }
 
 #pragma mark - Helpers
+- (void)givenThatLoginPageOnScreen
+{
+    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+    
+    [self expectationForPredicate:predicate
+              evaluatedWithObject:loginPageView
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
+- (void)givenThatServerProfilesPageOnScreen
+{
+    XCUIElement *serverProfilesPageView = self.application.otherElements[@"JMServerProfilesPageAccessibilityId"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+    
+    [self expectationForPredicate:predicate
+              evaluatedWithObject:serverProfilesPageView
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
+- (void)givenThatNewProfilePageOnScreen
+{
+    XCUIElement *newServerProfilePageView = self.application.otherElements[@"JMNewServerProfilePageAccessibilityId"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+    
+    [self expectationForPredicate:predicate
+              evaluatedWithObject:newServerProfilePageView
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
 - (void)givenThatLibraryPageOnScreen
 {
-    // Intro Page
+    [self verifyIntroPageIsOnScreen];
+    [self verifyRateAlertIsShown];
+    
+    // Verify Library Page
+    XCUIElement *libraryPageView = self.application.otherElements[@"JMLibraryPageAccessibilityId"];
+    NSPredicate *libraryPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+    
+    [self expectationForPredicate:libraryPagePredicate
+              evaluatedWithObject:libraryPageView
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
+- (void)verifyIntroPageIsOnScreen
+{
     XCUIElement *skipIntroButton = self.application.buttons[@"Skip Intro"];
     if (skipIntroButton.exists) {
         [skipIntroButton tap];
     }
-    
-    // Rate Alert
+}
+
+- (void)verifyRateAlertIsShown
+{
     XCUIElement *rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
     if (rateAlert.exists) {
         XCUIElement *rateAppLateButton = rateAlert.collectionViews.buttons[@"No, thanks"];
         if (rateAppLateButton.exists) {
             [rateAppLateButton tap];
         }
-    }
-    
-    // Verify Library Page
-    XCUIElement *libraryPageView = self.application.otherElements[@"JMLibraryPageAccessibilityId"];
-    if (libraryPageView.exists) {
-        NSLog(@"Library page on screen");
-    } else {
-        NSLog(@"Library page isn't on screen");
-    }
-    
-    // wait if need when view in navigation view will appear
-    NSPredicate *navBarPredicate = [NSPredicate predicateWithFormat:@"self.navigationBars.count > 0"];
-    [self expectationForPredicate:navBarPredicate
-              evaluatedWithObject:self.application
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
-    
-    [self givenThatCellsAreVisible];
-}
-
-- (void)givenSideMenuVisible
-{
-    XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
-    if (!menuView.exists) {
-        [self tryOpenSideApplicationMenu];
-    }
-}
-
-- (void)givenSideMenuNotVisible
-{
-    XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
-    if (menuView.exists) {
-        [self tryOpenSideApplicationMenu];
     }
 }
 
@@ -377,15 +597,6 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 
 #pragma mark - Helper Actions
 // TODO: move to shared methods
-- (void)tryOpenSideApplicationMenu
-{
-    XCUIElement *menuButton = self.application.buttons[@"menu icon"];
-    if (menuButton.exists) {
-        [menuButton tap];
-    } else {
-        XCTFail(@"'Menu' button doesn't exist.");
-    }
-}
 
 - (void)tryOpenRepositoryPage
 {
@@ -421,6 +632,36 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
     }
 }
 
+#pragma mark - Helpers - Side (App) Menu
+
+- (void)givenSideMenuVisible
+{
+    XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
+    if (!menuView.exists) {
+        [self tryOpenSideApplicationMenu];
+    }
+}
+
+- (void)givenSideMenuNotVisible
+{
+    XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
+    if (menuView.exists) {
+        [self tryOpenSideApplicationMenu];
+    }
+}
+
+- (void)tryOpenSideApplicationMenu
+{
+    XCUIElement *menuButton = self.application.buttons[@"menu icon"];
+    if (menuButton.exists) {
+        [menuButton tap];
+    } else {
+        XCTFail(@"'Menu' button doesn't exist.");
+    }
+}
+
+#pragma mark - Helpers - Collection View Presentations
+
 - (void)tryChangeViewPresentationFromListToGrid
 {
     XCUIElement *gridButtonButton = self.application.buttons[@"grid button"];
@@ -440,6 +681,8 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
         XCTFail(@"There isn't 'list' button");
     }
 }
+
+#pragma mark - Helpers - Search
 
 - (void)trySearchText:(NSString *)text
 {
@@ -477,25 +720,78 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
     }
 }
 
-- (void)trySortByName
+#pragma mark - Helpers - Menu
+- (BOOL)isShareButtonExists
 {
-    [self tryOpenMenuActions];
-    [self tryOpenSortMenuFromMenuActions];
-    [self trySelectSortByName];
+    BOOL isShareButtonExists = NO;
+    XCUIElement *navBar = self.application.navigationBars[@"Library"];
+    if (navBar.exists) {
+        XCUIElement *menuActionsButton = navBar.buttons[@"Share"];
+        if (menuActionsButton.exists) {
+            isShareButtonExists = YES;
+        }
+    }
+    return isShareButtonExists;
 }
 
-- (void)trySortByCreationDate
+#pragma mark - Helpers - Menu Sort By
+
+- (void)tryOpenSortMenu
 {
-    [self tryOpenMenuActions];
-    [self tryOpenSortMenuFromMenuActions];
-    [self trySelectSortByCreationDate];
+    BOOL isShareButtonExists = [self isShareButtonExists];
+    if (isShareButtonExists) {
+        [self tryOpenMenuActions];
+        [self tryOpenSortMenuFromMenuActions];
+    } else {
+        [self tryOpenSortMenuFromNavBar];
+    }
 }
 
-- (void)trySortByModifiedDate
+- (void)tryOpenSortMenuFromMenuActions
 {
-    [self tryOpenMenuActions];
-    [self tryOpenSortMenuFromMenuActions];
-    [self trySelectSortByModifiedDate];
+    XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
+    XCUIElement *sortActionElement = menuActionsElement.staticTexts[@"Sort by"];
+    if (sortActionElement.exists) {
+        [sortActionElement tap];
+        
+        // Wait until sort view appears
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
+        [self expectationForPredicate:predicate
+                  evaluatedWithObject:self.application
+                              handler:nil];
+        [self waitForExpectationsWithTimeout:5 handler:nil];
+        
+    } else {
+        XCTFail(@"Sort Action isn't visible");
+    }
+}
+
+- (void)tryOpenSortMenuFromNavBar
+{
+    XCUIElement *navBar = self.application.navigationBars[@"Library"];
+    if (navBar.exists) {
+        XCUIElement *sortButton = navBar.buttons[@"sort action"];
+        if (sortButton.exists) {
+            [sortButton tap];
+        } else {
+            XCTFail(@"Sort Button isn't visible");
+        }
+    } else {
+        XCTFail(@"Navigation bar isn't visible");
+    }
+}
+
+#pragma mark - Helpers - Menu Filter By
+
+- (void)tryOpenFilterMenu
+{
+    BOOL isShareButtonExists = [self isShareButtonExists];
+    if (isShareButtonExists) {
+        [self tryOpenMenuActions];
+        [self tryOpenFilterMenuFromMenuActions];
+    } else {
+        [self tryOpenFilterMenuFromNavBar];
+    }
 }
 
 - (void)tryOpenMenuActions
@@ -525,12 +821,12 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
     }
 }
 
-- (void)tryOpenSortMenuFromMenuActions
+- (void)tryOpenFilterMenuFromMenuActions
 {
     XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
-    XCUIElement *sortActionElement = menuActionsElement.staticTexts[@"Sort by"];
-    if (sortActionElement.exists) {
-        [sortActionElement tap];
+    XCUIElement *filterActionElement = menuActionsElement.staticTexts[@"Filter by"];
+    if (filterActionElement.exists) {
+        [filterActionElement tap];
         
         // Wait until sort view appears
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
@@ -544,18 +840,38 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
     }
 }
 
-- (void)trySelectSortByName
+- (void)tryOpenFilterMenuFromNavBar
 {
+    XCUIElement *navBar = self.application.navigationBars[@"Library"];
+    if (navBar.exists) {
+        XCUIElement *filterButton = navBar.buttons[@"filter action"];
+        if (filterButton.exists) {
+            [filterButton tap];
+        } else {
+            XCTFail(@"Filter Button isn't visible");
+        }
+    } else {
+        XCTFail(@"Navigation bar isn't visible");
+    }
+}
+
+#pragma mark - Helpers - Sort By
+
+- (void)trySortByName
+{
+    [self tryOpenSortMenu];
     [self trySelectSortBy:@"Name"];
 }
 
-- (void)trySelectSortByCreationDate
+- (void)trySortByCreationDate
 {
+    [self tryOpenSortMenu];
     [self trySelectSortBy:@"Creation Date"];
 }
 
-- (void)trySelectSortByModifiedDate
+- (void)trySortByModifiedDate
 {
+    [self tryOpenSortMenu];
     [self trySelectSortBy:@"Modified Date"];
 }
 
@@ -574,59 +890,24 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
     }
 }
 
+#pragma mark - Helpers - Filter By
+
 - (void)tryFilterByAll
 {
-    [self tryOpenMenuActions];
-    [self tryOpenFilterMenuFromMenuActions];
-    [self trySelectFilterByAll];
-}
-
-- (void)trySelectFilterByAll
-{
+    [self tryOpenFilterMenu];
     [self trySelectFilterBy:@"All"];
 }
 
 - (void)tryFilterByReports
 {
-    [self tryOpenMenuActions];
-    [self tryOpenFilterMenuFromMenuActions];
-    [self trySelectFilterByReports];
-}
-
-- (void)trySelectFilterByReports
-{
+    [self tryOpenFilterMenu];
     [self trySelectFilterBy:@"Reports"];
 }
 
 - (void)tryFilterByDashboards
 {
-    [self tryOpenMenuActions];
-    [self tryOpenFilterMenuFromMenuActions];
-    [self trySelectFilterByDashboards];
-}
-
-- (void)trySelectFilterByDashboards
-{
+    [self tryOpenFilterMenu];
     [self trySelectFilterBy:@"Dashboards"];
-}
-
-- (void)tryOpenFilterMenuFromMenuActions
-{
-    XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
-    XCUIElement *filterActionElement = menuActionsElement.staticTexts[@"Filter by"];
-    if (filterActionElement.exists) {
-        [filterActionElement tap];
-        
-        // Wait until sort view appears
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
-        [self expectationForPredicate:predicate
-                  evaluatedWithObject:self.application
-                              handler:nil];
-        [self waitForExpectationsWithTimeout:5 handler:nil];
-        
-    } else {
-        XCTFail(@"Sort Action isn't visible");
-    }
 }
 
 - (void)trySelectFilterBy:(NSString *)filterTypeString

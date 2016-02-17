@@ -153,6 +153,7 @@
 		93C358821C70EDF900A5DDA9 /* JMLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C358801C70EDF900A5DDA9 /* JMLibraryUITests.m */; };
 		93C358841C70EE2700A5DDA9 /* JMServerProfilesUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C358831C70EE2700A5DDA9 /* JMServerProfilesUITests.m */; };
 		93C37C6A1A39D49900CEE7CF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08E62CF819922BA40081CA83 /* Localizable.strings */; };
+		93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C4E3111C737DB300A19D64 /* JMUITestConstants.m */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
 		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
@@ -503,6 +504,8 @@
 		9397F97C1AAACADF006B89C6 /* JMReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReport.m; sourceTree = "<group>"; };
 		93C358801C70EDF900A5DDA9 /* JMLibraryUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLibraryUITests.m; sourceTree = "<group>"; };
 		93C358831C70EE2700A5DDA9 /* JMServerProfilesUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerProfilesUITests.m; sourceTree = "<group>"; };
+		93C4E3101C737DB300A19D64 /* JMUITestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMUITestConstants.h; sourceTree = "<group>"; };
+		93C4E3111C737DB300A19D64 /* JMUITestConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUITestConstants.m; sourceTree = "<group>"; };
 		93D8C6431AAC7E9200117306 /* JMWebViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebViewManager.h; sourceTree = "<group>"; };
 		93D8C6441AAC7E9200117306 /* JMWebViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMWebViewManager.m; sourceTree = "<group>"; };
 		93D8C6531AAD69CD00117306 /* JMDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboard.h; sourceTree = "<group>"; };
@@ -1809,6 +1812,23 @@
 			path = ServerProfilesTests;
 			sourceTree = "<group>";
 		};
+		93C4E30A1C7374A000A19D64 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				93C4E30E1C737D4A00A19D64 /* JMUITestConstants */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		93C4E30E1C737D4A00A19D64 /* JMUITestConstants */ = {
+			isa = PBXGroup;
+			children = (
+				93C4E3101C737DB300A19D64 /* JMUITestConstants.h */,
+				93C4E3111C737DB300A19D64 /* JMUITestConstants.m */,
+			);
+			path = JMUITestConstants;
+			sourceTree = "<group>";
+		};
 		93D8C6411AAC7E9200117306 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1854,6 +1874,7 @@
 		93DC8C3A1C6CCEEE000DEADF /* TIBCO JasperMobileUITests */ = {
 			isa = PBXGroup;
 			children = (
+				93C4E30A1C7374A000A19D64 /* Helpers */,
 				93C3587E1C70EDF900A5DDA9 /* SectionsTests */,
 				93C358811C70EDF900A5DDA9 /* ServerProfilesTests */,
 				93DC8C3D1C6CCEEE000DEADF /* Info.plist */,
@@ -2471,6 +2492,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */,
 				93C358821C70EDF900A5DDA9 /* JMLibraryUITests.m in Sources */,
 				93C358841C70EE2700A5DDA9 /* JMServerProfilesUITests.m in Sources */,
 			);

@@ -7,15 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-
-NSString *const kJMTestProfileName = @"Test Profile";
-//NSString *const kJMTestProfileURL = @"http://192.168.88.55:8088/jasperserver-pro-62";
-//NSString *const kJMTestProfileCredentialsUsername = @"superuser";
-//NSString *const kJMTestProfileCredentialsPassword = @"superuser";
-
-NSString *const kJMTestProfileURL = @"http://mobiledemo2.jaspersoft.com/jasperserver-pro";
-NSString *const kJMTestProfileCredentialsUsername = @"phoneuser";
-NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
+#import "JMUITestConstants.h"
 
 @interface JMServerProfilesUITests : XCTestCase
 @property(nonatomic, strong) XCUIApplication *application;
@@ -31,8 +23,13 @@ NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
     self.application = [[XCUIApplication alloc] init];
     [self.application launch];
     
-    [self createTestProfile];
-    [self loginWithTestProfile];
+    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
+    if (loginPageView.exists) {
+        [self loginWithTestProfile];
+    } else {
+        [self logout];
+        [self loginWithTestProfile];
+    }
 }
 
 - (void)testThatListOfServerProfilesVisible
@@ -41,7 +38,7 @@ NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
 }
 
 - (void)tearDown {
-//    [self logout];
+    [self logout];
 //    [self removeTestProfile];
     
     self.application = nil;
@@ -49,28 +46,32 @@ NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
 }
 
 #pragma mark - High level Helpers
-- (void)createTestProfile
+- (void)selectTestProfile
 {
     [self givenThatLoginPageOnScreen];
     [self tryOpenServerProfilesPage];
     
     [self givenThatServerProfilesPageOnScreen];
-    [self tryOpenNewServerProfilePage];
     
-    [self givenThatNewProfilePageOnScreen];
-    [self tryCreateNewTestServerProfile];
-    
-    [self givenThatServerProfilesPageOnScreen];
-    [self tryBackToLoginPageFromProfilesPage];
+    XCUIElement *testProfile = self.application.collectionViews.staticTexts[@"Test Profile"];
+    BOOL isTestProfileExists = testProfile.exists;
+    if (isTestProfileExists) {
+        [self trySelectNewTestServerProfile];
+    } else {
+        [self tryOpenNewServerProfilePage];
+        
+        [self givenThatNewProfilePageOnScreen];
+        [self tryCreateNewTestServerProfile];
+        
+        [self givenThatServerProfilesPageOnScreen];
+        [self trySelectNewTestServerProfile];
+    }
 }
 
 - (void)loginWithTestProfile
 {
     [self givenThatLoginPageOnScreen];
-    [self tryOpenServerProfilesPage];
-    
-    [self givenThatServerProfilesPageOnScreen];
-    [self trySelectNewTestServerProfile];
+    [self selectTestProfile];
     
     [self givenThatLoginPageOnScreen];
     [self tryEnterTestCredentials];
@@ -103,15 +104,10 @@ NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
 - (void)givenThatLoginPageOnScreen
 {
     XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-    if (loginPageView.exists) {
-        NSLog(@"Login page on screen");
-    } else {
-        NSLog(@"Login page isn't on screen");
-    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.navigationBars.count == 0"];
     [self expectationForPredicate:predicate
-              evaluatedWithObject:self.application
+              evaluatedWithObject:loginPageView
                           handler:nil];
     [self waitForExpectationsWithTimeout:5 handler:nil];
 }
@@ -119,15 +115,10 @@ NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
 - (void)givenThatServerProfilesPageOnScreen
 {
     XCUIElement *serverProfilesPageView = self.application.otherElements[@"JMServerProfilesPageAccessibilityId"];
-    if (serverProfilesPageView.exists) {
-        NSLog(@"Server Profiles page on screen");
-    } else {
-        NSLog(@"Server Profiles page isn't on screen");
-    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.navigationBars.count > 0"];
     [self expectationForPredicate:predicate
-              evaluatedWithObject:self.application
+              evaluatedWithObject:serverProfilesPageView
                           handler:nil];
     [self waitForExpectationsWithTimeout:5 handler:nil];
 }
@@ -135,24 +126,39 @@ NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
 - (void)givenThatNewProfilePageOnScreen
 {
     XCUIElement *newServerProfilePageView = self.application.otherElements[@"JMNewServerProfilePageAccessibilityId"];
-    if (newServerProfilePageView.exists) {
-        NSLog(@"New Server Profile page on screen");
-    } else {
-        NSLog(@"New Server Profile page isn't on screen");
-    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
     
-    // TODO: add expectation
+    [self expectationForPredicate:predicate
+              evaluatedWithObject:newServerProfilePageView
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
 - (void)givenThatLibraryPageOnScreen
 {
-    // Intro Page
+    [self verifyIntroPageIsOnScreen];
+    [self verifyRateAlertIsShown];
+    
+    // Verify Library Page
+    XCUIElement *libraryPageView = self.application.otherElements[@"JMLibraryPageAccessibilityId"];
+    NSPredicate *libraryPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+    
+    [self expectationForPredicate:libraryPagePredicate
+              evaluatedWithObject:libraryPageView
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
+- (void)verifyIntroPageIsOnScreen
+{
     XCUIElement *skipIntroButton = self.application.buttons[@"Skip Intro"];
     if (skipIntroButton.exists) {
         [skipIntroButton tap];
     }
-    
-    // Rate Alert
+}
+
+- (void)verifyRateAlertIsShown
+{
     XCUIElement *rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
     if (rateAlert.exists) {
         XCUIElement *rateAppLateButton = rateAlert.collectionViews.buttons[@"No, thanks"];
@@ -160,21 +166,6 @@ NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
             [rateAppLateButton tap];
         }
     }
-    
-    // Verify Library Page
-    XCUIElement *libraryPageView = self.application.otherElements[@"JMLibraryPageAccessibilityId"];
-    if (libraryPageView.exists) {
-        NSLog(@"Library page on screen");
-    } else {
-        NSLog(@"Library page isn't on screen");
-    }
-    
-    // wait if need when view in navigation view will appear
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.navigationBars.count > 0"];
-    [self expectationForPredicate:predicate
-              evaluatedWithObject:self.application
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
 #pragma mark - Low level Helpers
