@@ -24,3 +24,7 @@ Tibco JasperMobile.xcodeproj/xcuserdata/*
 Pods
 Podfile.lock
 TIBCO JasperMobile.xcworkspace
+
+#Tests Output
+output
+build
