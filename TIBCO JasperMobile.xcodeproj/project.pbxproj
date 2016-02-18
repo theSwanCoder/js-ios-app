@@ -2678,6 +2678,7 @@
 /* Begin XCBuildConfiguration section */
 		08DD18201B13519000856112 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2710,7 +2711,6 @@
 		};
 		08DD18211B13519000856112 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -2982,6 +2982,7 @@
 		};
 		F55CC373174CFFCF00CEB39E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3015,6 +3016,7 @@
 		};
 		F55CC374174CFFCF00CEB39E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 20A5E8D0860C986563FB740C /* Pods.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3047,7 +3049,6 @@
 		};
 		F55CC376174CFFCF00CEB39E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -3098,7 +3099,6 @@
 		};
 		F55CC377174CFFCF00CEB39E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 20A5E8D0860C986563FB740C /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
