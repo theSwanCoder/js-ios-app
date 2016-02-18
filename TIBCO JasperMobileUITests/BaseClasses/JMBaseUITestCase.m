@@ -21,15 +21,10 @@
     
     self.application = [[XCUIApplication alloc] init];
     [self.application launch];
-    
-    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-    if (loginPageView.exists) {
-        [self loginWithTestProfile];
-    }
 }
 
 - (void)tearDown {
-    //self.application = nil;
+    self.application = nil;
     
     [super tearDown];
 }
@@ -72,7 +67,6 @@
 - (void)logout
 {
     [self givenThatLibraryPageOnScreen];
-    [self tryOpenSideApplicationMenu];
     
     [self tryOpenPageWithName:@"Log Out"];
 }
@@ -272,13 +266,7 @@
     [self verifyRateAlertIsShown];
     
     // Verify Library Page
-    XCUIElement *libraryPageView = self.application.otherElements[@"JMLibraryPageAccessibilityId"];
-    NSPredicate *libraryPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
-    
-    [self expectationForPredicate:libraryPagePredicate
-              evaluatedWithObject:libraryPageView
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
+    [self verifyThatCurrentPageIsLibrary];
 }
 
 - (void)verifyIntroPageIsOnScreen
@@ -323,13 +311,6 @@
         XCUIElement *pageMenuItem = menuView.cells.staticTexts[pageName];
         if (pageMenuItem.exists) {
             [pageMenuItem tap];
-            
-            // wait if need when view in navigation view will appear
-            NSPredicate *navBarPredicate = [NSPredicate predicateWithFormat:@"self.navigationBars.count > 0"];
-            [self expectationForPredicate:navBarPredicate
-                      evaluatedWithObject:self.application
-                                  handler:nil];
-            [self waitForExpectationsWithTimeout:5 handler:nil];
         }
     } else {
         XCTFail(@"'Menu' isn't visible.");
@@ -381,14 +362,24 @@
 #pragma mark - Verifies
 - (void)verifyThatCurrentPageIsLibrary
 {
-    XCUIElement *libraryNavBar = self.application.navigationBars[@"Library"];
-    XCTAssertTrue(libraryNavBar.exists, @"Should be 'Library' page");
+    XCUIElement *libraryPageView = self.application.otherElements[@"JMLibraryPageAccessibilityId"];
+    NSPredicate *libraryPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+    
+    [self expectationForPredicate:libraryPagePredicate
+              evaluatedWithObject:libraryPageView
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
 - (void)verifyThatCurrentPageIsRepository
 {
-    XCUIElement *libraryNavBar = self.application.navigationBars[@"Repository"];
-    XCTAssertTrue(libraryNavBar.exists, @"Should be 'Library' page");
+    XCUIElement *repositoryNavBar = self.application.navigationBars[@"Repository"];
+    NSPredicate *repositoryPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+    
+    [self expectationForPredicate:repositoryPagePredicate
+              evaluatedWithObject:repositoryNavBar
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
 @end
