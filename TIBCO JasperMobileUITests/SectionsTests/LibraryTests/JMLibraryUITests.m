@@ -12,7 +12,12 @@
 @implementation JMLibraryUITests
 
 - (void)setUp {
-    [super setUp];    
+    [super setUp];
+
+    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
+    if (loginPageView.exists) {
+        [self loginWithTestProfile];
+    }
 }
 
 - (void)tearDown {
