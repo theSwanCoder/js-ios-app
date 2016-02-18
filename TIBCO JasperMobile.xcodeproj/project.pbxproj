@@ -144,6 +144,8 @@
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
 		9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */; };
 		936A1B971C22B72C00559F16 /* EULA.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 936A1B961C22B72C00559F16 /* EULA.pdf */; };
+		93732E2D1C75F2050065B972 /* JMBaseUITestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */; };
+		93732E321C75FA010065B972 /* JMLibraryUITests+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478962B3EC9A0F6985B085 /* JMLibraryUITests+Helpers.m */; };
 		937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */; };
 		93826C7E1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93826C7C1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m */; };
 		93826C7F1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93826C7D1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib */; };
@@ -496,6 +498,9 @@
 		9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionsTests.m; sourceTree = "<group>"; };
 		9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUtilsTests.m; sourceTree = "<group>"; };
 		936A1B961C22B72C00559F16 /* EULA.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = EULA.pdf; sourceTree = "<group>"; };
+		93732E2B1C75F2050065B972 /* JMBaseUITestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseUITestCase.h; sourceTree = "<group>"; };
+		93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseUITestCase.m; sourceTree = "<group>"; };
+		93732E331C75FAFB0065B972 /* JMLibraryUITests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JMLibraryUITests.h; sourceTree = "<group>"; };
 		937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoaderTests.m; sourceTree = "<group>"; };
 		93826C7B1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowDashboardControlsVC.h; sourceTree = "<group>"; };
 		93826C7C1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowDashboardControlsVC.m; sourceTree = "<group>"; };
@@ -520,6 +525,7 @@
 		93F54FDA1BD7975E00355A30 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.adhoc.xcconfig; path = "Pods/Target Support Files/Pods/Pods.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A1478080DB621855A002EE47 /* JMDashlet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashlet.h; sourceTree = "<group>"; };
+		A14780A3690ABD58CDEA961E /* JMLibraryUITests+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMLibraryUITests+Helpers.h"; sourceTree = "<group>"; };
 		A147810144F2E290F3B7FF83 /* JMJavascriptCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptCallback.m; sourceTree = "<group>"; };
 		A1478109BED20F430D9E6D81 /* JMJavascriptRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptRequest.h; sourceTree = "<group>"; };
 		A14781FFF7CCBB2CBA23D0D0 /* JMDashboardParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardParameter.m; sourceTree = "<group>"; };
@@ -548,6 +554,7 @@
 		A147887C2ACE2CC1BEB39AFE /* JMNewScheduleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMNewScheduleCell.h; sourceTree = "<group>"; };
 		A1478935CB12E39D40C6D7BF /* JMDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardLoader.h; sourceTree = "<group>"; };
 		A1478961EB70C13590B1CBE5 /* JMScheduleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleManager.m; sourceTree = "<group>"; };
+		A1478962B3EC9A0F6985B085 /* JMLibraryUITests+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMLibraryUITests+Helpers.m"; sourceTree = "<group>"; };
 		A14789652CAAA6F45433A045 /* JMDashboardParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardParameter.h; sourceTree = "<group>"; };
 		A1478986F8AAADBC9A5CC783 /* JMDashlet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashlet.m; sourceTree = "<group>"; };
 		A1478A35341BFE2392AC1191 /* JMBaseDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseDashboardLoader.h; sourceTree = "<group>"; };
@@ -1767,6 +1774,24 @@
 			path = EULA;
 			sourceTree = "<group>";
 		};
+		93732E2A1C75F1E10065B972 /* BaseClasses */ = {
+			isa = PBXGroup;
+			children = (
+				93732E2B1C75F2050065B972 /* JMBaseUITestCase.h */,
+				93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */,
+			);
+			path = BaseClasses;
+			sourceTree = "<group>";
+		};
+		93732E2E1C75F4140065B972 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A14780A3690ABD58CDEA961E /* JMLibraryUITests+Helpers.h */,
+				A1478962B3EC9A0F6985B085 /* JMLibraryUITests+Helpers.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		9397F9791AAACA94006B89C6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -1799,6 +1824,8 @@
 		93C3587F1C70EDF900A5DDA9 /* LibraryTests */ = {
 			isa = PBXGroup;
 			children = (
+				93732E2E1C75F4140065B972 /* Helpers */,
+				93732E331C75FAFB0065B972 /* JMLibraryUITests.h */,
 				93C358801C70EDF900A5DDA9 /* JMLibraryUITests.m */,
 			);
 			path = LibraryTests;
@@ -1874,6 +1901,7 @@
 		93DC8C3A1C6CCEEE000DEADF /* TIBCO JasperMobileUITests */ = {
 			isa = PBXGroup;
 			children = (
+				93732E2A1C75F1E10065B972 /* BaseClasses */,
 				93C4E30A1C7374A000A19D64 /* Helpers */,
 				93C3587E1C70EDF900A5DDA9 /* SectionsTests */,
 				93C358811C70EDF900A5DDA9 /* ServerProfilesTests */,
@@ -2493,6 +2521,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */,
+				93732E321C75FA010065B972 /* JMLibraryUITests+Helpers.m in Sources */,
+				93732E2D1C75F2050065B972 /* JMBaseUITestCase.m in Sources */,
 				93C358821C70EDF900A5DDA9 /* JMLibraryUITests.m in Sources */,
 				93C358841C70EE2700A5DDA9 /* JMServerProfilesUITests.m in Sources */,
 			);
