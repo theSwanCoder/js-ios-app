@@ -19,16 +19,6 @@
     }
 }
 
-- (void)givenThatCellsAreVisible
-{
-    // wait until collection view will fill.
-    NSPredicate *cellsCountPredicate = [NSPredicate predicateWithFormat:@"self.cells.count > 0"];
-    [self expectationForPredicate:cellsCountPredicate
-              evaluatedWithObject:self.application
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
-}
-
 #pragma mark - Helpers - Collection View Presentations
 
 - (void)tryChangeViewPresentationFromListToGrid

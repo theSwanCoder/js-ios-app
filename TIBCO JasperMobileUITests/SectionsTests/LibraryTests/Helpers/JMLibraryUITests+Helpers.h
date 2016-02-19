@@ -8,7 +8,6 @@
 @interface JMLibraryUITests (Helpers)
 // Helpers - Main
 - (void)givenThatCollectionViewContainsListOfCells;
-- (void)givenThatCellsAreVisible;
 // Helpers - Collection View Presentations
 - (void)tryChangeViewPresentationFromListToGrid;
 - (void)tryChangeViewPresentationFromGridToList;

@@ -269,6 +269,16 @@
     [self verifyThatCurrentPageIsLibrary];
 }
 
+- (void)givenThatCellsAreVisible
+{
+    // wait until collection view will fill.
+    NSPredicate *cellsCountPredicate = [NSPredicate predicateWithFormat:@"self.cells.count > 0"];
+    [self expectationForPredicate:cellsCountPredicate
+              evaluatedWithObject:self.application
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
 - (void)verifyIntroPageIsOnScreen
 {
     XCUIElement *skipIntroButton = self.application.buttons[@"Skip Intro"];
@@ -299,6 +309,12 @@
 - (void)tryOpenLibraryPage
 {
     NSString *libraryPageName = @"Library";
+    [self tryOpenPageWithName:libraryPageName];
+}
+
+- (void)tryOpenFavoritePage
+{
+    NSString *libraryPageName = @"Favorites";
     [self tryOpenPageWithName:libraryPageName];
 }
 
@@ -349,7 +365,7 @@
 - (BOOL)isShareButtonExists
 {
     BOOL isShareButtonExists = NO;
-    XCUIElement *navBar = self.application.navigationBars[@"Library"];
+    XCUIElement *navBar = [self.application.navigationBars elementBoundByIndex:0];
     if (navBar.exists) {
         XCUIElement *menuActionsButton = navBar.buttons[@"Share"];
         if (menuActionsButton.exists) {

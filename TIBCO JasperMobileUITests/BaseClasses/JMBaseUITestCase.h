@@ -25,11 +25,12 @@
 - (void)givenThatServerProfilesPageOnScreen;
 - (void)givenThatNewProfilePageOnScreen;
 - (void)givenThatLibraryPageOnScreen;
+- (void)givenThatCellsAreVisible;
 - (void)verifyIntroPageIsOnScreen;
 - (void)verifyRateAlertIsShown;
 - (void)tryOpenRepositoryPage;
 - (void)tryOpenLibraryPage;
-- (void)tryOpenPageWithName:(NSString *)pageName;
+- (void)tryOpenFavoritePage;
 - (void)givenSideMenuVisible;
 - (void)givenSideMenuNotVisible;
 - (void)tryOpenSideApplicationMenu;
