@@ -146,6 +146,7 @@
 		936A1B971C22B72C00559F16 /* EULA.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 936A1B961C22B72C00559F16 /* EULA.pdf */; };
 		93732E2D1C75F2050065B972 /* JMBaseUITestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */; };
 		93732E321C75FA010065B972 /* JMLibraryUITests+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478962B3EC9A0F6985B085 /* JMLibraryUITests+Helpers.m */; };
+		93732E391C7701810065B972 /* JMReportInfoPageUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93732E381C7701810065B972 /* JMReportInfoPageUITests.m */; };
 		937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */; };
 		93826C7E1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93826C7C1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m */; };
 		93826C7F1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93826C7D1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib */; };
@@ -501,6 +502,8 @@
 		93732E2B1C75F2050065B972 /* JMBaseUITestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseUITestCase.h; sourceTree = "<group>"; };
 		93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseUITestCase.m; sourceTree = "<group>"; };
 		93732E331C75FAFB0065B972 /* JMLibraryUITests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JMLibraryUITests.h; sourceTree = "<group>"; };
+		93732E371C7701810065B972 /* JMReportInfoPageUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportInfoPageUITests.h; sourceTree = "<group>"; };
+		93732E381C7701810065B972 /* JMReportInfoPageUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportInfoPageUITests.m; sourceTree = "<group>"; };
 		937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoaderTests.m; sourceTree = "<group>"; };
 		93826C7B1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowDashboardControlsVC.h; sourceTree = "<group>"; };
 		93826C7C1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowDashboardControlsVC.m; sourceTree = "<group>"; };
@@ -1792,6 +1795,31 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		93732E341C7701610065B972 /* ResourcesTests */ = {
+			isa = PBXGroup;
+			children = (
+				93732E351C7701610065B972 /* ReportTests */,
+			);
+			path = ResourcesTests;
+			sourceTree = "<group>";
+		};
+		93732E351C7701610065B972 /* ReportTests */ = {
+			isa = PBXGroup;
+			children = (
+				93732E361C7701610065B972 /* ReportInfoPageTests */,
+			);
+			path = ReportTests;
+			sourceTree = "<group>";
+		};
+		93732E361C7701610065B972 /* ReportInfoPageTests */ = {
+			isa = PBXGroup;
+			children = (
+				93732E371C7701810065B972 /* JMReportInfoPageUITests.h */,
+				93732E381C7701810065B972 /* JMReportInfoPageUITests.m */,
+			);
+			path = ReportInfoPageTests;
+			sourceTree = "<group>";
+		};
 		9397F9791AAACA94006B89C6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -1901,6 +1929,7 @@
 		93DC8C3A1C6CCEEE000DEADF /* TIBCO JasperMobileUITests */ = {
 			isa = PBXGroup;
 			children = (
+				93732E341C7701610065B972 /* ResourcesTests */,
 				93732E2A1C75F1E10065B972 /* BaseClasses */,
 				93C4E30A1C7374A000A19D64 /* Helpers */,
 				93C3587E1C70EDF900A5DDA9 /* SectionsTests */,
@@ -2523,6 +2552,7 @@
 				93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */,
 				93732E321C75FA010065B972 /* JMLibraryUITests+Helpers.m in Sources */,
 				93732E2D1C75F2050065B972 /* JMBaseUITestCase.m in Sources */,
+				93732E391C7701810065B972 /* JMReportInfoPageUITests.m in Sources */,
 				93C358821C70EDF900A5DDA9 /* JMLibraryUITests.m in Sources */,
 				93C358841C70EE2700A5DDA9 /* JMServerProfilesUITests.m in Sources */,
 			);
