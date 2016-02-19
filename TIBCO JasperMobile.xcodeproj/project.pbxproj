@@ -137,6 +137,7 @@
 		930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D431ABB1CDF005F93FB /* dashboard.html */; };
 		930F8D461ABB1CDF005F93FB /* report.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D441ABB1CDF005F93FB /* report.html */; };
 		930F8D481ABB1D9F005F93FB /* require.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D471ABB1D9F005F93FB /* require.min.js */; };
+		932EE4631C774D550031CDFB /* JMRunReportTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 932EE4621C774D550031CDFB /* JMRunReportTests.m */; };
 		9331B2C61C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */; };
 		9331B2C71C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */; };
 		9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */; };
@@ -490,6 +491,8 @@
 		930F8D431ABB1CDF005F93FB /* dashboard.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = dashboard.html; sourceTree = "<group>"; };
 		930F8D441ABB1CDF005F93FB /* report.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = report.html; sourceTree = "<group>"; };
 		930F8D471ABB1D9F005F93FB /* require.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = require.min.js; sourceTree = "<group>"; };
+		932EE4611C774D550031CDFB /* JMRunReportTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRunReportTests.h; sourceTree = "<group>"; };
+		932EE4621C774D550031CDFB /* JMRunReportTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRunReportTests.m; sourceTree = "<group>"; };
 		9331B2C31C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowDashboardControlsTableViewCell.h; sourceTree = "<group>"; };
 		9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowDashboardControlsTableViewCell.m; sourceTree = "<group>"; };
 		9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMExternalWindowDashboardControlsTableViewCell.xib; sourceTree = "<group>"; };
@@ -1739,6 +1742,15 @@
 			path = Library;
 			sourceTree = "<group>";
 		};
+		932EE4601C774D3F0031CDFB /* RunReportTests */ = {
+			isa = PBXGroup;
+			children = (
+				932EE4611C774D550031CDFB /* JMRunReportTests.h */,
+				932EE4621C774D550031CDFB /* JMRunReportTests.m */,
+			);
+			path = RunReportTests;
+			sourceTree = "<group>";
+		};
 		9331B2C01C2FC6F10057233B /* JMExtraWindowDashboardControlsTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -1806,6 +1818,7 @@
 		93732E351C7701610065B972 /* ReportTests */ = {
 			isa = PBXGroup;
 			children = (
+				932EE4601C774D3F0031CDFB /* RunReportTests */,
 				93732E361C7701610065B972 /* ReportInfoPageTests */,
 			);
 			path = ReportTests;
@@ -2551,6 +2564,7 @@
 			files = (
 				93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */,
 				93732E321C75FA010065B972 /* JMLibraryUITests+Helpers.m in Sources */,
+				932EE4631C774D550031CDFB /* JMRunReportTests.m in Sources */,
 				93732E2D1C75F2050065B972 /* JMBaseUITestCase.m in Sources */,
 				93732E391C7701810065B972 /* JMReportInfoPageUITests.m in Sources */,
 				93C358821C70EDF900A5DDA9 /* JMLibraryUITests.m in Sources */,
