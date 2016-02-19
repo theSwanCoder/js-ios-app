@@ -299,6 +299,15 @@
 }
 
 #pragma mark - Helper Actions
+- (void)tryBackToPreviousPage
+{
+    XCUIElement *backButton = self.application.buttons[@"Back"];
+    if (backButton.exists) {
+        [backButton tap];
+    } else {
+        XCTFail(@"'Back' item isn't visible");
+    }
+}
 
 - (void)tryOpenRepositoryPage
 {
@@ -397,5 +406,29 @@
                           handler:nil];
     [self waitForExpectationsWithTimeout:5 handler:nil];
 }
+
+#pragma mark - Verifies - Loading Popup
+- (void)verifyThatLoadingPopupVisible
+{
+    XCUIElement *loadingPopup = [self.application.otherElements elementMatchingType:XCUIElementTypeAny identifier:@"JMCancelRequestPopupAccessibilityId"];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+    [self expectationForPredicate:predicate
+              evaluatedWithObject:loadingPopup
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
+- (void)verifyThatLoadingPopupNotVisible
+{
+    XCUIElement *loadingPopup = [self.application.otherElements elementMatchingType:XCUIElementTypeAny identifier:@"JMCancelRequestPopupAccessibilityId"];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == false"];
+    [self expectationForPredicate:predicate
+              evaluatedWithObject:loadingPopup
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:30 handler:nil];
+}
+
 
 @end

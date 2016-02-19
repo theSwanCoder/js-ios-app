@@ -14,6 +14,7 @@
 - (void)selectTestProfile;
 - (void)loginWithTestProfile;
 - (void)logout;
+- (void)tryBackToPreviousPage;
 - (void)tryOpenServerProfilesPage;
 - (void)tryOpenNewServerProfilePage;
 - (void)tryCreateNewTestServerProfile;
@@ -37,4 +38,7 @@
 - (BOOL)isShareButtonExists;
 - (void)verifyThatCurrentPageIsLibrary;
 - (void)verifyThatCurrentPageIsRepository;
+//
+- (void)verifyThatLoadingPopupVisible;
+- (void)verifyThatLoadingPopupNotVisible;
 @end

@@ -84,7 +84,7 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     [self tryMarkTestReportAsFavorite];
     
     // verify report is favorite
-    [self backToPreviousPage];
+    [self tryBackToPreviousPage];
     [self givenThatLibraryPageOnScreen];
     if (![self isReportMarkAsFavorite:reportInfoLabel]) {
         XCTFail(@"Test report isn't marked as favorite.");
@@ -129,7 +129,7 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
         // unmark
         [self givenThatReportInfoPageOnScreen];
         [self tryUnMarkTestReportAsFavorite];
-        [self backToPreviousPage];
+        [self tryBackToPreviousPage];
     }
     
     [self tryOpenLibraryPage];
@@ -151,16 +151,6 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     }
     
     return isTestReportMarkAsFavorite;
-}
-
-- (void)backToPreviousPage
-{
-    XCUIElement *backButton = self.application.buttons[@"Back"];
-    if (backButton.exists) {
-        [backButton tap];
-    } else {
-        XCTFail(@"'Back' item isn't visible");
-    }
 }
 
 - (void)tryMarkTestReportAsFavorite
