@@ -51,6 +51,10 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 {
     [super viewDidLoad];
     
+    // Accessibility
+    self.view.isAccessibilityElement = NO;
+    self.view.accessibilityIdentifier = [self accessibilityIdentifier];
+    
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
@@ -68,6 +72,12 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    return @"JMResourceInfoViewAccessibilityId";
 }
 
 #pragma mark - Observers

@@ -58,6 +58,12 @@
     return _savedReports;
 }
 
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    return @"JMRSavedItemInfoViewAccessibilityId";
+}
+
 #pragma mark - Overloaded methods
 - (void)resetResourceProperties
 {

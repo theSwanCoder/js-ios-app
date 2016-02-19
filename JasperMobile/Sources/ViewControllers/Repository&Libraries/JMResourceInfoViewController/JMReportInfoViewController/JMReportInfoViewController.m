@@ -51,6 +51,11 @@
     }
 }
 
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    return @"JMReportInfoViewAccessibilityId";
+}
 
 #pragma mark - Private API
 - (void)runReport
