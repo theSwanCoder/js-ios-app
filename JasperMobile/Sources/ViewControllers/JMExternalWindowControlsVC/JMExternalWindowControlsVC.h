@@ -36,7 +36,7 @@
 @interface JMExternalWindowControlsVC : UIViewController
 @property (nonatomic, weak) NSObject <JMExternalWindowControlViewControllerDelegate> *delegate;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-- (instancetype)initWithContentWebView:(UIWebView *)contentView;
+- (instancetype)initWithContentWebView:(WKWebView *)contentView;
 - (void)updateInterface;
 @end
 

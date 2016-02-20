@@ -94,20 +94,22 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.report updateCountOfPages:NSNotFound];
     [self.report updateCurrentPage:page];
 
-    if ([[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView]) {
-        [self fetchPageNumber:page withCompletion:completionBlock];
-    } else {
-        self.reportLoadCompletion = completionBlock;
+    [[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView completion:^(BOOL isWebViewLoaded) {
+        if (isWebViewLoaded) {
+            [self fetchPageNumber:page withCompletion:completionBlock];
+        } else {
+            self.reportLoadCompletion = completionBlock;
 
-        [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
-            if (success) {
-                [self.bridge startLoadHTMLString:self.report.HTMLString
-                                         baseURL:[NSURL URLWithString:self.report.baseURLString]];
-            } else {
-                NSLog(@"Error loading HTML%@", error.localizedDescription);
-            }
-        }];
-    }
+            [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
+                if (success) {
+                    [self.bridge startLoadHTMLString:self.report.HTMLString
+                                             baseURL:[NSURL URLWithString:self.report.baseURLString]];
+                } else {
+                    NSLog(@"Error loading HTML%@", error.localizedDescription);
+                }
+            }];
+        }
+    }];
 }
 
 - (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(void(^)(BOOL success, NSError *error))completionBlock
@@ -137,37 +139,40 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)applyReportParametersWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    if ([[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView]) {
-        self.isReportInLoadingProcess = YES;
-        self.report.isReportAlreadyLoaded = NO;
-        
-        self.reportLoadCompletion = completion;
-        [self.report updateCurrentPage:1];
 
-        [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
-                if (success) {
-                    [self.bridge startLoadHTMLString:self.report.HTMLString
-                                             baseURL:[NSURL URLWithString:self.report.baseURLString]];
-                } else {
-                    NSLog(@"Error loading HTML%@", error.localizedDescription);
-                }
-            }];
-    } else if (!self.report.isReportAlreadyLoaded) {
-        self.isReportInLoadingProcess = YES;
-        self.report.isReportAlreadyLoaded = NO;
-        [self.report updateCountOfPages:NSNotFound];
+    [[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView completion:^(BOOL isWebViewLoaded) {
+        if (isWebViewLoaded) {
+            self.isReportInLoadingProcess = YES;
+            self.report.isReportAlreadyLoaded = NO;
 
-        [self fetchPageNumber:1 withCompletion:completion];
-    } else {
-        self.reportLoadCompletion = completion;
-        [self.report updateCurrentPage:1];
-        [self.report updateCountOfPages:NSNotFound];
+            self.reportLoadCompletion = completion;
+            [self.report updateCurrentPage:1];
 
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"MobileReport.applyReportParams(%@);";
-        request.parametersAsString = [self createParametersAsString];
-        [self.bridge sendRequest:request];
-    }
+            [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
+                    if (success) {
+                        [self.bridge startLoadHTMLString:self.report.HTMLString
+                                                 baseURL:[NSURL URLWithString:self.report.baseURLString]];
+                    } else {
+                        NSLog(@"Error loading HTML%@", error.localizedDescription);
+                    }
+                }];
+        } else if (!self.report.isReportAlreadyLoaded) {
+            self.isReportInLoadingProcess = YES;
+            self.report.isReportAlreadyLoaded = NO;
+            [self.report updateCountOfPages:NSNotFound];
+
+            [self fetchPageNumber:1 withCompletion:completion];
+        } else {
+            self.reportLoadCompletion = completion;
+            [self.report updateCurrentPage:1];
+            [self.report updateCountOfPages:NSNotFound];
+
+            JMJavascriptRequest *request = [JMJavascriptRequest new];
+            request.command = @"MobileReport.applyReportParams(%@);";
+            request.parametersAsString = [self createParametersAsString];
+            [self.bridge sendRequest:request];
+        }
+    }];
 }
 
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion

@@ -30,8 +30,8 @@
 #import "JMUtils.h"
 
 @interface JMWebViewManager()
-@property (nonatomic, strong, readwrite) UIWebView *primaryWebView;
-@property (nonatomic, strong, readwrite) UIWebView *secondaryWebView;
+@property (nonatomic, strong, readwrite) WKWebView *primaryWebView;
+@property (nonatomic, strong, readwrite) WKWebView *secondaryWebView;
 @end
 
 @implementation JMWebViewManager
@@ -52,14 +52,14 @@
 }
 
 #pragma mark - Public API
-- (UIWebView *)webView
+- (WKWebView *)webView
 {
     return [self webViewAsSecondary:NO];
 }
 
-- (UIWebView *)webViewAsSecondary:(BOOL)asSecondary
+- (WKWebView *)webViewAsSecondary:(BOOL)asSecondary
 {
-    UIWebView *webView;
+    WKWebView *webView;
     if (asSecondary) {
         webView = self.secondaryWebView;
     } else {
@@ -73,18 +73,19 @@
     return webView;
 }
 
-- (BOOL)isWebViewLoadedVisualize:(UIWebView *)webView
+- (void)isWebViewLoadedVisualize:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
 {
     NSString *jsCommand = @"typeof(visualize)";
-    NSString *result = [webView stringByEvaluatingJavaScriptFromString:jsCommand];
-    BOOL isWebViewLoadedVisualize = [result isEqualToString:@"function"];
-    return isWebViewLoadedVisualize;
+    [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
+        BOOL isFunction = [result isEqualToString:@"function"];
+        completion(!error && isFunction);
+    }];
 }
 
 - (void)reset
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    _primaryWebView.delegate = nil;
+    _primaryWebView.navigationDelegate = nil;
     _primaryWebView = nil;
 
     [self resetChildWebView];
@@ -93,7 +94,7 @@
 - (void)resetChildWebView
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    _secondaryWebView.delegate = nil;
+    _secondaryWebView.navigationDelegate = nil;
     _secondaryWebView = nil;
 }
 
@@ -105,9 +106,32 @@
                                           animated:YES];
 }
 
+- (void)injectCookiesInWebView:(WKWebView *)webView
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self verifyCookiesInWebView:webView completion:^(NSDictionary *webViewCookieValues){
+        NSDictionary *cookieValues = [self cookieValues];
+        NSString *cookiesAsString = [self cookiesAsStringFromCookieValues:cookieValues];
+        [webView evaluateJavaScript:cookiesAsString completionHandler:nil];
+    }];
+}
+
+- (void)cleanCookiesInWebView:(WKWebView *)webView
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self verifyCookiesInWebView:webView completion:^(NSDictionary *webViewCookieValues){
+        NSMutableDictionary *cookieValues = [[self cookieValues] mutableCopy];
+        for (NSString *cookieName in cookieValues.allKeys) {
+            cookieValues[cookieName] = @"";
+        }
+        NSString *cookiesAsString = [self cookiesAsStringFromCookieValues:cookieValues];
+        [webView evaluateJavaScript:cookiesAsString completionHandler:nil];
+    }];
+}
+
 #pragma mark - Private API
 
-- (UIWebView *)primaryWebView
+- (WKWebView *)primaryWebView
 {
     if (!_primaryWebView) {
         _primaryWebView = [self createWebView];
@@ -115,7 +139,7 @@
     return _primaryWebView;
 }
 
-- (UIWebView *)secondaryWebView
+- (WKWebView *)secondaryWebView
 {
     if (!_secondaryWebView) {
         _secondaryWebView = [self createWebView];
@@ -123,14 +147,12 @@
     return _secondaryWebView;
 }
 
-- (UIWebView *)createWebView
+- (WKWebView *)createWebView
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+    WKWebViewConfiguration* webViewConfig = [WKWebViewConfiguration new];
+    WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webViewConfig];
     webView.scrollView.bounces = NO;
-    webView.scalesPageToFit = YES;
-    webView.dataDetectorTypes = UIDataDetectorTypeNone;
-    webView.suppressesIncrementalRendering = YES;
 
     NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
@@ -138,6 +160,54 @@
                     baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
 
     return webView;
+}
+
+- (NSString *)cookiesAsStringFromCookieValues:(NSDictionary *)cookieValues
+{
+    NSString *cookiesAsString = @"";
+    for (NSString *name in cookieValues) {
+        cookiesAsString = [cookiesAsString stringByAppendingFormat:@"document.cookie = '%@=%@' ;", name, cookieValues[name]];
+    }
+    return cookiesAsString;
+}
+
+- (NSDictionary *)cookieValues
+{
+    NSLog(@"restClient cockies: %@", self.restClient.cookies);
+    NSMutableDictionary *cookieValues = [@{} mutableCopy];
+    for (NSHTTPCookie *cookie in self.restClient.cookies) {
+        cookieValues[cookie.name] = cookie.value;
+    }
+    return cookieValues;
+}
+
+- (void)verifyCookiesInWebView:(WKWebView *)webView completion:(void(^ __nonnull)(NSDictionary *cookiesValues))completion
+{
+    NSString *getCookiesJS = @"document.cookie";
+    [webView evaluateJavaScript:getCookiesJS completionHandler:^(id result, NSError *error) {
+//        JMLog(@"error: %@", error);
+//        JMLog(@"result: %@", result);
+
+        NSMutableDictionary *cookiesValues = [@{} mutableCopy];
+        if (!error) {
+            NSArray *cookies=nil;
+            NSString *cookiesString = result;
+            cookies = [cookiesString componentsSeparatedByString:@";"];
+            if (cookies.count > 0) {
+//                JMLog(@"cookies: %@", cookies);
+                for (NSString *cookie in cookies) {
+                    NSString *trimmedCookie = [cookie stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    if ([trimmedCookie rangeOfString:@"="].length) {
+                        NSArray *components = [trimmedCookie componentsSeparatedByString:@"="];
+                        NSString *name = components[0];
+                        NSString *value = components[1];
+                        cookiesValues[name] = value;
+                    }
+                }
+            }
+        }
+        completion(cookiesValues);
+    }];
 }
 
 @end

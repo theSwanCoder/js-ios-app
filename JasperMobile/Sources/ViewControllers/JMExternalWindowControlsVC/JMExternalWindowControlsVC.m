@@ -29,7 +29,7 @@
 #import "JMExternalWindowControlsVC.h"
 
 @interface JMExternalWindowControlsVC () <UIScrollViewDelegate>
-@property (weak, nonatomic) UIWebView *contentWebView;
+@property (weak, nonatomic) WKWebView *contentWebView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageViewHightConstraint;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -45,7 +45,7 @@
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 }
 
-- (instancetype)initWithContentWebView:(UIWebView *)contentView
+- (instancetype)initWithContentWebView:(WKWebView *)contentView
 {
     if (self = [super init]) {
         _contentWebView = contentView;

@@ -42,4 +42,7 @@
     #import <Fabric/Fabric.h>
     #import <Crashlytics/Crashlytics.h>
 
+// WebKit
+@import WebKit;
+
 #endif

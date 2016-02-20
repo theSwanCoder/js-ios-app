@@ -138,6 +138,7 @@
 #pragma mark - Actions
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
+    [[JMWebViewManager sharedInstance] cleanCookiesInWebView:self.webView];
     if (self.isChildReport) {
         [self closeChildReport];
     } else {
@@ -218,7 +219,7 @@
 {
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
 
-    UIWebView *webView = [self.configurator webViewAsSecondary:self.isChildReport];
+    WKWebView *webView = [self.configurator webViewAsSecondary:self.isChildReport];
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     [self setupWebViewLayout];
     [self.configurator updateReportLoaderDelegateWithObject:self];
@@ -415,7 +416,7 @@
 }
 
 #pragma mark - Custom accessors
-- (UIWebView *)webView
+- (WKWebView *)webView
 {
     return self.configurator.webView;
 }
@@ -595,7 +596,7 @@
         case JSReportLoaderErrorTypeAuthentification:
             [self.restClient deleteCookies];
             [self resetSubViews];
-            
+
             NSInteger reportCurrentPage = self.report.currentPage;
             [self.report restoreDefaultState];
             [self.report updateCurrentPage:reportCurrentPage];
@@ -608,6 +609,7 @@
                     __strong typeof(self)strongSelf = weakSelf;
                     [strongSelf stopShowLoader];
                     if (isSessionAuthorized) {
+                        [[JMWebViewManager sharedInstance] injectCookiesInWebView:strongSelf.webView];
                         // TODO: Need add restoring for current page
                         [strongSelf runReportWithPage:self.report.currentPage];
                     } else {
@@ -668,11 +670,12 @@
     }
 }
 
-#pragma mark - UIWebView helpers
+#pragma mark - WebView helpers
 - (void)resetSubViews
 {
     [self.reportLoader destroy];
     [[JMWebViewManager sharedInstance] resetZoom];
+    [[JMWebViewManager sharedInstance] cleanCookiesInWebView:self.webView];
 }
 
 #pragma mark - JMMenuActionsViewDelegate

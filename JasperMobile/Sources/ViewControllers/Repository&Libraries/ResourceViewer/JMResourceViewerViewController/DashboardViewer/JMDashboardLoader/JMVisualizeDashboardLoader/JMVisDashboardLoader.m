@@ -83,17 +83,19 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     self.completion = completion;
 
-    if ([[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView]) {
-        [self handleOnScriptLoaded];
-    } else {
-        [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
-            if (success) {
+    [[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView completion:^(BOOL isWebViewLoaded) {
+        if (isWebViewLoaded) {
+            [self handleOnScriptLoaded];
+        } else {
+            [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
+                if (success) {
 
-            } else {
-                NSLog(@"Error loading HTML%@", error.localizedDescription);
-            }
-        }];
-    }
+                } else {
+                    NSLog(@"Error loading HTML%@", error.localizedDescription);
+                }
+            }];
+        }
+    }];
 }
 
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion

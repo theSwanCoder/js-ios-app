@@ -28,7 +28,7 @@
 #import "JMMainNavigationController.h"
 
 @interface JMResourceViewerViewController () <UIPrintInteractionControllerDelegate>
-@property (nonatomic, weak, readwrite) IBOutlet UIWebView *webView;
+@property (nonatomic, weak, readwrite) IBOutlet WKWebView *webView;
 @property (nonatomic, strong) UINavigationController *printNavController;
 @property (nonatomic, assign) CGSize printSettingsPreferredContentSize;
 @property (nonatomic, assign) NSInteger lowMemoryWarningsCount;
@@ -90,8 +90,8 @@
 #pragma mark - Setups
 - (void)setupSubviews
 {
-    UIWebView *webView = [[JMWebViewManager sharedInstance] webView];
-    webView.delegate = self;
+    WKWebView *webView = [[JMWebViewManager sharedInstance] webView];
+    webView.navigationDelegate = self;
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
 
@@ -123,7 +123,7 @@
 {
     [self resetSubViews];
     [self.view endEditing:YES];
-    self.webView.delegate = nil;
+    self.webView.navigationDelegate = nil;
 
     [super cancelResourceViewingAndExit:exit];
 }
@@ -225,39 +225,40 @@
     }];
 }
 
-#pragma mark - UIWebViewDelegate
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+#pragma mark - WebViewDelegate
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
     NSString *serverHost = [NSURL URLWithString:self.restClient.serverProfile.serverUrl].host;
-    NSString *requestHost = request.URL.host;
+    NSString *requestHost = navigationAction.request.URL.host;
     BOOL isParentHost = [requestHost isEqualToString:serverHost];
-    BOOL isLinkClicked = navigationType == UIWebViewNavigationTypeLinkClicked;
+    BOOL isLinkClicked = navigationAction.navigationType == UIWebViewNavigationTypeLinkClicked;
 
     if (!isParentHost && isLinkClicked) {
-        if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
+        if ([[UIApplication sharedApplication] canOpenURL:navigationAction.request.URL]) {
             UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
                                                                                               message:@"resource.viewer.open.link"
                                                                                     cancelButtonTitle:@"dialog.button.cancel"
                                                                               cancelCompletionHandler:nil];
             [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                [[UIApplication sharedApplication] openURL:request.URL];
+                [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
             }];
             [self presentViewController:alertController animated:YES completion:nil];
         } else {
             [ALToastView toastInView:webView
                             withText:JMCustomLocalizedString(@"resource.viewer.can't.open.link", nil)];
         }
-        return NO;
+        decisionHandler(WKNavigationActionPolicyCancel);
     }
-    return YES;
+    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView
+
+- (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation
 {
     [self startShowLoadingIndicators];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
     [self stopShowLoadingIndicators];
     if (self.resourceRequest) {
@@ -265,7 +266,7 @@
     }
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
 {
     [self stopShowLoadingIndicators];
     self.isResourceLoaded = NO;

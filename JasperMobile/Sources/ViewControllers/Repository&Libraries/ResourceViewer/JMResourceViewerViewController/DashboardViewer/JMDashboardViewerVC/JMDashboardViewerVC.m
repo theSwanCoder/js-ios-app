@@ -121,7 +121,7 @@
     return _dashboard;
 }
 
-- (UIWebView *)webView
+- (WKWebView *)webView
 {
     return self.configurator.webView;
 }
@@ -180,11 +180,13 @@
 {
     [self.dashboardLoader destroy];
     [[JMWebViewManager sharedInstance] resetZoom];
+    [[JMWebViewManager sharedInstance] cleanCookiesInWebView:self.webView];
 }
 
 
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
+    [[JMWebViewManager sharedInstance] cleanCookiesInWebView:self.webView];
     if ([self isContentOnTV]) {
         [self switchFromTV];
         [self hideExternalWindowWithCompletion:nil];
@@ -590,7 +592,7 @@
     return self.dashboard.inputControls.count > 0;
 }
 
-- (void)handleAuthErrorWithCompletion:(void(^)(void))completion
+- (void)handleAuthErrorWithCompletion:(void(^ __nonnull)(void))completion
 {
     [self.restClient deleteCookies];
     [self resetSubViews];
@@ -599,9 +601,8 @@
     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
         __weak typeof(self)strongSelf = weakSelf;
         if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-            if (completion) {
-                completion();
-            }
+            [[JMWebViewManager sharedInstance] injectCookiesInWebView:strongSelf.webView];
+            completion();
         } else {
             __weak typeof(self)weakSelf = strongSelf;
             [JMUtils showLoginViewAnimated:YES completion:^{

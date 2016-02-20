@@ -42,7 +42,7 @@
 
 - (instancetype)initWithReport:(JMReport *)report;
 + (instancetype)configuratorWithReport:(JMReport *)report;
-- (id)webViewAsSecondary:(BOOL)asSecondary;
+- (WKWebView *)webViewAsSecondary:(BOOL)asSecondary;
 - (id<JMReportLoaderProtocol>)reportLoader;
 - (void)updateReportLoaderDelegateWithObject:(id<JMReportLoaderDelegate>)delegate;
 @end

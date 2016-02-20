@@ -38,12 +38,12 @@
 
 @interface JMDashboardViewerConfigurator : NSObject
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
-@property (nonatomic, weak) id webView;
+@property (nonatomic, weak) WKWebView *webView;
 
 - (instancetype)initWithDashboard:(JMDashboard *)dashboard;
 + (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard;
 
-- (id)webViewAsSecondary:(BOOL)asSecondary;
+- (WKWebView *)webViewAsSecondary:(BOOL)asSecondary;
 - (id<JMDashboardLoader>)dashboardLoader;
 - (void)updateReportLoaderDelegateWithObject:(id <JMDashboardLoaderDelegate>)delegate;
 @end

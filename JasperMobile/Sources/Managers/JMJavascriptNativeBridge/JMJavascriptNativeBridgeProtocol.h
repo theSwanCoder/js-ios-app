@@ -36,7 +36,7 @@
 @protocol JMJavascriptNativeBridgeDelegate;
 
 @protocol JMJavascriptNativeBridgeProtocol <NSObject>
-@property (nonatomic, weak) id webView;
+@property (nonatomic, weak) WKWebView *webView;
 @property (nonatomic, weak) id <JMJavascriptNativeBridgeDelegate>delegate;
 
 - (void)startLoadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL;

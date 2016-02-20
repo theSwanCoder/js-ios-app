@@ -32,11 +32,15 @@
  */
 
 @interface JMWebViewManager : NSObject
-+ (instancetype)sharedInstance;
-- (UIWebView *)webView;
-- (UIWebView *)webViewAsSecondary:(BOOL)asSecondary;
-- (BOOL)isWebViewLoadedVisualize:(UIWebView *)webView;
++ (instancetype __nonnull)sharedInstance;
+- (WKWebView *__nonnull)webView;
+- (WKWebView *__nonnull)webViewAsSecondary:(BOOL)asSecondary;
+- (void)isWebViewLoadedVisualize:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion;
 - (void)resetZoom;
+
+- (void)injectCookiesInWebView:(WKWebView *__nonnull)webView;
+- (void)cleanCookiesInWebView:(WKWebView *__nonnull)webView;
+
 - (void)reset;
 - (void)resetChildWebView;
 @end
