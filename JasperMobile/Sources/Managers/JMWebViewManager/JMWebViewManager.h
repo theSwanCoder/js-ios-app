@@ -35,7 +35,7 @@
 + (instancetype __nonnull)sharedInstance;
 - (WKWebView *__nonnull)webView;
 - (WKWebView *__nonnull)webViewAsSecondary:(BOOL)asSecondary;
-- (void)isWebViewLoadedVisualize:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion;
+- (void)isWebViewLoadedVisualize:(WKWebView *__nonnull)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion;
 - (void)resetZoom;
 
 - (void)injectCookiesInWebView:(WKWebView *__nonnull)webView;
