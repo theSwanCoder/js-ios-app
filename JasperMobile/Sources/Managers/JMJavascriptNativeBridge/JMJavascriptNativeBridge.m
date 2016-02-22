@@ -66,15 +66,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 }
 
 #pragma mark - Public API
-- (void)startLoadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL
-{
-    // TODO: replace with safety approach
-    if (baseURL) {
-        [self.webView stopLoading];
-        [self.webView loadHTMLString:HTMLString baseURL:baseURL];
-    }
-}
-
 - (void)startLoadHTMLString:(NSString *)HTMLString
                     baseURL:(NSURL *)baseURL
                  completion:(JMJavascriptRequestCompletion __nullable)completion
@@ -82,7 +73,14 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     if (completion) {
         JMJavascriptRequest *request = [JMJavascriptRequest new];
         request.command = @"DOMContentLoaded";
-        self.requestCompletions[request] = [completion copy];
+        __weak __typeof(self) weakSelf = self;
+        JMJavascriptRequestCompletion heapBlock = [completion copy];
+        JMJavascriptRequestCompletion completionWithCookies = ^(JMJavascriptCallback *callback, NSError *error) {
+            __typeof(self) strongSelf = weakSelf;
+            [strongSelf injectCookies];
+            heapBlock(callback, error);
+        };
+        self.requestCompletions[request] = [completionWithCookies copy];
     }
 
     // TODO: replace with safety approach
@@ -148,7 +146,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 #pragma mark - UIWebViewDelegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
-    NSLog(@"request from webView: %@", navigationAction.request);
+//    NSLog(@"request from webView: %@", navigationAction.request);
 //    NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
 
     if ([self isLoginRequest:navigationAction.request]) {
@@ -360,7 +358,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     if ([errorCodeString isEqualToString:@"window.onerror"]) {
         code = JMJavascriptNativeBridgeErrorTypeWindow;
     } else if ([errorCodeString isEqualToString:@"authentication.error"]) {
-        code = JSReportLoaderErrorTypeAuthentification;
+        code = JMJavascriptNativeBridgeErrorAuthError;
     }
     NSString *errorMessage = errorJSON[@"message"];
     NSError *error = [NSError errorWithDomain:visualizeErrorDomain
@@ -369,6 +367,34 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                                              NSLocalizedDescriptionKey: errorMessage
                                      }];
     return error;
+}
+
+
+#pragma mark - Work with Cookies
+- (void)injectCookies
+{
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSString *cookiesAsString = [self cookiesAsStringFromCookies:self.restClient.cookies];
+//    JMLog(@"cookiesAsString: %@", cookiesAsString);
+    [self.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
+        if (error) {
+            JMLog(@"error: %@", error);
+        } else {
+            JMLog(@"injected cookies: %@", self.restClient.cookies);
+        }
+    }];
+}
+
+- (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
+{
+    NSString *cookiesAsString = @"";
+    for (NSHTTPCookie *cookie in cookies) {
+        NSString *name = cookie.name;
+        NSString *value = cookie.value;
+        NSString *path = cookie.path;
+        cookiesAsString = [cookiesAsString stringByAppendingFormat:@"document.cookie = '%@=%@; expires=null, path=\\'%@\\''; ", name, value, path];
+    }
+    return cookiesAsString;
 }
 
 @end

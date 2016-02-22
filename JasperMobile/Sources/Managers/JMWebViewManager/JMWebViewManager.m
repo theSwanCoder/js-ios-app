@@ -106,29 +106,6 @@
                                           animated:YES];
 }
 
-- (void)injectCookiesInWebView:(WKWebView *)webView
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self verifyCookiesInWebView:webView completion:^(NSDictionary *webViewCookieValues){
-        NSDictionary *cookieValues = [self cookieValues];
-        NSString *cookiesAsString = [self cookiesAsStringFromCookieValues:cookieValues];
-        [webView evaluateJavaScript:cookiesAsString completionHandler:nil];
-    }];
-}
-
-- (void)cleanCookiesInWebView:(WKWebView *)webView
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self verifyCookiesInWebView:webView completion:^(NSDictionary *webViewCookieValues){
-        NSMutableDictionary *cookieValues = [[self cookieValues] mutableCopy];
-        for (NSString *cookieName in cookieValues.allKeys) {
-            cookieValues[cookieName] = @"";
-        }
-        NSString *cookiesAsString = [self cookiesAsStringFromCookieValues:cookieValues];
-        [webView evaluateJavaScript:cookiesAsString completionHandler:nil];
-    }];
-}
-
 #pragma mark - Private API
 
 - (WKWebView *)primaryWebView
@@ -160,54 +137,6 @@
                     baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
 
     return webView;
-}
-
-- (NSString *)cookiesAsStringFromCookieValues:(NSDictionary *)cookieValues
-{
-    NSString *cookiesAsString = @"";
-    for (NSString *name in cookieValues) {
-        cookiesAsString = [cookiesAsString stringByAppendingFormat:@"document.cookie = '%@=%@' ;", name, cookieValues[name]];
-    }
-    return cookiesAsString;
-}
-
-- (NSDictionary *)cookieValues
-{
-    NSLog(@"restClient cockies: %@", self.restClient.cookies);
-    NSMutableDictionary *cookieValues = [@{} mutableCopy];
-    for (NSHTTPCookie *cookie in self.restClient.cookies) {
-        cookieValues[cookie.name] = cookie.value;
-    }
-    return cookieValues;
-}
-
-- (void)verifyCookiesInWebView:(WKWebView *)webView completion:(void(^ __nonnull)(NSDictionary *cookiesValues))completion
-{
-    NSString *getCookiesJS = @"document.cookie";
-    [webView evaluateJavaScript:getCookiesJS completionHandler:^(id result, NSError *error) {
-//        JMLog(@"error: %@", error);
-//        JMLog(@"result: %@", result);
-
-        NSMutableDictionary *cookiesValues = [@{} mutableCopy];
-        if (!error) {
-            NSArray *cookies=nil;
-            NSString *cookiesString = result;
-            cookies = [cookiesString componentsSeparatedByString:@";"];
-            if (cookies.count > 0) {
-//                JMLog(@"cookies: %@", cookies);
-                for (NSString *cookie in cookies) {
-                    NSString *trimmedCookie = [cookie stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                    if ([trimmedCookie rangeOfString:@"="].length) {
-                        NSArray *components = [trimmedCookie componentsSeparatedByString:@"="];
-                        NSString *name = components[0];
-                        NSString *value = components[1];
-                        cookiesValues[name] = value;
-                    }
-                }
-            }
-        }
-        completion(cookiesValues);
-    }];
 }
 
 @end

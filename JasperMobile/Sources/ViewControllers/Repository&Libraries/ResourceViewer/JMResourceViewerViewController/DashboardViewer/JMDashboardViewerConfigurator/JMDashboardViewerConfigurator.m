@@ -68,7 +68,6 @@
 {
     if (!_webView) {
         _webView = [[JMWebViewManager sharedInstance] webViewAsSecondary:asSecondary];
-        [[JMWebViewManager sharedInstance] injectCookiesInWebView:_webView];
     }
     return _webView;
 }

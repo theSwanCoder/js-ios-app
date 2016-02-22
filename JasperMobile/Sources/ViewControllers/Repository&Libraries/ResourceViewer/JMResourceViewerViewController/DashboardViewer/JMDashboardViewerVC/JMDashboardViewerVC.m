@@ -180,13 +180,11 @@
 {
     [self.dashboardLoader destroy];
     [[JMWebViewManager sharedInstance] resetZoom];
-    [[JMWebViewManager sharedInstance] cleanCookiesInWebView:self.webView];
 }
 
 
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
-    [[JMWebViewManager sharedInstance] cleanCookiesInWebView:self.webView];
     if ([self isContentOnTV]) {
         [self switchFromTV];
         [self hideExternalWindowWithCompletion:nil];
@@ -221,7 +219,7 @@
 
         if (!success) {
             JMLog(@"error of refreshing dashboard: %@", error);
-            if (error.code == JSSessionExpiredErrorCode) {
+            if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
                 __weak typeof(self)weakSelf = strongSelf;
                 [strongSelf handleAuthErrorWithCompletion:^(void) {
                     __weak typeof(self)strongSelf = weakSelf;
@@ -232,7 +230,6 @@
                                               completion:nil];
             }
         }
-
     }];
 }
 
@@ -247,7 +244,7 @@
             __weak typeof(self)strongSelf = weakSelf;
             [strongSelf stopShowLoader];
             if (!success) {
-                if (error.code == JSSessionExpiredErrorCode) {
+                if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
                     __weak typeof(self)weakSelf = strongSelf;
                     [strongSelf handleAuthErrorWithCompletion:^(void) {
                         __weak typeof(self)strongSelf = weakSelf;
@@ -328,7 +325,7 @@
                 strongSelf.controlsViewController.components = strongSelf.dashboard.dashlets;
             }
         } else {
-            if (error.code == JSSessionExpiredErrorCode) {
+            if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
                 __weak typeof(self)weakSelf = strongSelf;
                 [strongSelf handleAuthErrorWithCompletion:^(void) {
                     __weak typeof(self)strongSelf = weakSelf;
@@ -601,7 +598,10 @@
     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
         __weak typeof(self)strongSelf = weakSelf;
         if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-            [[JMWebViewManager sharedInstance] injectCookiesInWebView:strongSelf.webView];
+            [[JMWebViewManager sharedInstance] reset];
+            [self setupSubviews];
+            [self configViewport];
+
             completion();
         } else {
             __weak typeof(self)weakSelf = strongSelf;

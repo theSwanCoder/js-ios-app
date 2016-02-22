@@ -45,7 +45,6 @@
 
 @optional
 - (void)exportReportWithFormat:(NSString *)exportFormat;
-- (void)authenticate;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end
 

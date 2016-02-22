@@ -138,7 +138,6 @@
 #pragma mark - Actions
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
-    [[JMWebViewManager sharedInstance] cleanCookiesInWebView:self.webView];
     if (self.isChildReport) {
         [self closeChildReport];
     } else {
@@ -603,6 +602,10 @@
             [self.report updateCurrentPage:reportCurrentPage];
             // Here 'break;' doesn't need, because we should try to create new session and reload report
         case JSSessionExpiredErrorCode:
+            [[JMWebViewManager sharedInstance] reset];
+            [self setupSubviews];
+            [self configViewport];
+
             if (self.restClient.keepSession) {
                 __weak typeof(self)weakSelf = self;
                 [self startShowLoaderWithMessage:@"status.loading"];
@@ -610,7 +613,6 @@
                     __strong typeof(self)strongSelf = weakSelf;
                     [strongSelf stopShowLoader];
                     if (isSessionAuthorized) {
-                        [[JMWebViewManager sharedInstance] injectCookiesInWebView:strongSelf.webView];
                         // TODO: Need add restoring for current page
                         [strongSelf runReportWithPage:self.report.currentPage];
                     } else {
@@ -676,7 +678,6 @@
 {
     [self.reportLoader destroy];
     [[JMWebViewManager sharedInstance] resetZoom];
-    [[JMWebViewManager sharedInstance] cleanCookiesInWebView:self.webView];
 }
 
 #pragma mark - JMMenuActionsViewDelegate

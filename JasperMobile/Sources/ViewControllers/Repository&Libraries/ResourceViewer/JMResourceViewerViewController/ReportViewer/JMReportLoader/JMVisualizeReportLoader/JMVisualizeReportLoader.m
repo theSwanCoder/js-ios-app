@@ -117,7 +117,14 @@
         jsRequestCompletion = ^(JMJavascriptCallback *callback, NSError *error) {
             __typeof(self) strongSelf = weakSelf;
             if (error) {
-                heapBlock(NO, error);
+                NSError *vizError = error;
+                if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
+                    NSError *authError = [NSError errorWithDomain:error.domain
+                                                             code:JSReportLoaderErrorTypeAuthentification
+                                                         userInfo:error.userInfo];
+                    vizError = authError;
+                }
+                heapBlock(NO, vizError);
             } else {
                 JMLog(@"running report was finished");
                 strongSelf.report.isReportAlreadyLoaded = YES;
@@ -131,7 +138,14 @@
         request.parametersAsString = @(pageNumber).stringValue;
         jsRequestCompletion = ^(JMJavascriptCallback *callback, NSError *error) {
             if (error) {
-                heapBlock(NO, error);
+                NSError *vizError = error;
+                if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
+                    NSError *authError = [NSError errorWithDomain:error.domain
+                                                             code:JSReportLoaderErrorTypeAuthentification
+                                                         userInfo:error.userInfo];
+                    vizError = authError;
+                }
+                heapBlock(NO, vizError);
             } else {
                 JMLog(@"selecting page was finished");
                 if (heapBlock) {
@@ -164,7 +178,7 @@
     __weak __typeof(self) weakSelf = self;
     [[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView completion:^(BOOL isWebViewLoaded) {
         __typeof(self) strongSelf = weakSelf;
-        if (isWebViewLoaded) {
+        if (!isWebViewLoaded) {
             strongSelf.isReportInLoadingProcess = YES;
             strongSelf.report.isReportAlreadyLoaded = NO;
 
@@ -178,9 +192,14 @@
                                                     completion:^(JMJavascriptCallback *callback, NSError *error) {
                                                         __typeof(self) strongSelf = weakSelf;
                                                         if (error) {
-                                                            if (heapBlock) {
-                                                                heapBlock(NO, error);
+                                                            NSError *vizError = error;
+                                                            if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
+                                                                NSError *authError = [NSError errorWithDomain:error.domain
+                                                                                                         code:JSReportLoaderErrorTypeAuthentification
+                                                                                                     userInfo:error.userInfo];
+                                                                vizError = authError;
                                                             }
+                                                            heapBlock(NO, vizError);
                                                         } else {
                                                             [strongSelf fetchPageNumber:strongSelf.report.currentPage
                                                                          withCompletion:heapBlock];
@@ -210,7 +229,14 @@
             [strongSelf.bridge sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
                 __typeof(self) strongSelf = weakSelf;
                 if (error) {
-                    JMLog(@"error: %@", error);
+                    NSError *vizError = error;
+                    if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
+                        NSError *authError = [NSError errorWithDomain:error.domain
+                                                                 code:JSReportLoaderErrorTypeAuthentification
+                                                             userInfo:error.userInfo];
+                        vizError = authError;
+                    }
+                    heapBlock(NO, vizError);
                 } else {
                     JMLog(@"applying parameters was finished");
                     strongSelf.report.isReportAlreadyLoaded = YES;
@@ -238,7 +264,14 @@
         __typeof(self) strongSelf = weakSelf;
         if (error) {
             if (heapBlock) {
-                heapBlock(NO, error);
+                NSError *vizError = error;
+                if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
+                    NSError *authError = [NSError errorWithDomain:error.domain
+                                                             code:JSReportLoaderErrorTypeAuthentification
+                                                         userInfo:error.userInfo];
+                    vizError = authError;
+                }
+                heapBlock(NO, vizError);
             }
         } else {
             JMLog(@"refreshing report was finished");
@@ -252,6 +285,7 @@
 
 - (void)exportReportWithFormat:(NSString *)exportFormat
 {
+    // TODO: make refactor - use completion
     self.exportFormat = exportFormat;
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
