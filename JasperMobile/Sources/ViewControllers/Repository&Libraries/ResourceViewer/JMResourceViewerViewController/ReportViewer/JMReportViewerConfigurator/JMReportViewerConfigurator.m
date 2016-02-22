@@ -77,8 +77,7 @@
         } else {
             _reportLoader = [JMRestReportLoader loaderWithReport:self.report restClient:self.restClient];
         }
-        JMJavascriptNativeBridge *bridge = [JMJavascriptNativeBridge new];
-        bridge.webView = self.webView;
+        JMJavascriptNativeBridge *bridge = [JMJavascriptNativeBridge bridgeWithWebView:self.webView];
         _reportLoader.bridge = bridge;
     }
 

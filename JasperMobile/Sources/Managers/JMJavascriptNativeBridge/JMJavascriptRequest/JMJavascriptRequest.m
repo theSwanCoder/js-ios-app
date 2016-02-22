@@ -29,4 +29,35 @@
 #import "JMJavascriptRequest.h"
 
 @implementation JMJavascriptRequest
+
+#pragma mark - NSCopying + NSObject Protocol
+- (NSUInteger)hash
+{
+    NSString *fullCommand = [NSString stringWithFormat:@"command:%@parametersAsString:%@", self.command, self.parametersAsString];
+    NSUInteger hash = [fullCommand hash];
+    return hash;
+}
+
+- (BOOL)isEqual:(JMJavascriptRequest *)secondRequest
+{
+    BOOL isCommandEqual = [self.command isEqual:secondRequest.command];
+    BOOL isParametersEqual = [self.parametersAsString isEqual:secondRequest.parametersAsString];
+    return isCommandEqual && isParametersEqual;
+}
+
+- (id)copyWithZone:(nullable NSZone *)zone
+{
+    JMJavascriptRequest *newRequest = (JMJavascriptRequest *) [[self class] allocWithZone:zone];
+    newRequest.command = [self.command copyWithZone:zone];
+    newRequest.parametersAsString = [self.parametersAsString copyWithZone:zone];
+    return newRequest;
+}
+
+#pragma mark - Print
+- (NSString *)description
+{
+    NSString *description = [NSString stringWithFormat:@"\nJMJavascriptRequest: %@\ncommand:%@\nparametersAsString:%@", [super description], self.command, self.parametersAsString];
+    return description;
+}
+
 @end

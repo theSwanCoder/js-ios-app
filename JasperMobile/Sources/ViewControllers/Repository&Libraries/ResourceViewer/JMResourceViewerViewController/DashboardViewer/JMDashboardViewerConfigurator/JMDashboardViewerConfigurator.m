@@ -88,9 +88,8 @@
         } else {
             _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard];
         }
-        JMJavascriptNativeBridge *bridge = [JMJavascriptNativeBridge new];
+        JMJavascriptNativeBridge *bridge = [JMJavascriptNativeBridge bridgeWithWebView:self.webView];
         _dashboardLoader.bridge = bridge;
-        bridge.webView = self.webView;
     }
     return _dashboardLoader;
 }

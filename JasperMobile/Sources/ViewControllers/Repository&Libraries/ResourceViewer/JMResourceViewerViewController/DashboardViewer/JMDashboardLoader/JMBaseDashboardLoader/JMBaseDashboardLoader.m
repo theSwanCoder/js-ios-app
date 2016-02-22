@@ -27,7 +27,6 @@
 //
 
 #import "JMBaseDashboardLoader.h"
-#import "JMJavascriptNativeBridgeProtocol.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMJavascriptCallback.h"
 #import "JMJavascriptRequest.h"
@@ -106,7 +105,13 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileDashboard.minimizeDashlet();";
     request.parametersAsString = @"";
-    [self.bridge sendRequest:request];
+    [self.bridge sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+        if (error) {
+            JMLog(@"error: %@", error);
+        } else {
+            JMLog(@"callback: %@", callback);
+        }
+    }];
 }
 
 - (void)cancel
@@ -120,19 +125,19 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
 }
 
 #pragma mark - JMJavascriptNativeBridgeProtocol
-- (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback
-{
-    JMLog(@"callback parameters: %@", callback.parameters);
-    if ([callback.type isEqualToString:@"scriptDidLoad"]) {
-        [self handleDidScriptLoad];
-    } else if ([callback.type isEqualToString:@"onLoadDone"]) {
-        [self handleOnLoadDone];
-    } else if ([callback.type isEqualToString:@"didStartMaximazeDashlet"]) {
-        [self handleDidStartMaximazeDashletWithParameters:callback.parameters];
-    }
-}
+//- (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback
+//{
+//    JMLog(@"callback parameters: %@", callback.parameters);
+//    if ([callback.type isEqualToString:@"scriptDidLoad"]) {
+//        [self handleDidScriptLoad];
+//    } else if ([callback.type isEqualToString:@"onLoadDone"]) {
+//        [self handleOnLoadDone];
+//    } else if ([callback.type isEqualToString:@"didStartMaximazeDashlet"]) {
+//        [self handleDidStartMaximazeDashletWithParameters:callback.parameters];
+//    }
+//}
 
-- (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
+- (void)javascriptNativeBridgeDidReceiveAuthRequest:(JMJavascriptNativeBridge *)bridge
 {
     if (self.loadCompletion) {
         // TODO: Need add auth error
@@ -141,7 +146,7 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
     [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
 }
 
-- (BOOL)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge shouldLoadExternalRequest:(NSURLRequest *)request
+- (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge shouldLoadExternalRequest:(NSURLRequest *)request
 {
     BOOL shouldLoad = NO;
     // TODO: verify all cases
@@ -153,27 +158,27 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
 }
 
 #pragma mark - JS Handlers
-- (void)handleDidScriptLoad
-{
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileDashboard.configure({'diagonal': %@}).run();";
-    request.parametersAsString = [NSString stringWithFormat:@"%@", @([self diagonal])];
-    [self.bridge sendRequest:request];
-}
-
-- (void)handleOnLoadDone
-{
-    self.isLoadDone = YES;
-    if (self.loadCompletion) {
-        self.loadCompletion(YES, nil);
-    }
-}
-
-- (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
-{
-    NSString *title = parameters[@"title"];
-    [self.delegate dashboardLoader:self didStartMaximazeDashletWithTitle:title];
-}
+//- (void)handleDidScriptLoad
+//{
+//    JMJavascriptRequest *request = [JMJavascriptRequest new];
+//    request.command = @"MobileDashboard.configure({'diagonal': %@}).run();";
+//    request.parametersAsString = [NSString stringWithFormat:@"%@", @([self diagonal])];
+//    [self.bridge sendRequest:request];
+//}
+//
+//- (void)handleOnLoadDone
+//{
+//    self.isLoadDone = YES;
+//    if (self.loadCompletion) {
+//        self.loadCompletion(YES, nil);
+//    }
+//}
+//
+//- (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
+//{
+//    NSString *title = parameters[@"title"];
+//    [self.delegate dashboardLoader:self didStartMaximazeDashletWithTitle:title];
+//}
 
 #pragma mark - Helpers
 - (CGFloat)diagonal

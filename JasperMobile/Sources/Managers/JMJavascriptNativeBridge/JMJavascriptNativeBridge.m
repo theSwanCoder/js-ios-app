@@ -27,28 +27,64 @@
 //
 
 #import "JMJavascriptNativeBridge.h"
-#import "JMJavascriptRequest.h"
-#import "JMJavascriptCallback.h"
 
+NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 @interface JMJavascriptNativeBridge() <WKNavigationDelegate>
 @property (nonatomic, copy) NSString *jsInitCode;
 @property (nonatomic, assign) BOOL isJSInitCodeInjected;
+@property (nonatomic, weak, readwrite) WKWebView *webView;
+@property (nonatomic, strong) NSMutableDictionary <JMJavascriptRequest *, JMJavascriptRequestCompletion>*requestCompletions;
+@property (nonatomic, strong) NSMutableDictionary <JMJavascriptRequest *, JMJavascriptRequestCompletion>*listenerCallbacks ;
 @end
 
 @implementation JMJavascriptNativeBridge
 @synthesize webView = _webView, delegate = _delegate;
 
-#pragma mark - Custom Accessors
-- (void)setWebView:(WKWebView *)webView
+#pragma mark - Custom Initializers
+- (instancetype __nullable)initWithWebView:(WKWebView * __nonnull)webView
 {
-    _webView = webView;
-    _webView.navigationDelegate = self;
+    self = [super init];
+    if (self) {
+        _requestCompletions = [NSMutableDictionary dictionary];
+        _listenerCallbacks = [NSMutableDictionary dictionary];
+        _webView = webView;
+        _webView.navigationDelegate = self;
+        _isJSInitCodeInjected = NO;
+    }
+    return self;
+}
+
++ (instancetype __nullable)bridgeWithWebView:(WKWebView * __nonnull)webView
+{
+    return [[self alloc] initWithWebView:webView];
+}
+
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 }
 
 #pragma mark - Public API
 - (void)startLoadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL
 {
+    // TODO: replace with safety approach
+    if (baseURL) {
+        [self.webView stopLoading];
+        [self.webView loadHTMLString:HTMLString baseURL:baseURL];
+    }
+}
+
+- (void)startLoadHTMLString:(NSString *)HTMLString
+                    baseURL:(NSURL *)baseURL
+                 completion:(JMJavascriptRequestCompletion __nullable)completion
+{
+    if (completion) {
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = @"DOMContentLoaded";
+        self.requestCompletions[request] = [completion copy];
+    }
+
     // TODO: replace with safety approach
     if (baseURL) {
         [self.webView stopLoading];
@@ -62,48 +98,20 @@
     [self.webView loadRequest:request];
 }
 
-- (void)sendRequest:(JMJavascriptRequest *)request
+- (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
+                   completion:(JMJavascriptRequestCompletion __nullable)completion
 {
-    NSString *javascriptString = request.command;
-    NSString *parameters = request.parametersAsString ?: @"";
-    NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
-//    NSLog(@"send request: %@", fullJavascriptString);
-    [self.webView evaluateJavaScript:fullJavascriptString completionHandler:^(id result, NSError *error) {
-        JMLog(@"error: %@", error);
-        JMLog(@"result: %@", request);
-    }];
-}
-
-- (void)sendRequest:(JMJavascriptRequest *)request completion:(void(^)(JMJavascriptCallback *callback, NSError *error))completion
-{
-    if (!completion) {
-        return;
-    }
-    NSString *javascriptString = request.command;
-    NSString *parameters = request.parametersAsString ?: @"";
-    NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
 //    JMLog(@"send request: %@", fullJavascriptString);
+    if (completion) {
+        self.requestCompletions[request] = [completion copy];
+    }
+
+    NSString *command = request.command;
+    NSString *parameters = request.parametersAsString ?: @"";
+    NSString *fullJavascriptString = [NSString stringWithFormat:@"%@(%@);", command, parameters];
     [self.webView evaluateJavaScript:fullJavascriptString completionHandler:^(id result, NSError *error) {
         JMLog(@"error: %@", error);
         JMLog(@"result: %@", request);
-
-        NSData *parametersAsData = [result dataUsingEncoding:NSUTF8StringEncoding];
-        NSError *parseError;
-        id json = [NSJSONSerialization JSONObjectWithData:parametersAsData
-                                                  options:NSJSONReadingMutableContainers
-                                                    error:&parseError];
-        if (json) {
-            JMJavascriptCallback *response = [JMJavascriptCallback new];
-            response.type = @"callback";
-            if ([json isKindOfClass:[NSDictionary class]]) {
-                response.parameters = json;
-            } else if ([json isKindOfClass:[NSArray class]]) {
-                response.parameters = @{@"parameters" : json };
-            }
-            completion(response, nil);
-        } else {
-            completion(nil, parseError);
-        }
     }];
 }
 
@@ -119,15 +127,32 @@
     self.isJSInitCodeInjected = NO;
     NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@""]];
     [self.webView loadRequest:clearingRequest];
+    self.requestCompletions = [NSMutableDictionary dictionary];
+    [self removeAllListeners];
+}
+
+- (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nullable)callback
+{
+    if (callback) {
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = listenerId;
+        self.listenerCallbacks[request] = [callback copy];
+    }
+}
+
+- (void)removeAllListeners
+{
+    self.listenerCallbacks = [NSMutableDictionary dictionary];
 }
 
 #pragma mark - UIWebViewDelegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
-//    NSLog(@"request from webView: %@", navigationAction.request);
+    NSLog(@"request from webView: %@", navigationAction.request);
 //    NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
 
     if ([self isLoginRequest:navigationAction.request]) {
+        // For dashboard only
         [self.delegate javascriptNativeBridgeDidReceiveAuthRequest:self];
         decisionHandler(WKNavigationActionPolicyCancel);
     }
@@ -149,11 +174,10 @@
         }
     }
 
-    NSString *callback = @"http://jaspermobile.callback/";
     NSString *requestURLString = navigationAction.request.URL.absoluteString;
 
-    if ([requestURLString rangeOfString:callback].length) {
-
+    if ([requestURLString rangeOfString:kJMJavascriptNativeBridgeCallbackURL].length) {
+        NSString *callback = [NSString stringWithFormat:@"http://%@/", kJMJavascriptNativeBridgeCallbackURL];
         NSRange callbackRange = [requestURLString rangeOfString:callback];
         NSRange commandRange = NSMakeRange(callbackRange.length, requestURLString.length - callbackRange.length);
         NSString *command = [requestURLString substringWithRange:commandRange];
@@ -162,9 +186,8 @@
 
         JMJavascriptCallback *response = [JMJavascriptCallback new];
         response.type = parameters[@"callback.type"];
-        response.parameters = parameters;
-        [self.delegate javascriptNativeBridge:self didReceiveCallback:response];
-
+        response.parameters = parameters[@"parameters"];
+        [self didReceiveCallback:response];
         decisionHandler(WKNavigationActionPolicyCancel);
     } else {
         decisionHandler(WKNavigationActionPolicyAllow);
@@ -180,13 +203,25 @@
             JMLog(@"result: %@", result);
         }];
     }
+
+    // add window.onerror listener
+    NSString *listenerId = @"JasperMobile.Events.Window.OnError";
+   __weak __typeof(self) weakSelf = self;
+    [self addListenerWithId:listenerId
+                   callback:^(JMJavascriptCallback *callback, NSError *error) {
+                       __typeof(self) strongSelf = weakSelf;
+                       if ([strongSelf.delegate respondsToSelector:@selector(javascriptNativeBridge:didReceiveOnWindowError:)]) {
+                           [strongSelf.delegate javascriptNativeBridge:strongSelf
+                                               didReceiveOnWindowError:error];
+                       }
+                   }];
 }
 
 #pragma mark - Helpers
 - (NSDictionary *)parseCommand:(NSString *)command
 {
     NSString *decodedCommand = [command stringByRemovingPercentEncoding];
-    NSArray *components = [decodedCommand componentsSeparatedByString:@"&"];
+    NSArray *components = [decodedCommand componentsSeparatedByString:@"&&"];
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
     NSString *callbackType = [components firstObject];
@@ -260,7 +295,7 @@
     NSString *requestHostURLString = request.URL.host;
     NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
     NSString *serverHostURLString = serverURL.host;
-    NSString *callbackHostURLString = @"jaspermobile.callback";
+    NSString *callbackHostURLString = kJMJavascriptNativeBridgeCallbackURL;
 
     BOOL isServerURL = [requestHostURLString isEqualToString:serverHostURLString];
     BOOL isCallbackURL = [requestHostURLString isEqualToString:callbackHostURLString];
@@ -270,6 +305,70 @@
     }
 
     return isExternalRequest;
+}
+
+#pragma mark - Callbacks
+- (void)didReceiveCallback:(JMJavascriptCallback *)callback
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    if([callback.type isEqualToString:@"logging"]) {
+        JMLog(@"Bridge Message: %@", callback.parameters[@"message"]);
+    } else {
+        JMLog(@"%@", callback);
+        BOOL isRequestCompletionFound = NO;
+        for (JMJavascriptRequest *request in self.requestCompletions) {
+            JMLog(@"request.command: %@", request.command);
+            JMLog(@"callback.type: %@", callback.type);
+            if ([request.command isEqualToString:callback.type]) {
+                JMJavascriptRequestCompletion completion = self.requestCompletions[request];
+                if (callback.parameters[@"error"]) {
+                    NSDictionary *errorJSON = callback.parameters[@"error"];
+                    NSError *error = [self makeErrorFromWebViewError:errorJSON];
+                    completion(nil, error);
+                } else {
+                    completion(callback, nil);
+                }
+                [self.requestCompletions removeObjectForKey:request];
+                isRequestCompletionFound = YES;
+                break;
+            }
+        }
+
+        if (!isRequestCompletionFound) {
+            for (JMJavascriptRequest *request in self.listenerCallbacks) {
+                if ([request.command isEqualToString:callback.type]) {
+                    JMJavascriptRequestCompletion completion = self.listenerCallbacks[request];
+                    if (callback.parameters[@"error"]) {
+                        NSDictionary *errorJSON = callback.parameters[@"error"];
+                        NSError *error = [self makeErrorFromWebViewError:errorJSON];
+                        completion(nil, error);
+                    } else {
+                        completion(callback, nil);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+
+- (NSError *)makeErrorFromWebViewError:(NSDictionary *)errorJSON
+{
+    NSString *visualizeErrorDomain = @"Visualize Error Domain";
+    NSString *errorCodeString = errorJSON[@"code"];
+    NSInteger code = JMJavascriptNativeBridgeErrorTypeOther;
+    if ([errorCodeString isEqualToString:@"window.onerror"]) {
+        code = JMJavascriptNativeBridgeErrorTypeWindow;
+    } else if ([errorCodeString isEqualToString:@"authentication.error"]) {
+        code = JSReportLoaderErrorTypeAuthentification;
+    }
+    NSString *errorMessage = errorJSON[@"message"];
+    NSError *error = [NSError errorWithDomain:visualizeErrorDomain
+                                         code:code
+                                     userInfo:@{
+                                             NSLocalizedDescriptionKey: errorMessage
+                                     }];
+    return error;
 }
 
 @end

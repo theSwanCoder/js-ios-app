@@ -29,8 +29,6 @@
 #import "JMRestReportLoader.h"
 #import "NSObject+Additions.h"
 #import "JMReportViewerVC.h"
-#import "JMJavascriptNativeBridgeProtocol.h"
-#import "JMJavascriptRequest.h"
 
 @interface JSReportLoader (LoadHTML)
 - (void)startLoadReportHTML;
@@ -45,7 +43,7 @@
 
 
 #pragma mark - Custom accessors
-- (void)setBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge
+- (void)setBridge:(JMJavascriptNativeBridge *)bridge
 {
     _bridge = bridge;
 //    _bridge.delegate = self;
@@ -68,7 +66,8 @@
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"changeInitialZoom(%@);";
     request.parametersAsString = @(scaleFactor).stringValue;
-    [self.bridge sendRequest:request];
+    [self.bridge sendJavascriptRequest:request
+                            completion:nil];
 }
 
 #pragma mark - Private API
@@ -83,7 +82,8 @@
     }
     [self.bridge injectJSInitCode:jsMobile];
     [self.bridge startLoadHTMLString:self.report.HTMLString
-                             baseURL:[NSURL URLWithString:self.report.baseURLString]];
+                             baseURL:[NSURL URLWithString:self.report.baseURLString]
+                          completion:nil];
 
     [self updateViewportScaleFactorWithValue:initialZoom];
 

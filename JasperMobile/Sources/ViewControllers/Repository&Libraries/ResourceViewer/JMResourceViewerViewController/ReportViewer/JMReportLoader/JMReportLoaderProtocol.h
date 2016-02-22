@@ -31,16 +31,15 @@
  @since 2.3
  */
 
-#import <Foundation/Foundation.h>
 #import "JSReportLoaderProtocol.h"
+#import "JMJavascriptNativeBridge.h"
 
 @protocol JMReportLoaderDelegate;
-@protocol JMJavascriptNativeBridgeProtocol;
 @protocol JMReportLoaderProtocol <JSReportLoaderProtocol>
 
 @required
 @property (nonatomic, weak) id<JMReportLoaderDelegate> delegate;
-@property (nonatomic, strong) id<JMJavascriptNativeBridgeProtocol>bridge;
+@property (nonatomic, strong) JMJavascriptNativeBridge *bridge;
 
 - (void)destroy;
 

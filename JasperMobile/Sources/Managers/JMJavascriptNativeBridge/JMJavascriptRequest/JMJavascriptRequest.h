@@ -31,7 +31,7 @@
 @since 2.1
 */
 
-@interface JMJavascriptRequest : NSObject
+@interface JMJavascriptRequest : NSObject <NSCopying>
 @property (nonatomic, copy) NSString *command;
 @property (nonatomic, copy) NSString *parametersAsString;
 @end

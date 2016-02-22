@@ -30,4 +30,11 @@
 
 
 @implementation JMJavascriptCallback
+
+- (NSString *)description
+{
+    NSString *description = [NSString stringWithFormat:@"\nJMJavascriptCallback: %@\ntype: %@\nparams:%@", [super description], self.type, self.parameters];
+    return description;
+}
+
 @end

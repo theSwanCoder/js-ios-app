@@ -31,8 +31,45 @@
 @since 2.1
 */
 
-#import "JMJavascriptNativeBridgeProtocol.h"
+#import "JMJavascriptRequest.h"
+#import "JMJavascriptCallback.h"
+@protocol JMJavascriptNativeBridgeDelegate;
 
-@interface JMJavascriptNativeBridge : NSObject <JMJavascriptNativeBridgeProtocol>
+typedef NS_ENUM(NSInteger, JMJavascriptNativeBrigdeErrorType) {
+    JMJavascriptNativeBridgeErrorTypeWindow,
+    JMJavascriptNativeBridgeErrorTypeOther,
+};
+
+typedef void(^JMJavascriptRequestCompletion)(JMJavascriptCallback *__nullable callback, NSError * __nullable error);
+
+@interface JMJavascriptNativeBridge : NSObject
+@property (nonatomic, weak, readonly) WKWebView *webView;
+@property (nonatomic, weak) id <JMJavascriptNativeBridgeDelegate>delegate;
+
+- (instancetype __nullable)initWithWebView:(WKWebView * __nonnull)webView;
++ (instancetype __nullable)bridgeWithWebView:(WKWebView * __nonnull)webView;
+
+- (void)startLoadHTMLString:(NSString *__nonnull)HTMLString
+                    baseURL:(NSURL *__nonnull)baseURL
+                 completion:(JMJavascriptRequestCompletion __nullable)completion;
+- (void)loadRequest:(NSURLRequest * __nonnull)request;
+
+- (void)injectJSInitCode:(NSString * __nonnull)jsCode;
+
+// js requests
+- (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
+                   completion:(JMJavascriptRequestCompletion __nullable)completion;
+- (void)reset;
+
+// listeners
+- (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nullable)callback;
+- (void)removeAllListeners;
+@end
+
+@protocol JMJavascriptNativeBridgeDelegate <NSObject>
+@optional
+- (void)javascriptNativeBridgeDidReceiveAuthRequest:(JMJavascriptNativeBridge *__nonnull)bridge;
+- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveOnWindowError:(NSError *__nonnull)error;
+- (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge shouldLoadExternalRequest:(NSURLRequest * __nonnull)request;
 @end
 

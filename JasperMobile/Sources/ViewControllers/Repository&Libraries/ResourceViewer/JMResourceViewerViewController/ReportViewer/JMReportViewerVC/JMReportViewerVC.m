@@ -470,7 +470,8 @@
                     } else {
                         JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
                         runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
-                        [((JMJavascriptNativeBridge *)[strongSelf reportLoader].bridge) sendRequest:runRequest];
+                        [[strongSelf reportLoader].bridge sendJavascriptRequest:runRequest
+                                                                     completion:nil];
                     }
                 });
             }
