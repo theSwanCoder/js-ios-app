@@ -143,7 +143,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     self.listenerCallbacks = [NSMutableDictionary dictionary];
 }
 
-#pragma mark - UIWebViewDelegate
+#pragma mark - WKWebViewDelegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
 //    NSLog(@"request from webView: %@", navigationAction.request);

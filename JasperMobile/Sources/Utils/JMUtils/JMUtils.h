@@ -128,6 +128,11 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (BOOL)isServerVersionUpOrEqual6;
 
 /**
+@return YES if JRS instance has version equal 6.0 or 6.0.1
+*/
++ (BOOL)isServerAmber;
+
+/**
  Returns YES if JRS instance has version equal 6.1
 
  @return YES if JRS instance has version equal 6.1

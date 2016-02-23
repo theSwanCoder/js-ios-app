@@ -73,36 +73,7 @@
 
 - (NSString *)htmlStringForReport
 {
-    BOOL isAmberServer = [self isAmberServer];
-
-    NSString *htmlString;
-    if (isAmberServer) {
-        htmlString = [self htmlStringForAmberServer];
-    } else {
-        htmlString = [self htmlStringForDashboard];
-    }
-
-    return htmlString;
-}
-
-- (NSString *)htmlStringForAmberServer
-{
-    NSString *htmlName = @"report";
-
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:htmlName ofType:@"html"];
-    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-
-    // Initial Scale for ViewPort
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(self.viewportScaleFactor).stringValue];
-
-    // Visualize
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
-
-    // JasperMobile
-    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"report-ios-mobilejs-sdk" ofType:@"js"];
-    NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
-
+    NSString *htmlString = [self htmlStringForDashboard];
     return htmlString;
 }
 

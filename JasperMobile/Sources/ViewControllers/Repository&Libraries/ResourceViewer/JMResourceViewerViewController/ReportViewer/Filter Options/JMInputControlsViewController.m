@@ -77,14 +77,8 @@
 
 - (void)backButtonTapped:(id)sender
 {
-    if (self.report.isReportAlreadyLoaded) {
-        [self.navigationController popViewControllerAnimated:YES];
-    } else {
-        NSMutableArray *viewControllers = [self.navigationController.viewControllers mutableCopy];
-        while (![[viewControllers lastObject] isKindOfClass:NSClassFromString(@"JMBaseCollectionViewController")]) {
-            [viewControllers removeLastObject];
-        }
-        [self.navigationController popToViewController:[viewControllers lastObject] animated:YES];
+    if (self.completionBlock) {
+        self.completionBlock(nil);
     }
 }
 
@@ -175,34 +169,59 @@
 - (void)runReport
 {
     [self.view endEditing:YES];
-    BOOL isReportParametersChanged = [self isReportParametersChanged];
-    if ([self currentReportOptionIsExisted]) {
-        if (self.completionBlock) {
-            self.completionBlock(self.currentReportOption);
-        }
-        [self.navigationController popViewControllerAnimated:YES];
-    } else if (!self.report.isReportAlreadyLoaded || (self.report.isReportAlreadyLoaded && isReportParametersChanged)) {
-        if ([self validateInputControls]) { // Local validation
-            [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) { // Server validation
-                if (dataIsValid) {
-                    if (self.completionBlock) {
-                        self.completionBlock(self.currentReportOption);
+    BOOL isNoneReportOption = [self isNoneReportOption:self.currentReportOption];
+
+    if (isNoneReportOption) { // NONE OPTION
+        BOOL isReportParametersChanged = [self isReportParametersChanged];
+        if (isReportParametersChanged) {
+            if ([self validateInputControls]) { // Local validation
+                [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) { // Server validation
+                    if (dataIsValid) {
+                        if (self.completionBlock) {
+                            self.completionBlock(self.currentReportOption);
+                        }
+                    } else {
+                        [self.tableView reloadData];
                     }
-                    [self.navigationController popViewControllerAnimated:YES];
-                }
-            }];
+                }];
+            } else {
+                [self.tableView reloadData];
+            }
         } else {
-            [self.tableView reloadData];
+            if (self.completionBlock) {
+                self.completionBlock(nil);
+            }
         }
-    } else {
-        [self backButtonTapped:nil];
+    } else { // SOME REPORT OPTION
+        BOOL isReportOptionChanged = [self isReportOptionChanged];
+        if (isReportOptionChanged) {
+            if (self.completionBlock) {
+                self.completionBlock(self.currentReportOption);
+            }
+        } else {
+            if (self.completionBlock) {
+                self.completionBlock(nil);
+            }
+        }
     }
+}
+
+- (BOOL)isNoneReportOption:(JSReportOption *)reportOption
+{
+    // TODO: consider other properties
+    return reportOption.uri == nil;
+}
+
+- (BOOL)isReportOptionChanged
+{
+    return (![self.report.activeReportOption isEqual: self.currentReportOption]);
 }
 
 - (BOOL)isReportParametersChanged
 {
-    return (self.report.activeReportOption != self.currentReportOption);
-    
+    // TODO: add implementation
+    return YES;
+
 //    for (JSInputControlDescriptor *inputControl in self.report.activeReportOption.inputControls) {
 //        for (JSInputControlDescriptor *internalInputControl in self.currentInputControls) {
 //            if ([inputControl.uuid isEqualToString:internalInputControl.uuid]) {
@@ -521,7 +540,9 @@
     [JMCancelRequestPopup presentWithMessage:@"status.loading"
                                  cancelBlock:^(void) {
                                      [self.restClient cancelAllRequests];
-                                     [self backButtonTapped:nil];
+                                     if (self.completionBlock) {
+                                         self.completionBlock(nil);
+                                     }
                                  }];
     NSString *resourceURI = self.currentReportOption.uri;
     if (![resourceURI length]) {

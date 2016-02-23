@@ -529,22 +529,32 @@
 
 - (void)updateReportWithNewActiveReportOption:(JSReportOption *)newActiveOption
 {
-    NSString *currentReportURI = self.report.reportURI;
+    NSString *currentReportURI = self.report.activeReportOption.uri;
+    NSString *reportOptionURI = newActiveOption.uri;
+
+    BOOL isURIChanged = YES;
+    if (currentReportURI == nil && reportOptionURI == nil) {
+        isURIChanged = NO;
+    } else if (currentReportURI != nil && reportOptionURI == nil) {
+        isURIChanged = YES;
+    } else if (currentReportURI == nil && reportOptionURI != nil) {
+        isURIChanged = YES;
+    } else if ([currentReportURI isEqualToString:reportOptionURI]) {
+        isURIChanged = NO;
+    }
+
     self.report.activeReportOption = newActiveOption;
-    
-    BOOL uriDidChanged = (!currentReportURI && newActiveOption.uri) || ![currentReportURI isEqualToString:newActiveOption.uri];
-    
-    if (self.report.isReportAlreadyLoaded && !uriDidChanged) {
+    if (self.report.isReportAlreadyLoaded && !isURIChanged) {
         [self hideEmptyReportMessage];
         [self hideToolbar];
         [self hideReportView];
-        
+
         __weak typeof(self)weakSelf = self;
         [self startShowLoaderWithMessage:@"status.loading"];
         [self.reportLoader applyReportParametersWithCompletion:^(BOOL success, NSError *error) {
             __strong typeof(self)strongSelf = weakSelf;
             [strongSelf stopShowLoader];
-            
+
             if (success) {
                 [strongSelf showReportView];
                 if ([strongSelf isContentOnTV]) {
@@ -557,6 +567,7 @@
             }
         }];
     } else {
+        self.report.isReportAlreadyLoaded = NO;
         [self runReportWithPage:1];
     }
 }
@@ -739,7 +750,18 @@
     __weak typeof(self) weakSelf = self;
     inputControlsViewController.completionBlock = ^(JSReportOption *reportOption) {
         __strong typeof(self) strongSelf = weakSelf;
-        [strongSelf updateReportWithNewActiveReportOption:reportOption];
+        if (reportOption) {
+            [strongSelf updateReportWithNewActiveReportOption:reportOption];
+            [strongSelf.navigationController popViewControllerAnimated:YES];
+        } else {
+            if (!strongSelf.report.isReportAlreadyLoaded) {
+                NSMutableArray *viewControllers = [strongSelf.navigationController.viewControllers mutableCopy];
+                while (![[viewControllers lastObject] isKindOfClass:NSClassFromString(@"JMBaseCollectionViewController")]) {
+                    [viewControllers removeLastObject];
+                }
+                [strongSelf.navigationController popToViewController:[viewControllers lastObject] animated:YES];
+            }
+        }
     };
 
     if (isShowBackButton) {
