@@ -362,85 +362,107 @@ JasperMobile.Dashboard.API = {
     dashboardFunction: {},
     selectedDashlet: {}, // DOM element
     selectedComponent: {}, // Model element
-    run: function (params) {
-        JasperMobile.Callback.log("start run");
-        visualize(function (v) {
-            JasperMobile.Dashboard.API.dashboardFunction = v.dashboard;
+    runDashboard: function(params) {
+        var successFn = function() {
 
-            var dashboard = JasperMobile.Dashboard.API.dashboardFunction({
-                resource: params["uri"],
-                container: "#container",
-                report: {
-                    chart: {
-                        animation: false,
-                        zoom: false
-                    }
-                },
-                linkOptions: {
-                    events: {
-                        click: function(event, link, defaultHandler) {
-                            var type = link.type;
-                            JasperMobile.Callback.log("link type: " + type);
+            setTimeout(function(){
+                var data = JasperMobile.Dashboard.API.dashboardObject.data();
+                JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Dashboard.API.runDashboard", {
+                    "components" : data.components,
+                    "params" : data.parameters
+                });
+                if (data.components) {
+                    JasperMobile.Dashboard.API._configureComponents(data.components);
+                }
+                JasperMobile.Dashboard.API._defineComponentsClickEvent();
+                JasperMobile.Dashboard.API._setupFiltersApperance();
+            }, 6000);
 
-                            switch (type) {
-                                case "ReportExecution": {
-                                    var data = {
-                                        resource: link.parameters._report,
-                                        params: JasperMobile.Helper.collectReportParams(link)
-                                    };
-                                    var dataString = JSON.stringify(data);
-                                    JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.ReportExecution", {
-                                        "data" : dataString
-                                    });
-                                    break;
-                                }
-                                case "LocalAnchor": {
-                                    defaultHandler.call();
-                                    break;
-                                }
-                                case "LocalPage": {
-                                    defaultHandler.call();
-                                    break;
-                                }
-                                case "Reference": {
-                                    var href = link.href;
-                                    JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.Reference", {
-                                        "location" : href
-                                    });
-                                    break;
-                                }
-                                case "AdHocExecution":
-                                    defaultHandler.call();
-                                    JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution", {});
-                                    break;
-                                default: {
-                                    defaultHandler.call();
-                                }
+        };
+        var errorFn = function(error) {
+            JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.runDashboard", {
+                "error" : JSON.stringify({
+                    "code" : error.errorCode,
+                    "message" : error.message
+                })
+            });
+        };
+        var dashboardStruct = {
+            resource: params["uri"],
+            container: "#container",
+            linkOptions: {
+                events: {
+                    click: function(event, link, defaultHandler) {
+                        var type = link.type;
+                        JasperMobile.Callback.log("link type: " + type);
+
+                        switch (type) {
+                            case "ReportExecution": {
+                                var data = {
+                                    resource: link.parameters._report,
+                                    params: JasperMobile.Helper.collectReportParams(link)
+                                };
+                                var dataString = JSON.stringify(data);
+                                JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.ReportExecution", {
+                                    "data" : dataString
+                                });
+                                break;
+                            }
+                            case "LocalAnchor": {
+                                defaultHandler.call();
+                                break;
+                            }
+                            case "LocalPage": {
+                                defaultHandler.call();
+                                break;
+                            }
+                            case "Reference": {
+                                var href = link.href;
+                                JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.Reference", {
+                                    "location" : href
+                                });
+                                break;
+                            }
+                            case "AdHocExecution":
+                                defaultHandler.call();
+                                JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution", {});
+                                break;
+                            default: {
+                                defaultHandler.call();
                             }
                         }
                     }
-                },
-                success: function() {
-                    var data = JasperMobile.Dashboard.API.dashboardObject.data();
-                    JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Dashboard.API.run", {
-                        "components" : data.components,
-                        "params" : data.parameters
-                    });
-                    JasperMobile.Dashboard.API._configureComponents(data.components);
-                    JasperMobile.Dashboard.API._defineComponentsClickEvent();
-                    JasperMobile.Dashboard.API._setupFiltersApperance();
-                },
-                error: function(error) {
-                    JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.run", {
-                        "error" : JSON.stringify({
-                            "code" : error.errorCode,
-                            "message" : error.message
-                        })
-                    });
                 }
-            });
-            JasperMobile.Dashboard.API.dashboardObject = dashboard;
-        });
+            },
+            success: successFn,
+            error: errorFn
+        };
+        var auth = {};
+
+        if (params["is_for_6_0"]) {
+            auth = {
+                auth: {
+                    loginFn: function(properties, request) {
+                        return (new Deferred()).resolve();
+                    }
+                }
+            };
+        } else {
+            dashboardStruct.report =  {
+                chart: {
+                    animation: false,
+                        zoom: false
+                }
+            };
+        }
+
+        var dashboardFn = function (v) {
+            // save link for dashboardObject
+            JasperMobile.Dashboard.API.dashboardFunction = v.dashboard;
+            JasperMobile.Dashboard.API.dashboardObject = JasperMobile.Dashboard.API.dashboardFunction(dashboardStruct);
+        };
+
+        visualize(auth, dashboardFn, errorFn);
     },
     getDashboardParameters: function() {
         var data = JasperMobile.Dashboard.API.dashboardObject.data();

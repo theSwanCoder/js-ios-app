@@ -75,15 +75,11 @@
 - (id <JMDashboardLoader>)dashboardLoader
 {
     if (!_dashboardLoader) {
-        if ([JMUtils isServerAmber2OrHigher]) {
-            if ([self.dashboard.resourceLookup isNewDashboard]) {
-                _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard];
-                JMVisualizeManager *visualizeManager = [JMVisualizeManager new];
-                visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
-                ((JMVisDashboardLoader *)_dashboardLoader).visualizeManager = visualizeManager;
-            } else {
-                _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard];
-            }
+        if ([self.dashboard.resourceLookup isNewDashboard]) {
+            _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard];
+            JMVisualizeManager *visualizeManager = [JMVisualizeManager new];
+            visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
+            ((JMVisDashboardLoader *)_dashboardLoader).visualizeManager = visualizeManager;
         } else {
             _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard];
         }

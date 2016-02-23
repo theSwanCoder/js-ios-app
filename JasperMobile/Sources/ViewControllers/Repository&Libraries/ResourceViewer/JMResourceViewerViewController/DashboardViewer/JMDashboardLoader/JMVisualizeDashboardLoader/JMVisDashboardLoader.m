@@ -372,9 +372,22 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     JMDashboardLoaderCompletion heapBlock = [completion copy];
     // run
     JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
-    runRequest.command = @"JasperMobile.Dashboard.API.run";
-    NSString *runParameters = [NSString stringWithFormat:@"{'uri': '%@'}", self.dashboard.resourceURI];
-    runRequest.parametersAsString = runParameters;
+    runRequest.command = @"JasperMobile.Dashboard.API.runDashboard";
+
+    NSString *uriParam = [NSString stringWithFormat:@"'uri' : '%@'", self.dashboard.resourceURI];
+    NSString *requestParameters;
+    BOOL isServerAmber = [JMUtils isServerAmber];
+    NSString *isServerAmberParam;
+    if (isServerAmber) {
+        isServerAmberParam = @"'is_for_6_0' : true";
+    } else {
+        isServerAmberParam = @"'is_for_6_0' : false";
+    }
+    requestParameters = [NSString stringWithFormat:@"{%@, %@}",
+                                                   isServerAmberParam,
+                                                   uriParam];
+    runRequest.parametersAsString = requestParameters;
+
     [self.bridge sendJavascriptRequest:runRequest completion:^(JMJavascriptCallback *callback, NSError *error) {
         if (error) {
             heapBlock(NO, error);

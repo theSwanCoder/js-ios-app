@@ -130,13 +130,7 @@
 		08E62C8319922B0B0081CA83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E62C8019922B0B0081CA83 /* main.m */; };
 		7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */; };
 		93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */; };
-		930F8D3F1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3B1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js */; };
-		930F8D401ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3C1ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js */; };
-		930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3D1ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js */; };
-		930F8D421ABB1C35005F93FB /* report-ios-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3E1ABB1C35005F93FB /* report-ios-mobilejs-sdk.js */; };
 		930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D431ABB1CDF005F93FB /* dashboard.html */; };
-		930F8D461ABB1CDF005F93FB /* report.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D441ABB1CDF005F93FB /* report.html */; };
-		930F8D481ABB1D9F005F93FB /* require.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D471ABB1D9F005F93FB /* require.min.js */; };
 		9331B2C61C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */; };
 		9331B2C71C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */; };
 		933CAF771C776A8E00EF6F84 /* JMReportPageUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 933CAF5C1C776A8E00EF6F84 /* JMReportPageUITests.m */; };
@@ -504,13 +498,7 @@
 		93047D591AB6F5750047C982 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		93047D5A1AB6F5750047C982 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
 		93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
-		930F8D3B1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "dashboard-amber-ios-mobilejs-sdk.js"; sourceTree = "<group>"; };
-		930F8D3C1ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "dashboard-amber2-ios-mobilejs-sdk.js"; sourceTree = "<group>"; };
-		930F8D3D1ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "dashboard-legacy-mobilejs-sdk.js"; sourceTree = "<group>"; };
-		930F8D3E1ABB1C35005F93FB /* report-ios-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "report-ios-mobilejs-sdk.js"; sourceTree = "<group>"; };
 		930F8D431ABB1CDF005F93FB /* dashboard.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = dashboard.html; sourceTree = "<group>"; };
-		930F8D441ABB1CDF005F93FB /* report.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = report.html; sourceTree = "<group>"; };
-		930F8D471ABB1D9F005F93FB /* require.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = require.min.js; sourceTree = "<group>"; };
 		9331B2C31C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowDashboardControlsTableViewCell.h; sourceTree = "<group>"; };
 		9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowDashboardControlsTableViewCell.m; sourceTree = "<group>"; };
 		9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMExternalWindowDashboardControlsTableViewCell.xib; sourceTree = "<group>"; };
@@ -1371,13 +1359,7 @@
 		089B16141AA757EA0021A915 /* VisualizeJS */ = {
 			isa = PBXGroup;
 			children = (
-				930F8D471ABB1D9F005F93FB /* require.min.js */,
 				930F8D431ABB1CDF005F93FB /* dashboard.html */,
-				930F8D441ABB1CDF005F93FB /* report.html */,
-				930F8D3B1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js */,
-				930F8D3C1ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js */,
-				930F8D3D1ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js */,
-				930F8D3E1ABB1C35005F93FB /* report-ios-mobilejs-sdk.js */,
 				089B16151AA757EA0021A915 /* jaspermobile.js */,
 				A14785AF90B597E785B4A30A /* old_dashboard.js */,
 				A1478BF95DE687CDEB03D288 /* vis_jaspermobile.js */,
@@ -2781,22 +2763,16 @@
 				BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */,
 				087A71AD1BD95FBF007B98A4 /* Settings.bundle in Resources */,
 				089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */,
-				930F8D421ABB1C35005F93FB /* report-ios-mobilejs-sdk.js in Resources */,
-				930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */,
-				930F8D401ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js in Resources */,
 				9331B2C71C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib in Resources */,
 				089B15FC1AA756BD0021A915 /* JMBaseCollectionView.xib in Resources */,
-				930F8D461ABB1CDF005F93FB /* report.html in Resources */,
 				08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */,
 				08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */,
 				089B15C61AA756BD0021A915 /* JMGridResourceCollectionViewCell.xib in Resources */,
 				08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */,
-				930F8D481ABB1D9F005F93FB /* require.min.js in Resources */,
 				BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */,
 				930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */,
 				089B15C81AA756BD0021A915 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
 				089B15AD1AA756BD0021A915 /* JMCancelRequestPopup.xib in Resources */,
-				930F8D3F1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js in Resources */,
 				089B15C31AA756BD0021A915 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
 				08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */,
 				089B15AF1AA756BD0021A915 /* JMListOptionsPopupView.xib in Resources */,

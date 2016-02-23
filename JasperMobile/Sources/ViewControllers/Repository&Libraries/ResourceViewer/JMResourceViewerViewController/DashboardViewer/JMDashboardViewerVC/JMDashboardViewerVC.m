@@ -134,6 +134,10 @@
 #pragma mark - Setups
 - (void)configViewport
 {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[JMWebViewManager sharedInstance] resetZoom];
+    });
+
     CGFloat initialScaleViewport = 0.75;
     BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
     if (isCompactWidth) {

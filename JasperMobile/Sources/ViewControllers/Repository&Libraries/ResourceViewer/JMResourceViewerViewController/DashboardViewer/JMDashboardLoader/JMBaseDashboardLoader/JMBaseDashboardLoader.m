@@ -33,8 +33,6 @@
 #import "JMDashboard.h"
 #import "JSResourceLookup+Helpers.h"
 
-static const NSInteger kDashboardLoadTimeoutSec = 30;
-
 @interface JMBaseDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
 @property (nonatomic, copy) void(^loadCompletion)(BOOL success, NSError *error);
@@ -70,25 +68,12 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
 {
     [self.bridge loadRequest:self.dashboard.resourceRequest];
 
-    if ([self.dashboard.resourceLookup isNewDashboard]) {
-        self.loadCompletion = completion;
-        [self injectJSCode];
-
-        // There is issue with webpages in dashlets
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDashboardLoadTimeoutSec * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (!self.isLoadDone && completion) {
-                completion(YES, nil);
-                self.loadCompletion = nil;
-            }
+    [self injectJSCodeOldDashboard];
+    if (completion) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            completion(YES, nil);
         });
-    } else {
-        [self injectJSCodeOldDashboard];
-        if (completion) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                completion(YES, nil);
-            });
-        }
-    };
+    }
 }
 
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion)completion
@@ -125,18 +110,6 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
 }
 
 #pragma mark - JMJavascriptNativeBridgeProtocol
-//- (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback
-//{
-//    JMLog(@"callback parameters: %@", callback.parameters);
-//    if ([callback.type isEqualToString:@"scriptDidLoad"]) {
-//        [self handleDidScriptLoad];
-//    } else if ([callback.type isEqualToString:@"onLoadDone"]) {
-//        [self handleOnLoadDone];
-//    } else if ([callback.type isEqualToString:@"didStartMaximazeDashlet"]) {
-//        [self handleDidStartMaximazeDashletWithParameters:callback.parameters];
-//    }
-//}
-
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(JMJavascriptNativeBridge *)bridge
 {
     if (self.loadCompletion) {
@@ -157,55 +130,8 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
     return shouldLoad;
 }
 
-#pragma mark - JS Handlers
-//- (void)handleDidScriptLoad
-//{
-//    JMJavascriptRequest *request = [JMJavascriptRequest new];
-//    request.command = @"MobileDashboard.configure({'diagonal': %@}).run();";
-//    request.parametersAsString = [NSString stringWithFormat:@"%@", @([self diagonal])];
-//    [self.bridge sendRequest:request];
-//}
-//
-//- (void)handleOnLoadDone
-//{
-//    self.isLoadDone = YES;
-//    if (self.loadCompletion) {
-//        self.loadCompletion(YES, nil);
-//    }
-//}
-//
-//- (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
-//{
-//    NSString *title = parameters[@"title"];
-//    [self.delegate dashboardLoader:self didStartMaximazeDashletWithTitle:title];
-//}
 
 #pragma mark - Helpers
-- (CGFloat)diagonal
-{
-    // TODO: extend this simplified version
-    float diagonal = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? [self diagonalIpad]: [self diagonalIphone];
-    return diagonal;
-}
-
-- (CGFloat)diagonalIpad
-{
-    return 9.7;
-}
-
-- (CGFloat)diagonalIphone
-{
-    return 4.0;
-}
-
-- (void)injectJSCode
-{
-    NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"dashboard-amber-ios-mobilejs-sdk" ofType:@"js"];
-    NSError *error;
-    NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
-    [self.bridge injectJSInitCode:jsMobile];
-}
-
 - (void)injectJSCodeOldDashboard
 {
     NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"old_dashboard" ofType:@"js"];
