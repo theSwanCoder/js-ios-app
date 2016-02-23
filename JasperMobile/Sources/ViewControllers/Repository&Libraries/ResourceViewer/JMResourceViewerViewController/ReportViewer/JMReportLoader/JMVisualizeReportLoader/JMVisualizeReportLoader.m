@@ -201,6 +201,7 @@
                                 __typeof(self) strongSelf = weakSelf;
                                 if (callback) {
                                     strongSelf.report.isReportAlreadyLoaded = YES;
+                                    [strongSelf.report updateCurrentPage:1];
                                     if (heapBlock) {
                                         heapBlock(YES, nil);
                                     }
