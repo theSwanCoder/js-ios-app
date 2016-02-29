@@ -62,7 +62,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JSInputControlOption *option = self.listOfValues[indexPath.row];
-    option.selected = [JSUtils stringFromBOOL:!option.selected.boolValue];
+    option.selected = !option.selected;
     
     if (self.itemsSegmentedControl.selectedSegmentIndex != 0) {
         [self applyFiltering];
@@ -136,7 +136,7 @@
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     for (JSInputControlOption *option in self.listOfValues) {
-        option.selected = [JSUtils stringFromBOOL:(action == JMMenuActionsViewAction_SelectAll)];
+        option.selected = (action == JMMenuActionsViewAction_SelectAll);
     }
     [self applyFiltering];
     [self setupSegmentedControlAppearence];

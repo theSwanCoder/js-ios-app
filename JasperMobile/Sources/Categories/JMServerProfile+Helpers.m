@@ -122,28 +122,29 @@
                                                  username:nil
                                                  password:nil];
     
-    __block JSRESTBase *restBase = [[JSRESTBase alloc] initWithServerProfile:profile keepLogged:YES];
-
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        JSServerInfo *serverInfo = restBase.serverInfo;
-        float serverVersion = serverInfo.versionAsFloat;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionBlock) {
-                if (serverVersion >= [JMServerProfile minSupportedServerVersion]) {
-                    completionBlock(nil);
-                } else {
-                    NSString *title = [NSString stringWithFormat:JMCustomLocalizedString(@"error.server.notsupported.title", nil), serverVersion];
-                    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"error.server.notsupported.msg", nil), [JMServerProfile minSupportedServerVersion]];
-
-                    if (!serverInfo) {
-                        title = JMCustomLocalizedString(@"error.unknownhost.dialog.title", nil);
-                        message = JMCustomLocalizedString(@"error.unknownhost.dialog.msg", nil);
+    JSRESTBase *restClient = [[JSRESTBase alloc] initWithServerProfile:profile keepLogged:YES];
+    [restClient fetchServerInfoWithCompletion:^(JSOperationResult * _Nullable result) {
+        if (completionBlock) {
+            if (!result.error) {
+                NSError *checkingError = nil;
+                if (result.objects.count) {
+                    JSServerInfo *serverInfo = result.objects.lastObject;
+                    if (serverInfo.versionAsFloat < [JMServerProfile minSupportedServerVersion]) {
+                        checkingError = [NSError errorWithDomain:JMCustomLocalizedString(@"error.server.notsupported.title", nil)
+                                                            code:NSNotFound
+                                                        userInfo:@{NSLocalizedDescriptionKey : JMCustomLocalizedString(@"error.server.notsupported.msg", nil)}];
                     }
-                    completionBlock([NSError errorWithDomain:title code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : message}]);
+                } else {
+                    checkingError = [NSError errorWithDomain:JMCustomLocalizedString(@"error.unknownhost.dialog.title", nil)
+                                                        code:NSNotFound
+                                                    userInfo:@{NSLocalizedDescriptionKey : JMCustomLocalizedString(@"error.unknownhost.dialog.msg", nil)}];
                 }
+                completionBlock(checkingError);
+            } else {
+                completionBlock(result.error);
             }
-        });
-    });
+        }
+    }];
 }
 
 @end

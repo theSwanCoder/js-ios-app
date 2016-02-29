@@ -25,7 +25,6 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMServerProfile+Helpers.h"
 #import "UIImageView+AFNetworking.h"
-#import "RKObjectManager.h"
 #import "UIImage+Additions.h"
 
 #import "JSResourceLookup+Helpers.h"
