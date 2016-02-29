@@ -2536,6 +2536,9 @@ your business wherever you are.</string>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.8980392157" green="0.91372549020000005" blue="0.92156862750000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <accessibility key="accessibilityConfiguration" identifier="JMInputControlsViewControllerAccessibilityIdentifier" label="Edit Values Page">
+                            <bool key="isElement" value="YES"/>
+                        </accessibility>
                         <constraints>
                             <constraint firstItem="Xrc-ML-gfI" firstAttribute="leading" secondItem="fI4-Ub-CqF" secondAttribute="leading" constant="10" id="50S-xf-Zro"/>
                             <constraint firstItem="UyR-xy-u50" firstAttribute="top" secondItem="jv1-lW-hJw" secondAttribute="bottom" constant="10" id="NqG-AR-eY6"/>
@@ -2545,6 +2548,9 @@ your business wherever you are.</string>
                             <constraint firstAttribute="trailing" secondItem="Xrc-ML-gfI" secondAttribute="trailing" constant="10" id="vDi-mV-J4n"/>
                             <constraint firstItem="jv1-lW-hJw" firstAttribute="leading" secondItem="fI4-Ub-CqF" secondAttribute="leading" constant="10" id="zm4-Uw-cZK"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="NO"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <navigationItem key="navigationItem" id="dnV-ml-hpF"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -3003,6 +3009,9 @@ your business wherever you are.</string>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.94000000000000006" alpha="1" colorSpace="calibratedWhite"/>
+                        <accessibility key="accessibilityConfiguration" identifier="JMSaveReportViewControllerAccessibilityIdentifier" label="Save Report Page">
+                            <bool key="isElement" value="YES"/>
+                        </accessibility>
                         <constraints>
                             <constraint firstItem="r4g-Sw-bQV" firstAttribute="top" secondItem="fE7-mN-GVX" secondAttribute="bottom" constant="10" id="Fqf-qf-xuG"/>
                             <constraint firstItem="fE7-mN-GVX" firstAttribute="top" secondItem="h4f-qE-3cX" secondAttribute="bottom" constant="10" id="GZz-gh-OjH"/>
@@ -3012,6 +3021,9 @@ your business wherever you are.</string>
                             <constraint firstAttribute="trailing" secondItem="h4f-qE-3cX" secondAttribute="trailing" constant="10" id="WLd-5E-SSS"/>
                             <constraint firstItem="fE7-mN-GVX" firstAttribute="leading" secondItem="SZK-SG-TH5" secondAttribute="leading" constant="10" id="gIX-mc-1oq"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="NO"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <navigationItem key="navigationItem" id="mlB-Rj-jiF"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
