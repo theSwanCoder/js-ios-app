@@ -35,24 +35,29 @@
 #import "JMJavascriptNativeBridge.h"
 
 @protocol JMReportLoaderDelegate;
+@class JMWebEnvironment;
+
 @protocol JMReportLoaderProtocol <JSReportLoaderProtocol>
 
-@required
-@property (nonatomic, weak) id<JMReportLoaderDelegate> delegate;
-@property (nonatomic, strong) JMJavascriptNativeBridge *bridge;
-
+- (void)setDelegate:(id<JMReportLoaderDelegate> __nullable)delegate;
 - (void)destroy;
 
 @optional
-- (void)exportReportWithFormat:(NSString *)exportFormat;
+- (nullable id<JMReportLoaderProtocol>)initWithReport:(nonnull JSReport *)report
+                                        restClient:(nonnull JSRESTBase *)restClient
+                                    webEnvironment:(nonnull JMWebEnvironment *)webEnvironment;
++ (nullable id<JMReportLoaderProtocol>)loaderWithReport:(nonnull JSReport *)report
+                                           restClient:(nonnull JSRESTBase *)restClient
+                                       webEnvironment:(nonnull JMWebEnvironment *)webEnvironment;
+- (void)exportReportWithFormat:(NSString * __nonnull)exportFormat;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end
 
 @protocol JMReportLoaderDelegate <NSObject>
 @optional
-- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters;
-- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventWithError:(NSError *)error;
-- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference;
-- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName;
+- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *__nonnull)resourceLookup withParameters:(NSArray *__nullable)reportParameters;
+- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventWithError:(NSError *__nonnull)error;
+- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoder didReceiveOnClickEventForReference:(NSURL *__nonnull)urlReference;
+- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOutputResourcePath:(NSString *__nonnull)resourcePath fullReportName:(NSString *__nonnull)fullReportName;
 @end
 

@@ -37,7 +37,6 @@
 #import "JMReportLoaderProtocol.h"
 
 @interface JMReportViewerVC : JMResourceViewerViewController <JMRefreshable>
-@property (nonatomic, strong, readonly) id <JMReportLoaderProtocol> reportLoader;
 @property (nonatomic, strong, readonly) JMReport *report;
 @property (nonatomic, assign) BOOL isChildReport;
 @property (nonatomic, copy) void(^exitBlock)(void);

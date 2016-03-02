@@ -26,9 +26,11 @@
 #import "ALToastView.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMMainNavigationController.h"
+#import "JMWebEnvironment.h"
+
+NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewerWebEnvironmentIdentifier";
 
 @interface JMResourceViewerViewController () <UIPrintInteractionControllerDelegate>
-@property (nonatomic, weak, readwrite) IBOutlet WKWebView *webView;
 @property (nonatomic, strong) UINavigationController *printNavController;
 @property (nonatomic, assign) CGSize printSettingsPreferredContentSize;
 @property (nonatomic, assign) NSInteger lowMemoryWarningsCount;
@@ -87,13 +89,26 @@
     [super viewWillLayoutSubviews];
 }
 
+#pragma mark - Custom Accessors
+- (WKWebView *)webView
+{
+    if (!_webView) {
+        JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
+        _webView = webEnvironment.webView;
+//        _webView.navigationDelegate = self;
+    }
+    return _webView;
+}
+
 #pragma mark - Setups
 - (void)setupSubviews
 {
-    WKWebView *webView = [[JMWebViewManager sharedInstance] webView];
-    webView.navigationDelegate = self;
-    [self.view insertSubview:webView belowSubview:self.activityIndicator];
-    self.webView = webView;
+//    WKWebView *webView = [[JMWebViewManager sharedInstance] webView];
+//    webView.navigationDelegate = self;
+//    [self.view insertSubview:webView belowSubview:self.activityIndicator];
+//    self.webView = webView;
+
+    [self.view addSubview:self.webView];
 
     [self setupWebViewLayout];
 }
@@ -123,7 +138,7 @@
 {
     [self resetSubViews];
     [self.view endEditing:YES];
-    self.webView.navigationDelegate = nil;
+//    self.webView.navigationDelegate = nil;
 
     [super cancelResourceViewingAndExit:exit];
 }

@@ -35,6 +35,7 @@
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;
 @class JMDashlet;
+@class JMWebEnvironment;
 
 typedef void(^JMDashboardLoaderCompletion)(BOOL success, NSError * __nullable error);
 
@@ -55,11 +56,10 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 };
 
 @protocol JMDashboardLoader <NSObject>
-@property (nonatomic, strong) JMJavascriptNativeBridge *__nonnull bridge;
 @property (nonatomic, weak) id<JMDashboardLoaderDelegate> delegate;
 
-- (instancetype __nullable)initWithDashboard:(JMDashboard *__nonnull)dashboard;
-+ (instancetype __nullable)loaderWithDashboard:(JMDashboard *__nonnull)dashboard;
+- (id<JMDashboardLoader> __nullable)initWithDashboard:(JMDashboard *__nonnull)dashboard webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
++ (id<JMDashboardLoader> __nullable)loaderWithDashboard:(JMDashboard *__nonnull)dashboard webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
 
 @optional
 - (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;

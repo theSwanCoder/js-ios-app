@@ -29,36 +29,30 @@
 #import "JMRestReportLoader.h"
 #import "NSObject+Additions.h"
 #import "JMReportViewerVC.h"
+#import "JMWebEnvironment.h"
+#import "JMVisualizeManager.h"
 
 @interface JSReportLoader (LoadHTML)
 - (void)startLoadReportHTML;
 @end
 
 @interface JMRestReportLoader()
-
+@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 @end
 
 @implementation JMRestReportLoader
-@synthesize bridge = _bridge, delegate = _delegate;
 
-
-#pragma mark - Custom accessors
-- (void)setBridge:(JMJavascriptNativeBridge *)bridge
-{
-    _bridge = bridge;
-//    _bridge.delegate = self;
-}
 
 #pragma mark - Public API
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    [self.bridge reset];
+    [self.webEnvironment clean];
     [super refreshReportWithCompletion: completion];
 }
 
 - (void)destroy
 {
-    [self.bridge reset];
+    [self.webEnvironment clean];
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
@@ -66,8 +60,8 @@
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"changeInitialZoom(%@);";
     request.parametersAsString = @(scaleFactor).stringValue;
-    [self.bridge sendJavascriptRequest:request
-                            completion:nil];
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:nil];
 }
 
 #pragma mark - Private API
@@ -80,10 +74,11 @@
     if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
         initialZoom = 1;
     }
-    [self.bridge injectJSInitCode:jsMobile];
-    [self.bridge startLoadHTMLString:self.report.HTMLString
-                             baseURL:[NSURL URLWithString:self.report.baseURLString]
-                          completion:nil];
+
+    [self.webEnvironment injectJSInitCode:jsMobile];
+    [self.webEnvironment loadHTML:self.report.HTMLString
+                          baseURL:[NSURL URLWithString:self.report.baseURLString]
+                       completion:nil];
 
     [self updateViewportScaleFactorWithValue:initialZoom];
 

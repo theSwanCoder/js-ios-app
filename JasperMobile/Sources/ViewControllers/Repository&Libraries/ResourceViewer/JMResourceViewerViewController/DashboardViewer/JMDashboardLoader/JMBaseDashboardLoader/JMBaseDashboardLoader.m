@@ -27,46 +27,43 @@
 //
 
 #import "JMBaseDashboardLoader.h"
-#import "JMJavascriptNativeBridge.h"
-#import "JMJavascriptCallback.h"
-#import "JMJavascriptRequest.h"
 #import "JMDashboard.h"
-#import "JSResourceLookup+Helpers.h"
+#import "JMWebEnvironment.h"
 
 @interface JMBaseDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
 @property (nonatomic, copy) void(^loadCompletion)(BOOL success, NSError *error);
 @property (nonatomic) BOOL isLoadDone;
+@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 @end
 
 @implementation JMBaseDashboardLoader
-@synthesize bridge = _bridge, delegate = _delegate;
-
-- (void)setBridge:(JMJavascriptNativeBridge *)bridge
-{
-    _bridge = bridge;
-    _bridge.delegate = self;
-}
+@synthesize delegate = _delegate;
 
 #pragma mark - Initializers
-- (instancetype)initWithDashboard:(JMDashboard *)dashboard
+- (id<JMDashboardLoader> __nullable)initWithDashboard:(JMDashboard *__nonnull)dashboard
+                                       webEnvironment:(JMWebEnvironment *)webEnvironment
 {
     self = [super init];
     if (self) {
         _dashboard = dashboard;
+        _webEnvironment = webEnvironment;
     }
     return self;
 }
 
-+ (instancetype)loaderWithDashboard:(JMDashboard *)dashboard
++ (id<JMDashboardLoader> __nullable)loaderWithDashboard:(JMDashboard *__nonnull)dashboard
+                                         webEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    return [[self alloc] initWithDashboard:dashboard];
+    return [[self alloc] initWithDashboard:dashboard
+                            webEnvironment:webEnvironment];
 }
 
 #pragma mark - Public API
 - (void)loadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
-    [self.bridge loadRequest:self.dashboard.resourceRequest];
+    // TODO: reimplement without request
+    [self.webEnvironment loadRequest:self.dashboard.resourceRequest];
 
     [self injectJSCodeOldDashboard];
     if (completion) {
@@ -78,7 +75,7 @@
 
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion)completion
 {
-    [self.bridge reset];
+    [self.webEnvironment clean];
 
     // waiting until page will be cleared
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -90,7 +87,7 @@
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileDashboard.minimizeDashlet();";
     request.parametersAsString = @"";
-    [self.bridge sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
         } else {
@@ -101,12 +98,12 @@
 
 - (void)cancel
 {
-    [self.bridge reset];
+    [self.webEnvironment reset];
 }
 
 - (void)destroy
 {
-    [self.bridge reset];
+    [self.webEnvironment reset];
 }
 
 #pragma mark - JMJavascriptNativeBridgeProtocol
@@ -142,7 +139,7 @@
         initialScale = 0.25;
     }
     jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScale).stringValue];
-    [self.bridge injectJSInitCode:jsMobile];
+    [self.webEnvironment injectJSInitCode:jsMobile];
 }
 
 @end

@@ -28,64 +28,41 @@
 
 #import "JMReportViewerConfigurator.h"
 #import "JMReportLoaderProtocol.h"
-#import "JMJavascriptNativeBridge.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMRestReportLoader.h"
 #import "JMReport.h"
 #import "JMVisualizeManager.h"
 #import "JMWebViewManager.h"
-
-@interface JMReportViewerConfigurator()
-@property (nonatomic, weak) JMReport *report;
-@property (nonatomic, strong) id <JMReportLoaderProtocol> reportLoader;
-@end
+#import "JMWebEnvironment.h"
 
 @implementation JMReportViewerConfigurator
 
 #pragma mark - Public API
 
-- (instancetype)initWithReport:(JMReport *)report {
+- (instancetype)initWithReport:(JMReport *)report webEnvironment:(JMWebEnvironment *)webEnvironment {
     self = [super init];
     if (self) {
-        _report = report;
+        if ([JMUtils isSupportVisualize]) {
+            _reportLoader = [JMVisualizeReportLoader loaderWithReport:report
+                                                           restClient:self.restClient
+                                                       webEnvironment:webEnvironment];
+            ((JMVisualizeReportLoader *)_reportLoader).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
+        } else {
+            _reportLoader = (id <JMReportLoaderProtocol>) [JMRestReportLoader loaderWithReport:report
+                                                                                    restClient:self.restClient];
+        }
     }
     return self;
 }
 
-+ (instancetype)configuratorWithReport:(JMReport *)report
++ (instancetype)configuratorWithReport:(JMReport *)report webEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    return [[self alloc] initWithReport:report];
-}
-
-- (WKWebView *)webViewAsSecondary:(BOOL)asSecondary
-{
-    if (!_webView) {
-        _webView = [[JMWebViewManager sharedInstance] webViewAsSecondary:asSecondary];
-    }
-    return _webView;
-}
-
-- (id <JMReportLoaderProtocol>)reportLoader
-{
-    if (!_reportLoader) {
-        if ([JMUtils isSupportVisualize]) {
-            _reportLoader = [JMVisualizeReportLoader loaderWithReport:self.report restClient:self.restClient];
-            JMVisualizeManager *visualizeManager = [JMVisualizeManager new];
-            visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
-            ((JMVisualizeReportLoader *)_reportLoader).visualizeManager = visualizeManager;
-        } else {
-            _reportLoader = [JMRestReportLoader loaderWithReport:self.report restClient:self.restClient];
-        }
-        JMJavascriptNativeBridge *bridge = [JMJavascriptNativeBridge bridgeWithWebView:self.webView];
-        _reportLoader.bridge = bridge;
-    }
-
-    return _reportLoader;
+    return [[self alloc] initWithReport:report webEnvironment:webEnvironment];
 }
 
 - (void)updateReportLoaderDelegateWithObject:(id <JMReportLoaderDelegate>)delegate
 {
-    [self reportLoader].delegate = delegate;
+    [[self reportLoader] setDelegate:delegate];
 }
 
 @end

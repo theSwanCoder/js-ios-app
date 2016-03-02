@@ -86,7 +86,8 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     // TODO: replace with safety approach
     if (baseURL) {
         [self.webView stopLoading];
-        [self.webView loadHTMLString:HTMLString baseURL:baseURL];
+        [self.webView loadHTMLString:HTMLString
+                             baseURL:baseURL];
     }
 }
 
@@ -123,10 +124,14 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 {
     // TODO: replace with safety approach
     self.isJSInitCodeInjected = NO;
+    [self removeContents];
+    [self removeAllListeners];
+}
+
+- (void)removeContents
+{
     NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@""]];
     [self.webView loadRequest:clearingRequest];
-    self.requestCompletions = [NSMutableDictionary dictionary];
-    [self removeAllListeners];
 }
 
 - (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nullable)callback
@@ -140,6 +145,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 - (void)removeAllListeners
 {
+    self.requestCompletions = [NSMutableDictionary dictionary];
     self.listenerCallbacks = [NSMutableDictionary dictionary];
 }
 
@@ -182,10 +188,16 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
         NSDictionary *parameters = [self parseCommand:command];
 
-        JMJavascriptCallback *response = [JMJavascriptCallback new];
-        response.type = parameters[@"callback.type"];
-        response.parameters = parameters[@"parameters"];
-        [self didReceiveCallback:response];
+        JMLog(@"parameters: %@", parameters);
+
+        if (parameters) {
+            JMJavascriptCallback *response = [JMJavascriptCallback new];
+            response.type = parameters[@"callback.type"];
+            response.parameters = parameters[@"parameters"];
+            [self didReceiveCallback:response];
+        } else {
+            // TODO: add general errors handling
+        }
         decisionHandler(WKNavigationActionPolicyCancel);
     } else {
         decisionHandler(WKNavigationActionPolicyAllow);
@@ -222,40 +234,25 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     NSArray *components = [decodedCommand componentsSeparatedByString:@"&&"];
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
-    NSString *callbackType = [components firstObject];
-
-    if ([callbackType isEqualToString:@"json"]) {
-        NSString *parameters = components[1];
-//        JMLog(@"origin parameters: %@", parameters);
-        parameters = [parameters stringByReplacingOccurrencesOfString:@"/\"" withString:@"\""];
-        parameters = [parameters stringByReplacingOccurrencesOfString:@"\"{" withString:@"{"];
-        parameters = [parameters stringByReplacingOccurrencesOfString:@"}\"" withString:@"}"];
-//        JMLog(@"sanitized parameters: %@", parameters);
-        NSData *parametersAsData = [parameters dataUsingEncoding:NSUTF8StringEncoding];
-        NSError *error;
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:parametersAsData
-                                                             options:NSJSONReadingMutableContainers
-                                                               error:&error];
-        if (json) {
-            result[@"callback.type"] = json[@"command"];
-            result[@"parameters"] = json[@"parameters"];
-        } else {
-            result[@"callback.type"] = @"Error";
-            result[@"description"] = error.localizedDescription;
-        }
+    NSString *parameters = components[1];
+    JMLog(@"origin parameters: %@", parameters);
+    parameters = [parameters stringByReplacingOccurrencesOfString:@"///\"" withString:@"'"];
+    parameters = [parameters stringByReplacingOccurrencesOfString:@"/\"" withString:@"\""];
+    parameters = [parameters stringByReplacingOccurrencesOfString:@"\"{" withString:@"{"];
+    parameters = [parameters stringByReplacingOccurrencesOfString:@"}\"" withString:@"}"];
+    JMLog(@"sanitized parameters: %@", parameters);
+    NSData *parametersAsData = [parameters dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error;
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:parametersAsData
+                                                         options:NSJSONReadingMutableContainers
+                                                           error:&error];
+    if (json) {
+        result[@"callback.type"] = json[@"command"];
+        result[@"parameters"] = json[@"parameters"];
     } else {
-        result[@"callback.type"] = callbackType;
-
-        NSMutableArray *parameters = [NSMutableArray arrayWithArray:components];
-//        JMLog(@"origin parameters: %@", parameters);
-        [parameters removeObjectAtIndex:0];
-        for (NSString *component in parameters) {
-            NSArray *keyValue = [component componentsSeparatedByString:@"="];
-            if (keyValue.count == 2) {
-                result[keyValue[0]] = keyValue[1];
-            }
-        }
+        result = nil;
     }
+
     return result;
 }
 

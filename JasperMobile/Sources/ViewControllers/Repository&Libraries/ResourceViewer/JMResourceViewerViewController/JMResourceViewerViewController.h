@@ -33,8 +33,10 @@
 
 #import "JMBaseResourceViewerVC.h"
 
-@interface JMResourceViewerViewController : JMBaseResourceViewerVC <WKNavigationDelegate>
-@property (nonatomic, weak, readonly) IBOutlet WKWebView *webView;
+@interface JMResourceViewerViewController : JMBaseResourceViewerVC <WKNavigationDelegate> {
+    IBOutlet WKWebView *_webView;
+}
+- (WKWebView *)webView;
 - (void)setupWebViewLayout;
 - (void)printResource __attribute__((objc_requires_super));
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void (^)(BOOL completed, NSError *error))completion;

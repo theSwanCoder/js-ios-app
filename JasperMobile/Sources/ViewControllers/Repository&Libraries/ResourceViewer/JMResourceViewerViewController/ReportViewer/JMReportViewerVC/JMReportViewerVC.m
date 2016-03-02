@@ -33,6 +33,10 @@
 #import "JMReportViewerToolBar.h"
 #import "JMExternalWindowControlsVC.h"
 #import "JMNewScheduleVC.h"
+#import "JMWebEnvironment.h"
+
+NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifier = @"kJMReportViewerPrimaryWebEnvironmentIdentifier";
+NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportViewerSecondaryWebEnvironmentIdentifier";
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
@@ -138,15 +142,12 @@
 #pragma mark - Actions
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
-    if (self.isChildReport) {
-        [self closeChildReport];
-    } else {
+    if (!self.isChildReport) {
         [self stopShowLoader];
 
         if (![self.restClient isRequestPoolEmpty]) {
             [self.restClient cancelAllRequests];
         }
-        [self.reportLoader cancel];
         if (self.exitBlock) {
             self.exitBlock();
         }
@@ -154,9 +155,8 @@
         if ([self isContentOnTV]) {
             [self hideExternalWindowWithCompletion:nil];
         }
-
-        [super cancelResourceViewingAndExit:exit];
     }
+    [super cancelResourceViewingAndExit:exit];
 }
 
 - (void)handleReportLoaderDidChangeCountOfPages
@@ -167,12 +167,6 @@
     }
 }
 
-- (void)closeChildReport
-{
-    [[JMWebViewManager sharedInstance] resetChildWebView];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 #pragma mark - Notifications
 - (void)applicationWillResignActiveNotification:(NSNotification *)notification
 {
@@ -180,14 +174,6 @@
 }
 
 #pragma mark - Setups
-- (void)setupLeftBarButtonItems
-{
-    if (self.isChildReport) {
-        self.navigationItem.leftBarButtonItem = [self backBarButtonItemWithTarget:self action:@selector(closeChildReport)];
-    } else {
-        [super setupLeftBarButtonItems];
-    }
-}
 
 - (void)configViewport
 {
@@ -216,10 +202,12 @@
 
 - (void)setupSubviews
 {
-    self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
+    JMWebEnvironment *webEnvironment = [self currentWebEnvironment];
+    self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report
+                                                            webEnvironment:webEnvironment];
 
-    WKWebView *webView = [self.configurator webViewAsSecondary:self.isChildReport];
-    [self.view insertSubview:webView belowSubview:self.activityIndicator];
+    [self.view addSubview:self.webView];
+
     [self setupWebViewLayout];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 
@@ -323,6 +311,9 @@
                                                           if ([reportOptions count] || (reportUnit.alwaysPromptControls && [visibleInputControls count])) {
                                                               [strongSelf showInputControlsViewControllerWithBackButton:YES];
                                                           } else  {
+                                                              if (strongSelf.initialReportParameters) {
+                                                                  [strongSelf.report updateReportParameters:strongSelf.initialReportParameters];
+                                                              }
                                                               [strongSelf startLoadReportWithPage:1];
                                                           }
                                                       }
@@ -417,7 +408,34 @@
 #pragma mark - Custom accessors
 - (WKWebView *)webView
 {
-    return self.configurator.webView;
+    if (!_webView) {
+        JMWebEnvironment *webEnvironment = [self currentWebEnvironment];
+        _webView = webEnvironment.webView;
+    }
+    return _webView;
+}
+
+- (JMWebEnvironment *)currentWebEnvironment
+{
+    JMWebEnvironment *webEnvironment;
+    if (self.isChildReport) {
+        webEnvironment = [self secondaryWebEnvironment];
+    } else {
+        webEnvironment = [self primaryWebEnvironment];
+    }
+    return webEnvironment;
+}
+
+- (JMWebEnvironment *)primaryWebEnvironment
+{
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMReportViewerPrimaryWebEnvironmentIdentifier]              ;
+    return webEnvironment;
+}
+
+- (JMWebEnvironment *)secondaryWebEnvironment
+{
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMReportViewerSecondaryWebEnvironmentIdentifier]              ;
+    return webEnvironment;
 }
 
 - (id<JMReportLoaderProtocol>)reportLoader
@@ -467,10 +485,12 @@
                             [strongSelf.reportLoader updateViewportScaleFactorWithValue:3];
                         }
                     } else {
+                        JMWebEnvironment *webEnvironment = [self currentWebEnvironment];
+
                         JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
                         runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
-                        [[strongSelf reportLoader].bridge sendJavascriptRequest:runRequest
-                                                                     completion:nil];
+                        [webEnvironment sendJavascriptRequest:runRequest
+                                                   completion:nil];
                     }
                 });
             }
@@ -688,7 +708,7 @@
 - (void)resetSubViews
 {
     [self.reportLoader destroy];
-    [[JMWebViewManager sharedInstance] resetZoom];
+    // TODO: add reset zoom
 }
 
 #pragma mark - JMMenuActionsViewDelegate

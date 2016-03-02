@@ -42,6 +42,9 @@
 #import "JMDashboardInputControlsVC.h"
 #import "JSRESTBase+JSRESTDashboard.h"
 #import "JSDashboardComponent.h"
+#import "JMWebEnvironment.h"
+
+NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashboardViewerPrimaryWebEnvironmentIdentifier";
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -123,7 +126,17 @@
 
 - (WKWebView *)webView
 {
-    return self.configurator.webView;
+    if (!_webView) {
+        JMWebEnvironment *primaryWebEnvironment = [self primaryWebEnvironment];
+        _webView = primaryWebEnvironment.webView;
+    }
+    return _webView;
+}
+
+- (JMWebEnvironment *)primaryWebEnvironment
+{
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMDashboardViewerPrimaryWebEnvironmentIdentifier]              ;
+    return webEnvironment;
 }
 
 - (id<JMDashboardLoader>)dashboardLoader
@@ -135,7 +148,8 @@
 - (void)configViewport
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[JMWebViewManager sharedInstance] resetZoom];
+        JMWebEnvironment *primaryWebEnvironment = [self primaryWebEnvironment];
+        [primaryWebEnvironment resetZoom];
     });
 
     CGFloat initialScaleViewport = 0.75;
@@ -151,11 +165,10 @@
 
 - (void)setupSubviews
 {
-    self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard];
+    self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard
+                                                                  webEnvironment:[self primaryWebEnvironment]];
 
-    id dashboardView = [self.configurator webViewAsSecondary:NO];
-    [self.view addSubview:dashboardView];
-
+    [self.view addSubview:self.webView];
     [self setupWebViewLayout];
 
     [self.configurator updateReportLoaderDelegateWithObject:self];
@@ -183,7 +196,8 @@
 - (void)resetSubViews
 {
     [self.dashboardLoader destroy];
-    [[JMWebViewManager sharedInstance] resetZoom];
+    JMWebEnvironment *primaryWebEnvironment = [self primaryWebEnvironment];
+    [primaryWebEnvironment resetZoom];
 }
 
 
@@ -623,7 +637,8 @@
     if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
         [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
     }
-    UIView *dashboardView = self.configurator.webView;
+    JMWebEnvironment *primaryWebEnvironment = [self primaryWebEnvironment];
+    UIView *dashboardView = primaryWebEnvironment.webView;
     dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
     return dashboardView;
 }

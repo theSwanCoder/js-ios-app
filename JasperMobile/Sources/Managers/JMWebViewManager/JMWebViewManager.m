@@ -28,10 +28,12 @@
 
 #import "JMWebViewManager.h"
 #import "JMUtils.h"
+#import "JMWebEnvironment.h"
 
 @interface JMWebViewManager()
-@property (nonatomic, strong, readwrite) WKWebView *primaryWebView;
-@property (nonatomic, strong, readwrite) WKWebView *secondaryWebView;
+//@property (nonatomic, strong, readwrite) WKWebView *primaryWebView;
+//@property (nonatomic, strong, readwrite) WKWebView *secondaryWebView;
+@property (nonatomic, strong) NSMutableArray *webEnvironments;
 @end
 
 @implementation JMWebViewManager
@@ -51,92 +53,47 @@
     return sharedMyManager;
 }
 
-#pragma mark - Public API
-- (WKWebView *)webView
+- (instancetype)init
 {
-    return [self webViewAsSecondary:NO];
+    self = [super init];
+    if (self) {
+        _webEnvironments = [NSMutableArray array];
+    }
+    return self;
 }
 
-- (WKWebView *)webViewAsSecondary:(BOOL)asSecondary
+#pragma mark - Public API
+- (JMWebEnvironment *)webEnvironmentForId:(NSString *)identifier
 {
-    WKWebView *webView;
-    if (asSecondary) {
-        webView = self.secondaryWebView;
+    JMWebEnvironment *webEnvironment;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
+    NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
+
+    if ( filtredWebEnvironments.count == 0 ) {
+        webEnvironment = [self createNewWebEnvironmentWithId:identifier];
+        [self.webEnvironments addObject:webEnvironment];
+    } else if ( filtredWebEnvironments.count > 1 ) {
+        return nil;
     } else {
-        webView = self.primaryWebView;
+        webEnvironment = [filtredWebEnvironments firstObject];
     }
 
-    webView.scrollView.zoomScale = 1;
-    webView.scrollView.minimumZoomScale = 1;
-    webView.scrollView.maximumZoomScale = 2;
-
-    return webView;
+    return webEnvironment;
 }
 
-- (void)isWebViewLoadedVisualize:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
+- (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier
 {
-    NSString *jsCommand = @"typeof(visualize)";
-    [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
-        BOOL isFunction = [result isEqualToString:@"function"];
-        completion(!error && isFunction);
-    }];
+    JMWebEnvironment *webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier];
+    return webEnvironment;
 }
 
 - (void)reset
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    _primaryWebView.navigationDelegate = nil;
-    _primaryWebView = nil;
+    // TODO: need reset?
+    [self.webEnvironments makeObjectsPerformSelector:@selector(reset)];
 
-    [self resetChildWebView];
-}
-
-- (void)resetChildWebView
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    _secondaryWebView.navigationDelegate = nil;
-    _secondaryWebView = nil;
-}
-
-- (void)resetZoom
-{
-    [_primaryWebView.scrollView setZoomScale:0.1
-                                        animated:YES];
-    [_secondaryWebView.scrollView setZoomScale:0.1
-                                          animated:YES];
-}
-
-#pragma mark - Private API
-
-- (WKWebView *)primaryWebView
-{
-    if (!_primaryWebView) {
-        _primaryWebView = [self createWebView];
-    }
-    return _primaryWebView;
-}
-
-- (WKWebView *)secondaryWebView
-{
-    if (!_secondaryWebView) {
-        _secondaryWebView = [self createWebView];
-    }
-    return _secondaryWebView;
-}
-
-- (WKWebView *)createWebView
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    WKWebViewConfiguration* webViewConfig = [WKWebViewConfiguration new];
-    WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webViewConfig];
-    webView.scrollView.bounces = NO;
-
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
-    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-    [webView loadHTMLString:htmlString
-                    baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
-
-    return webView;
+    self.webEnvironments = [NSMutableArray array];
 }
 
 @end
