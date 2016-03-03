@@ -64,9 +64,6 @@ typedef void(^JMJavascriptRequestCompletion)(JMJavascriptCallback *__nullable ca
 // listeners
 - (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nullable)callback;
 - (void)removeAllListeners;
-
-// cookies
-- (void)injectCookies;
 @end
 
 @protocol JMJavascriptNativeBridgeDelegate <NSObject>

@@ -70,18 +70,18 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                     baseURL:(NSURL *)baseURL
                  completion:(JMJavascriptRequestCompletion __nullable)completion
 {
-    if (completion) {
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"DOMContentLoaded";
-        __weak __typeof(self) weakSelf = self;
-        JMJavascriptRequestCompletion heapBlock = [completion copy];
-        JMJavascriptRequestCompletion completionWithCookies = ^(JMJavascriptCallback *callback, NSError *error) {
-            __typeof(self) strongSelf = weakSelf;
-            [strongSelf injectCookies];
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"DOMContentLoaded";
+    JMJavascriptRequestCompletion heapBlock = [completion copy];
+    JMJavascriptRequestCompletion completionWithCookies = ^(JMJavascriptCallback *callback, NSError *error) {
+//        JMLog(@"Callback: DOMContentLoaded");
+        if (heapBlock) {
             heapBlock(callback, error);
-        };
-        self.requestCompletions[request] = [completionWithCookies copy];
-    }
+        }
+    };
+
+    self.requestCompletions[request] = [completionWithCookies copy];
 
     // TODO: replace with safety approach
     if (baseURL) {
@@ -94,7 +94,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMJavascriptRequestCompletion __nullable)completion
 {
-//    JMLog(@"send request: %@", fullJavascriptString);
+//    JMLog(@"send request: %@", request);
     if (completion) {
         self.requestCompletions[request] = [completion copy];
     }
@@ -208,6 +208,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (self.jsInitCode && !self.isJSInitCodeInjected) {
         self.isJSInitCodeInjected = YES;
         [self.webView evaluateJavaScript:self.jsInitCode completionHandler:^(id result, NSError *error) {
@@ -237,12 +238,12 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
     NSString *parameters = components[1];
-    JMLog(@"origin parameters: %@", parameters);
+//    JMLog(@"origin parameters: %@", parameters);
     parameters = [parameters stringByReplacingOccurrencesOfString:@"///\"" withString:@"'"];
     parameters = [parameters stringByReplacingOccurrencesOfString:@"/\"" withString:@"\""];
     parameters = [parameters stringByReplacingOccurrencesOfString:@"\"{" withString:@"{"];
     parameters = [parameters stringByReplacingOccurrencesOfString:@"}\"" withString:@"}"];
-    JMLog(@"sanitized parameters: %@", parameters);
+//    JMLog(@"sanitized parameters: %@", parameters);
     NSData *parametersAsData = [parameters dataUsingEncoding:NSUTF8StringEncoding];
     NSError *error;
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:parametersAsData
@@ -385,34 +386,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                                              NSLocalizedDescriptionKey: errorMessage
                                      }];
     return error;
-}
-
-
-#pragma mark - Work with Cookies
-- (void)injectCookies
-{
-//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSString *cookiesAsString = [self cookiesAsStringFromCookies:self.restClient.cookies];
-//    JMLog(@"cookiesAsString: %@", cookiesAsString);
-    [self.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
-        if (error) {
-            JMLog(@"error: %@", error);
-        } else {
-            JMLog(@"injected cookies: %@", self.restClient.cookies);
-        }
-    }];
-}
-
-- (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
-{
-    NSString *cookiesAsString = @"";
-    for (NSHTTPCookie *cookie in cookies) {
-        NSString *name = cookie.name;
-        NSString *value = cookie.value;
-        NSString *path = cookie.path;
-        cookiesAsString = [cookiesAsString stringByAppendingFormat:@"document.cookie = '%@=%@; expires=null, path=\\'%@\\''; ", name, value, path];
-    }
-    return cookiesAsString;
 }
 
 @end
