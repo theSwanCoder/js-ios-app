@@ -79,24 +79,34 @@
 {
     if ([request.URL isFileURL]) {
         // TODO: detect format of file for request
-        [self loadLocalFileFromURL:request.URL fileFormat:nil];
+        [self loadLocalFileFromURL:request.URL
+                        fileFormat:nil
+                           baseURL:nil];
     } else {
         [self.webView loadRequest:request];
     }
 }
 
-- (void)loadLocalFileFromURL:(NSURL *)fileURL fileFormat:(NSString *)fileFormat
+- (void)loadLocalFileFromURL:(NSURL *)fileURL
+                  fileFormat:(NSString *)fileFormat
+                     baseURL:(NSURL *)baseURL
 {
-    if ([JMUtils isSystemVersion9]) {
-        [self.webView loadFileURL:fileURL
-          allowingReadAccessToURL:fileURL];
+    if ([fileFormat.lowercaseString isEqualToString:@"html"]) {
+        NSString* content = [NSString stringWithContentsOfURL:fileURL
+                                                     encoding:NSUTF8StringEncoding
+                                                        error:NULL];
+        NSURL *URL;
+        if (!baseURL) {
+            URL = [NSURL URLWithString:@"about:blank"];
+        } else {
+            URL = baseURL;
+        }
+        [self.webView loadHTMLString:content
+                             baseURL:URL];
     } else {
-        if ([fileFormat.lowercaseString isEqualToString:@"html"]) {
-            NSString* content = [NSString stringWithContentsOfURL:fileURL
-                                                          encoding:NSUTF8StringEncoding
-                                                             error:NULL];
-            [self.webView loadHTMLString:content
-                                 baseURL:[NSURL URLWithString:@"about:blank"]];
+        if ([JMUtils isSystemVersion9]) {
+            [self.webView loadFileURL:fileURL
+              allowingReadAccessToURL:fileURL];
         } else {
             [self.webView loadRequest:[NSURLRequest requestWithURL:fileURL]];
         }
@@ -160,20 +170,52 @@
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     WKWebViewConfiguration* webViewConfig = [WKWebViewConfiguration new];
+    WKUserContentController *contentController = [WKUserContentController new];
+
+    [contentController addUserScript:[self injectCookiesScript]];
+    [contentController addUserScript:[self jaspermobileScript]];
+
+    webViewConfig.userContentController = contentController;
+
     WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webViewConfig];
     webView.scrollView.bounces = NO;
 
     // From for iOS9
 //    webView.customUserAgent = @"Mozilla/5.0 (Linux; Android 5.0.1; SCH-I545 Build/LRX22C) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.95 Mobile Safari/537.36";
-
-    // TODO: setup on bridge level
-
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
-    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-    [webView loadHTMLString:htmlString
-                    baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
-
     return webView;
+}
+
+- (WKUserScript *)jaspermobileScript
+{
+    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"vis_jaspermobile" ofType:@"js"];
+    NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
+
+    WKUserScript *script = [[WKUserScript alloc] initWithSource:jaspermobileString
+                                                  injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                                               forMainFrameOnly:YES];
+    return script;
+}
+
+- (WKUserScript *)injectCookiesScript
+{
+    NSString *cookiesAsString = [self cookiesAsStringFromCookies:self.restClient.cookies];
+
+    WKUserScript *script = [[WKUserScript alloc] initWithSource:cookiesAsString
+                                                  injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                                               forMainFrameOnly:YES];
+    return script;
+}
+
+- (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
+{
+    NSString *cookiesAsString = @"";
+    for (NSHTTPCookie *cookie in cookies) {
+        NSString *name = cookie.name;
+        NSString *value = cookie.value;
+        NSString *path = cookie.path;
+        cookiesAsString = [cookiesAsString stringByAppendingFormat:@"document.cookie = '%@=%@; expires=null, path=\\'%@\\''; ", name, value, path];
+    }
+    return cookiesAsString;
 }
 
 - (void)isWebViewLoadedVisualize:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion

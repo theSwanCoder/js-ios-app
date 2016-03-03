@@ -198,7 +198,9 @@
 {
     NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
     NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-    [self showResourceWithURL:url resourceFormat:self.savedReports.format];
+    [self showResourceWithURL:url
+               resourceFormat:self.savedReports.format
+                      baseURL:[NSURL URLWithString:@"about:blank"]];
 }
 
 - (void)showRemoteResource
@@ -252,18 +254,15 @@
                                                                                                  if ([strongSelf isSupportedResource:resource]) {
                                                                                                      if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_IMG]) {
                                                                                                          [strongSelf showImageWithURL:strongSelf.savedResourceURL];
-                                                                                                     } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_HTML]) {
-                                                                                                         NSURL *fileURL = [strongSelf updateFormatForURL:strongSelf.savedResourceURL withFormat:kJS_CONTENT_TYPE_HTML];
-                                                                                                         [strongSelf moveResourceFromPath:strongSelf.savedResourceURL.path
-                                                                                                                                   toPath:fileURL.path];
-                                                                                                         strongSelf.savedResourceURL = fileURL;
-                                                                                                         [strongSelf showRemoveHTMLForResource:resource];
                                                                                                      } else {
                                                                                                          NSURL *fileURL = [strongSelf updateFormatForURL:strongSelf.savedResourceURL withFormat:resource.fileFormat];
                                                                                                          [strongSelf moveResourceFromPath:strongSelf.savedResourceURL.path
                                                                                                                                    toPath:fileURL.path];
                                                                                                          strongSelf.savedResourceURL = fileURL;
-                                                                                                         [strongSelf showResourceWithURL:fileURL resourceFormat:resource.fileFormat];
+                                                                                                         NSString *baseURLString = [NSString stringWithFormat:@"%@/fileview/fileview/public/Samples/Reports/", self.restClient.serverProfile.serverUrl];
+                                                                                                         [strongSelf showResourceWithURL:fileURL
+                                                                                                                          resourceFormat:resource.fileFormat
+                                                                                                                                 baseURL:[NSURL URLWithString:baseURLString]];
                                                                                                      }
                                                                                                  } else {
                                                                                                      // TODO: add showing with ...
@@ -280,7 +279,9 @@
                                             }];
 }
 
-- (void)showResourceWithURL:(NSURL *)url resourceFormat:(NSString *)resourceFormat
+- (void)showResourceWithURL:(NSURL *)url
+             resourceFormat:(NSString *)resourceFormat
+                    baseURL:(NSURL *)baseURL
 {
     self.isResourceLoaded = NO;
 
@@ -289,21 +290,8 @@
 
     JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
     [webEnvironment loadLocalFileFromURL:url
-                              fileFormat:resourceFormat];
-}
-
-- (void)showRemoveHTMLForResource:(JSContentResource *)resource
-{
-    NSString *baseURLString = [NSString stringWithFormat:@"%@/fileview/fileview/%@", self.restClient.serverProfile.serverUrl, resource.uri];
-
-    NSError *error;
-    NSString *htmlString = [NSString stringWithContentsOfFile:self.savedResourceURL.path
-                                                     encoding:NSUTF8StringEncoding
-                                                        error:&error];
-    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
-    [webEnvironment loadHTML:htmlString
-                     baseURL:[NSURL URLWithString:baseURLString]
-                  completion:nil];
+                              fileFormat:resourceFormat
+                                 baseURL:baseURL];
 }
 
 - (void)showImageWithURL:(NSURL *)url

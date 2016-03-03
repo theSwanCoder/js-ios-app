@@ -89,11 +89,6 @@
     visualizeURLString = [visualizeURLString stringByAppendingString:@"&_showInputControls=true&_opt=true"];
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:visualizeURLString];
 
-    // JasperMobile
-    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"vis_jaspermobile" ofType:@"js"];
-    NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
-
     return htmlString;
 }
 
