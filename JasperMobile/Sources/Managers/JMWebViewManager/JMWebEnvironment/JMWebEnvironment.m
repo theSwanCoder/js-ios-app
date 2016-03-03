@@ -77,16 +77,29 @@
 
 - (void)loadRequest:(NSURLRequest * __nonnull)request
 {
-    [self.bridge loadRequest:request];
+    if ([request.URL isFileURL]) {
+        // TODO: detect format of file for request
+        [self loadLocalFileFromURL:request.URL fileFormat:nil];
+    } else {
+        [self.webView loadRequest:request];
+    }
 }
 
-- (void)loadLocalFileFromURL:(NSURL *)fileURL
+- (void)loadLocalFileFromURL:(NSURL *)fileURL fileFormat:(NSString *)fileFormat
 {
     if ([JMUtils isSystemVersion9]) {
         [self.webView loadFileURL:fileURL
           allowingReadAccessToURL:fileURL];
     } else {
-        [self.webView loadRequest:[NSURLRequest requestWithURL:fileURL]];
+        if ([fileFormat.lowercaseString isEqualToString:@"html"]) {
+            NSString* content = [NSString stringWithContentsOfURL:fileURL
+                                                          encoding:NSUTF8StringEncoding
+                                                             error:NULL];
+            [self.webView loadHTMLString:content
+                                 baseURL:[NSURL URLWithString:@"about:blank"]];
+        } else {
+            [self.webView loadRequest:[NSURLRequest requestWithURL:fileURL]];
+        }
     }
 }
 
@@ -141,11 +154,15 @@
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self.bridge reset];
+
+    NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
+    [self.webView loadRequest:clearingRequest];
 }
 
 - (void)reset
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+
     _webView.navigationDelegate = nil;
     _webView = nil;
 }

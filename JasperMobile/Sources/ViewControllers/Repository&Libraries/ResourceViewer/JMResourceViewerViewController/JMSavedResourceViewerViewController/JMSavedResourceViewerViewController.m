@@ -198,7 +198,7 @@
 {
     NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
     NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-    [self showResourceWithURL:url];
+    [self showResourceWithURL:url resourceFormat:self.savedReports.format];
 }
 
 - (void)showRemoteResource
@@ -263,7 +263,7 @@
                                                                                                          [strongSelf moveResourceFromPath:strongSelf.savedResourceURL.path
                                                                                                                                    toPath:fileURL.path];
                                                                                                          strongSelf.savedResourceURL = fileURL;
-                                                                                                         [strongSelf showResourceWithURL:fileURL];
+                                                                                                         [strongSelf showResourceWithURL:fileURL resourceFormat:resource.fileFormat];
                                                                                                      }
                                                                                                  } else {
                                                                                                      // TODO: add showing with ...
@@ -280,7 +280,7 @@
                                             }];
 }
 
-- (void)showResourceWithURL:(NSURL *)url
+- (void)showResourceWithURL:(NSURL *)url resourceFormat:(NSString *)resourceFormat
 {
     self.isResourceLoaded = NO;
 
@@ -288,7 +288,8 @@
 //    self.resourceRequest = [NSURLRequest requestWithURL:url];
 
     JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
-    [webEnvironment loadLocalFileFromURL:url];
+    [webEnvironment loadLocalFileFromURL:url
+                              fileFormat:resourceFormat];
 }
 
 - (void)showRemoveHTMLForResource:(JSContentResource *)resource

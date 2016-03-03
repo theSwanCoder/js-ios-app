@@ -47,7 +47,7 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
          baseURL:(NSURL * __nullable)baseURL
       completion:(JMWebEnvironmentRequestBooleanCompletion __nullable)completion;
 - (void)loadRequest:(NSURLRequest * __nonnull)request;
-- (void)loadLocalFileFromURL:(NSURL * __nonnull)fileURL;
+- (void)loadLocalFileFromURL:(NSURL * __nonnull)fileURL fileFormat:(NSString * __nullable)fileFormat;
 
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion;
