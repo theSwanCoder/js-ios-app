@@ -127,16 +127,12 @@
     [self.bridge injectJSInitCode:jsCodeString];
 }
 
-- (void)addListenerWithId:(NSString *__nonnull)listenerId
-                 callback:(JMWebEnvironmentRequestParametersCompletion __nullable)callback
+- (void)addListenerWithId:(NSString *)listenerId
+                 callback:(JMWebEnvironmentRequestParametersCompletion)callback
 {
     [self.bridge addListenerWithId:listenerId
                           callback:^(JMJavascriptCallback *jsCallback, NSError *error) {
-                              if (callback) {
-                                  callback(jsCallback.parameters, nil);
-                              } else {
-                                  callback(nil, error);
-                              }
+                              callback(jsCallback.parameters, error);
                           }];
 }
 
@@ -157,14 +153,6 @@
 
     NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
     [self.webView loadRequest:clearingRequest];
-}
-
-- (void)reset
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-
-    _webView.navigationDelegate = nil;
-    _webView = nil;
 }
 
 #pragma mark - Helpers

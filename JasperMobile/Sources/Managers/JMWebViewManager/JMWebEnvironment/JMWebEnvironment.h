@@ -55,10 +55,9 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 - (void)injectJSInitCode:(NSString *__nonnull)jsCodeString;
 
 - (void)addListenerWithId:(NSString *__nonnull)listenerId
-                 callback:(JMWebEnvironmentRequestParametersCompletion __nullable)callback;
+                 callback:(JMWebEnvironmentRequestParametersCompletion __nonnull)callback;
 - (void)removeAllListeners;
 
 - (void)resetZoom;
 - (void)clean;
-- (void)reset;
 @end
