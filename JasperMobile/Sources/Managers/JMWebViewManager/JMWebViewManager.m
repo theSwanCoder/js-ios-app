@@ -38,6 +38,13 @@
 
 @implementation JMWebViewManager
 
+#pragma mark - Handle Memory Warnings
+- (void)handleMemoryWarnings
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    self.webEnvironments = [NSMutableArray array];
+}
+
 #pragma mark - Lifecycle
 - (void)dealloc
 {
@@ -58,6 +65,11 @@
     self = [super init];
     if (self) {
         _webEnvironments = [NSMutableArray array];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleMemoryWarnings)
+                                                     name:UIApplicationDidReceiveMemoryWarningNotification
+                                                   object:nil];
     }
     return self;
 }
