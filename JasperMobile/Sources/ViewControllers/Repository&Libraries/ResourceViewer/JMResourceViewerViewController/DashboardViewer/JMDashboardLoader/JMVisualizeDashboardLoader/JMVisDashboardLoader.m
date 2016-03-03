@@ -103,7 +103,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.refresh";
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             heapBlock(NO, error);
         } else {
@@ -119,7 +119,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.refreshDashlet";
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             heapBlock(NO, error);
         } else {
@@ -135,7 +135,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest new];
     applyParamsRequest.command = @"JasperMobile.Dashboard.API.getDashboardParameters";
-    [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             heapBlock(NO, error);
         } else {
@@ -152,11 +152,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     applyParamsRequest.command = @"JasperMobile.Dashboard.API.applyParams";
 
     applyParamsRequest.parametersAsString = parametersAsString;
-    [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
         } else {
-            JMLog(@"callback: %@", callback);
+            JMLog(@"parameters: %@", parameters);
         }
     }];
 }
@@ -177,11 +177,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.maximizeDashlet";
     request.parametersAsString = dashlet.identifier;
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
         } else {
-            JMLog(@"callback: %@", callback);
+            JMLog(@"parameters: %@", parameters);
         }
     }];
 }
@@ -192,11 +192,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.minimizeDashlet";
     request.parametersAsString = dashlet.identifier;
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
         } else {
-            JMLog(@"callback: %@", callback);
+            JMLog(@"parameters: %@", parameters);
         }
     }];
 }
@@ -205,11 +205,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.minimizeDashlet";
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
         } else {
-            JMLog(@"callback: %@", callback);
+            JMLog(@"parameters: %@", parameters);
         }
     }];
 }
@@ -234,11 +234,13 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.destroy";
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        // Need capture self to wait until this request finishes
+        [self.webEnvironment removeAllListeners];
         if (error) {
             JMLog(@"error: %@", error);
         } else {
-            JMLog(@"callback: %@", callback);
+            JMLog(@"parameters: %@", parameters);
         }
     }];
 }
@@ -248,11 +250,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.cancel";
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
         } else {
-            JMLog(@"callback: %@", callback);
+            JMLog(@"parameters: %@", parameters);
         }
     }];
 }
@@ -292,7 +294,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     NSString *dashletDidMaximizeListenerId = @"JasperMobile.Dashboard.API.events.dashlet.didMaximize";
     [self.webEnvironment addListenerWithId:dashletDidMaximizeListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.API.run.reportCompleted");
+        JMLog(@"JasperMobile.Dashboard.API.events.dashlet.didMaximize");
         __typeof(self) strongSelf = weakSelf;
         [strongSelf handleDidStartMaximazeDashletWithParameters:parameters];
     }];
@@ -380,12 +382,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                                    uriParam];
     runRequest.parametersAsString = requestParameters;
 
-    [self.webEnvironment sendJavascriptRequest:runRequest completion:^(JMJavascriptCallback *callback, NSError *error) {
+    __weak typeof(self)weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
+        __strong typeof(self)strongSelf = weakSelf;
         if (error) {
             heapBlock(NO, error);
         } else {
 //            JMLog(@"callback: %@", callback);
-            [self handleOnLoadDoneWithParameters:callback.parameters];
+            [strongSelf handleOnLoadDoneWithParameters:parameters];
             heapBlock(YES, nil);
         }
     }];

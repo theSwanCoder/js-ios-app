@@ -342,7 +342,18 @@ JasperMobile.Report.API = {
     },
     destroyReport: function() {
         if (JasperMobile.Report.API.report) {
-            JasperMobile.Report.API.report.destroy();
+            JasperMobile.Report.API.report.destroy()
+                .done(function() {
+                    JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.API.destroyReport", {});
+                })
+                .fail(function(error) {
+                    JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.destroyReport", {
+                        "error" : JSON.stringify({
+                            "code" : error.errorCode,
+                            "message" : error.message
+                        })
+                    });
+                });
         } else {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.destroyReport", {
                 "error": JSON.stringify({
@@ -635,7 +646,25 @@ JasperMobile.Dashboard.API = {
     },
     destroy: function() {
         if (JasperMobile.Dashboard.API.dashboardObject) {
-            JasperMobile.Dashboard.API.dashboardObject.destroy();
+            JasperMobile.Dashboard.API.dashboardObject.destroy()
+                .done(function() {
+                    JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Dashboard.API.destroy", {});
+                })
+                .fail(function(error) {
+                    JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.destroy", {
+                        "error" : JSON.stringify({
+                            "code" : error.errorCode,
+                            "message" : error.message
+                        })
+                    });
+                });
+        } else {
+            JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.destroy", {
+                "error": JSON.stringify({
+                    "code" : "visualize.error",
+                    "message" : "JasperMobile.Dashboard.API.dashboardObject == nil"
+                })
+            });
         }
     },
     _configureComponents: function(components) {

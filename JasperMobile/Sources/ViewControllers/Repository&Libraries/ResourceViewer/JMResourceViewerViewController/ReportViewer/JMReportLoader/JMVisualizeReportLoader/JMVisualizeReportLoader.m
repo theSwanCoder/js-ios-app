@@ -123,8 +123,8 @@
 {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Report.API.cancel";
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
-        if (callback) {
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        if (parameters) {
             JMLog(@"canceling report was finished");
         } else {
             JMLog(@"error: %@", error);
@@ -170,9 +170,9 @@
             request.command = @"JasperMobile.Report.API.applyReportParams";
             request.parametersAsString = [strongSelf createParametersAsString];
             __weak __typeof(self) weakSelf = strongSelf;
-            [strongSelf.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+            [strongSelf.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
                 __typeof(self) strongSelf = weakSelf;
-                if (callback) {
+                if (parameters) {
                     if (heapBlock) {
                         heapBlock(YES, nil);
                     }
@@ -200,9 +200,9 @@
 
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
-                            completion:^(JMJavascriptCallback *callback, NSError *error) {
+                            completion:^(NSDictionary *parameters, NSError *error) {
                                 __typeof(self) strongSelf = weakSelf;
-                                if (callback) {
+                                if (parameters) {
                                     strongSelf.report.isReportAlreadyLoaded = YES;
                                     [strongSelf.report updateCurrentPage:1];
                                     if (heapBlock) {
@@ -225,14 +225,16 @@
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Report.API.exportReport";
     request.parametersAsString = [NSString stringWithFormat:@"'%@'", exportFormat];
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
-        if (callback) {
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (parameters) {
             JMLog(@"getting output resource link was finished");
-            NSString *outputResourcesPath = callback.parameters[@"link"];
+            NSString *outputResourcesPath = parameters[@"link"];
             if (outputResourcesPath) {
-                if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOutputResourcePath:fullReportName:)]) {
-                    NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", self.report.resourceLookup.label, self.exportFormat];
-                    [self.delegate reportLoader:self didReceiveOutputResourcePath:outputResourcesPath fullReportName:fullReportName];
+                if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveOutputResourcePath:fullReportName:)]) {
+                    NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", strongSelf.report.resourceLookup.label, strongSelf.exportFormat];
+                    [strongSelf.delegate reportLoader:strongSelf didReceiveOutputResourcePath:outputResourcesPath fullReportName:fullReportName];
                 }
             }
         } else {
@@ -246,16 +248,17 @@
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Report.API.destroyReport";
     request.parametersAsString = @"";
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
-        if (callback) {
-            JMLog(@"callback: %@", callback);
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        // Need capture self to wait until this request finishes
+        self.report.isReportAlreadyLoaded = NO;
+        [self.webEnvironment removeAllListeners];
+
+        if (parameters) {
+            JMLog(@"callback: %@", parameters);
         } else {
             JMLog(@"error: %@", error);
         }
     }];
-
-    self.report.isReportAlreadyLoaded = NO;
-    [self.webEnvironment removeAllListeners];
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
@@ -289,9 +292,9 @@
 
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
-                                    completion:^(JMJavascriptCallback *callback, NSError *error) {
+                                    completion:^(NSDictionary *parameters, NSError *error) {
                                 __typeof(self) strongSelf = weakSelf;
-                                if (callback) {
+                                if (parameters) {
                                     strongSelf.report.isReportAlreadyLoaded = YES;
                                     strongSelf.isReportInLoadingProcess = NO;
                                     [strongSelf.report updateCurrentPage:pageNumber];
@@ -319,9 +322,9 @@
 
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
-                            completion:^(JMJavascriptCallback *callback, NSError *error) {
+                            completion:^(NSDictionary *parameters, NSError *error) {
                                 __typeof(self) strongSelf = weakSelf;
-                                if (callback) {
+                                if (parameters) {
                                     [strongSelf.report updateCurrentPage:pageNumber];
                                     if (heapBlock) {
                                         heapBlock(YES, nil);

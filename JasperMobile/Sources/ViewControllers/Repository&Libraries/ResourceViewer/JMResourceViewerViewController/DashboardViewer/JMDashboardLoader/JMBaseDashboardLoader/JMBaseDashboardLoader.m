@@ -87,11 +87,11 @@
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileDashboard.minimizeDashlet();";
     request.parametersAsString = @"";
-    [self.webEnvironment sendJavascriptRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
         } else {
-            JMLog(@"callback: %@", callback);
+            JMLog(@"parameters: %@", parameters);
         }
     }];
 }

@@ -122,6 +122,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 - (void)reset
 {
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     self.isJSInitCodeInjected = NO;
     [self removeContents];
     [self removeAllListeners];
@@ -145,6 +146,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 - (void)removeAllListeners
 {
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     self.requestCompletions = [NSMutableDictionary dictionary];
     self.listenerCallbacks = [NSMutableDictionary dictionary];
 }
@@ -202,7 +204,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
         NSDictionary *parameters = [self parseCommand:command];
 
-        JMLog(@"parameters: %@", parameters);
+//        JMLog(@"parameters: %@", parameters);
 
         if (parameters) {
             JMJavascriptCallback *response = [JMJavascriptCallback new];
@@ -338,15 +340,15 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 #pragma mark - Callbacks
 - (void)didReceiveCallback:(JMJavascriptCallback *)callback
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if([callback.type isEqualToString:@"logging"]) {
         JMLog(@"Bridge Message: %@", callback.parameters[@"message"]);
     } else {
         JMLog(@"%@", callback);
         BOOL isRequestCompletionFound = NO;
         for (JMJavascriptRequest *request in self.requestCompletions) {
-            JMLog(@"request.command: %@", request.command);
-            JMLog(@"callback.type: %@", callback.type);
+//            JMLog(@"request.command: %@", request.command);
+//            JMLog(@"callback.type: %@", callback.type);
             if ([request.command isEqualToString:callback.type]) {
                 JMJavascriptRequestCompletion completion = self.requestCompletions[request];
                 if (callback.parameters[@"error"]) {

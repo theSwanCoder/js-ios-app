@@ -96,10 +96,17 @@
 }
 
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
-                   completion:(JMJavascriptRequestCompletion __nullable)completion
+                   completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
 {
-    [self.bridge sendJavascriptRequest:request
-                            completion:completion];
+    if (completion) {
+        [self.bridge sendJavascriptRequest:request
+                                completion:^(JMJavascriptCallback *callback, NSError *error) {
+                                    completion(callback.parameters, error);
+                                }];
+    } else {
+        [self.bridge sendJavascriptRequest:request
+                                completion:nil];
+    }
 }
 
 - (void)injectJSInitCode:(NSString *__nonnull)jsCodeString

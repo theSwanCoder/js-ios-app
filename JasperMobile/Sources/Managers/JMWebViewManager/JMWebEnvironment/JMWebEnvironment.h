@@ -27,7 +27,7 @@
 //
 
 
-#import "JMJavascriptNativeBridge.h"
+@class JMJavascriptRequest;
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
@@ -50,7 +50,7 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 - (void)loadLocalFileFromURL:(NSURL * __nonnull)fileURL;
 
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
-                   completion:(JMJavascriptRequestCompletion __nullable)completion;
+                   completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion;
 
 - (void)injectJSInitCode:(NSString *__nonnull)jsCodeString;
 
