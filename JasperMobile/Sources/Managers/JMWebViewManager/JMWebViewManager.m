@@ -95,6 +95,21 @@
     return webEnvironment;
 }
 
+- (void)removeWebEnvironmentForId:(NSString *)identifier
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
+    NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
+
+    if ( filtredWebEnvironments.count == 0 ) {
+        return;
+    } else if ( filtredWebEnvironments.count > 1 ) {
+        // TODO: need error?
+    } else {
+        JMWebEnvironment *webEnvironment = filtredWebEnvironments.firstObject;
+        [self.webEnvironments removeObject:webEnvironment];
+    }
+}
+
 - (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier
 {
     JMWebEnvironment *webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier];
@@ -105,7 +120,7 @@
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     // TODO: need reset?
-    [self.webEnvironments makeObjectsPerformSelector:@selector(reset)];
+//    [self.webEnvironments makeObjectsPerformSelector:@selector(reset)];
 
     self.webEnvironments = [NSMutableArray array];
 }

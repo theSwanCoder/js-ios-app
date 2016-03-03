@@ -36,5 +36,6 @@
 @interface JMWebViewManager : NSObject
 + (instancetype __nonnull)sharedInstance;
 - (JMWebEnvironment * __nullable)webEnvironmentForId:(NSString * __nonnull)identifier;
+- (void)removeWebEnvironmentForId:(NSString *)identifier;
 - (void)reset;
 @end
