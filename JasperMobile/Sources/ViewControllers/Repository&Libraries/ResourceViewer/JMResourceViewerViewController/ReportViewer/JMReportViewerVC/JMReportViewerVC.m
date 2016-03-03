@@ -48,6 +48,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
 @property (nonatomic, strong) JMWebEnvironment *webEnvironment;
+@property (nonatomic, assign) BOOL wasAuthError;
 @end
 
 @implementation JMReportViewerVC
@@ -409,25 +410,19 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 #pragma mark - Custom accessors
 - (JMWebEnvironment *)currentWebEnvironment
 {
-    JMWebEnvironment *webEnvironment;
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:[self currentWebEnvironmentIdentifier]];
+    return webEnvironment;
+}
+
+- (NSString *)currentWebEnvironmentIdentifier
+{
+    NSString *webEnvironmentIdentifier;
     if (self.isChildReport) {
-        webEnvironment = [self secondaryWebEnvironment];
+        webEnvironmentIdentifier = kJMReportViewerSecondaryWebEnvironmentIdentifier;
     } else {
-        webEnvironment = [self primaryWebEnvironment];
+        webEnvironmentIdentifier = kJMReportViewerPrimaryWebEnvironmentIdentifier;
     }
-    return webEnvironment;
-}
-
-- (JMWebEnvironment *)primaryWebEnvironment
-{
-    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMReportViewerPrimaryWebEnvironmentIdentifier]              ;
-    return webEnvironment;
-}
-
-- (JMWebEnvironment *)secondaryWebEnvironment
-{
-    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMReportViewerSecondaryWebEnvironmentIdentifier]              ;
-    return webEnvironment;
+    return webEnvironmentIdentifier;
 }
 
 - (id<JMReportLoaderProtocol>)reportLoader
@@ -617,31 +612,41 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         case JSReportLoaderErrorTypeAuthentification:
             [self.restClient deleteCookies];
             [self resetSubViews];
+            [[JMWebViewManager sharedInstance] removeWebEnvironmentForId:[self currentWebEnvironmentIdentifier]];
 
             NSInteger reportCurrentPage = self.report.currentPage;
             [self.report restoreDefaultState];
             [self.report updateCurrentPage:reportCurrentPage];
             // Here 'break;' doesn't need, because we should try to create new session and reload report
         case JSSessionExpiredErrorCode:
-            [[JMWebViewManager sharedInstance] reset];
             [self setupSubviews];
             [self configViewport];
 
             if (self.restClient.keepSession) {
-                __weak typeof(self)weakSelf = self;
-                [self startShowLoaderWithMessage:@"status.loading"];
-                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                    __strong typeof(self)strongSelf = weakSelf;
-                    [strongSelf stopShowLoader];
-                    if (isSessionAuthorized) {
-                        // TODO: Need add restoring for current page
-                        [strongSelf runReportWithPage:self.report.currentPage];
-                    } else {
-                        [JMUtils showLoginViewAnimated:YES completion:^{
-                            [strongSelf cancelResourceViewingAndExit:YES];
-                        }];
-                    }
-                }];
+                if (!self.wasAuthError) {
+                    self.wasAuthError = YES;
+
+                    __weak typeof(self)weakSelf = self;
+                    [self startShowLoaderWithMessage:@"status.loading"];
+                    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                        __strong typeof(self)strongSelf = weakSelf;
+                        [strongSelf stopShowLoader];
+                        if (isSessionAuthorized) {
+                            // TODO: Need add restoring for current page
+                            [strongSelf runReportWithPage:self.report.currentPage];
+                        } else {
+                            [JMUtils showLoginViewAnimated:YES completion:^{
+                                [strongSelf cancelResourceViewingAndExit:YES];
+                            }];
+                        }
+                    }];
+                } else {
+                    __weak typeof(self) weakSelf = self;
+                    [JMUtils presentAlertControllerWithError:error completion:^{
+                        __strong typeof(self) strongSelf = weakSelf;
+                        [strongSelf cancelResourceViewingAndExit:YES];
+                    }];
+                }
             } else {
                 [JMUtils showLoginViewAnimated:YES completion:^{
                     [self cancelResourceViewingAndExit:YES];
@@ -698,7 +703,10 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 - (void)resetSubViews
 {
     [self.reportLoader destroy];
-    // TODO: add reset zoom
+    [self.webEnvironment resetZoom];
+    [self.webEnvironment.webView removeFromSuperview];
+
+    self.webEnvironment = nil;
 }
 
 #pragma mark - JMMenuActionsViewDelegate
