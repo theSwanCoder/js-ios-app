@@ -98,12 +98,12 @@
 
 - (void)cancel
 {
-    [self.webEnvironment reset];
+    [self.webEnvironment clean];
 }
 
 - (void)destroy
 {
-    [self.webEnvironment reset];
+    [self.webEnvironment clean];
 }
 
 #pragma mark - JMJavascriptNativeBridgeProtocol
