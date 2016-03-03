@@ -53,7 +53,6 @@ typedef void(^JMJavascriptRequestCompletion)(JMJavascriptCallback *__nullable ca
 - (void)startLoadHTMLString:(NSString *__nonnull)HTMLString
                     baseURL:(NSURL *__nonnull)baseURL
                  completion:(JMJavascriptRequestCompletion __nullable)completion;
-- (void)loadRequest:(NSURLRequest * __nonnull)request;
 
 - (void)injectJSInitCode:(NSString * __nonnull)jsCode;
 

@@ -91,12 +91,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     }
 }
 
-- (void)loadRequest:(NSURLRequest *)request
-{
-    [self.webView stopLoading];
-    [self.webView loadRequest:request];
-}
-
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMJavascriptRequestCompletion __nullable)completion
 {
@@ -124,15 +118,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 {
 //    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     self.isJSInitCodeInjected = NO;
-    [self removeContents];
     [self removeAllListeners];
-}
-
-- (void)removeContents
-{
-    // TODO: replace with safety approach
-    NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
-    [self.webView loadRequest:clearingRequest];
 }
 
 - (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nullable)callback
