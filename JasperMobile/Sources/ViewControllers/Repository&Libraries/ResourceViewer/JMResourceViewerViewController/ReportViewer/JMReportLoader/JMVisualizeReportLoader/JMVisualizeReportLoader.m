@@ -285,6 +285,7 @@
     // need for clean running, but not selecting page
     self.report.isReportAlreadyLoaded = NO;
     [self.report updateCountOfPages:NSNotFound];
+    [self.report updateCurrentPage:pageNumber];
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Report.API.runReport";
@@ -297,7 +298,6 @@
                                 if (parameters) {
                                     strongSelf.report.isReportAlreadyLoaded = YES;
                                     strongSelf.isReportInLoadingProcess = NO;
-                                    [strongSelf.report updateCurrentPage:pageNumber];
                                     if (heapBlock) {
                                         heapBlock(YES, nil);
                                     }
