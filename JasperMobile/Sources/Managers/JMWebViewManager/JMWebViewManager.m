@@ -65,6 +65,8 @@
 #pragma mark - Public API
 - (JMWebEnvironment *)webEnvironmentForId:(NSString *)identifier
 {
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+//    JMLog(@"identifier: %@", identifier);
     JMWebEnvironment *webEnvironment;
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
     NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];

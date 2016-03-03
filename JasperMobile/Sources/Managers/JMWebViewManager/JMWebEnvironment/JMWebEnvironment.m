@@ -65,6 +65,8 @@
     [self.bridge startLoadHTMLString:HTMLString
                              baseURL:baseURL
                           completion:^(JMJavascriptCallback *callback, NSError *error) {
+//                              JMLog(@"callback: %@", callback);
+//                              JMLog(@"error: %@", error);
                               if (error) {
                                   completion(NO, error);
                               } else {
@@ -76,6 +78,16 @@
 - (void)loadRequest:(NSURLRequest * __nonnull)request
 {
     [self.bridge loadRequest:request];
+}
+
+- (void)loadLocalFileFromURL:(NSURL *)fileURL
+{
+    if ([JMUtils isSystemVersion9]) {
+        [self.webView loadFileURL:fileURL
+          allowingReadAccessToURL:fileURL];
+    } else {
+        [self.webView loadRequest:[NSURLRequest requestWithURL:fileURL]];
+    }
 }
 
 - (void)verifyEnvironmentReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
@@ -115,11 +127,12 @@
 
 - (void)resetZoom
 {
-
+    [self.webView.scrollView setZoomScale:0.1 animated:YES];
 }
 
 - (void)clean
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self.bridge reset];
 }
 
@@ -137,6 +150,9 @@
     WKWebViewConfiguration* webViewConfig = [WKWebViewConfiguration new];
     WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webViewConfig];
     webView.scrollView.bounces = NO;
+
+    // From for iOS9
+//    webView.customUserAgent = @"Mozilla/5.0 (Linux; Android 5.0.1; SCH-I545 Build/LRX22C) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.95 Mobile Safari/537.36";
 
     // TODO: setup on bridge level
 

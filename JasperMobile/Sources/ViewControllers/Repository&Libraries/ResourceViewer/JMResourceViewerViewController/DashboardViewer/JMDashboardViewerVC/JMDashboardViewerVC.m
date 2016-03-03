@@ -53,10 +53,13 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
 @property (nonatomic) JMExternalWindowDashboardControlsVC *controlsViewController;
+@property (nonatomic, strong) JMWebEnvironment *webEnvironment;
 @end
 
 
 @implementation JMDashboardViewerVC
+
+#pragma mark - UIViewController LifeCycle
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -99,8 +102,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     [JMCancelRequestPopup presentWithMessage:@"status.loading"];
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         // Screenshot rendering from webView
-        UIGraphicsBeginImageContextWithOptions(self.webView.bounds.size, self.webView.opaque, 0.0);
-        [self.webView.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIView *resourceView = [self resourceView];
+        UIGraphicsBeginImageContextWithOptions(resourceView.bounds.size, resourceView.opaque, 0.0);
+        [resourceView.layer renderInContext:UIGraphicsGetCurrentContext()];
 
         UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
@@ -124,13 +128,20 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     return _dashboard;
 }
 
-- (WKWebView *)webView
+- (UIView *)resourceView
 {
-    if (!_webView) {
-        JMWebEnvironment *primaryWebEnvironment = [self primaryWebEnvironment];
-        _webView = primaryWebEnvironment.webView;
-    }
-    return _webView;
+    return self.webEnvironment.webView;
+}
+
+- (void)setupSubviews
+{
+    self.webEnvironment = [self primaryWebEnvironment];
+    self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard
+                                                                  webEnvironment:self.webEnvironment];
+
+    [self.configurator updateReportLoaderDelegateWithObject:self];
+
+    [super setupSubviews];
 }
 
 - (JMWebEnvironment *)primaryWebEnvironment
@@ -148,8 +159,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)configViewport
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        JMWebEnvironment *primaryWebEnvironment = [self primaryWebEnvironment];
-        [primaryWebEnvironment resetZoom];
+        [self.webEnvironment resetZoom];
     });
 
     CGFloat initialScaleViewport = 0.75;
@@ -161,17 +171,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
         [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
     }
-}
-
-- (void)setupSubviews
-{
-    self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard
-                                                                  webEnvironment:[self primaryWebEnvironment]];
-
-    [self.view addSubview:self.webView];
-    [self setupWebViewLayout];
-
-    [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
 - (void)setupLeftBarButtonItems
@@ -196,8 +195,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)resetSubViews
 {
     [self.dashboardLoader destroy];
-    JMWebEnvironment *primaryWebEnvironment = [self primaryWebEnvironment];
-    [primaryWebEnvironment resetZoom];
+    [self.webEnvironment resetZoom];
 }
 
 
@@ -215,7 +213,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 #pragma mark - Actions
 - (void)minimizeDashlet
 {
-    [[self webView].scrollView setZoomScale:0.1 animated:YES];
+    [self.webEnvironment resetZoom];
     [self.dashboardLoader minimizeDashlet];
     self.navigationItem.leftBarButtonItem = self.leftButtonItem;
     self.navigationItem.rightBarButtonItems = self.rightButtonItems;
@@ -413,7 +411,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 #pragma mark - JMDashboardLoaderDelegate
 - (void)dashboardLoader:(id <JMDashboardLoader>)loader didStartMaximazeDashletWithTitle:(NSString *)title
 {
-    [[self webView].scrollView setZoomScale:0.1 animated:YES];
+    [self.webEnvironment resetZoom];
 
     self.navigationItem.rightBarButtonItems = nil;
     if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
@@ -637,8 +635,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
         [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
     }
-    JMWebEnvironment *primaryWebEnvironment = [self primaryWebEnvironment];
-    UIView *dashboardView = primaryWebEnvironment.webView;
+    UIView *dashboardView = self.webEnvironment.webView;
     dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
     return dashboardView;
 }
@@ -667,8 +664,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 - (void)switchFromTV
 {
-    [self.view addSubview:self.webView];
-    [self setupWebViewLayout];
+    [super setupSubviews];
 
     [self.controlsViewController.view removeFromSuperview];
     self.controlsViewController = nil;

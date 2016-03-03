@@ -122,7 +122,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 - (void)reset
 {
-    // TODO: replace with safety approach
     self.isJSInitCodeInjected = NO;
     [self removeContents];
     [self removeAllListeners];
@@ -130,7 +129,8 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 - (void)removeContents
 {
-    NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@""]];
+    // TODO: replace with safety approach
+    NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
     [self.webView loadRequest:clearingRequest];
 }
 
@@ -155,14 +155,27 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 //    NSLog(@"request from webView: %@", navigationAction.request);
 //    NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
 
+    if ([self isLocalFileRequest:navigationAction.request]) {
+        // TODO: request from delegate to allow such requests.
+        decisionHandler(WKNavigationActionPolicyAllow);
+        return;
+    }
+
+    if ([self isCleaningRequest:navigationAction.request]) {
+        decisionHandler(WKNavigationActionPolicyAllow);
+        return;
+    }
+
     if ([self isLoginRequest:navigationAction.request]) {
         // For dashboard only
         [self.delegate javascriptNativeBridgeDidReceiveAuthRequest:self];
         decisionHandler(WKNavigationActionPolicyCancel);
+        return;
     }
 
     if ([self isRequestToRunReport:navigationAction.request]) {
         decisionHandler(WKNavigationActionPolicyCancel);
+        return;
     }
 
     if ([self isExternalRequest:navigationAction.request]) {
@@ -176,6 +189,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         } else {
             decisionHandler(WKNavigationActionPolicyCancel);
         }
+        return;
     }
 
     NSString *requestURLString = navigationAction.request.URL.absoluteString;
@@ -300,6 +314,25 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     }
 
     return isExternalRequest;
+}
+
+- (BOOL)isLocalFileRequest:(NSURLRequest *)request
+{
+    BOOL isLocalFileRequest = NO;
+    if ([request.URL isFileURL]) {
+        isLocalFileRequest = YES;
+    }
+    return isLocalFileRequest;
+}
+
+- (BOOL)isCleaningRequest:(NSURLRequest *)request
+{
+    BOOL isCleaningRequest = NO;
+    NSString *requestURLString = request.URL.absoluteString;
+    if ([requestURLString isEqualToString:@"about:blank"]) {
+        isCleaningRequest = YES;
+    }
+    return isCleaningRequest;
 }
 
 #pragma mark - Callbacks

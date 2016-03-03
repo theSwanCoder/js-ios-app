@@ -71,11 +71,11 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 {
     [super viewWillDisappear:animated];
 
-    if (self.webView.loading) {
-        [self stopShowLoadingIndicators];
-        // old dashboards don't load empty page
-        //[self.webView stopLoading];
-    }
+//    if (self.webView.loading) {
+//        [self stopShowLoadingIndicators];
+//        // old dashboards don't load empty page
+//        //[self.webView stopLoading];
+//    }
 }
 
 - (void)viewWillLayoutSubviews
@@ -90,48 +90,38 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 }
 
 #pragma mark - Custom Accessors
-- (WKWebView *)webView
+- (UIView *)resourceView
 {
-    if (!_webView) {
-        JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
-        _webView = webEnvironment.webView;
-//        _webView.navigationDelegate = self;
-    }
-    return _webView;
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
+    return webEnvironment.webView;
 }
 
 #pragma mark - Setups
 - (void)setupSubviews
 {
-//    WKWebView *webView = [[JMWebViewManager sharedInstance] webView];
-//    webView.navigationDelegate = self;
-//    [self.view insertSubview:webView belowSubview:self.activityIndicator];
-//    self.webView = webView;
-
-    [self.view addSubview:self.webView];
-
-    [self setupWebViewLayout];
+    [self.view addSubview:[self resourceView]];
+    [self setupResourceViewLayout];
 }
 
-- (void)setupWebViewLayout
+- (void)setupResourceViewLayout
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
+    UIView *resourceView = [self resourceView];
+    resourceView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[resourceView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": self.webView}]];
+                                                                        views:@{@"resourceView": resourceView}]];
 
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[resourceView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": self.webView}]];
+                                                                        views:@{@"resourceView": resourceView}]];
 }
 
 - (void)resetSubViews
 {
-    [self.webView stopLoading];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
+    [webEnvironment clean];
 }
 
 - (void)cancelResourceViewingAndExit:(BOOL)exit
@@ -291,8 +281,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 - (void)handleLowMemory
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self.webView stopLoading];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    [self resetSubViews];
 
     NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
     NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];

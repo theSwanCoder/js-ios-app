@@ -47,6 +47,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 @property (nonatomic, strong) NSArray *initialReportParameters;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
+@property (nonatomic, strong) JMWebEnvironment *webEnvironment;
 @end
 
 @implementation JMReportViewerVC
@@ -200,20 +201,20 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
     }
 }
 
-- (void)setupSubviews
+- (UIView *)resourceView
 {
-    JMWebEnvironment *webEnvironment = [self currentWebEnvironment];
-    self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report
-                                                            webEnvironment:webEnvironment];
-
-    [self.view addSubview:self.webView];
-
-    [self setupWebViewLayout];
-    [self.configurator updateReportLoaderDelegateWithObject:self];
-
-    [self hideReportView];
+    return self.webEnvironment.webView;
 }
 
+- (void)setupSubviews
+{
+    self.webEnvironment = [self currentWebEnvironment];
+    self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report
+                                                            webEnvironment:self.webEnvironment];
+    [self.configurator updateReportLoaderDelegateWithObject:self];
+
+    [super setupSubviews];
+}
 
 - (void)updateToobarAppearence
 {
@@ -406,15 +407,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 }
 
 #pragma mark - Custom accessors
-- (WKWebView *)webView
-{
-    if (!_webView) {
-        JMWebEnvironment *webEnvironment = [self currentWebEnvironment];
-        _webView = webEnvironment.webView;
-    }
-    return _webView;
-}
-
 - (JMWebEnvironment *)currentWebEnvironment
 {
     JMWebEnvironment *webEnvironment;
@@ -468,7 +460,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 - (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage
 {
     toolbar.enable = NO;
-    [[self webView].scrollView setZoomScale:0.1 animated:YES];
+    [self.webEnvironment resetZoom];
 
     __weak typeof(self)weakSelf = self;
     void(^changePageCompletion)(BOOL, NSError*) = ^(BOOL success, NSError *error) {
@@ -485,12 +477,10 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
                             [strongSelf.reportLoader updateViewportScaleFactorWithValue:3];
                         }
                     } else {
-                        JMWebEnvironment *webEnvironment = [self currentWebEnvironment];
-
                         JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
                         runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
-                        [webEnvironment sendJavascriptRequest:runRequest
-                                                   completion:nil];
+                        [self.webEnvironment sendJavascriptRequest:runRequest
+                                                        completion:nil];
                     }
                 });
             }
@@ -837,12 +827,14 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
 - (void)showEmptyReportMessage
 {
+    [self hideReportView];
     self.emptyReportMessageLabel.hidden = NO;
     [self.navigationController setToolbarHidden:YES animated:YES];
 }
 
 - (void)hideEmptyReportMessage
 {
+    [self showReportView];
     self.emptyReportMessageLabel.hidden = YES;
 }
 
@@ -864,12 +856,12 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
 - (void)hideReportView
 {
-    self.webView.hidden = YES;
+    [self resourceView].hidden = YES;
 }
 
 - (void)showReportView
 {
-    self.webView.hidden = NO;
+    [self resourceView].hidden = NO;
 }
 
 - (void)layoutEmptyReportLabelInView:(UIView *)view {
@@ -906,7 +898,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
     }
 
     UIView *view = [UIView new];
-    UIView *reportView = self.webView;
+    UIView *reportView = [self resourceView];
 
     [view addSubview:reportView];
 
@@ -930,7 +922,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
 - (void)addControlsForExternalWindow
 {
-    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentWebView:self.webView];
+    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentWebView:[self resourceView]];
     self.controlsViewController.delegate = self;
 
     CGRect controlViewFrame = self.view.frame;
@@ -944,8 +936,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 {
     [self.controlsViewController.view removeFromSuperview];
 
-    [self.view addSubview:self.webView];
-    [self setupWebViewLayout];
+    [super setupSubviews];
 
     [self.view addSubview:self.emptyReportMessageLabel];
     [self layoutEmptyReportLabelInView:self.view];

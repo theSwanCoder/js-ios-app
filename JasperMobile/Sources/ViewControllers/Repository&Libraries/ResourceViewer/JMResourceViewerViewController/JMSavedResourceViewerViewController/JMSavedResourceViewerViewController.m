@@ -26,6 +26,8 @@
 #import "JMExternalWindowControlsVC.h"
 #import "JSReportSaver.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMWebViewManager.h"
+#import "JMWebEnvironment.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
@@ -167,20 +169,6 @@
             NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
-    } else if (action == JMMenuActionsViewAction_ShowExternalDisplay) {
-        if ( [self createExternalWindow] ) {
-            [self showExternalWindowWithCompletion:^(BOOL success) {
-                if (success) {
-                    [self addControlsForExternalWindow];
-                } else {
-                    // TODO: add handling this situation
-                    JMLog(@"error of showing on tv");
-                }
-            }];
-        }
-    } else if (action == JMMenuActionsViewAction_HideExternalDisplay) {
-        [self switchFromTV];
-        [self hideExternalWindowWithCompletion:nil];
     }
 }
 
@@ -190,40 +178,6 @@
     UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
     interactionController.delegate = interactionDelegate;
     return interactionController;
-}
-
-#pragma mark - Work with external screen
-- (UIView *)viewToShowOnExternalWindow
-{
-    self.webView.translatesAutoresizingMaskIntoConstraints = YES;
-    return self.webView;
-}
-
-- (void)addControlsForExternalWindow
-{
-    CGRect controlViewFrame = self.view.frame;
-    controlViewFrame.origin.y = 0;
-
-    self.controlViewController = [[JMExternalWindowControlsVC alloc] initWithContentWebView:self.webView];
-    self.controlViewController.view.frame = controlViewFrame;
-    self.controlViewController.delegate = self;
-
-    [self.view addSubview:self.controlViewController.view];
-}
-
-- (void)switchFromTV
-{
-    [self.view addSubview:self.webView];
-//    [self setupWebViewLayout];
-
-    [self.controlViewController.view removeFromSuperview];
-}
-
-#pragma mark - JMExternalWindowControlViewControllerDelegate
-- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController
-{
-    [self switchFromTV];
-    [self hideExternalWindowWithCompletion:nil];
 }
 
 #pragma mark - Viewers
@@ -328,14 +282,13 @@
 
 - (void)showResourceWithURL:(NSURL *)url
 {
-    if (self.webView.isLoading) {
-        [self.webView stopLoading];
-    }
     self.isResourceLoaded = NO;
 
-    self.resourceRequest = [NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:self.resourceRequest];
+    // TODO: do we need this?
+//    self.resourceRequest = [NSURLRequest requestWithURL:url];
 
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
+    [webEnvironment loadLocalFileFromURL:url];
 }
 
 - (void)showRemoveHTMLForResource:(JSContentResource *)resource
@@ -346,14 +299,15 @@
     NSString *htmlString = [NSString stringWithContentsOfFile:self.savedResourceURL.path
                                                      encoding:NSUTF8StringEncoding
                                                         error:&error];
-
-    [self.webView loadHTMLString:htmlString
-                         baseURL:[NSURL URLWithString:baseURLString]];
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
+    [webEnvironment loadHTML:htmlString
+                     baseURL:[NSURL URLWithString:baseURLString]
+                  completion:nil];
 }
 
 - (void)showImageWithURL:(NSURL *)url
 {
-    [self.webView removeFromSuperview];
+    [[self resourceView] removeFromSuperview];
 
     NSData *data = [NSData dataWithContentsOfURL:url];
     UIImage *image = [UIImage imageWithData:data];
