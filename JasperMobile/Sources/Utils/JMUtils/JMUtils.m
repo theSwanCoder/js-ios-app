@@ -293,15 +293,16 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)shouldUseVisualize
 {
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize]) {
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultUseVisualize];
-    }
-
-    id useVisualizeSettings = [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize];
-    if (useVisualizeSettings) {
-        return [useVisualizeSettings boolValue];
-    }
-    return YES;
+//    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize]) {
+//        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultUseVisualize];
+//    }
+//
+//    id useVisualizeSettings = [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize];
+//    if (useVisualizeSettings) {
+//        return [useVisualizeSettings boolValue];
+//    }
+//    return YES;
+    return NO;
 }
 
 + (BOOL)isSupportVisualize

@@ -471,11 +471,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
                         if ([strongSelf.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
                             [strongSelf.reportLoader updateViewportScaleFactorWithValue:3];
                         }
-                    } else {
-                        JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
-                        runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
-                        [self.webEnvironment sendJavascriptRequest:runRequest
-                                                        completion:nil];
                     }
                 });
             }

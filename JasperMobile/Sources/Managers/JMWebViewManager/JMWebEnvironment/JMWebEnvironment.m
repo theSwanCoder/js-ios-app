@@ -29,7 +29,7 @@
 #import "JMWebEnvironment.h"
 #import "JMJavascriptNativeBridge.h"
 
-@interface JMWebEnvironment()
+@interface JMWebEnvironment() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, strong) JMJavascriptNativeBridge * __nonnull bridge;
 @end
 
@@ -48,6 +48,7 @@
         _identifier = identifier;
         _webView = [self createWebView];
         _bridge = [JMJavascriptNativeBridge bridgeWithWebView:_webView];
+        _bridge.delegate = self;
     }
     return self;
 }
@@ -62,17 +63,21 @@
          baseURL:(NSURL * __nullable)baseURL
       completion:(JMWebEnvironmentRequestBooleanCompletion __nullable)completion
 {
+    JMJavascriptRequestCompletion javascriptRequestCompletion;
+
+    if (completion) {
+        javascriptRequestCompletion = ^(JMJavascriptCallback *callback, NSError *error) {
+            if (error) {
+                completion(NO, error);
+            } else {
+                completion(YES, nil);
+            }
+        };
+    }
+
     [self.bridge startLoadHTMLString:HTMLString
                              baseURL:baseURL
-                          completion:^(JMJavascriptCallback *callback, NSError *error) {
-//                              JMLog(@"callback: %@", callback);
-//                              JMLog(@"error: %@", error);
-                              if (error) {
-                                  completion(NO, error);
-                              } else {
-                                  completion(YES, nil);
-                              }
-    }];
+                          completion:javascriptRequestCompletion];
 }
 
 - (void)loadRequest:(NSURLRequest * __nonnull)request
@@ -118,6 +123,11 @@
     [self isWebViewLoadedVisualize:self.webView completion:completion];
 }
 
+- (void)verifyJasperMobileReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
+{
+    [self isWebViewLoadedJasperMobile:self.webView completion:completion];
+}
+
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
 {
@@ -130,11 +140,6 @@
         [self.bridge sendJavascriptRequest:request
                                 completion:nil];
     }
-}
-
-- (void)injectJSInitCode:(NSString *__nonnull)jsCodeString
-{
-    [self.bridge injectJSInitCode:jsCodeString];
 }
 
 - (void)addListenerWithId:(NSString *)listenerId
@@ -159,7 +164,7 @@
 - (void)clean
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self.bridge reset];
+    [self.bridge removeAllListeners];
 
     NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
     [self.webView loadRequest:clearingRequest];
@@ -225,6 +230,23 @@
         BOOL isFunction = [result isEqualToString:@"function"];
         completion(!error && isFunction);
     }];
+}
+
+- (void)isWebViewLoadedJasperMobile:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
+{
+    NSString *jsCommand = @"typeof(JasperMobile)";
+    [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
+        BOOL isObject = [result isEqualToString:@"object"];
+        completion(!error && isObject);
+    }];
+}
+
+#pragma mark - JMJavascriptNativeBridgeDelegate
+- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveOnWindowError:(NSError *__nonnull)error
+{
+    // TODO: move to loader layer
+    [JMUtils presentAlertControllerWithError:error
+                                  completion:nil];
 }
 
 @end

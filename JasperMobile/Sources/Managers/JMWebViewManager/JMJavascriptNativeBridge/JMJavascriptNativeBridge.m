@@ -31,8 +31,6 @@
 NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 @interface JMJavascriptNativeBridge() <WKNavigationDelegate>
-@property (nonatomic, copy) NSString *jsInitCode;
-@property (nonatomic, assign) BOOL isJSInitCodeInjected;
 @property (nonatomic, weak, readwrite) WKWebView *webView;
 @property (nonatomic, strong) NSMutableDictionary <JMJavascriptRequest *, JMJavascriptRequestCompletion>*requestCompletions;
 @property (nonatomic, strong) NSMutableDictionary <JMJavascriptRequest *, JMJavascriptRequestCompletion>*listenerCallbacks ;
@@ -50,7 +48,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         _listenerCallbacks = [NSMutableDictionary dictionary];
         _webView = webView;
         _webView.navigationDelegate = self;
-        _isJSInitCodeInjected = NO;
     }
     return self;
 }
@@ -75,7 +72,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     request.command = @"DOMContentLoaded";
     JMJavascriptRequestCompletion heapBlock = [completion copy];
     JMJavascriptRequestCompletion completionWithCookies = ^(JMJavascriptCallback *callback, NSError *error) {
-//        JMLog(@"Callback: DOMContentLoaded");
+        JMLog(@"Callback: DOMContentLoaded");
         if (heapBlock) {
             heapBlock(callback, error);
         }
@@ -99,26 +96,12 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         self.requestCompletions[request] = [completion copy];
     }
 
-    NSString *command = request.command;
-    NSString *parameters = request.parametersAsString ?: @"";
-    NSString *fullJavascriptString = [NSString stringWithFormat:@"%@(%@);", command, parameters];
-    [self.webView evaluateJavaScript:fullJavascriptString completionHandler:^(id result, NSError *error) {
-        JMLog(@"error: %@", error);
-        JMLog(@"result: %@", request);
-    }];
-}
-
-- (void)injectJSInitCode:(NSString *)jsCode
-{
-    self.isJSInitCodeInjected = NO;
-    self.jsInitCode = jsCode;
-}
-
-- (void)reset
-{
-//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    self.isJSInitCodeInjected = NO;
-    [self removeAllListeners];
+    [self.webView evaluateJavaScript:[request fullJavascriptRequestString]
+                   completionHandler:^(id result, NSError *error) {
+                       JMLog(@"request: %@", request);
+                       JMLog(@"error: %@", error);
+                       JMLog(@"result: %@", result);
+                   }];
 }
 
 - (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nullable)callback
@@ -140,7 +123,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 #pragma mark - WKWebViewDelegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
-//    NSLog(@"request from webView: %@", navigationAction.request);
+    NSLog(@"request from webView: %@", navigationAction.request);
 //    NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
 
     if ([self isLocalFileRequest:navigationAction.request]) {
@@ -209,13 +192,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
 //    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if (self.jsInitCode && !self.isJSInitCodeInjected) {
-        self.isJSInitCodeInjected = YES;
-        [self.webView evaluateJavaScript:self.jsInitCode completionHandler:^(id result, NSError *error) {
-            JMLog(@"error: %@", error);
-            JMLog(@"result: %@", result);
-        }];
-    }
 
     // add window.onerror listener
     NSString *listenerId = @"JasperMobile.Events.Window.OnError";

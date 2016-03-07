@@ -63,14 +63,46 @@ var JasperMobile = {
             }
             return params;
         },
-        updateViewPortInitialScale: function (scale) {
+        updateViewPortScale: function (scale) {
+            var viewPortContent = 'initial-scale='+ scale + ', width=device-width, maximum-scale=2.0, user-scalable=yes';
             var viewport = document.querySelector("meta[name=viewport]");
-            viewport.setAttribute('content', 'initial-scale='+ scale + ', width=device-width, maximum-scale=2.0, user-scalable=yes');
+            if (!viewport) {
+                var viewport=document.createElement('meta');
+                viewport.name = "viewport";
+                viewport.content = viewPortContent;
+                document.head.appendChild(viewport);
+            } else {
+                viewport.setAttribute('content', viewPortContent);
+            }
+        },
+        updateDocumentZoom: function(zoom) {
+            document.body.style.zoom = zoom;
+        },
+        injectContent: function(content) {
+            JasperMobile.Callback.log("injectContent");
+            JasperMobile.Callback.log(content);
+            var div = document.getElementById('container');
+            div.innerHTML = content;
+            JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Helper.injectContent", {});
+        },
+        execCustomScript: function(script, params) {
+            script(params);
         }
     }
 };
 
 // Callbacks
+JasperMobile.Callback.Listeners = {
+    listener: function(listener, parameters) {
+        JasperMobile.Callback.createCallback(
+            {
+                "command" : listener,
+                "parameters" : parameters
+            }
+        );
+    }
+};
+
 JasperMobile.Callback.Callbacks = {
     successCompleted: function(command, parameters) {
         JasperMobile.Callback.createCallback(
@@ -103,6 +135,55 @@ JasperMobile.Callback.Callbacks = {
                 "parameters" : parameters
             }
         );
+    }
+};
+
+JasperMobile.Report = {
+    REST      : {},
+    VISUALIZE : {},
+    // TODO: Replace 'API' with 'VISUALIZE'
+    API       : {}
+};
+
+JasperMobile.Report.REST.API = {
+    verifyEnvironmentIsReady: function() {
+        JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.verifyEnvironmentIsReady", {
+            "isReady" : document.getElementById("container") != null
+        });
+    },
+    renderChart: function(script, params, renderFullScreen) {
+        if (renderFullScreen) {
+            var containerWidth = document.getElementById("container").offsetWidth;
+            var containerHeight = document.getElementById("container").offsetHeight;
+
+            var chartDimensions = params["chartDimensions"];
+            chartDimensions["width"] = containerWidth;
+            chartDimensions["height"] = containerHeight;
+            params["chartDimensions"] = chartDimensions;
+        }
+        script(params);
+    },
+    addHyperlinks: function(hyperlinks) {
+        var allSpans = document.getElementsByTagName("span");
+        for (var i = 0; i < hyperlinks.length; i++) {
+            var hyperlink = hyperlinks[i];
+            (function(hyperlink) {
+                for (var j=0; j < allSpans.length; j++) {
+                    var span = allSpans[j];
+                    if (hyperlink.tooltip == span.title) {
+                        // add click listener
+                        span.addEventListener("click", function() {
+                            console.log("click " + hyperlink.id);
+                            JasperMobile.Callback.Listeners.listener("JasperMobile.listener.hyperlink", {
+                                "type" : hyperlink.type,
+                                "params" : hyperlink.params
+                            });
+                        });
+                    }
+                    //console.log("span: " + span.title);
+                }
+            })(hyperlink);
+        }
     }
 };
 
@@ -765,13 +846,16 @@ JasperMobile.Dashboard.API = {
 // Start Point
 document.addEventListener("DOMContentLoaded", function(event) {
     JasperMobile.Callback.onScriptLoaded();
+    JasperMobile.Helper.updateViewPortScale(0.3);
+    JasperMobile.Helper.updateDocumentZoom(2);
+    //document.body.bgColor = "#f3f3f3";
 });
 
 window.onerror = function myErrorHandler(message, source, lineno, colno, error) {
     JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Events.Window.OnError", {
         "error" : JSON.stringify({
             "code" : "window.onerror",
-            "message" : message,
+            "message" : message + " " + source + " " + lineno + " " + colno + " " + error,
             "source" : source
         })
     });

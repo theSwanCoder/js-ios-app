@@ -28,7 +28,51 @@
 
 #import "JMJavascriptRequest.h"
 
+typedef NS_ENUM(NSInteger, JMJavascriptRequestType) {
+    JMJavascriptRequestTypeVisualize,
+    JMJavascriptRequestTypeCustom
+};
+
+@interface JMJavascriptRequest()
+@property (nonatomic) JMJavascriptRequestType type;
+@end
+
 @implementation JMJavascriptRequest
+
+#pragma mark - Init
+- (instancetype)initWithCommand:(NSString *)command parametersAsString:(NSString *)parametersAsString
+{
+    self = [super init];
+    if (self) {
+        _command = command;
+        _parametersAsString = parametersAsString;
+        _type = JMJavascriptRequestTypeVisualize;
+    }
+    return self;
+}
+
++ (instancetype)requestWithCommand:(NSString *)command parametersAsString:(NSString *)parametersAsString
+{
+    return [[self alloc] initWithCommand:command parametersAsString:parametersAsString];
+}
+
+- (instancetype)initWithScript:(NSString *)script
+{
+    self = [super init];
+    if (self) {
+        [self parseScript:script];
+        if (!_command) {
+            return nil;
+        }
+        _type = JMJavascriptRequestTypeCustom;
+    }
+    return self;
+}
+
++ (instancetype)requestWithScript:(NSString *)script
+{
+    return [[self alloc] initWithScript:script];
+}
 
 #pragma mark - NSCopying + NSObject Protocol
 - (NSUInteger)hash
@@ -58,6 +102,75 @@
 {
     NSString *description = [NSString stringWithFormat:@"\nJMJavascriptRequest: %@\ncommand:%@\nparametersAsString:%@", [super description], self.command, self.parametersAsString];
     return description;
+}
+
+
+#pragma mark - Public API
+- (NSString *)fullJavascriptRequestString
+{
+    NSString *command = self.command;
+    NSString *parameters = self.parametersAsString ?: @"";
+    NSString *fullJavascriptString;
+    if (self.type == JMJavascriptRequestTypeVisualize) {
+        fullJavascriptString = [NSString stringWithFormat:@"%@(%@);", command, parameters];
+    } else if (self.type == JMJavascriptRequestTypeCustom) {
+        fullJavascriptString = [NSString stringWithFormat:@"JasperMobile.Helper.execCustomScript(%@, %@);", command, parameters];
+    }
+    JMLog(@"fullJavascriptString: %@", fullJavascriptString);
+    return fullJavascriptString;
+}
+
+#pragma mark - Helpers
+- (void)parseScript:(NSString *)script
+{
+    NSString *fullCommand = [self fullCommandFromScript:script];
+    JMLog(@"full command: %@", fullCommand);
+
+    NSError *error;
+    NSRegularExpression *commandRegex = [NSRegularExpression regularExpressionWithPattern:@"(\\S*)\\(([\\s*\\S*]*)\\);"
+                                                                                 options:NSRegularExpressionCaseInsensitive
+                                                                                   error:&error];
+    NSArray *matches = [commandRegex matchesInString:fullCommand
+                                             options:NSMatchingReportProgress
+                                               range:NSMakeRange(0, fullCommand.length)];
+
+    if (matches.count == 1) {
+        NSTextCheckingResult *matchResult = matches.firstObject;
+
+        if (matchResult.numberOfRanges == 3) {
+            NSRange commandRange = [matchResult rangeAtIndex:1];
+            NSRange parametersRange = [matchResult rangeAtIndex:2];
+
+            _command = [fullCommand substringWithRange:commandRange];
+            _parametersAsString = [fullCommand substringWithRange:parametersRange];
+        }
+    }
+}
+
+- (NSString *)fullCommandFromScript:(NSString *)script
+{
+    NSString *fullCommand;
+
+    NSRange scriptRange = NSMakeRange(0, script.length);
+
+    NSError *error;
+    NSRegularExpression *scriptRegex = [NSRegularExpression regularExpressionWithPattern:@">([\\s*\\S*]*)<\\/script>"
+                                                                                 options:NSRegularExpressionCaseInsensitive
+                                                                                   error:&error];
+    NSArray *matches = [scriptRegex matchesInString:script
+                                            options:NSMatchingReportProgress
+                                              range:scriptRange];
+
+    if (matches.count == 1) {
+        NSTextCheckingResult *matchResult = matches.firstObject;
+        // select range
+        NSRange selectedJSRange = [matchResult rangeAtIndex:1];
+        fullCommand = [script substringWithRange:selectedJSRange];
+    }
+
+    fullCommand = [fullCommand stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+    return fullCommand;
 }
 
 @end

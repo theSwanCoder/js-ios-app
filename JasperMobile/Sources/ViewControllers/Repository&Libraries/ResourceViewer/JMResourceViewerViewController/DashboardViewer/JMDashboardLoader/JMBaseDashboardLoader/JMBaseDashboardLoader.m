@@ -65,7 +65,7 @@
     // TODO: reimplement without request
     [self.webEnvironment loadRequest:self.dashboard.resourceRequest];
 
-    [self injectJSCodeOldDashboard];
+//    [self injectJSCodeOldDashboard];
     if (completion) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             completion(YES, nil);
@@ -129,17 +129,17 @@
 
 
 #pragma mark - Helpers
-- (void)injectJSCodeOldDashboard
-{
-    NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"old_dashboard" ofType:@"js"];
-    NSError *error;
-    NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
-    CGFloat initialScale = 0.5;
-    if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
-        initialScale = 0.25;
-    }
-    jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScale).stringValue];
-    [self.webEnvironment injectJSInitCode:jsMobile];
-}
+//- (void)injectJSCodeOldDashboard
+//{
+//    NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"old_dashboard" ofType:@"js"];
+//    NSError *error;
+//    NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
+//    CGFloat initialScale = 0.5;
+//    if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
+//        initialScale = 0.25;
+//    }
+//    jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScale).stringValue];
+//    [self.webEnvironment injectJSInitCode:jsMobile];
+//}
 
 @end

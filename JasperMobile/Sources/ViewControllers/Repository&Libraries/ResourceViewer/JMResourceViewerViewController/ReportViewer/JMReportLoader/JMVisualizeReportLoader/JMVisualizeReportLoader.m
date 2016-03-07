@@ -269,7 +269,7 @@
         self.visualizeManager.viewportScaleFactor = scaleFactor;
 
         JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"JasperMobile.Helper.updateViewPortInitialScale";
+        request.command = @"JasperMobile.Helper.updateViewPortScale";
         request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
         [self.webEnvironment sendJavascriptRequest:request
                                         completion:nil];

@@ -82,7 +82,7 @@
     NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"dashboard" ofType:@"html"];
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
 
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(self.viewportScaleFactor).stringValue];
+//    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(self.viewportScaleFactor).stringValue];
 
     // Visualize
     NSString *visualizeURLString = self.visualizePath;
@@ -107,13 +107,14 @@
 {
     if (!_visualizePath) {
         NSString *baseURL = self.restClient.serverProfile.serverUrl;
+//        NSString *baseURL = @"http://mobiledemo2.jaspersoft.com";
         baseURL = [baseURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
         NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js?baseUrl=%@", self.restClient.serverProfile.serverUrl, baseURL];
 
-        BOOL isNeedNonOptimizedVisualize = [self isAmberServer];
-        if (isNeedNonOptimizedVisualize) {
+//        BOOL isNeedNonOptimizedVisualize = [self isAmberServer];
+//        if (isNeedNonOptimizedVisualize) {
+//        }
             visualizePath = [visualizePath stringByAppendingString:@"&_opt=false"];
-        }
 
         _visualizePath = visualizePath;
     }
