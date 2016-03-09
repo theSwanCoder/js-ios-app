@@ -479,12 +479,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
                     }
                 });
             }
-
-            if ([strongSelf isContentOnTV]) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [strongSelf.controlsViewController updateInterface];
-                });
-            }
         } else {
             [strongSelf handleError:error];
         }
@@ -520,12 +514,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
                         }];
 
             [strongSelf showReportView];
-
-            if ([strongSelf isContentOnTV]) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [strongSelf.controlsViewController updateInterface];
-                });
-            }
         } else {
             [strongSelf handleError:error];
         }
@@ -562,11 +550,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
             if (success) {
                 [strongSelf showReportView];
-                if ([strongSelf isContentOnTV]) {
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [strongSelf.controlsViewController updateInterface];
-                    });
-                }
             } else {
                 [strongSelf handleError:error];
             }
@@ -930,7 +913,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
 - (void)addControlsForExternalWindow
 {
-    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentWebView:[self resourceView]];
+    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentView:[self resourceView]];
     self.controlsViewController.delegate = self;
 
     CGRect controlViewFrame = self.view.frame;

@@ -132,9 +132,9 @@
         case JMMenuActionsViewAction_Schedule:
             return @"schedule_action";
         case JMMenuActionsViewAction_ShowExternalDisplay:
-            return @"print_action";
+            return @"tv_action";
         case JMMenuActionsViewAction_HideExternalDisplay:
-            return @"print_action";
+            return @"tv_action";
     }
 }
 
