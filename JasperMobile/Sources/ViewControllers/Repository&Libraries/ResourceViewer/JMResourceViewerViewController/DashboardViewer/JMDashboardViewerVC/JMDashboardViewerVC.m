@@ -468,7 +468,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self minimizeDashlet];
     }
 
-    [self.restClient deleteCookies];
     if ([JMUtils isServerAmber2OrHigher]) {
         [self startResourceViewing];
     } else {

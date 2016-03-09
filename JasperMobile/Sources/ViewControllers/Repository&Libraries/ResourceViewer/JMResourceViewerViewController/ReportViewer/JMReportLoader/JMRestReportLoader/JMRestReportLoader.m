@@ -61,7 +61,9 @@ typedef NS_ENUM(NSInteger, JMReportType) {
     return self;
 }
 
-+ (id <JMReportLoaderProtocol>)loaderWithReport:(JSReport *)report restClient:(JSRESTBase *)restClient webEnvironment:(JMWebEnvironment *)webEnvironment
++ (id<JMReportLoaderProtocol>)loaderWithReport:(nonnull JSReport *)report
+                                    restClient:(nonnull JSRESTBase *)restClient
+                                webEnvironment:(JMWebEnvironment *)webEnvironment
 {
     return [[self alloc] initWithReport:report
                              restClient:restClient

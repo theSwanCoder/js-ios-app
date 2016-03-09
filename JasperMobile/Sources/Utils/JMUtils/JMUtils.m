@@ -180,16 +180,23 @@ void jmDebugLog(NSString *format, ...) {
     SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
     JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
 
-    BOOL isPresentedByNavVC = [revealViewController.presentedViewController isKindOfClass:[UINavigationController class]];
-    BOOL isLoginVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMLoginViewController class]];
-    BOOL isServersVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMServersGridViewController class]];
-    BOOL isNewServerVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMServerOptionsViewController class]];
-    if (isPresentedByNavVC && (isLoginVC || isServersVC || isNewServerVC)) {
+    UIViewController *presentedVC = revealViewController.presentedViewController;
+
+    BOOL isPresentedByNavVC = [presentedVC isKindOfClass:[UINavigationController class]];
+    if (isPresentedByNavVC) {
         // if a nav view controller was loaded previously
-        return;
+        UINavigationController *navController = (UINavigationController *) presentedVC;
+        BOOL isLoginVC     = [navController.topViewController isKindOfClass:[JMLoginViewController class]];
+        BOOL isServersVC   = [navController.topViewController isKindOfClass:[JMServersGridViewController class]];
+        BOOL isNewServerVC = [navController.topViewController isKindOfClass:[JMServerOptionsViewController class]];
+        if (isLoginVC || isServersVC || isNewServerVC) {
+            return;
+        }
     }
 
-    UINavigationController *loginNavController = (UINavigationController *) [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
+    [presentedVC dismissViewControllerAnimated:NO completion:nil];
+
+    UINavigationController *loginNavController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
     JMLoginViewController *loginViewController = (JMLoginViewController *)loginNavController.topViewController;
     loginViewController.showForRestoreSession = restoreSession;
     loginViewController.completion = ^(void){

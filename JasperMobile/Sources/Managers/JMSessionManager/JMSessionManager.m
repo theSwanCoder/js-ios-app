@@ -51,9 +51,15 @@ static JMSessionManager *_sharedManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedManager = [JMSessionManager new];
+        [[NSNotificationCenter defaultCenter] addObserver:_sharedManager selector:@selector(saveActiveSessionIfNeeded:) name:kJSSessionDidAuthorized object:_sharedManager.restClient];
     });
     
     return _sharedManager;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(BOOL success))completionBlock
@@ -62,20 +68,10 @@ static JMSessionManager *_sharedManager = nil;
     [self setDefaults];
     [self.restClient deleteCookies];
 
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-            if (completionBlock) {
-                BOOL isServerInfoExists = self.restClient.serverInfo != nil;
-                if (isServerInfoExists && isSessionAuthorized) {
-                    [self saveActiveSessionIfNeeded];
-                    completionBlock(YES);
-                } else {
-                    completionBlock(NO);
-                }
-            }
-    }];
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:completionBlock];
 }
 
-- (void) saveActiveSessionIfNeeded {
+- (void) saveActiveSessionIfNeeded:(id)notification {
     if (self.restClient && self.restClient.keepSession) {
         NSData *archivedSession = [NSKeyedArchiver archivedDataWithRootObject:self.restClient];
         [[NSUserDefaults standardUserDefaults] setObject:archivedSession forKey:kJMSavedSessionKey];
@@ -106,12 +102,11 @@ static JMSessionManager *_sharedManager = nil;
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
                     dispatch_async(dispatch_get_main_queue(), ^(void){
-                        BOOL isRestoredSession = (isSessionAuthorized && self.restClient.serverInfo);
-                        if (isRestoredSession) {
+                        if (isSessionAuthorized) {
                             [self setDefaults];
                         }
                         if (completion) {
-                            completion(isRestoredSession);
+                            completion(isSessionAuthorized);
                         }
                     });
                 }];

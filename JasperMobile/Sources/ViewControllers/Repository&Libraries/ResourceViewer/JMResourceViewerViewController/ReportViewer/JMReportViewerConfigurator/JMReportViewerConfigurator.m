@@ -48,9 +48,9 @@
                                                        webEnvironment:webEnvironment];
             ((JMVisualizeReportLoader *)_reportLoader).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
         } else {
-            _reportLoader = [JMRestReportLoader loaderWithReport:report
-                                                      restClient:self.restClient
-                                                  webEnvironment:webEnvironment];
+            _reportLoader = (id <JMReportLoaderProtocol>) [JMRestReportLoader loaderWithReport:report
+                                                                                    restClient:self.restClient
+                                                                                webEnvironment:webEnvironment];
         }
     }
     return self;

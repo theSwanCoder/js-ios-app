@@ -66,10 +66,7 @@
     NSString *dashboardUrl = [NSString stringWithFormat:@"%@%@", @"flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=", _resourceURI];
     dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
     
-    NSMutableURLRequest *dashboardRequest = [self.restClient.restKitObjectManager requestWithObject:nil
-                                                                                             method:RKRequestMethodGET
-                                                                                               path:dashboardUrl
-                                                                                         parameters:nil];
+    NSMutableURLRequest *dashboardRequest = [self.restClient.requestSerializer requestWithMethod:@"GET" URLString:dashboardUrl parameters:nil error:nil];
     dashboardRequest.timeoutInterval = self.restClient.timeoutInterval;
     dashboardRequest.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
     return dashboardRequest;

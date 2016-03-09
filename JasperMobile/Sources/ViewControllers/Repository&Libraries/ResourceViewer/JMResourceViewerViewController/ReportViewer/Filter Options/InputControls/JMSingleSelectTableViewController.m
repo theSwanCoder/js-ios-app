@@ -118,7 +118,7 @@
     
     JSInputControlOption *option = self.listOfValues[indexPath.row];
     cell.textLabel.text = option.label;
-    cell.accessoryType = option.selected.boolValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    cell.accessoryType = option.selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 
     return cell;
 }
@@ -131,8 +131,8 @@
     JSInputControlOption *previousSelectedOption = [self.previousSelectedValues anyObject];
 
     if (previousSelectedOption != selectedOption) {
-        selectedOption.selected = [JSUtils stringFromBOOL:YES];
-        previousSelectedOption.selected = [JSUtils stringFromBOOL:NO];
+        selectedOption.selected = YES;
+        previousSelectedOption.selected = NO;
     }
 
     [self.navigationController popViewControllerAnimated:YES];
@@ -142,7 +142,7 @@
 #pragma mark - UISearchBarDelegate
 - (NSPredicate *)selectedValuesPredicate
 {
-    return [NSPredicate predicateWithFormat:@"SELF.selected LIKE[cd] %@", [JSUtils stringFromBOOL:YES]];
+    return [NSPredicate predicateWithFormat:@"SELF.selected == YES"];
 }
     
 - (NSPredicate *)filteredPredicateWithText:(NSString *)text

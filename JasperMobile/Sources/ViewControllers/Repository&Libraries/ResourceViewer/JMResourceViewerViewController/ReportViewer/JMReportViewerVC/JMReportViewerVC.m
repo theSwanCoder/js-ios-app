@@ -147,9 +147,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
     if (!self.isChildReport) {
         [self stopShowLoader];
 
-        if (![self.restClient isRequestPoolEmpty]) {
-            [self.restClient cancelAllRequests];
-        }
+        [self.restClient cancelAllRequests];
         if (self.exitBlock) {
             self.exitBlock();
         }
@@ -474,12 +472,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
                     }
                 });
             }
-
-            if ([strongSelf isContentOnTV]) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [strongSelf.controlsViewController updateInterface];
-                });
-            }
         } else {
             [strongSelf handleError:error];
         }
@@ -515,12 +507,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
                         }];
 
             [strongSelf showReportView];
-
-            if ([strongSelf isContentOnTV]) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [strongSelf.controlsViewController updateInterface];
-                });
-            }
         } else {
             [strongSelf handleError:error];
         }
@@ -557,11 +543,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
             if (success) {
                 [strongSelf showReportView];
-                if ([strongSelf isContentOnTV]) {
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [strongSelf.controlsViewController updateInterface];
-                    });
-                }
             } else {
                 [strongSelf handleError:error];
             }
@@ -605,7 +586,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 {
     switch (error.code) {
         case JSReportLoaderErrorTypeAuthentification:
-            [self.restClient deleteCookies];
             [self resetSubViews];
             [[JMWebViewManager sharedInstance] removeWebEnvironmentForId:[self currentWebEnvironmentIdentifier]];
 
@@ -614,34 +594,25 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
             [self.report updateCurrentPage:reportCurrentPage];
             // Here 'break;' doesn't need, because we should try to create new session and reload report
         case JSSessionExpiredErrorCode:
-            [self setupSubviews];
-            [self configViewport];
-
             if (self.restClient.keepSession) {
-                if (!self.wasAuthError) {
-                    self.wasAuthError = YES;
+                __weak typeof(self)weakSelf = self;
+                [self startShowLoaderWithMessage:@"status.loading"];
+                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                    __strong typeof(self)strongSelf = weakSelf;
 
-                    __weak typeof(self)weakSelf = self;
-                    [self startShowLoaderWithMessage:@"status.loading"];
-                    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                        __strong typeof(self)strongSelf = weakSelf;
-                        [strongSelf stopShowLoader];
-                        if (isSessionAuthorized) {
-                            // TODO: Need add restoring for current page
-                            [strongSelf runReportWithPage:self.report.currentPage];
-                        } else {
-                            [JMUtils showLoginViewAnimated:YES completion:^{
-                                [strongSelf cancelResourceViewingAndExit:YES];
-                            }];
-                        }
-                    }];
-                } else {
-                    __weak typeof(self) weakSelf = self;
-                    [JMUtils presentAlertControllerWithError:error completion:^{
-                        __strong typeof(self) strongSelf = weakSelf;
-                        [strongSelf cancelResourceViewingAndExit:YES];
-                    }];
-                }
+                    [strongSelf setupSubviews];
+                    [strongSelf configViewport];
+
+                    [strongSelf stopShowLoader];
+                    if (isSessionAuthorized) {
+                        // TODO: Need add restoring for current page
+                        [strongSelf runReportWithPage:strongSelf.report.currentPage];
+                    } else {
+                        [JMUtils showLoginViewAnimated:YES completion:^{
+                            [strongSelf cancelResourceViewingAndExit:YES];
+                        }];
+                    }
+                }];
             } else {
                 [JMUtils showLoginViewAnimated:YES completion:^{
                     [self cancelResourceViewingAndExit:YES];
@@ -651,6 +622,12 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         case JSReportLoaderErrorTypeEmtpyReport:
             [self showEmptyReportMessage];
             break;
+        case JSInvalidCredentialsErrorCode: {
+            [JMUtils showLoginViewAnimated:YES completion:^{
+                [self cancelResourceViewingAndExit:YES];
+            }];
+            break;
+        }
         default: {
             __weak typeof(self) weakSelf = self;
             [JMUtils presentAlertControllerWithError:error completion:^{
@@ -925,7 +902,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
 - (void)addControlsForExternalWindow
 {
-    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentWebView:[self resourceView]];
+    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentView:[self resourceView]];
     self.controlsViewController.delegate = self;
 
     CGRect controlViewFrame = self.view.frame;
