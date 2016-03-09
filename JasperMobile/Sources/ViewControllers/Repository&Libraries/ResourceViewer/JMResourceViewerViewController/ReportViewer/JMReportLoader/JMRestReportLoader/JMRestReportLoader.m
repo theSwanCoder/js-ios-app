@@ -42,6 +42,25 @@
 
 @implementation JMRestReportLoader
 
+- (id<JMReportLoaderProtocol>)initWithReport:(nonnull JSReport *)report
+                                  restClient:(nonnull JSRESTBase *)restClient
+                              webEnvironment:(JMWebEnvironment *)webEnvironment
+{
+    self = [super initWithReport:report restClient:restClient];
+    if (self) {
+        _webEnvironment = webEnvironment;
+    }
+    return self;
+}
+
++ (id<JMReportLoaderProtocol>)loaderWithReport:(nonnull JSReport *)report
+                                    restClient:(nonnull JSRESTBase *)restClient
+                                webEnvironment:(JMWebEnvironment *)webEnvironment
+{
+    return [[self alloc] initWithReport:report
+                             restClient:restClient
+                         webEnvironment:webEnvironment];
+}
 
 #pragma mark - Public API
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion

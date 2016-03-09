@@ -65,12 +65,12 @@
     [self.bridge startLoadHTMLString:HTMLString
                              baseURL:baseURL
                           completion:^(JMJavascriptCallback *callback, NSError *error) {
-//                              JMLog(@"callback: %@", callback);
-//                              JMLog(@"error: %@", error);
-                              if (error) {
-                                  completion(NO, error);
-                              } else {
-                                  completion(YES, nil);
+                              if (completion) {
+                                  if (error) {
+                                      completion(NO, error);
+                                  } else {
+                                      completion(YES, nil);
+                                  }
                               }
     }];
 }
