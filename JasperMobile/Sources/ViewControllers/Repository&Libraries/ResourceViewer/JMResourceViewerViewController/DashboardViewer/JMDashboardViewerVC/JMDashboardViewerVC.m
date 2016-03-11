@@ -695,35 +695,36 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     inputControlsViewController.dashboard = self.dashboard;
 
     __weak __typeof(self) weakSelf = self;
-    inputControlsViewController.exitBlock = ^(NSArray *changedInputControls) {
-        __typeof(self) strongSelf = weakSelf;
-        JMLog(@"changed input controls: %@", changedInputControls);
-
-        NSString *parametersAsString = @"{";
-        for (JSInputControlDescriptor *inputControlDescriptor in changedInputControls) {
-
-            NSString *inputControlID = inputControlDescriptor.uuid;
-
-            NSString *componentID;
-
-            for (JSDashboardComponent *component in strongSelf.dashboard.components) {
-                if ([component.ownerResourceParameterName isEqualToString:inputControlID]) {
-                    componentID = component.identifier;
+    inputControlsViewController.exitBlock = ^(BOOL inputControlsDidChanged) {
+        if (inputControlsDidChanged) {
+            __typeof(self) strongSelf = weakSelf;
+            
+            NSString *parametersAsString = @"{";
+            for (JSInputControlDescriptor *inputControlDescriptor in strongSelf.dashboard.inputControls) {
+                
+                NSString *inputControlID = inputControlDescriptor.uuid;
+                
+                NSString *componentID;
+                
+                for (JSDashboardComponent *component in strongSelf.dashboard.components) {
+                    if ([component.ownerResourceParameterName isEqualToString:inputControlID]) {
+                        componentID = component.identifier;
+                    }
                 }
+                
+                NSArray *values = [inputControlDescriptor selectedValues];
+                NSString *valuesAsString = @"";
+                for (NSString *value in values) {
+                    valuesAsString = [valuesAsString stringByAppendingFormat:@"\"%@\",", value];
+                }
+                
+                parametersAsString = [parametersAsString stringByAppendingFormat:@"\"%@\":[%@], ", componentID, valuesAsString];
             }
-
-            NSArray *values = [inputControlDescriptor selectedValues];
-            NSString *valuesAsString = @"";
-            for (NSString *value in values) {
-                valuesAsString = [valuesAsString stringByAppendingFormat:@"\"%@\",", value];
-            }
-
-            parametersAsString = [parametersAsString stringByAppendingFormat:@"\"%@\":[%@], ", componentID, valuesAsString];
+            parametersAsString = [parametersAsString stringByAppendingString:@"}"];
+            JMLog(@"parametersAsString: %@", parametersAsString);
+            
+            [strongSelf.dashboardLoader applyParameters:parametersAsString];
         }
-        parametersAsString = [parametersAsString stringByAppendingString:@"}"];
-        JMLog(@"parametersAsString: %@", parametersAsString);
-
-        [strongSelf.dashboardLoader applyParameters:parametersAsString];
     };
 
     [self.navigationController pushViewController:inputControlsViewController animated:YES];

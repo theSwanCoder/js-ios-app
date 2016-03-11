@@ -10,5 +10,5 @@
 
 @interface JMDashboardInputControlsVC : JMEditabledViewController
 @property (nonatomic, strong) JMDashboard *dashboard;
-@property (nonatomic, copy) void(^exitBlock)(NSArray <JSInputControlDescriptor *>*changedInputControls);
+@property (nonatomic, copy) void(^exitBlock)(BOOL inputControlsDidChanged);
 @end

@@ -281,7 +281,7 @@
         [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) { // Server validation
             if (dataIsValid) {
                 if (self.exitBlock) {
-                    self.exitBlock(self.chagedInputControls);
+                    self.exitBlock([self.chagedInputControls count] > 0);
                 }
                 [self.navigationController popViewControllerAnimated:YES];
             }
