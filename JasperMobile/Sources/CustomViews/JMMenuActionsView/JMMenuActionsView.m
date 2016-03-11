@@ -93,70 +93,73 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
 - (void)setupDatasource
 {
     self.dataSource = @{
-            @(JMMenuActionsViewAction_MakeFavorite) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_MakeFavorite
-                                                                               available:NO
-                                                                                 enabled:YES],
-            @(JMMenuActionsViewAction_MakeUnFavorite) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_MakeUnFavorite
-                                                                                 available:NO
-                                                                                   enabled:YES],
-            @(JMMenuActionsViewAction_Refresh) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Refresh
-                                                                          available:NO
-                                                                            enabled:YES],
-            @(JMMenuActionsViewAction_Filter) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Filter
-                                                                         available:NO
-                                                                           enabled:YES],
-            @(JMMenuActionsViewAction_Edit) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Edit
-                                                                       available:NO
-                                                                         enabled:YES],
-            @(JMMenuActionsViewAction_EditFilters) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_EditFilters
-                                                                       available:NO
-                                                                         enabled:YES],
-            @(JMMenuActionsViewAction_Sort) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Sort
-                                                                       available:NO
-                                                                         enabled:YES],
-            @(JMMenuActionsViewAction_Save) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Save
-                                                                       available:NO
-                                                                         enabled:YES],
-            @(JMMenuActionsViewAction_Delete) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Delete
-                                                                         available:NO
-                                                                           enabled:YES],
-            @(JMMenuActionsViewAction_Rename) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Rename
-                                                                         available:NO
-                                                                           enabled:YES],
-            @(JMMenuActionsViewAction_SelectAll) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_SelectAll
-                                                                            available:NO
-                                                                              enabled:YES],
-            @(JMMenuActionsViewAction_ClearSelections) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ClearSelections
-                                                                                  available:NO
-                                                                                    enabled:YES],
-            @(JMMenuActionsViewAction_Run) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Run
-                                                                      available:NO
-                                                                        enabled:YES],
-            @(JMMenuActionsViewAction_Print) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Print
-                                                                        available:NO
-                                                                          enabled:YES],
-            @(JMMenuActionsViewAction_Info) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Info
-                                                                       available:NO
-                                                                         enabled:YES],
-            @(JMMenuActionsViewAction_OpenIn) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_OpenIn
-                                                                       available:NO
-                                                                         enabled:YES],
-            @(JMMenuActionsViewAction_Schedule) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Schedule
-                                                                       available:NO
-                                                                         enabled:YES],
-            @(JMMenuActionsViewAction_ShowExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ShowExternalDisplay
-                                                                                      available:NO
-                                                                                        enabled:YES],
-            @(JMMenuActionsViewAction_HideExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_HideExternalDisplay
-                                                                                      available:NO
-                                                                                        enabled:YES],
-    };
+                        @(JMMenuActionsViewAction_MakeFavorite)     : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_MakeFavorite
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_MakeUnFavorite)   : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_MakeUnFavorite
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Refresh)          : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Refresh
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Filter)           : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Filter
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Edit)             : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Edit
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_EditFilters)      : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_EditFilters
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Sort)             : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Sort
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Save)             : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Save
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Delete)           : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Delete
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Rename)           : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Rename
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_SelectAll)        : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_SelectAll
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_ClearSelections)  : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ClearSelections
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Run)              : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Run
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Print)            : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Print
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Info)             : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Info
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_OpenIn)           : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_OpenIn
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Schedule)         : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Schedule
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_Share)            : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Share
+                                                                                               available:NO
+                                                                                                 enabled:YES],
+                        @(JMMenuActionsViewAction_ShowExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ShowExternalDisplay
+                                                                                                  available:NO
+                                                                                                    enabled:YES],
+                        @(JMMenuActionsViewAction_HideExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_HideExternalDisplay
+                                                                                                  available:NO
+                                                                                                    enabled:YES],
+                        };
 }
 
 - (void)refreshDatasourceForAvailableActions
 {
     NSMutableArray *availableMenuActions = [NSMutableArray array];
-    NSInteger i = JMMenuActionsViewActionFirst();
+    NSInteger i = 1;
     while (i <= self.availableActions) {
         if (self.availableActions & i) {
             JMMenuAction *menuAction = self.dataSource[@(i)];
@@ -170,7 +173,7 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
 
 - (void)refreshDatasourceForDisabledActions
 {
-    NSInteger i = JMMenuActionsViewActionFirst();
+    NSInteger i = 1;
     while (i <= self.disabledActions) {
         if (self.disabledActions & i) {
             JMMenuAction *menuAction = self.dataSource[@(i)];
