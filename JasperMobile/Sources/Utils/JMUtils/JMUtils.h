@@ -171,6 +171,9 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (UIViewController *__nonnull)launchScreenViewController;
 
 + (BOOL)isDemoAccount;
+
++ (JMServerProfile * __nullable)activeServerProfile;
+
 + (void)logEventWithInfo:(NSDictionary *__nonnull)eventInfo;
 + (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
 

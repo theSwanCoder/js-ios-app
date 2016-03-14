@@ -565,6 +565,7 @@
 		93826C7B1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowDashboardControlsVC.h; sourceTree = "<group>"; };
 		93826C7C1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowDashboardControlsVC.m; sourceTree = "<group>"; };
 		93826C7D1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMExternalWindowDashboardControlsVC.xib; sourceTree = "<group>"; };
+		9396BCB61C96FBAF004C6D65 /* JasperMobile_v_2_ 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "JasperMobile_v_2_ 2.xcdatamodel"; sourceTree = "<group>"; };
 		9397F97B1AAACADF006B89C6 /* JMReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReport.h; sourceTree = "<group>"; };
 		9397F97C1AAACADF006B89C6 /* JMReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReport.m; sourceTree = "<group>"; };
 		93C4E3101C737DB300A19D64 /* JMUITestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMUITestConstants.h; sourceTree = "<group>"; };
@@ -3609,12 +3610,13 @@
 		08DD18231B135BE500856112 /* JasperMobile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				9396BCB61C96FBAF004C6D65 /* JasperMobile_v_2_ 2.xcdatamodel */,
 				08DD18241B135BE500856112 /* JasperMobile.xcdatamodel */,
 				08DD18251B135BE500856112 /* JasperMobile_v_1_9.xcdatamodel */,
 				08DD18261B135BE500856112 /* JasperMobile_v_2_0.xcdatamodel */,
 				08DD18271B135BE500856112 /* JasperMobile_v_2_1.xcdatamodel */,
 			);
-			currentVersion = 08DD18271B135BE500856112 /* JasperMobile_v_2_1.xcdatamodel */;
+			currentVersion = 9396BCB61C96FBAF004C6D65 /* JasperMobile_v_2_ 2.xcdatamodel */;
 			path = JasperMobile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

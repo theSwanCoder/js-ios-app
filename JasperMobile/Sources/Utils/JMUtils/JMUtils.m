@@ -298,20 +298,6 @@ void jmDebugLog(NSString *format, ...) {
 
 #pragma mark - Helpers
 
-+ (BOOL)shouldUseVisualize
-{
-//    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize]) {
-//        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultUseVisualize];
-//    }
-//
-//    id useVisualizeSettings = [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize];
-//    if (useVisualizeSettings) {
-//        return [useVisualizeSettings boolValue];
-//    }
-//    return YES;
-    return NO;
-}
-
 + (BOOL)isSupportNewRESTFlow
 {
     return [self isServerVersionUpOrEqual6];
@@ -319,7 +305,7 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isSupportVisualize
 {
-    return [self shouldUseVisualize] && [self isServerVersionUpOrEqual6] && [self isServerProEdition];
+    return [self isServerVersionUpOrEqual6] && [self isServerProEdition];
 }
 
 + (BOOL)isServerVersionUpOrEqual6
@@ -433,6 +419,12 @@ void jmDebugLog(NSString *format, ...) {
     BOOL isDemoOrganization = [self.restClient.serverProfile.organization isEqualToString:kJMDemoServerOrganization];
     BOOL isDemoAccount = isDemoServer && isDemoUser && isDemoOrganization;
     return isDemoAccount;
+}
+
++ (JMServerProfile * __nullable)activeServerProfile
+{
+    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    return activeServerProfile;
 }
 
 #pragma mark - Analytics

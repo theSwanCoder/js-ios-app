@@ -42,12 +42,14 @@
 - (instancetype)initWithReport:(JMReport *)report webEnvironment:(JMWebEnvironment *)webEnvironment {
     self = [super init];
     if (self) {
-        if ([JMUtils isSupportVisualize]) {
+        if ([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize) {
+            JMLog(@"run with VIZ");
             _reportLoader = [JMVisualizeReportLoader loaderWithReport:report
                                                            restClient:self.restClient
                                                        webEnvironment:webEnvironment];
             ((JMVisualizeReportLoader *)_reportLoader).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
         } else {
+            JMLog(@"run with REST");
             _reportLoader = (id <JMReportLoaderProtocol>) [JMRestReportLoader loaderWithReport:report
                                                                                     restClient:self.restClient
                                                                                 webEnvironment:webEnvironment];

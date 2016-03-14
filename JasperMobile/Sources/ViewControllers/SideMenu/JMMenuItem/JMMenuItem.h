@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, JMResourceType){
     JMResourceTypeScheduling,
     JMResourceTypeAbout,
     JMResourceTypeFeedback,
+    JMResourceTypeSettings,
     JMResourceTypeLogout,
     
     JMResourceTypeNone

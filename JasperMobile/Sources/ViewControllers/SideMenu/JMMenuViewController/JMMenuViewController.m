@@ -38,6 +38,7 @@
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
+#import "JMServerOptionsViewController.h"
 
 typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonStateNormal,
@@ -177,6 +178,27 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         [[JMSessionManager sharedManager] logout];
         [JMUtils showLoginViewAnimated:YES completion:nil];
         self.menuItems = nil;
+    } else if (item.resourceType == JMResourceTypeSettings) {
+        [self closeMenu];
+
+        JMServerOptionsViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+        settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
+                                                                                        style:UIBarButtonItemStyleDone
+                                                                                       target:settingsVC
+                                                                                       action:@selector(cancel)];
+        settingsVC.serverProfile = [JMUtils activeServerProfile];
+        __weak __typeof(settingsVC) weakSettingVC = settingsVC;
+        settingsVC.exitBlock = ^{
+            __typeof(settingsVC) strongSettingVC = weakSettingVC;
+            [strongSettingVC dismissViewControllerAnimated:YES completion:nil];
+        };
+        JMMainNavigationController *navController = [[JMMainNavigationController alloc] initWithRootViewController:settingsVC];
+        navController.modalPresentationStyle = UIModalPresentationFormSheet;
+
+        [self.revealViewController.frontViewController presentViewController:navController
+                                                                    animated:YES
+                                                                  completion:nil];
+
     } else if (item.resourceType == JMResourceTypeAbout) {
         [self closeMenu];
 
@@ -265,6 +287,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeScheduling],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeSettings],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeAbout],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeFeedback],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]

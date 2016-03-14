@@ -160,7 +160,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
     // Analytics
     NSString *label = kJMAnalyticsResourceEventLabelSavedResource;
     if ([self.resourceLookup isReport]) {
-        label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
+        label = ([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize) ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
     } else if ([self.resourceLookup isDashboard]) {
         label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
     }

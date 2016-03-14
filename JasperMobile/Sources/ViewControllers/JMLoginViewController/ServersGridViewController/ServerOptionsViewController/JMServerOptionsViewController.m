@@ -91,6 +91,13 @@
     [self.tableView reloadData];
 }
 
+- (void)cancel
+{
+    if (self.exitBlock) {
+        self.exitBlock();
+    }
+}
+
 #pragma mark - UITableViewDataSource, UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -136,7 +143,7 @@
         BOOL isHTTPSScheme = [scheme isEqualToString:@"https"];
         if (isHTTPSScheme) {
             [self saveServerOptions];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self cancel];
         } else {
             // show alert
             [self showSecurityHTTPAlert];
@@ -172,7 +179,7 @@
                                                                             cancelButtonTitle:@"ok"
                                                                       cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
                                                                           [self saveServerOptions];
-                                                                          [self.navigationController popViewControllerAnimated:YES];
+                                                                          [self cancel];
                                                                       }];
     [self presentViewController:alertController
                        animated:YES

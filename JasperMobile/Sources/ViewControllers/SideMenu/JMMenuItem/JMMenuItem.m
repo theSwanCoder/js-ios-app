@@ -78,6 +78,8 @@
             return @"JMSchedulingListNC";
         case JMResourceTypeRepository:
             return @"JMRepositoryNavigationViewController";
+        case JMResourceTypeSettings:
+            return @"JMServerOptionsViewController";
         case JMResourceTypeAbout:
             return @"JMAboutNavigationViewController";
         default:
@@ -104,6 +106,8 @@
             return JMCustomLocalizedString(@"menuitem.about.label", nil);
         case JMResourceTypeFeedback:
             return JMCustomLocalizedString(@"menuitem.feedback.label", nil);
+        case JMResourceTypeSettings:
+            return JMCustomLocalizedString(@"menuitem.settings.label", nil);
         case JMResourceTypeLogout:
             return JMCustomLocalizedString(@"menuitem.logout.label", nil);
         default:
@@ -204,6 +208,8 @@
             return @"Scheduling";
         case JMResourceTypeAbout:
             return @"AboutApp";
+        case JMResourceTypeSettings:
+            return @"Settings";
         default:
             return nil;
     }

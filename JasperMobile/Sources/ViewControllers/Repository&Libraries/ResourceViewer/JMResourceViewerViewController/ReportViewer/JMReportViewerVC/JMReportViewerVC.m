@@ -183,7 +183,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
     }
 
     CGFloat initialScaleViewport = 0.75;
-    if ([JMUtils isSupportVisualize]) {
+    if ([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize) {
         BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
         if (isCompactWidth) {
             initialScaleViewport = 0.25;
@@ -462,7 +462,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         if (success) {
             toolbar.enable = YES;
             [strongSelf.report updateCurrentPage:toPage];
-            if (![JMUtils isSupportVisualize]) {
+            if (!([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize)) {
                 // fix an issue in webview after zooming and changing page (black areas)
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     if ([strongSelf isContentOnTV]) {
@@ -869,7 +869,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 - (UIView *)viewToShowOnExternalWindow
 {
     CGFloat initialScaleViewport = 0.75;
-    if (![JMUtils isSupportVisualize]) {
+    if (!([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize)) {
         initialScaleViewport = 3;
     }
 

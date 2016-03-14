@@ -85,10 +85,15 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    JMServerOptionsViewController *destinationViewController = (JMServerOptionsViewController *) segue.destinationViewController;
+    JMServerOptionsViewController *destinationViewController = segue.destinationViewController;
     if (sender) {
         [destinationViewController setServerProfile:[sender objectForKey:kJMServerProfileKey]];
         destinationViewController.editable = [[sender objectForKey:kJMServerProfileEditableKey] boolValue];
+        __weak __typeof(destinationViewController) weakVC = destinationViewController;
+        destinationViewController.exitBlock = ^{
+            __typeof(destinationViewController) strongVC = weakVC;
+            [strongVC.navigationController popViewControllerAnimated:YES];
+        };
     }
 }
 
