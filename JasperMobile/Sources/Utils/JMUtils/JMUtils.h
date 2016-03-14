@@ -142,6 +142,8 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (BOOL)isServerAmber2OrHigher;
 
++ (BOOL)isSupportNewRESTFlow;
+
 /**
  Returns YES if visualize is supported on current JRS instance
 

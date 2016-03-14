@@ -312,6 +312,11 @@ void jmDebugLog(NSString *format, ...) {
     return NO;
 }
 
++ (BOOL)isSupportNewRESTFlow
+{
+    return [self isServerVersionUpOrEqual6];
+}
+
 + (BOOL)isSupportVisualize
 {
     return [self shouldUseVisualize] && [self isServerVersionUpOrEqual6] && [self isServerProEdition];
