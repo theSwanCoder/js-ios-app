@@ -42,7 +42,7 @@
 - (instancetype)initWithReport:(JMReport *)report webEnvironment:(JMWebEnvironment *)webEnvironment {
     self = [super init];
     if (self) {
-        if ([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize) {
+        if ([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize.boolValue) {
             JMLog(@"run with VIZ");
             _reportLoader = [JMVisualizeReportLoader loaderWithReport:report
                                                            restClient:self.restClient
