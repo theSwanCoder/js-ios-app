@@ -35,8 +35,10 @@
 #import "JMNewScheduleVC.h"
 #import "JMWebEnvironment.h"
 
-NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifier = @"kJMReportViewerPrimaryWebEnvironmentIdentifier";
-NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportViewerSecondaryWebEnvironmentIdentifier";
+NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierViz    = @"kJMReportViewerPrimaryWebEnvironmentIdentifierViz";
+NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMReportViewerPrimaryWebEnvironmentIdentifierREST";
+NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierViz  = @"kJMReportViewerSecondaryWebEnvironmentIdentifierViz";
+NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMReportViewerSecondaryWebEnvironmentIdentifierREST";
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
@@ -416,9 +418,17 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 {
     NSString *webEnvironmentIdentifier;
     if (self.isChildReport) {
-        webEnvironmentIdentifier = kJMReportViewerSecondaryWebEnvironmentIdentifier;
+        if ([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize.boolValue) {
+            webEnvironmentIdentifier = kJMReportViewerSecondaryWebEnvironmentIdentifierViz;
+        } else {
+            webEnvironmentIdentifier = kJMReportViewerSecondaryWebEnvironmentIdentifierREST;
+        }
     } else {
-        webEnvironmentIdentifier = kJMReportViewerPrimaryWebEnvironmentIdentifier;
+        if ([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize.boolValue) {
+            webEnvironmentIdentifier = kJMReportViewerPrimaryWebEnvironmentIdentifierViz;
+        } else {
+            webEnvironmentIdentifier = kJMReportViewerPrimaryWebEnvironmentIdentifierREST;
+        }
     }
     return webEnvironmentIdentifier;
 }
