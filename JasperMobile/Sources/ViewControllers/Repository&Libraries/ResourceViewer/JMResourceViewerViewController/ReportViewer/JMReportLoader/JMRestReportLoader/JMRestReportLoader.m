@@ -278,9 +278,10 @@
         [paramsForAllCharts addObject:chartParams];
     }
 
+    NSString *domain = [self.restClient.serverProfile.serverUrl stringByDeletingLastPathComponent];
     NSDictionary *params = @{
             @"componentsData" : paramsForAllCharts,
-            @"domain"     : @"http://mobiledemo2.jaspersoft.com",
+            @"domain"         : domain
     };
     JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.renderFusionWidgets"
                                                                    parameters:params];
