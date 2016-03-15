@@ -247,6 +247,7 @@
 "action.title.openIn" = "Open with...";
 "action.title.accept" = "Accept";
 "action.title.schedule" = "Schedule";
+"action.title.share" = "Share";
 
 /* External screens*/
 "action.title.showExternalDisplay" = "Show on TV";

@@ -237,37 +237,41 @@
                                      [self backButtonTapped:nil];
                                  }];
 
+    NSMutableArray *parametersArray = [NSMutableArray array];
     for (JSInputControlDescriptor *inputControlDescriptor in self.chagedInputControls) {
 
         JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
                                                                                value:inputControlDescriptor.selectedValues];
 
         NSString *URI = [inputControlDescriptor.uri stringByReplacingOccurrencesOfString:@"repo:" withString:@""];
-        [self.restClient updatedInputControlValuesForDashboardWithURI:URI
-                                                                  ids:nil
-                                                       selectedValues:@[reportParameter]
-                                                                async:NO
-                                                      completionBlock:^(JSOperationResult *result) {
-
-                                                          if (result.error) {
-                                                              if (result.error.code == JSSessionExpiredErrorCode) {
-                                                                  [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                              } else {
-                                                                  [JMUtils presentAlertControllerWithError:result.error completion:nil];
-                                                              }
-                                                          } else {
-                                                              JSInputControlState *state = result.objects.firstObject;
-                                                              inputControlDescriptor.state = state;
-                                                          }
-                                                      }];
+        
+        JSParameter *parameter = [JSParameter parameterWithName:URI value:@[reportParameter]];
+        [parametersArray addObject:parameter];
     }
-
-    [JMCancelRequestPopup dismiss];
-
-    [self.tableView reloadData];
-    if (completion) {
-        completion([self validateInputControls]);
-    }
+    
+    [self.restClient updatedInputControlValuesForDashboardWithParameters:parametersArray completionBlock:^(JSOperationResult * _Nullable result) {
+        [JMCancelRequestPopup dismiss];
+        if (result.error) {
+            if (result.error.code == JSSessionExpiredErrorCode) {
+                [JMUtils showLoginViewAnimated:YES completion:nil];
+            } else {
+                [JMUtils presentAlertControllerWithError:result.error completion:nil];
+            }
+        } else {
+            for (JSInputControlState *state in result.objects) {
+                for (JSInputControlDescriptor *inputControl in self.chagedInputControls) {
+                    if ([state.uuid isEqualToString:inputControl.uuid]) {
+                        inputControl.state = state;
+                        break;
+                    }
+                }
+            }
+        }
+        [self.tableView reloadData];
+        if (completion) {
+            completion([self validateInputControls]);
+        }
+    }];
 }
 
 #pragma mark - Helpers
@@ -277,7 +281,7 @@
         [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) { // Server validation
             if (dataIsValid) {
                 if (self.exitBlock) {
-                    self.exitBlock(self.chagedInputControls);
+                    self.exitBlock([self.chagedInputControls count] > 0);
                 }
                 [self.navigationController popViewControllerAnimated:YES];
             }

@@ -85,6 +85,8 @@
             return @"action.title.openIn";
         case JMMenuActionsViewAction_Schedule:
             return @"action.title.schedule";
+        case JMMenuActionsViewAction_Share:
+            return @"action.title.share";
         case JMMenuActionsViewAction_ShowExternalDisplay:
             return @"action.title.showExternalDisplay";
         case JMMenuActionsViewAction_HideExternalDisplay:
@@ -130,6 +132,9 @@
         case JMMenuActionsViewAction_OpenIn:
             return @"open_in_new";
         case JMMenuActionsViewAction_Schedule:
+            return @"schedule_action";
+        case JMMenuActionsViewAction_Share:
+#warning SHOULD UPDATE IMAGE FOR THIS ITEM
             return @"schedule_action";
         case JMMenuActionsViewAction_ShowExternalDisplay:
             return @"tv_action";

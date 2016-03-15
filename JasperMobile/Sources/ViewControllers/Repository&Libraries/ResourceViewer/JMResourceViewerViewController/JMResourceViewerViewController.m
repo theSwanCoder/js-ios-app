@@ -27,6 +27,7 @@
 #import "JSResourceLookup+Helpers.h"
 #import "JMMainNavigationController.h"
 #import "JMWebEnvironment.h"
+#import "UIView+Additions.h"
 
 NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewerWebEnvironmentIdentifier";
 
@@ -138,6 +139,8 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
     JMMenuActionsViewAction availableActions = [super availableActionForResource:resource];
+    availableActions |= JMMenuActionsViewAction_Share;
+
     BOOL isSaveReport = [self.resourceLookup isSavedReport];
     BOOL isFile = [self.resourceLookup isFile];
     if ( !(isSaveReport || isFile) ) {
@@ -151,6 +154,8 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
     [super actionsView:view didSelectAction:action];
     if (action == JMMenuActionsViewAction_Print) {
         [self printResource];
+    } else if (action == JMMenuActionsViewAction_Share) {
+        [self shareResource];
     }
 }
 
@@ -208,6 +213,36 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
                                                completionHandler:completionHandler];
         }
     }
+}
+
+- (void)shareResource
+{
+    // What's New
+    NSString *textForShare = [NSString stringWithFormat:@"Look at this awesome report, builded via %@!", kJMAppName];
+    UIImage *imageForSharing = [self.resourceView renderedImage];
+    
+    NSArray *objectsToShare = @[textForShare, imageForSharing];
+  
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
+    
+    NSMutableArray *excludeActivities = [@[UIActivityTypePrint,
+                                           UIActivityTypeCopyToPasteboard,
+                                           UIActivityTypeAssignToContact,
+                                           UIActivityTypeAddToReadingList,
+                                           UIActivityTypeAirDrop] mutableCopy];
+    if ([JMUtils isSystemVersion9]) {
+        [excludeActivities addObject:UIActivityTypeOpenInIBooks];
+    }
+    
+    activityVC.excludedActivityTypes = excludeActivities;
+    
+    if ( [activityVC respondsToSelector:@selector(popoverPresentationController)] ) {
+        activityVC.popoverPresentationController.sourceView = self.view;
+        activityVC.popoverPresentationController.sourceRect = self.navigationController.navigationBar.frame;
+    }
+    
+    [self presentViewController:activityVC animated:YES completion:nil];
+
 }
 
 #pragma mark - UIPrintInteractionControllerDelegate
