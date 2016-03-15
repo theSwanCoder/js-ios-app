@@ -183,23 +183,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     if ([self isContentOnTV]) {
         return;
     }
-
-    CGFloat initialScaleViewport = 0.75;
-    if ([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize.boolValue) {
-        BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-        if (isCompactWidth) {
-            initialScaleViewport = 0.25;
-        }
-    } else {
-        initialScaleViewport = 2;
-        if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
-            initialScaleViewport = 1;
-        }
-    }
-
-    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
 }
 
 - (UIView *)resourceView
@@ -472,16 +455,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         if (success) {
             toolbar.enable = YES;
             [strongSelf.report updateCurrentPage:toPage];
-            if (!([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize.boolValue)) {
-                // fix an issue in webview after zooming and changing page (black areas)
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    if ([strongSelf isContentOnTV]) {
-                        if ([strongSelf.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-                            [strongSelf.reportLoader updateViewportScaleFactorWithValue:3];
-                        }
-                    }
-                });
-            }
         } else {
             [strongSelf handleError:error];
         }
@@ -667,18 +640,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 -(void)reportLoader:(id<JMReportLoaderProtocol>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
 {
     [[UIApplication sharedApplication] openURL:urlReference];
-}
-
-- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName
-{
-    // sample
-    // [self.reportLoader exportReportWithFormat:@"pdf"];
-    // html format currently vis.js doesn't support
-    // here we can receive link on file.
-    if (self.exportCompletion) {
-        self.exportCompletion(resourcePath);
-        self.exportCompletion = nil;
-    }
 }
 
 #pragma mark - WebView helpers
@@ -878,15 +839,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Work with external screen
 - (UIView *)viewToShowOnExternalWindow
 {
-    CGFloat initialScaleViewport = 0.75;
-    if (!([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize.boolValue)) {
-        initialScaleViewport = 3;
-    }
-
-    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
-
     UIView *view = [UIView new];
     UIView *reportView = [self resourceView];
 

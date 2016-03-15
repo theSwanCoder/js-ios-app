@@ -84,9 +84,8 @@
 }
 
 - (void)minimizeDashlet {
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileDashboard.minimizeDashlet();";
-    request.parametersAsString = @"";
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"MobileDashboard.minimizeDashlet"
+                                                                parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);

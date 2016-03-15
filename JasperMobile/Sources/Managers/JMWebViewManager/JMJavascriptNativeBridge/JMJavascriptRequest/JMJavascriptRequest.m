@@ -28,50 +28,27 @@
 
 #import "JMJavascriptRequest.h"
 
-typedef NS_ENUM(NSInteger, JMJavascriptRequestType) {
-    JMJavascriptRequestTypeVisualize,
-    JMJavascriptRequestTypeCustom
-};
-
 @interface JMJavascriptRequest()
-@property (nonatomic) JMJavascriptRequestType type;
+@property (nonatomic, strong) NSDictionary *parameters;
+@property (nonatomic, strong) NSString *parametersAsString;
 @end
 
 @implementation JMJavascriptRequest
 
 #pragma mark - Init
-- (instancetype)initWithCommand:(NSString *)command parametersAsString:(NSString *)parametersAsString
+- (instancetype __nullable)initWithCommand:(NSString * __nonnull)command parameters:(NSDictionary * __nullable)parameters
 {
     self = [super init];
     if (self) {
         _command = command;
-        _parametersAsString = parametersAsString;
-        _type = JMJavascriptRequestTypeVisualize;
+        _parameters = parameters;
     }
     return self;
 }
 
-+ (instancetype)requestWithCommand:(NSString *)command parametersAsString:(NSString *)parametersAsString
++ (instancetype __nullable)requestWithCommand:(NSString * __nonnull)command parameters:(NSDictionary * __nullable)parameters
 {
-    return [[self alloc] initWithCommand:command parametersAsString:parametersAsString];
-}
-
-- (instancetype)initWithScript:(NSString *)script
-{
-    self = [super init];
-    if (self) {
-        [self parseScript:script];
-        if (!_command) {
-            return nil;
-        }
-        _type = JMJavascriptRequestTypeCustom;
-    }
-    return self;
-}
-
-+ (instancetype)requestWithScript:(NSString *)script
-{
-    return [[self alloc] initWithScript:script];
+    return [[self alloc] initWithCommand:command parameters:parameters];
 }
 
 #pragma mark - NSCopying + NSObject Protocol
@@ -109,68 +86,28 @@ typedef NS_ENUM(NSInteger, JMJavascriptRequestType) {
 - (NSString *)fullJavascriptRequestString
 {
     NSString *command = self.command;
-    NSString *parameters = self.parametersAsString ?: @"";
+    self.parametersAsString = [self prepareParamsAsStringFromParameters:self.parameters];
     NSString *fullJavascriptString;
-    if (self.type == JMJavascriptRequestTypeVisualize) {
-        fullJavascriptString = [NSString stringWithFormat:@"%@(%@);", command, parameters];
-    } else if (self.type == JMJavascriptRequestTypeCustom) {
-        fullJavascriptString = [NSString stringWithFormat:@"JasperMobile.Helper.execCustomScript(%@, %@);", command, parameters];
-    }
+    fullJavascriptString = [NSString stringWithFormat:@"%@(%@);", command, self.parametersAsString];
     JMLog(@"fullJavascriptString: %@", fullJavascriptString);
     return fullJavascriptString;
 }
 
 #pragma mark - Helpers
-- (void)parseScript:(NSString *)script
+- (NSString *)prepareParamsAsStringFromParameters:(NSDictionary *)parameters
 {
-    NSString *fullCommand = [self fullCommandFromScript:script];
-    JMLog(@"full command: %@", fullCommand);
-
-    NSError *error;
-    NSRegularExpression *commandRegex = [NSRegularExpression regularExpressionWithPattern:@"(\\S*)\\(([\\s*\\S*]*)\\);"
-                                                                                 options:NSRegularExpressionCaseInsensitive
-                                                                                   error:&error];
-    NSArray *matches = [commandRegex matchesInString:fullCommand
-                                             options:NSMatchingReportProgress
-                                               range:NSMakeRange(0, fullCommand.length)];
-
-    if (matches.count == 1) {
-        NSTextCheckingResult *matchResult = matches.firstObject;
-
-        if (matchResult.numberOfRanges == 3) {
-            NSRange commandRange = [matchResult rangeAtIndex:1];
-            NSRange parametersRange = [matchResult rangeAtIndex:2];
-
-            _command = [fullCommand substringWithRange:commandRange];
-            _parametersAsString = [fullCommand substringWithRange:parametersRange];
-        }
-    }
-}
-
-- (NSString *)fullCommandFromScript:(NSString *)script
-{
-    NSString *fullCommand;
-
-    NSRange scriptRange = NSMakeRange(0, script.length);
-
-    NSError *error;
-    NSRegularExpression *scriptRegex = [NSRegularExpression regularExpressionWithPattern:@">([\\s*\\S*]*)<\\/script>"
-                                                                                 options:NSRegularExpressionCaseInsensitive
-                                                                                   error:&error];
-    NSArray *matches = [scriptRegex matchesInString:script
-                                            options:NSMatchingReportProgress
-                                              range:scriptRange];
-
-    if (matches.count == 1) {
-        NSTextCheckingResult *matchResult = matches.firstObject;
-        // select range
-        NSRange selectedJSRange = [matchResult rangeAtIndex:1];
-        fullCommand = [script substringWithRange:selectedJSRange];
+    if (!parameters) {
+        return @"";
     }
 
-    fullCommand = [fullCommand stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSError *serializeError;
+    NSData *paramsData = [NSJSONSerialization dataWithJSONObject:parameters
+                                                         options:NSJSONWritingPrettyPrinted
+                                                           error:&serializeError];
 
-    return fullCommand;
+    NSString *paramsDataAsString = [[NSString alloc] initWithData:paramsData
+                                               encoding:NSUTF8StringEncoding];
+    return paramsDataAsString;
 }
 
 @end

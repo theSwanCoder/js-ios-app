@@ -145,13 +145,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     }];
 }
 
-- (void)applyParameters:(NSString *)parametersAsString
+- (void)applyParameters:(NSDictionary *)parameters
 {
+    // TODO: replace received parameter for dictionary
     JMLog(@"%@", NSStringFromSelector(_cmd));
-    JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest new];
-    applyParamsRequest.command = @"JasperMobile.Dashboard.API.applyParams";
-
-    applyParamsRequest.parametersAsString = parametersAsString;
+    JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.applyParams"
+                                                                           parameters:parameters];
     [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
@@ -174,9 +173,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)maximizeDashlet:(JMDashlet *)dashlet
 {
     JMLog(@"%@", NSStringFromSelector(_cmd));
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Dashboard.API.maximizeDashlet";
-    request.parametersAsString = dashlet.identifier;
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.maximizeDashlet"
+                                                                parameters:@{
+                                                                        @"identifier" : dashlet != nil ? dashlet.identifier : @"null"
+                                                                }];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
@@ -189,9 +189,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)minimizeDashlet:(JMDashlet *)dashlet
 {
     JMLog(@"%@", NSStringFromSelector(_cmd));
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Dashboard.API.minimizeDashlet";
-    request.parametersAsString = dashlet.identifier;
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.minimizeDashlet"
+                                                                parameters:@{
+                                                                        @"identifier" : dashlet != nil ? dashlet.identifier : @"null"
+                                                                }];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
@@ -203,29 +204,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)minimizeDashlet
 {
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Dashboard.API.minimizeDashlet";
-    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        if (error) {
-            JMLog(@"error: %@", error);
-        } else {
-            JMLog(@"parameters: %@", parameters);
-        }
-    }];
-}
-
-- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
-{
-    BOOL isInitialScaleFactorSet = self.visualizeManager.viewportScaleFactor > 0.01;
-    BOOL isInitialScaleFactorTheSame = fabs(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49;
-    if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
-        self.visualizeManager.viewportScaleFactor = scaleFactor;
-
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"JasperMobile.Helper.updateViewPortScale";
-        request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
-        [self.webEnvironment sendJavascriptRequest:request completion:nil];
-    }
+    [self minimizeDashlet:nil];
 }
 
 #pragma mark - Private API
@@ -276,7 +255,9 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                        if (success) {
                                            // load vis into web environment
                                            JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
-                                                                                                            parametersAsString:[NSString stringWithFormat:@"'%@'", strongSelf.visualizeManager.visualizePath]];
+                                                                                                                    parameters:@{
+                                                                                                                            @"scriptURL" : strongSelf.visualizeManager.visualizePath,
+                                                                                                                    }];
                                            [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
                                                                                  completion:^(NSDictionary *params, NSError *error) {
                                                                                      if (error) {
@@ -382,23 +363,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     JMDashboardLoaderCompletion heapBlock = [completion copy];
     // run
-    JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
+    JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.runDashboard"
+                                                                   parameters:@{
+                                                                           @"uri" : self.dashboard.resourceURI,
+                                                                           @"is_for_6_0" : @([JMUtils isServerAmber]),
+                                                                   }];
     runRequest.command = @"JasperMobile.Dashboard.API.runDashboard";
-
-    NSString *uriParam = [NSString stringWithFormat:@"'uri' : '%@'", self.dashboard.resourceURI];
-    NSString *requestParameters;
-    BOOL isServerAmber = [JMUtils isServerAmber];
-    NSString *isServerAmberParam;
-    if (isServerAmber) {
-        isServerAmberParam = @"'is_for_6_0' : true";
-    } else {
-        isServerAmberParam = @"'is_for_6_0' : false";
-    }
-    requestParameters = [NSString stringWithFormat:@"{%@, %@}",
-                                                   isServerAmberParam,
-                                                   uriParam];
-    runRequest.parametersAsString = requestParameters;
-
     __weak typeof(self)weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;

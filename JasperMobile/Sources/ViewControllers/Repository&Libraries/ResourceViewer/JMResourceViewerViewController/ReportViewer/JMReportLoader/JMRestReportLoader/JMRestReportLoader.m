@@ -87,9 +87,11 @@
 {
 //    [self.webEnvironment clean];
 
-    JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest new];
-    injectContentRequest.command = @"JasperMobile.Report.REST.API.injectContent";
-    injectContentRequest.parametersAsString = @"\"\"";
+    NSDictionary *params = @{
+            @"HTMLString" : @""
+    };
+    JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
+                                                                             parameters:params];
     [self.webEnvironment sendJavascriptRequest:injectContentRequest
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"params: %@", params);
@@ -145,7 +147,7 @@
 
 - (void)renderReportWithCompletion:(void(^)(BOOL, NSError *))completion
 {
-    NSString *bodyHTMLString = self.report.HTMLString;
+
 
     [self.restClient reportComponentForReportWithExecutionId:self.report.requestId
                                                   pageNumber:self.report.currentPage
@@ -153,40 +155,30 @@
                                                       if (components) {
                                                           self.report.reportComponents = components;
 
+                                                          NSString *bodyHTMLString = self.report.HTMLString;
+
                                                           if (self.report.isElasticChart) {
                                                               JSReportComponent *component = self.report.reportComponents.firstObject;
                                                               NSDictionary *hcinstacedata = ((JSReportComponentChartStructure *)component.structure).hcinstancedata;
                                                               NSString *renderTo = hcinstacedata[@"renderto"];
-                                                              NSString *HTMLString = [NSString stringWithFormat:@"\"<div id=\\\"%@\\\"></div>\"", renderTo];
-
-                                                              [self renderReportWithHTML:HTMLString completion:completion];
-                                                          } else {
-                                                              [self renderReportWithHTML:[NSString stringWithFormat:@"\"%@\"", [self removeSpecSymbolsFromSting:bodyHTMLString]] completion:completion];
+                                                              bodyHTMLString = [NSString stringWithFormat:@"<div id='%@'></div>", renderTo];
                                                           }
+
+                                                          [self renderReportWithHTML:bodyHTMLString
+                                                                          completion:completion];
                                                       } else {
                                                           // TODO: add error handling
                                                       }
                                                   }];
 }
 
-- (NSString *)removeSpecSymbolsFromSting:(NSString *)string
-{
-    NSString *cleanString = string;
-    cleanString = [cleanString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-    cleanString = [cleanString stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-    cleanString = [cleanString stringByReplacingOccurrencesOfString:@"\r\n" withString:@""];
-    cleanString = [cleanString stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-    cleanString = [cleanString stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
-    cleanString = [cleanString stringByReplacingOccurrencesOfString:@"  " withString:@" "];
-    cleanString = [cleanString stringByReplacingOccurrencesOfString:@"   " withString:@" "];
-    cleanString = [cleanString stringByReplacingOccurrencesOfString:@"    " withString:@" "];
-    return cleanString;
-}
-
 - (void)renderReportWithHTML:(NSString *)HTMLString completion:(void(^ __nullable)(BOOL, NSError *))completion
 {
+    NSDictionary *params = @{
+            @"HTMLString" : HTMLString
+    };
     JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
-                                                                     parametersAsString:HTMLString];
+                                                                             parameters:params];
 
     [self.webEnvironment sendJavascriptRequest:injectContentRequest
                                     completion:^(NSDictionary *params, NSError *error) {
@@ -248,18 +240,12 @@
 {
     NSDictionary *chartParams = [self highChartParametersFromComponenents:component];
 
-    NSError *serializeError;
-    NSData *componentData = [NSJSONSerialization dataWithJSONObject:chartParams
-                                                            options:NSJSONWritingPrettyPrinted
-                                                              error:&serializeError];
-
-    NSString *componentDataAsString = [[NSString alloc] initWithData:componentData
-                                                            encoding:NSUTF8StringEncoding];
-
-    //renderAdHocHighchart
-    NSString *parametersAsString = [NSString stringWithFormat:@"%@, %@", @"__renderHighcharts", componentDataAsString];
+    NSDictionary *params = @{
+            @"scriptName"     : @"__renderHighcharts",
+            @"componentsData" : chartParams,
+    };
     JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.renderAdHocHighchart"
-                                                                   parametersAsString:parametersAsString];
+                                                                           parameters:params];
 
     [self.webEnvironment sendJavascriptRequest:chartRenderRequest
                                     completion:^(NSDictionary *params, NSError *error) {
@@ -277,17 +263,12 @@
         [paramsForAllCharts addObject:chartParams];
     }
 
-    NSError *serializeError;
-    NSData *componentData = [NSJSONSerialization dataWithJSONObject:paramsForAllCharts
-                                                            options:NSJSONWritingPrettyPrinted
-                                                              error:&serializeError];
-
-    NSString *componentDataAsString = [[NSString alloc] initWithData:componentData
-                                                            encoding:NSUTF8StringEncoding];
-
-    NSString *parametersAsString = [NSString stringWithFormat:@"%@, %@", @"__renderHighcharts", componentDataAsString];
+    NSDictionary *params = @{
+            @"scriptName"     : @"__renderHighcharts",
+            @"componentsData" : paramsForAllCharts,
+    };
     JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.renderHighcharts"
-                                                                   parametersAsString:parametersAsString];
+                                                                           parameters:params];
 
     [self.webEnvironment sendJavascriptRequest:chartRenderRequest
                                     completion:^(NSDictionary *params, NSError *error) {
@@ -305,18 +286,12 @@
         [paramsForAllCharts addObject:chartParams];
     }
 
-    NSError *serializeError;
-    NSData *componentData = [NSJSONSerialization dataWithJSONObject:paramsForAllCharts
-                                                            options:NSJSONWritingPrettyPrinted
-                                                              error:&serializeError];
-
-    NSString *componentDataAsString = [[NSString alloc] initWithData:componentData
-                                                            encoding:NSUTF8StringEncoding];// paramsArray, jrsDomain
-
-
-    NSString *parametersAsString = [NSString stringWithFormat:@"%@, %@", componentDataAsString, @"\"http://mobiledemo2.jaspersoft.com\""];
+    NSDictionary *params = @{
+            @"componentsData" : paramsForAllCharts,
+            @"domain"     : @"http://mobiledemo2.jaspersoft.com",
+    };
     JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.renderFusionWidgets"
-                                                                   parametersAsString:parametersAsString];
+                                                                   parameters:params];
     [self.webEnvironment sendJavascriptRequest:chartRenderRequest
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"JasperMobile.Report.REST.API.renderChart");
@@ -332,8 +307,11 @@
 
     NSString *serverURLString = self.restClient.serverProfile.serverUrl;
     NSString *requireJSURLString = [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/require/require-2.1.6.src.js"];
+    NSDictionary *params = @{
+            @"scriptURL" : requireJSURLString,
+    };
     JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
-                                                                   parametersAsString:[NSString stringWithFormat:@"\"%@\"", requireJSURLString]];
+                                                                             parameters:params];
     [self.webEnvironment sendJavascriptRequest:requireJSLoadRequest
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"JasperMobile.Helper.loadScript");
@@ -342,8 +320,11 @@
                                         if (params) {
 
                                             NSString *renderChartJSURLString = [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/resources/highcharts.chart.producer.js"];
+                                            params = @{
+                                                    @"scriptURL" : renderChartJSURLString,
+                                            };
                                             JMJavascriptRequest *renderChartJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
-                                                                                                             parametersAsString:[NSString stringWithFormat:@"\"%@\"", renderChartJSURLString]];
+                                                                                                                         parameters:params];
 
                                             [self.webEnvironment sendJavascriptRequest:renderChartJSLoadRequest
                                                                             completion:^(NSDictionary *params, NSError *error) {
@@ -369,8 +350,11 @@
     void(^heapBlock)(BOOL) = [completion copy];
     NSString *serverURLString = self.restClient.serverProfile.serverUrl;
     NSString *requireJSURLString = [NSString stringWithFormat:@"%@//%@", serverURLString, @"fusion/maps/FusionCharts.js"];
+    NSDictionary *params = @{
+            @"scriptURL" : requireJSURLString,
+    };
     JMJavascriptRequest *fusionJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
-                                                                     parametersAsString:[NSString stringWithFormat:@"\"%@\"", requireJSURLString]];
+                                                                            parameters:params];
     [self.webEnvironment sendJavascriptRequest:fusionJSLoadRequest
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"JasperMobile.Helper.loadScript");

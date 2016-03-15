@@ -49,8 +49,6 @@
 + (nullable id<JMReportLoaderProtocol>)loaderWithReport:(nonnull JSReport *)report
                                            restClient:(nonnull JSRESTBase *)restClient
                                        webEnvironment:(nonnull JMWebEnvironment *)webEnvironment;
-- (void)exportReportWithFormat:(NSString * __nonnull)exportFormat;
-- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end
 
 @protocol JMReportLoaderDelegate <NSObject>
@@ -58,6 +56,5 @@
 - (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *__nonnull)resourceLookup withParameters:(NSArray *__nullable)reportParameters;
 - (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventWithError:(NSError *__nonnull)error;
 - (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoder didReceiveOnClickEventForReference:(NSURL *__nonnull)urlReference;
-- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOutputResourcePath:(NSString *__nonnull)resourcePath fullReportName:(NSString *__nonnull)fullReportName;
 @end
 

@@ -75,23 +75,19 @@ var JasperMobile = {
                 viewport.setAttribute('content', viewPortContent);
             }
         },
-        updateDocumentZoom: function(zoom) {
-            document.body.style.zoom = zoom;
-        },
-        execCustomScript: function(script, params) {
-            script(params);
-        },
-        loadScript: function(scriptPath) {
+        loadScript: function(parameters) {
+            var scriptURL = parameters["scriptURL"];
+
             var isScriptAlreadyLoaded = false;
             var allScripts = document.head.getElementsByTagName("script");
 
             for(var i=0; i < allScripts.length; i++) {
                 var script = allScripts[i];
-                if (script.src === scriptPath) {
+                if (script.src === scriptURL) {
                     isScriptAlreadyLoaded = true;
                     JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Helper.loadScript", {
                         "params" : {
-                            "script_path" : scriptPath
+                            "script_path" : scriptURL
                         }
                     });
                     break;
@@ -99,11 +95,11 @@ var JasperMobile = {
             }
             if (!isScriptAlreadyLoaded) {
                 var scriptTag = document.createElement('script');
-                scriptTag.src = scriptPath;
+                scriptTag.src = scriptURL;
                 scriptTag.onload = function() {
                     JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Helper.loadScript", {
                         "params" : {
-                            "script_path" : scriptPath
+                            "script_path" : scriptURL
                         }
                     });
                 };
@@ -169,8 +165,10 @@ JasperMobile.Report = {
 
 // REST Reports
 JasperMobile.Report.REST.API = {
-    injectContent: function(content) {
-
+    parameters : {},
+    injectContent: function(contentObject) {
+        JasperMobile.Report.REST.API.parameters = contentObject;
+        var content = contentObject["HTMLString"];
         var div = document.getElementById('container');
         div.innerHTML = content;
 
@@ -179,12 +177,19 @@ JasperMobile.Report.REST.API = {
         } else {
             // setup scaling
             var childs = document.getElementById('container').childNodes;
-            if (childs.length > 0) {
-                var secondChild = childs[1];
-                if (secondChild != undefined) {
-                    secondChild.style.transform = "scale(" + innerWidth / parseInt(secondChild.style.width) + ")";
-                    secondChild.style.transformOrigin = "0% 0%";
+            var table = undefined;
+            for (var i = 0; i < childs.length; i++) {
+                var child = childs[i];
+                // TODO: investigate other cases
+                if (child.nodeName == "TABLE") {
+                    table = child;
+                    break;
                 }
+            }
+
+            if (table != undefined) {
+                table.style.transform = "scale(" + innerWidth / parseInt(table.style.width) + ")";
+                table.style.transformOrigin = "0% 0%";
             }
         }
         JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
@@ -194,28 +199,47 @@ JasperMobile.Report.REST.API = {
             "isReady" : document.getElementById("container") != null
         });
     },
-    renderAdHocHighchart: function(script, params) {
+    renderAdHocHighchart: function(parameters) {
+        JasperMobile.Report.REST.API.parameters = parameters;
+
+        var scriptName = parameters["scriptName"];
+        var componentsData = parameters["componentsData"];
+
+        console.log("scriptName: " + scriptName);
+        console.log("componentsData: " + componentsData);
+
         var containerWidth = document.getElementById("container").offsetWidth;
         var containerHeight = document.getElementById("container").offsetHeight;
 
-        var chartDimensions = params["chartDimensions"];
+        // Update chart size
+        var chartDimensions = componentsData["chartDimensions"];
         chartDimensions["width"] = containerWidth;
         chartDimensions["height"] = containerHeight;
-        params["chartDimensions"] = chartDimensions;
-        script(params);
+
+        // set new chart size
+        componentsData["chartDimensions"] = chartDimensions;
+
+        // run script
+        window[scriptName](componentsData);
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.renderAdHocHighchart", {});
     },
-    renderHighcharts: function(script, paramsArray) {
-        for(var i=0; i < paramsArray.length; i++) {
-            var params = paramsArray[i];
-            script(params);
+    renderHighcharts: function(parameters) {
+        var scriptName = parameters["scriptName"];
+        var componentsData = parameters["componentsData"];
+
+        for(var i=0; i < componentsData.length; i++) {
+            var params = componentsData[i];
+            window[scriptName](params);
         }
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.renderHighcharts", {});
     },
-    renderFusionWidgets: function(paramsArray, jrsDomain) {
-        for(var i=0; i < paramsArray.length; i++) {
-            var params = paramsArray[i];
-            params["swfUrl"] = jrsDomain + params["swfUrl"];
+    renderFusionWidgets: function(parameters) {
+        var domain = parameters["domain"];
+        var componentsData = parameters["componentsData"];
+
+        for(var i=0; i < componentsData.length; i++) {
+            var params = componentsData[i];
+            params["swfUrl"] = domain + params["swfUrl"];
             JasperMobile.Report.REST.API.renderFusionWidget(params);
         }
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.renderFusionWidgets", {});
@@ -275,7 +299,7 @@ JasperMobile.Report.REST.API = {
 JasperMobile.Report.API = {
     report: null,
     runReport: function(params) {
-        var successFn = function() {
+        var successFn = function(status) {
             JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.API.runReport", {
                 "status" : status,
                 "pages" : JasperMobile.Report.API.report.data().totalPages
@@ -415,7 +439,7 @@ JasperMobile.Report.API = {
     refresh: function() {
         if (JasperMobile.Report.API.report) {
             JasperMobile.Report.API.report.refresh()
-                .done( function() {
+                .done( function(status) {
                         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.API.refresh", {
                             "status": status,
                             "pages": JasperMobile.Report.API.report.data().totalPages
@@ -462,7 +486,8 @@ JasperMobile.Report.API = {
             });
         }
     },
-    selectPage: function(page) {
+    selectPage: function(parameters) {
+        var page = parameters["pageNumber"];
         if (JasperMobile.Report.API.report) {
             JasperMobile.Report.API.report.pages(page).run()
                 .done(function (reportData) {
@@ -647,8 +672,9 @@ JasperMobile.Dashboard.API = {
             "params" : data.parameters
         });
     },
-    minimizeDashlet: function(dashletId) {
-        if (dashletId) {
+    minimizeDashlet: function(parameters) {
+        var dashletId = parameters["identifier"];
+        if (dashletId != "null") {
             JasperMobile.Dashboard.API.dashboardObject.updateComponent(dashletId, {
                 maximized: false,
                 interactive: false
@@ -694,8 +720,9 @@ JasperMobile.Dashboard.API = {
             });
         }
     },
-    maximizeDashlet: function(dashletId) {
-        if (dashletId) {
+    maximizeDashlet: function(parameters) {
+        var dashletId = parameters["identifier"];
+        if (dashletId != "null") {
             JasperMobile.Dashboard.API.dashboardObject.updateComponent(dashletId, {
                 maximized: true,
                 interactive: true
@@ -713,7 +740,7 @@ JasperMobile.Dashboard.API = {
                 });
             });
         } else {
-            JasperMobile.Callback.log("Try maximize dashelt without 'id'");
+            JasperMobile.Callback.log("Try maximize dashlet without 'id'");
         }
     },
     refresh: function() {

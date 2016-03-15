@@ -68,21 +68,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     [self configViewport];
 }
 
-#pragma mark - Rotation
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
-
-    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        CGFloat initialScaleViewport = 0.75;
-        BOOL isCompactWidth = newCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-        if (isCompactWidth) {
-            initialScaleViewport = 0.25;
-        }
-        [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
-}
-
 #pragma mark - Print
 - (void)printResource
 {
@@ -161,16 +146,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.webEnvironment resetZoom];
     });
-
-    CGFloat initialScaleViewport = 0.75;
-    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-    if (isCompactWidth) {
-        initialScaleViewport = 0.25;
-    }
-
-    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
 }
 
 - (void)setupLeftBarButtonItems
@@ -616,9 +591,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 #pragma mark - Work with external screen
 - (UIView *)viewToShowOnExternalWindow
 {
-    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
-    }
     UIView *dashboardView = self.webEnvironment.webView;
     dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
     return dashboardView;
@@ -698,32 +670,18 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     inputControlsViewController.exitBlock = ^(BOOL inputControlsDidChanged) {
         if (inputControlsDidChanged) {
             __typeof(self) strongSelf = weakSelf;
-            
-            NSString *parametersAsString = @"{";
+            NSMutableDictionary *parameters = [@{} mutableCopy];
             for (JSInputControlDescriptor *inputControlDescriptor in strongSelf.dashboard.inputControls) {
-                
-                NSString *inputControlID = inputControlDescriptor.uuid;
-                
                 NSString *componentID;
-                
                 for (JSDashboardComponent *component in strongSelf.dashboard.components) {
-                    if ([component.ownerResourceParameterName isEqualToString:inputControlID]) {
+                    if ([component.ownerResourceParameterName isEqualToString:inputControlDescriptor.uuid]) {
                         componentID = component.identifier;
                     }
                 }
-                
                 NSArray *values = [inputControlDescriptor selectedValues];
-                NSString *valuesAsString = @"";
-                for (NSString *value in values) {
-                    valuesAsString = [valuesAsString stringByAppendingFormat:@"\"%@\",", value];
-                }
-                
-                parametersAsString = [parametersAsString stringByAppendingFormat:@"\"%@\":[%@], ", componentID, valuesAsString];
+                parameters[componentID] = values;
             }
-            parametersAsString = [parametersAsString stringByAppendingString:@"}"];
-            JMLog(@"parametersAsString: %@", parametersAsString);
-            
-            [strongSelf.dashboardLoader applyParameters:parametersAsString];
+            [strongSelf.dashboardLoader applyParameters:parameters];
         }
     };
 
