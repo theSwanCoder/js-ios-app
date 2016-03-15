@@ -28,7 +28,7 @@
 
 #import "JMRestReportLoader.h"
 #import "JMWebEnvironment.h"
-
+#import "JSRestClient.h"
 
 
 @interface JSReportLoader (LoadHTML)
@@ -148,6 +148,7 @@
     NSString *bodyHTMLString = self.report.HTMLString;
 
     [self.restClient reportComponentForReportWithExecutionId:self.report.requestId
+                                                  pageNumber:self.report.currentPage
                                                   completion:^(NSArray <JSReportComponent *>*components, NSError *error) {
                                                       if (components) {
                                                           self.report.reportComponents = components;
