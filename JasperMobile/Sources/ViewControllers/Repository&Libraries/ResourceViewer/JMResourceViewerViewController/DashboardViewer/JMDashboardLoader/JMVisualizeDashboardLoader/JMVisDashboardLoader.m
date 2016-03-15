@@ -268,10 +268,27 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
             if (success) {
                 JMLog(@"visuzalise.js did end load");
                 NSString *baseURLString = self.restClient.serverProfile.serverUrl;
-                NSString *htmlString = [self.visualizeManager htmlStringForDashboard];
-                [self.webEnvironment loadHTML:htmlString
+                __weak __typeof(self) weakSelf = self;
+                [self.webEnvironment loadHTML:self.visualizeManager.htmlString
                                       baseURL:[NSURL URLWithString:baseURLString]
-                                   completion:heapBlock];
+                                   completion:^(BOOL isSuccess, NSError *error) {
+                                       __typeof(self) strongSelf = weakSelf;
+                                       if (success) {
+                                           // load vis into web environment
+                                           JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+                                                                                                            parametersAsString:[NSString stringWithFormat:@"'%@'", strongSelf.visualizeManager.visualizePath]];
+                                           [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
+                                                                                 completion:^(NSDictionary *params, NSError *error) {
+                                                                                     if (error) {
+                                                                                         heapBlock(NO, error);
+                                                                                     } else {
+                                                                                         heapBlock(YES, nil);
+                                                                                     }
+                                                                                 }];
+                                       } else {
+                                           heapBlock(NO, error);
+                                       }
+                                   }];
             } else {
                 // TODO: handle this error
                 JMLog(@"Error loading visualize.js");

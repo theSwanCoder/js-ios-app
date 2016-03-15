@@ -89,8 +89,18 @@
                                              completion:^(BOOL isSuccess, NSError *error) {
                                                  __typeof(self) strongSelf = weakSelf;
                                                  if (isSuccess) {
-                                                     [strongSelf freshLoadReportWithPageNumber:page
-                                                                                    completion:completionBlock];
+                                                     // load vis into web environment
+                                                     JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+                                                                                                                      parametersAsString:[NSString stringWithFormat:@"'%@'", strongSelf.visualizeManager.visualizePath]];
+                                                     [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
+                                                                                     completion:^(NSDictionary *params, NSError *error) {
+                                                                                         if (error) {
+                                                                                             JMLog(@"error: %@", error);
+                                                                                         } else {
+                                                                                             [strongSelf freshLoadReportWithPageNumber:page
+                                                                                                                            completion:completionBlock];
+                                                                                         }
+                                                                                     }];
                                                  } else {
                                                      if (heapBlock) {
                                                          NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
@@ -149,8 +159,18 @@
                                                  completion:^(BOOL isSuccess, NSError *error) {
                                                      __typeof(self) strongSelf = weakSelf;
                                                      if (isSuccess) {
-                                                         [strongSelf freshLoadReportWithPageNumber:strongSelf.report.currentPage
-                                                                                        completion:completion];
+                                                         // load vis into web environment
+                                                         JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+                                                                                                                          parametersAsString:[NSString stringWithFormat:@"'%@'", strongSelf.visualizeManager.visualizePath]];
+                                                         [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
+                                                                                               completion:^(NSDictionary *params, NSError *error) {
+                                                                                                   if (error) {
+                                                                                                       JMLog(@"error: %@", error);
+                                                                                                   } else {
+                                                                                                       [strongSelf freshLoadReportWithPageNumber:strongSelf.report.currentPage
+                                                                                                                                      completion:completion];
+                                                                                                   }
+                                                                                               }];
                                                      } else {
                                                          NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
                                                          heapBlock(NO, vizError);
@@ -344,8 +364,10 @@
     [self.visualizeManager loadVisualizeJSWithCompletion:^(BOOL success, NSError *error){
         if (success) {
             JMLog(@"visuzalise.js did end load");
+
             NSString *baseURLString = self.restClient.serverProfile.serverUrl;
-            [self.report updateHTMLString:[self.visualizeManager htmlStringForReport] baseURLSring:baseURLString];
+            [self.report updateHTMLString:self.visualizeManager.htmlString
+                             baseURLSring:baseURLString];
 
             if (completion) {
                 completion(YES, nil);
