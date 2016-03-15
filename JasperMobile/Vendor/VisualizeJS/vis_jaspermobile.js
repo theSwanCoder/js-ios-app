@@ -78,15 +78,37 @@ var JasperMobile = {
         updateDocumentZoom: function(zoom) {
             document.body.style.zoom = zoom;
         },
-        injectContent: function(content) {
-            JasperMobile.Callback.log("injectContent");
-            JasperMobile.Callback.log(content);
-            var div = document.getElementById('container');
-            div.innerHTML = content;
-            JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Helper.injectContent", {});
-        },
         execCustomScript: function(script, params) {
             script(params);
+        },
+        loadScript: function(scriptPath) {
+            var isScriptAlreadyLoaded = false;
+            var allScripts = document.head.getElementsByTagName("script");
+
+            for(var i=0; i < allScripts.length; i++) {
+                var script = allScripts[i];
+                if (script.src === scriptPath) {
+                    isScriptAlreadyLoaded = true;
+                    JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Helper.loadScript", {
+                        "params" : {
+                            "script_path" : scriptPath
+                        }
+                    });
+                    break;
+                }
+            }
+            if (!isScriptAlreadyLoaded) {
+                var scriptTag = document.createElement('script');
+                scriptTag.src = scriptPath;
+                scriptTag.onload = function() {
+                    JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Helper.loadScript", {
+                        "params" : {
+                            "script_path" : scriptPath
+                        }
+                    });
+                };
+                document.head.appendChild(scriptTag);
+            }
         }
     }
 };
@@ -145,40 +167,32 @@ JasperMobile.Report = {
     API       : {}
 };
 
+// REST Reports
 JasperMobile.Report.REST.API = {
+    injectContent: function(content) {
+
+        var div = document.getElementById('container');
+        div.innerHTML = content;
+
+        if (content == "") {
+            JasperMobile.Callback.log("clear content");
+        } else {
+            // setup scaling
+            var childs = document.getElementById('container').childNodes;
+            if (childs.length > 0) {
+                var secondChild = childs[1];
+                if (secondChild != undefined) {
+                    secondChild.style.transform = "scale(" + innerWidth / parseInt(secondChild.style.width) + ")";
+                    secondChild.style.transformOrigin = "0% 0%";
+                }
+            }
+        }
+        JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
+    },
     verifyEnvironmentIsReady: function() {
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.verifyEnvironmentIsReady", {
             "isReady" : document.getElementById("container") != null
         });
-    },
-    loadScript: function(scriptPath) {
-        var isScriptAlreadyLoaded = false;
-        var allScripts = document.head.getElementsByTagName("script");
-
-        for(var i=0; i < allScripts.length; i++) {
-            var script = allScripts[i];
-            if (script.src === scriptPath) {
-                isScriptAlreadyLoaded = true;
-                JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.loadScript", {
-                    "params" : {
-                        "script_path" : scriptPath
-                    }
-                });
-                break;
-            }
-        }
-        if (!isScriptAlreadyLoaded) {
-            var scriptTag = document.createElement('script');
-            scriptTag.src = scriptPath;
-            scriptTag.onload = function() {
-                JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.loadScript", {
-                    "params" : {
-                        "script_path" : scriptPath
-                    }
-                });
-            };
-            document.head.appendChild(scriptTag);
-        }
     },
     renderAdHocHighchart: function(script, params) {
         var containerWidth = document.getElementById("container").offsetWidth;
@@ -257,7 +271,7 @@ JasperMobile.Report.REST.API = {
     }
 };
 
-// Report
+// VIZ Reports
 JasperMobile.Report.API = {
     report: null,
     runReport: function(params) {
@@ -516,7 +530,7 @@ JasperMobile.Report.API = {
     }
 };
 
-// Dashboard
+// VIZ Dashboards
 JasperMobile.Dashboard.API = {
     dashboardObject: {},
     refreshedDashboardObject: {},
@@ -916,9 +930,6 @@ JasperMobile.Dashboard.API = {
 // Start Point
 document.addEventListener("DOMContentLoaded", function(event) {
     JasperMobile.Callback.onScriptLoaded();
-    JasperMobile.Helper.updateViewPortScale(0.3);
-    JasperMobile.Helper.updateDocumentZoom(2);
-    document.body.bgColor = "#f3f3f3";
 });
 
 window.onerror = function myErrorHandler(message, source, lineno, colno, error) {

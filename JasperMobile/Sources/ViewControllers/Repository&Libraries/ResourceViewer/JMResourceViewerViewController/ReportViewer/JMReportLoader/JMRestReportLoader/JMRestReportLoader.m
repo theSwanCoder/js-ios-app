@@ -88,7 +88,7 @@
 //    [self.webEnvironment clean];
 
     JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest new];
-    injectContentRequest.command = @"JasperMobile.Helper.injectContent";
+    injectContentRequest.command = @"JasperMobile.Report.REST.API.injectContent";
     injectContentRequest.parametersAsString = @"\"\"";
     [self.webEnvironment sendJavascriptRequest:injectContentRequest
                                     completion:^(NSDictionary *params, NSError *error) {
@@ -106,13 +106,25 @@
             NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
 
             if (isCreated) {
-                [self renderReport];
+                [self renderReportWithCompletion:^(BOOL success, NSError *error) {
+                    if (success) {
+                        [super startLoadReportHTML];
+                    } else {
+                        // TODO: add error handling
+                    }
+                }];
             } else {
                 [self.webEnvironment loadHTML:htmlString
                                       baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
                                    completion:^(BOOL isSuccess, NSError *error) {
                                        if (isSuccess) {
-                                           [self renderReport];
+                                           [self renderReportWithCompletion:^(BOOL success, NSError *error) {
+                                               if (success) {
+                                                       [super startLoadReportHTML];
+                                               } else {
+                                                   // TODO: add error handling
+                                               }
+                                           }];
                                        } else {
                                            JMLog(@"error: %@", error);
                                        }
@@ -131,7 +143,7 @@
     }];
 }
 
-- (void)renderReport
+- (void)renderReportWithCompletion:(void(^)(BOOL, NSError *))completion
 {
     NSString *bodyHTMLString = self.report.HTMLString;
 
@@ -146,15 +158,13 @@
                                                               NSString *renderTo = hcinstacedata[@"renderto"];
                                                               NSString *HTMLString = [NSString stringWithFormat:@"\"<div id=\\\"%@\\\"></div>\"", renderTo];
 
-                                                              [self renderReportWithHTML:HTMLString];
+                                                              [self renderReportWithHTML:HTMLString completion:completion];
                                                           } else {
-                                                              [self renderReportWithHTML:[NSString stringWithFormat:@"\"%@\"", [self removeSpecSymbolsFromSting:bodyHTMLString]]];
+                                                              [self renderReportWithHTML:[NSString stringWithFormat:@"\"%@\"", [self removeSpecSymbolsFromSting:bodyHTMLString]] completion:completion];
                                                           }
                                                       } else {
                                                           // TODO: add error handling
                                                       }
-
-                                                      [super startLoadReportHTML];
                                                   }];
 }
 
@@ -172,14 +182,14 @@
     return cleanString;
 }
 
-- (void)renderReportWithHTML:(NSString *)HTMLString
+- (void)renderReportWithHTML:(NSString *)HTMLString completion:(void(^ __nullable)(BOOL, NSError *))completion
 {
-    JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.injectContent"
+    JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
                                                                      parametersAsString:HTMLString];
 
     [self.webEnvironment sendJavascriptRequest:injectContentRequest
                                     completion:^(NSDictionary *params, NSError *error) {
-                                        JMLog(@"JasperMobile.Helper.injectContent");
+                                        JMLog(@"JasperMobile.Report.REST.API.injectContent");
                                         JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
 
@@ -197,6 +207,9 @@
                                             [self loadFusionScriptsWithCompletion:^(BOOL success) {
                                                 if (success) {
                                                     [self renderFusionWidgetsWithComponents:fusionComponents];
+                                                    if (completion) {
+                                                        completion(YES, nil);
+                                                    }
                                                 } else {
                                                     //TODO: handle errors
                                                 }
@@ -212,10 +225,20 @@
                                                     } else {
                                                         [self renderHighchartsWithComponents:highchartComponents];
                                                     }
+                                                    if (completion) {
+                                                        completion(YES, nil);
+                                                    }
                                                 } else {
                                                     //TODO: handle errors
                                                 }
                                             }];
+                                        }
+
+                                        // report without chart scripts
+                                        if (fusionComponents.count == 0 && highchartComponents.count == 0) {
+                                            if (completion) {
+                                                completion(YES, nil);
+                                            }
                                         }
                                     }];
 }
@@ -308,22 +331,22 @@
 
     NSString *serverURLString = self.restClient.serverProfile.serverUrl;
     NSString *requireJSURLString = [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/require/require-2.1.6.src.js"];
-    JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.loadScript"
+    JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
                                                                    parametersAsString:[NSString stringWithFormat:@"\"%@\"", requireJSURLString]];
     [self.webEnvironment sendJavascriptRequest:requireJSLoadRequest
                                     completion:^(NSDictionary *params, NSError *error) {
-                                        JMLog(@"JasperMobile.Report.REST.API.loadScript");
+                                        JMLog(@"JasperMobile.Helper.loadScript");
                                         JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
                                         if (params) {
 
                                             NSString *renderChartJSURLString = [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/resources/highcharts.chart.producer.js"];
-                                            JMJavascriptRequest *renderChartJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.loadScript"
+                                            JMJavascriptRequest *renderChartJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
                                                                                                              parametersAsString:[NSString stringWithFormat:@"\"%@\"", renderChartJSURLString]];
 
                                             [self.webEnvironment sendJavascriptRequest:renderChartJSLoadRequest
                                                                             completion:^(NSDictionary *params, NSError *error) {
-                                                                                JMLog(@"JasperMobile.Report.REST.API.loadScript");
+                                                                                JMLog(@"JasperMobile.Helper.loadScript");
                                                                                 JMLog(@"params: %@", params);
                                                                                 JMLog(@"error: %@", error);
                                                                                 if (params) {
@@ -345,11 +368,11 @@
     void(^heapBlock)(BOOL) = [completion copy];
     NSString *serverURLString = self.restClient.serverProfile.serverUrl;
     NSString *requireJSURLString = [NSString stringWithFormat:@"%@//%@", serverURLString, @"fusion/maps/FusionCharts.js"];
-    JMJavascriptRequest *fusionJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.loadScript"
+    JMJavascriptRequest *fusionJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
                                                                      parametersAsString:[NSString stringWithFormat:@"\"%@\"", requireJSURLString]];
     [self.webEnvironment sendJavascriptRequest:fusionJSLoadRequest
                                     completion:^(NSDictionary *params, NSError *error) {
-                                        JMLog(@"JasperMobile.Report.REST.API.loadScript");
+                                        JMLog(@"JasperMobile.Helper.loadScript");
                                         JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
 
