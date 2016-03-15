@@ -102,40 +102,32 @@
 #pragma mark - Private API
 - (void)startLoadReportHTML
 {
-    if ([JMUtils isSupportNewRESTFlow]) {
-        [self verifyIsContentDivCreatedWithCompletion:^(BOOL isCreated, NSError *error) {
-            NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
-            NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+    void(^renderCompletion)(BOOL, NSError *) = ^(BOOL success, NSError *error) {
+        if (success) {
+            [super startLoadReportHTML];
+        } else {
+            // TODO: add error handling
+        }
+    };
 
-            if (isCreated) {
-                [self renderReportWithCompletion:^(BOOL success, NSError *error) {
-                    if (success) {
-                        [super startLoadReportHTML];
-                    } else {
-                        // TODO: add error handling
-                    }
-                }];
-            } else {
-                [self.webEnvironment loadHTML:htmlString
-                                      baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
-                                   completion:^(BOOL isSuccess, NSError *error) {
-                                       if (isSuccess) {
-                                           [self renderReportWithCompletion:^(BOOL success, NSError *error) {
-                                               if (success) {
-                                                       [super startLoadReportHTML];
-                                               } else {
-                                                   // TODO: add error handling
-                                               }
-                                           }];
-                                       } else {
-                                           JMLog(@"error: %@", error);
-                                       }
-                                   }];
-            }
-        }];
-    } else {
-        // TODO: old flow
-    }
+    [self verifyIsContentDivCreatedWithCompletion:^(BOOL isCreated, NSError *error) {
+        NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
+        NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+
+        if (isCreated) {
+            [self renderReportWithCompletion:renderCompletion];
+        } else {
+            [self.webEnvironment loadHTML:htmlString
+                                  baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
+                               completion:^(BOOL isSuccess, NSError *error) {
+                                   if (isSuccess) {
+                                       [self renderReportWithCompletion:renderCompletion];
+                                   } else {
+                                       JMLog(@"error: %@", error);
+                                   }
+                               }];
+        }
+    }];
 }
 
 - (void)verifyIsContentDivCreatedWithCompletion:(void(^ __nonnull)(BOOL isCreated, NSError *error))completion
@@ -145,9 +137,9 @@
     }];
 }
 
-- (void)renderReportWithCompletion:(void(^)(BOOL, NSError *))completion
+- (void)renderReportWithCompletion:(void(^ __nullable)(BOOL, NSError *))completion
 {
-
+    void(^heapBlock)(BOOL, NSError *) = [completion copy];
 
     [self.restClient reportComponentForReportWithExecutionId:self.report.requestId
                                                   pageNumber:self.report.currentPage
@@ -165,7 +157,7 @@
                                                           }
 
                                                           [self renderReportWithHTML:bodyHTMLString
-                                                                          completion:completion];
+                                                                          completion:heapBlock];
                                                       } else {
                                                           // TODO: add error handling
                                                       }
