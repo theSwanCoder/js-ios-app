@@ -317,11 +317,9 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 - (void)renderAdhocHighchartWithComponent:(JSReportComponent *)component completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
-    NSDictionary *chartParams = [self highChartParametersFromComponenents:component];
-
     NSDictionary *params = @{
-            @"scriptName"     : @"__renderHighcharts",
-            @"componentsData" : chartParams,
+            @"serverURL"      : self.restClient.serverProfile.serverUrl,
+            @"componentsData" : [self makeStructureFromComponent:component],
     };
     JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.renderAdHocHighchart"
                                                                            parameters:params];
@@ -343,12 +341,11 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 {
     NSMutableArray *paramsForAllCharts = [@[] mutableCopy];
     for (JSReportComponent *component in components) {
-        NSDictionary *chartParams = [self highChartParametersFromComponenents:component];
-        [paramsForAllCharts addObject:chartParams];
+        [paramsForAllCharts addObject:[self makeStructureFromComponent:component]];
     }
 
     NSDictionary *params = @{
-            @"scriptName"     : @"__renderHighcharts",
+            @"serverURL"      : self.restClient.serverProfile.serverUrl,
             @"componentsData" : paramsForAllCharts,
     };
     JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.renderHighcharts"
@@ -398,109 +395,18 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 }
 
 #pragma mark - Helpers
-
-- (NSDictionary *)highChartParametersFromComponenents:(JSReportComponent *)component
+- (NSDictionary *)makeStructureFromComponent:(JSReportComponent *)component
 {
-    NSDictionary *hcinstacedata = ((JSReportComponentChartStructure *)component.structure).hcinstancedata;
-    NSString *renderTo = hcinstacedata[@"renderto"];
-
-    // render chart
-    NSDictionary *chartDimensionsJSON = @{
-            @"width" : hcinstacedata[@"width"],
-            @"height" : hcinstacedata[@"height"],
-    };
-
-    NSDictionary *globalOptions = ((JSReportComponentChartStructure *)component.structure).globalOptions;
-
-    NSDictionary *parameters;
+    JSReportComponentChartStructure *structure = (JSReportComponentChartStructure *)component.structure;
+    NSDictionary *hcinstacedata = structure.hcinstancedata;
+    NSDictionary *globalOptions = structure.globalOptions;
+    NSMutableDictionary *rawStructure = [@{
+            @"hcinstacedata" : hcinstacedata
+    } mutableCopy];
     if (globalOptions) {
-        parameters = @{
-                @"services"        : hcinstacedata[@"services"],
-                @"chartDimensions" : chartDimensionsJSON,
-                @"requirejsConfig" : [self requirejsConfigJSON],
-                @"renderTo"        : renderTo,
-                @"globalOptions"   : globalOptions,
-        };
-    } else {
-        parameters = @{
-                @"services"        : hcinstacedata[@"services"],
-                @"chartDimensions" : chartDimensionsJSON,
-                @"requirejsConfig" : [self requirejsConfigJSON],
-                @"renderTo"        : renderTo,
-        };
+        rawStructure[@"globalOptions"] = globalOptions;
     }
-
-    return parameters;
-}
-
-- (NSDictionary *)requirejsConfigJSON
-{
-    NSString *serverURLString = self.restClient.serverProfile.serverUrl;
-    NSDictionary *paths = @{
-            @"jquery"                                  : [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/jquery-1.10.2.min.js"],
-            @"highcharts"                              : [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-4.1.8.src.js"],
-            @"highcharts-more"                         : [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-more-4.1.8.src.js"],
-            @"heatmap"                                 : [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-heatmap-4.1.8.src.js"],
-            @"treemap"                                 : [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-treemap-4.1.8.src.js"],
-            @"dataSettingService"                      : [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/services/require/data.service.js"],
-            @"defaultSettingService"                   : [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/services/require/default.service.js"],
-            @"yAxisSettingService"                     : [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/services/require/y.axis.service.js"],
-            @"itemHyperlinkSettingService"             : [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/services/require/item.hyperlink.service.js"],
-            @"adhocHighchartsSettingService"           : [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/ji/adhoc/jr/require/adhocHighchartsSettingService.js"],
-            @"adhoc/chart/ext/multiplePieTitlesExt"    : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/bi-report/src/adhoc/chart/ext/multiplePieTitlesExt.js"],
-            @"adhoc/chart/palette/defaultPalette"      : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/bi-report/src/adhoc/chart/palette/defaultPalette.js"],
-            @"adhoc/chart/enum/dateTimeFormats"        : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/bi-report/src/adhoc/chart/enum/dateTimeFormats.js"],
-            @"adhoc/chart/enum/adhocToHighchartsTypes" : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/bi-report/src/adhoc/chart/enum/adhocToHighchartsTypes.js"],
-            @"adhoc/chart/adhocDataProcessor"          : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/bi-report/src/adhoc/chart/adhocDataProcessor.js"],
-            @"adhoc/chart/highchartsDataMapper"        : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/bi-report/src/adhoc/chart/highchartsDataMapper.js"],
-            @"adhoc/highcharts.api"                    : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/bi-report/src/adhoc/chart/adhocToHighchartsAdapter.js"],
-            @"adhoc/chart/Highcharts"                  : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/bi-report/src/adhoc/chart/Highcharts.js"],
-            @"grouped-categories"                      : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/highcharts-pack/highcharts/grouped-categories.js"],
-            @"underscore"                              : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/lodash.custom/dist/lodash.custom.js"],
-            @"xssUtil"                                 : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/js-sdk/src/common/util/xssUtil.js"],
-            @"json3"                                   : [NSString stringWithFormat:@"%@/%@", serverURLString, @"scripts/bower_components/json3/lib/json3.js"],
-    };
-
-    NSDictionary *requirejsConfigJSON = @{
-            @"baseUrl" : @"",
-            @"paths" : paths,
-            @"shim" : @{
-                    @"highcharts" : @{
-                            @"exports" : @"Highcharts",
-                            @"deps" : @[
-                                    @"jquery"
-                            ]
-                    },
-                    @"highcharts-more" : @{
-                            @"exports" : @"Highcharts",
-                            @"deps" : @[
-                                    @"highcharts",
-                                    @"heatmap",
-                                    @"treemap"
-                            ]
-                    },
-                    @"heatmap" : @{
-                            @"exports" : @"Highcharts",
-                            @"deps" : @[
-                                    @"highcharts"
-                            ]
-                    },
-                    @"treemap" : @{
-                            @"exports" : @"Highcharts",
-                            @"deps" : @[
-                                    @"heatmap",
-                            ]
-                    },
-                    @"grouped-categories" : @{
-                            @"exports" : @"Highcharts",
-                            @"deps" : @[
-                                    @"underscore",
-                            ]
-                    }
-            }
-
-    };
-    return requirejsConfigJSON;
+    return rawStructure;
 }
 
 #pragma mark - Handle Hyperlinks

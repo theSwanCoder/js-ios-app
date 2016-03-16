@@ -165,9 +165,7 @@ JasperMobile.Report = {
 
 // REST Reports
 JasperMobile.Report.REST.API = {
-    parameters : {},
     injectContent: function(contentObject) {
-        JasperMobile.Report.REST.API.parameters = contentObject;
         var content = contentObject["HTMLString"];
         var div = document.getElementById('container');
         div.innerHTML = content;
@@ -200,38 +198,112 @@ JasperMobile.Report.REST.API = {
         });
     },
     renderAdHocHighchart: function(parameters) {
-        JasperMobile.Report.REST.API.parameters = parameters;
-
-        var scriptName = parameters["scriptName"];
+        var scriptName = "__renderHighcharts";
+        var serverUrl = parameters["serverURL"] + "/";
         var componentsData = parameters["componentsData"];
-
-        console.log("scriptName: " + scriptName);
-        console.log("componentsData: " + componentsData);
+        var params = JasperMobile.Report.REST.API.makeHighchartParameters(serverUrl, componentsData);
 
         var containerWidth = document.getElementById("container").offsetWidth;
         var containerHeight = document.getElementById("container").offsetHeight;
 
         // Update chart size
-        var chartDimensions = componentsData["chartDimensions"];
+        var chartDimensions = params["chartDimensions"];
         chartDimensions["width"] = containerWidth;
         chartDimensions["height"] = containerHeight;
 
         // set new chart size
-        componentsData["chartDimensions"] = chartDimensions;
+        params["chartDimensions"] = chartDimensions;
 
         // run script
-        window[scriptName](componentsData);
+        window[scriptName](params);
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.renderAdHocHighchart", {});
     },
     renderHighcharts: function(parameters) {
-        var scriptName = parameters["scriptName"];
+        var scriptName = "__renderHighcharts";
+        var serverUrl = parameters["serverURL"] + "/";
         var componentsData = parameters["componentsData"];
 
         for(var i=0; i < componentsData.length; i++) {
-            var params = componentsData[i];
+            var params = JasperMobile.Report.REST.API.makeHighchartParameters(serverUrl, componentsData[i]);
             window[scriptName](params);
         }
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.renderHighcharts", {});
+    },
+    makeHighchartParameters: function(serverUrl, params) {
+
+        var hcinstacedata = params["hcinstacedata"];
+
+        var highchartParameters = {
+            chartDimensions : {
+                width: hcinstacedata["width"],
+                height: hcinstacedata["height"]
+            },
+            globalOptions: params["globalOptions"],
+            renderTo: hcinstacedata["renderto"],
+            requirejsConfig: {
+                baseUrl: "", // TODO: verify from viz
+                paths: {
+                    "jquery"                                  : serverUrl + "reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/jquery-1.10.2.min.js",
+                    "highcharts"                              : serverUrl + "reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-4.1.8.src.js",
+                    "highcharts-more"                         : serverUrl + "reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-more-4.1.8.src.js",
+                    "heatmap"                                 : serverUrl + "reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-heatmap-4.1.8.src.js",
+                    "treemap"                                 : serverUrl + "reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-treemap-4.1.8.src.js",
+                    "dataSettingService"                      : serverUrl + "reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/services/require/data.service.js",
+                    "defaultSettingService"                   : serverUrl + "reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/services/require/default.service.js",
+                    "yAxisSettingService"                     : serverUrl + "reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/services/require/y.axis.service.js",
+                    "itemHyperlinkSettingService"             : serverUrl + "reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/services/require/item.hyperlink.service.js",
+                    "adhocHighchartsSettingService"           : serverUrl + "reportresource?resource=com/jaspersoft/ji/adhoc/jr/require/adhocHighchartsSettingService.js",
+                    "adhoc/chart/ext/multiplePieTitlesExt"    : serverUrl + "scripts/bower_components/bi-report/src/adhoc/chart/ext/multiplePieTitlesExt.js",
+                    "adhoc/chart/palette/defaultPalette"      : serverUrl + "scripts/bower_components/bi-report/src/adhoc/chart/palette/defaultPalette.js",
+                    "adhoc/chart/enum/dateTimeFormats"        : serverUrl + "scripts/bower_components/bi-report/src/adhoc/chart/enum/dateTimeFormats.js",
+                    "adhoc/chart/enum/adhocToHighchartsTypes" : serverUrl + "scripts/bower_components/bi-report/src/adhoc/chart/enum/adhocToHighchartsTypes.js",
+                    "adhoc/chart/adhocDataProcessor"          : serverUrl + "scripts/bower_components/bi-report/src/adhoc/chart/adhocDataProcessor.js",
+                    "adhoc/chart/highchartsDataMapper"        : serverUrl + "scripts/bower_components/bi-report/src/adhoc/chart/highchartsDataMapper.js",
+                    "adhoc/highcharts.api"                    : serverUrl + "scripts/bower_components/bi-report/src/adhoc/chart/adhocToHighchartsAdapter.js",
+                    "adhoc/chart/Highcharts"                  : serverUrl + "scripts/bower_components/bi-report/src/adhoc/chart/Highcharts.js",
+                    "grouped-categories"                      : serverUrl + "scripts/bower_components/highcharts-pack/highcharts/grouped-categories.js",
+                    "underscore"                              : serverUrl + "scripts/bower_components/lodash.custom/dist/lodash.custom.js",
+                    "xssUtil"                                 : serverUrl + "scripts/bower_components/js-sdk/src/common/util/xssUtil.js",
+                    "json3"                                   : serverUrl + "scripts/bower_components/json3/lib/json3.js"
+                },
+                shim: {
+                    "highcharts" : {
+                        "exports" : "Highcharts",
+                        "deps" : [
+                            "jquery"
+                        ]
+                    },
+                    "highcharts-more" : {
+                        "exports" : "Highcharts",
+                        "deps" : [
+                            "highcharts",
+                            "heatmap",
+                            "treemap"
+                        ]
+                    },
+                    "heatmap" : {
+                        "exports" : "Highcharts",
+                        "deps" : [
+                            "highcharts"
+                        ]
+                    },
+                    "treemap" : {
+                        "exports" : "Highcharts",
+                        "deps" : [
+                            "heatmap"
+                        ]
+                    },
+                    "grouped-categories" : {
+                        "exports" : "Highcharts",
+                        "deps" : [
+                            "underscore"
+                        ]
+                    }
+                }
+            },
+            services: hcinstacedata["services"]
+        };
+        return highchartParameters;
     },
     renderFusionWidgets: function(parameters) {
         var domain = parameters["domain"];
