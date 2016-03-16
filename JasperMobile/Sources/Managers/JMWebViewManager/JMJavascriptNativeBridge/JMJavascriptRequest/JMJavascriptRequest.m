@@ -89,7 +89,7 @@
     self.parametersAsString = [self prepareParamsAsStringFromParameters:self.parameters];
     NSString *fullJavascriptString;
     fullJavascriptString = [NSString stringWithFormat:@"%@(%@);", command, self.parametersAsString];
-    JMLog(@"fullJavascriptString: %@", fullJavascriptString);
+//    JMLog(@"fullJavascriptString: %@", fullJavascriptString);
     return fullJavascriptString;
 }
 

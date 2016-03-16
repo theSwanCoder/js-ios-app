@@ -277,7 +277,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
     [self.webEnvironment sendJavascriptRequest:injectContentRequest
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"JasperMobile.Report.REST.API.injectContent");
-                                        JMLog(@"params: %@", params);
+//                                        JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
 
                                         NSMutableArray *highchartComponents = [NSMutableArray array];
@@ -329,7 +329,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
     [self.webEnvironment sendJavascriptRequest:chartRenderRequest
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"JasperMobile.Report.REST.API.renderAdHocHighchart");
-                                        JMLog(@"params: %@", params);
+//                                        JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
                                         if (params) {
                                             completion(YES, nil);
@@ -357,7 +357,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
     [self.webEnvironment sendJavascriptRequest:chartRenderRequest
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"JasperMobile.Report.REST.API.renderHighcharts");
-                                        JMLog(@"params: %@", params);
+//                                        JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
 
                                         if (params) {
@@ -386,7 +386,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
     [self.webEnvironment sendJavascriptRequest:chartRenderRequest
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"JasperMobile.Report.REST.API.renderChart");
-                                        JMLog(@"params: %@", params);
+//                                        JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
 
                                         if (params) {
