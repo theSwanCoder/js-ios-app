@@ -42,13 +42,6 @@
 + (JMServerProfile *)demoServerProfile;
 
 /**
- Returns number of min supported server version
- 
- @return number of min supported server version
- */
-+ (float) minSupportedServerVersion;
-
-/**
  Return server profile by server name
  
  @param profile JSProfile Server profile
@@ -78,13 +71,5 @@
  @return YES if name is valid
  */
 - (BOOL) isValidNameForServerProfile:(NSString *)name;
-
-/**
- Check if jasperserver exist and it version is supported by application.
- 
- @param completionBlock block of code will be executed after checking. If server exist and supported error will be nil.
- */
-- (void) checkServerProfileWithCompletionBlock:(void(^)(NSError *error))completionBlock;
-
 
 @end

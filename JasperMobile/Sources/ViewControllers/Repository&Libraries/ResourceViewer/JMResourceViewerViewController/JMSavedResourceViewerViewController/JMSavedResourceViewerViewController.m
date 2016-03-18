@@ -215,20 +215,10 @@
                                                 __typeof(self) strongSelf = weakSelf;
                                                 [strongSelf stopShowLoader];
                                                 if (error) {
-                                                    if (error.code == JSSessionExpiredErrorCode) {
-                                                        [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                                            if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                                [strongSelf showRemoteResource];
-                                                            } else {
-                                                                [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                            }
-                                                        }];
-                                                    } else {
-                                                        [strongSelf showErrorWithMessage:error.localizedDescription
-                                                                              completion:^{
-                                                                                  [strongSelf cancelResourceViewingAndExit:YES];
-                                                                              }];
-                                                    }
+                                                    [strongSelf showErrorWithMessage:error.localizedDescription
+                                                                          completion:^{
+                                                                              [strongSelf cancelResourceViewingAndExit:YES];
+                                                                          }];
                                                 } else {
 
                                                     [strongSelf startShowLoaderWithMessage:@"status.loading" cancelBlock:^{

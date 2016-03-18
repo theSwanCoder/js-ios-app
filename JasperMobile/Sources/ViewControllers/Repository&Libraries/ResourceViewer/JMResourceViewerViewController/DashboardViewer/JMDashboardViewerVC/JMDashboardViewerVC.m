@@ -593,24 +593,32 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     [self.restClient deleteCookies];
     [self resetSubViews];
-
-    __weak typeof(self)weakSelf = self;
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-        __weak typeof(self)strongSelf = weakSelf;
-        if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-            [[JMWebViewManager sharedInstance] reset];
-            [self setupSubviews];
-            [self configViewport];
-
-            completion();
-        } else {
-            __weak typeof(self)weakSelf = strongSelf;
-            [JMUtils showLoginViewAnimated:YES completion:^{
-                __weak typeof(self)strongSelf = weakSelf;
-                [strongSelf cancelResourceViewingAndExit:YES];
-            }];
-        }
-    }];
+    
+    if (self.restClient.keepSession) {
+        __weak typeof(self)weakSelf = self;
+        [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
+            __weak typeof(self)strongSelf = weakSelf;
+            if (!result.error) {
+                [[JMWebViewManager sharedInstance] reset];
+                [self setupSubviews];
+                [self configViewport];
+                
+                completion();
+            } else {
+                __weak typeof(self)weakSelf = strongSelf;
+                [JMUtils showLoginViewAnimated:YES completion:^{
+                    __weak typeof(self)strongSelf = weakSelf;
+                    [strongSelf cancelResourceViewingAndExit:YES];
+                }];
+            }
+        }];
+    } else {
+        __weak typeof(self)weakSelf = self;
+        [JMUtils showLoginViewAnimated:YES completion:^{
+            __weak typeof(self)strongSelf = weakSelf;
+            [strongSelf cancelResourceViewingAndExit:YES];
+        }];
+    }
 }
 
 #pragma mark - Work with external screen

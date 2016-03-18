@@ -179,7 +179,7 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
     NSString *appVersionString = [NSString stringWithFormat:@"Version: %@ (%@)", [JMAppUpdater latestAppVersionAsString], build];
     NSString *appAboutString = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil),
                     @"\u00AE",
-                    [JMServerProfile minSupportedServerVersion],
+                    [JSUtils minSupportedServerVersion],
                     appVersionString,
                     JMCustomLocalizedString(@"about.comminity.title", nil)];
     return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n%@", appAboutString]

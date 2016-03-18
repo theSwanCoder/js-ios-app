@@ -118,27 +118,9 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    __block BOOL requestDidCancelled = NO;
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
-        requestDidCancelled = YES;
-    }];
-    
-    JMServerProfile *serverProfile = self.servers[indexPath.row];
-    __weak typeof(self)weakSelf = self;
-    [serverProfile checkServerProfileWithCompletionBlock:^(NSError *error) {
-        __strong typeof(self)strongSelf = weakSelf;
-
-        [JMCancelRequestPopup dismiss];
-        if (!requestDidCancelled) {
-            if (error) {
-                [JMUtils presentAlertControllerWithError:error completion:nil];
-            } else {
-                if ([strongSelf.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
-                    [strongSelf.delegate serverGridControllerDidSelectProfile:serverProfile];
-                }
-            }
-        }
-    }];
+    if ([self.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
+        [self.delegate serverGridControllerDidSelectProfile:self.servers[indexPath.row]];
+    }
 }
 
 // These methods provide support for copy/paste actions on cells.
