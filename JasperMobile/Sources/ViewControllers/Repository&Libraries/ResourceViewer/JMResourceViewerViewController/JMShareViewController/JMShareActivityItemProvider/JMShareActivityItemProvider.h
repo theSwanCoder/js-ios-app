@@ -34,6 +34,8 @@
 
 #import <UIKit/UIKit.h>
 
+extern NSString * const kSkypeActivityType;
+
 @interface JMShareActivityItemProvider : UIActivityItemProvider <UIActivityItemSource>
 
 @end

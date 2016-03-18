@@ -218,7 +218,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 
 - (void)shareResource
 {
-    JMShareActivityItemProvider * textProvider = [JMShareActivityItemProvider new];
+    JMShareActivityItemProvider * textProvider = [[JMShareActivityItemProvider alloc] initWithPlaceholderItem:kSkypeActivityType];
     UIImage *imageForSharing = [self.resourceView renderedImage];
     
     NSArray *objectsToShare = @[textProvider, imageForSharing];

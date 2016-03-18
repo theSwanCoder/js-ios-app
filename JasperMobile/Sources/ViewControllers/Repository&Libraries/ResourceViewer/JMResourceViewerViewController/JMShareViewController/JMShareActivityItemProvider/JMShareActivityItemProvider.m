@@ -28,7 +28,7 @@
 
 #import "JMShareActivityItemProvider.h"
 
-NSString *kSkypeActivityType = @"com.skype.SkypeForiPad.sharingextension";
+NSString * const kSkypeActivityType = @"com.skype.SkypeForiPad.sharingextension";
 
 @implementation JMShareActivityItemProvider
 - (nullable id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
