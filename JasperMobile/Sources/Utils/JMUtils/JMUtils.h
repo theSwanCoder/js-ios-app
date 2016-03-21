@@ -114,13 +114,6 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (void)presentAlertControllerWithError:(NSError *__nonnull)error completion:(void (^__nullable)(void))completion;
 
 /**
- Returns YES if User want to use Visualize for watching reports and dashboards
-
- @return YES if User want to use Visualize for watching reports and dashboards
- */
-+ (BOOL)shouldUseVisualize;
-
-/**
  Returns YES if JRS instance has version equal 6.0 or upper
 
  @return YES if JRS instance has version equal 6.0 or upper
