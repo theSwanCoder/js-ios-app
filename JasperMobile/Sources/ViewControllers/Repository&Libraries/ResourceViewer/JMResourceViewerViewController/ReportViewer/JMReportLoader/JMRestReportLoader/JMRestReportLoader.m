@@ -438,11 +438,6 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                               completionBlock:^(JSOperationResult *result) {
             NSError *error = result.error;
             if (error) {
-                NSString *errorString = error.localizedDescription;
-                JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
-                if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
-                    errorType = JSReportLoaderErrorTypeAuthentification;
-                }
                 JMLog(@"error: %@", error);
             } else {
                 JSResourceLookup *resourceLookup = [result.objects firstObject];
