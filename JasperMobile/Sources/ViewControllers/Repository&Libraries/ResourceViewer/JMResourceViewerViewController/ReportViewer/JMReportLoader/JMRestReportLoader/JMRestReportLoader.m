@@ -29,6 +29,8 @@
 #import "JMRestReportLoader.h"
 #import "JMWebEnvironment.h"
 #import "JSRestClient.h"
+#import "JMHTMLParser.h"
+#import "JMHTMLScript.h"
 
 typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
@@ -61,9 +63,9 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                       restClient:restClient];
     if (self) {
         _webEnvironment = webEnvironment;
-        if ([JMUtils isSupportNewRESTFlow]) {
-            self.needEmbeddableOutput = YES;
-        }
+//        if ([JMUtils isSupportNewRESTFlow]) {
+//            self.needEmbeddableOutput = YES;
+//        }
     }
     return self;
 }
@@ -106,15 +108,25 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                 if (success) {
                     [super startLoadReportHTML];
                 } else {
-                    // TODO: add error handling
+                    // TODO: extend errors handling
+                    BOOL isParseError = YES;
+                    if (isParseError) {
+                        [self.webEnvironment loadHTML:self.report.HTMLString
+                                              baseURL:[NSURL URLWithString:self.report.baseURLString]
+                                           completion:nil];
+                        [super startLoadReportHTML];
+                    }
                 }
             }];
         } else {
-            // TODO: add error handling
+            // TODO: extend errors handling
+            [self.webEnvironment loadHTML:self.report.HTMLString
+                                  baseURL:[NSURL URLWithString:self.report.baseURLString]
+                               completion:nil];
+            [super startLoadReportHTML];
         }
     }];
 }
-
 
 #pragma mark - Prepear
 
@@ -169,72 +181,75 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 - (void)loadHighchartScriptsWithCompletion:(JMRestReportLoaderCompletion __nonnull)completion
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    JMRestReportLoaderCompletion heapBlock = [completion copy];
+    completion(YES, nil);
 
-    NSString *serverURLString = self.restClient.serverProfile.serverUrl;
-    NSString *requireJSURLString = [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/require/require-2.1.6.src.js"];
-    NSDictionary *params = @{
-            @"scriptURL" : requireJSURLString,
-    };
-    JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
-                                                                             parameters:params];
-    [self.webEnvironment sendJavascriptRequest:requireJSLoadRequest
-                                    completion:^(NSDictionary *params, NSError *error) {
-                                        JMLog(@"JasperMobile.Helper.loadScript");
-                                        JMLog(@"params: %@", params);
-                                        JMLog(@"error: %@", error);
-                                        if (params) {
-
-                                            NSString *renderChartJSURLString = [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/resources/highcharts.chart.producer.js"];
-                                            params = @{
-                                                    @"scriptURL" : renderChartJSURLString,
-                                            };
-                                            JMJavascriptRequest *renderChartJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
-                                                                                                                         parameters:params];
-
-                                            [self.webEnvironment sendJavascriptRequest:renderChartJSLoadRequest
-                                                                            completion:^(NSDictionary *params, NSError *error) {
-                                                                                JMLog(@"JasperMobile.Helper.loadScript");
-                                                                                JMLog(@"params: %@", params);
-                                                                                JMLog(@"error: %@", error);
-                                                                                if (params) {
-                                                                                    heapBlock(YES, nil);
-                                                                                } else {
-                                                                                    heapBlock(NO, error);
-                                                                                }
-                                                                            }];
-                                        } else {
-                                            heapBlock(NO, error);
-                                        }
-                                    }];
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+//    JMRestReportLoaderCompletion heapBlock = [completion copy];
+//
+//    NSString *serverURLString = self.restClient.serverProfile.serverUrl;
+//    NSString *requireJSURLString = [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/require/require-2.1.6.src.js"];
+//    NSDictionary *params = @{
+//            @"scriptURL" : requireJSURLString,
+//    };
+//    JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+//                                                                             parameters:params];
+//    [self.webEnvironment sendJavascriptRequest:requireJSLoadRequest
+//                                    completion:^(NSDictionary *params, NSError *error) {
+//                                        JMLog(@"JasperMobile.Helper.loadScript");
+//                                        JMLog(@"params: %@", params);
+//                                        JMLog(@"error: %@", error);
+//                                        if (params) {
+//
+//                                            NSString *renderChartJSURLString = [NSString stringWithFormat:@"%@/%@", serverURLString, @"reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/resources/highcharts.chart.producer.js"];
+//                                            params = @{
+//                                                    @"scriptURL" : renderChartJSURLString,
+//                                            };
+//                                            JMJavascriptRequest *renderChartJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+//                                                                                                                         parameters:params];
+//
+//                                            [self.webEnvironment sendJavascriptRequest:renderChartJSLoadRequest
+//                                                                            completion:^(NSDictionary *params, NSError *error) {
+//                                                                                JMLog(@"JasperMobile.Helper.loadScript");
+//                                                                                JMLog(@"params: %@", params);
+//                                                                                JMLog(@"error: %@", error);
+//                                                                                if (params) {
+//                                                                                    heapBlock(YES, nil);
+//                                                                                } else {
+//                                                                                    heapBlock(NO, error);
+//                                                                                }
+//                                                                            }];
+//                                        } else {
+//                                            heapBlock(NO, error);
+//                                        }
+//                                    }];
 }
 
 - (void)loadFusionScriptsWithCompletion:(JMRestReportLoaderCompletion __nonnull)completion
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-
-    JMRestReportLoaderCompletion heapBlock = [completion copy];
-
-    NSString *serverURLString = self.restClient.serverProfile.serverUrl;
-    NSString *requireJSURLString = [NSString stringWithFormat:@"%@//%@", serverURLString, @"fusion/maps/FusionCharts.js"];
-    NSDictionary *params = @{
-            @"scriptURL" : requireJSURLString,
-    };
-    JMJavascriptRequest *fusionJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
-                                                                            parameters:params];
-    [self.webEnvironment sendJavascriptRequest:fusionJSLoadRequest
-                                    completion:^(NSDictionary *params, NSError *error) {
-                                        JMLog(@"JasperMobile.Helper.loadScript");
-                                        JMLog(@"params: %@", params);
-                                        JMLog(@"error: %@", error);
-
-                                        if (params) {
-                                            heapBlock(YES, nil);
-                                        } else {
-                                            heapBlock(NO, error);
-                                        }
-                                    }];
+    completion(YES, nil);
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+//
+//    JMRestReportLoaderCompletion heapBlock = [completion copy];
+//
+//    NSString *serverURLString = self.restClient.serverProfile.serverUrl;
+//    NSString *requireJSURLString = [NSString stringWithFormat:@"%@//%@", serverURLString, @"fusion/maps/FusionCharts.js"];
+//    NSDictionary *params = @{
+//            @"scriptURL" : requireJSURLString,
+//    };
+//    JMJavascriptRequest *fusionJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+//                                                                            parameters:params];
+//    [self.webEnvironment sendJavascriptRequest:fusionJSLoadRequest
+//                                    completion:^(NSDictionary *params, NSError *error) {
+//                                        JMLog(@"JasperMobile.Helper.loadScript");
+//                                        JMLog(@"params: %@", params);
+//                                        JMLog(@"error: %@", error);
+//
+//                                        if (params) {
+//                                            heapBlock(YES, nil);
+//                                        } else {
+//                                            heapBlock(NO, error);
+//                                        }
+//                                    }];
 }
 
 #pragma mark - Render Report
@@ -249,24 +264,41 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                                       if (components) {
                                                           self.report.reportComponents = components;
 
-                                                          NSString *bodyHTMLString = self.report.HTMLString;
+                                                          JMHTMLParser *parser = [JMHTMLParser parserWithHTMLString:self.report.HTMLString];
+                                                          [parser parse];
+                                                          NSString *bodyHTMLString = [parser content];
+                                                          NSArray *scripts = parser.scripts;
 
-                                                          if (self.report.isElasticChart) {
-                                                              JSReportComponent *component = self.report.reportComponents.firstObject;
-                                                              NSDictionary *hcinstacedata = ((JSReportComponentChartStructure *)component.structure).hcinstancedata;
-                                                              NSString *renderTo = hcinstacedata[@"renderto"];
-                                                              bodyHTMLString = [NSString stringWithFormat:@"<div id='%@'></div>", renderTo];
+                                                          if (!bodyHTMLString) {
+                                                              // TODO: add error codes
+                                                              NSError *error = [NSError errorWithDomain:@"Parse HTML Error"
+                                                                                                   code:0
+                                                                                               userInfo:@{
+                                                                                                       NSLocalizedDescriptionKey: @"Parse HTML Error"
+                                                                                               }];
+                                                              heapBlock(NO, error);
+                                                          } else {
+                                                              if (self.report.isElasticChart) {
+                                                                  JSReportComponent *component = self.report.reportComponents.firstObject;
+                                                                  NSDictionary *hcinstacedata = ((JSReportComponentChartStructure *)component.structure).hcinstancedata;
+                                                                  NSString *renderTo = hcinstacedata[@"renderto"];
+                                                                  bodyHTMLString = [NSString stringWithFormat:@"<div id='%@'></div>", renderTo];
+                                                              }
+
+                                                              [self renderReportWithHTML:bodyHTMLString
+                                                                                 scripts:scripts
+                                                                              completion:heapBlock];
                                                           }
 
-                                                          [self renderReportWithHTML:bodyHTMLString
-                                                                          completion:heapBlock];
                                                       } else {
-                                                          // TODO: add error handling
+                                                          heapBlock(NO, error);
                                                       }
                                                   }];
 }
 
-- (void)renderReportWithHTML:(NSString *)HTMLString completion:(JMRestReportLoaderCompletion __nonnull)completion
+- (void)renderReportWithHTML:(NSString *)HTMLString
+                     scripts:(NSArray <NSString *>*)scripts
+                  completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
     NSDictionary *params = @{
             @"HTMLString" : HTMLString
@@ -280,34 +312,50 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 //                                        JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
 
-                                        NSMutableArray *highchartComponents = [NSMutableArray array];
-                                        NSMutableArray *fusionComponents = [NSMutableArray array];
-                                        for (JSReportComponent *component in self.report.reportComponents) {
-                                            if (component.type == JSReportComponentTypeChart) {
-                                                [highchartComponents addObject:component];
-                                            } else if(component.type == JSReportComponentTypeFusion) {
-                                                [fusionComponents addObject:component];
+                                        NSMutableArray *links = [NSMutableArray new];
+                                        NSMutableArray *renderHighchartScripts = [NSMutableArray new];
+                                        NSMutableArray *sources = [NSMutableArray new];
+                                        for (JMHTMLScript *script in scripts) {
+                                            switch(script.type) {
+                                                case JMHTMLScriptTypeLink: {
+                                                    [links addObject:script.value];
+                                                    break;
+                                                }
+                                                case JMHTMLScriptTypeRenderHighchart: {
+                                                    [renderHighchartScripts addObject:script.value];
+                                                    break;
+                                                }
+                                                case JMHTMLScriptTypeSource: {
+                                                    [sources addObject:script.value];
+                                                    break;
+                                                }
+                                                case JMHTMLScriptTypeOther: {
+                                                    break;
+                                                }
                                             }
                                         }
 
-                                        if (fusionComponents.count) {
-                                            [self renderFusionWidgetsWithComponents:fusionComponents
-                                                                         completion:completion];
-                                        }
+                                        [self loadScriptsFromLinks:links
+                                                        completion:^(BOOL success, NSError *error) {
+                                                            if (success) {
 
-                                        if (highchartComponents.count) {
-                                            if (self.report.isElasticChart) {
-                                                JSReportComponent *component = highchartComponents.firstObject;
-                                                [self renderAdhocHighchartWithComponent:component
-                                                                             completion:completion];
-                                            } else {
-                                                [self renderHighchartsWithComponents:highchartComponents
-                                                                          completion:completion];
-                                            }
-                                        }
+                                                                if (sources.count) {
+                                                                    [self executeOtherScripts:sources
+                                                                                   completion:completion];
+                                                                }
+
+                                                                if (renderHighchartScripts.count) {
+                                                                    [self renderHighchartsWithScripts:renderHighchartScripts
+                                                                                       isElasticChart:self.report.isElasticChart
+                                                                                           completion:completion];
+                                                                }
+                                                            } else {
+                                                                completion(NO, error);
+                                                            }
+                                                        }];
 
                                         // report without chart scripts
-                                        if (fusionComponents.count == 0 && highchartComponents.count == 0) {
+                                        if (links.count == 0) {
                                             if (completion) {
                                                 completion(YES, nil);
                                             }
@@ -315,19 +363,17 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                     }];
 }
 
-- (void)renderAdhocHighchartWithComponent:(JSReportComponent *)component completion:(JMRestReportLoaderCompletion __nonnull)completion
+- (void)loadScriptsFromLinks:(NSArray *)links
+                  completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
-    NSDictionary *params = @{
-            @"serverURL"      : self.restClient.serverProfile.serverUrl,
-            @"componentsData" : [self makeStructureFromComponent:component],
-    };
-    JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.renderAdHocHighchart"
-                                                                           parameters:params];
-
-    [self.webEnvironment sendJavascriptRequest:chartRenderRequest
+    JMJavascriptRequest *loadDependenciesRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
+                                                                                 parameters:@{
+                                                                                         @"scriptURLs" : links,
+                                                                                 }];
+    [self.webEnvironment sendJavascriptRequest:loadDependenciesRequest
                                     completion:^(NSDictionary *params, NSError *error) {
-                                        JMLog(@"JasperMobile.Report.REST.API.renderAdHocHighchart");
-//                                        JMLog(@"params: %@", params);
+                                        JMLog(@"JasperMobile.Report.REST.API.loadScript");
+                                        JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
                                         if (params) {
                                             completion(YES, nil);
@@ -337,20 +383,15 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                     }];
 }
 
-- (void)renderHighchartsWithComponents:(NSArray <JSReportComponent *>*)components completion:(JMRestReportLoaderCompletion __nonnull)completion
+- (void)renderHighchartsWithScripts:(NSArray *)scripts
+                     isElasticChart:(BOOL)isElasticChart
+                         completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
-    NSMutableArray *paramsForAllCharts = [@[] mutableCopy];
-    for (JSReportComponent *component in components) {
-        [paramsForAllCharts addObject:[self makeStructureFromComponent:component]];
-    }
-
-    NSDictionary *params = @{
-            @"serverURL"      : self.restClient.serverProfile.serverUrl,
-            @"componentsData" : paramsForAllCharts,
-    };
     JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.renderHighcharts"
-                                                                           parameters:params];
-
+                                                                           parameters:@{
+                                                                                   @"scripts"         : scripts,
+                                                                                   @"isElasticChart"  : isElasticChart ? @"true" : @"false"
+                                                                           }];
     [self.webEnvironment sendJavascriptRequest:chartRenderRequest
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"JasperMobile.Report.REST.API.renderHighcharts");
@@ -365,24 +406,16 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                     }];
 }
 
-- (void)renderFusionWidgetsWithComponents:(NSArray <JSReportComponent *>*)components completion:(JMRestReportLoaderCompletion __nonnull)completion
+- (void)executeOtherScripts:(NSArray *)scripts
+                 completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
-    NSMutableArray *paramsForAllCharts = [@[] mutableCopy];
-    for (JSReportComponent *component in components) {
-        id chartParams = ((JSReportComponentFusionStructure *)component.structure).instanceData;
-        [paramsForAllCharts addObject:chartParams];
-    }
-
-    NSString *domain = [self.restClient.serverProfile.serverUrl stringByDeletingLastPathComponent];
-    NSDictionary *params = @{
-            @"componentsData" : paramsForAllCharts,
-            @"domain"         : domain
-    };
-    JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.renderFusionWidgets"
-                                                                   parameters:params];
+    JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.executeScripts"
+                                                                           parameters:@{
+                                                                                   @"scripts" : scripts,
+                                                                           }];
     [self.webEnvironment sendJavascriptRequest:chartRenderRequest
                                     completion:^(NSDictionary *params, NSError *error) {
-                                        JMLog(@"JasperMobile.Report.REST.API.renderChart");
+                                        JMLog(@"JasperMobile.Report.REST.API.executeScripts");
 //                                        JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
 
@@ -392,21 +425,6 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                             completion(NO, error);
                                         }
                                     }];
-}
-
-#pragma mark - Helpers
-- (NSDictionary *)makeStructureFromComponent:(JSReportComponent *)component
-{
-    JSReportComponentChartStructure *structure = (JSReportComponentChartStructure *)component.structure;
-    NSDictionary *hcinstacedata = structure.hcinstancedata;
-    NSDictionary *globalOptions = structure.globalOptions;
-    NSMutableDictionary *rawStructure = [@{
-            @"hcinstacedata" : hcinstacedata
-    } mutableCopy];
-    if (globalOptions) {
-        rawStructure[@"globalOptions"] = globalOptions;
-    }
-    return rawStructure;
 }
 
 #pragma mark - Handle Hyperlinks

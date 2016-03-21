@@ -22,7 +22,7 @@
 
 
 //
-//  JMHTMLParser.h
+//  JMHTMLScript.h
 //  TIBCO JasperMobile
 //
 
@@ -31,13 +31,14 @@
 @since 2.5
 */
 
-@class JMHTMLScript;
+typedef NS_ENUM(NSInteger, JMHTMLScriptType) {
+    JMHTMLScriptTypeLink,
+    JMHTMLScriptTypeSource,
+    JMHTMLScriptTypeRenderHighchart,
+    JMHTMLScriptTypeOther
+};
 
-@interface JMHTMLParser : NSObject
-@property (nonatomic, strong) NSArray <JMHTMLScript *> *__nullable scripts;
-
-- (instancetype __nullable)initWithHTMLString:(NSString * __nonnull)htmlString;
-+ (instancetype __nullable)parserWithHTMLString:(NSString * __nonnull)htmlString;
-- (void)parse;
-- (NSString * __nullable)content;
+@interface JMHTMLScript : NSObject
+@property (nonatomic, assign) JMHTMLScriptType type;
+@property (nonatomic, strong) id value;
 @end
