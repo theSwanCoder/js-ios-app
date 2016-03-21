@@ -687,7 +687,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
                     }
                 }
                 NSArray *values = [inputControlDescriptor selectedValues];
-                parameters[componentID] = values;
+                if (componentID) {
+                    parameters[componentID] = values;                    
+                }
             }
             [strongSelf.dashboardLoader applyParameters:parameters];
         }
