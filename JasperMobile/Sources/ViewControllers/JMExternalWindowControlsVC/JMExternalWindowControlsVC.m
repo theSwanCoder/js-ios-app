@@ -148,10 +148,16 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
 - (void)upAction
 {
     WKWebView *contentView = (WKWebView *) self.contentView;
+    UIScrollView *scrollView = contentView.scrollView;
+    CGSize contentViewSize = scrollView.frame.size;
 
-    CGPoint upPoint = contentView.scrollView.contentOffset;
+    CGPoint upPoint = scrollView.contentOffset;
+    JMLog(@"upPoint.y: %@", @(upPoint.y));
     upPoint.y += kJMExternalWindowControlsScrollStep;
-    contentView.scrollView.contentOffset = upPoint;
+    if (upPoint.y > contentViewSize.height * 1.1) {
+        return;
+    }
+    scrollView.contentOffset = upPoint;
 }
 
 #pragma mark - Action Helpers Down
@@ -170,13 +176,16 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
 - (void)downAction
 {
     WKWebView *contentView = (WKWebView *) self.contentView;
+    UIScrollView *scrollView = contentView.scrollView;
+    CGSize contentViewSize = scrollView.frame.size;
 
-    CGPoint upPoint = contentView.scrollView.contentOffset;
+    CGPoint upPoint = scrollView.contentOffset;
+    JMLog(@"upPoint.y: %@", @(upPoint.y));
     upPoint.y -= kJMExternalWindowControlsScrollStep;
-    if (upPoint.y < 0) {
+    if (upPoint.y < -contentViewSize.height * 0.1) {
         return;
     }
-    contentView.scrollView.contentOffset = upPoint;
+    scrollView.contentOffset = upPoint;
 }
 
 #pragma mark - Action Helpers Left
@@ -195,10 +204,16 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
 - (void)leftAction
 {
     WKWebView *contentView = (WKWebView *) self.contentView;
+    UIScrollView *scrollView = contentView.scrollView;
+    CGSize contentViewSize = scrollView.frame.size;
 
-    CGPoint upPoint = contentView.scrollView.contentOffset;
+    CGPoint upPoint = scrollView.contentOffset;
+    JMLog(@"upPoint.x: %@", @(upPoint.x));
     upPoint.x += kJMExternalWindowControlsScrollStep;
-    contentView.scrollView.contentOffset = upPoint;
+    if (upPoint.x > contentViewSize.width * 0.1) {
+        return;
+    }
+    scrollView.contentOffset = upPoint;
 }
 
 #pragma mark - Action Helpers Right
@@ -217,13 +232,16 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
 - (void)rightAction
 {
     WKWebView *contentView = (WKWebView *) self.contentView;
+    UIScrollView *scrollView = contentView.scrollView;
+    CGSize contentViewSize = scrollView.frame.size;
 
-    CGPoint upPoint = contentView.scrollView.contentOffset;
+    CGPoint upPoint = scrollView.contentOffset;
+    JMLog(@"upPoint.x: %@", @(upPoint.x));
     upPoint.x -= kJMExternalWindowControlsScrollStep;
-    if (upPoint.x < 0) {
+    if (upPoint.x < -contentViewSize.width * 0.1) {
         return;
     }
-    contentView.scrollView.contentOffset = upPoint;
+    scrollView.contentOffset = upPoint;
 }
 
 
