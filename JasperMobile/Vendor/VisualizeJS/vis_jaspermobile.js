@@ -75,7 +75,7 @@ var JasperMobile = {
                 viewport.setAttribute('content', viewPortContent);
             }
         },
-        loadScript: function(scriptURL, success, error) {
+        addScript: function(scriptURL, success, error) {
             var isScriptAlreadyLoaded = false;
             var allScripts = document.head.getElementsByTagName("script");
 
@@ -101,15 +101,24 @@ var JasperMobile = {
             var callbacksCount = scriptURLs.length;
             for (var i = 0; i < scriptURLs.length; i++) {
                 var scriptURL = scriptURLs[i];
-
                 (function(scriptURL) {
-                    JasperMobile.Helper.loadScript(scriptURL, function() {
+                    JasperMobile.Helper.addScript(scriptURL, function() {
                         if (--callbacksCount == 0) {
                             JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Helper.loadScripts", {});
                         }
                     }, null);
                 })(scriptURL);
             }
+        },
+        loadScript: function(parameters) {
+            var scriptURL = parameters["scriptURL"];
+            JasperMobile.Helper.addScript(scriptURL, function() {
+                JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Helper.loadScript", {
+                    "params" : {
+                        "script_path" : scriptURL
+                    }
+                });
+            }, null);
         }
     }
 };
