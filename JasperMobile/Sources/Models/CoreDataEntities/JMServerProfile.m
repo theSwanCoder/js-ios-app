@@ -36,4 +36,5 @@
 @dynamic serverUrl;
 @dynamic favorites;
 @dynamic savedResources;
+@dynamic useVisualize;
 @end
