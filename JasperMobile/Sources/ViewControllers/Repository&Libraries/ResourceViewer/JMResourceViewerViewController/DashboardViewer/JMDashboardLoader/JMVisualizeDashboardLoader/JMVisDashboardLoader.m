@@ -176,7 +176,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     JMLog(@"%@", NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.maximizeDashlet";
-    request.parametersAsString = dashlet.identifier;
+    request.parametersAsString = [NSString stringWithFormat:@"\"%@\"", dashlet.identifier];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
@@ -191,7 +191,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     JMLog(@"%@", NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.minimizeDashlet";
-    request.parametersAsString = dashlet.identifier;
+    request.parametersAsString = [NSString stringWithFormat:@"\"%@\"", dashlet.identifier];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
