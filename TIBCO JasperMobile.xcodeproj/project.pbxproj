@@ -210,6 +210,8 @@
 		A1478EFBFF648E171A39F2BF /* JMReportViewerToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */; };
 		BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */; };
 		BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */; };
+		BD6DB2A01C981E5F002DEFDF /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */; };
+		BD6DB2BA1C982B9C002DEFDF /* JMShareActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6DB2B91C982B9C002DEFDF /* JMShareActivityItemProvider.m */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8B9ED1B57D90B00758441 /* JMThemesManager.m */; };
@@ -645,6 +647,9 @@
 		A1478FF2E87954F5F6AF096E /* JMNewScheduleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMNewScheduleCell.m; sourceTree = "<group>"; };
 		BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
+		BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		BD6DB2B81C982B9C002DEFDF /* JMShareActivityItemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMShareActivityItemProvider.h; sourceTree = "<group>"; };
+		BD6DB2B91C982B9C002DEFDF /* JMShareActivityItemProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareActivityItemProvider.m; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -690,6 +695,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD6DB2A01C981E5F002DEFDF /* AssetsLibrary.framework in Frameworks */,
 				93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */,
 				9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */,
 				93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */,
@@ -1525,6 +1531,7 @@
 		08E2AC2A1B1E056900AC462B /* JMResourceViewerViewController */ = {
 			isa = PBXGroup;
 			children = (
+				BD6DB2B61C982B9C002DEFDF /* JMShareViewController */,
 				08E2AC3B1B1E056900AC462B /* JMSavedResourceViewerViewController */,
 				08E2AC3E1B1E056900AC462B /* ReportViewer */,
 				A1478624CCF4C28F681912E0 /* DashboardViewer */,
@@ -2542,6 +2549,23 @@
 			);
 			path = JMHTMLParser;
 			sourceTree = "<group>";
+        };
+		BD6DB2B61C982B9C002DEFDF /* JMShareViewController */ = {
+			isa = PBXGroup;
+			children = (
+				BD6DB2B71C982B9C002DEFDF /* JMShareActivityItemProvider */,
+			);
+			path = JMShareViewController;
+			sourceTree = "<group>";
+		};
+		BD6DB2B71C982B9C002DEFDF /* JMShareActivityItemProvider */ = {
+			isa = PBXGroup;
+			children = (
+				BD6DB2B81C982B9C002DEFDF /* JMShareActivityItemProvider.h */,
+				BD6DB2B91C982B9C002DEFDF /* JMShareActivityItemProvider.m */,
+			);
+			path = JMShareActivityItemProvider;
+			sourceTree = "<group>";
 		};
 		BDABBD231A41D8CC00EDA100 /* RNCachingURLProtocol */ = {
 			isa = PBXGroup;
@@ -2637,6 +2661,7 @@
 		F55CC331174CFFCE00CEB39E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */,
 				93EEB4651AC55430000718C7 /* WebKit.framework */,
 				08DB3D931A891640006F9620 /* MessageUI.framework */,
 				9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */,
@@ -2973,6 +2998,7 @@
 				BDF3D25A1B8B166B0005AA28 /* JMReportOptionsCell.m in Sources */,
 				089F66501C3D727700ED683B /* UIViewController+Additions.m in Sources */,
 				0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */,
+				BD6DB2BA1C982B9C002DEFDF /* JMShareActivityItemProvider.m in Sources */,
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
 				089B15F81AA756BD0021A915 /* JMLibraryCollectionViewController.m in Sources */,

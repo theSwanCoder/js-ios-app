@@ -580,14 +580,14 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
             if (self.restClient.keepSession) {
                 __weak typeof(self)weakSelf = self;
                 [self startShowLoaderWithMessage:@"status.loading"];
-                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
                     __strong typeof(self)strongSelf = weakSelf;
 
                     [strongSelf setupSubviews];
                     [strongSelf configViewport];
 
                     [strongSelf stopShowLoader];
-                    if (isSessionAuthorized) {
+                    if (!result.error) {
                         // TODO: Need add restoring for current page
                         [strongSelf runReportWithPage:strongSelf.report.currentPage];
                     } else {

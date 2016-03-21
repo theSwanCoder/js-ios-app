@@ -22,33 +22,20 @@
 
 
 //
-//  JMSessionManager.h
+//  JMResourceViewerViewController.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.0
+ @since 2.5
  */
 
 
-#import <Foundation/Foundation.h>
-#import "JSRESTBase.h"
+#import <UIKit/UIKit.h>
 
-@class JSProfile;
+extern NSString * const kSkypeActivityType;
 
-@interface JMSessionManager : NSObject
-
-@property (nonatomic, strong, readonly) JSRESTBase *restClient;
-
-+ (instancetype) sharedManager;
-
-- (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(NSError *error))completionBlock;
-
-- (void)restoreLastSessionWithCompletion:(void (^)(BOOL isSessionRestored))completion;
-
-- (void) logout;
-
-- (NSPredicate *)predicateForCurrentServerProfile;
+@interface JMShareActivityItemProvider : UIActivityItemProvider <UIActivityItemSource>
 
 @end

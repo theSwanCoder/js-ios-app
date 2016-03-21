@@ -28,6 +28,7 @@
 #import "JMMainNavigationController.h"
 #import "JMWebEnvironment.h"
 #import "UIView+Additions.h"
+#import "JMShareActivityItemProvider.h"
 
 NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewerWebEnvironmentIdentifier";
 
@@ -217,11 +218,10 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 
 - (void)shareResource
 {
-    // What's New
-    NSString *textForShare = [NSString stringWithFormat:@"Look at this awesome report, builded via %@!", kJMAppName];
+    JMShareActivityItemProvider * textProvider = [[JMShareActivityItemProvider alloc] initWithPlaceholderItem:kSkypeActivityType];
     UIImage *imageForSharing = [self.resourceView renderedImage];
     
-    NSArray *objectsToShare = @[textForShare, imageForSharing];
+    NSArray *objectsToShare = @[textProvider, imageForSharing];
   
     UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
     
@@ -235,14 +235,9 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
     }
     
     activityVC.excludedActivityTypes = excludeActivities;
-    
-    if ( [activityVC respondsToSelector:@selector(popoverPresentationController)] ) {
-        activityVC.popoverPresentationController.sourceView = self.view;
-        activityVC.popoverPresentationController.sourceRect = self.navigationController.navigationBar.frame;
-    }
+    activityVC.popoverPresentationController.barButtonItem = [self.navigationItem.rightBarButtonItems firstObject];
     
     [self presentViewController:activityVC animated:YES completion:nil];
-
 }
 
 #pragma mark - UIPrintInteractionControllerDelegate

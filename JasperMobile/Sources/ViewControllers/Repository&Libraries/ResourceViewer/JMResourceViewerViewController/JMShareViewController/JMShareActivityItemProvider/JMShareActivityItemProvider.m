@@ -22,33 +22,21 @@
 
 
 //
-//  JMSessionManager.h
+//  JMResourceViewerViewController.h
 //  TIBCO JasperMobile
 //
 
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 2.0
- */
+#import "JMShareActivityItemProvider.h"
 
+NSString * const kSkypeActivityType = @"com.skype.SkypeForiPad.sharingextension";
 
-#import <Foundation/Foundation.h>
-#import "JSRESTBase.h"
-
-@class JSProfile;
-
-@interface JMSessionManager : NSObject
-
-@property (nonatomic, strong, readonly) JSRESTBase *restClient;
-
-+ (instancetype) sharedManager;
-
-- (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(NSError *error))completionBlock;
-
-- (void)restoreLastSessionWithCompletion:(void (^)(BOOL isSessionRestored))completion;
-
-- (void) logout;
-
-- (NSPredicate *)predicateForCurrentServerProfile;
-
+@implementation JMShareActivityItemProvider
+- (nullable id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
+{
+    if ([activityType isEqualToString:kSkypeActivityType]) {
+        return nil;
+    } else {
+        return [NSString stringWithFormat:@"Look at this awesome report, builded via %@!", kJMAppName];
+    }
+}
 @end

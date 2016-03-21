@@ -62,13 +62,17 @@ static JMSessionManager *_sharedManager = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(BOOL success))completionBlock
+- (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(NSError *error))completionBlock
 {
     self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile keepLogged:keepLogged];
     [self setDefaults];
     [self.restClient deleteCookies];
 
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:completionBlock];
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult * _Nullable result) {
+        if (completionBlock) {
+            completionBlock(result.error);
+        }
+    }];
 }
 
 - (void) saveActiveSessionIfNeeded:(id)notification {
@@ -94,19 +98,18 @@ static JMSessionManager *_sharedManager = nil;
     }
 
     if (self.restClient && self.restClient.keepSession) { // try restore session
-        [self.restClient resetReachabilityStatus];
 
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
 
             JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
-                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult * _Nullable result) {
                     dispatch_async(dispatch_get_main_queue(), ^(void){
-                        if (isSessionAuthorized) {
+                        if (!result.error) {
                             [self setDefaults];
                         }
                         if (completion) {
-                            completion(isSessionAuthorized);
+                            completion(!result.error);
                         }
                     });
                 }];

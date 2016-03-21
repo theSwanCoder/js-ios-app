@@ -216,18 +216,18 @@
         [strongSelf.restClient cancelAllRequests];
     }];
     
-    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:^(BOOL success) {
+    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:^(NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [JMCancelRequestPopup dismiss];
         // Analytics
-        [JMUtils logLoginSuccess:success
+        [JMUtils logLoginSuccess:!error
                     additionInfo:@{
                                    kJMAnalyticsCategoryKey      : kJMAnalyticsAuthenticationEventCategoryTitle,
                                    kJMAnalyticsActionKey        : kJMAnalyticsAuthenticationEventActionLoginTitle,
                                    kJMAnalyticsLabelKey         : kJMAnalyticsAuthenticationEventLabelSuccess
                                    }];
         
-        if (success) {
+        if (!error) {
             strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
 
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
@@ -235,9 +235,11 @@
                 strongSelf.completion();
             }
         } else {
-            NSString *errorTitle = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
-            NSString *errorMessage = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
-            NSError *error = [NSError errorWithDomain:errorTitle code:JSInvalidCredentialsErrorCode userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            if (error.code != JSServerVersionNotSupportedErrorCode && error.code != JSServerNotReachableErrorCode) {
+                NSString *errorTitle = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
+                NSString *errorMessage = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
+                error = [NSError errorWithDomain:errorTitle code:JSInvalidCredentialsErrorCode userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            }
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }];

@@ -78,7 +78,7 @@
 
     [[JMSessionManager sharedManager] createSessionWithServerProfile:testProfile
                                                           keepLogged:NO
-                                                          completion:^(BOOL success) {
+                                                          completion:^(NSError *error) {
                                                               [expectation fulfill];
                                                           }];
 
