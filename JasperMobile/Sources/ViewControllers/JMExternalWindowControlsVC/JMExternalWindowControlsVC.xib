@@ -12,11 +12,12 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="500"/>
+            <rect key="frame" x="0.0" y="64" width="320" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qxg-4W-i9z">
-                    <rect key="frame" x="118" y="86" width="24" height="24"/>
+                    <rect key="frame" x="98" y="96" width="44" height="44"/>
+                    <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                     <state key="normal" image="ic_zoom_in">
                         <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -25,7 +26,7 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fkS-JR-kFG">
-                    <rect key="frame" x="40" y="130" width="240" height="240"/>
+                    <rect key="frame" x="40" y="150" width="240" height="240"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pxn-Kt-9ze">
                             <rect key="frame" x="84" y="0.0" width="72" height="72"/>
@@ -71,9 +72,13 @@
                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="4dg-JP-d5v" firstAttribute="centerY" secondItem="fkS-JR-kFG" secondAttribute="centerY" id="2eW-cW-eFJ"/>
-                        <constraint firstAttribute="height" constant="240" id="2gn-XG-mgw"/>
+                        <constraint firstAttribute="height" constant="240" id="2gn-XG-mgw">
+                            <variation key="heightClass=compact-widthClass=compact" constant="180"/>
+                        </constraint>
                         <constraint firstItem="pxn-Kt-9ze" firstAttribute="centerX" secondItem="fkS-JR-kFG" secondAttribute="centerX" id="IBX-s4-UmP"/>
-                        <constraint firstAttribute="width" constant="240" id="OR9-8m-JN3"/>
+                        <constraint firstAttribute="width" constant="240" id="OR9-8m-JN3">
+                            <variation key="heightClass=compact-widthClass=compact" constant="180"/>
+                        </constraint>
                         <constraint firstItem="5ot-QI-uDY" firstAttribute="leading" secondItem="fkS-JR-kFG" secondAttribute="leading" id="cqN-K4-rtv"/>
                         <constraint firstAttribute="trailing" secondItem="4dg-JP-d5v" secondAttribute="trailing" id="lCT-4Z-ota"/>
                         <constraint firstItem="hGT-Tu-WA0" firstAttribute="centerX" secondItem="fkS-JR-kFG" secondAttribute="centerX" id="pL6-QK-Z3j"/>
@@ -83,7 +88,8 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zez-mN-QCn">
-                    <rect key="frame" x="178" y="86" width="24" height="24"/>
+                    <rect key="frame" x="178" y="96" width="44" height="44"/>
+                    <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                     <state key="normal" image="ic_zoom_out">
                         <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -94,13 +100,16 @@
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
             <constraints>
-                <constraint firstItem="zez-mN-QCn" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" constant="30" id="2k8-dD-g42"/>
-                <constraint firstItem="fkS-JR-kFG" firstAttribute="top" secondItem="Qxg-4W-i9z" secondAttribute="bottom" constant="20" id="GxM-uo-miR"/>
-                <constraint firstItem="fkS-JR-kFG" firstAttribute="top" secondItem="zez-mN-QCn" secondAttribute="bottom" constant="20" id="Q9q-ph-7XN"/>
+                <constraint firstItem="zez-mN-QCn" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" constant="40" id="2k8-dD-g42"/>
+                <constraint firstItem="Qxg-4W-i9z" firstAttribute="top" secondItem="zez-mN-QCn" secondAttribute="top" id="HVD-im-b51"/>
+                <constraint firstItem="fkS-JR-kFG" firstAttribute="top" secondItem="zez-mN-QCn" secondAttribute="bottom" constant="10" id="Q9q-ph-7XN"/>
                 <constraint firstItem="fkS-JR-kFG" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="bdh-uI-EbV"/>
-                <constraint firstItem="fkS-JR-kFG" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="t7F-TJ-C86"/>
-                <constraint firstItem="Qxg-4W-i9z" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" constant="-30" id="v7W-pI-Cg7"/>
+                <constraint firstItem="zez-mN-QCn" firstAttribute="leading" secondItem="Qxg-4W-i9z" secondAttribute="trailing" constant="36" id="hde-Yb-l6K"/>
+                <constraint firstItem="fkS-JR-kFG" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="20" id="t7F-TJ-C86">
+                    <variation key="heightClass=compact-widthClass=compact" constant="30"/>
+                </constraint>
             </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="397" y="327"/>
         </view>
