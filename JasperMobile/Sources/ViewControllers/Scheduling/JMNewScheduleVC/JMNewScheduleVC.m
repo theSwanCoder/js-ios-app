@@ -450,6 +450,8 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 
     if (!self.scheduleResponse.baseOutputFilename) {
         message = JMCustomLocalizedString(@"schedules.error.empty.filename", nil);
+    } else if (!self.scheduleResponse.label.length) {
+        message = JMCustomLocalizedString(@"schedules.error.empty.label", nil);
     } else if (!self.scheduleResponse.outputFormats.count) {
         message = JMCustomLocalizedString(@"schedules.error.empty.format", nil);
     }
