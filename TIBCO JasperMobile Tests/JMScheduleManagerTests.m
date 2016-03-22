@@ -16,6 +16,7 @@
 @property (nonatomic, strong) JMScheduleManager *scheduleManager;
 @property (nonatomic, strong) JSScheduleMetadata *testScheduleMetadata;
 @property (nonatomic, strong) JSScheduleMetadata *createdScheduleMetadata;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation JMScheduleManagerTests
@@ -23,40 +24,62 @@
 - (void)setUp {
     [super setUp];
 
-    self.scheduleManager = [JMScheduleManager new];
-    self.testScheduleMetadata = [self setupTestScheduleMetadata];
-    [self createNewSessionWithExpectation];
-    [self createScheduleMetadataWithExpectation];
+//    self.scheduleManager = [JMScheduleManager new];
+//    self.testScheduleMetadata = [self setupTestScheduleMetadata];
+//    [self createNewSessionWithExpectation];
+//    [self createScheduleMetadataWithExpectation];
+    self.dateFormatter = [NSDateFormatter new];
+    //2016-03-21T12:18:08.970+02:00
+//    NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"yyyy-MM-ddTHH:mm"
+//                                                             options:0
+//                                                              locale:[NSLocale currentLocale]];
+//    [self.dateFormatter setDateFormat:formatString];
+    
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    [self.dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+    [self.dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ssZZZ"];
 }
 
 - (void)tearDown {
 
-    [self deleteScheduleMetadataWithExpectation];
-    [self cleanSession];
-    self.scheduleManager = nil;
+//    [self deleteScheduleMetadataWithExpectation];
+//    [self cleanSession];
+//    self.scheduleManager = nil;
 
     [super tearDown];
 }
 
 #pragma mark - Tests Public API
-- (void)testThatSchedulesCanBeLoaded
+//- (void)testThatSchedulesCanBeLoaded
+//{
+//    XCTestExpectation *expectation = [self expectationWithDescription:@"Load Schedules Expectation"];
+//
+//    [self.scheduleManager loadSchedulesForResourceLookup:nil
+//                                              completion:^(NSArray *array, NSError *error) {
+//                                                  NSLog(@"schedules: %@", array);
+//                                                  XCTAssertNil(error, @"Load Schedules Error");
+//                                                  XCTAssertGreaterThan(array.count, 0, @"Should be some schedules");
+//                                                  [expectation fulfill];
+//                                              }];
+//
+//    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
+//        if (error) {
+//            NSLog(@"Timeout Error: %@", error);
+//            XCTAssertNil(error);
+//        }
+//    }];
+//}
+
+- (void)testThatDataCanBeConvertedFromString
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Load Schedules Expectation"];
-
-    [self.scheduleManager loadSchedulesForResourceLookup:nil
-                                              completion:^(NSArray *array, NSError *error) {
-                                                  NSLog(@"schedules: %@", array);
-                                                  XCTAssertNil(error, @"Load Schedules Error");
-                                                  XCTAssertGreaterThan(array.count, 0, @"Should be some schedules");
-                                                  [expectation fulfill];
-                                              }];
-
-    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
-        if (error) {
-            NSLog(@"Timeout Error: %@", error);
-            XCTAssertNil(error);
-        }
-    }];
+    //2016-03-21T12:18:08.970+02:00
+    NSString *dateString = @"2016-03-21T12:18:08.970+02:00";
+    //2016-03-22T00:00:00+02:00
+//    NSString *dateString = @"2016-03-22T00:00:00+02:00";
+    
+    NSDate *date = [self.dateFormatter dateFromString:dateString];
+    NSLog(@"date: %@", date);
+    XCTAssert(date != nil, @"date should be created");
 }
 
 #pragma mark - Helpers
