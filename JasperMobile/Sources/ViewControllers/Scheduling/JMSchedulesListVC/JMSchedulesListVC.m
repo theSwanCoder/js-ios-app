@@ -167,13 +167,8 @@
 
 - (NSString *)dateStringFromDate:(NSDate *)date
 {
-    NSDateFormatter* outputFormatter = [[NSDateFormatter alloc]init];
-    [outputFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-
-    NSTimeInterval timeInterval = [date timeIntervalSince1970];
-    date = [NSDate dateWithTimeIntervalSince1970:timeInterval];
-
-    NSString *dateString = [outputFormatter stringFromDate:date];
+    NSDateFormatter *formatter = [[JSDateFormatterFactory sharedFactory] formatterWithPattern:@"yyyy-MM-dd HH:mm"];
+    NSString *dateString = [formatter stringFromDate:date];
     return dateString;
 }
 
