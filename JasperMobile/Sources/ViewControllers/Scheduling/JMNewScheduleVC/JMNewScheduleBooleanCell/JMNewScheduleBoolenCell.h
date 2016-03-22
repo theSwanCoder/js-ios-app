@@ -42,5 +42,5 @@
 
 @protocol JMNewScheduleBoolenCellDelegate
 @optional
-- (void)scheduleCell:(JMNewScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue;
+- (void)scheduleBoolenCell:(JMNewScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue;
 @end

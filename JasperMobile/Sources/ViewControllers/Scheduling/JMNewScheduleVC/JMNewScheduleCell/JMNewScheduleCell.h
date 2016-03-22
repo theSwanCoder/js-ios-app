@@ -31,15 +31,15 @@
 @since 2.3
 */
 
-@protocol JMNewJobCellDelegate;
+@protocol JMNewScheduleCellDelegate;
 
 @interface JMNewScheduleCell : UITableViewCell <UITextFieldDelegate>
 @property(nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITextField *valueTextField;
-@property (nonatomic, weak) NSObject <JMNewJobCellDelegate> *delegate;
+@property (nonatomic, weak) NSObject <JMNewScheduleCellDelegate> *delegate;
 @end
 
-@protocol JMNewJobCellDelegate
+@protocol JMNewScheduleCellDelegate
 @optional
-- (void)jobCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue;
+- (void)scheduleCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue;
 @end
