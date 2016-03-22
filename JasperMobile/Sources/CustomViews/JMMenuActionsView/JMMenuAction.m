@@ -134,8 +134,7 @@
         case JMMenuActionsViewAction_Schedule:
             return @"schedule_action";
         case JMMenuActionsViewAction_Share:
-#warning SHOULD UPDATE IMAGE FOR THIS ITEM
-            return @"schedule_action";
+            return @"share_action";
         case JMMenuActionsViewAction_ShowExternalDisplay:
             return @"tv_action";
         case JMMenuActionsViewAction_HideExternalDisplay:

@@ -296,15 +296,11 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
     [self stopShowLoadingIndicators];
-    if (self.resourceRequest) {
-        self.isResourceLoaded = YES;
-    }
 }
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
 {
     [self stopShowLoadingIndicators];
-    self.isResourceLoaded = NO;
 }
 
 #pragma mark - Helpers
