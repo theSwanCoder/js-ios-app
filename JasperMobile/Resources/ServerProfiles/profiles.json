@@ -47,7 +47,7 @@
     },
     {
       "mAlias" : "csrf",
-      "mServerUrl" : "http://build-master.jaspersoft.com/job/feature-csrf-protection/",
+      "mServerUrl" : "http://build-master.jaspersoft.com:8480/jrs-pro-feature-csrf-protection",
       "mOrganization" : ""
     }
   ]
