@@ -91,18 +91,12 @@
                   fileFormat:(NSString *)fileFormat
                      baseURL:(NSURL *)baseURL
 {
-    if ([fileFormat.lowercaseString isEqualToString:@"html"]) {
+    if (baseURL && [fileFormat.lowercaseString isEqualToString:@"html"]) {
         NSString* content = [NSString stringWithContentsOfURL:fileURL
                                                      encoding:NSUTF8StringEncoding
                                                         error:NULL];
-        NSURL *URL;
-        if (!baseURL) {
-            URL = [NSURL URLWithString:@"about:blank"];
-        } else {
-            URL = baseURL;
-        }
         [self.webView loadHTMLString:content
-                             baseURL:URL];
+                             baseURL:baseURL];
     } else {
         if ([JMUtils isSystemVersion9]) {
             [self.webView loadFileURL:fileURL
