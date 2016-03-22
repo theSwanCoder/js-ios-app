@@ -34,7 +34,7 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
 @interface JMExternalWindowControlsVC () <UIScrollViewDelegate>
 @property (weak, nonatomic) UIView *contentView;
 @property (nonatomic, strong) NSTimer *timer;
-@property (nonatomic) CGFloat currentZoomScale;
+@property (nonatomic) CGFloat defaultZoomScale;
 @end
 
 @implementation JMExternalWindowControlsVC
@@ -60,7 +60,7 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
     [super viewDidAppear:animated];
 
     WKWebView *contentView = (WKWebView *) self.contentView;
-    self.currentZoomScale = contentView.scrollView.zoomScale;
+    self.defaultZoomScale = contentView.scrollView.zoomScale;
 }
 
 #pragma mark - Actions Up
@@ -112,7 +112,7 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
     WKWebView *contentView = (WKWebView *) self.contentView;
     CGFloat zoomScale = contentView.scrollView.zoomScale;
     zoomScale += 0.1;
-    if (zoomScale >= 2 * self.currentZoomScale) {
+    if (zoomScale >= 2 * self.defaultZoomScale) {
         return;
     }
     [contentView.scrollView setZoomScale:zoomScale
@@ -124,7 +124,7 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
     WKWebView *contentView = (WKWebView *) self.contentView;
     CGFloat zoomScale = contentView.scrollView.zoomScale;
     zoomScale -= 0.1;
-    if (zoomScale <= self.currentZoomScale) {
+    if (zoomScale <= self.defaultZoomScale) {
         return;
     }
     [contentView.scrollView setZoomScale:zoomScale
@@ -152,9 +152,9 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
     CGSize contentViewSize = scrollView.frame.size;
 
     CGPoint upPoint = scrollView.contentOffset;
-    JMLog(@"upPoint.y: %@", @(upPoint.y));
-    upPoint.y += kJMExternalWindowControlsScrollStep;
-    if (upPoint.y > contentViewSize.height * 1.1) {
+    upPoint.y -= kJMExternalWindowControlsScrollStep;
+    CGFloat zoomFactor = scrollView.zoomScale / self.defaultZoomScale;
+    if (upPoint.y < -contentViewSize.height * 0.1 * zoomFactor) {
         return;
     }
     scrollView.contentOffset = upPoint;
@@ -180,9 +180,9 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
     CGSize contentViewSize = scrollView.frame.size;
 
     CGPoint upPoint = scrollView.contentOffset;
-    JMLog(@"upPoint.y: %@", @(upPoint.y));
-    upPoint.y -= kJMExternalWindowControlsScrollStep;
-    if (upPoint.y < -contentViewSize.height * 0.1) {
+    upPoint.y += kJMExternalWindowControlsScrollStep;
+    CGFloat zoomFactor = scrollView.zoomScale / self.defaultZoomScale;
+    if (upPoint.y > contentViewSize.height * 1.1 * zoomFactor) {
         return;
     }
     scrollView.contentOffset = upPoint;
@@ -208,9 +208,9 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
     CGSize contentViewSize = scrollView.frame.size;
 
     CGPoint upPoint = scrollView.contentOffset;
-    JMLog(@"upPoint.x: %@", @(upPoint.x));
-    upPoint.x += kJMExternalWindowControlsScrollStep;
-    if (upPoint.x > contentViewSize.width * 0.1) {
+    upPoint.x -= kJMExternalWindowControlsScrollStep;
+    CGFloat zoomFactor = scrollView.zoomScale / self.defaultZoomScale;
+    if (upPoint.x < -contentViewSize.width * 0.1 * zoomFactor) {
         return;
     }
     scrollView.contentOffset = upPoint;
@@ -231,14 +231,14 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
 
 - (void)rightAction
 {
-    WKWebView *contentView = (WKWebView *) self.contentView;
-    UIScrollView *scrollView = contentView.scrollView;
-    CGSize contentViewSize = scrollView.frame.size;
+    WKWebView *webView = (WKWebView *) self.contentView;
+    UIScrollView *scrollView = webView.scrollView;
+    CGSize scrollViewSize = scrollView.frame.size;
+    CGSize contentViewSize = scrollView.contentSize;
 
     CGPoint upPoint = scrollView.contentOffset;
-    JMLog(@"upPoint.x: %@", @(upPoint.x));
-    upPoint.x -= kJMExternalWindowControlsScrollStep;
-    if (upPoint.x < -contentViewSize.width * 0.1) {
+    upPoint.x += kJMExternalWindowControlsScrollStep;
+    if (upPoint.x > contentViewSize.width * 0.1 + (contentViewSize.width -  scrollViewSize.width) ) {
         return;
     }
     scrollView.contentOffset = upPoint;
