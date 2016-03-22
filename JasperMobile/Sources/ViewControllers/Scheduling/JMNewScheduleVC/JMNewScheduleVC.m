@@ -80,23 +80,40 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 #pragma mark - Actions
 - (void)updateDate:(UIDatePicker *)sender
 {
-    self.scheduleMetadata.trigger.startDate = sender.date;
+    NSDate *newDate = sender.date;
+    NSDate *currentDate = [NSDate date];
+    if ([newDate compare:currentDate] == NSOrderedAscending) {
+        return;
+    } else {
+        self.scheduleMetadata.trigger.startDate = newDate;
 
-    // find text field for date
-    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
-    NSArray *rows = section.rows;
-    NSInteger rowDateCell = [rows indexOfObject:kJMJobStartDate];
-    NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell
-                                                        inSection:JMNewScheduleVCSectionTypeSchedule];
-    JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
+        // find text field for date
+        JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
+        NSArray *rows = section.rows;
+        NSInteger rowDateCell = [rows indexOfObject:kJMJobStartDate];
+        NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell
+                                                            inSection:JMNewScheduleVCSectionTypeSchedule];
+        JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
 
-    // set new value
-    dateCell.valueTextField.text = [self dateStringFromDate:self.scheduleMetadata.trigger.startDate];
+        // set new value
+        dateCell.valueTextField.text = [self dateStringFromDate:self.scheduleMetadata.trigger.startDate];
+    }
 }
 
 - (void)setDate:(UIButton *)sender
 {
-    self.scheduleMetadata.trigger.startDate = self.datePicker.date;
+    NSDate *newDate = self.datePicker.date;
+    NSDate *currentDate = [NSDate date];
+    if ([newDate compare:currentDate] == NSOrderedAscending) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
+                                                                                          message:JMCustomLocalizedString(@"schedules.error.date.past", nil)
+                                                                                cancelButtonTitle:@"dialog.button.ok"
+                                                                          cancelCompletionHandler:nil];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
+
+    self.scheduleMetadata.trigger.startDate = newDate;
 
     // find text field for date
     JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
@@ -105,6 +122,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell
                                                         inSection:JMNewScheduleVCSectionTypeSchedule];
     JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
+
 
     // set new value
     dateCell.valueTextField.text = [self dateStringFromDate:self.scheduleMetadata.trigger.startDate];

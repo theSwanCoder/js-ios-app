@@ -321,3 +321,4 @@
 "schedules.error.empty.output.folder" = "Output folder is empty";
 "schedules.error.empty.label" = "Label is empty";
 "schedules.error.empty.format" = "Output file format not selected";
+"schedules.error.date.past" = "The start date is in the past. It should be in the future.";
