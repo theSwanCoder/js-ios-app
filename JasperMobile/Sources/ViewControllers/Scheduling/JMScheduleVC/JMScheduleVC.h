@@ -22,7 +22,7 @@
 
 
 //
-//  JMNewScheduleVC.h
+//  JMScheduleVC.h
 //  TIBCO JasperMobile
 //
 
@@ -31,14 +31,11 @@
 @since 2.3
 */
 
-typedef NS_ENUM(NSInteger, JMScheduleMode) {
-    JMScheduleModeNew,
-    JMScheduleModeEdit,
-};
+@class JMScheduleManager;
 
-@interface JMNewScheduleVC : JMBaseViewController
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, strong) JSScheduleLookup *scheduleSummary;
-@property (nonatomic, assign) JMScheduleMode mode;
-@property (nonatomic, copy) void(^exitBlock)(void);
+typedef void(^JMScheduleCompletionBlock)(JSScheduleMetadata *__nullable);
+
+@interface JMScheduleVC : JMBaseViewController
+@property (nonatomic, strong) JSScheduleMetadata *__nonnull scheduleMetadata;
+@property (nonatomic, copy) JMScheduleCompletionBlock __nonnull exitBlock;
 @end

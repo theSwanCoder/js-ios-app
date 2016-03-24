@@ -30,23 +30,19 @@
 
 @implementation JMScheduleManager
 
-#pragma mark - Public API
-- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleLookup *> *, NSError *))completion
+#pragma mark - Life Cycle
++ (instancetype)sharedManager
 {
-    if (!completion) {
-        return;
-    }
-
-    [self.restClient fetchSchedulesForResourceWithURI:resourceLookup.uri completion:^(JSOperationResult *result) {
-        if (result.error) {
-            completion(nil, result.error);
-        } else {
-            completion(result.objects, nil);
-        }
-    }];
+    static JMScheduleManager *sharedManager;
+    static dispatch_once_t predicate;
+    dispatch_once(&predicate, ^() {
+        sharedManager = [JMScheduleManager new];
+    });
+    return sharedManager;
 }
 
-- (void)loadScheduleInfoWithScheduleId:(NSInteger)scheduleId completion:(JMScheduleCompletion)completion
+#pragma mark - Public API
+- (void)loadScheduleMetadataForScheduleWithId:(NSInteger)scheduleId completion:(JMScheduleCompletion __nonnull)completion
 {
     if (!completion) {
         return;
@@ -61,7 +57,7 @@
     }];
 }
 
-- (void)createJobWithData:(JSScheduleMetadata *)schedule completion:(JMScheduleCompletion)completion
+- (void)createScheduleWithData:(JSScheduleMetadata *)schedule completion:(JMScheduleCompletion)completion
 {
     [self.restClient createScheduleWithData:schedule
                                  completion:^(JSOperationResult *result) {
@@ -95,7 +91,7 @@
                          }];
 }
 
-- (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void(^)(NSError *))completion
+- (void)deleteScheduleWithJobIdentifier:(NSInteger)identifier completion:(void(^)(NSError *))completion
 {
     if (!completion) {
         return;
@@ -152,6 +148,58 @@
     } else {
         completion(nil, serializeError);
     }
+}
+
+
+#pragma mark - New Schedule Metadata
+- (JSScheduleMetadata *)createNewScheduleMetadataWithResourceLookup:(JSResourceLookup *)resourceLookup
+{
+    JSScheduleMetadata *scheduleMetadata = [JSScheduleMetadata new];
+
+    NSString *resourceFolder = [resourceLookup.uri stringByDeletingLastPathComponent];
+    scheduleMetadata.folderURI = resourceFolder;
+    scheduleMetadata.reportUnitURI = resourceLookup.uri;
+    scheduleMetadata.label = resourceLookup.label;
+    scheduleMetadata.baseOutputFilename = [self filenameFromLabel:resourceLookup.label];
+    scheduleMetadata.outputFormats = [self defaultFormats];
+
+    scheduleMetadata.outputTimeZone = [self currentTimeZone];
+
+    JSScheduleSimpleTrigger *simpleTrigger = [self simpleTrigger];
+    simpleTrigger.timezone = [self currentTimeZone];
+    simpleTrigger.startDate = [NSDate date];
+    scheduleMetadata.trigger = @{
+            @(JSScheduleTriggerTypeSimple) : simpleTrigger
+    };
+    scheduleMetadata.creationDate = [NSDate date];
+    return scheduleMetadata;
+}
+
+- (JSScheduleSimpleTrigger *)simpleTrigger
+{
+    JSScheduleSimpleTrigger *simpleTrigger = [JSScheduleSimpleTrigger new];
+    simpleTrigger.startType = JSScheduleTriggerStartTypeAtDate;
+    simpleTrigger.occurrenceCount = 1;
+    simpleTrigger.startDate = [NSDate date];
+    return simpleTrigger;
+}
+
+- (NSString *)currentTimeZone
+{
+    NSTimeZone *localTimeZone = [NSTimeZone localTimeZone];
+    NSString *localTimeZoneName = localTimeZone.name;
+    return localTimeZoneName;
+}
+
+- (NSArray *)defaultFormats
+{
+    return @[kJS_CONTENT_TYPE_PDF.uppercaseString];
+}
+
+- (NSString *)filenameFromLabel:(NSString *)label
+{
+    NSString *filename = [label stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    return filename;
 }
 
 @end

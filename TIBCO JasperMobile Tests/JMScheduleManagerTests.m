@@ -126,7 +126,7 @@
     scheduleMetadata.baseOutputFilename = @"Test_Schedule_Manager";
     scheduleMetadata.folderURI = @"/public/Samples/Reports";
     scheduleMetadata.outputFormats = @[@"PDF"];
-    scheduleMetadata.trigger.startDate = [NSDate dateWithTimeIntervalSinceNow:10 * 24 * 60 * 60];
+//    scheduleMetadata.trigger.startDate = [NSDate dateWithTimeIntervalSinceNow:10 * 24 * 60 * 60];
 
     return scheduleMetadata;
 }
@@ -135,13 +135,13 @@
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Create Schedule Expectation"];
 
-    [self.scheduleManager createJobWithData:self.testScheduleMetadata
-                                 completion:^(JSScheduleMetadata *metadata, NSError *error) {
-                                     NSLog(@"schedule: %@", metadata);
-                                     XCTAssertNil(error, @"Creating Schedule Error");
-                                     self.createdScheduleMetadata = metadata;
-                                     [expectation fulfill];
-                                 }];
+    [self.scheduleManager createScheduleWithData:self.testScheduleMetadata
+                                      completion:^(JSScheduleMetadata *metadata, NSError *error) {
+                                          NSLog(@"schedule: %@", metadata);
+                                          XCTAssertNil(error, @"Creating Schedule Error");
+                                          self.createdScheduleMetadata = metadata;
+                                          [expectation fulfill];
+                                      }];
 
     [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
         if (error) {
@@ -155,11 +155,11 @@
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Delete Schedule Expectation"];
 
-    [self.scheduleManager deleteJobWithJobIdentifier:self.createdScheduleMetadata.jobIdentifier
-                                          completion:^(NSError *error) {
-                                              XCTAssertNil(error, @"Deleting Schedule Error");
-                                              [expectation fulfill];
-                                          }];
+    [self.scheduleManager deleteScheduleWithJobIdentifier:self.createdScheduleMetadata.jobIdentifier
+                                               completion:^(NSError *error) {
+                                                   XCTAssertNil(error, @"Deleting Schedule Error");
+                                                   [expectation fulfill];
+                                               }];
 
     [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
         if (error) {

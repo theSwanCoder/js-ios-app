@@ -22,25 +22,16 @@
 
 
 //
-//  JMScheduleManager.h
+//  JMScheduleLoader.h
 //  TIBCO JasperMobile
 //
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
-@since 2.3
+@since 2.5
 */
 
-#import "JMResourcesListLoader.h"
 
-typedef void(^JMScheduleCompletion)(JSScheduleMetadata *__nullable, NSError *__nullable);
-
-@interface JMScheduleManager : NSObject
-+ (instancetype __nullable)sharedManager;
-- (void)loadScheduleMetadataForScheduleWithId:(NSInteger)scheduleId completion:(JMScheduleCompletion __nonnull)completion;
-- (void)createScheduleWithData:(JSScheduleMetadata *__nonnull)jobData completion:(JMScheduleCompletion __nonnull)completion;
-- (void)updateSchedule:(JSScheduleMetadata *__nonnull)schedule completion:(JMScheduleCompletion __nonnull)completion;
-- (void)deleteScheduleWithJobIdentifier:(NSInteger)identifier completion:(void (^__nonnull)(NSError *__nullable))completion;
-// create new model
-- (JSScheduleMetadata *__nonnull)createNewScheduleMetadataWithResourceLookup:(JSResourceLookup *__nonnull)resourceLookup;
+@interface JMScheduleLoader : NSObject
+- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleLookup *> *, NSError *))completion;
 @end

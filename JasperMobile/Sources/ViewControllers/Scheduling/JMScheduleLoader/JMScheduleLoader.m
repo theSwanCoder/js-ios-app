@@ -22,25 +22,30 @@
 
 
 //
-//  JMScheduleManager.h
+//  JMScheduleLoader.m
 //  TIBCO JasperMobile
 //
 
-/**
-@author Aleksandr Dakhno odahno@tibco.com
-@since 2.3
-*/
+#import "JMScheduleLoader.h"
 
-#import "JMResourcesListLoader.h"
 
-typedef void(^JMScheduleCompletion)(JSScheduleMetadata *__nullable, NSError *__nullable);
+@implementation JMScheduleLoader
 
-@interface JMScheduleManager : NSObject
-+ (instancetype __nullable)sharedManager;
-- (void)loadScheduleMetadataForScheduleWithId:(NSInteger)scheduleId completion:(JMScheduleCompletion __nonnull)completion;
-- (void)createScheduleWithData:(JSScheduleMetadata *__nonnull)jobData completion:(JMScheduleCompletion __nonnull)completion;
-- (void)updateSchedule:(JSScheduleMetadata *__nonnull)schedule completion:(JMScheduleCompletion __nonnull)completion;
-- (void)deleteScheduleWithJobIdentifier:(NSInteger)identifier completion:(void (^__nonnull)(NSError *__nullable))completion;
-// create new model
-- (JSScheduleMetadata *__nonnull)createNewScheduleMetadataWithResourceLookup:(JSResourceLookup *__nonnull)resourceLookup;
+#pragma mark - Public API
+- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleLookup *> *, NSError *))completion
+{
+    if (!completion) {
+        return;
+    }
+
+    [self.restClient fetchSchedulesForResourceWithURI:resourceLookup.uri completion:^(JSOperationResult *result) {
+        if (result.error) {
+            completion(nil, result.error);
+        } else {
+            completion(result.objects, nil);
+        }
+    }];
+}
+
+
 @end
