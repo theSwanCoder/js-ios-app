@@ -185,6 +185,8 @@
 - (NSString *)dateStringFromDate:(NSDate *)date
 {
     NSDateFormatter *formatter = [[JSDateFormatterFactory sharedFactory] formatterWithPattern:@"yyyy-MM-dd HH:mm"];
+    // need set local timezone because of received value
+    formatter.timeZone = [NSTimeZone localTimeZone];
     NSString *dateString = [formatter stringFromDate:date];
     return dateString;
 }

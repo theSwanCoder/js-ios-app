@@ -376,8 +376,6 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 {
     NSDateFormatter *formatter = [[JSDateFormatterFactory sharedFactory] formatterWithPattern:@"yyyy-MM-dd HH:mm"];
     NSString *dateString = [formatter stringFromDate:date];
-    JMLog(@"date: %@", date);
-    JMLog(@"dateString: %@", dateString);
     return dateString;
 }
 
@@ -385,9 +383,12 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 {
     if (!self.datePicker) {
         UIDatePicker *datePicker = [[UIDatePicker alloc]init];
+        // need set timezone to 0 because of received value
+        datePicker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        [datePicker setDate:simpleTrigger.startDate];
+        datePicker.date = simpleTrigger.startDate;
         [datePicker addTarget:self
                        action:@selector(updateDate:)
              forControlEvents:UIControlEventValueChanged];
