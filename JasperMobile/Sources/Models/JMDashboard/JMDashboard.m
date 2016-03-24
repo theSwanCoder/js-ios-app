@@ -63,11 +63,11 @@
 #pragma mark - Helpers
 - (NSURLRequest *)createResourceRequest
 {
-    NSString *dashboardUrl = [NSString stringWithFormat:@"%@%@", @"flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=", _resourceURI];
+    NSString *dashboardUrl = [NSString stringWithFormat:@"flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=%@", _resourceURI];
     dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
+    dashboardUrl = [[NSURL URLWithString:dashboardUrl relativeToURL:self.restClient.baseURL] absoluteString];
     
     NSMutableURLRequest *dashboardRequest = [self.restClient.requestSerializer requestWithMethod:@"GET" URLString:dashboardUrl parameters:nil error:nil];
-    dashboardRequest.timeoutInterval = self.restClient.timeoutInterval;
     dashboardRequest.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
     return dashboardRequest;
 }
