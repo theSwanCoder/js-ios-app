@@ -59,7 +59,6 @@ NSString * const kJMReportKey = @"reportKey";
 NSString * const kJMDashboardKey = @"dashboardKey";
 
 // Settings keys
-NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
 NSString * const kJMDefaultSendingCrashReport = @"jaspersoft.crashreportsending.enabled";
 NSString * const kJMDefaultUseVisualize = @"jaspersoft.use.visualize";
 NSString * const kJMUserAcceptAgreement = @"kJMUserAcceptAgreement";

@@ -8,30 +8,6 @@
 	<array>
 		<dict>
 			<key>Type</key>
-			<string>PSMultiValueSpecifier</string>
-			<key>Title</key>
-			<string>settings.item.connection.timeout</string>
-			<key>Key</key>
-			<string>defaultRequestTimeout</string>
-			<key>DefaultValue</key>
-			<string>120</string>
-			<key>Titles</key>
-			<array>
-				<string>15s</string>
-				<string>30s</string>
-				<string>60s</string>
-				<string>120s</string>
-			</array>
-			<key>Values</key>
-			<array>
-				<string>15</string>
-				<string>30</string>
-				<string>60</string>
-				<string>120</string>
-			</array>
-		</dict>
-		<dict>
-			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
 			<string>settings.crashtracking.title</string>

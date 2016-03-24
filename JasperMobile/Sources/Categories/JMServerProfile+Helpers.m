@@ -55,10 +55,16 @@
 + (JMServerProfile *)serverProfileForJSProfile:(JSProfile *)profile
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    
+    NSMutableArray *serverUrlPredicates = [NSMutableArray array];
+    [serverUrlPredicates addObject:[NSPredicate predicateWithFormat:@"serverUrl == %@", profile.serverUrl]];
+    [serverUrlPredicates addObject:[NSPredicate predicateWithFormat:@"serverUrl == %@", [profile.serverUrl stringByAppendingString:@"/"]]];
+
     NSMutableArray *predicates = [NSMutableArray array];
-    [predicates addObject:[NSPredicate predicateWithFormat:@"serverUrl == %@", profile.serverUrl]];
     [predicates addObject:[NSPredicate predicateWithFormat:@"alias == %@", profile.alias]];
     [predicates addObject:[NSPredicate predicateWithFormat:@"organization == %@", profile.organization]];
+    [predicates addObject:[NSCompoundPredicate orPredicateWithSubpredicates:serverUrlPredicates]];
+    
     fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
     
     return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];

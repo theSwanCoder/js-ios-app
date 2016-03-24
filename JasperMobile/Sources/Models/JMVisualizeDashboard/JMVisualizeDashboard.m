@@ -37,7 +37,6 @@
     NSString *dashboardUrl = [NSString stringWithFormat:@"%@%@", @"dashboard/viewer.html?_opt=true&sessionDecorator=no&decorate=no#", self.resourceURI];
     
     NSMutableURLRequest *dashboardRequest = [self.restClient.requestSerializer requestWithMethod:@"GET" URLString:dashboardUrl parameters:nil error:nil];
-    dashboardRequest.timeoutInterval = self.restClient.timeoutInterval;
     dashboardRequest.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
     
     return dashboardRequest;

@@ -228,8 +228,6 @@
                                    }];
         
         if (!error) {
-            strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
             if (strongSelf.completion) {
                 strongSelf.completion();
