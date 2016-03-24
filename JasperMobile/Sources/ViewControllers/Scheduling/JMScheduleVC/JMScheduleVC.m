@@ -385,7 +385,9 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 {
     if (!self.datePicker) {
         UIDatePicker *datePicker = [[UIDatePicker alloc]init];
-        [datePicker setDate:[NSDate date]];
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        [datePicker setDate:simpleTrigger.startDate];
         [datePicker addTarget:self
                        action:@selector(updateDate:)
              forControlEvents:UIControlEventValueChanged];
