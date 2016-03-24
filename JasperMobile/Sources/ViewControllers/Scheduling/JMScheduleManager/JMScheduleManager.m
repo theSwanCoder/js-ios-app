@@ -162,16 +162,12 @@
     scheduleMetadata.label = resourceLookup.label;
     scheduleMetadata.baseOutputFilename = [self filenameFromLabel:resourceLookup.label];
     scheduleMetadata.outputFormats = [self defaultFormats];
-
     scheduleMetadata.outputTimeZone = [self currentTimeZone];
 
     JSScheduleSimpleTrigger *simpleTrigger = [self simpleTrigger];
-    simpleTrigger.timezone = [self currentTimeZone];
-    simpleTrigger.startDate = [NSDate date];
     scheduleMetadata.trigger = @{
             @(JSScheduleTriggerTypeSimple) : simpleTrigger
     };
-    scheduleMetadata.creationDate = [NSDate date];
     return scheduleMetadata;
 }
 
@@ -179,8 +175,10 @@
 {
     JSScheduleSimpleTrigger *simpleTrigger = [JSScheduleSimpleTrigger new];
     simpleTrigger.startType = JSScheduleTriggerStartTypeAtDate;
-    simpleTrigger.occurrenceCount = 1;
+    simpleTrigger.occurrenceCount = @1;
     simpleTrigger.startDate = [NSDate date];
+    simpleTrigger.timezone = [self currentTimeZone];
+    simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
     return simpleTrigger;
 }
 

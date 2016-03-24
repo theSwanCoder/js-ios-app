@@ -31,8 +31,6 @@
 @since 2.3
 */
 
-#import "JMResourcesListLoader.h"
-
 typedef void(^JMScheduleCompletion)(JSScheduleMetadata *__nullable, NSError *__nullable);
 
 @interface JMScheduleManager : NSObject
