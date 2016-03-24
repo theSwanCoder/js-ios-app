@@ -9,164 +9,85 @@
 #import <XCTest/XCTest.h>
 #import "JaspersoftSDK.h"
 #import "JMScheduleManager.h"
-#import "JMSessionManager.h"
-#import "JMConstants.h"
 
 @interface JMScheduleManagerTests : XCTestCase
-@property (nonatomic, strong) JMScheduleManager *scheduleManager;
-@property (nonatomic, strong) JSScheduleMetadata *testScheduleMetadata;
-@property (nonatomic, strong) JSScheduleMetadata *createdScheduleMetadata;
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property(nonatomic, strong) JSScheduleMetadata *scheduleMetadata;
 @end
 
 @implementation JMScheduleManagerTests
 
 - (void)setUp {
     [super setUp];
-
-//    self.scheduleManager = [JMScheduleManager new];
-//    self.testScheduleMetadata = [self setupTestScheduleMetadata];
-//    [self createNewSessionWithExpectation];
-//    [self createScheduleMetadataWithExpectation];
-    self.dateFormatter = [NSDateFormatter new];
-    //2016-03-21T12:18:08.970+02:00
-//    NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"yyyy-MM-ddTHH:mm"
-//                                                             options:0
-//                                                              locale:[NSLocale currentLocale]];
-//    [self.dateFormatter setDateFormat:formatString];
     
-    self.dateFormatter = [[NSDateFormatter alloc] init];
-    [self.dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-    [self.dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ssZZZ"];
+    self.scheduleMetadata = [self createTestScheduleMetadata];
+    NSLog(@"scheduleMetadata: %@", self.scheduleMetadata);
+    //{"baseOutputFilename":"03._Store_Segment_Performance_Report","outputFormats":{"outputFormat":["PDF"]},"source":{"reportUnitURI":"/public/Samples/Reports/03._Store_Segment_Performance_Report"},"trigger":{"simpleTrigger":{"timezone":"Europe/Helsinki","occurrenceCount":1,"startType":2,"recurrenceInterval":null,"recurrenceIntervalUnit":null,"endDate":null,"startDate":"2016-03-31 10:00"}},"outputTimeZone":"Europe/Helsinki","repositoryDestination":{"overwriteFiles":true,"sequentialFilenames":false,"folderURI":"/public/Samples/Reports","saveToRepository":true,"timestampPattern":null,"outputFTPInfo":{"type":"ftp","port":21,"folderPath":null,"password":null,"propertiesMap":{},"serverName":null,"userName":null}},"label":"03._Store_Segment_Performance_Report","description":"description"}
+    
+    
 }
 
 - (void)tearDown {
-
-//    [self deleteScheduleMetadataWithExpectation];
-//    [self cleanSession];
-//    self.scheduleManager = nil;
-
+    self.scheduleMetadata = nil;
     [super tearDown];
 }
 
 #pragma mark - Tests Public API
-//- (void)testThatSchedulesCanBeLoaded
-//{
-//    XCTestExpectation *expectation = [self expectationWithDescription:@"Load Schedules Expectation"];
-//
-//    [self.scheduleManager loadSchedulesForResourceLookup:nil
-//                                              completion:^(NSArray *array, NSError *error) {
-//                                                  NSLog(@"schedules: %@", array);
-//                                                  XCTAssertNil(error, @"Load Schedules Error");
-//                                                  XCTAssertGreaterThan(array.count, 0, @"Should be some schedules");
-//                                                  [expectation fulfill];
-//                                              }];
-//
-//    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
-//        if (error) {
-//            NSLog(@"Timeout Error: %@", error);
-//            XCTAssertNil(error);
-//        }
-//    }];
-//}
+- (void)testThatNewScheduleWithSimpleTriggerCanBeCreatedFromTestMetadata
+{    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Create New Schedule Expectation"];
 
-- (void)testThatDataCanBeConvertedFromString
-{
-    //2016-03-21T12:18:08.970+02:00
-    NSString *dateString = @"2016-03-21T12:18:08.970+02:00";
-    //2016-03-22T00:00:00+02:00
-//    NSString *dateString = @"2016-03-22T00:00:00+02:00";
-    
-    NSDate *date = [self.dateFormatter dateFromString:dateString];
-    NSLog(@"date: %@", date);
-    XCTAssert(date != nil, @"date should be created");
-}
+    [[JMScheduleManager sharedManager] createScheduleWithData:self.scheduleMetadata
+                                                   completion:^(JSScheduleMetadata *newScheduleMetadata, NSError *error) {
+                                                       [expectation fulfill];
+                                                       if (!newScheduleMetadata) {
+                                                           XCTAssertFalse(error, @"Create New Schedule Error");
+                                                       }
+                                                   }];
 
-#pragma mark - Helpers
-- (void)createNewSessionWithExpectation
-{
-    NSString *testProfileURL = @"http://mobiledemo2.jaspersoft.com/jasperserver-pro";
-    NSString *testProfileOrganization = kJMDemoServerAlias;
-    NSString *testProfileUsername = kJMDemoServerUsername;
-    NSString *testProfilePassword = kJMDemoServerPassword;
-    JSProfile *testProfile = [[JSProfile alloc] initWithAlias:@"Test Profile"
-                                                    serverUrl:testProfileURL
-                                                 organization:testProfileOrganization
-                                                     username:testProfileUsername
-                                                     password:testProfilePassword];
-
-    [[JMSessionManager sharedManager] logout];
-
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Creating Session Expectation"];
-
-    [[JMSessionManager sharedManager] createSessionWithServerProfile:testProfile
-                                                          keepLogged:NO
-                                                          completion:^(NSError *error) {
-                                                              [expectation fulfill];
-                                                          }];
-
-    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
-        if (error) {
-            NSLog(@"Timeout Error: %@", error);
-            XCTAssertNil(error, @"Timeout error");
-        }
-    }];
-}
-
-- (void)cleanSession
-{
-    [[JMSessionManager sharedManager] logout];
-}
-
-- (JSScheduleMetadata *)setupTestScheduleMetadata
-{
-    JSScheduleMetadata *scheduleMetadata = [JSScheduleMetadata new];
-    scheduleMetadata.label = @"Test Schedule Manager";
-    scheduleMetadata.reportUnitURI = @"/public/Samples/Reports/02._Sales_Mix_by_Demographic_Report";
-    scheduleMetadata.baseOutputFilename = @"Test_Schedule_Manager";
-    scheduleMetadata.folderURI = @"/public/Samples/Reports";
-    scheduleMetadata.outputFormats = @[@"PDF"];
-//    scheduleMetadata.trigger.startDate = [NSDate dateWithTimeIntervalSinceNow:10 * 24 * 60 * 60];
-
-    return scheduleMetadata;
-}
-
-- (void)createScheduleMetadataWithExpectation
-{
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Create Schedule Expectation"];
-
-    [self.scheduleManager createScheduleWithData:self.testScheduleMetadata
-                                      completion:^(JSScheduleMetadata *metadata, NSError *error) {
-                                          NSLog(@"schedule: %@", metadata);
-                                          XCTAssertNil(error, @"Creating Schedule Error");
-                                          self.createdScheduleMetadata = metadata;
-                                          [expectation fulfill];
-                                      }];
-
-    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
-        if (error) {
-            NSLog(@"Timeout Error: %@", error);
-            XCTAssertNil(error, @"Timeout error");
-        }
-    }];
-}
-
-- (void)deleteScheduleMetadataWithExpectation
-{
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Delete Schedule Expectation"];
-
-    [self.scheduleManager deleteScheduleWithJobIdentifier:self.createdScheduleMetadata.jobIdentifier
-                                               completion:^(NSError *error) {
-                                                   XCTAssertNil(error, @"Deleting Schedule Error");
-                                                   [expectation fulfill];
-                                               }];
-
-    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:120.0 handler:^(NSError *error) {
         if (error) {
             NSLog(@"Timeout Error: %@", error);
             XCTAssertNil(error);
         }
     }];
+}
+
+#pragma mark - Helpers
+- (JSScheduleMetadata *)createTestScheduleMetadata
+{
+    JSScheduleMetadata *scheduleMetadata = [JSScheduleMetadata new];
+    
+    scheduleMetadata.folderURI = @"/public/Samples/Reports";
+    scheduleMetadata.reportUnitURI = @"/public/Samples/Reports/03._Store_Segment_Performance_Report";
+    scheduleMetadata.label = @"03._Store_Segment_Performance_Report";
+    scheduleMetadata.baseOutputFilename = @"03._Store_Segment_Performance_Report";
+    scheduleMetadata.outputFormats = @[@"PDF"];
+    scheduleMetadata.outputTimeZone = [self currentTimeZone];
+    
+    JSScheduleSimpleTrigger *simpleTrigger = [self simpleTrigger];
+    scheduleMetadata.trigger = @{
+                                 @(JSScheduleTriggerTypeSimple) : simpleTrigger
+                                 };
+    return scheduleMetadata;
+}
+
+- (NSString *)currentTimeZone
+{
+    NSTimeZone *localTimeZone = [NSTimeZone localTimeZone];
+    NSString *localTimeZoneName = localTimeZone.name;
+    return localTimeZoneName;
+}
+
+- (JSScheduleSimpleTrigger *)simpleTrigger
+{
+    JSScheduleSimpleTrigger *simpleTrigger = [JSScheduleSimpleTrigger new];
+    simpleTrigger.startType = JSScheduleTriggerStartTypeAtDate;
+    simpleTrigger.occurrenceCount = @1;
+    simpleTrigger.startDate = [NSDate dateWithTimeIntervalSinceNow:10*24*60*60];
+    simpleTrigger.endDate = nil;
+    simpleTrigger.timezone = [self currentTimeZone];
+    simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
+    return simpleTrigger;
 }
 
 @end
