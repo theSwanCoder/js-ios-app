@@ -76,7 +76,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
         return;
     } else {
         // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         simpleTrigger.startDate = newDate;
 
         [self updateDateCellWithDate:newDate];
@@ -96,7 +96,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
         return;
     }
     // TODO: at the moment we support only simple trigger
-    JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
     simpleTrigger.startDate = newDate;
 
     [self updateDateCellWithDate:newDate];
@@ -251,7 +251,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.start.date", nil);
 
         // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         scheduleCell.valueTextField.text = [self dateStringFromDate:simpleTrigger.startDate];
         [self setupToolbarForTextField:scheduleCell.valueTextField];
         scheduleCell.delegate = self;
@@ -261,7 +261,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.start.immediately", nil);
 
         // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         scheduleCell.uiSwitch.on = simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately;
         scheduleCell.delegate = self;
         cell = scheduleCell;
@@ -311,7 +311,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 {
     JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
     // TODO: at the moment we support only simple trigger
-    JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
     NSArray *scheduleRows;
     if (newValue) {
         simpleTrigger.startType = JSScheduleTriggerStartTypeImmediately;
@@ -351,7 +351,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
                                                                               ]];
 
     // TODO: at the moment we support only simple trigger
-    JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
     NSArray *scheduleRows;
     if (simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately) {
         scheduleRows = @[
@@ -388,7 +388,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
         datePicker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
 
         // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         datePicker.date = simpleTrigger.startDate;
         [datePicker addTarget:self
                        action:@selector(updateDate:)
