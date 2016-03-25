@@ -65,7 +65,6 @@ static JMSessionManager *_sharedManager = nil;
 - (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(NSError *error))completionBlock
 {
     self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile keepLogged:keepLogged];
-    [self setDefaults];
     [self.restClient deleteCookies];
 
     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult * _Nullable result) {
@@ -105,9 +104,6 @@ static JMSessionManager *_sharedManager = nil;
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult * _Nullable result) {
                     dispatch_async(dispatch_get_main_queue(), ^(void){
-                        if (!result.error) {
-                            [self setDefaults];
-                        }
                         if (completion) {
                             completion(!result.error);
                         }
@@ -158,11 +154,6 @@ static JMSessionManager *_sharedManager = nil;
     [predicates addObject:[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:nilServerProfilepredicates]];
     
     return [[NSCompoundPredicate alloc] initWithType:NSOrPredicateType subpredicates:predicates];
-}
-
-- (void)setDefaults
-{
-    self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
 }
 
 @end

@@ -61,8 +61,8 @@
         changedString = [NSString stringWithFormat:@"%@%@%@", firstPartOfString, string, lastPartOfString];
     }
 
-    if ([self.delegate respondsToSelector:@selector(jobCell:didChangeValue:)]) {
-        [self.delegate jobCell:self didChangeValue:changedString];
+    if ([self.delegate respondsToSelector:@selector(scheduleCell:didChangeValue:)]) {
+        [self.delegate scheduleCell:self didChangeValue:changedString];
     }
 
     JMLog(@"changed string: %@", changedString);

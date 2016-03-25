@@ -30,23 +30,19 @@
 
 @implementation JMScheduleManager
 
-#pragma mark - Public API
-- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleLookup *> *, NSError *))completion
+#pragma mark - Life Cycle
++ (instancetype)sharedManager
 {
-    if (!completion) {
-        return;
-    }
-
-    [self.restClient fetchSchedulesForResourceWithURI:resourceLookup.uri completion:^(JSOperationResult *result) {
-        if (result.error) {
-            completion(nil, result.error);
-        } else {
-            completion(result.objects, nil);
-        }
-    }];
+    static JMScheduleManager *sharedManager;
+    static dispatch_once_t predicate;
+    dispatch_once(&predicate, ^() {
+        sharedManager = [JMScheduleManager new];
+    });
+    return sharedManager;
 }
 
-- (void)loadScheduleInfoWithScheduleId:(NSInteger)scheduleId completion:(void(^)(JSScheduleMetadata *, NSError *))completion
+#pragma mark - Public API
+- (void)loadScheduleMetadataForScheduleWithId:(NSInteger)scheduleId completion:(JMScheduleCompletion __nonnull)completion
 {
     if (!completion) {
         return;
@@ -61,64 +57,25 @@
     }];
 }
 
-- (void)createJobWithData:(JSScheduleMetadata *)schedule completion:(void(^)(JSScheduleMetadata *, NSError *))completion
+- (void)createScheduleWithData:(JSScheduleMetadata *)schedule completion:(JMScheduleCompletion)completion
 {
-    if (!completion) {
-        return;
-    }
-
     [self.restClient createScheduleWithData:schedule
                                  completion:^(JSOperationResult *result) {
-                                     JMLog(@"error: %@", result.error);
                                      NSError *error = result.error;
                                      if (error) {
-                                         if (error.code == 1000) {
-                                             NSDictionary *bodyJSON = [NSJSONSerialization JSONObjectWithData:result.body options:NSJSONReadingMutableContainers error:nil];
-                                             if (bodyJSON) {
-                                                 NSArray *errors = bodyJSON[@"error"];
-                                                if (errors.count > 0) {
-                                                    NSString *fullMessage = @"";
-                                                    for (NSDictionary *errorJSON in errors) {
-                                                        id message = errorJSON[@"defaultMessage"];
-                                                        NSString *errorMessage = @"";
-                                                        NSString *field = errorJSON[@"field"];
-                                                        if (message && [message isKindOfClass:[NSString class]]) {
-                                                            errorMessage = [NSString stringWithFormat:@"Message: '%@', field: %@", message, field];
-                                                        } else {
-                                                            NSString *errorCode = errorJSON[@"errorCode"];
-                                                            errorMessage = [NSString stringWithFormat:@"Error Code: '%@'", errorCode];
-                                                        }
-                                                        NSArray *arguments = errorJSON[@"errorArguments"];
-                                                        NSString *argumentsString = @"";
-                                                        if (arguments) {
-                                                            for (NSString *argument in arguments) {
-                                                                argumentsString = [argumentsString stringByAppendingFormat:@"'%@', ", argument];
-                                                            }
-                                                        }
-                                                        if (arguments.count) {
-                                                            fullMessage = [fullMessage stringByAppendingFormat:@"%@.\nArguments: %@.\n", errorMessage, argumentsString];
-                                                        } else {
-                                                            fullMessage = [fullMessage stringByAppendingFormat:@"%@.\n", errorMessage];
-                                                        }
-                                                    }
-                                                    NSError *createScheduledJobError = [[NSError alloc] initWithDomain:@"Error"
-                                                                                                                  code:0
-                                                                                                              userInfo:@{NSLocalizedDescriptionKey: fullMessage}];
-                                                    completion(nil, createScheduledJobError);
-                                                }
-                                            }
-                                        } else {
+                                         if (error.code == 1007) {
+                                             [self handleErrorWithData:result.body completion:completion];
+                                         } else {
                                             completion(nil, result.error);
                                         }
                                     } else {
-                                        JMLog(@"result.objects: %@", result.objects);
                                         JSScheduleMetadata *scheduledJob = result.objects.firstObject;
                                         completion(scheduledJob, nil);
                                     }
                                 }];
 }
 
-- (void)updateSchedule:(JSScheduleMetadata *)schedule completion:(void(^)(JSScheduleMetadata *, NSError *))completion
+- (void)updateSchedule:(JSScheduleMetadata *)schedule completion:(JMScheduleCompletion)completion
 {
     if (!completion) {
         return;
@@ -134,7 +91,7 @@
                          }];
 }
 
-- (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void(^)(NSError *))completion
+- (void)deleteScheduleWithJobIdentifier:(NSInteger)identifier completion:(void(^)(NSError *))completion
 {
     if (!completion) {
         return;
@@ -148,6 +105,99 @@
                                        completion(nil);
                                    }
                                }];
+}
+
+#pragma mark - Hanlde Errors
+- (void)handleErrorWithData:(NSData *)jsonData completion:(JMScheduleCompletion)completion
+{
+    NSError *serializeError;
+    NSDictionary *bodyJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&serializeError];
+    if (bodyJSON) {
+        NSArray *errors = bodyJSON[@"error"];
+        if (errors.count > 0) {
+            NSString *fullMessage = @"";
+            for (NSDictionary *errorJSON in errors) {
+                id message = errorJSON[@"defaultMessage"];
+                NSString *errorMessage = @"";
+                NSString *field = errorJSON[@"field"];
+                if (message && [message isKindOfClass:[NSString class]]) {
+                    errorMessage = [NSString stringWithFormat:@"Message: '%@', field: %@", message, field];
+                } else {
+                    NSString *errorCode = errorJSON[@"errorCode"];
+                    errorMessage = [NSString stringWithFormat:@"Error Code: '%@'", errorCode];
+                }
+                NSArray *arguments = errorJSON[@"errorArguments"];
+                NSString *argumentsString = @"";
+                if (arguments) {
+                    for (NSString *argument in arguments) {
+                        argumentsString = [argumentsString stringByAppendingFormat:@"'%@', ", argument];
+                    }
+                }
+                if (arguments.count) {
+                    fullMessage = [fullMessage stringByAppendingFormat:@"%@.\nArguments: %@.\n", errorMessage, argumentsString];
+                } else {
+                    fullMessage = [fullMessage stringByAppendingFormat:@"%@.\n", errorMessage];
+                }
+            }
+            // TODO: enhance error
+            NSError *createScheduledJobError = [[NSError alloc] initWithDomain:@"Error"
+                                                                          code:0
+                                                                      userInfo:@{NSLocalizedDescriptionKey: fullMessage}];
+            completion(nil, createScheduledJobError);
+        }
+    } else {
+        completion(nil, serializeError);
+    }
+}
+
+
+#pragma mark - New Schedule Metadata
+- (JSScheduleMetadata *)createNewScheduleMetadataWithResourceLookup:(JSResourceLookup *)resourceLookup
+{
+    JSScheduleMetadata *scheduleMetadata = [JSScheduleMetadata new];
+
+    NSString *resourceFolder = [resourceLookup.uri stringByDeletingLastPathComponent];
+    scheduleMetadata.folderURI = resourceFolder;
+    scheduleMetadata.reportUnitURI = resourceLookup.uri;
+    scheduleMetadata.label = resourceLookup.label;
+    scheduleMetadata.baseOutputFilename = [self filenameFromLabel:resourceLookup.label];
+    scheduleMetadata.outputFormats = [self defaultFormats];
+    scheduleMetadata.outputTimeZone = [self currentTimeZone];
+
+    JSScheduleSimpleTrigger *simpleTrigger = [self simpleTrigger];
+    scheduleMetadata.trigger = @{
+            @(JSScheduleTriggerTypeSimple) : simpleTrigger
+    };
+    return scheduleMetadata;
+}
+
+- (JSScheduleSimpleTrigger *)simpleTrigger
+{
+    JSScheduleSimpleTrigger *simpleTrigger = [JSScheduleSimpleTrigger new];
+    simpleTrigger.startType = JSScheduleTriggerStartTypeAtDate;
+    simpleTrigger.occurrenceCount = @1;
+    simpleTrigger.startDate = [NSDate date];
+    simpleTrigger.timezone = [self currentTimeZone];
+    simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
+    return simpleTrigger;
+}
+
+- (NSString *)currentTimeZone
+{
+    NSTimeZone *localTimeZone = [NSTimeZone localTimeZone];
+    NSString *localTimeZoneName = localTimeZone.name;
+    return localTimeZoneName;
+}
+
+- (NSArray *)defaultFormats
+{
+    return @[kJS_CONTENT_TYPE_PDF.uppercaseString];
+}
+
+- (NSString *)filenameFromLabel:(NSString *)label
+{
+    NSString *filename = [label stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    return filename;
 }
 
 @end

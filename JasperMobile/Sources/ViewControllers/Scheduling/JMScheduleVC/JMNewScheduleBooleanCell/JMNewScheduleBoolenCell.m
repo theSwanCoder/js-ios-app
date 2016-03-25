@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,25 +22,26 @@
 
 
 //
-//  JMVisualizeDashboard.h
+//  JMNewScheduleBoolenCell.m
 //  TIBCO JasperMobile
 //
-
-#import "JMVisualizeDashboard.h"
-
-@implementation JMVisualizeDashboard
+#import "JMNewScheduleBoolenCell.h"
 
 
-#pragma mark - Helpers
-- (NSURLRequest *)createResourceRequest
+@implementation JMNewScheduleBoolenCell
+
+- (void)awakeFromNib
 {
-    NSString *dashboardUrl = [NSString stringWithFormat:@"%@%@", @"dashboard/viewer.html?_opt=true&sessionDecorator=no&decorate=no#", self.resourceURI];
-    
-    NSMutableURLRequest *dashboardRequest = [self.restClient.requestSerializer requestWithMethod:@"GET" URLString:dashboardUrl parameters:nil error:nil];
-    dashboardRequest.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
-    
-    return dashboardRequest;
+    [super awakeFromNib];
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.uiSwitch.onTintColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
 }
 
+- (IBAction)switchChangedValue:(UISwitch *)sender
+{
+    if ([self.delegate respondsToSelector:@selector(scheduleCell:didChangeValue:)]) {
+        [self.delegate scheduleBoolenCell:self didChangeValue:self.uiSwitch.isOn];
+    }
+}
 
 @end

@@ -107,14 +107,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     }
 }
 
-#pragma mark - Custom Accessors
-- (void)setResourceRequest:(NSURLRequest *)resourceRequest
-{
-    if (resourceRequest != _resourceRequest) {
-        _resourceRequest = resourceRequest;
-    }
-}
-
 #pragma mark - Setups
 - (void)setupSubviews
 {

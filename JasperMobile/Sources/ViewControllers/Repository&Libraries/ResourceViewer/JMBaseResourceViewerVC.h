@@ -51,8 +51,6 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 
 @interface JMBaseResourceViewerVC : JMBaseViewController <JMResourceClientHolder, JMMenuActionsViewDelegate>
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, assign) BOOL isResourceLoaded;
-@property (nonatomic, strong) NSURLRequest *resourceRequest;
 @property (nonatomic, weak) id <JMBaseResourceViewerVCDelegate>delegate;
 
 // setup

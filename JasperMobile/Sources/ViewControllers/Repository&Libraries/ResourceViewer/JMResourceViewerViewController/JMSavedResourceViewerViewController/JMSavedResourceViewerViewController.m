@@ -34,7 +34,6 @@
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
 @property (nonatomic) JMExternalWindowControlsVC *controlViewController;
-@property (nonatomic, strong) JSReportSaver *reportSaver;
 @property (nonatomic, strong) NSURL *savedResourceURL;
 @property (nonatomic, weak) UIImageView *imageView;
 @end
@@ -57,8 +56,6 @@
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
     [self.documentController dismissMenuAnimated:YES];
-
-    [self.reportSaver cancelSavingReport];
 
     if (self.savedResourceURL) {
         [self removeSavedResource];
@@ -154,11 +151,12 @@
         }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if (action == JMMenuActionsViewAction_OpenIn) {
+        // TODO: Should be reviewed and refactored!!!
         NSURL *url;
         if ([self.resourceLookup isFile]) {
             url = self.savedResourceURL;
         } else {
-            url = self.resourceRequest.URL;
+            url = [NSURL fileURLWithPath:[JMSavedResources absolutePathToSavedReport:self.savedReports]];
         }
         self.documentController = [self setupDocumentControllerWithURL:url
                                                          usingDelegate:self];
@@ -181,26 +179,13 @@
 }
 
 #pragma mark - Viewers
-- (void)showResourceWithDocumentController
-{
-    self.documentController = [self setupDocumentControllerWithURL:self.resourceRequest.URL
-                                                     usingDelegate:self];
-
-    BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
-    if (!canOpen) {
-        NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
-        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-        [JMUtils presentAlertControllerWithError:error completion:nil];
-    }
-}
-
 - (void)showSavedResource
 {
     NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
     NSURL *url = [NSURL fileURLWithPath:fullReportPath];
     [self showResourceWithURL:url
                resourceFormat:self.savedReports.format
-                      baseURL:[NSURL URLWithString:@"about:blank"]];
+                      baseURL:nil];
 }
 
 - (void)showRemoteResource
@@ -220,51 +205,52 @@
                                                                               [strongSelf cancelResourceViewingAndExit:YES];
                                                                           }];
                                                 } else {
-
-                                                    [strongSelf startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
-                                                        [strongSelf cancelResourceViewingAndExit:YES];
-                                                    }];
-
-                                                    NSString *resourcePath = [NSString stringWithFormat:@"%@/rest_v2/resources%@", strongSelf.restClient.serverProfile.serverUrl, resource.uri];
-                                                    __typeof(self) weakSelf = strongSelf;
-                                                    JSReport *report = [JSReport reportWithResourceLookup:strongSelf.resourceLookup];
-                                                    strongSelf.reportSaver = [[JSReportSaver alloc] initWithReport:report restClient:strongSelf.restClient];
-                                                    [strongSelf.reportSaver downloadResourceFromURLString:resourcePath
-                                                                                         completion:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                                                                                             __typeof(self) strongSelf = weakSelf;
-                                                                                             [strongSelf stopShowLoader];
-                                                                                             if (error) {
-                                                                                                 [strongSelf showErrorWithMessage:error.localizedDescription
-                                                                                                                       completion:^{
-                                                                                                                           [strongSelf cancelResourceViewingAndExit:YES];
-                                                                                                                       }];
-                                                                                             } else {
-                                                                                                 strongSelf.savedResourceURL = location;
-
-                                                                                                 if ([strongSelf isSupportedResource:resource]) {
-                                                                                                     if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_IMG]) {
-                                                                                                         [strongSelf showImageWithURL:strongSelf.savedResourceURL];
-                                                                                                     } else {
-                                                                                                         NSURL *fileURL = [strongSelf updateFormatForURL:strongSelf.savedResourceURL withFormat:resource.fileFormat];
-                                                                                                         [strongSelf moveResourceFromPath:strongSelf.savedResourceURL.path
-                                                                                                                                   toPath:fileURL.path];
-                                                                                                         strongSelf.savedResourceURL = fileURL;
-                                                                                                         NSString *baseURLString = [NSString stringWithFormat:@"%@/fileview/fileview/public/Samples/Reports/", self.restClient.serverProfile.serverUrl];
-                                                                                                         [strongSelf showResourceWithURL:fileURL
-                                                                                                                          resourceFormat:resource.fileFormat
-                                                                                                                                 baseURL:[NSURL URLWithString:baseURLString]];
-                                                                                                     }
-                                                                                                 } else {
-                                                                                                     // TODO: add showing with ...
-//                                                                                                     strongSelf.resourceRequest = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:outputResourcePath]];
-//                                                                                                     [strongSelf showResourceWithDocumentController];
-                                                                                                     [strongSelf showErrorWithMessage:JMCustomLocalizedString(@"savedreport.viewer.format.not.supported", nil)
-                                                                                                                           completion:^{
-                                                                                                                               [strongSelf cancelResourceViewingAndExit:YES];
-                                                                                                                           }];
-                                                                                                 }
-                                                                                             }
-                                                                                         }];
+                                                    if ([strongSelf isSupportedResource:resource]) {
+                                                        [strongSelf startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
+                                                            [strongSelf cancelResourceViewingAndExit:YES];
+                                                        }];
+                                                        
+                                                        NSString *resourcePath = [NSString stringWithFormat:@"%@/rest_v2/resources%@", strongSelf.restClient.serverProfile.serverUrl, resource.uri];
+                                                        NSString *tempAppDirectory = NSTemporaryDirectory();
+                                                        NSString *tempReportDirectory = [tempAppDirectory stringByAppendingPathComponent:[[NSUUID UUID] UUIDString]];                                                        
+                                                        NSString *tempReportPath = [tempReportDirectory stringByAppendingPathComponent:resource.label];
+                                                        
+                                                        __typeof(self) weakSelf = strongSelf;
+                                                        [JSReportSaver downloadResourceWithRestClient:self.restClient
+                                                                                        fromURLString:resourcePath
+                                                                                      destinationPath:tempReportPath
+                                                                                           completion:^(NSError *error) {
+                                                                                               __typeof(self) strongSelf = weakSelf;
+                                                                                               [strongSelf stopShowLoader];
+                                                                                               if (error) {
+                                                                                                   [strongSelf showErrorWithMessage:error.localizedDescription
+                                                                                                                         completion:^{
+                                                                                                                             [strongSelf cancelResourceViewingAndExit:YES];
+                                                                                                                         }];
+                                                                                               } else {
+                                                                                                   strongSelf.savedResourceURL = [NSURL fileURLWithPath:tempReportPath];
+                                                                                                   
+                                                                                                   if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_IMG]) {
+                                                                                                       [strongSelf showImageWithURL:strongSelf.savedResourceURL];
+                                                                                                   } else {
+                                                                                                       NSURL *fileURL = [strongSelf updateFormatForURL:strongSelf.savedResourceURL withFormat:resource.fileFormat];
+                                                                                                       [strongSelf moveResourceFromPath:strongSelf.savedResourceURL.path
+                                                                                                                                 toPath:fileURL.path];
+                                                                                                       strongSelf.savedResourceURL = fileURL;
+                                                                                                       NSString *baseURLString = [NSString stringWithFormat:@"%@/fileview/fileview/public/Samples/Reports/", self.restClient.serverProfile.serverUrl];
+                                                                                                       [strongSelf showResourceWithURL:fileURL
+                                                                                                                        resourceFormat:resource.fileFormat
+                                                                                                                               baseURL:[NSURL URLWithString:baseURLString]];
+                                                                                                   }
+                                                                                               }
+                                                                                           }];
+                                                    } else {
+                                                        // TODO: add showing with ...
+                                                        [strongSelf showErrorWithMessage:JMCustomLocalizedString(@"savedreport.viewer.format.not.supported", nil)
+                                                                              completion:^{
+                                                                                  [strongSelf cancelResourceViewingAndExit:YES];
+                                                                              }];
+                                                    }
                                                 }
                                             }];
 }
@@ -273,11 +259,6 @@
              resourceFormat:(NSString *)resourceFormat
                     baseURL:(NSURL *)baseURL
 {
-    self.isResourceLoaded = NO;
-
-    // TODO: do we need this?
-//    self.resourceRequest = [NSURLRequest requestWithURL:url];
-
     JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
     [webEnvironment loadLocalFileFromURL:url
                               fileFormat:resourceFormat
@@ -299,14 +280,18 @@
 #pragma mark - Helpers
 - (void)removeSavedResource
 {
-    if ([[NSFileManager defaultManager] fileExistsAtPath:self.savedResourceURL.path]) {
-        [[NSFileManager defaultManager] removeItemAtPath:self.savedResourceURL.path error:nil];
+    NSString *directoryPath = [self.savedResourceURL.path stringByDeletingLastPathComponent];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
     }
     _savedResourceURL = nil;
 }
 
 - (NSError *)moveResourceFromPath:(NSString *)fromPath toPath:(NSString *)toPath
 {
+    if ([fromPath isEqualToString:toPath]) {
+        return nil;
+    }
     NSError *error;
     [[NSFileManager defaultManager] moveItemAtPath:fromPath
                                             toPath:toPath
@@ -318,8 +303,7 @@
 {
     NSString *fullPathWithoutFormat = [fromURL.path stringByDeletingPathExtension];
     NSString *fullPathWithNewFormat = [fullPathWithoutFormat stringByAppendingPathExtension:newFormat];
-    fullPathWithNewFormat = [NSString stringWithFormat:@"file://%@", fullPathWithNewFormat];
-    NSURL *URLWithFormat = [NSURL URLWithString:fullPathWithNewFormat];
+    NSURL *URLWithFormat = [NSURL fileURLWithPath:fullPathWithNewFormat];
     JMLog(@"%@", URLWithFormat);
     return URLWithFormat;
 }

@@ -172,7 +172,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)maximizeDashlet:(JMDashlet *)dashlet
 {
-    JMLog(@"%@", NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.maximizeDashlet"
                                                                 parameters:@{
                                                                         @"identifier" : dashlet != nil ? dashlet.identifier : @"null"
@@ -188,7 +187,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)minimizeDashlet:(JMDashlet *)dashlet
 {
-    JMLog(@"%@", NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.minimizeDashlet"
                                                                 parameters:@{
                                                                         @"identifier" : dashlet != nil ? dashlet.identifier : @"null"
