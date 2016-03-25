@@ -315,6 +315,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     NSArray *scheduleRows;
     if (newValue) {
         simpleTrigger.startType = JSScheduleTriggerStartTypeImmediately;
+        simpleTrigger.startDate = nil;
         scheduleRows = @[
                 kJMJobStartImmediately,
         ];
