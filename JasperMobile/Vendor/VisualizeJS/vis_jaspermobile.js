@@ -182,6 +182,17 @@ JasperMobile.Report.REST.API = {
     injectContent: function(contentObject) {
         var content = contentObject["HTMLString"];
         var div = document.getElementById('container');
+
+        if (div == null) {
+            JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Report.REST.API.injectContent", {
+                "error" : JSON.stringify({
+                    "code"    : "internal.error", // TODO: need error codes?
+                    "message" : "No container"
+                })
+            });
+            return;
+        }
+
         div.innerHTML = content;
 
         if (content == "") {

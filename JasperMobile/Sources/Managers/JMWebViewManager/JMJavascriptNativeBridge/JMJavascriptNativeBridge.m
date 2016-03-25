@@ -363,13 +363,18 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 - (NSError *)makeErrorFromWebViewError:(NSDictionary *)errorJSON
 {
     NSString *visualizeErrorDomain = @"Visualize Error Domain";
-    NSString *errorCodeString = errorJSON[@"code"];
+    id errorCode = errorJSON[@"code"];
     NSInteger code = JMJavascriptNativeBridgeErrorTypeOther;
-    if ([errorCodeString isEqualToString:@"window.onerror"]) {
-        code = JMJavascriptNativeBridgeErrorTypeWindow;
-    } else if ([errorCodeString isEqualToString:@"authentication.error"]) {
-        code = JMJavascriptNativeBridgeErrorAuthError;
+    if ([errorCode isKindOfClass:[NSString class]]) {
+        NSString *errorCodeString = errorCode;
+        if ([errorCodeString isEqualToString:@"window.onerror"]) {
+            code = JMJavascriptNativeBridgeErrorTypeWindow;
+        } else if ([errorCodeString isEqualToString:@"authentication.error"]) {
+            code = JMJavascriptNativeBridgeErrorAuthError;
+        }
     }
+    // TODO: need add handle integer codes?
+
     NSString *errorMessage = errorJSON[@"message"];
     NSError *error = [NSError errorWithDomain:visualizeErrorDomain
                                          code:code

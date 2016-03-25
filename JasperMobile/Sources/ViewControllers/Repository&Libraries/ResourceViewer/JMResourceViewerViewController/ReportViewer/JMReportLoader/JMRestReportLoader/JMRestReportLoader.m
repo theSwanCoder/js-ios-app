@@ -99,6 +99,9 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
+                                        if (error) {
+                                            [self.webEnvironment clean];
+                                        }
                                     }];
 }
 
@@ -111,6 +114,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                 if (success) {
                     [super startLoadReportHTML];
                 } else {
+                    JMLog(@"error of rendering report: %@", error.localizedDescription);
                     // TODO: extend errors handling
                     BOOL isParseError = YES;
                     if (isParseError) {
