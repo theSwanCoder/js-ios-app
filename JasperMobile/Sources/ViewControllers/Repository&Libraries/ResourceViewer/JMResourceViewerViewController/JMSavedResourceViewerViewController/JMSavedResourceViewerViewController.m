@@ -181,11 +181,24 @@
 #pragma mark - Viewers
 - (void)showSavedResource
 {
-    NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
-    NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-    [self showResourceWithURL:url
-               resourceFormat:self.savedReports.format
-                      baseURL:nil];
+    NSString *reportDirectory = [JMSavedResources pathToFolderForSavedReport:self.savedReports];
+    
+    NSString *tempAppDirectory = NSTemporaryDirectory();
+    NSString *tempReportDirectory = [tempAppDirectory stringByAppendingPathComponent:[[NSUUID UUID] UUIDString]];
+    
+    NSError *error = nil;
+    if ([[NSFileManager defaultManager] copyItemAtPath:reportDirectory toPath:tempReportDirectory error:&error]) {
+        NSString *tempReportPath = [tempReportDirectory stringByAppendingPathComponent:[self.savedReports.label stringByAppendingPathExtension:self.savedReports.format]];
+        self.savedResourceURL = [NSURL fileURLWithPath:tempReportPath];
+        [self showResourceWithURL:self.savedResourceURL
+                   resourceFormat:self.savedReports.format
+                          baseURL:nil];
+    }
+    if (error) {
+        [JMUtils presentAlertControllerWithError:error completion:^{
+            [self cancelResourceViewingAndExit:YES];
+        }];
+    }
 }
 
 - (void)showRemoteResource
