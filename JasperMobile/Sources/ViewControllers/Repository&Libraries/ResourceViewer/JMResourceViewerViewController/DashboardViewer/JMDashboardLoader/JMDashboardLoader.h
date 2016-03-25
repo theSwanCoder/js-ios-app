@@ -56,7 +56,7 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 };
 
 @protocol JMDashboardLoader <NSObject>
-@property (nonatomic, weak) id<JMDashboardLoaderDelegate> delegate;
+@property (nonatomic, weak, nullable) id<JMDashboardLoaderDelegate> delegate;
 
 - (id<JMDashboardLoader> __nullable)initWithDashboard:(JMDashboard *__nonnull)dashboard webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
 + (id<JMDashboardLoader> __nullable)loaderWithDashboard:(JMDashboard *__nonnull)dashboard webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
