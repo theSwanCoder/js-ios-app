@@ -643,8 +643,8 @@
 		A1478E41CDA17D1E8E909758 /* JMScheduleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMScheduleCell.h; sourceTree = "<group>"; };
 		A1478E85ED789BDE76646F55 /* JMScheduleVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleVC.m; sourceTree = "<group>"; };
 		A1478E970FE9B5FF46756AFF /* JMDashboardInputControlsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardInputControlsVC.m; sourceTree = "<group>"; };
-		A1478ED4657A2DF19295E29D /* JMHTMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMHTMLParser.h; sourceTree = "<group>"; };
 		A1478EC3A1FB8F8694275376 /* JMScheduleVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMScheduleVC.h; sourceTree = "<group>"; };
+		A1478ED4657A2DF19295E29D /* JMHTMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMHTMLParser.h; sourceTree = "<group>"; };
 		A1478EEB9FB0CCB7D652FF2F /* JMVisualizeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeManager.h; sourceTree = "<group>"; };
 		A1478F3424586DD36ECD3DE4 /* JMNewScheduleBoolenCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMNewScheduleBoolenCell.m; sourceTree = "<group>"; };
 		A1478FF2E87954F5F6AF096E /* JMNewScheduleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMNewScheduleCell.m; sourceTree = "<group>"; };
@@ -2460,15 +2460,6 @@
 			path = JMDashboardViewerConfigurator;
 			sourceTree = "<group>";
 		};
-		A1478B79C7B87D2CA61D0795 /* JMHTMLScript */ = {
-			isa = PBXGroup;
-			children = (
-				A14787D92267145142F78242 /* JMHTMLScript.m */,
-				A147825B77B4E40269C5406A /* JMHTMLScript.h */,
-			);
-			path = JMHTMLScript;
-			sourceTree = "<group>";
-        };
 		A1478B565B5D4B7E299480D6 /* JMScheduleLoader */ = {
 			isa = PBXGroup;
 			children = (
@@ -2476,6 +2467,15 @@
 				A1478310EE45B536C764DAD5 /* JMScheduleLoader.h */,
 			);
 			path = JMScheduleLoader;
+			sourceTree = "<group>";
+		};
+		A1478B79C7B87D2CA61D0795 /* JMHTMLScript */ = {
+			isa = PBXGroup;
+			children = (
+				A14787D92267145142F78242 /* JMHTMLScript.m */,
+				A147825B77B4E40269C5406A /* JMHTMLScript.h */,
+			);
+			path = JMHTMLScript;
 			sourceTree = "<group>";
 		};
 		A1478BEB9CBFEFF30EAAA2F2 /* JMExternalWindowControlsVC */ = {
@@ -2562,7 +2562,7 @@
 			);
 			path = JMHTMLParser;
 			sourceTree = "<group>";
-        };
+		};
 		BD6DB2B61C982B9C002DEFDF /* JMShareViewController */ = {
 			isa = PBXGroup;
 			children = (
