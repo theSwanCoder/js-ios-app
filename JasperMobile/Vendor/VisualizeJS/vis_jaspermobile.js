@@ -289,6 +289,25 @@ JasperMobile.Report.REST.API = {
                 }
             })(hyperlink);
         }
+    },
+    applyZoomForReport: function() {
+        var tableNode = document.getElementsByClassName("jrPage")[0];
+        if (tableNode.nodeName == "TABLE") {
+            document.body.innerHTML = "<div id='containter'></div>";
+            var container = document.getElementById("containter");
+            container.appendChild(tableNode);
+            var table = tableNode;
+            table.style.transform = "scale(" + innerWidth / parseInt(table.style.width) + ")";
+            table.style.transformOrigin = "50% 0%";
+            JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.applyZoomForReport", {});
+        } else {
+            JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Report.REST.API.applyZoomForReport", {
+                "error" : JSON.stringify({
+                    "code"    : "internal.error", // TODO: need error codes?
+                    "message" : "No table with class 'jrPage'."
+                })
+            });
+        }
     }
 };
 

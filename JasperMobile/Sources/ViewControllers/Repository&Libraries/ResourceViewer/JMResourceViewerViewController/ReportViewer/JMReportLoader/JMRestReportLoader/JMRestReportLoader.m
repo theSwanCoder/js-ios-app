@@ -116,24 +116,33 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                 } else {
                     JMLog(@"error of rendering report: %@", error.localizedDescription);
                     // TODO: extend errors handling
-                    BOOL isParseError = YES;
-                    if (isParseError) {
-                        [self.webEnvironment loadHTML:self.report.HTMLString
-                                              baseURL:[NSURL URLWithString:self.report.baseURLString]
-                                           completion:nil];
-                        [super startLoadReportHTML];
-                    }
+                    [self loadHTMLWithOldFlow];
                 }
             }];
         } else {
             // TODO: extend errors handling
-            [self.webEnvironment loadHTML:self.report.HTMLString
-                                  baseURL:[NSURL URLWithString:self.report.baseURLString]
-                               completion:nil];
-            [super startLoadReportHTML];
+            [self loadHTMLWithOldFlow];
         }
     }];
 }
+
+- (void)loadHTMLWithOldFlow
+{
+    [self.webEnvironment loadHTML:self.report.HTMLString
+                          baseURL:[NSURL URLWithString:self.report.baseURLString]
+                       completion:^(BOOL isSuccess, NSError *error) {
+                           JMJavascriptRequest *applyZoomRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.applyZoomForReport"
+                                                                                                parameters:nil];
+                           [self.webEnvironment sendJavascriptRequest:applyZoomRequest
+                                                           completion:^(NSDictionary *params, NSError *error) {
+                                                               if (error) {
+                                                                   JMLog(@"error of applying zoom: %@", error);
+                                                               }
+                                                               [super startLoadReportHTML];
+                                                           }];
+                       }];
+}
+
 
 #pragma mark - Prepear
 
