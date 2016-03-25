@@ -29,12 +29,12 @@
 #import "JMSchedulesListVC.h"
 #import "JMScheduleManager.h"
 #import "JMScheduleCell.h"
-#import "JMNewScheduleVC.h"
 #import "ALToastView.h"
+#import "JMScheduleVC.h"
+#import "JMScheduleLoader.h"
 
 @interface JMSchedulesListVC () <UITableViewDelegate, UITableViewDataSource, JMScheduleCellDelegate>
 @property (nonatomic, copy) NSArray <JSScheduleLookup *> *scheduleSummaries;
-@property (nonatomic) JMScheduleManager *schedulesManager;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) UIRefreshControl *refreshControl;
 @property (weak, nonatomic) IBOutlet UILabel *noJobsLabel;
@@ -50,8 +50,6 @@
     self.title = JMCustomLocalizedString(@"schedules.title", nil);
 
     self.view.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
-
-    self.schedulesManager = [JMScheduleManager new];
 
     [self updateNoJobsLabelAppearence];
 
@@ -105,49 +103,68 @@
 #pragma mark - Actions
 - (void)refresh
 {
-    __weak __typeof(self) weakSelf = self;
-    [self.schedulesManager loadSchedulesForResourceLookup:nil completion:^(NSArray <JSScheduleLookup *> *jobs, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf.refreshControl endRefreshing];
+    JMScheduleLoader *scheduleLoader = [JMScheduleLoader new];
+    [scheduleLoader loadSchedulesForResourceLookup:nil completion:^(NSArray <JSScheduleLookup *> *jobs, NSError *error) {
+        [self.refreshControl endRefreshing];
 
-        strongSelf.scheduleSummaries = jobs;
-        [strongSelf updateNoJobsLabelAppearence];
+        self.scheduleSummaries = jobs;
+        [self updateNoJobsLabelAppearence];
 
-        [strongSelf.tableView reloadData];
+        [self.tableView reloadData];
     }];
 }
 
 - (void)editSchedule:(JSScheduleLookup *)schedule
 {
-    JMNewScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
-    newScheduleVC.scheduleSummary = schedule;
-    newScheduleVC.mode = JMScheduleModeEdit;
-    newScheduleVC.exitBlock = ^(void){
-            [ALToastView toastInView:self.navigationController.view
-                            withText:JMCustomLocalizedString(@"Schedule was updated successfully.", nil)];
-    };
-    [self.navigationController pushViewController:newScheduleVC animated:YES];
+    JMScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+    // TODO: add loader
+    [[JMScheduleManager sharedManager] loadScheduleMetadataForScheduleWithId:schedule.jobIdentifier completion:^(JSScheduleMetadata *metadata, NSError *error) {
+        if (metadata) {
+            newScheduleVC.scheduleMetadata = metadata;
+            newScheduleVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata) {
+                if (scheduleMetadata) {
+                    [[JMScheduleManager sharedManager] updateSchedule:scheduleMetadata
+                                                           completion:^(JSScheduleMetadata *updatedScheduleMetadata, NSError *error) {
+                                                               if (updatedScheduleMetadata) {
+                                                                   [self.navigationController popViewControllerAnimated:YES];
+                                                                   [ALToastView toastInView:self.navigationController.view
+                                                                                   withText:JMCustomLocalizedString(@"Schedule was updated successfully.", nil)];
+                                                               } else {
+                                                                   [JMUtils presentAlertControllerWithError:error
+                                                                                                 completion:nil];
+                                                               }
+                                                           }];
+                } else {
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+            };
+            [self.navigationController pushViewController:newScheduleVC animated:YES];
+        } else {
+            [JMUtils presentAlertControllerWithError:error
+                                          completion:nil];
+        }
+    }];
 }
 
 - (void)deleteSchedule:(JSScheduleLookup *)scheduleSummary
 {
     __weak __typeof(self) weakSelf = self;
-    [self.schedulesManager deleteJobWithJobIdentifier:scheduleSummary.jobIdentifier
-                                           completion:^(NSError *error) {
-                                               __typeof(self) strongSelf = weakSelf;
+    [[JMScheduleManager sharedManager] deleteScheduleWithJobIdentifier:scheduleSummary.jobIdentifier
+                                                            completion:^(NSError *error) {
+                                                                __typeof(self) strongSelf = weakSelf;
 
-                                               NSInteger scheduleSummaryIndex = [strongSelf.scheduleSummaries indexOfObjectIdenticalTo:scheduleSummary];
+                                                                NSInteger scheduleSummaryIndex = [strongSelf.scheduleSummaries indexOfObjectIdenticalTo:scheduleSummary];
 
-                                               NSMutableArray *jobs = [strongSelf.scheduleSummaries mutableCopy];
-                                               [jobs removeObject:scheduleSummary];
-                                               strongSelf.scheduleSummaries = [jobs copy];
+                                                                NSMutableArray *jobs = [strongSelf.scheduleSummaries mutableCopy];
+                                                                [jobs removeObject:scheduleSummary];
+                                                                strongSelf.scheduleSummaries = [jobs copy];
 
-                                               NSIndexPath *indexPath = [NSIndexPath indexPathForRow:scheduleSummaryIndex inSection:0];
-                                               [strongSelf.tableView deleteRowsAtIndexPaths:@[indexPath]
-                                                                           withRowAnimation:UITableViewRowAnimationLeft];
+                                                                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:scheduleSummaryIndex inSection:0];
+                                                                [strongSelf.tableView deleteRowsAtIndexPaths:@[indexPath]
+                                                                                            withRowAnimation:UITableViewRowAnimationLeft];
 
-                                               [strongSelf updateNoJobsLabelAppearence];
-                                           }];
+                                                                [strongSelf updateNoJobsLabelAppearence];
+                                                            }];
 }
 
 #pragma mark - JMJobCellDelegate
@@ -167,13 +184,10 @@
 
 - (NSString *)dateStringFromDate:(NSDate *)date
 {
-    NSDateFormatter* outputFormatter = [[NSDateFormatter alloc]init];
-    [outputFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-
-    NSTimeInterval timeInterval = [date timeIntervalSince1970];
-    date = [NSDate dateWithTimeIntervalSince1970:timeInterval];
-
-    NSString *dateString = [outputFormatter stringFromDate:date];
+    NSDateFormatter *formatter = [[JSDateFormatterFactory sharedFactory] formatterWithPattern:@"yyyy-MM-dd HH:mm"];
+    // need set local timezone because of received value
+    formatter.timeZone = [NSTimeZone localTimeZone];
+    NSString *dateString = [formatter stringFromDate:date];
     return dateString;
 }
 

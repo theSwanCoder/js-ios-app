@@ -22,25 +22,30 @@
 
 
 //
-//  JMNewScheduleBoolenCell.h
+//  JMScheduleLoader.m
 //  TIBCO JasperMobile
 //
 
+#import "JMScheduleLoader.h"
 
-/**
-@author Aleksandr Dakhno odahno@tibco.com
-@since 2.3
-*/
 
-@protocol JMNewScheduleBoolenCellDelegate;
+@implementation JMScheduleLoader
 
-@interface JMNewScheduleBoolenCell : UITableViewCell
-@property(nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UISwitch *uiSwitch;
-@property (nonatomic, weak) NSObject <JMNewScheduleBoolenCellDelegate> *delegate;
-@end
+#pragma mark - Public API
+- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleLookup *> *, NSError *))completion
+{
+    if (!completion) {
+        return;
+    }
 
-@protocol JMNewScheduleBoolenCellDelegate
-@optional
-- (void)scheduleCell:(JMNewScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue;
+    [self.restClient fetchSchedulesForResourceWithURI:resourceLookup.uri completion:^(JSOperationResult *result) {
+        if (result.error) {
+            completion(nil, result.error);
+        } else {
+            completion(result.objects, nil);
+        }
+    }];
+}
+
+
 @end

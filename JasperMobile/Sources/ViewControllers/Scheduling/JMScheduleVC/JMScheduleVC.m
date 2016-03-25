@@ -22,93 +22,102 @@
 
 
 //
-//  JMNewScheduleVC.m
+//  JMScheduleVC.m
 //  TIBCO JasperMobile
 //
 
-#import "JMNewScheduleVC.h"
+#import "JMScheduleVC.h"
 #import "JMScheduleManager.h"
 #import "JMNewScheduleCell.h"
 #import "JMNewScheduleBoolenCell.h"
 #import "JMNewScheduleVCSection.h"
 
 
-NSString *const kJMJobLabel = @"kJMJobLabel";
-NSString *const kJMJobDescription = @"kJMJobDescription";
-NSString *const kJMJobOutputFileURI = @"kJMJobOutputFileURI";
-NSString *const kJMJobOutputFolderURI = @"kJMJobOutputFolderURI";
-NSString *const kJMJobFormat = @"kJMJobFormat";
-NSString *const kJMJobStartDate = @"kJMJobStartDate";
+NSString *const kJMJobLabel            = @"kJMJobLabel";
+NSString *const kJMJobDescription      = @"kJMJobDescription";
+NSString *const kJMJobOutputFileURI    = @"kJMJobOutputFileURI";
+NSString *const kJMJobOutputFolderURI  = @"kJMJobOutputFolderURI";
+NSString *const kJMJobFormat           = @"kJMJobFormat";
+NSString *const kJMJobStartDate        = @"kJMJobStartDate";
 NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 
-@interface JMNewScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate, JMNewScheduleBoolenCellDelegate>
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *createJobButton;
+@interface JMScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewScheduleCellDelegate, JMNewScheduleBoolenCellDelegate>
 @property (weak, nonatomic) UIDatePicker *datePicker;
-@property (nonatomic, strong) JSScheduleMetadata *scheduleResponse;
-//@property (nonatomic, strong) NSDictionary *sections;
 @property (nonatomic, strong) NSArray <JMNewScheduleVCSection *> *sections;
-@property (strong, nonatomic) JMScheduleManager *scheduleManager;
+//@property (nonatomic, strong) JSResourceLookup *resourceLookup;
+//@property (nonatomic, strong) JSScheduleLookup *scheduleLookup;
+//@property (strong, nonatomic) JMScheduleManager *scheduleManager;
+@property (weak, nonatomic) IBOutlet UIButton *createJobButton;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end
 
-@implementation JMNewScheduleVC
+@implementation JMScheduleVC
 
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    if (self.mode == JMScheduleModeNew) {
-        self.title = @"New Schedule";
-        [self.createJobButton setTitle:JMCustomLocalizedString(@"schedules.new.job.button.create", nil)
-                              forState:UIControlStateNormal];
-    } else if (self.mode == JMScheduleModeEdit) {
-        self.title = @"Edit Schedule";
-        [self.createJobButton setTitle:@"Update"
-                              forState:UIControlStateNormal];
-    }
-
+    self.title = @"Schedule";
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
-
-    self.scheduleManager = [JMScheduleManager new];
 
     [self createScheduleRepresentationProperties];
 
-    [self createScheduleRepresentation];
+    [self.createJobButton setTitle:@"Apply"
+                          forState:UIControlStateNormal];
 }
 
 #pragma mark - Actions
 - (void)updateDate:(UIDatePicker *)sender
 {
-    self.scheduleResponse.trigger.startDate = sender.date;
+    NSDate *newDate = sender.date;
+    NSDate *currentDate = [NSDate date];
+    if ([newDate compare:currentDate] == NSOrderedAscending) {
+        return;
+    } else {
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        simpleTrigger.startDate = newDate;
 
-    // find text field for date
-    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
-    NSArray *rows = section.rows;
-    NSInteger rowDateCell = [rows indexOfObject:kJMJobStartDate];
-    NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell
-                                                        inSection:JMNewScheduleVCSectionTypeSchedule];
-    JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
-
-    // set new value
-    dateCell.valueTextField.text = [self dateStringFromDate:self.scheduleResponse.trigger.startDate];
+        [self updateDateCellWithDate:newDate];
+    }
 }
 
 - (void)setDate:(UIButton *)sender
 {
-    self.scheduleResponse.trigger.startDate = self.datePicker.date;
+    NSDate *newDate = self.datePicker.date;
+    NSDate *currentDate = [NSDate date];
+    if ([newDate compare:currentDate] == NSOrderedAscending) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
+                                                                                          message:JMCustomLocalizedString(@"schedules.error.date.past", nil)
+                                                                                cancelButtonTitle:@"dialog.button.ok"
+                                                                          cancelCompletionHandler:nil];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
+    // TODO: at the moment we support only simple trigger
+    JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+    simpleTrigger.startDate = newDate;
 
-    // find text field for date
+    [self updateDateCellWithDate:newDate];
+
+    [[self dateCell].valueTextField resignFirstResponder];
+}
+
+- (void)updateDateCellWithDate:(NSDate *)date
+{
+    [self dateCell].valueTextField.text = [self dateStringFromDate:date];
+}
+
+- (JMNewScheduleCell *)dateCell
+{
     JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
     NSArray *rows = section.rows;
     NSInteger rowDateCell = [rows indexOfObject:kJMJobStartDate];
     NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell
                                                         inSection:JMNewScheduleVCSectionTypeSchedule];
     JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
-
-    // set new value
-    dateCell.valueTextField.text = [self dateStringFromDate:self.scheduleResponse.trigger.startDate];
-    [dateCell.valueTextField resignFirstResponder];
+    return dateCell;
 }
 
 - (IBAction)selectFormat:(id)sender
@@ -134,8 +143,8 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     for (NSString *format in availableFormats) {
         [alertController addActionWithLocalizedTitle:format style:UIAlertActionStyleDefault
                                              handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                 self.scheduleResponse.outputFormats = @[format.uppercaseString];
-                                                 formatCell.valueTextField.text = self.scheduleResponse.outputFormats.firstObject;
+                                                 self.scheduleMetadata.outputFormats = @[format.uppercaseString];
+                                                 formatCell.valueTextField.text = self.scheduleMetadata.outputFormats.firstObject;
                                              }];
     }
 
@@ -209,45 +218,51 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     if ([jobProperty isEqualToString:kJMJobLabel]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.label", nil);
-        scheduleCell.valueTextField.text = self.scheduleResponse.label;
+        scheduleCell.valueTextField.text = self.scheduleMetadata.label;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobDescription]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.description", nil);
-        scheduleCell.valueTextField.text = self.scheduleResponse.scheduleDescription;
+        scheduleCell.valueTextField.text = self.scheduleMetadata.scheduleDescription;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.output.file.name", nil);
-        scheduleCell.valueTextField.text = self.scheduleResponse.baseOutputFilename;
+        scheduleCell.valueTextField.text = self.scheduleMetadata.baseOutputFilename;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     }  else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.output.file.path", nil);
-        scheduleCell.valueTextField.text = self.scheduleResponse.folderURI;
+        scheduleCell.valueTextField.text = self.scheduleMetadata.folderURI;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobFormat]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.format", nil);
-        scheduleCell.valueTextField.text = self.scheduleResponse.outputFormats.firstObject;
+        scheduleCell.valueTextField.text = self.scheduleMetadata.outputFormats.firstObject;
         scheduleCell.valueTextField.userInteractionEnabled = NO;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.start.date", nil);
-        scheduleCell.valueTextField.text = [self dateStringFromDate:self.scheduleResponse.trigger.startDate];
+
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        scheduleCell.valueTextField.text = [self dateStringFromDate:simpleTrigger.startDate];
         [self setupToolbarForTextField:scheduleCell.valueTextField];
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobStartImmediately]) {
         JMNewScheduleBoolenCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleBoolenCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.start.immediately", nil);
-        scheduleCell.uiSwitch.on = self.scheduleResponse.trigger.startType == JSScheduleTriggerStartTypeImmediately;
+
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        scheduleCell.uiSwitch.on = simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     }
@@ -256,79 +271,56 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 }
 
 #pragma mark - Save
-- (IBAction)saveJob:(id)sender
+- (IBAction)makeAction:(UIButton *)sender
 {
     [self validateJobWithCompletion:^(BOOL success, NSError *error) {
         if (success) {
-            switch (self.mode) {
-                case JMScheduleModeNew: {
-
-                    [self.scheduleManager createJobWithData:self.scheduleResponse
-                                                 completion:^(JSScheduleMetadata *job, NSError *error) {
-                                                    if (error) {
-                                                         [JMUtils presentAlertControllerWithError:error completion:nil];
-                                                     } else {
-                                                         if (self.exitBlock) {
-                                                             self.exitBlock();
-                                                         }
-                                                        [self.navigationController popViewControllerAnimated:YES];
-                                                     }
-                                                 }];
-
-                    break;
-                }
-                case JMScheduleModeEdit: {
-
-                    [self.scheduleManager updateSchedule:self.scheduleResponse
-                                              completion:^(JSScheduleMetadata *job, NSError *error) {
-                                                  if (error) {
-                                                      [JMUtils presentAlertControllerWithError:error completion:nil];
-                                                  } else {
-                                                      if (self.exitBlock) {
-                                                          self.exitBlock();
-                                                      }
-                                                      [self.navigationController popViewControllerAnimated:YES];
-                                                  }
-                                              }];
-                    break;
-                }
-            }
+            self.exitBlock(self.scheduleMetadata);
         } else {
+            [self updateView];
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }];
 }
 
-#pragma mark - JMNewJobCellDelegate
-- (void)jobCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue
+- (void)updateView
+{
+    [self.tableView reloadData];
+}
+
+#pragma mark - JMNewScheduleCellDelegate
+- (void)scheduleCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     JMNewScheduleVCSection *section = self.sections[indexPath.section];
     NSString *jobProperty = section.rows[indexPath.row];
 
     if ([jobProperty isEqualToString:kJMJobLabel]) {
-        self.scheduleResponse.label = newValue;
+        self.scheduleMetadata.label = [newValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     } else if ([jobProperty isEqualToString:kJMJobDescription]) {
-        self.scheduleResponse.scheduleDescription = newValue;
+        self.scheduleMetadata.scheduleDescription = newValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
-        self.scheduleResponse.baseOutputFilename = newValue;
+        self.scheduleMetadata.baseOutputFilename = newValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
-        self.scheduleResponse.folderURI = newValue;
+        self.scheduleMetadata.folderURI = newValue;
     }
 }
 
 #pragma mark - JMNewScheduleBoolenCellDelegate
-- (void)scheduleCell:(JMNewScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue
+- (void)scheduleBoolenCell:(JMNewScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue
 {
     JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
+    // TODO: at the moment we support only simple trigger
+    JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
     NSArray *scheduleRows;
     if (newValue) {
-        self.scheduleResponse.trigger.startType = JSScheduleTriggerStartTypeImmediately;
+        simpleTrigger.startType = JSScheduleTriggerStartTypeImmediately;
+        simpleTrigger.startDate = nil;
         scheduleRows = @[
                 kJMJobStartImmediately,
         ];
     } else {
-        self.scheduleResponse.trigger.startType = JSScheduleTriggerStartTypeAtDate;
+        simpleTrigger.startType = JSScheduleTriggerStartTypeAtDate;
         scheduleRows = @[
                 kJMJobStartImmediately,
                 kJMJobStartDate,
@@ -358,8 +350,10 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
                                                                                       kJMJobFormat,
                                                                               ]];
 
+    // TODO: at the moment we support only simple trigger
+    JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
     NSArray *scheduleRows;
-    if (self.scheduleResponse.trigger.startType == JSScheduleTriggerStartTypeImmediately) {
+    if (simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately) {
         scheduleRows = @[
                 kJMJobStartImmediately,
         ];
@@ -379,40 +373,10 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     ];
 }
 
-- (void)createScheduleRepresentation
-{
-    switch (self.mode) {
-        case JMScheduleModeNew: {
-            NSString *resourceFolder = [self.resourceLookup.uri stringByDeletingLastPathComponent];
-            self.scheduleResponse = [JSScheduleMetadata new];
-            self.scheduleResponse.reportUnitURI = self.resourceLookup.uri;
-            self.scheduleResponse.label = self.resourceLookup.label;
-            self.scheduleResponse.baseOutputFilename = [self filenameFromLabel:self.resourceLookup.label];
-            self.scheduleResponse.folderURI = resourceFolder;
-            self.scheduleResponse.outputFormats = [self defaultFormats];
-            self.scheduleResponse.trigger.startDate = [NSDate date];
-            break;
-        }
-        case JMScheduleModeEdit: {
-            // TODO: add loading indicator
-            [self.scheduleManager loadScheduleInfoWithScheduleId:self.scheduleSummary.jobIdentifier completion:^(JSScheduleMetadata *schedule, NSError *error) {
-                if (schedule) {
-                    self.scheduleResponse = schedule;
-                    [self.tableView reloadData];
-                } else {
-                    [JMUtils presentAlertControllerWithError:error completion:nil];
-                }
-            }];
-            break;
-        }
-    }
-}
-
 - (NSString *)dateStringFromDate:(NSDate *)date
 {
-    NSDateFormatter* outputFormatter = [[NSDateFormatter alloc]init];
-    [outputFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-    NSString *dateString = [outputFormatter stringFromDate:date];
+    NSDateFormatter *formatter = [[JSDateFormatterFactory sharedFactory] formatterWithPattern:@"yyyy-MM-dd HH:mm"];
+    NSString *dateString = [formatter stringFromDate:date];
     return dateString;
 }
 
@@ -420,7 +384,12 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 {
     if (!self.datePicker) {
         UIDatePicker *datePicker = [[UIDatePicker alloc]init];
-        [datePicker setDate:[NSDate date]];
+        // need set timezone to 0 because of received value
+        datePicker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        datePicker.date = simpleTrigger.startDate;
         [datePicker addTarget:self
                        action:@selector(updateDate:)
              forControlEvents:UIControlEventValueChanged];
@@ -448,11 +417,13 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 
     NSString *message;
 
-    if (!self.scheduleResponse.baseOutputFilename) {
+    if (!self.scheduleMetadata.baseOutputFilename.length) {
         message = JMCustomLocalizedString(@"schedules.error.empty.filename", nil);
-    } else if (!self.scheduleResponse.label.length) {
+    } else if (!self.scheduleMetadata.folderURI.length) {
+        message = JMCustomLocalizedString(@"schedules.error.empty.output.folder", nil);
+    } else if (!self.scheduleMetadata.label.length) {
         message = JMCustomLocalizedString(@"schedules.error.empty.label", nil);
-    } else if (!self.scheduleResponse.outputFormats.count) {
+    } else if (!self.scheduleMetadata.outputFormats.count) {
         message = JMCustomLocalizedString(@"schedules.error.empty.format", nil);
     }
 
@@ -464,17 +435,6 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     } else {
         completion(YES, nil);
     }
-}
-
-- (NSArray *)defaultFormats
-{
-    return @[kJS_CONTENT_TYPE_PDF.uppercaseString];
-}
-
-- (NSString *)filenameFromLabel:(NSString *)label
-{
-    NSString *filename = [label stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    return filename;
 }
 
 @end

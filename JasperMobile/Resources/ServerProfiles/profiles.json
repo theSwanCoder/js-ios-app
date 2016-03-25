@@ -44,6 +44,11 @@
       "mAlias" : "mobile demo 5.5",
       "mServerUrl" : "http://mobiledemo.jaspersoft.com/jasperserver-pro",
       "mOrganization" : ""
+    },
+    {
+      "mAlias" : "csrf",
+      "mServerUrl" : "http://build-master.jaspersoft.com:8480/jrs-pro-feature-csrf-protection",
+      "mOrganization" : ""
     }
   ]
 }

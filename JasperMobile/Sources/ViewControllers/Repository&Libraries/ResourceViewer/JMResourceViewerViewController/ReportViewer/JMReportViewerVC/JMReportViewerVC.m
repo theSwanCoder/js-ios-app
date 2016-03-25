@@ -32,8 +32,9 @@
 #import "JMInputControlsViewController.h"
 #import "JMReportViewerToolBar.h"
 #import "JMExternalWindowControlsVC.h"
-#import "JMNewScheduleVC.h"
+#import "JMScheduleVC.h"
 #import "JMWebEnvironment.h"
+#import "JMScheduleManager.h"
 
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifier = @"kJMReportViewerPrimaryWebEnvironmentIdentifier";
 NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportViewerSecondaryWebEnvironmentIdentifier";
@@ -939,11 +940,24 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
 #pragma mark - Scheduling
 - (void)scheduleReport {
-    JMNewScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
-    newJobVC.resourceLookup = self.resourceLookup;
-    newJobVC.exitBlock = ^(void){
-        [ALToastView toastInView:self.navigationController.view
-                        withText:JMCustomLocalizedString(@"Schedule was created successfully.", nil)];
+    JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+    newJobVC.scheduleMetadata = [[JMScheduleManager sharedManager] createNewScheduleMetadataWithResourceLookup:self.resourceLookup];
+    newJobVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata){
+        if (scheduleMetadata) {
+            [[JMScheduleManager sharedManager] createScheduleWithData:scheduleMetadata
+                                                           completion:^(JSScheduleMetadata *newScheduleMetadata, NSError *error) {
+                                                               if (newScheduleMetadata) {
+                                                                   [self.navigationController popViewControllerAnimated:YES];
+                                                                   [ALToastView toastInView:self.navigationController.view
+                                                                                   withText:JMCustomLocalizedString(@"Schedule was created successfully.", nil)];
+                                                               } else {
+                                                                   [JMUtils presentAlertControllerWithError:error
+                                                                                                 completion:nil];
+                                                               }
+                                                           }];
+        } else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     };
     [self.navigationController pushViewController:newJobVC animated:YES];
 }

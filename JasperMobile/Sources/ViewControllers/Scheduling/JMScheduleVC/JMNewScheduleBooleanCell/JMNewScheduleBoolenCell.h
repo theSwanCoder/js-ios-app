@@ -22,26 +22,25 @@
 
 
 //
-//  JMNewScheduleBoolenCell.m
+//  JMNewScheduleBoolenCell.h
 //  TIBCO JasperMobile
 //
-#import "JMNewScheduleBoolenCell.h"
 
 
-@implementation JMNewScheduleBoolenCell
+/**
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.3
+*/
 
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.uiSwitch.onTintColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
-}
+@protocol JMNewScheduleBoolenCellDelegate;
 
-- (IBAction)switchChangedValue:(UISwitch *)sender
-{
-    if ([self.delegate respondsToSelector:@selector(scheduleCell:didChangeValue:)]) {
-        [self.delegate scheduleCell:self didChangeValue:self.uiSwitch.isOn];
-    }
-}
+@interface JMNewScheduleBoolenCell : UITableViewCell
+@property(nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *uiSwitch;
+@property (nonatomic, weak) NSObject <JMNewScheduleBoolenCellDelegate> *delegate;
+@end
 
+@protocol JMNewScheduleBoolenCellDelegate
+@optional
+- (void)scheduleBoolenCell:(JMNewScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue;
 @end

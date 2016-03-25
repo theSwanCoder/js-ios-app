@@ -22,7 +22,7 @@
 
 
 //
-//  JMNewScheduleCell.h
+//  JMScheduleVC.h
 //  TIBCO JasperMobile
 //
 
@@ -31,15 +31,11 @@
 @since 2.3
 */
 
-@protocol JMNewJobCellDelegate;
+@class JMScheduleManager;
 
-@interface JMNewScheduleCell : UITableViewCell <UITextFieldDelegate>
-@property(nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UITextField *valueTextField;
-@property (nonatomic, weak) NSObject <JMNewJobCellDelegate> *delegate;
-@end
+typedef void(^JMScheduleCompletionBlock)(JSScheduleMetadata *__nullable);
 
-@protocol JMNewJobCellDelegate
-@optional
-- (void)jobCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue;
+@interface JMScheduleVC : JMBaseViewController
+@property (nonatomic, strong) JSScheduleMetadata *__nonnull scheduleMetadata;
+@property (nonatomic, copy) JMScheduleCompletionBlock __nonnull exitBlock;
 @end

@@ -22,23 +22,26 @@
 
 
 //
-//  JMScheduleManager.h
+//  JMNewScheduleBoolenCell.m
 //  TIBCO JasperMobile
 //
+#import "JMNewScheduleBoolenCell.h"
 
-/**
-@author Aleksandr Dakhno odahno@tibco.com
-@since 2.3
-*/
 
-typedef void(^JMScheduleCompletion)(JSScheduleMetadata *__nullable, NSError *__nullable);
+@implementation JMNewScheduleBoolenCell
 
-@interface JMScheduleManager : NSObject
-+ (instancetype __nullable)sharedManager;
-- (void)loadScheduleMetadataForScheduleWithId:(NSInteger)scheduleId completion:(JMScheduleCompletion __nonnull)completion;
-- (void)createScheduleWithData:(JSScheduleMetadata *__nonnull)jobData completion:(JMScheduleCompletion __nonnull)completion;
-- (void)updateSchedule:(JSScheduleMetadata *__nonnull)schedule completion:(JMScheduleCompletion __nonnull)completion;
-- (void)deleteScheduleWithJobIdentifier:(NSInteger)identifier completion:(void (^__nonnull)(NSError *__nullable))completion;
-// create new model
-- (JSScheduleMetadata *__nonnull)createNewScheduleMetadataWithResourceLookup:(JSResourceLookup *__nonnull)resourceLookup;
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.uiSwitch.onTintColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
+}
+
+- (IBAction)switchChangedValue:(UISwitch *)sender
+{
+    if ([self.delegate respondsToSelector:@selector(scheduleCell:didChangeValue:)]) {
+        [self.delegate scheduleBoolenCell:self didChangeValue:self.uiSwitch.isOn];
+    }
+}
+
 @end
