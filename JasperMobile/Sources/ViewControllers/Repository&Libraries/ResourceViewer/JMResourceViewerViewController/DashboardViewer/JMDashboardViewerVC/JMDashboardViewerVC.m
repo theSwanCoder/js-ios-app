@@ -44,6 +44,8 @@
 #import "JSDashboardComponent.h"
 #import "JMWebEnvironment.h"
 
+#import "UIView+Additions.h"
+
 NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashboardViewerPrimaryWebEnvironmentIdentifier";
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
@@ -87,35 +89,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)printResource
 {
     [super printResource];
-
-    [self imageFromWebViewWithCompletion:^(UIImage *image) {
-        if (image) {
-            [self printItem:image
-                   withName:self.dashboard.resourceLookup.label
-                 completion:nil];
-        }
-    }];
-}
-
-- (void)imageFromWebViewWithCompletion:(void(^)(UIImage *image))completion
-{
-    [JMCancelRequestPopup presentWithMessage:@"status.loading"];
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        // Screenshot rendering from webView
-        UIView *resourceView = [self resourceView];
-        UIGraphicsBeginImageContextWithOptions(resourceView.bounds.size, resourceView.opaque, 0.0);
-        [resourceView.layer renderInContext:UIGraphicsGetCurrentContext()];
-
-        UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [JMCancelRequestPopup dismiss];
-            if (completion) {
-                completion(viewImage);
-            }
-        });
-    });
+    [self printItem:[self.resourceView renderedImage] withName:self.dashboard.resourceLookup.label completion:nil];
 }
 
 #pragma mark - Custom Accessors
