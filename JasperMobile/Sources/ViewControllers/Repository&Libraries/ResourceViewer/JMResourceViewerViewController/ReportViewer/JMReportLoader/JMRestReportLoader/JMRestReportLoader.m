@@ -224,7 +224,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 }
 
 - (void)renderReportWithHTML:(NSString *)HTMLString
-                     scripts:(NSArray <NSString *>*)scripts
+                     scripts:(NSArray <JMHTMLScript *>*)scripts
                   completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
     void(^heapBlock)(BOOL, NSError *) = [completion copy];
