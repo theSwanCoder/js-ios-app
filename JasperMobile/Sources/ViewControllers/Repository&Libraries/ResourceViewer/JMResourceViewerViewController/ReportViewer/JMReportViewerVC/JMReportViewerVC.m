@@ -76,13 +76,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
     [self addObservers];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    [self configViewport];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -175,31 +168,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 }
 
 #pragma mark - Setups
-
-- (void)configViewport
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if ([self isContentOnTV]) {
-        return;
-    }
-
-    CGFloat initialScaleViewport = 0.75;
-    if ([JMUtils isSupportVisualize]) {
-        BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-        if (isCompactWidth) {
-            initialScaleViewport = 0.25;
-        }
-    } else {
-        initialScaleViewport = 2;
-        if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
-            initialScaleViewport = 1;
-        }
-    }
-
-    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
-}
 
 - (UIView *)resourceView
 {
@@ -466,11 +434,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
             if (![JMUtils isSupportVisualize]) {
                 // fix an issue in webview after zooming and changing page (black areas)
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    if ([strongSelf isContentOnTV]) {
-                        if ([strongSelf.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-                            [strongSelf.reportLoader updateViewportScaleFactorWithValue:3];
-                        }
-                    } else {
+                    if (![strongSelf isContentOnTV]) {
                         JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
                         runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
                         [self.webEnvironment sendJavascriptRequest:runRequest
@@ -607,7 +571,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
                     __strong typeof(self)strongSelf = weakSelf;
 
                     [strongSelf setupSubviews];
-                    [strongSelf configViewport];
 
                     [strongSelf stopShowLoader];
                     if (!result.error) {
@@ -720,9 +683,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         }
         case JMMenuActionsViewAction_HideExternalDisplay: {
             [self switchFromTV];
-            [self hideExternalWindowWithCompletion:^(void) {
-                [self configViewport];
-            }];
+            [self hideExternalWindowWithCompletion:nil];
             break;
         }
         default:
@@ -874,15 +835,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 #pragma mark - Work with external screen
 - (UIView *)viewToShowOnExternalWindow
 {
-    CGFloat initialScaleViewport = 0.75;
-    if (![JMUtils isSupportVisualize]) {
-        initialScaleViewport = 3;
-    }
-
-    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
-
     UIView *view = [UIView new];
     UIView *reportView = [self resourceView];
 
@@ -932,9 +884,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 - (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController
 {
     [self switchFromTV];
-    [self hideExternalWindowWithCompletion:^(void) {
-        [self configViewport];
-    }];
+    [self hideExternalWindowWithCompletion:nil];
 }
 
 
