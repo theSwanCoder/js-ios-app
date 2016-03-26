@@ -105,6 +105,7 @@
 "resources.search.placeholder" = "Search resources";
 "resources.noresults.saveditems.msg" = "No Saved Items.";
 "resources.noresults.favorites.msg" = "No Favorited Items.";
+"resources.noresults.schedules.msg" = "No jobs are scheduled.";
 
 
 // Filter By
@@ -303,9 +304,6 @@
 /* Security */
 "secutiry.http.message" = "\"HTTP connections are not secure. You should specify HTTPS if your server supports it.";
 
-/*Schedules*/
-"schedules.title" = "Schedules";
-"schedules.no.jobs.message" = "No jobs are scheduled.";
 // New Job
 "schedules.new.job.label" = "Label";
 "schedules.new.job.description" = "Description";
