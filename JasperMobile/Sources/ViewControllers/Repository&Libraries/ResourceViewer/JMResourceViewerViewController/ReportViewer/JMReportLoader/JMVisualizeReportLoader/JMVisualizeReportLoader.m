@@ -276,6 +276,14 @@
     }
 }
 
+- (void)fitReportViewToScreen
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"JasperMobile.Report.API.fitReportViewToScreen";
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:nil];
+}
+
 #pragma mark - Private
 - (void)freshLoadReportWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock)completion
 {

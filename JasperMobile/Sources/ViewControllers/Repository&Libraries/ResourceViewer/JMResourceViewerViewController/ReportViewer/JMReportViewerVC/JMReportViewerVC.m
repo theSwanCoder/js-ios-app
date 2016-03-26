@@ -39,7 +39,7 @@
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifier = @"kJMReportViewerPrimaryWebEnvironmentIdentifier";
 NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportViewerSecondaryWebEnvironmentIdentifier";
 
-@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMExternalWindowControlViewControllerDelegate>
+@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, copy) void(^exportCompletion)(NSString *resourcePath);
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
@@ -49,7 +49,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
 @property (nonatomic, strong) JMWebEnvironment *webEnvironment;
-@property (nonatomic, assign) BOOL wasAuthError;
 @end
 
 @implementation JMReportViewerVC
@@ -58,6 +57,12 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 {
     JMLog(@"horizontal size class: %@", @(newCollection.horizontalSizeClass));
     JMLog(@"vertical size class: %@", @(newCollection.verticalSizeClass));
+
+    [coordinator animateAlongsideTransition:nil completion:^(id <UIViewControllerTransitionCoordinatorContext> context) {
+        if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {
+            [self.reportLoader fitReportViewToScreen];
+        }
+    }];
 
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
 }
@@ -673,6 +678,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         case JMMenuActionsViewAction_ShowExternalDisplay: {
             [self showExternalWindowWithCompletion:^(BOOL success) {
                 if (success) {
+                    if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {
+                        [self.reportLoader fitReportViewToScreen];
+                    }
                     [self addControlsForExternalWindow];
                 } else {
                     // TODO: add handling this situation
@@ -683,7 +691,11 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         }
         case JMMenuActionsViewAction_HideExternalDisplay: {
             [self switchFromTV];
-            [self hideExternalWindowWithCompletion:nil];
+            [self hideExternalWindowWithCompletion:^{
+                if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {
+                    [self.reportLoader fitReportViewToScreen];
+                }
+            }];
             break;
         }
         default:
@@ -861,7 +873,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 - (void)addControlsForExternalWindow
 {
     self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentView:[self resourceView]];
-    self.controlsViewController.delegate = self;
 
     CGRect controlViewFrame = self.view.frame;
     controlViewFrame.origin.y = 0;
@@ -878,13 +889,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
     [self.view addSubview:self.emptyReportMessageLabel];
     [self layoutEmptyReportLabelInView:self.view];
-}
-
-#pragma mark - JMExternalWindowControlViewControllerDelegate
-- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController
-{
-    [self switchFromTV];
-    [self hideExternalWindowWithCompletion:nil];
 }
 
 

@@ -51,6 +51,7 @@
                                        webEnvironment:(nonnull JMWebEnvironment *)webEnvironment;
 - (void)exportReportWithFormat:(NSString * __nonnull)exportFormat;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
+- (void)fitReportViewToScreen;
 @end
 
 @protocol JMReportLoaderDelegate <NSObject>

@@ -31,16 +31,8 @@
 @since 2.3
 */
 
-@protocol JMExternalWindowControlViewControllerDelegate;
 
 @interface JMExternalWindowControlsVC : UIViewController
-@property (nonatomic, weak) NSObject <JMExternalWindowControlViewControllerDelegate> *delegate;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 - (instancetype)initWithContentView:(UIView *)contentView;
-@end
-
-
-@protocol JMExternalWindowControlViewControllerDelegate
-@optional
-- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController;
 @end

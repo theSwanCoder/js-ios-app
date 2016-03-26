@@ -197,6 +197,7 @@ JasperMobile.Report.API = {
             pages: params["pages"],
             scale: "width",
             container: "#container",
+            autoresize: false,
             success: successFn,
             error: errorFn,
             events: events,
@@ -362,6 +363,30 @@ JasperMobile.Report.API = {
                 })
             });
         }
+    },
+    fitReportViewToScreen: function() {
+        // var width = 500;
+        // var height = 500;
+
+        var body = document.body,
+            html = document.documentElement;
+
+        var height = Math.min( body.scrollHeight, body.offsetHeight,
+            html.clientHeight, html.scrollHeight, html.offsetHeight );
+
+        var width = Math.min( body.scrollWidth, body.offsetWidth,
+            html.clientWidth, html.scrollWidth, html.offsetWidth );
+
+        var container = document.getElementById("container");
+        container.width = width;
+        container.height = height;
+        JasperMobile.Report.API.report.resize();
+        JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.API.fitReportViewToScreen", {
+            size: JSON.stringify({
+                "width"  : width,
+                "height" : height
+            })
+        });
     }
 };
 
