@@ -29,9 +29,9 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 
 @interface JMResourcesListLoader ()
 
-@property (atomic, strong) NSMutableArray *resourcesFolders;
-@property (atomic, strong) NSMutableArray *resourcesItems;
-@property (nonatomic, strong) NSMutableArray *allResources;
+@property (atomic, strong) NSMutableArray <JSResourceLookup *>*resourcesFolders;
+@property (atomic, strong) NSMutableArray <JSResourceLookup *>*resourcesItems;
+@property (nonatomic, strong) NSMutableArray <JSResourceLookup *>*allResources;
 
 @property (nonatomic, assign) BOOL needUpdateData;
 @property (nonatomic, assign) BOOL isLoadingNow;
@@ -114,7 +114,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return kJMResourceLimit;
 }
 
-- (NSMutableArray *)allResources
+- (NSArray <JSResourceLookup *>*)allResources
 {
     if (!_allResources && [_allResources count] == 0) {
         _allResources = [NSMutableArray arrayWithArray:self.resourcesFolders];
@@ -129,7 +129,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return self.allResources.count;
 }
 
-- (id)resourceAtIndex:(NSInteger)index
+- (JSResourceLookup *)resourceAtIndex:(NSInteger)index
 {
     if (index < [self resourceCount]) {
         return self.allResources[index];
@@ -147,7 +147,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     self.allResources = nil;
 }
 
-- (void)addResourcesWithResources:(NSArray *)resources
+- (void)addResourcesWithResources:(NSArray <JSResourceLookup *>*)resources
 {
     for (id resource in resources) {
         [self addResourcesWithResource:resource];
