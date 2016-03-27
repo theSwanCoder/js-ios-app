@@ -50,7 +50,7 @@ extern NSString * const kJMRepresentationTypeDidChangeNotification;
 @property (nonatomic, assign) BOOL shouldShowRightNavigationItems;
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
 @property (nonatomic, strong) NSString *representationTypeKey;
-@property (nonatomic, strong) void(^actionBlock)(JMResource *);
+@property (nonatomic, copy) void(^actionBlock)(JMResource *);
 
 - (NSString *)noResultText;
 - (void)actionForResource:(JMResource *)resource;
