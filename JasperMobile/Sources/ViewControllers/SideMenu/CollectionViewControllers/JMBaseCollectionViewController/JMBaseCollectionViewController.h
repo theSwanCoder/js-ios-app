@@ -46,6 +46,7 @@ extern NSString * const kJMRepresentationTypeDidChangeNotification;
 @property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
 @property (nonatomic, assign) BOOL needReloadData;
 @property (nonatomic, assign) BOOL needLayoutUI;
+@property (nonatomic, assign) BOOL shouldShowButtonForChangingViewPresentation;
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
 @property (nonatomic, strong) NSString *representationTypeKey;
 

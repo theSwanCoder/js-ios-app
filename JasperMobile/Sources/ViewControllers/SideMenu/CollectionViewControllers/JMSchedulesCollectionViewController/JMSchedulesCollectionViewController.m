@@ -41,8 +41,11 @@
 {
     [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"menuitem.schedules.label", nil);
-}
+    self.shouldShowButtonForChangingViewPresentation = NO;
+    self.needLayoutUI = YES;
 
+    [self addCreateNewScheduleButton];
+}
 
 #pragma mark - Overloaded methods
 - (NSString *)defaultRepresentationTypeKey
@@ -115,6 +118,21 @@
 {
     [JMUtils hideNetworkActivityIndicator];
     [JMCancelRequestPopup dismiss];
+}
+
+#pragma mark - Helpers
+- (void)addCreateNewScheduleButton
+{
+    UIBarButtonItem *createScheduleButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                                          target:self
+                                                                                          action:@selector(createNewSchedule)];
+    self.navigationItem.rightBarButtonItem = createScheduleButton;
+}
+
+#pragma mark - Actions
+- (void)createNewSchedule
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 }
 
 @end

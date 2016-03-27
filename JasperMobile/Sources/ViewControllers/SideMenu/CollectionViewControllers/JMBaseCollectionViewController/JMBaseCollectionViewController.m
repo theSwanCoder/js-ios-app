@@ -104,6 +104,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
     [self addObservers];
     
+    self.shouldShowButtonForChangingViewPresentation = YES;
     self.isScrollToTop = NO;
     self.needLayoutUI = YES;
 }
@@ -397,7 +398,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
                                                                            target:self
                                                                            action:@selector(actionButtonClicked:)]] mutableCopy];
         }
-        [navBarItems addObject:[self resourceRepresentationItem]];
+        if (self.shouldShowButtonForChangingViewPresentation) {
+            [navBarItems addObject:[self resourceRepresentationItem]];
+        }
         self.navigationItem.rightBarButtonItems = navBarItems;
     } else {
         self.needLayoutUI = YES;
