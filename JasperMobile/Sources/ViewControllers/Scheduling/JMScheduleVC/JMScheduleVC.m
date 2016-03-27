@@ -62,6 +62,17 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 
     [self.createJobButton setTitle:@"Apply"
                           forState:UIControlStateNormal];
+
+    [self setupLeftBarButtonItems];
+}
+
+#pragma mark - Setups
+- (void)setupLeftBarButtonItems
+{
+    UIBarButtonItem *backItem = [self backButtonWithTitle:self.backButtonTitle
+                                                   target:self
+                                                   action:@selector(backButtonTapped:)];
+    self.navigationItem.leftBarButtonItem = backItem;
 }
 
 #pragma mark - Actions
@@ -146,6 +157,11 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     }
 
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)backButtonTapped:(UIBarButtonItem *)sender
+{
+    self.exitBlock(nil);
 }
 
 #pragma mark - UITableViewDelegate

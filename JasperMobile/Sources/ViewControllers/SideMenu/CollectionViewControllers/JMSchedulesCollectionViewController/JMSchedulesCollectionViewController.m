@@ -32,6 +32,7 @@
 #import "JMSchedule.h"
 #import "JMScheduleVC.h"
 #import "JMCancelRequestPopup.h"
+#import "JMLibraryCollectionViewController.h"
 
 
 @implementation JMSchedulesCollectionViewController
@@ -42,9 +43,10 @@
     [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"menuitem.schedules.label", nil);
     self.shouldShowButtonForChangingViewPresentation = NO;
+    self.shouldShowRightNavigationItems = NO;
     self.needLayoutUI = YES;
 
-    [self addCreateNewScheduleButton];
+    [self addButtonForCreatingNewSchedule];
 }
 
 #pragma mark - Overloaded methods
@@ -121,7 +123,7 @@
 }
 
 #pragma mark - Helpers
-- (void)addCreateNewScheduleButton
+- (void)addButtonForCreatingNewSchedule
 {
     UIBarButtonItem *createScheduleButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                           target:self
@@ -132,7 +134,54 @@
 #pragma mark - Actions
 - (void)createNewSchedule
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLibraryCollectionViewController *libraryVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMLibraryCollectionViewController"];
+    libraryVC.representationTypeKey = self.representationTypeKey;
+    libraryVC.representationType = self.representationType;
+    libraryVC.shouldShowButtonForChangingViewPresentation = NO;
+    libraryVC.shouldShowRightNavigationItems = NO;
+    libraryVC.navigationItem.leftBarButtonItem = nil;
+    __weak __typeof(self) weakSelf = self;
+    libraryVC.actionBlock = ^(JMResource *resource) {
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf scheduleReportWithResource:resource];
+    };
+    [self.navigationController pushViewController:libraryVC animated:YES];
 }
+
+- (void)scheduleReportWithResource:(JMResource *)resource
+{
+    JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+    newJobVC.scheduleMetadata = [[JMScheduleManager sharedManager] createNewScheduleMetadataWithResourceLookup:resource];
+    newJobVC.backButtonTitle = self.title;
+    __weak __typeof(self) weakSelf = self;
+    newJobVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata){
+        __typeof(self) strongSelf = weakSelf;
+        if (scheduleMetadata) {
+            __weak __typeof(self) weakSelf = strongSelf;
+            [[JMScheduleManager sharedManager] createScheduleWithData:scheduleMetadata
+                                                           completion:^(JSScheduleMetadata *newScheduleMetadata, NSError *error) {
+                                                               __typeof(self) strongSelf = weakSelf;
+                                                               if (newScheduleMetadata) {
+                                                                   [strongSelf.navigationController
+                                                                           popToViewController:strongSelf
+                                                                                      animated:YES];
+                                                                   [strongSelf.resourceListLoader setNeedsUpdate];
+                                                                   [strongSelf.resourceListLoader updateIfNeeded];
+                                                                   [ALToastView toastInView:strongSelf.navigationController.view
+                                                                                   withText:JMCustomLocalizedString(@"Schedule was created successfully.", nil)];
+                                                               } else {
+                                                                   [JMUtils presentAlertControllerWithError:error
+                                                                                                 completion:nil];
+                                                               }
+                                                           }];
+        } else {
+            [strongSelf.navigationController
+                    popToViewController:strongSelf
+                               animated:YES];
+        }
+    };
+    [self.navigationController pushViewController:newJobVC animated:YES];
+}
+
 
 @end

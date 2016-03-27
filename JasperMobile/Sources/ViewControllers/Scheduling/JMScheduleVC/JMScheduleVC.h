@@ -37,5 +37,6 @@ typedef void(^JMScheduleCompletionBlock)(JSScheduleMetadata *__nullable);
 
 @interface JMScheduleVC : JMBaseViewController
 @property (nonatomic, strong) JSScheduleMetadata *__nonnull scheduleMetadata;
+@property (nonatomic, strong) NSString *__nullable backButtonTitle;
 @property (nonatomic, copy) JMScheduleCompletionBlock __nonnull exitBlock;
 @end
