@@ -31,7 +31,6 @@
 #import "JMScheduleCell.h"
 #import "ALToastView.h"
 #import "JMScheduleVC.h"
-#import "JMScheduleLoader.h"
 
 @interface JMSchedulesListVC () <UITableViewDelegate, UITableViewDataSource, JMScheduleCellDelegate>
 @property (nonatomic, copy) NSArray <JSScheduleLookup *> *scheduleSummaries;
@@ -103,15 +102,15 @@
 #pragma mark - Actions
 - (void)refresh
 {
-    JMScheduleLoader *scheduleLoader = [JMScheduleLoader new];
-    [scheduleLoader loadSchedulesForResource:nil completion:^(NSArray <JSScheduleLookup *> *jobs, NSError *error) {
-        [self.refreshControl endRefreshing];
-
-        self.scheduleSummaries = jobs;
-        [self updateNoJobsLabelAppearence];
-
-        [self.tableView reloadData];
-    }];
+//    JMScheduleLoader *scheduleLoader = [JMScheduleLoader new];
+//    [scheduleLoader loadSchedulesForResource:nil completion:^(NSArray <JSScheduleLookup *> *jobs, NSError *error) {
+//        [self.refreshControl endRefreshing];
+//
+//        self.scheduleSummaries = jobs;
+//        [self updateNoJobsLabelAppearence];
+//
+//        [self.tableView reloadData];
+//    }];
 }
 
 - (void)editSchedule:(JSScheduleLookup *)schedule
