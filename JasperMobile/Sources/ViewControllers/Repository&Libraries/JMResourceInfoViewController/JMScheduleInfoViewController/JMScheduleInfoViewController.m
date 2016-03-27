@@ -140,6 +140,9 @@
                                                             completion:^(NSError *error) {
                                                                 __typeof(self) strongSelf = weakSelf;
                                                                 [strongSelf stopShowLoader];
+                                                                if (self.exitBlock) {
+                                                                    self.exitBlock();
+                                                                }
                                                                 [strongSelf.navigationController popViewControllerAnimated:YES];
                                                             }];
 }

@@ -501,6 +501,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     JMResourceInfoViewController *vc = (JMResourceInfoViewController *) [NSClassFromString([resource infoVCIdentifier]) new];
     vc.resource = resource;
+    __weak __typeof(self) weakSelf = self;
+    vc.exitBlock = ^(){
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf.resourceListLoader setNeedsUpdate];
+        [strongSelf.resourceListLoader updateIfNeeded];
+    };
     [self.navigationController pushViewController:vc animated:YES];
 }
 
