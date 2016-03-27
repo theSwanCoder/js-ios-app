@@ -45,7 +45,7 @@
     parameters.label = self.searchQuery;
     parameters.startIndex = @(self.offset);
     parameters.numberOfRows = @([self limitOfLoadingResources]);
-    parameters.sortType = JSScheduleSearchSortTypeNone;
+    parameters.sortType = JSScheduleSearchSortTypeJobName;
 
     __weak typeof(self)weakSelf = self;
     [self.restClient fetchSchedulesWithSearchParameters:parameters
