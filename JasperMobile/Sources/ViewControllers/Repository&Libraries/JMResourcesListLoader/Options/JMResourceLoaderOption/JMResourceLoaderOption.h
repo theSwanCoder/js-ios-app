@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,32 +22,19 @@
 
 
 //
-//  JMSaveReportViewController.h
+//  JMResourceLoaderOption.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Alexey Gubarev ogubarie@tibco.com
  @author Aleksandr Dakhno odahno@tibco.com
-
- @since 1.9
+ @since 2.5
  */
 
-#import <UIKit/UIKit.h>
-#import "JMEditabledViewController.h"
-#import "JMReport.h"
 
-@protocol JMSaveReportViewControllerDelegate <NSObject>
-
-@required
-- (void)reportDidSavedSuccessfully;
-
-@end
-
-extern NSString * const kJMSaveReportViewControllerSegue;
-
-@interface JMSaveReportViewController : JMEditabledViewController
-@property (nonatomic, weak) id <JMSaveReportViewControllerDelegate> delegate;
-
-@property (nonatomic, strong) JMReport *report;
+@interface JMResourceLoaderOption : NSObject
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) id value;
+- (instancetype)initWithTitle:(NSString *)title value:(id)value;
++ (instancetype)optionWithTitle:(NSString *)title value:(id)value;
 @end

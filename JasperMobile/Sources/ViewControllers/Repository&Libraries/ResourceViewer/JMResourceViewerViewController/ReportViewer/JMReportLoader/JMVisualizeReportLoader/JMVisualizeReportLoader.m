@@ -31,6 +31,7 @@
 #import "JMVisualizeManager.h"
 #import "JMWebViewManager.h"
 #import "JMWebEnvironment.h"
+#import "JMResource.h"
 
 @interface JMVisualizeReportLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak, readwrite) JSReport *report;
@@ -511,8 +512,9 @@
                         [reportParameters addObject:reportParameter];
                     }
 
-                    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResourceLookup:withParameters:)]) {
-                        [self.delegate reportLoader:self didReceiveOnClickEventForResourceLookup:resourceLookup withParameters:[reportParameters copy]];
+                    JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
+                    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResource:withParameters:)]) {
+                        [self.delegate reportLoader:self didReceiveOnClickEventForResource:resource withParameters:[reportParameters copy]];
                     }
                 }
             }

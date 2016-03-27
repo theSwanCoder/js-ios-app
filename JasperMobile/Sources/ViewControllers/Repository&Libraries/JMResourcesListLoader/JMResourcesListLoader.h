@@ -36,15 +36,18 @@
 extern NSString * const kJMResourceListLoaderOptionItemTitleKey;
 extern NSString * const kJMResourceListLoaderOptionItemValueKey;
 
-typedef NS_ENUM(NSInteger, JMResourcesListLoaderOption) {
-    JMResourcesListLoaderOption_Filter = 0,
-    JMResourcesListLoaderOption_Sort
+typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
+    JMResourcesListLoaderOptionType_Filter,
+    JMResourcesListLoaderOptionType_Sort
 };
 
 @class JMResourcesListLoader;
+@class JMResource;
+@class JMResourceLoaderOption;
+
 @protocol JMResourcesListLoaderDelegate <NSObject>
 - (void)resourceListLoaderDidStartLoad:(JMResourcesListLoader *)listLoader;
-- (void)resourceListLoaderDidEndLoad:(JMResourcesListLoader *)listLoader withResources:(NSArray <JSResourceLookup *>*)resources;
+- (void)resourceListLoaderDidEndLoad:(JMResourcesListLoader *)listLoader withResources:(NSArray <JMResource *>*)resources;
 - (void)resourceListLoaderDidFailed:(JMResourcesListLoader *)listLoader withError:(NSError *)error;
 @end
 
@@ -73,18 +76,18 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOption) {
 
 // helpers
 - (NSUInteger)resourceCount;
-- (void)addResourcesWithResource:(id)resource;
-- (void)addResourcesWithResources:(NSArray <JSResourceLookup *>*)resources;
-- (JSResourceLookup *)resourceAtIndex:(NSInteger)index;
+- (void)addResourcesWithResource:(JMResource *)resource;
+- (void)addResourcesWithResources:(NSArray <JMResource *>*)resources;
+- (JMResource *)resourceAtIndex:(NSInteger)index;
 
 // search
 - (void)searchWithQuery:(NSString *)query;
 - (void)clearSearchResults;
 
 //
-- (NSArray <NSDictionary *>*)listItemsWithOption:(JMResourcesListLoaderOption)option;
-- (id)parameterForQueryWithOption:(JMResourcesListLoaderOption)option;
-- (NSString *)titleForPopupWithOption:(JMResourcesListLoaderOption)option;
+- (NSArray <JMResourceLoaderOption *>*)listOptionsWithOptionType:(JMResourcesListLoaderOptionType)option;
+- (id)parameterForQueryWithOptionType:(JMResourcesListLoaderOptionType)optionType;
+- (NSString *)titleForPopupWithOptionType:(JMResourcesListLoaderOptionType)optionType;
 
 - (void)finishLoadingWithError:(NSError *)error;
 @end

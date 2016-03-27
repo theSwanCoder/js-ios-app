@@ -22,12 +22,11 @@
 
 
 #import "JMSavedResourcesListLoader.h"
-
 #import "JMServerProfile+Helpers.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMFavorites+Helpers.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMExportManager.h"
+#import "JMResourceLoaderOption.h"
 
 @implementation JMSavedResourcesListLoader
 
@@ -60,7 +59,7 @@
         NSArray *exportedResources = [[[JMExportManager sharedInstance] exportedResources] filteredArrayUsingPredicate:[self predicate]];
         if (exportedResources.count) {
             [commonResourcesArray addObjectsFromArray:exportedResources];
-            NSSortDescriptor *sortDescriptor = [self sortDescriptor];
+            NSSortDescriptor *sortDescriptor = [self sortDescriptorForResources];
             if (sortDescriptor) {
                 commonResourcesArray = [[commonResourcesArray sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
             }
@@ -73,22 +72,23 @@
     }
 }
 
-- (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
+- (NSArray <JMResourceLoaderOption *>*)listOptionsWithOptionType:(JMResourcesListLoaderOptionType)optionType
 {
-    switch (option) {
-        case JMResourcesListLoaderOption_Sort:
-            return [super listItemsWithOption:option];
-        case JMResourcesListLoaderOption_Filter: {
-            NSMutableArray *filterItems = [NSMutableArray array];
-            [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-                    kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
+    switch (optionType) {
+        case JMResourcesListLoaderOptionType_Sort:
+            return [super listOptionsWithOptionType:optionType];
+        case JMResourcesListLoaderOptionType_Filter: {
+            NSMutableArray *filterOptions = [NSMutableArray array];
+            JMResourceLoaderOption *filterByAllOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.all", nil)
+                                                                                          value:[JMUtils supportedFormatsForReportSaving]];
+            [filterOptions addObject:filterByAllOption];
 
             for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
-                [filterItems addObject:
-                        @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],
-                                kJMResourceListLoaderOptionItemValueKey: @[format]}];
+                JMResourceLoaderOption *filterByOption = [JMResourceLoaderOption optionWithTitle:[format uppercaseString]
+                                                                                           value:@[format]];
+                [filterOptions addObject:filterByOption];
             }
-            return filterItems;
+            return filterOptions;
         }
     }
 }
@@ -114,7 +114,7 @@
 - (NSPredicate *)predicate
 {
     NSMutableArray *predicates = [NSMutableArray array];
-    [predicates addObject:[NSPredicate predicateWithFormat:@"format IN %@", [self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"format IN %@", [self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Filter]]];
     if (self.searchQuery && self.searchQuery.length) {
         NSMutableArray *queryPredicates = [NSMutableArray array];
         [queryPredicates addObject:[NSPredicate predicateWithFormat:@"label LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", self.searchQuery]]];
@@ -126,9 +126,22 @@
 
 - (NSSortDescriptor *)sortDescriptor
 {
-    if ([self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]) {
+    if ([self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Sort]) {
         BOOL ascending = self.sortBySelectedIndex == 0;
-        return [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:ascending];
+        return [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Sort] ascending:ascending];
+    }
+    return nil;
+}
+
+- (NSSortDescriptor *)sortDescriptorForResources
+{
+    NSString *sortKey = [self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Sort];
+    if (sortKey) {
+        BOOL ascending = self.sortBySelectedIndex == 0;
+        sortKey = [NSString stringWithFormat:@"resourceLookup.%@", sortKey];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:sortKey
+                                                                         ascending:ascending];
+        return sortDescriptor;
     }
     return nil;
 }

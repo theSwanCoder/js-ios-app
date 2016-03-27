@@ -30,11 +30,11 @@
 #import "JMDashboardLoader.h"
 #import "JMBaseDashboardLoader.h"
 #import "JMVisDashboardLoader.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMWebViewManager.h"
 #import "JMVisualizeManager.h"
 #import "JMDashboard.h"
 #import "JMWebEnvironment.h"
+#import "JMResource.h"
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, weak) JMDashboard *dashboard;
@@ -53,7 +53,7 @@
     self = [super init];
     if (self) {
         _dashboard = dashboard;
-        if ([self.dashboard.resourceLookup isNewDashboard]) {
+        if ([JMUtils isSupportVisualize] && self.dashboard.resource.type == JMResourceTypeDashboard) {
             _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard
                                                           webEnvironment:webEnvironment];
             ((JMVisDashboardLoader *)_dashboardLoader).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;

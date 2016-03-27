@@ -27,19 +27,18 @@
 
 #import <Foundation/Foundation.h>
 
+
 /**
- This protocol aggregates all the information implementing object should know about 
+ This protocol aggregates all the information implementing object should know about
  to work with JasperServer Repository Service
- 
+
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @author Alexey Gubarev ogubarie@tibco.com
  @since 1.6
  */
 
-@class JSResourceLookup;
+@class JMResource;
 
 @protocol JMResourceClientHolder <NSObject>
-@required
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-
+@property (nonatomic, strong) JMResource *resource;
 @end

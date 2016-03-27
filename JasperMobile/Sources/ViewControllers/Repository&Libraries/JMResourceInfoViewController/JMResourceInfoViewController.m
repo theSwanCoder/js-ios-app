@@ -23,10 +23,10 @@
 
 #import "JMResourceInfoViewController.h"
 #import "JMFavorites+Helpers.h"
-#import "JSResourceLookup+Helpers.h"
 #import "PopoverView.h"
 #import "JMSavedResources+Helpers.h"
 #import "UIViewController+Additions.h"
+#import "JMResource.h"
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
@@ -39,7 +39,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 @end
 
 @implementation JMResourceInfoViewController
-@synthesize resourceLookup = _resourceLookup;
+@synthesize resource = _resource;
 
 #pragma mark - UIViewController Life Cycle
 - (instancetype)init
@@ -90,7 +90,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
 - (void)resetResourceProperties
 {
-    self.title = self.resourceLookup.label;
+    self.title = self.resource.resourceLookup.label;
     self.resourceProperties = nil;
     [self.tableView reloadData];
     self.needLayoutUI = YES;
@@ -109,10 +109,10 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 #pragma mark - Actions
 - (void)favoriteButtonTapped:(id)sender
 {
-    if ([JMFavorites isResourceInFavorites:self.resourceLookup]) {
-        [JMFavorites removeFromFavorites:self.resourceLookup];
+    if ([JMFavorites isResourceInFavorites:self.resource]) {
+        [JMFavorites removeFromFavorites:self.resource];
     } else {
-        [JMFavorites addToFavorites:self.resourceLookup];
+        [JMFavorites addToFavorites:self.resource];
     }
 }
 
@@ -126,30 +126,30 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 {
     
     if (!_resourceProperties) {
-        NSString *createdAtString = [JMUtils localizedStringFromDate:self.resourceLookup.creationDate];
-        NSString *modifiedAtString = [JMUtils localizedStringFromDate:self.resourceLookup.updateDate];
+        NSString *createdAtString = [JMUtils localizedStringFromDate:self.resource.resourceLookup.creationDate];
+        NSString *modifiedAtString = [JMUtils localizedStringFromDate:self.resource.resourceLookup.updateDate];
 
         _resourceProperties = @[
                                 @{
                                     kJMTitleKey : @"label",
-                                    kJMValueKey : self.resourceLookup.label ?: @""
+                                    kJMValueKey : self.resource.resourceLookup.label ?: @""
                                     },
                                 @{
                                     kJMTitleKey : @"description",
-                                    kJMValueKey : self.resourceLookup.resourceDescription ?: @""
+                                    kJMValueKey : self.resource.resourceLookup.resourceDescription ?: @""
                                     },
                                 @{
                                     kJMTitleKey : @"uri",
-                                    kJMValueKey : self.resourceLookup.uri ?: @""
+                                    kJMValueKey : self.resource.resourceLookup.uri ?: @""
                                     },
                                 
                                 @{
                                     kJMTitleKey : @"type",
-                                    kJMValueKey : [self.resourceLookup localizedResourceType] ?: @""
+                                    kJMValueKey : [self.resource localizedResourceType] ?: @""
                                     },
                                 @{
                                     kJMTitleKey : @"version",
-                                    kJMValueKey : self.resourceLookup.version ? [NSString stringWithFormat:@"%@", self.resourceLookup.version]: @""
+                                    kJMValueKey : self.resource.resourceLookup.version ? [NSString stringWithFormat:@"%@", self.resource.resourceLookup.version]: @""
                                     },
                                 @{
                                     kJMTitleKey : @"creationDate",
@@ -170,7 +170,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     if (![self favoriteItemShouldDisplaySeparately]) {
         availableAction |= [self favoriteAction];
     }
-    if ([self.resourceLookup isSavedReport]) {
+    if (self.resource.type == JMResourceTypeSavedResource) {
         availableAction |= JMMenuActionsViewAction_OpenIn;
     }
     return availableAction;
@@ -193,7 +193,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
 - (JMMenuActionsViewAction)favoriteAction
 {
-    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource];
     return isResourceInFavorites ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
 }
 
@@ -232,7 +232,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
 - (UIBarButtonItem *) favoriteBarButtonItem
 {
-    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource];
     NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
     
     UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
@@ -298,7 +298,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
             [self favoriteButtonTapped:nil];
             break;
         case JMMenuActionsViewAction_OpenIn: {
-            JMSavedResources *savedResources = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+            JMSavedResources *savedResources = [JMSavedResources savedReportsFromResource:self.resource];
             NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:savedResources];
 
             NSURL *url = [NSURL fileURLWithPath:fullReportPath];

@@ -26,10 +26,10 @@
 //  TIBCO JasperMobile
 //
 #import "JMReportInfoViewController.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMScheduleVC.h"
 #import "ALToastView.h"
 #import "JMScheduleManager.h"
+#import "JMResource.h"
 
 @interface JMReportInfoViewController ()
 
@@ -61,9 +61,9 @@
 #pragma mark - Private API
 - (void)runReport
 {
-    id nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
-    if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
-        [nextVC setResourceLookup:self.resourceLookup];
+    id nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resource resourceViewerVCIdentifier]];
+    if ([nextVC respondsToSelector:@selector(setResource:)]) {
+        [nextVC setResource:self.resource];
     }
     
     if (nextVC) {
@@ -73,7 +73,7 @@
 
 - (void)scheduleReport {
     JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
-    newJobVC.scheduleMetadata = [[JMScheduleManager sharedManager] createNewScheduleMetadataWithResourceLookup:self.resourceLookup];
+    newJobVC.scheduleMetadata = [[JMScheduleManager sharedManager] createNewScheduleMetadataWithResourceLookup:self.resource];
     newJobVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata){
         if (scheduleMetadata) {
             [[JMScheduleManager sharedManager] createScheduleWithData:scheduleMetadata

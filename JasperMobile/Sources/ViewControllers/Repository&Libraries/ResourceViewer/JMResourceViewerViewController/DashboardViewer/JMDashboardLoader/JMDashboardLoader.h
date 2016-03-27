@@ -36,6 +36,7 @@
 @class JMDashboard;
 @class JMDashlet;
 @class JMWebEnvironment;
+@class JMResource;
 
 typedef void(^JMDashboardLoaderCompletion)(BOOL success, NSError * __nullable error);
 
@@ -79,7 +80,7 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 @protocol JMDashboardLoaderDelegate <NSObject>
 - (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didStartMaximazeDashletWithTitle:(NSString * __nonnull)title;
 - (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
-         resourceLookup:(JSResourceLookup * __nullable)resourceLookup
+               resource:(JMResource * __nullable)resource
              parameters:(NSArray * __nullable)parameters;
 - (void)dashboardLoaderDidReceiveAuthRequest:(id<JMDashboardLoader> __nonnull)loader;
 @end

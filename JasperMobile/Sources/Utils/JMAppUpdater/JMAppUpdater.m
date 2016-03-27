@@ -31,6 +31,7 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMFavorites+Helpers.h"
+#import "JMResource.h"
 
 // Old constants used in previous versions of application
 static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated.versions";
@@ -137,11 +138,15 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
             NSString *reportExtension = [report substringFromIndex:reportExtensionRange.location];
             NSString *reportName = [report stringByReplacingOccurrencesOfString:reportExtension withString:@""];
             
-            JSResourceLookup *resource = [JSResourceLookup new];
-            resource.resourceType = kJS_WS_TYPE_REPORT_UNIT;
-            resource.version = @(0);
+            JSResourceLookup *resourceLookup = [JSResourceLookup new];
+            resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
+            resourceLookup.version = @(0);
+            JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
             NSURL *reportSourcesURL = [NSURL fileURLWithPath:[reportsDirectory stringByAppendingPathComponent:report] isDirectory:YES];
-            [JMSavedResources addReport:resource withName:reportName format:[reportExtension stringByReplacingOccurrencesOfString:@"." withString:@""] sourcesURL:reportSourcesURL];
+            [JMSavedResources addReport:resource
+                               withName:reportName
+                                 format:[reportExtension stringByReplacingOccurrencesOfString:@"." withString:@""]
+                             sourcesURL:reportSourcesURL];
         }
     }
 

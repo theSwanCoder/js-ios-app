@@ -32,21 +32,21 @@
  */
 
 #import "JMSavedResources.h"
-#import "JSResourceLookup.h"
 
 @class JMExportResource;
+@class JMResource;
 
 extern NSString * const kJMSavedResources;
 
 @interface JMSavedResources (Helpers)
 
-// Returns saved report from JSResourceLookup
-+ (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource;
+// Returns saved report from JMResource
++ (JMSavedResources *)savedReportsFromResource:(JMResource *)resource;
 
 + (JMSavedResources *)savedResourceWithReportName:(NSString *)reportName format:(NSString *)reportFormat;
 
 // Adds saved resource with path to CoreData
-+ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format sourcesURL:(NSURL *)sourcesURL;
++ (JMSavedResources *)addReport:(JMResource *)resource withName:(NSString *)name format:(NSString *)format sourcesURL:(NSURL *)sourcesURL;
 
 // Returns YES if report with name reportName with format reportFormat is absent
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat;
@@ -64,8 +64,8 @@ extern NSString * const kJMSavedResources;
 // Returns thumbnail image for saved report
 - (UIImage *)thumbnailImage;
 
-// Returns wrapper from SavedReports. Wrapper is a JSResourceLookup
-- (JSResourceLookup *)wrapperFromSavedReports;
+// Returns wrapper from SavedReports. Wrapper is a JMResource
+- (JMResource *)wrapperFromSavedReports;
 
 // paths
 + (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format;

@@ -58,7 +58,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
 @implementation JMMenuViewController
 + (NSInteger)defaultItemIndex {
-    return JMResourceTypeLibrary;
+    return JMSectionTypeLibrary;
 }
 
 #pragma mark - LifeCycle
@@ -173,11 +173,11 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuItem *item = self.menuItems[itemIndex];
     item.showNotes = NO;
 
-    if (item.resourceType == JMResourceTypeLogout) {
+    if (item.sectionType == JMSectionTypeLogout) {
         [[JMSessionManager sharedManager] logout];
         [JMUtils showLoginViewAnimated:YES completion:nil];
         self.menuItems = nil;
-    } else if (item.resourceType == JMResourceTypeAbout) {
+    } else if (item.sectionType == JMSectionTypeAbout) {
         [self closeMenu];
 
         JMMainNavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
@@ -186,7 +186,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         [self.revealViewController.frontViewController presentViewController:navController
                                                                     animated:YES
                                                                   completion:nil];
-    } else if (item.resourceType == JMResourceTypeFeedback) {
+    } else if (item.sectionType == JMSectionTypeFeedback) {
         [self showFeedback];
     } else {
         if (!currentSelectedItem || currentSelectedItem != item) {
@@ -260,19 +260,19 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 - (NSArray *)createMenuItems
 {
     NSMutableArray *menuItems = [@[
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeLibrary],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeScheduling],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeAbout],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeFeedback],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeLibrary],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeRepository],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeSavedItems],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeFavorites],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeScheduling],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeAbout],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeFeedback],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeLogout]
     ] mutableCopy];
 
     if ([JMUtils isServerProEdition]) {
-        NSUInteger indexOfRepository = [menuItems indexOfObject:[JMMenuItem menuItemWithResourceType:JMResourceTypeRepository]];
-        [menuItems insertObject:[JMMenuItem menuItemWithResourceType:JMResourceTypeRecentViews] atIndex:indexOfRepository + 1];
+        NSUInteger indexOfRepository = [menuItems indexOfObject:[JMMenuItem menuItemWithSectionType:JMSectionTypeRepository]];
+        [menuItems insertObject:[JMMenuItem menuItemWithSectionType:JMSectionTypeRecentViews] atIndex:indexOfRepository + 1];
     }
 
     return [menuItems copy];
@@ -330,9 +330,9 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     }
 }
 
-- (JMMenuItem *)menuItemWithType:(JMResourceType)resourceType
+- (JMMenuItem *)menuItemWithType:(JMSectionType)sectionType
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"resourceType == %@", @(resourceType)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sectionType == %@", @(sectionType)];
     return [self.menuItems filteredArrayUsingPredicate:predicate].firstObject;
 }
 
@@ -391,9 +391,9 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 #pragma mark - Notifications
 - (void)exportedResouceDidLoad:(NSNotification *)notification
 {
-    if (self.selectedItem.resourceType != JMResourceTypeSavedItems) {
+    if (self.selectedItem.sectionType != JMSectionTypeSavedItems) {
         [self showNoteInMenuButton];
-        JMMenuItem *savedItem = [self menuItemWithType:JMResourceTypeSavedItems];
+        JMMenuItem *savedItem = [self menuItemWithType:JMSectionTypeSavedItems];
         savedItem.showNotes = YES;
     }
 }

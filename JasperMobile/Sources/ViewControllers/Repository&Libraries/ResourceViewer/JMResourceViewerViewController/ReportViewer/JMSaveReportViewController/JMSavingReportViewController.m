@@ -21,7 +21,7 @@
  */
 
 
-#import "JMSaveReportViewController.h"
+#import "JMSavingReportViewController.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMCancelRequestPopup.h"
 #import "JMSaveReportSection.h"
@@ -30,7 +30,6 @@
 #import "JMSaveReportPagesCell.h"
 #import "JMSaveReportPageRangeCell.h"
 #import "JMReport.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JSReportSaver.h"
 #import "JMExportManager.h"
 #import "JMReportExportTask.h"
@@ -42,7 +41,7 @@ NSString * const kJMSaveReportFormatCellIdentifier = @"FormatSelectionCell";
 NSString * const kJMSaveReportPagesCellIdentifier = @"PagesCell";
 NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
-@interface JMSaveReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, JMSaveReportNameCellDelegate, JMSaveReportPageRangeCellDelegate, JMSaveReportPagesCellDelegate>
+@interface JMSavingReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, JMSaveReportNameCellDelegate, JMSaveReportPageRangeCellDelegate, JMSaveReportPagesCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *saveReportButton;
@@ -59,7 +58,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 @end
 
 
-@implementation JMSaveReportViewController
+@implementation JMSavingReportViewController
 
 #pragma mark - Lifecycle
 - (void)dealloc

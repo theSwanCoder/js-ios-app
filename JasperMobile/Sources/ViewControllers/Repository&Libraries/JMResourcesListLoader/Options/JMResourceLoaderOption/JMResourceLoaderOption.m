@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,12 +22,28 @@
 
 
 //
-//  JMResourceLookup.h
+//  JMResourceLoaderOption.m
 //  TIBCO JasperMobile
 //
 
-#import "JMResourceLookup.h"
+#import "JMResourceLoaderOption.h"
 
 
-@implementation JMResourceLookup
+@implementation JMResourceLoaderOption
+
+- (instancetype)initWithTitle:(NSString *)title value:(id)value
+{
+    self = [super init];
+    if (self) {
+        _title = title;
+        _value = value;
+    }
+    return self;
+}
+
++ (instancetype)optionWithTitle:(NSString *)title value:(id)value
+{
+    return [[self alloc] initWithTitle:title value:value];
+}
+
 @end

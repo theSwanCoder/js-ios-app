@@ -37,11 +37,8 @@
 @interface JMListOptionsPopupView : JMPopupView
 
 @property(nonatomic, assign) NSInteger selectedIndex;
-@property(nonatomic, assign) JMResourcesListLoaderOption option;
-
+@property(nonatomic, assign) JMResourcesListLoaderOptionType optionType;
 @property(nonatomic, strong) NSString *titleString;
 
-
-- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type items:(NSArray *)items;
-
+- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type options:(NSArray <JMResourceLoaderOption *>*)options;
 @end

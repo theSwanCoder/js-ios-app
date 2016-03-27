@@ -26,6 +26,8 @@
 //  TIBCO JasperMobile
 //
 
+@class JMResource;
+
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.3
@@ -40,5 +42,5 @@ typedef void(^JMScheduleCompletion)(JSScheduleMetadata *__nullable, NSError *__n
 - (void)updateSchedule:(JSScheduleMetadata *__nonnull)schedule completion:(JMScheduleCompletion __nonnull)completion;
 - (void)deleteScheduleWithJobIdentifier:(NSInteger)identifier completion:(void (^__nonnull)(NSError *__nullable))completion;
 // create new model
-- (JSScheduleMetadata *__nonnull)createNewScheduleMetadataWithResourceLookup:(JSResourceLookup *__nonnull)resourceLookup;
+- (JSScheduleMetadata *__nonnull)createNewScheduleMetadataWithResourceLookup:(JMResource *__nonnull)resourceLookup;
 @end

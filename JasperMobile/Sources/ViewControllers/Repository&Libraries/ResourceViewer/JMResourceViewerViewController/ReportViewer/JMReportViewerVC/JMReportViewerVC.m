@@ -22,12 +22,11 @@
 
 
 #import "JMReportViewerVC.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMReportViewerConfigurator.h"
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMWebViewManager.h"
-#import "JMSaveReportViewController.h"
+#import "JMSavingReportViewController.h"
 #import "ALToastView.h"
 #import "JMInputControlsViewController.h"
 #import "JMReportViewerToolBar.h"
@@ -35,6 +34,7 @@
 #import "JMScheduleVC.h"
 #import "JMWebEnvironment.h"
 #import "JMScheduleManager.h"
+#import "JMResource.h"
 
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifier = @"kJMReportViewerPrimaryWebEnvironmentIdentifier";
 NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportViewerSecondaryWebEnvironmentIdentifier";
@@ -99,7 +99,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 {
     [super prepareForSegue:segue sender:sender];
     if ([segue.identifier isEqualToString:kJMSaveReportViewControllerSegue]) {
-        JMSaveReportViewController *destinationViewController = segue.destinationViewController;
+        JMSavingReportViewController *destinationViewController = segue.destinationViewController;
         destinationViewController.report = self.report;
         destinationViewController.delegate = self;
     }
@@ -235,7 +235,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         [strongSelf handleError:error];
     };
 
-    NSString *reportURI = self.resourceLookup.uri;
+    NSString *reportURI = self.resource.resourceLookup.uri;
 
     [self startShowLoaderWithMessage:@"status.loading"];
     [self.restClient resourceLookupForURI:reportURI resourceType:kJS_WS_TYPE_REPORT_UNIT
@@ -405,7 +405,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 - (JMReport *)report
 {
     if (!_report) {
-        _report = [self.resourceLookup reportModel];
+        _report = [self.resource modelOfResource];
     }
     return _report;
 }
@@ -614,10 +614,10 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
-- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventForResource:(JMResource *)resource withParameters:(NSArray *)reportParameters
 {
-    JMReportViewerVC *reportViewController = (JMReportViewerVC *) [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-    reportViewController.resourceLookup = resourceLookup;
+    JMReportViewerVC *reportViewController = (JMReportViewerVC *) [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+    reportViewController.resource = resource;
     reportViewController.initialReportParameters = reportParameters;
     reportViewController.isChildReport = YES;
     [self.navigationController pushViewController:reportViewController animated:YES];
@@ -760,9 +760,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
     }];
 }
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)availableAction
 {
-    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule;
+    JMMenuActionsViewAction availableAction = [super availableAction] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule;
     if (self.report.isReportWithInputControls) {
         availableAction |= JMMenuActionsViewAction_Edit;
     }
@@ -775,9 +775,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
     return availableAction;
 }
 
-- (JMMenuActionsViewAction)disabledActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)disabledAction
 {
-    JMMenuActionsViewAction disabledAction = [super disabledActionForResource:resource];
+    JMMenuActionsViewAction disabledAction = [super disabledAction];
     if (![self isReportReady] || self.report.isReportEmpty) {
         disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ShowExternalDisplay;
     }
@@ -895,7 +895,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 #pragma mark - Scheduling
 - (void)scheduleReport {
     JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
-    newJobVC.scheduleMetadata = [[JMScheduleManager sharedManager] createNewScheduleMetadataWithResourceLookup:self.resourceLookup];
+    newJobVC.scheduleMetadata = [[JMScheduleManager sharedManager] createNewScheduleMetadataWithResourceLookup:self.resource];
     newJobVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata){
         if (scheduleMetadata) {
             [[JMScheduleManager sharedManager] createScheduleWithData:scheduleMetadata

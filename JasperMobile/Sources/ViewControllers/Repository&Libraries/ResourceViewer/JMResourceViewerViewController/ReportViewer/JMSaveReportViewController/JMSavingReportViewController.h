@@ -22,39 +22,32 @@
 
 
 //
-//  JMFavorites+Helpers.h
+//  JMSavingReportViewController.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
+ @author Aleksandr Dakhno odahno@tibco.com
+
  @since 1.9
  */
 
-#import "JMFavorites.h"
+#import <UIKit/UIKit.h>
+#import "JMEditabledViewController.h"
+#import "JMReport.h"
 
-@class JMResource;
-extern NSString * const kJMFavorites;
+@protocol JMSaveReportViewControllerDelegate <NSObject>
 
-@interface JMFavorites (Helpers)
+@required
+- (void)reportDidSavedSuccessfully;
 
-// Adds resource to favorites
-+ (void)addToFavorites:(JMResource *)resource;
+@end
 
-// Removes resource from favorites
-+ (void)removeFromFavorites:(JMResource *)resource;
+extern NSString * const kJMSaveReportViewControllerSegue;
 
-// Checks if resource was already added to favorites
-+ (BOOL)isResourceInFavorites:(JMResource *)resource;
+@interface JMSavingReportViewController : JMEditabledViewController
+@property (nonatomic, weak) id <JMSaveReportViewControllerDelegate> delegate;
 
-// Returns favorites report from JSResourceLookup
-+ (JMFavorites *)favoritesFromResourceLookup:(JMResource *)resource;
-
-
-// Returns wrapper from favorites. Wrapper is a JSResourceLookup
-- (JMResource *)wrapperFromFavorite;
-
-// Returns all favorites.
-+ (NSArray *)allFavorites;
-
+@property (nonatomic, strong) JMReport *report;
 @end

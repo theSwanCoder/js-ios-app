@@ -24,32 +24,33 @@
 #import "JMFavorites+Helpers.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMSessionManager.h"
+#import "JMResource.h"
 
 
 NSString * const kJMFavorites = @"Favorites";
 
 @implementation JMFavorites (Helpers)
 
-+ (void)addToFavorites:(JSResourceLookup *)resource
++ (void)addToFavorites:(JMResource *)resource
 {
     JSProfile *sessionServerProfile = [JMSessionManager sharedManager].restClient.serverProfile;
     JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
     JMFavorites *favorites = [NSEntityDescription insertNewObjectForEntityForName:kJMFavorites inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
-    favorites.uri = resource.uri;
-    favorites.label = resource.label;
-    favorites.wsType = resource.resourceType;
-    favorites.creationDate = resource.creationDate;
-    favorites.updateDate = resource.updateDate;
-    favorites.resourceDescription = resource.resourceDescription;
+    favorites.uri = resource.resourceLookup.uri;
+    favorites.label = resource.resourceLookup.label;
+    favorites.wsType = resource.resourceLookup.resourceType;
+    favorites.creationDate = resource.resourceLookup.creationDate;
+    favorites.updateDate = resource.resourceLookup.updateDate;
+    favorites.resourceDescription = resource.resourceLookup.resourceDescription;
     favorites.username = sessionServerProfile.username;
-    favorites.version = resource.version;
+    favorites.version = resource.resourceLookup.version;
     [activeServerProfile  addFavoritesObject:favorites];
 
     [[JMCoreDataManager sharedInstance] save:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
-+ (void)removeFromFavorites:(JSResourceLookup *)resource
++ (void)removeFromFavorites:(JMResource *)resource
 {
     JMFavorites *favorites = [self favoritesFromResourceLookup:resource];
     if (favorites) {
@@ -60,32 +61,32 @@ NSString * const kJMFavorites = @"Favorites";
     }
 }
 
-+ (BOOL)isResourceInFavorites:(JSResourceLookup *)resource
++ (BOOL)isResourceInFavorites:(JMResource *)resource
 {
-    if (!resource.uri) {
+    if (!resource.resourceLookup.uri) {
         return NO;
     }
-    NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.uri];
+    NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.resourceLookup.uri];
     return ([[JMCoreDataManager sharedInstance].managedObjectContext countForFetchRequest:fetchRequest error:nil] > 0);
 }
 
-+ (JMFavorites *)favoritesFromResourceLookup:(JSResourceLookup *)resource
++ (JMFavorites *)favoritesFromResourceLookup:(JMResource *)resource
 {
-    NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.uri];
+    NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.resourceLookup.uri];
     return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
-- (JSResourceLookup *)wrapperFromFavorite
+- (JMResource *)wrapperFromFavorite
 {
-    JSResourceLookup *resource = [[JSResourceLookup alloc] init];
-    resource.uri = self.uri;
-    resource.label = self.label;
-    resource.resourceType = self.wsType;
-    resource.creationDate = self.creationDate;
-    resource.updateDate = self.updateDate;
-    resource.resourceDescription = self.resourceDescription;
-    resource.version = self.version;
-    return resource;
+    JSResourceLookup *resourceLookup = [JSResourceLookup new];
+    resourceLookup.uri = self.uri;
+    resourceLookup.label = self.label;
+    resourceLookup.resourceType = self.wsType;
+    resourceLookup.creationDate = self.creationDate;
+    resourceLookup.updateDate = self.updateDate;
+    resourceLookup.resourceDescription = self.resourceDescription;
+    resourceLookup.version = self.version;
+    return [JMResource resourceWithResourceLookup:resourceLookup];;
 }
 
 + (NSArray *)allFavorites

@@ -36,6 +36,7 @@
 
 @protocol JMReportLoaderDelegate;
 @class JMWebEnvironment;
+@class JMResource;
 
 @protocol JMReportLoaderProtocol <JSReportLoaderProtocol>
 
@@ -56,7 +57,7 @@
 
 @protocol JMReportLoaderDelegate <NSObject>
 @optional
-- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *__nonnull)resourceLookup withParameters:(NSArray *__nullable)reportParameters;
+- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resourceLookup withParameters:(NSArray *__nullable)reportParameters;
 - (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventWithError:(NSError *__nonnull)error;
 - (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoder didReceiveOnClickEventForReference:(NSURL *__nonnull)urlReference;
 - (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOutputResourcePath:(NSString *__nonnull)resourcePath fullReportName:(NSString *__nonnull)fullReportName;

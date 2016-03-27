@@ -44,9 +44,6 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
 @interface JMScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewScheduleCellDelegate, JMNewScheduleBoolenCellDelegate>
 @property (weak, nonatomic) UIDatePicker *datePicker;
 @property (nonatomic, strong) NSArray <JMNewScheduleVCSection *> *sections;
-//@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-//@property (nonatomic, strong) JSScheduleLookup *scheduleLookup;
-//@property (strong, nonatomic) JMScheduleManager *scheduleManager;
 @property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end

@@ -27,6 +27,7 @@
 //
 
 #import "JMScheduleManager.h"
+#import "JMResource.h"
 
 @implementation JMScheduleManager
 
@@ -152,15 +153,15 @@
 
 
 #pragma mark - New Schedule Metadata
-- (JSScheduleMetadata *)createNewScheduleMetadataWithResourceLookup:(JSResourceLookup *)resourceLookup
+- (JSScheduleMetadata *)createNewScheduleMetadataWithResourceLookup:(JMResource *)resource
 {
     JSScheduleMetadata *scheduleMetadata = [JSScheduleMetadata new];
 
-    NSString *resourceFolder = [resourceLookup.uri stringByDeletingLastPathComponent];
+    NSString *resourceFolder = [resource.resourceLookup.uri stringByDeletingLastPathComponent];
     scheduleMetadata.folderURI = resourceFolder;
-    scheduleMetadata.reportUnitURI = resourceLookup.uri;
-    scheduleMetadata.label = resourceLookup.label;
-    scheduleMetadata.baseOutputFilename = [self filenameFromLabel:resourceLookup.label];
+    scheduleMetadata.reportUnitURI = resource.resourceLookup.uri;
+    scheduleMetadata.label = resource.resourceLookup.label;
+    scheduleMetadata.baseOutputFilename = [self filenameFromLabel:resource.resourceLookup.label];
     scheduleMetadata.outputFormats = [self defaultFormats];
     scheduleMetadata.outputTimeZone = [self currentTimeZone];
 

@@ -30,11 +30,11 @@
 
 @implementation JMMenuItem
 
-- (instancetype)initWithResourceType:(JMResourceType)resourceType
+- (instancetype)initWithSectionType:(JMSectionType)sectionType
 {
     self = [super init];
     if (self) {
-        _resourceType = resourceType;
+        _sectionType = sectionType;
         _itemTitle = [self titleWithResourceType];
         _showNotes = NO;
         _selected = NO;
@@ -42,9 +42,9 @@
     return self;
 }
 
-+ (instancetype)menuItemWithResourceType:(JMResourceType)resourceType
++ (instancetype)menuItemWithSectionType:(JMSectionType)sectionType
 {
-    return [[[self class] alloc] initWithResourceType:resourceType];
+    return [[self alloc] initWithSectionType:sectionType];
 }
 
 - (void)setSelected:(BOOL)selected
@@ -65,20 +65,20 @@
 #pragma mark - Private API
 - (NSString *) vcIdentifierForSelectedItem
 {
-    switch (self.resourceType) {
-        case JMResourceTypeLibrary:
+    switch (self.sectionType) {
+        case JMSectionTypeLibrary:
             return @"JMLibraryNavigationViewController";
-        case JMResourceTypeRecentViews:
+        case JMSectionTypeRecentViews:
             return @"JMRecentViewsNavigationViewController";
-        case JMResourceTypeSavedItems:
+        case JMSectionTypeSavedItems:
             return @"JMSavedItemsNavigationViewController";
-        case JMResourceTypeFavorites:
+        case JMSectionTypeFavorites:
             return @"JMFavoritesNavigationViewController";
-        case JMResourceTypeScheduling:
+        case JMSectionTypeScheduling:
             return @"JMSchedulingListNC";
-        case JMResourceTypeRepository:
+        case JMSectionTypeRepository:
             return @"JMRepositoryNavigationViewController";
-        case JMResourceTypeAbout:
+        case JMSectionTypeAbout:
             return @"JMAboutNavigationViewController";
         default:
             return nil;
@@ -87,24 +87,24 @@
 
 - (NSString *) titleWithResourceType
 {
-    switch (self.resourceType) {
-        case JMResourceTypeLibrary:
+    switch (self.sectionType) {
+        case JMSectionTypeLibrary:
             return JMCustomLocalizedString(@"menuitem.library.label", nil);
-        case JMResourceTypeRecentViews:
+        case JMSectionTypeRecentViews:
             return JMCustomLocalizedString(@"menuitem.recentviews.label", nil);
-        case JMResourceTypeSavedItems:
+        case JMSectionTypeSavedItems:
             return JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
-        case JMResourceTypeFavorites:
+        case JMSectionTypeFavorites:
             return JMCustomLocalizedString(@"menuitem.favorites.label", nil);
-        case JMResourceTypeScheduling:
+        case JMSectionTypeScheduling:
             return JMCustomLocalizedString(@"menuitem.schedules.label", nil);
-        case JMResourceTypeRepository:
+        case JMSectionTypeRepository:
             return JMCustomLocalizedString(@"menuitem.repository.label", nil);
-        case JMResourceTypeAbout:
+        case JMSectionTypeAbout:
             return JMCustomLocalizedString(@"menuitem.about.label", nil);
-        case JMResourceTypeFeedback:
+        case JMSectionTypeFeedback:
             return JMCustomLocalizedString(@"menuitem.feedback.label", nil);
-        case JMResourceTypeLogout:
+        case JMSectionTypeLogout:
             return JMCustomLocalizedString(@"menuitem.logout.label", nil);
         default:
             return nil;
@@ -113,18 +113,18 @@
 
 - (UIImage *)iconWithResourceType
 {
-    switch (self.resourceType) {
-        case JMResourceTypeLibrary:
+    switch (self.sectionType) {
+        case JMSectionTypeLibrary:
             return [UIImage imageNamed:@"ic_library"];
-        case JMResourceTypeRecentViews:
+        case JMSectionTypeRecentViews:
             return [UIImage imageNamed:@"ic_recent_views"];
-        case JMResourceTypeRepository:
+        case JMSectionTypeRepository:
             return [UIImage imageNamed:@"ic_repository"];
-        case JMResourceTypeSavedItems:
+        case JMSectionTypeSavedItems:
             return [UIImage imageNamed:@"ic_saved_items"];
-        case JMResourceTypeFavorites:
+        case JMSectionTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites"];
-        case JMResourceTypeScheduling:
+        case JMSectionTypeScheduling:
             return [UIImage imageNamed:@"ic_scheduling"];
         default:
             return nil;
@@ -133,18 +133,18 @@
 
 - (UIImage *)selectedIconWithResourceType
 {
-    switch (self.resourceType) {
-        case JMResourceTypeLibrary:
+    switch (self.sectionType) {
+        case JMSectionTypeLibrary:
             return [UIImage imageNamed:@"ic_library_selected"];
-        case JMResourceTypeRecentViews:
+        case JMSectionTypeRecentViews:
             return [UIImage imageNamed:@"ic_recent_views_selected"];
-        case JMResourceTypeRepository:
+        case JMSectionTypeRepository:
             return [UIImage imageNamed:@"ic_repository_selected"];
-        case JMResourceTypeSavedItems:
+        case JMSectionTypeSavedItems:
             return [UIImage imageNamed:@"ic_saved_items_selected"];
-        case JMResourceTypeFavorites:
+        case JMSectionTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites_selected"];
-        case JMResourceTypeScheduling:
+        case JMSectionTypeScheduling:
             return [UIImage imageNamed:@"ic_scheduling_selected"];
         default:
             return nil;
@@ -153,16 +153,16 @@
 
 - (UIImage *)iconWithNoteWithResourceType
 {
-    switch (self.resourceType) {
-        case JMResourceTypeLibrary:
+    switch (self.sectionType) {
+        case JMSectionTypeLibrary:
             return [UIImage imageNamed:@"ic_library"];
-        case JMResourceTypeRecentViews:
+        case JMSectionTypeRecentViews:
             return [UIImage imageNamed:@"ic_recent_views"];
-        case JMResourceTypeRepository:
+        case JMSectionTypeRepository:
             return [UIImage imageNamed:@"ic_repository"];
-        case JMResourceTypeSavedItems:
+        case JMSectionTypeSavedItems:
             return [UIImage imageNamed:@"ic_saved_items_note"];
-        case JMResourceTypeFavorites:
+        case JMSectionTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites"];
         default:
             return nil;
@@ -171,16 +171,16 @@
 
 - (UIImage *)selectedIconWithNoteWithResourceType
 {
-    switch (self.resourceType) {
-        case JMResourceTypeLibrary:
+    switch (self.sectionType) {
+        case JMSectionTypeLibrary:
             return [UIImage imageNamed:@"ic_library_selected"];
-        case JMResourceTypeRecentViews:
+        case JMSectionTypeRecentViews:
             return [UIImage imageNamed:@"ic_recent_views_selected"];
-        case JMResourceTypeRepository:
+        case JMSectionTypeRepository:
             return [UIImage imageNamed:@"ic_repository_selected"];
-        case JMResourceTypeSavedItems:
+        case JMSectionTypeSavedItems:
             return [UIImage imageNamed:@"ic_saved_items_selected_note"];
-        case JMResourceTypeFavorites:
+        case JMSectionTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites_selected"];
         default:
             return nil;
@@ -189,20 +189,20 @@
 
 - (NSString *)nameForAnalytics
 {
-    switch (self.resourceType) {
-        case JMResourceTypeLibrary:
+    switch (self.sectionType) {
+        case JMSectionTypeLibrary:
             return @"Library";
-        case JMResourceTypeRecentViews:
+        case JMSectionTypeRecentViews:
             return @"Recenlty Viewed";
-        case JMResourceTypeRepository:
+        case JMSectionTypeRepository:
             return @"Repository";
-        case JMResourceTypeSavedItems:
+        case JMSectionTypeSavedItems:
             return @"Saved Items";
-        case JMResourceTypeFavorites:
+        case JMSectionTypeFavorites:
             return @"Favorites";
-        case JMResourceTypeScheduling:
+        case JMSectionTypeScheduling:
             return @"Scheduling";
-        case JMResourceTypeAbout:
+        case JMSectionTypeAbout:
             return @"AboutApp";
         default:
             return nil;
@@ -221,7 +221,7 @@
     }
 
     JMMenuItem *otherMenuItem = object;
-    return _resourceType == otherMenuItem.resourceType;
+    return _sectionType == otherMenuItem.sectionType;
 }
 
 - (NSUInteger)hash

@@ -27,11 +27,11 @@
 //
 
 #import "JMSavedItemsInfoViewController.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMSavedResourceViewerViewController.h"
 #import "JMFavorites.h"
 #import "JMFavorites+Helpers.h"
+#import "JMResource.h"
 
 @interface JMSavedItemsInfoViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
@@ -53,7 +53,7 @@
 - (JMSavedResources *)savedReports
 {
     if (!_savedReports) {
-        _savedReports = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+        _savedReports = [JMSavedResources savedReportsFromResource:self.resource];
     }
     return _savedReports;
 }
@@ -67,7 +67,7 @@
 #pragma mark - Overloaded methods
 - (void)resetResourceProperties
 {
-    self.resourceLookup = [self.savedReports wrapperFromSavedReports];
+    self.resource = [self.savedReports wrapperFromSavedReports];
     [super resetResourceProperties];
 }
 
@@ -98,7 +98,7 @@
                                                                                 textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
                                                                                     __strong typeof (self) strongSelf = weakSelf;
                                                                                     textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
-                                                                                    textField.text = [strongSelf.resourceLookup.label copy];
+                                                                                    textField.text = [strongSelf.resource.resourceLookup.label copy];
                                                                                 } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                     NSString *errorMessage = nil;
                                                                                     __strong typeof (self) strongSelf = weakSelf;
@@ -134,8 +134,8 @@
 
 - (void)runReport
 {
-    JMSavedResourceViewerViewController *nextVC = (JMSavedResourceViewerViewController *) [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
-    nextVC.resourceLookup = self.resourceLookup;
+    JMSavedResourceViewerViewController *nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resource resourceViewerVCIdentifier]];
+    [nextVC setResource:self.resource];
     nextVC.delegate = self;
     
     if (nextVC) {
@@ -151,14 +151,14 @@
 }
 
 #pragma mark - JMBaseResourceViewerVCDelegate
-- (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JSResourceLookup *)resourceLookup
+- (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JMResource *)resourceLookup
 {
     NSArray *viewControllers = self.navigationController.viewControllers;
     UIViewController *previousViewController = viewControllers[[viewControllers indexOfObject:self] - 1];
     [self.navigationController popToViewController:previousViewController animated:YES];
 }
 
-- (BOOL)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer shouldCloseViewerAfterDeletingResource:(JSResourceLookup *)resourceLookup
+- (BOOL)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer shouldCloseViewerAfterDeletingResource:(JMResource *)resourceLookup
 {
     return NO;
 }

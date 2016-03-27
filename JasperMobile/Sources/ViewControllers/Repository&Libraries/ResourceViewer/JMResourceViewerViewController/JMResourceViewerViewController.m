@@ -24,11 +24,11 @@
 #import "JMResourceViewerViewController.h"
 #import "JMWebViewManager.h"
 #import "ALToastView.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMMainNavigationController.h"
 #import "JMWebEnvironment.h"
 #import "UIView+Additions.h"
 #import "JMShareActivityItemProvider.h"
+#import "JMResource.h"
 
 NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewerWebEnvironmentIdentifier";
 
@@ -137,13 +137,13 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 
 #pragma mark - Overriden methods
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)availableAction
 {
-    JMMenuActionsViewAction availableActions = [super availableActionForResource:resource];
+    JMMenuActionsViewAction availableActions = [super availableAction];
     availableActions |= JMMenuActionsViewAction_Share;
 
-    BOOL isSaveReport = [self.resourceLookup isSavedReport];
-    BOOL isFile = [self.resourceLookup isFile];
+    BOOL isSaveReport = self.resource.type == JMResourceTypeSavedResource;
+    BOOL isFile = self.resource.type == JMResourceTypeFile;
     if ( !(isSaveReport || isFile) ) {
         availableActions |= JMMenuActionsViewAction_Print;
     }
@@ -165,9 +165,9 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 {
     // Analytics
     NSString *label = kJMAnalyticsResourceEventLabelSavedResource;
-    if ([self.resourceLookup isReport]) {
+    if (self.resource.type == JMResourceTypeReport) {
         label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
-    } else if ([self.resourceLookup isDashboard]) {
+    } else if (self.resource.type == JMResourceTypeDashboard) {
         label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
     }
     [JMUtils logEventWithInfo:@{

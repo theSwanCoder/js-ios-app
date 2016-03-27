@@ -36,13 +36,12 @@
 #import "JMListOptionsPopupView.h"
 #import "JMCancelRequestPopup.h"
 #import "JMAboutViewController.h"
-
 #import "JMRepositoryCollectionViewController.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMReportViewerVC.h"
 #import "JMResourceInfoViewController.h"
 #import "UIViewController+Additions.h"
 #import "JMExportManager.h"
+#import "JMResource.h"
 
 CGFloat const kJMBaseCollectionViewGridWidth = 310;
 
@@ -203,10 +202,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     JMListOptionsPopupView *sortPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
                                                                                     type:JMPopupViewType_ContentViewOnly
-                                                                                   items:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOption_Sort]];
+                                                                                 options:[self.resourceListLoader listOptionsWithOptionType:JMResourcesListLoaderOptionType_Sort]];
     sortPopup.titleString = JMCustomLocalizedString(@"resources.sortby.title", nil);
     sortPopup.selectedIndex = self.resourceListLoader.sortBySelectedIndex;
-    sortPopup.option = JMResourcesListLoaderOption_Sort;
+    sortPopup.optionType = JMResourcesListLoaderOptionType_Sort;
     [sortPopup show];
 }
 
@@ -214,10 +213,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     JMListOptionsPopupView *filterPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
                                                                                       type:JMPopupViewType_ContentViewOnly
-                                                                                     items:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOption_Filter]];
+                                                                                   options:[self.resourceListLoader listOptionsWithOptionType:JMResourcesListLoaderOptionType_Filter]];
     filterPopup.titleString = JMCustomLocalizedString(@"resources.filterby.title", nil);
     filterPopup.selectedIndex = self.resourceListLoader.filterBySelectedIndex;
-    filterPopup.option = JMResourcesListLoaderOption_Filter;
+    filterPopup.optionType = JMResourcesListLoaderOptionType_Filter;
     [filterPopup show];
 }
 
@@ -290,7 +289,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (JMMenuActionsViewAction)availableAction
 {
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Sort;
-    NSArray *filterItems = [self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOption_Filter];
+    NSArray *filterItems = [self.resourceListLoader listOptionsWithOptionType:JMResourcesListLoaderOptionType_Filter];
     if ([filterItems count] > 1) {
         availableAction |= JMMenuActionsViewAction_Filter;
     }
@@ -307,7 +306,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     return [self.resourceListLoader resourceCount];
 }
 
-- (JSResourceLookup *)loadedResourceForIndexPath:(NSIndexPath *)indexPath
+- (JMResource *)loadedResourceForIndexPath:(NSIndexPath *)indexPath
 {
     return [self.resourceListLoader resourceAtIndex:indexPath.row];
 }
@@ -435,36 +434,36 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 - (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSResourceLookup *resourceLookup = [self loadedResourceForIndexPath:indexPath];
+    JMResource *resource = [self loadedResourceForIndexPath:indexPath];
     id nextVC = nil;
     
-    if ([resourceLookup isFolder]) {
+    if (resource.type == JMResourceTypeFolder) {
         // TODO: replace identifier with constant
         JMRepositoryCollectionViewController *repositoryViewController = (JMRepositoryCollectionViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMRepositoryCollectionViewController"];
-        repositoryViewController.resourceListLoader.resourceLookup = resourceLookup;
+        repositoryViewController.resourceListLoader.resource = resource;
         repositoryViewController.navigationItem.leftBarButtonItem = nil;
-        repositoryViewController.navigationItem.title = resourceLookup.label;
+        repositoryViewController.navigationItem.title = resource.resourceLookup.label;
         repositoryViewController.representationTypeKey = self.representationTypeKey;
         repositoryViewController.representationType = self.representationType;
         nextVC = repositoryViewController;
-    } else if ([resourceLookup isTempExportedReport]) {
+    } else if (resource.type == JMResourceTypeTempExportedReport) {
         // TODO: add canceling task
 //        [[JMExportManager sharedInstance] cancelAll];
 //        JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *) self.view).collectionView cellForItemAtIndexPath:indexPath];
 //        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:cell.resourceLookup];
 //        [[JMExportManager sharedInstance] cancelTaskForSavedResource:savedReport];
-    } else if ([resourceLookup isSavedReport]) {
-        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-        if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
-            [nextVC setResourceLookup:resourceLookup];
+    } else if (resource.type == JMResourceTypeSavedResource) {
+        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+        if ([nextVC respondsToSelector:@selector(setResource:)]) {
+            [nextVC setResource:resource];
         }
     } else {
-        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-        if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
-            [nextVC setResourceLookup:resourceLookup];
+        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+        if ([nextVC respondsToSelector:@selector(setResource:)]) {
+            [nextVC setResource:resource];
         }
         // Customizing report viewer view controller
-        if ([resourceLookup isReport]) {
+        if (resource.type == JMResourceTypeReport) {
             JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
             JMReport *report = (JMReport *)[nextVC report];
             report.thumbnailImage = cell.thumbnailImage;
@@ -484,10 +483,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     self.navigationItem.rightBarButtonItems = rightItems;
 }
 
-- (void)showResourceInfoViewControllerWithResourceLookup:(JSResourceLookup *)resourceLookup
+- (void)showResourceInfoViewControllerWithResourceLookup:(JMResource *)resource
 {
-    JMResourceInfoViewController *vc = (JMResourceInfoViewController *) [NSClassFromString([resourceLookup infoVCIdentifier]) new];
-    vc.resourceLookup = resourceLookup;
+    JMResourceInfoViewController *vc = (JMResourceInfoViewController *) [NSClassFromString([resource infoVCIdentifier]) new];
+    vc.resource = resource;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -517,7 +516,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     
     JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [collectionView dequeueReusableCellWithReuseIdentifier:[baseCollectionView resourceCellForRepresentationType:self.representationType]
                                                                                                                     forIndexPath:indexPath];
-    cell.resourceLookup = [self loadedResourceForIndexPath:indexPath];
+    cell.resource = [self loadedResourceForIndexPath:indexPath];
     cell.delegate = self;
     return cell;
 }
@@ -569,7 +568,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     if ([self isMenuShown]) {
         [self closeMenu];
     }
-    [self showResourceInfoViewControllerWithResourceLookup:cell.resourceLookup];
+    [self showResourceInfoViewControllerWithResourceLookup:cell.resource];
 }
 
 
@@ -621,8 +620,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 - (void)popupViewValueDidChanged:(JMListOptionsPopupView *)popup
 {
-    switch (popup.option) {
-        case JMResourcesListLoaderOption_Filter: {
+    switch (popup.optionType) {
+        case JMResourcesListLoaderOptionType_Filter: {
             NSUInteger selectedIndex = [popup selectedIndex];
             if (selectedIndex != self.resourceListLoader.filterBySelectedIndex) {
                  self.resourceListLoader.filterBySelectedIndex = selectedIndex;
@@ -630,7 +629,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             }
             break;
         }
-        case JMResourcesListLoaderOption_Sort: {
+        case JMResourcesListLoaderOptionType_Sort: {
             NSUInteger selectedIndex = [popup selectedIndex];
             if (selectedIndex != self.resourceListLoader.sortBySelectedIndex) {
                 self.resourceListLoader.sortBySelectedIndex = selectedIndex;

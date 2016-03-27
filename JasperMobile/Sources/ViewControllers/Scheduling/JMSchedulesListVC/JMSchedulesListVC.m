@@ -104,7 +104,7 @@
 - (void)refresh
 {
     JMScheduleLoader *scheduleLoader = [JMScheduleLoader new];
-    [scheduleLoader loadSchedulesForResourceLookup:nil completion:^(NSArray <JSScheduleLookup *> *jobs, NSError *error) {
+    [scheduleLoader loadSchedulesForResource:nil completion:^(NSArray <JSScheduleLookup *> *jobs, NSError *error) {
         [self.refreshControl endRefreshing];
 
         self.scheduleSummaries = jobs;

@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,7 +22,7 @@
 
 
 //
-//  JMResourceLookup.h
+//  JMResource.h
 //  TIBCO JasperMobile
 //
 
@@ -31,18 +31,23 @@
  @since 2.5
  */
 
-typedef NS_ENUM(NSInteger, JMResourceLookupType) {
-    JMResourceLookupTypeFile,
-    JMResourceLookupTypeFolder,
-    JMResourceLookupTypeSavedResource,
-    JMResourceLookupTypeReport,
-    JMResourceLookupTypeTempExportedReport,
-    JMResourceLookupTypeDashboard,
-    JMResourceLookupTypeLegacyDashboard,
-    JMResourceLookupTypeNewDashboard,
+typedef NS_ENUM(NSInteger, JMResourceType) {
+    JMResourceTypeFile,
+    JMResourceTypeFolder,
+    JMResourceTypeSavedResource,
+    JMResourceTypeReport,
+    JMResourceTypeTempExportedReport,
+    JMResourceTypeDashboard,
+    JMResourceTypeLegacyDashboard
 };
 
-@interface JMResourceLookup : NSObject
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, assign) JMResourceLookupType resourceType;
+@interface JMResource : NSObject
+@property (nonatomic, strong, nonnull) JSResourceLookup *resourceLookup;
+@property (nonatomic, assign) JMResourceType type;
+- (instancetype __nullable)initWithResourceLookup:(JSResourceLookup *__nonnull)resourceLookup;
++ (instancetype __nullable)resourceWithResourceLookup:(JSResourceLookup *__nonnull)resourceLookup;
+- (id __nullable)modelOfResource;
+- (NSString *__nullable)localizedResourceType;
+- (NSString *__nullable)resourceViewerVCIdentifier;
+- (NSString *__nullable)infoVCIdentifier;
 @end

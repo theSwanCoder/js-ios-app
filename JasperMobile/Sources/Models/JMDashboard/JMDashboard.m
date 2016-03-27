@@ -29,10 +29,11 @@
 #import "JMDashboard.h"
 #import "JMDashlet.h"
 #import "JMDashboardParameter.h"
+#import "JMResource.h"
 
 @interface JMDashboard()
 // setters
-@property (nonatomic, strong, readwrite) JSResourceLookup *resourceLookup;
+@property (nonatomic, strong, readwrite) JMResource *resource;
 @property (nonatomic, copy, readwrite) NSString *resourceURI;
 @property (nonatomic, strong, readwrite) NSURLRequest *resourceRequest;
 @end
@@ -40,18 +41,18 @@
 @implementation JMDashboard
 
 #pragma mark - LifyCycle
-- (instancetype)initWithResource:(JSResourceLookup *)resourceLookup
+- (instancetype)initWithResource:(JMResource *)resource
 {
     self = [super init];
     if (self) {
-        _resourceLookup = resourceLookup;
-        _resourceURI = resourceLookup.uri;
+        _resource = resource;
+        _resourceURI = resource.resourceLookup.uri;
         _resourceRequest = [self createResourceRequest];
     }
     return self;
 }
 
-+ (instancetype)dashboardWithResource:(JSResourceLookup *)resourceLookup
++ (instancetype)dashboardWithResource:(JMResource *)resourceLookup
 {
     return [[self alloc] initWithResource:resourceLookup];
 }

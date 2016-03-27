@@ -25,6 +25,7 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JMSessionManager.h"
+#import "JMResource.h"
 
 
 NSString * const kJMSavedResources = @"SavedResources";
@@ -34,10 +35,11 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
 @implementation JMSavedResources (Helpers)
 
-+ (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource
++ (JMSavedResources *)savedReportsFromResource:(JMResource *)resource
 {
-    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:resource.uri, @"uri", nil];
-    return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:resource.resourceLookup.uri, @"uri", nil];
+    NSArray *result = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    return [result lastObject];
 }
 
 + (JMSavedResources *)savedResourceWithReportName:(NSString *)reportName format:(NSString *)reportFormat;
@@ -48,7 +50,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return [savedReports firstObject];
 }
 
-+ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format sourcesURL:(NSURL *)sourcesURL
++ (JMSavedResources *)addReport:(JMResource *)resource withName:(NSString *)name format:(NSString *)format sourcesURL:(NSURL *)sourcesURL
 {
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:name, @"label", format, @"format", nil];
     JMSavedResources *savedReport = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
@@ -58,11 +60,11 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
         savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
         savedReport.label = name;
         savedReport.uri = [self uriForSavedReportWithName:name format:format];
-        savedReport.resourceDescription = resource.resourceDescription;
+        savedReport.resourceDescription = resource.resourceLookup.resourceDescription;
         savedReport.format = format;
         savedReport.username = self.restClient.serverProfile.username;
-        savedReport.wsType = [self wsTypeWithSourceWSType:resource.resourceType];
-        savedReport.version = resource.version;
+        savedReport.wsType = [self wsTypeWithSourceWSType:resource.resourceLookup.resourceType];
+        savedReport.version = resource.resourceLookup.version;
         [activeServerProfile addSavedResourcesObject:savedReport];
     }
     savedReport.creationDate = [NSDate date];
@@ -201,17 +203,17 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return NO;
 }
 
-- (JSResourceLookup *)wrapperFromSavedReports
+- (JMResource *)wrapperFromSavedReports
 {
-    JSResourceLookup *resource = [[JSResourceLookup alloc] init];
-    resource.uri = self.uri;
-    resource.label = self.label;
-    resource.resourceType = self.wsType;
-    resource.creationDate = self.creationDate;
-    resource.updateDate = self.updateDate;
-    resource.resourceDescription = self.resourceDescription;
-    resource.version = self.version;
-    return resource;
+    JSResourceLookup *resourceLookup = [JSResourceLookup new];
+    resourceLookup.uri = self.uri;
+    resourceLookup.label = self.label;
+    resourceLookup.resourceType = self.wsType;
+    resourceLookup.creationDate = self.creationDate;
+    resourceLookup.updateDate = self.updateDate;
+    resourceLookup.resourceDescription = self.resourceDescription;
+    resourceLookup.version = self.version;
+    return [JMResource resourceWithResourceLookup:resourceLookup];
 }
 
 #pragma mark - Public API for Paths

@@ -28,7 +28,6 @@
 
 #import "JMDashboardViewerVC.h"
 #import "JMDashboardViewerConfigurator.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMDashboardLoader.h"
 #import "JMReportViewerVC.h"
 #import "JMDashboard.h"
@@ -45,6 +44,7 @@
 #import "JMWebEnvironment.h"
 
 #import "UIView+Additions.h"
+#import "JMResource.h"
 
 NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashboardViewerPrimaryWebEnvironmentIdentifier";
 
@@ -89,7 +89,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)printResource
 {
     [super printResource];
-    [self printItem:[self.resourceView renderedImage] withName:self.dashboard.resourceLookup.label completion:nil];
+    [self printItem:[self.resourceView renderedImage] withName:self.dashboard.resource.resourceLookup.label completion:nil];
 }
 
 #pragma mark - Custom Accessors
@@ -97,7 +97,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (JMDashboard *)dashboard
 {
     if (!_dashboard) {
-        _dashboard = [self.resourceLookup dashboardModel];
+        _dashboard = [self.resource modelOfResource];
     }
     return _dashboard;
 }
@@ -191,7 +191,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     [self.dashboardLoader minimizeDashlet];
     self.navigationItem.leftBarButtonItem = self.leftButtonItem;
     self.navigationItem.rightBarButtonItems = self.rightButtonItems;
-    self.navigationItem.title = [self resourceLookup].label;
+    self.navigationItem.title = self.resource.resourceLookup.label;
     self.leftButtonItem = nil;
 }
 
@@ -256,7 +256,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-    if ([JMUtils isServerAmber2OrHigher] && ![self.resourceLookup isLegacyDashboard]) {
+    if ([JMUtils isServerAmber2OrHigher] && self.resource.type != JMResourceTypeLegacyDashboard) {
         [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
                                    cancelBlock:^(void) {
                                        [super cancelResourceViewingAndExit:YES];
@@ -329,9 +329,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     }];
 }
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)availableAction
 {
-    JMMenuActionsViewAction menuActions = [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
+    JMMenuActionsViewAction menuActions = [super availableAction] | JMMenuActionsViewAction_Refresh;
 
     // TODO: enable in next releases
     if ([JMUtils isServerAmber2OrHigher]) {
@@ -404,11 +404,11 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 }
 
 - (void)dashboardLoader:(id <JMDashboardLoader>)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
-         resourceLookup:(JSResourceLookup *)resourceLookup
+         resource:(JMResource *)resource
              parameters:(NSArray *)parameters
 {
     if (hyperlinkType == JMHyperlinkTypeReportExecution) {
-        NSString *reportURI = resourceLookup.uri;
+        NSString *reportURI = resource.resourceLookup.uri;
         __weak typeof(self)weakSelf = self;
         [self loadInputControlsWithReportURI:reportURI completion:^(NSArray *inputControls, NSError *error) {
             __strong typeof(self)strongSelf = weakSelf;
@@ -419,8 +419,8 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
                     [strongSelf cancelResourceViewingAndExit:YES];
                 }];
             } else {
-                JMReportViewerVC *reportViewController = (JMReportViewerVC *) [strongSelf.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-                reportViewController.resourceLookup = resourceLookup;
+                JMReportViewerVC *reportViewController = (JMReportViewerVC *) [strongSelf.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+                reportViewController.resource = resource;
                 [reportViewController.report generateReportOptionsWithInputControls:inputControls];
                 [reportViewController.report updateReportParameters:parameters];
                 reportViewController.isChildReport = YES;
@@ -665,7 +665,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         // TODO: move to separate method
         self.navigationItem.leftBarButtonItem = self.leftButtonItem;
         self.navigationItem.rightBarButtonItems = self.rightButtonItems;
-        self.navigationItem.title = [self resourceLookup].label;
+        self.navigationItem.title = self.resource.resourceLookup.label;
         self.leftButtonItem = nil;
     }
 }

@@ -25,9 +25,9 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMExternalWindowControlsVC.h"
 #import "JSReportSaver.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMWebViewManager.h"
 #import "JMWebEnvironment.h"
+#import "JMResource.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
@@ -46,7 +46,7 @@
 - (JMSavedResources *)savedReports
 {
     if (!_savedReports) {
-        _savedReports = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+        _savedReports = [JMSavedResources savedReportsFromResource:self.resource];
     }
 
     return _savedReports;
@@ -67,7 +67,7 @@
 
 - (void)startResourceViewing
 {
-    if ([self.resourceLookup isFile]) {
+    if (self.resource.type == JMResourceTypeFile) {
         [self showRemoteResource];
     } else {
         [self showSavedResource];
@@ -82,13 +82,13 @@
                 }];
 }
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)availableAction
 {
     JMMenuActionsViewAction action = JMMenuActionsViewAction_None;
-    if ([self.resourceLookup isFile]) {
-        action = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_OpenIn;
+    if (self.resource.type == JMResourceTypeFile) {
+        action = [super availableAction] | JMMenuActionsViewAction_OpenIn;
     } else {
-        action = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn ;
+        action = [super availableAction] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn ;
     }
 
     // TODO: We need come up with another approach to control a resource which is being presented on tv.
@@ -109,7 +109,7 @@
                                                                                 textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
                                                                                     __strong typeof(self) strongSelf = weakSelf;
                                                                                     textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
-                                                                                    textField.text = [strongSelf.resourceLookup.label copy];
+                                                                                    textField.text = [strongSelf.resource.resourceLookup.label copy];
                                                                                 } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                     NSString *errorMessage = nil;
                                                                                     __strong typeof(self) strongSelf = weakSelf;
@@ -124,7 +124,7 @@
                                                                                     __strong typeof(self) strongSelf = weakSelf;
                                                                                     if ([strongSelf.savedReports renameReportTo:text]) {
                                                                                         strongSelf.title = text;
-                                                                                        strongSelf.resourceLookup = [strongSelf.savedReports wrapperFromSavedReports];
+                                                                                        strongSelf.resource = [strongSelf.savedReports wrapperFromSavedReports];
                                                                                         [strongSelf setupRightBarButtonItems];
                                                                                         [strongSelf startResourceViewing];
                                                                                     }
@@ -140,20 +140,20 @@
             __strong typeof(self) strongSelf = weakSelf;
             BOOL shouldCloseViewer = YES;
             if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:shouldCloseViewerAfterDeletingResource:)]) {
-                shouldCloseViewer = [strongSelf.delegate resourceViewer:strongSelf shouldCloseViewerAfterDeletingResource:strongSelf.resourceLookup];
+                shouldCloseViewer = [strongSelf.delegate resourceViewer:strongSelf shouldCloseViewerAfterDeletingResource:strongSelf.resource];
             }
             [strongSelf cancelResourceViewingAndExit:shouldCloseViewer];
             [strongSelf.savedReports removeReport];
             
             if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:didDeleteResource:)]) {
-                [strongSelf.delegate resourceViewer:strongSelf didDeleteResource:strongSelf.resourceLookup];
+                [strongSelf.delegate resourceViewer:strongSelf didDeleteResource:strongSelf.resource];
             }
         }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if (action == JMMenuActionsViewAction_OpenIn) {
         // TODO: Should be reviewed and refactored!!!
         NSURL *url;
-        if ([self.resourceLookup isFile]) {
+        if (self.resource.type == JMResourceTypeFile) {
             url = self.savedResourceURL;
         } else {
             url = [NSURL fileURLWithPath:[JMSavedResources absolutePathToSavedReport:self.savedReports]];
@@ -208,7 +208,7 @@
     }];
 
     __typeof(self) weakSelf = self;
-    [self.restClient contentResourceWithResourceLookup:self.resourceLookup
+    [self.restClient contentResourceWithResourceLookup:self.resource.resourceLookup
                                             completion:^(JSContentResource *resource, NSError *error) {
                                                 __typeof(self) strongSelf = weakSelf;
                                                 [strongSelf stopShowLoader];

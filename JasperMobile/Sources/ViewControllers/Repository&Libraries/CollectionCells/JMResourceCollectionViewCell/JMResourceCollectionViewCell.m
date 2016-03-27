@@ -26,9 +26,8 @@
 #import "JMServerProfile+Helpers.h"
 #import "UIImageView+AFNetworking.h"
 #import "UIImage+Additions.h"
-
-#import "JSResourceLookup+Helpers.h"
 #import "JMExportResource.h"
+#import "JMResource.h"
 
 NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
@@ -61,21 +60,21 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.contentView.backgroundColor = [UIColor whiteColor];
 }
 
-- (void)setResourceLookup:(JSResourceLookup *)resourceLookup
+- (void)setResource:(JMResource *)resource
 {
-    _resourceLookup = resourceLookup;
-    self.resourceName.text = resourceLookup.label;
-    self.resourceDescription.text = resourceLookup.resourceDescription;
+    _resource = resource;
+    self.resourceName.text = resource.resourceLookup.label;
+    self.resourceDescription.text = resource.resourceLookup.resourceDescription;
     self.thumbnailImage = nil;
     [self updateResourceImage];
     
     // Add file extension for saved & temp exported items
-    if ([self.resourceLookup isSavedReport]) {
-        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
-        self.resourceName.text = [resourceLookup.label stringByAppendingPathExtension:savedReport.format];
-    } else if ([self.resourceLookup isTempExportedReport]) {
-        JMExportResource *exportResource = (JMExportResource *)resourceLookup;
-        self.resourceName.text = [exportResource.label stringByAppendingPathExtension:exportResource.format];
+    if (self.resource.type == JMResourceTypeSavedResource) {
+        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResource:self.resource];
+        self.resourceName.text = [resource.resourceLookup.label stringByAppendingPathExtension:savedReport.format];
+    } else if (self.resource.type == JMResourceTypeTempExportedReport) {
+        JMExportResource *exportResource = (JMExportResource *)resource;
+        self.resourceName.text = [exportResource.resourceLookup.label stringByAppendingPathExtension:exportResource.format];
     }
 }
 
@@ -88,10 +87,10 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 {
     self.contentView.alpha = 1;
     UIImage *resourceImage;
-    if ([self.resourceLookup isReport]) {
+    if (self.resource.type == JMResourceTypeReport) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
         if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
-            NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.restClient generateThumbnailImageUrl:self.resourceLookup.uri]]];
+            NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.restClient generateThumbnailImageUrl:self.resource.resourceLookup.uri]]];
             [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
             __weak typeof(self)weakSelf = self;
             [self.resourceImage setImageWithURLRequest:imageRequest
@@ -105,7 +104,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                }
                                                failure:nil];
         }
-    } else if ([self.resourceLookup isSavedReport]) {
+    } else if (self.resource.type == JMResourceTypeSavedResource) {
         JMLog(@"saved items");
 //        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
 //        self.thumbnailImage = [savedReport thumbnailImage];
@@ -113,7 +112,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
         // We temporary disabled showing thumbnails of saved items
         resourceImage = [UIImage imageNamed:@"res_type_report"];
-        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResource:self.resource];
         if (savedReport) {
             if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
                 resourceImage = [UIImage imageNamed:@"res_type_file_html"];
@@ -123,9 +122,9 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                 resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
             }
         }
-    } else if ([self.resourceLookup isTempExportedReport]) {
+    } else if (self.resource.type == JMResourceTypeTempExportedReport) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
-        JMExportResource *exportResource = (JMExportResource *)self.resourceLookup;
+        JMExportResource *exportResource = (JMExportResource *)self.resource;
         if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
             resourceImage = [UIImage imageNamed:@"res_type_file_html"];
         } else if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
@@ -134,15 +133,15 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
             resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
         }
         self.contentView.alpha = 0.5;
-    } else if ([self.resourceLookup isDashboard]) {
+    } else if (self.resource.type == JMResourceTypeDashboard) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
-    } else if ([self.resourceLookup isFolder]) {
+    } else if (self.resource.type == JMResourceTypeFolder) {
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
-    } else if([self.resourceLookup isFile]) {
+    } else if(self.resource.type == JMResourceTypeFile) {
         resourceImage = [UIImage imageNamed:@"res_type_file"];
 
         __typeof(self) weakSelf = self;
-        [self.restClient contentResourceWithResourceLookup:self.resourceLookup
+        [self.restClient contentResourceWithResourceLookup:self.resource.resourceLookup
                                                 completion:^(JSContentResource *resource, NSError *error) {
                                                     __typeof(self) strongSelf = weakSelf;
                                                     if (resource) {

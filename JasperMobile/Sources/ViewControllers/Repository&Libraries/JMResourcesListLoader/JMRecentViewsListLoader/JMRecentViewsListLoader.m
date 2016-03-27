@@ -27,7 +27,7 @@
 //
 
 #import "JMRecentViewsListLoader.h"
-#import "JSResourceLookup+Helpers.h"
+#import "JMResourceLoaderOption.h"
 
 @implementation JMRecentViewsListLoader
 - (instancetype)init
@@ -39,19 +39,22 @@
     return self;
 }
 
-- (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
+- (NSArray <JMResourceLoaderOption *>*)listOptionsWithOptionType:(JMResourcesListLoaderOptionType)optionType
 {
-    switch (option) {
-        case JMResourcesListLoaderOption_Sort: {
-            NSDictionary *optionForSortByAccessTime = @{
-                    kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.accessTime", nil),
-                    kJMResourceListLoaderOptionItemValueKey: @"accessTime"
-            };
-            NSArray *optionsArray = @[optionForSortByAccessTime];
-            return optionsArray;
+    switch (optionType) {
+        case JMResourcesListLoaderOptionType_Sort: {
+//            NSDictionary *optionForSortByAccessTime = @{
+//                    kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.accessTime", nil),
+//                    kJMResourceListLoaderOptionItemValueKey: @"accessTime"
+//            };
+//            NSArray *optionsArray = @[optionForSortByAccessTime];
+            return @[
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.sortby.accessTime", nil)
+                                                      value:@"accessTime"]
+            ];
         }
-        case JMResourcesListLoaderOption_Filter:
-            return [super listItemsWithOption:option];
+        case JMResourcesListLoaderOptionType_Filter:
+            return [super listOptionsWithOptionType:optionType];
     }
 }
 

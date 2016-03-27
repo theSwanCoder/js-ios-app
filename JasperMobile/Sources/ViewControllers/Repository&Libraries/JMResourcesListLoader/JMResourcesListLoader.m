@@ -22,16 +22,17 @@
 
 
 #import "JMResourcesListLoader.h"
-#import "JSResourceLookup+Helpers.h"
+#import "JMResource.h"
+#import "JMResourceLoaderOption.h"
 
 NSString * const kJMResourceListLoaderOptionItemTitleKey = @"JMResourceListLoaderFilterItemTitleKey";
 NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoaderFilterItemValueKey";
 
 @interface JMResourcesListLoader ()
 
-@property (atomic, strong) NSMutableArray <JSResourceLookup *>*resourcesFolders;
-@property (atomic, strong) NSMutableArray <JSResourceLookup *>*resourcesItems;
-@property (nonatomic, strong) NSMutableArray <JSResourceLookup *>*allResources;
+@property (atomic, strong) NSMutableArray <JMResource *>*resourcesFolders;
+@property (atomic, strong) NSMutableArray <JMResource *>*resourcesItems;
+@property (nonatomic, strong) NSMutableArray <JMResource *>*allResources;
 
 @property (nonatomic, assign) BOOL needUpdateData;
 @property (nonatomic, assign) BOOL isLoadingNow;
@@ -41,8 +42,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 @end
 
 @implementation JMResourcesListLoader
-
-@synthesize resourceLookup = _resourceLookup;
+@synthesize resource = _resource;
 
 #pragma mark - LifeCycle
 
@@ -114,7 +114,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return kJMResourceLimit;
 }
 
-- (NSArray <JSResourceLookup *>*)allResources
+- (NSArray <JMResource *>*)allResources
 {
     if (!_allResources && [_allResources count] == 0) {
         _allResources = [NSMutableArray arrayWithArray:self.resourcesFolders];
@@ -129,7 +129,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return self.allResources.count;
 }
 
-- (JSResourceLookup *)resourceAtIndex:(NSInteger)index
+- (JMResource *)resourceAtIndex:(NSInteger)index
 {
     if (index < [self resourceCount]) {
         return self.allResources[index];
@@ -137,9 +137,9 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return nil;
 }
 
-- (void)addResourcesWithResource:(id)resource
+- (void)addResourcesWithResource:(JMResource *)resource
 {
-    if ([resource isFolder]) {
+    if (resource.type == JMResourceTypeFolder) {
         [self.resourcesFolders addObject:resource];
     } else {
         [self.resourcesItems addObject:resource];
@@ -147,7 +147,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     self.allResources = nil;
 }
 
-- (void)addResourcesWithResources:(NSArray <JSResourceLookup *>*)resources
+- (void)addResourcesWithResources:(NSArray <JMResource *>*)resources
 {
     for (id resource in resources) {
         [self addResourcesWithResource:resource];
@@ -160,10 +160,10 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 {
     self.needUpdateData = NO;
     __weak typeof(self)weakSelf = self;
-    [self.restClient resourceLookups:self.resourceLookup.uri
+    [self.restClient resourceLookups:self.resource.resourceLookup.uri
                                query:self.searchQuery
-                               types:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]
-                              sortBy:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]
+                               types:[self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Filter]
+                              sortBy:[self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Sort]
                           accessType:self.accessType
                            recursive:self.loadRecursively
                               offset:self.offset
@@ -177,8 +177,11 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                                  [strongSelf finishLoadingWithError:result.error];
                              }
                          } else {
-                             for (JSResourceLookup *resourceLookup in result.objects) {
-                                 [strongSelf addResourcesWithResource:resourceLookup];
+                             for (id resourceLookup in result.objects) {
+                                 if ([resourceLookup isKindOfClass:[JSResourceLookup class]]) {
+                                     JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
+                                     [strongSelf addResourcesWithResource:resource];
+                                 }
                              }
                              
                              if (result.allHeaderFields[@"Next-Offset"]) {
@@ -227,67 +230,74 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 }
 
 #pragma mark - Utils
-- (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
+- (NSArray <JMResourceLoaderOption *>*)listOptionsWithOptionType:(JMResourcesListLoaderOptionType)optionType
 {
-    switch (option) {
-        case JMResourcesListLoaderOption_Sort:
-            return @[
-                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.name", nil),
-                       kJMResourceListLoaderOptionItemValueKey: @"label"},
-                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.creationDate", nil),
-                       kJMResourceListLoaderOptionItemValueKey: @"creationDate"},
-                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.modifiedDate", nil),
-                       kJMResourceListLoaderOptionItemValueKey: @"updateDate"}
-                     ];
-        case JMResourcesListLoaderOption_Filter:{
-            NSMutableArray *options = [@[
-                                         @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil),
-                                           kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_REPORT_UNIT]}] mutableCopy];
-            if ([JMUtils isServerProEdition]) {
-                id dashboardItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil),
-                                     kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY]};
-                [options addObject:dashboardItem];
-            }
-            
-            if ([options count] > 1) {
-                NSMutableArray *allAvailableItems = [NSMutableArray array];
-                for (NSDictionary *item in options) {
-                    [allAvailableItems addObjectsFromArray:item[kJMResourceListLoaderOptionItemValueKey]];
-                }
-                id allItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil), kJMResourceListLoaderOptionItemValueKey: allAvailableItems};
-                [options insertObject:allItem atIndex:0];
-            }
-            
-            return options;
+    switch (optionType) {
+        case JMResourcesListLoaderOptionType_Sort: {
+            NSArray *allOptions = @[
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.sortby.name", nil)
+                                                      value:@"label"],
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.sortby.creationDate", nil)
+                                                      value:@"creationDate"],
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.sortby.modifiedDate", nil)
+                                                      value:@"updateDate"]
+            ];
+            return allOptions;
         }
-        default:
-            return nil;
+        case JMResourcesListLoaderOptionType_Filter:{
+            NSMutableArray *allOptions = [@[
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil)
+                                                      value:@[kJS_WS_TYPE_REPORT_UNIT]],
+            ] mutableCopy];
+
+            if ([JMUtils isServerProEdition]) {
+                JMResourceLoaderOption *dashboardFilterOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil)
+                                                                                                  value:@[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY]];
+                [allOptions addObject:dashboardFilterOption];
+            }
+            if (allOptions.count > 1) {
+                NSMutableArray *allAvailableItems = [NSMutableArray array];
+                for (JMResourceLoaderOption *option in allOptions) {
+                    [allAvailableItems addObjectsFromArray:option.value];
+                }
+                JMResourceLoaderOption *allItemsOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.all", nil)
+                                                                                           value:allAvailableItems];
+                [allOptions insertObject:allItemsOption
+                                 atIndex:0];
+            }
+
+            return allOptions;
+        }
     }
 }
 
-- (id)parameterForQueryWithOption:(JMResourcesListLoaderOption)option
+- (id)parameterForQueryWithOptionType:(JMResourcesListLoaderOptionType)optionType
 {
-    switch (option) {
-        case JMResourcesListLoaderOption_Sort:
-            if ([[self listItemsWithOption:option] count] > self.sortBySelectedIndex) {
-                return [[self listItemsWithOption:option][self.sortBySelectedIndex] objectForKey:kJMResourceListLoaderOptionItemValueKey];
+    switch (optionType) {
+        case JMResourcesListLoaderOptionType_Sort: {
+            NSArray *allSortOptions = [self listOptionsWithOptionType:optionType];
+            if (allSortOptions.count > self.sortBySelectedIndex) {
+                JMResourceLoaderOption *option = allSortOptions[self.sortBySelectedIndex];
+                id value = option.value;
+                return value;
             }
             break;
-        case JMResourcesListLoaderOption_Filter:
-            if ([[self listItemsWithOption:option] count] > self.filterBySelectedIndex) {
-                return [[self listItemsWithOption:option][self.filterBySelectedIndex] objectForKey:kJMResourceListLoaderOptionItemValueKey];
+        }
+        case JMResourcesListLoaderOptionType_Filter:
+            if ([self listOptionsWithOptionType:optionType].count > self.filterBySelectedIndex) {
+                return [[self listOptionsWithOptionType:optionType][self.filterBySelectedIndex] value];
             }
             break;
     }
     return nil;
 }
 
-- (NSString *)titleForPopupWithOption:(JMResourcesListLoaderOption)option
+- (NSString *)titleForPopupWithOptionType:(JMResourcesListLoaderOptionType)optionType
 {
-    switch (option) {
-        case JMResourcesListLoaderOption_Filter:
+    switch (optionType) {
+        case JMResourcesListLoaderOptionType_Filter:
             return JMCustomLocalizedString(@"resources.filterby.title", nil);
-        case JMResourcesListLoaderOption_Sort:
+        case JMResourcesListLoaderOptionType_Sort:
             return JMCustomLocalizedString(@"resources.sortby.title", nil);
     }
     return nil;

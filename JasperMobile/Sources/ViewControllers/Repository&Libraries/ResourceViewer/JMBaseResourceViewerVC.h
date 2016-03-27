@@ -39,8 +39,8 @@
 @class JMBaseResourceViewerVC;
 @protocol JMBaseResourceViewerVCDelegate <NSObject>
 @optional
-- (BOOL)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer shouldCloseViewerAfterDeletingResource:(JSResourceLookup *)resourceLookup;
-- (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JSResourceLookup *)resourceLookup;
+- (BOOL)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer shouldCloseViewerAfterDeletingResource:(JMResource *)resource;
+- (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JMResource *)resource;
 
 @end
 
@@ -64,8 +64,8 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 - (void) startResourceViewing;
 - (void) cancelResourceViewingAndExit:(BOOL)exit NS_REQUIRES_SUPER;
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource NS_REQUIRES_SUPER;
-- (JMMenuActionsViewAction)disabledActionForResource:(JSResourceLookup *)resource;
+- (JMMenuActionsViewAction)availableAction NS_REQUIRES_SUPER;
+- (JMMenuActionsViewAction)disabledAction;
 
 // Loaders
 - (void)startShowLoadingIndicators;

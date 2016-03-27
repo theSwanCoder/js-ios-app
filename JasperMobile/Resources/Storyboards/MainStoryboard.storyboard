@@ -2843,7 +2843,7 @@ your business wherever you are.</string>
         <!--Save Report View Controller-->
         <scene sceneID="PQc-PN-Lqa">
             <objects>
-                <viewController id="r1t-0l-AbT" customClass="JMSaveReportViewController" sceneMemberID="viewController">
+                <viewController id="r1t-0l-AbT" customClass="JMSavingReportViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RCa-FO-nsh"/>
                         <viewControllerLayoutGuide type="bottom" id="r4g-Sw-bQV"/>

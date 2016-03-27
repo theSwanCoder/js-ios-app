@@ -33,9 +33,8 @@
  @since 2.3
  */
 
-#import "JSResourceLookup.h"
+#import "JMResource.h"
 
-@interface JMExportResource : JSResourceLookup
+@interface JMExportResource : JMResource
 @property (nonatomic, strong) NSString *format;
-
 @end

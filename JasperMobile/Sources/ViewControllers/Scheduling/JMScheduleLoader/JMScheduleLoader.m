@@ -27,18 +27,19 @@
 //
 
 #import "JMScheduleLoader.h"
+#import "JMResource.h"
 
 
 @implementation JMScheduleLoader
 
 #pragma mark - Public API
-- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleLookup *> *, NSError *))completion
+- (void)loadSchedulesForResource:(JMResource *)resource completion:(void (^)(NSArray <JSScheduleLookup *> *, NSError *))completion
 {
     if (!completion) {
         return;
     }
 
-    [self.restClient fetchSchedulesForResourceWithURI:resourceLookup.uri completion:^(JSOperationResult *result) {
+    [self.restClient fetchSchedulesForResourceWithURI:resource.resourceLookup.uri completion:^(JSOperationResult *result) {
         if (result.error) {
             completion(nil, result.error);
         } else {

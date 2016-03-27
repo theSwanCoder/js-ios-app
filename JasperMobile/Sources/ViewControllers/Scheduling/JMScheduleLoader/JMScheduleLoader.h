@@ -26,12 +26,14 @@
 //  TIBCO JasperMobile
 //
 
+
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.5
 */
 
+@class JMResource;
 
 @interface JMScheduleLoader : NSObject
-- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleLookup *> *, NSError *))completion;
+- (void)loadSchedulesForResource:(JMResource *)resourceLookup completion:(void (^)(NSArray <JSScheduleLookup *> *, NSError *))completion;
 @end

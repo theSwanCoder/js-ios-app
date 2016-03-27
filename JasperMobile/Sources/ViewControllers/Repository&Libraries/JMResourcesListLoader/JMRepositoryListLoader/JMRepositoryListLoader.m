@@ -22,6 +22,8 @@
 
 
 #import "JMRepositoryListLoader.h"
+#import "JMResource.h"
+#import "JMResourceLoaderOption.h"
 
 @interface JMRepositoryListLoader ()
 @property (nonatomic, strong) NSMutableArray *rootFoldersURIs;
@@ -34,7 +36,7 @@
 {
     _needUpdateData = NO;
     
-    if (self.resourceLookup || (!self.resourceLookup && self.searchQuery.length)) {
+    if (self.resource || (!self.resource && self.searchQuery.length)) {
         [super loadNextPage];
     } else {
         [self loadRootFolders];
@@ -87,7 +89,8 @@
                                       if (!resourceLookup.resourceType) {
                                           resourceLookup.resourceType = kJS_WS_TYPE_FOLDER;
                                       }
-                                      [strongSelf addResourcesWithResource:resourceLookup];
+                                      JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
+                                      [strongSelf addResourcesWithResource:resource];
                                   }
                                   
                                   [strongSelf loadNextResourceForResource:resourceURI];
@@ -105,23 +108,33 @@
                                                                                                      options:NSCaseInsensitiveSearch].location != NSNotFound));
 }
 
-- (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
+- (NSArray <JMResourceLoaderOption *>*)listOptionsWithOptionType:(JMResourcesListLoaderOptionType)optionType
 {
-    switch (option) {
-        case JMResourcesListLoaderOption_Sort:
-            return [super listItemsWithOption:option];
-        case JMResourcesListLoaderOption_Filter:
+    switch (optionType) {
+        case JMResourcesListLoaderOptionType_Sort:
+            return [super listOptionsWithOptionType:optionType];
+        case JMResourcesListLoaderOptionType_Filter:
+//            return @[
+//                     @{
+//                             kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
+//                             kJMResourceListLoaderOptionItemValueKey: @[
+//                                                                        kJS_WS_TYPE_REPORT_UNIT,
+//                                                                        kJS_WS_TYPE_DASHBOARD,
+//                                                                        kJS_WS_TYPE_DASHBOARD_LEGACY,
+//                                                                        kJS_WS_TYPE_FOLDER,
+//                                                                        kJS_WS_TYPE_FILE
+//                                                                        ]
+//                     }
+//            ];
             return @[
-                     @{
-                             kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-                             kJMResourceListLoaderOptionItemValueKey: @[
-                                                                        kJS_WS_TYPE_REPORT_UNIT,
-                                                                        kJS_WS_TYPE_DASHBOARD,
-                                                                        kJS_WS_TYPE_DASHBOARD_LEGACY,
-                                                                        kJS_WS_TYPE_FOLDER,
-                                                                        kJS_WS_TYPE_FILE
-                                                                        ]
-                     }
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.all", nil)
+                                                      value:@[
+                                                              kJS_WS_TYPE_REPORT_UNIT,
+                                                              kJS_WS_TYPE_DASHBOARD,
+                                                              kJS_WS_TYPE_DASHBOARD_LEGACY,
+                                                              kJS_WS_TYPE_FOLDER,
+                                                              kJS_WS_TYPE_FILE
+                                                      ]]
             ];
     }
 }

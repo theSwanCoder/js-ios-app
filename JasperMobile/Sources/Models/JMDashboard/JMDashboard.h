@@ -27,6 +27,7 @@
 //
 
 @class JMDashlet;
+@class JMResource;
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
@@ -35,7 +36,7 @@
 
 @interface JMDashboard : NSObject
 // getters
-@property (nonatomic, strong, readonly) JSResourceLookup *resourceLookup;
+@property (nonatomic, strong, readonly) JMResource *resource;
 @property (nonatomic, copy, readonly) NSString *resourceURI;
 @property (nonatomic, strong, readonly) NSURLRequest *resourceRequest;
 @property (nonatomic, copy) NSArray <JMDashlet *>*dashlets;
@@ -43,8 +44,8 @@
 @property (nonatomic, copy) NSArray <JSDashboardResource *>*resources;
 @property (nonatomic, copy) NSArray <JSDashboardComponent *>*components;
 
-- (instancetype)initWithResource:(JSResourceLookup *)resourceLookup;
-+ (instancetype)dashboardWithResource:(JSResourceLookup *)resourceLookup;
+- (instancetype)initWithResource:(JMResource *)resource;
++ (instancetype)dashboardWithResource:(JMResource *)resource;
 
 - (NSURLRequest *)createResourceRequest;
 @end

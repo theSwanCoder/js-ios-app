@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #import "JMDashlet.h"
 #import "JMDashboardParameter.h"
 #import "JMWebEnvironment.h"
+#import "JMResource.h"
 
 @interface JMVisDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
@@ -418,11 +419,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleOnReportExecution:(NSDictionary *)parameters
 {
-    NSString *resource = parameters[@"resource"];
+    NSString *resourceURI = parameters[@"resource"];
     NSDictionary *params = parameters[@"params"];
 
     __weak typeof(self)weakSelf = self;
-    [self.restClient resourceLookupForURI:resource
+    [self.restClient resourceLookupForURI:resourceURI
                              resourceType:kJS_WS_TYPE_REPORT_UNIT
                                modelClass:[JSResourceLookup class]
                           completionBlock:^(JSOperationResult *result) {
@@ -441,10 +442,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                     if (resourceLookup) {
                                         resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
 
+                                        JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
                                         NSArray *reportParameters = [strongSelf createReportParametersFromParameters:params];
                                         [strongSelf.delegate dashboardLoader:strongSelf
                                                  didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
-                                                              resourceLookup:resourceLookup
+                                                                    resource:resource
                                                                   parameters:reportParameters];
                                     }
                                 }
@@ -457,7 +459,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     if (self.externalURL) {
         [self.delegate dashboardLoader:self
            didReceiveHyperlinkWithType:JMHyperlinkTypeReference
-                        resourceLookup:nil
+                              resource:nil
                             parameters:@[self.externalURL]];
     }
 }
@@ -468,7 +470,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     if (URLString) {
         [self.delegate dashboardLoader:self
            didReceiveHyperlinkWithType:JMHyperlinkTypeReference
-                        resourceLookup:nil
+                              resource:nil
                             parameters:@[[NSURL URLWithString:URLString]]];
     }
 }

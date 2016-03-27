@@ -29,5 +29,4 @@
 #import "JMExportResource.h"
 
 @implementation JMExportResource
-
 @end
