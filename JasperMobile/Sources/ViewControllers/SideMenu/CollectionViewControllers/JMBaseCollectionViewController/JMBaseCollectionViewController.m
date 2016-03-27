@@ -103,8 +103,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     baseCollectionView.searchBar.delegate = self;
 
     [self addObservers];
-    
+
     self.shouldShowButtonForChangingViewPresentation = YES;
+    self.shouldShowRightNavigationItems = YES;
     self.isScrollToTop = NO;
     self.needLayoutUI = YES;
 }
@@ -368,40 +369,42 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void) showNavigationItemsForTraitCollection:(UITraitCollection *)traitCollection
 {
     if (traitCollection) {
-        NSMutableArray *navBarItems = [NSMutableArray array];
-        JMMenuActionsViewAction availableAction = [self availableAction];
-        if (availableAction & JMMenuActionsViewAction_Filter) {
-            UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"]
-                                                                           style:UIBarButtonItemStylePlain
-                                                                          target:self
-                                                                          action:@selector(filterByButtonTapped:)];
-            [navBarItems addObject:filterItem];
+        if (self.shouldShowRightNavigationItems) {
+            NSMutableArray *navBarItems = [NSMutableArray array];
+            JMMenuActionsViewAction availableAction = [self availableAction];
+            if (availableAction & JMMenuActionsViewAction_Filter) {
+                UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"]
+                                                                               style:UIBarButtonItemStylePlain
+                                                                              target:self
+                                                                              action:@selector(filterByButtonTapped:)];
+                [navBarItems addObject:filterItem];
+            }
+            if (availableAction & JMMenuActionsViewAction_Sort) {
+                UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"]
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(sortByButtonTapped:)];
+                [navBarItems addObject:sortItem];
+            }
+
+            UIUserInterfaceSizeClass horizontalSizeClass = traitCollection.horizontalSizeClass;
+            if (horizontalSizeClass == UIUserInterfaceSizeClassUnspecified && [JMUtils isIphone] && UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+                horizontalSizeClass = UIUserInterfaceSizeClassCompact;
+            }
+
+            BOOL shouldConcateItems = (navBarItems.count > 1) && (horizontalSizeClass == UIUserInterfaceSizeClassCompact) &&
+                                                                 (traitCollection.verticalSizeClass != UIUserInterfaceSizeClassCompact);
+
+            if (shouldConcateItems) {
+                navBarItems = [@[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                               target:self
+                                                                               action:@selector(actionButtonClicked:)]] mutableCopy];
+            }
+            if (self.shouldShowButtonForChangingViewPresentation) {
+                [navBarItems addObject:[self resourceRepresentationItem]];
+            }
+            self.navigationItem.rightBarButtonItems = navBarItems;
         }
-        if (availableAction & JMMenuActionsViewAction_Sort) {
-            UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"]
-                                                                         style:UIBarButtonItemStylePlain
-                                                                        target:self
-                                                                        action:@selector(sortByButtonTapped:)];
-            [navBarItems addObject:sortItem];
-        }
-        
-        UIUserInterfaceSizeClass horizontalSizeClass = traitCollection.horizontalSizeClass;
-        if (horizontalSizeClass == UIUserInterfaceSizeClassUnspecified && [JMUtils isIphone] && UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-            horizontalSizeClass = UIUserInterfaceSizeClassCompact;
-        }
-        
-        BOOL shouldConcateItems = (navBarItems.count > 1) && (horizontalSizeClass == UIUserInterfaceSizeClassCompact) &&
-                                                             (traitCollection.verticalSizeClass != UIUserInterfaceSizeClassCompact);
-        
-        if (shouldConcateItems) {
-            navBarItems = [@[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                                           target:self
-                                                                           action:@selector(actionButtonClicked:)]] mutableCopy];
-        }
-        if (self.shouldShowButtonForChangingViewPresentation) {
-            [navBarItems addObject:[self resourceRepresentationItem]];
-        }
-        self.navigationItem.rightBarButtonItems = navBarItems;
     } else {
         self.needLayoutUI = YES;
     }
@@ -441,7 +444,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     JMResource *resource = [self loadedResourceForIndexPath:indexPath];
     id nextVC = nil;
-    
+
     if (resource.type == JMResourceTypeFolder) {
         // TODO: replace identifier with constant
         JMRepositoryCollectionViewController *repositoryViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMRepositoryCollectionViewController"];
@@ -475,7 +478,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             }
         }
     }
-    
+
     if (nextVC) {
         [self.navigationController pushViewController:nextVC animated:YES];
     }
@@ -538,7 +541,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     if ([self isMenuShown]) {
         [self closeMenu];
     }
-    [self didSelectResourceAtIndexPath:indexPath];
+    if (self.actionBlock) {
+        JMResource *resource = [self loadedResourceForIndexPath:indexPath];
+        self.actionBlock(resource);
+    } else {
+        [self didSelectResourceAtIndexPath:indexPath];
+    }
 }
 
 
