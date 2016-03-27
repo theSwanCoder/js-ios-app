@@ -30,31 +30,51 @@
 #import "JMResource.h"
 #import "JMSchedule.h"
 
+@interface JMSchedulesListLoader()
+@property (nonatomic, assign) NSInteger totalCount;
+@end
 
 @implementation JMSchedulesListLoader
 
 - (void)loadNextPage
 {
+    _needUpdateData = NO;
+
+    JSScheduleSearchParameters *parameters = [JSScheduleSearchParameters new];
+    parameters.reportUnitURI = self.resource.resourceLookup.uri;
+    parameters.label = self.searchQuery;
+    parameters.startIndex = @(self.offset);
+    parameters.numberOfRows = @([self limitOfLoadingResources]);
+    parameters.sortType = JSScheduleSearchSortTypeNone;
+
     __weak typeof(self)weakSelf = self;
-    [self.restClient fetchSchedulesForResourceWithURI:self.resource.resourceLookup.uri completion:^(JSOperationResult *result) {
-        __strong typeof(self)strongSelf = weakSelf;
-        if (result.error) {
-            if (result.error.code == JSSessionExpiredErrorCode) {
-                [JMUtils showLoginViewAnimated:YES completion:nil];
-            } else {
-                [strongSelf finishLoadingWithError:result.error];
-            }
-        } else {
-            for (id scheduleLookup in result.objects) {
-                if ([scheduleLookup isKindOfClass:[JSScheduleLookup class]]) {
-                    JSResourceLookup *resourceLookup = [strongSelf resourceLookupFromScheduleLookup:scheduleLookup];
-                    JMSchedule *resource = [JMSchedule scheduleWithResourceLookup:resourceLookup scheduleLookup:scheduleLookup];
-                    [strongSelf addResourcesWithResource:resource];
-                }
-            }
-            [strongSelf finishLoadingWithError:nil];
-        }
-    }];
+    [self.restClient fetchSchedulesWithSearchParameters:parameters
+                                             completion:^(JSOperationResult *result) {
+                                                 __strong typeof(self)strongSelf = weakSelf;
+                                                 if (result.error) {
+                                                     if (result.error.code == JSSessionExpiredErrorCode) {
+                                                         [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                     } else {
+                                                         [strongSelf finishLoadingWithError:result.error];
+                                                     }
+                                                 } else {
+                                                     for (id scheduleLookup in result.objects) {
+                                                         if ([scheduleLookup isKindOfClass:[JSScheduleLookup class]]) {
+                                                             JSResourceLookup *resourceLookup = [strongSelf resourceLookupFromScheduleLookup:scheduleLookup];
+                                                             JMSchedule *resource = [JMSchedule scheduleWithResourceLookup:resourceLookup scheduleLookup:scheduleLookup];
+                                                             [strongSelf addResourcesWithResource:resource];
+                                                         }
+                                                     }
+
+                                                     strongSelf.offset += kJMResourceLimit;
+                                                     if (!strongSelf.totalCount) {
+                                                         strongSelf.totalCount = result.objects.count;
+                                                     }
+                                                     strongSelf.hasNextPage = strongSelf.offset < strongSelf.totalCount;
+
+                                                     [strongSelf finishLoadingWithError:nil];
+                                                 }
+                                             }];
 }
 
 - (JSResourceLookup *)resourceLookupFromScheduleLookup:(JSScheduleLookup *)scheduleLookup

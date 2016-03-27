@@ -36,8 +36,6 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 
 @property (nonatomic, assign) BOOL needUpdateData;
 @property (nonatomic, assign) BOOL isLoadingNow;
-@property (nonatomic, assign, readwrite) BOOL hasNextPage;
-@property (nonatomic, assign, readwrite) NSInteger offset;
 @property (nonatomic, assign) NSInteger totalCount;
 @end
 

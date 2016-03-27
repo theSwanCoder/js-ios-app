@@ -60,8 +60,8 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
 // Params for loading request.
 @property (nonatomic, strong) NSString *searchQuery;
 @property (nonatomic, assign) BOOL      loadRecursively;
-@property (nonatomic, readonly) BOOL hasNextPage;
-@property (nonatomic, readonly) NSInteger offset;
+@property (nonatomic, assign) BOOL hasNextPage;
+@property (nonatomic, assign) NSInteger offset;
 @property (nonatomic, strong) NSString *accessType;
 @property (nonatomic, assign) NSInteger filterBySelectedIndex;
 @property (nonatomic, assign) NSInteger sortBySelectedIndex;
