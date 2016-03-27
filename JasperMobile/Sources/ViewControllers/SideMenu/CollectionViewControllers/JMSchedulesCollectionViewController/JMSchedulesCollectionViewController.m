@@ -31,6 +31,7 @@
 #import "JMScheduleManager.h"
 #import "JMSchedule.h"
 #import "JMScheduleVC.h"
+#import "JMCancelRequestPopup.h"
 
 
 @implementation JMSchedulesCollectionViewController
@@ -69,8 +70,11 @@
 - (void)actionForResource:(JMResource *)resource
 {
     JMSchedule *schedule = (JMSchedule *) resource;
-    // TODO: add loader
+    [self startShowLoaderWithMessage:@"status.loading"];
+    __weak __typeof(self) weakSelf = self;
     [[JMScheduleManager sharedManager] loadScheduleMetadataForScheduleWithId:schedule.scheduleLookup.jobIdentifier completion:^(JSScheduleMetadata *metadata, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf stopShowLoader];
         if (metadata) {
             JMScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
             newScheduleVC.scheduleMetadata = metadata;
@@ -97,6 +101,20 @@
                                           completion:nil];
         }
     }];
+}
+
+#pragma mark - Loaders
+
+- (void)startShowLoaderWithMessage:(NSString *)message
+{
+    [JMUtils showNetworkActivityIndicator];
+    [JMCancelRequestPopup presentWithMessage:message];
+}
+
+- (void)stopShowLoader
+{
+    [JMUtils hideNetworkActivityIndicator];
+    [JMCancelRequestPopup dismiss];
 }
 
 @end

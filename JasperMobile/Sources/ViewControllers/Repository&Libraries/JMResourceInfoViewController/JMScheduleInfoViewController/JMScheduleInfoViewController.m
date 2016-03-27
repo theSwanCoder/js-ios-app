@@ -134,10 +134,12 @@
         @throw wrongActionxception;
     }
 
+    [self startShowLoaderWithMessage:@"status.loading"];
     __weak __typeof(self) weakSelf = self;
     [[JMScheduleManager sharedManager] deleteScheduleWithJobIdentifier:scheduleLookup.jobIdentifier
                                                             completion:^(NSError *error) {
                                                                 __typeof(self) strongSelf = weakSelf;
+                                                                [strongSelf stopShowLoader];
                                                                 [strongSelf.navigationController popViewControllerAnimated:YES];
                                                             }];
 }
@@ -154,8 +156,11 @@
         @throw wrongActionxception;
     }
 
-    // TODO: add loader
+    [self startShowLoaderWithMessage:@"status.loading"];
+    __weak __typeof(self) weakSelf = self;
     [[JMScheduleManager sharedManager] loadScheduleMetadataForScheduleWithId:scheduleLookup.jobIdentifier completion:^(JSScheduleMetadata *metadata, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf stopShowLoader];
         if (metadata) {
             JMScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
             newScheduleVC.scheduleMetadata = metadata;
@@ -202,6 +207,20 @@
     formatter.timeZone = [NSTimeZone localTimeZone];
     NSString *dateString = [formatter stringFromDate:date];
     return dateString;
+}
+
+#pragma mark - Loaders
+
+- (void)startShowLoaderWithMessage:(NSString *)message
+{
+    [JMUtils showNetworkActivityIndicator];
+    [JMCancelRequestPopup presentWithMessage:message];
+}
+
+- (void)stopShowLoader
+{
+    [JMUtils hideNetworkActivityIndicator];
+    [JMCancelRequestPopup dismiss];
 }
 
 @end
