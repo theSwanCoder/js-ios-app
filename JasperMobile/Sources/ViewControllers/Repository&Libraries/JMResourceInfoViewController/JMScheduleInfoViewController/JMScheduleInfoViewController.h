@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,26 +22,16 @@
 
 
 //
-//  JMResourceInfoViewController.h
+//  JMScheduleInfoViewController.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
+ @author Olexandr Dahno odahno@tibco.com
+ @since 2.5
  */
 
-#import "JMResourceClientHolder.h"
-#import "JMMenuActionsView.h"
-#import "JMBaseResourceViewerVC.h"
+#import "JMResourceInfoViewController.h"
 
-extern NSString * const kJMShowResourceInfoSegue;
-
-@interface JMResourceInfoViewController : JMBaseViewController <JMResourceClientHolder, JMMenuActionsViewDelegate, JMBaseResourceViewerVCDelegate>
-@property (nonatomic, strong) NSArray *resourceProperties;
-
-- (void)resetResourceProperties NS_REQUIRES_SUPER;
-
-- (JMMenuActionsViewAction)availableAction NS_REQUIRES_SUPER;
-
+@interface JMScheduleInfoViewController : JMResourceInfoViewController
 @end

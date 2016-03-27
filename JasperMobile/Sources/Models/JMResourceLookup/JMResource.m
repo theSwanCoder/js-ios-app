@@ -178,7 +178,10 @@
             vcIdentifier = @"JMDashboardInfoViewController";
             break;
         }
-        case JMResourceTypeSchedule: {break;}
+        case JMResourceTypeSchedule: {
+            vcIdentifier = @"JMScheduleInfoViewController";
+            break;
+        }
     }
     return vcIdentifier;
 }

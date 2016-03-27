@@ -62,9 +62,20 @@
     JSResourceLookup *resourceLookup = [JSResourceLookup new];
     resourceLookup.label = scheduleLookup.label;
     resourceLookup.resourceType = kJMScheduleUnit;
-    resourceLookup.resourceDescription = scheduleLookup.scheduleDescription;
+    NSString *nextFireDateString = [self dateStringFromDate:scheduleLookup.state.nextFireTime];
+    NSString *description = [NSString stringWithFormat:@"Status:%@\nNext Fire: %@", scheduleLookup.state.value, nextFireDateString];
+    resourceLookup.resourceDescription = description;
     resourceLookup.version = @(scheduleLookup.version);
     return resourceLookup;
+}
+
+- (NSString *)dateStringFromDate:(NSDate *)date
+{
+    NSDateFormatter *formatter = [[JSDateFormatterFactory sharedFactory] formatterWithPattern:@"yyyy-MM-dd HH:mm"];
+    // need set local timezone because of received value
+    formatter.timeZone = [NSTimeZone localTimeZone];
+    NSString *dateString = [formatter stringFromDate:date];
+    return dateString;
 }
 
 @end

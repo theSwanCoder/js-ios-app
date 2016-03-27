@@ -31,7 +31,6 @@
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
 @interface JMResourceInfoViewController ()<UITableViewDataSource, UITableViewDelegate, PopoverViewDelegate>
-@property (nonatomic, strong) NSArray *resourceProperties;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) PopoverView *popoverView;
 @property (nonatomic, assign) BOOL needLayoutUI;

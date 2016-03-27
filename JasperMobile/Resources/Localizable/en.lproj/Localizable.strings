@@ -206,6 +206,10 @@
 "resource.creationDate.title" = "Creation Date";
 "resource.modifiedDate.title" = "Modified Date";
 "resource.format.title" = "Format";
+"resource.owner.title" = "Owner";
+"resource.state.title" = "State";
+"resource.previousFireTime.title" = "Previous Fire Time";
+"resource.nextFireTime.title" = "Next Fire Time";
 
 
 "resources.type.reportUnit" = "Report";
@@ -231,7 +235,7 @@
 
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
-"action.title.edit" = "Edit Values";
+"action.title.edit" = "Edit";
 "action.title.edit.filters" = "Filters";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";

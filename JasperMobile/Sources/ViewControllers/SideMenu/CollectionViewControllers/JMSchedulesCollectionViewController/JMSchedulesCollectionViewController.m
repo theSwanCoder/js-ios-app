@@ -58,7 +58,7 @@
 
 - (NSString *)noResultText
 {
-    return JMCustomLocalizedString(@"resources.noresults.saveditems.msg", nil);
+    return JMCustomLocalizedString(@"resources.noresults.schedules.msg", nil);
 }
 
 - (Class)resourceLoaderClass
