@@ -182,7 +182,6 @@
 		A147822581385266BCDCA6FB /* JMNewScheduleVCSection.m in Sources */ = {isa = PBXBuildFile; fileRef = A14787FB73FB92A6F9125E20 /* JMNewScheduleVCSection.m */; };
 		A147830E180707CF31A5EDFE /* JMSchedulesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478E909A981A2610DA0081 /* JMSchedulesListLoader.m */; };
 		A147837E1991885EC48D81AC /* JMScheduleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478E85ED789BDE76646F55 /* JMScheduleVC.m */; };
-		A147842549A510E963307FD6 /* JSScheduleLookup+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A147805E3C85BBB79A276148 /* JSScheduleLookup+Helpers.m */; };
 		A147845B677EC917000192AB /* JMJavascriptRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A14789ABBB4628995F7040B6 /* JMJavascriptRequest.m */; };
 		A14784AF61EB18E6AD372AEB /* JMDashboardViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478D6859B60B36A4F9FCC8 /* JMDashboardViewerConfigurator.m */; };
 		A1478554E4FD8C3321C48845 /* JMDashlet.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478986F8AAADBC9A5CC783 /* JMDashlet.m */; };
@@ -196,6 +195,7 @@
 		A14786ADC7F4369E9DEDD26C /* JMScheduleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A147838F086DC01DE5EBC830 /* JMScheduleLoader.m */; };
 		A14787748E391A1967D72E74 /* JMJavascriptCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A147806D6CC4CAC23BF4488F /* JMJavascriptCallback.m */; };
 		A14787F66450947BD9F35A1E /* JMSavedResources+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478C290748B548CC6FEF89 /* JMSavedResources+Helpers.m */; };
+		A147888919BCE2735DD30F58 /* JMSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = A147877192E851CB8341C144 /* JMSchedule.m */; };
 		A14788CFC02FE10C3B77213E /* JMFavorites+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A14783B4F80FE846BE43F22C /* JMFavorites+Helpers.m */; };
 		A14789C39DF01A718B92E97C /* JMDashboardViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478203D1D9D597184D040F /* JMDashboardViewerVC.m */; };
 		A14789CD0B67973BFC52912E /* JMResourceLoaderOption.m in Sources */ = {isa = PBXBuildFile; fileRef = A14782CAE9D514A688A8331B /* JMResourceLoaderOption.m */; };
@@ -581,7 +581,6 @@
 		93F54FD91BD7975E00355A30 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		93F54FDA1BD7975E00355A30 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.adhoc.xcconfig; path = "Pods/Target Support Files/Pods/Pods.adhoc.xcconfig"; sourceTree = "<group>"; };
-		A147805E3C85BBB79A276148 /* JSScheduleLookup+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSScheduleLookup+Helpers.m"; sourceTree = "<group>"; };
 		A147806D6CC4CAC23BF4488F /* JMJavascriptCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptCallback.m; sourceTree = "<group>"; };
 		A1478080DB621855A002EE47 /* JMDashlet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashlet.h; sourceTree = "<group>"; };
 		A14781236AC9524AE2DDCA14 /* JMWebEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMWebEnvironment.m; sourceTree = "<group>"; };
@@ -594,6 +593,7 @@
 		A14782CAE9D514A688A8331B /* JMResourceLoaderOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceLoaderOption.m; sourceTree = "<group>"; };
 		A1478310EE45B536C764DAD5 /* JMScheduleLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMScheduleLoader.h; sourceTree = "<group>"; };
 		A147833F01EC956738C2E56A /* JMReportViewerToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JMReportViewerToolBar.xib; sourceTree = "<group>"; };
+		A14783751EA166495FD8A5E8 /* JMSchedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSchedule.h; sourceTree = "<group>"; };
 		A1478385D33526419265D48F /* JMScheduleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleCell.m; sourceTree = "<group>"; };
 		A147838F086DC01DE5EBC830 /* JMScheduleLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleLoader.m; sourceTree = "<group>"; };
 		A14783B4F80FE846BE43F22C /* JMFavorites+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMFavorites+Helpers.m"; sourceTree = "<group>"; };
@@ -613,10 +613,10 @@
 		A14786B2853E483E1320B59A /* JMResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResource.h; sourceTree = "<group>"; };
 		A14787325B030C99ACEAFA49 /* JMDashboardViewerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardViewerVC.h; sourceTree = "<group>"; };
 		A147875D25959A63159192C8 /* JMExternalWindowControlsVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JMExternalWindowControlsVC.xib; sourceTree = "<group>"; };
+		A147877192E851CB8341C144 /* JMSchedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSchedule.m; sourceTree = "<group>"; };
 		A14787CC8A451121967127EE /* JMWebEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebEnvironment.h; sourceTree = "<group>"; };
 		A14787FB73FB92A6F9125E20 /* JMNewScheduleVCSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMNewScheduleVCSection.m; sourceTree = "<group>"; };
 		A14788039BC56AEEEB389C6F /* JMSchedulesListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSchedulesListVC.m; sourceTree = "<group>"; };
-		A147880FBA4C45F01F7885DC /* JSScheduleLookup+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSScheduleLookup+Helpers.h"; sourceTree = "<group>"; };
 		A147881459C78743FA3F43DB /* JMResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResource.m; sourceTree = "<group>"; };
 		A1478859F96142945CD0B9F5 /* JMSavedResources+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMSavedResources+Helpers.h"; sourceTree = "<group>"; };
 		A147887C2ACE2CC1BEB39AFE /* JMNewScheduleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMNewScheduleCell.h; sourceTree = "<group>"; };
@@ -2291,6 +2291,15 @@
 			path = JMDashlet;
 			sourceTree = "<group>";
 		};
+		A14780BC0225CBD349E8B723 /* JMSchedule */ = {
+			isa = PBXGroup;
+			children = (
+				A147877192E851CB8341C144 /* JMSchedule.m */,
+				A14783751EA166495FD8A5E8 /* JMSchedule.h */,
+			);
+			path = JMSchedule;
+			sourceTree = "<group>";
+		};
 		A14780D0BF88F91E195DD34D /* JMNewScheduleBooleanCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -2326,6 +2335,7 @@
 				A14782875D9AB61F498DD634 /* JMSchedulesListVC */,
 				A147839BFBA8482E9D9C33EB /* JMScheduleManager */,
 				A1478B565B5D4B7E299480D6 /* JMScheduleLoader */,
+				A14780BC0225CBD349E8B723 /* JMSchedule */,
 			);
 			path = Scheduling;
 			sourceTree = "<group>";
@@ -2469,7 +2479,6 @@
 				A1478E83DD3C929300A9A2C1 /* Favorites */,
 				A1478FA96F546B4271DC6F76 /* SavedResource */,
 				A1478C0B01AE140F50CCB57D /* ServerProfile */,
-				A1478AE7ED973E3C11646CF0 /* Schedules */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2481,15 +2490,6 @@
 				A1478D6859B60B36A4F9FCC8 /* JMDashboardViewerConfigurator.m */,
 			);
 			path = JMDashboardViewerConfigurator;
-			sourceTree = "<group>";
-		};
-		A1478AE7ED973E3C11646CF0 /* Schedules */ = {
-			isa = PBXGroup;
-			children = (
-				A147805E3C85BBB79A276148 /* JSScheduleLookup+Helpers.m */,
-				A147880FBA4C45F01F7885DC /* JSScheduleLookup+Helpers.h */,
-			);
-			path = Schedules;
 			sourceTree = "<group>";
 		};
 		A1478B565B5D4B7E299480D6 /* JMScheduleLoader */ = {
@@ -3188,9 +3188,9 @@
 				A14788CFC02FE10C3B77213E /* JMFavorites+Helpers.m in Sources */,
 				A14787F66450947BD9F35A1E /* JMSavedResources+Helpers.m in Sources */,
 				A1478AF726712130E4DF974A /* JMServerProfile+Helpers.m in Sources */,
-				A147842549A510E963307FD6 /* JSScheduleLookup+Helpers.m in Sources */,
 				A1478005B3B1C5EA078F8199 /* JMResource.m in Sources */,
 				A14789CD0B67973BFC52912E /* JMResourceLoaderOption.m in Sources */,
+				A147888919BCE2735DD30F58 /* JMSchedule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

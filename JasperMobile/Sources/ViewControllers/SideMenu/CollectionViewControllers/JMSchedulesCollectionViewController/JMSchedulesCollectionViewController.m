@@ -27,6 +27,10 @@
 //
 
 #import "JMSchedulesCollectionViewController.h"
+#import "ALToastView.h"
+#import "JMScheduleManager.h"
+#import "JMSchedule.h"
+#import "JMScheduleVC.h"
 
 
 @implementation JMSchedulesCollectionViewController
@@ -60,6 +64,39 @@
 - (Class)resourceLoaderClass
 {
     return NSClassFromString(@"JMSchedulesListLoader");
+}
+
+- (void)actionForResource:(JMResource *)resource
+{
+    JMSchedule *schedule = (JMSchedule *) resource;
+    // TODO: add loader
+    [[JMScheduleManager sharedManager] loadScheduleMetadataForScheduleWithId:schedule.scheduleLookup.jobIdentifier completion:^(JSScheduleMetadata *metadata, NSError *error) {
+        if (metadata) {
+            JMScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+            newScheduleVC.scheduleMetadata = metadata;
+            newScheduleVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata) {
+                if (scheduleMetadata) {
+                    [[JMScheduleManager sharedManager] updateSchedule:scheduleMetadata
+                                                           completion:^(JSScheduleMetadata *updatedScheduleMetadata, NSError *error) {
+                                                               if (updatedScheduleMetadata) {
+                                                                   [self.navigationController popViewControllerAnimated:YES];
+                                                                   [ALToastView toastInView:self.navigationController.view
+                                                                                   withText:JMCustomLocalizedString(@"Schedule was updated successfully.", nil)];
+                                                               } else {
+                                                                   [JMUtils presentAlertControllerWithError:error
+                                                                                                 completion:nil];
+                                                               }
+                                                           }];
+                } else {
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+            };
+            [self.navigationController pushViewController:newScheduleVC animated:YES];
+        } else {
+            [JMUtils presentAlertControllerWithError:error
+                                          completion:nil];
+        }
+    }];
 }
 
 @end

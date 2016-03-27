@@ -77,6 +77,7 @@
             model = [JMDashboard dashboardWithResource:self];
             break;
         }
+        case JMResourceTypeSchedule: {break;}
     }
     return model;
 }
@@ -113,6 +114,10 @@
             localizedResourceType = JMCustomLocalizedString(@"resources.type.dashboard.legacy", nil);
             break;
         }
+        case JMResourceTypeSchedule: {
+            localizedResourceType = JMCustomLocalizedString(@"resources.type.schedule", nil);
+            break;
+        }
     }
     return localizedResourceType;
 }
@@ -138,6 +143,10 @@
         }
         case JMResourceTypeLegacyDashboard: {
             vcIdentifier = @"JMDashboardViewerVC";
+            break;
+        }
+        case JMResourceTypeSchedule: {
+            vcIdentifier = @"JMScheduleVC";
             break;
         }
     }
@@ -169,6 +178,7 @@
             vcIdentifier = @"JMDashboardInfoViewController";
             break;
         }
+        case JMResourceTypeSchedule: {break;}
     }
     return vcIdentifier;
 }
@@ -190,6 +200,8 @@
         return JMResourceTypeLegacyDashboard;
     } else if([resourceLookup.resourceType isEqualToString:kJS_WS_TYPE_FILE]) {
         return JMResourceTypeFile;
+    } else if([resourceLookup.resourceType isEqualToString:kJMScheduleUnit]) {
+        return JMResourceTypeSchedule;
     }
 }
 

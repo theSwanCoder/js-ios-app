@@ -20,9 +20,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
-//  JMResource.h
+//  JMSchedule.h
 //  TIBCO JasperMobile
 //
 
@@ -31,24 +30,10 @@
  @since 2.5
  */
 
-typedef NS_ENUM(NSInteger, JMResourceType) {
-    JMResourceTypeFile,
-    JMResourceTypeFolder,
-    JMResourceTypeSavedResource,
-    JMResourceTypeReport,
-    JMResourceTypeTempExportedReport,
-    JMResourceTypeDashboard,
-    JMResourceTypeLegacyDashboard,
-    JMResourceTypeSchedule
-};
+#import "JMResource.h"
 
-@interface JMResource : NSObject
-@property (nonatomic, strong, nonnull) JSResourceLookup *resourceLookup;
-@property (nonatomic, assign) JMResourceType type;
-- (instancetype __nullable)initWithResourceLookup:(JSResourceLookup *__nonnull)resourceLookup;
-+ (instancetype __nullable)resourceWithResourceLookup:(JSResourceLookup *__nonnull)resourceLookup;
-- (id __nullable)modelOfResource;
-- (NSString *__nullable)localizedResourceType;
-- (NSString *__nullable)resourceViewerVCIdentifier;
-- (NSString *__nullable)infoVCIdentifier;
+@interface JMSchedule : JMResource
+@property (nonatomic, strong) JSScheduleLookup *scheduleLookup;
+- (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup scheduleLookup:(JSScheduleLookup *)scheduleLookup;
++ (instancetype)scheduleWithResourceLookup:(JSResourceLookup *)resourceLookup scheduleLookup:(JSScheduleLookup *)scheduleLookup;
 @end

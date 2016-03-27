@@ -42,6 +42,8 @@
 #import "UIViewController+Additions.h"
 #import "JMExportManager.h"
 #import "JMResource.h"
+#import "JMSchedule.h"
+#import "ALToastView.h"
 
 CGFloat const kJMBaseCollectionViewGridWidth = 310;
 
@@ -439,40 +441,46 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     
     if (resource.type == JMResourceTypeFolder) {
         // TODO: replace identifier with constant
-        JMRepositoryCollectionViewController *repositoryViewController = (JMRepositoryCollectionViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMRepositoryCollectionViewController"];
+        JMRepositoryCollectionViewController *repositoryViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMRepositoryCollectionViewController"];
         repositoryViewController.resourceListLoader.resource = resource;
         repositoryViewController.navigationItem.leftBarButtonItem = nil;
         repositoryViewController.navigationItem.title = resource.resourceLookup.label;
         repositoryViewController.representationTypeKey = self.representationTypeKey;
         repositoryViewController.representationType = self.representationType;
         nextVC = repositoryViewController;
+    } else if (resource.type == JMResourceTypeSchedule) {
+        [self actionForResource:resource];
+        return;
     } else if (resource.type == JMResourceTypeTempExportedReport) {
         // TODO: add canceling task
 //        [[JMExportManager sharedInstance] cancelAll];
 //        JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *) self.view).collectionView cellForItemAtIndexPath:indexPath];
 //        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:cell.resourceLookup];
 //        [[JMExportManager sharedInstance] cancelTaskForSavedResource:savedReport];
-    } else if (resource.type == JMResourceTypeSavedResource) {
-        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
-        if ([nextVC respondsToSelector:@selector(setResource:)]) {
-            [nextVC setResource:resource];
-        }
     } else {
-        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
-        if ([nextVC respondsToSelector:@selector(setResource:)]) {
-            [nextVC setResource:resource];
-        }
-        // Customizing report viewer view controller
-        if (resource.type == JMResourceTypeReport) {
-            JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
-            JMReport *report = (JMReport *)[nextVC report];
-            report.thumbnailImage = cell.thumbnailImage;
+        NSString *resourceViewerVCIdentifier = [resource resourceViewerVCIdentifier];
+        if (resourceViewerVCIdentifier) {
+            nextVC = [self.storyboard instantiateViewControllerWithIdentifier:resourceViewerVCIdentifier];
+            if ([nextVC respondsToSelector:@selector(setResource:)]) {
+                [nextVC setResource:resource];
+            }
+            // Customizing report viewer view controller
+            if (resource.type == JMResourceTypeReport) {
+                JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
+                JMReport *report = [nextVC report];
+                report.thumbnailImage = cell.thumbnailImage;
+            }
         }
     }
     
     if (nextVC) {
         [self.navigationController pushViewController:nextVC animated:YES];
     }
+}
+
+- (void)actionForResource:(JMResource *)resource
+{
+    // override in children
 }
 
 - (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem

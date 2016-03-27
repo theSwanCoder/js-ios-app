@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -20,18 +20,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
-//  JMFavorites+Helpers.h
+//  JMSchedule.h
 //  TIBCO JasperMobile
 //
 
-/**
- @author Olexandr Dahno odahno@tibco.com
- @since 2.5
- */
+#import "JMSchedule.h"
 
-#import "JSScheduleLookup.h"
 
-@interface JSScheduleLookup (Helpers)
+@implementation JMSchedule
+
+- (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup scheduleLookup:(JSScheduleLookup *)scheduleLookup
+{
+    self = [super initWithResourceLookup:resourceLookup];
+    if (self) {
+        _scheduleLookup = scheduleLookup;
+    }
+    return self;
+}
+
++ (instancetype)scheduleWithResourceLookup:(JSResourceLookup *)resourceLookup scheduleLookup:(JSScheduleLookup *)scheduleLookup
+{
+    return [[self alloc] initWithResourceLookup:resourceLookup scheduleLookup:scheduleLookup];
+}
+
 @end

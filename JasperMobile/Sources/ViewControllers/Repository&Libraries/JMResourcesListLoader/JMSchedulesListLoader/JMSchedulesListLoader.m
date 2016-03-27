@@ -27,13 +27,44 @@
 //
 
 #import "JMSchedulesListLoader.h"
+#import "JMResource.h"
+#import "JMSchedule.h"
 
 
 @implementation JMSchedulesListLoader
 
 - (void)loadNextPage
 {
-    [self finishLoadingWithError:nil];
+    __weak typeof(self)weakSelf = self;
+    [self.restClient fetchSchedulesForResourceWithURI:self.resource.resourceLookup.uri completion:^(JSOperationResult *result) {
+        __strong typeof(self)strongSelf = weakSelf;
+        if (result.error) {
+            if (result.error.code == JSSessionExpiredErrorCode) {
+                [JMUtils showLoginViewAnimated:YES completion:nil];
+            } else {
+                [strongSelf finishLoadingWithError:result.error];
+            }
+        } else {
+            for (id scheduleLookup in result.objects) {
+                if ([scheduleLookup isKindOfClass:[JSScheduleLookup class]]) {
+                    JSResourceLookup *resourceLookup = [strongSelf resourceLookupFromScheduleLookup:scheduleLookup];
+                    JMSchedule *resource = [JMSchedule scheduleWithResourceLookup:resourceLookup scheduleLookup:scheduleLookup];
+                    [strongSelf addResourcesWithResource:resource];
+                }
+            }
+            [strongSelf finishLoadingWithError:nil];
+        }
+    }];
+}
+
+- (JSResourceLookup *)resourceLookupFromScheduleLookup:(JSScheduleLookup *)scheduleLookup
+{
+    JSResourceLookup *resourceLookup = [JSResourceLookup new];
+    resourceLookup.label = scheduleLookup.label;
+    resourceLookup.resourceType = kJMScheduleUnit;
+    resourceLookup.resourceDescription = scheduleLookup.scheduleDescription;
+    resourceLookup.version = @(scheduleLookup.version);
+    return resourceLookup;
 }
 
 @end

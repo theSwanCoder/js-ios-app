@@ -211,6 +211,7 @@
 "resources.type.reportUnit" = "Report";
 "resources.type.dashboard" = "Dashboard";
 "resources.type.dashboard.legacy" = "Legacy Dashboard";
+"resources.type.schedule" = "Schedule";
 "resources.type.folder" = "Folder";
 "resources.type.saved.reportUnit" = "Content Resource";
 

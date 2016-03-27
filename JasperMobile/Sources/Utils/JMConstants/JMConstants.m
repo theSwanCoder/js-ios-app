@@ -82,6 +82,9 @@ NSString * const kJMReportsDirectory = @"reports";
 NSString * const kJMSavedReportUnit = @"savedReportUnit";
 NSString * const kJMTempExportedReportUnit = @"kJMTempExportedReportUnit";
 
+// Schedules Items
+NSString * const kJMScheduleUnit = @"kJMScheduleUnit";
+
 // Name of the main report file (outputResource)
 NSString * const kJMReportFilename = @"report";
 

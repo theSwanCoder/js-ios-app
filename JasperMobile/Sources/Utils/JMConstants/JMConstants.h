@@ -88,6 +88,9 @@ extern NSString * const kJMReportsDirectory;
 extern NSString * const kJMSavedReportUnit;
 extern NSString * const kJMTempExportedReportUnit;
 
+// Schedules Items
+extern NSString * const kJMScheduleUnit;
+
 // Name of the main report file (outputResource)
 extern NSString * const kJMReportFilename;
 
