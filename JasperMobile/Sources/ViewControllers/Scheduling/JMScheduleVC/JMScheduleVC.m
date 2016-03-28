@@ -94,7 +94,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     }
 }
 
-- (void)setDate:(UIButton *)sender
+- (void)setDate:(UIBarButtonItem *)sender
 {
     NSDate *newDate = self.datePicker.date;
     NSDate *currentDate = [NSDate date];
@@ -115,20 +115,29 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     [[self dateCell].valueTextField resignFirstResponder];
 }
 
+- (void)setRecurrenceCount:(UIBarButtonItem *)sender
+{
+    JMNewScheduleCell *cell = [self recurrenceCountCell];
+    // TODO: at the moment we support only simple trigger
+    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+    // TODO: from ipad we can get letters
+    NSString *value = cell.valueTextField.text;
+    if (value.length == 0 || !value.integerValue) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
+                                                                                          message:JMCustomLocalizedString(@"schedules.error.repeat.count.wrong", nil)
+                                                                                cancelButtonTitle:@"dialog.button.ok"
+                                                                          cancelCompletionHandler:nil];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    } else {
+        simpleTrigger.recurrenceInterval = @(value.integerValue);
+        [cell.valueTextField resignFirstResponder];
+    }
+}
+
 - (void)updateDateCellWithDate:(NSDate *)date
 {
     [self dateCell].valueTextField.text = [self dateStringFromDate:date];
-}
-
-- (JMNewScheduleCell *)dateCell
-{
-    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
-    NSArray *rows = section.rows;
-    NSInteger rowDateCell = [rows indexOfObject:kJMJobStartDate];
-    NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell
-                                                        inSection:JMNewScheduleVCSectionTypeSchedule];
-    JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
-    return dateCell;
 }
 
 - (IBAction)selectFormat:(id)sender
@@ -303,7 +312,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         scheduleCell.valueTextField.text = [self dateStringFromDate:simpleTrigger.startDate];
-        [self setupToolbarForTextField:scheduleCell.valueTextField];
+        [self setupToolbarForStartDateCell:scheduleCell];
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobStartImmediately]) {
@@ -331,6 +340,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         scheduleCell.valueTextField.text = simpleTrigger.recurrenceInterval.stringValue;
         scheduleCell.valueTextField.keyboardType = UIKeyboardTypeNumberPad;
+        [self setupToolbarForRecurrenceCountCell:scheduleCell];
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobRepeatTimeInterval]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
@@ -528,10 +538,10 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     return dateString;
 }
 
-- (void)setupToolbarForTextField:(UITextField *)textField
+- (void)setupToolbarForStartDateCell:(JMNewScheduleCell *)cell
 {
     if (!self.datePicker) {
-        UIDatePicker *datePicker = [[UIDatePicker alloc]init];
+        UIDatePicker *datePicker = [UIDatePicker new];
         // need set timezone to 0 because of received value
         datePicker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
 
@@ -541,20 +551,35 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         [datePicker addTarget:self
                        action:@selector(updateDate:)
              forControlEvents:UIControlEventValueChanged];
-        textField.inputView = datePicker;
+        cell.valueTextField.inputView = datePicker;
         self.datePicker = datePicker;
     }
 
-    UIToolbar *toolbar = [[UIToolbar alloc] init];
+    UIToolbar *toolbar = [UIToolbar new];
     [toolbar sizeToFit];
     UIBarButtonItem* doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                               target:self
-                                                                               action:@selector(setDate:)];
+                                                              target:self
+                                                              action:@selector(setDate:)];
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                                    target:nil
                                                                                    action:nil];
     [toolbar setItems:@[flexibleSpace, doneButton] animated:YES];
-    textField.inputAccessoryView = toolbar;
+    cell.valueTextField.inputAccessoryView = toolbar;
+}
+
+- (void)setupToolbarForRecurrenceCountCell:(JMNewScheduleCell *)cell
+{
+
+    UIToolbar *toolbar = [UIToolbar new];
+    [toolbar sizeToFit];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                  target:self
+                                                                  action:@selector(setRecurrenceCount:)];
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                                   target:nil
+                                                                                   action:nil];
+    [toolbar setItems:@[flexibleSpace, doneButton] animated:YES];
+    cell.valueTextField.inputAccessoryView = toolbar;
 }
 
 - (void)validateJobWithCompletion:(void(^)(BOOL success, NSError *error))completion
@@ -613,6 +638,31 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     }
 
     return stringValue;
+}
+
+- (JMNewScheduleCell *)dateCell
+{
+    JMNewScheduleCell *cell = [self cellInSection:JMNewScheduleVCSectionTypeSchedule
+                                           andRow:kJMJobStartDate];
+    return cell;
+}
+
+- (JMNewScheduleCell *)recurrenceCountCell
+{
+    JMNewScheduleCell *cell = [self cellInSection:JMNewScheduleVCSectionTypeRecurrence
+                                           andRow:kJMJobRepeatCount];
+    return cell;
+}
+
+- (JMNewScheduleCell *)cellInSection:(JMNewScheduleVCSectionType)sectionType andRow:(NSString *)row
+{
+    JMNewScheduleVCSection *section = self.sections[sectionType];
+    NSArray *rows = section.rows;
+    NSInteger cellIndex = [rows indexOfObject:row];
+    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForRow:cellIndex
+                                                    inSection:sectionType];
+    JMNewScheduleCell *cell = [self.tableView cellForRowAtIndexPath:cellIndexPath];
+    return cell;
 }
 
 @end
