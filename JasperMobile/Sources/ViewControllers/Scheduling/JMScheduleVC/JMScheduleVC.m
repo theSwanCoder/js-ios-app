@@ -49,6 +49,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 @property (nonatomic, strong) NSArray <JMNewScheduleVCSection *> *sections;
 @property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (assign, nonatomic) CGFloat keyboardHeight;
 @end
 
 @implementation JMScheduleVC
@@ -67,6 +68,20 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                           forState:UIControlStateNormal];
 
     [self setupLeftBarButtonItems];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    [self addKeyboardObservers];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+
+    [self removeKeyboardObservers];
 }
 
 #pragma mark - Setups
@@ -527,6 +542,44 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                                                                                     type:JMNewScheduleVCSectionTypeRecurrence
                                                                                     rows:rows];
     return recurrenceSection;
+}
+
+#pragma mark - Keyboard Observers
+- (void)addKeyboardObservers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
+}
+
+- (void)removeKeyboardObservers
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidShowNotification
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+}
+
+- (void)keyboardDidShow:(NSNotification *)notification
+{
+    CGRect keyboardRect = ((NSValue *)notification.userInfo[UIKeyboardFrameEndUserInfoKey]).CGRectValue;
+    CGPoint offset = CGPointMake(0, self.tableView.contentOffset.y + CGRectGetHeight(keyboardRect));
+    // Height of keyboard get wrong sometimes on UIKeyboardDidHideNotification
+    self.keyboardHeight = CGRectGetHeight(keyboardRect);
+    [self.tableView setContentOffset:offset animated:YES];
+}
+
+- (void)keyboardDidHide:(NSNotification *)notification
+{
+    CGPoint offset = CGPointMake(0, self.tableView.contentOffset.y - self.keyboardHeight);
+    [self.tableView setContentOffset:offset animated:YES];
 }
 
 #pragma mark - Helpers
