@@ -134,17 +134,28 @@
         @throw wrongActionxception;
     }
 
-    [self startShowLoaderWithMessage:@"status.loading"];
-    __weak __typeof(self) weakSelf = self;
-    [[JMScheduleManager sharedManager] deleteScheduleWithJobIdentifier:scheduleLookup.jobIdentifier
-                                                            completion:^(NSError *error) {
-                                                                __typeof(self) strongSelf = weakSelf;
-                                                                [strongSelf stopShowLoader];
-                                                                if (self.exitBlock) {
-                                                                    self.exitBlock();
-                                                                }
-                                                                [strongSelf.navigationController popViewControllerAnimated:YES];
-                                                            }];
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
+                                                                                      message:@"savedreport.viewer.delete.confirmation.message"
+                                                                            cancelButtonTitle:@"dialog.button.cancel"
+                                                                      cancelCompletionHandler:nil];
+    __weak typeof(self) weakSelf = self;
+    [alertController addActionWithLocalizedTitle:@"dialog.button.ok"
+                                           style:UIAlertActionStyleDefault
+                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        __strong typeof(self) strongSelf = weakSelf;
+        [self startShowLoaderWithMessage:@"status.loading"];
+        __weak __typeof(self) weakSelf = strongSelf;
+        [[JMScheduleManager sharedManager] deleteScheduleWithJobIdentifier:scheduleLookup.jobIdentifier
+                                                                completion:^(NSError *error) {
+                                                                    __typeof(self) strongSelf = weakSelf;
+                                                                    [strongSelf stopShowLoader];
+                                                                    if (self.exitBlock) {
+                                                                        self.exitBlock();
+                                                                    }
+                                                                    [strongSelf.navigationController popViewControllerAnimated:YES];
+                                                                }];
+    }];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)editSchedule
