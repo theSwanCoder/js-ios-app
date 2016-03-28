@@ -473,7 +473,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             // Customizing report viewer view controller
             if (resource.type == JMResourceTypeReport) {
                 JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
-                JMReport *report = [nextVC report];
+                JMReport *report = (JMReport *)[nextVC report];
                 report.thumbnailImage = cell.thumbnailImage;
             }
         }

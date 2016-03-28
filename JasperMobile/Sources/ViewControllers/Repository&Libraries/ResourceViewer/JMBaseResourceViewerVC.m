@@ -255,7 +255,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (UIBarButtonItem *) favoriteBarButtonItem
 {
-    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource.resourceLookup];
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource];
     NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
     
     UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]

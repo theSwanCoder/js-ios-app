@@ -206,6 +206,7 @@
     } else if([resourceLookup.resourceType isEqualToString:kJMScheduleUnit]) {
         return JMResourceTypeSchedule;
     }
+    return NSNotFound;
 }
 
 @end
