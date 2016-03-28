@@ -177,7 +177,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     if ([self isContentOnTV]) {
         [self switchFromTV];
-        [self hideExternalWindowWithCompletion:nil];
         [super cancelResourceViewingAndExit:exit];
     } else {
         [super cancelResourceViewingAndExit:exit];
@@ -369,9 +368,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         }
         case JMMenuActionsViewAction_HideExternalDisplay: {
             [self switchFromTV];
-            [self hideExternalWindowWithCompletion:^(void) {
-                [self configViewport];
-            }];
             break;
         }
         case JMMenuActionsViewAction_EditFilters: {
@@ -634,6 +630,10 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
     [self.controlsViewController.view removeFromSuperview];
     self.controlsViewController = nil;
+
+    [self hideExternalWindowWithCompletion:^(void) {
+        [self configViewport];
+    }];
 }
 
 #pragma mark - JMExternalWindowDashboardControlsVCDelegate

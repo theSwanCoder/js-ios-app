@@ -691,11 +691,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         }
         case JMMenuActionsViewAction_HideExternalDisplay: {
             [self switchFromTV];
-            [self hideExternalWindowWithCompletion:^{
-                if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {
-                    [self.reportLoader fitReportViewToScreen];
-                }
-            }];
             break;
         }
         default:
@@ -889,6 +884,12 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
     [self.view addSubview:self.emptyReportMessageLabel];
     [self layoutEmptyReportLabelInView:self.view];
+
+    [self hideExternalWindowWithCompletion:^{
+        if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {
+            [self.reportLoader fitReportViewToScreen];
+        }
+    }];
 }
 
 
