@@ -33,13 +33,16 @@
 #import "JMNewScheduleVCSection.h"
 
 
-NSString *const kJMJobLabel            = @"kJMJobLabel";
-NSString *const kJMJobDescription      = @"kJMJobDescription";
-NSString *const kJMJobOutputFileURI    = @"kJMJobOutputFileURI";
-NSString *const kJMJobOutputFolderURI  = @"kJMJobOutputFolderURI";
-NSString *const kJMJobFormat           = @"kJMJobFormat";
-NSString *const kJMJobStartDate        = @"kJMJobStartDate";
-NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
+NSString *const kJMJobLabel              = @"kJMJobLabel";
+NSString *const kJMJobDescription        = @"kJMJobDescription";
+NSString *const kJMJobOutputFileURI      = @"kJMJobOutputFileURI";
+NSString *const kJMJobOutputFolderURI    = @"kJMJobOutputFolderURI";
+NSString *const kJMJobFormat             = @"kJMJobFormat";
+NSString *const kJMJobStartDate          = @"kJMJobStartDate";
+NSString *const kJMJobStartImmediately   = @"kJMJobStartImmediately";
+NSString *const kJMJobRepeatType         = @"kJMJobRepeatType";
+NSString *const kJMJobRepeatCount        = @"kJMJobRepeatCount";
+NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 @interface JMScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewScheduleCellDelegate, JMNewScheduleBoolenCellDelegate>
 @property (weak, nonatomic) UIDatePicker *datePicker;
@@ -58,7 +61,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     self.title = @"Schedule";
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
-    [self createScheduleRepresentationProperties];
+    [self createSections];
 
     [self.createJobButton setTitle:@"Apply"
                           forState:UIControlStateNormal];
@@ -142,8 +145,7 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
                                                                       cancelCompletionHandler:nil];
 
     JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeOutputOptions];
-    NSArray *rows = section.rows;
-    NSInteger rowFormatCell = [rows indexOfObject:kJMJobFormat];
+    NSInteger rowFormatCell = [section.rows indexOfObject:kJMJobFormat];
     NSIndexPath *formatCellIndexPath = [NSIndexPath indexPathForRow:rowFormatCell
                                                           inSection:JMNewScheduleVCSectionTypeOutputOptions];
     JMNewScheduleCell *formatCell = [self.tableView cellForRowAtIndexPath:formatCellIndexPath];
@@ -156,6 +158,40 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
                                              }];
     }
 
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)selectRecurrenceType
+{
+    NSArray *intervals = @[
+            @(JSScheduleSimpleTriggerRecurrenceIntervalTypeMinute),
+            @(JSScheduleSimpleTriggerRecurrenceIntervalTypeHour),
+            @(JSScheduleSimpleTriggerRecurrenceIntervalTypeDay),
+            @(JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek)
+    ];
+
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules.new.job.recurrenceType.alert.title", nil)
+                                                                                      message:nil
+                                                                            cancelButtonTitle:@"dialog.button.cancel"
+                                                                      cancelCompletionHandler:nil];
+
+    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeRecurrence];
+    NSInteger cellIndex = [section.rows indexOfObject:kJMJobRepeatTimeInterval];
+    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForRow:cellIndex
+                                                    inSection:JMNewScheduleVCSectionTypeRecurrence];
+    JMNewScheduleCell *cell = [self.tableView cellForRowAtIndexPath:cellIndexPath];
+    for (NSNumber *interval in intervals) {
+        JSScheduleSimpleTriggerRecurrenceIntervalType intervalType = (JSScheduleSimpleTriggerRecurrenceIntervalType) interval.integerValue;
+        NSString *title = [self stringValueForRecurrenceType:intervalType];
+        [alertController addActionWithLocalizedTitle:title
+                                               style:UIAlertActionStyleDefault
+                                             handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                                 // TODO: at the moment we support only simple trigger
+                                                 JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+                                                 simpleTrigger.recurrenceIntervalUnit = intervalType;
+                                                 cell.valueTextField.text = title;
+                                             }];
+    }
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
@@ -173,6 +209,8 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     NSString *jobProperty = section.rows[indexPath.row];
     if ([jobProperty isEqualToString:kJMJobFormat]) {
         [self selectFormat:nil];
+    } else if ([jobProperty isEqualToString:kJMJobRepeatTimeInterval]) {
+        [self selectRecurrenceType];
     }
 }
 
@@ -257,7 +295,6 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.format", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.outputFormats.firstObject;
         scheduleCell.valueTextField.userInteractionEnabled = NO;
-        scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
@@ -278,6 +315,31 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
         scheduleCell.uiSwitch.on = simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately;
         scheduleCell.delegate = self;
         cell = scheduleCell;
+    } else if ([jobProperty isEqualToString:kJMJobRepeatType]) {
+        JMNewScheduleBoolenCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleBoolenCell" forIndexPath:indexPath];
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.repeat.type", nil);
+
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        scheduleCell.uiSwitch.on = simpleTrigger.recurrenceIntervalUnit != JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
+        scheduleCell.delegate = self;
+        cell = scheduleCell;
+    } else if ([jobProperty isEqualToString:kJMJobRepeatCount]) {
+        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.repeat.count", nil);
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        scheduleCell.valueTextField.text = simpleTrigger.recurrenceInterval.stringValue;
+        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeNumberPad;
+        cell = scheduleCell;
+    } else if ([jobProperty isEqualToString:kJMJobRepeatTimeInterval]) {
+        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.repeat.interval", nil);
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        scheduleCell.valueTextField.text = [self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit];
+        scheduleCell.valueTextField.userInteractionEnabled = NO;
+        cell = scheduleCell;
     }
 
     return cell;
@@ -290,15 +352,10 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
         if (success) {
             self.exitBlock(self.scheduleMetadata);
         } else {
-            [self updateView];
+            [self.tableView reloadData];
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }];
-}
-
-- (void)updateView
-{
-    [self.tableView reloadData];
 }
 
 #pragma mark - JMNewScheduleCellDelegate
@@ -316,37 +373,87 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
         self.scheduleMetadata.baseOutputFilename = newValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
         self.scheduleMetadata.folderURI = newValue;
+    } else if ([jobProperty isEqualToString:kJMJobRepeatCount]) {
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        // TODO: from ipad we can get letters
+        simpleTrigger.recurrenceInterval = @(newValue.integerValue);
     }
 }
 
 #pragma mark - JMNewScheduleBoolenCellDelegate
 - (void)scheduleBoolenCell:(JMNewScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue
 {
-    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeSchedule];
-    // TODO: at the moment we support only simple trigger
-    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-    NSArray *scheduleRows;
-    if (newValue) {
-        simpleTrigger.startType = JSScheduleTriggerStartTypeImmediately;
-        simpleTrigger.startDate = nil;
-        scheduleRows = @[
-                kJMJobStartImmediately,
-        ];
-    } else {
-        simpleTrigger.startType = JSScheduleTriggerStartTypeAtDate;
-        scheduleRows = @[
-                kJMJobStartImmediately,
-                kJMJobStartDate,
-        ];
-    }
-    section.rows = scheduleRows;
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    JMNewScheduleVCSection *section = self.sections[indexPath.section];
+    NSString *jobProperty = section.rows[indexPath.row];
 
-    NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeSchedule];
-    [self.tableView reloadSections:sectionIndecies withRowAnimation:UITableViewRowAnimationAutomatic];
+    if ([jobProperty isEqualToString:kJMJobStartImmediately]) {
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        NSArray *scheduleRows;
+        if (newValue) {
+            simpleTrigger.startType = JSScheduleTriggerStartTypeImmediately;
+            // Need save previous state?
+            simpleTrigger.startDate = nil;
+            scheduleRows = @[
+                    kJMJobStartImmediately,
+            ];
+        } else {
+            simpleTrigger.startType = JSScheduleTriggerStartTypeAtDate;
+            simpleTrigger.startDate = [NSDate date];
+            scheduleRows = @[
+                    kJMJobStartImmediately,
+                    kJMJobStartDate,
+            ];
+        }
+        section.rows = scheduleRows;
+
+        NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeSchedule];
+        [self.tableView reloadSections:sectionIndecies withRowAnimation:UITableViewRowAnimationAutomatic];
+    } else if([jobProperty isEqualToString:kJMJobRepeatType]) {
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        NSArray *rows;
+        if (newValue) {
+            simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeMinute;
+            simpleTrigger.occurrenceCount = @1;
+            simpleTrigger.recurrenceInterval = @1;
+            rows = @[
+                    kJMJobRepeatType,
+                    kJMJobRepeatCount,
+                    kJMJobRepeatTimeInterval
+            ];
+        } else {
+            simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
+            // Need save previous state?
+            simpleTrigger.occurrenceCount = nil;
+            simpleTrigger.recurrenceInterval = nil;
+            rows = @[
+                    kJMJobRepeatType,
+            ];
+        }
+        section.rows = rows;
+
+        NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeRecurrence];
+        [self.tableView reloadSections:sectionIndecies withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
-#pragma mark - Helpers
-- (void)createScheduleRepresentationProperties
+#pragma mark - Setup
+- (void)createSections
+{
+    self.sections = @[
+            [self mainSection],
+            [self outupOptionsSection],
+            [self schedleSection],
+            [self recurrenceSection]
+    ];
+}
+
+#pragma mark - Setup Sections
+
+- (JMNewScheduleVCSection *)mainSection
 {
     JMNewScheduleVCSection *mainSection = [JMNewScheduleVCSection sectionWithTitle:@"Main"
                                                                               type:JMNewScheduleVCSectionTypeMain
@@ -354,15 +461,23 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
                                                                                       kJMJobLabel,
                                                                                       kJMJobDescription,
                                                                               ]];
+    return mainSection;
+}
 
+- (JMNewScheduleVCSection *)outupOptionsSection
+{
     JMNewScheduleVCSection *outputOptionsSection = [JMNewScheduleVCSection sectionWithTitle:@"Output Options"
-                                                                              type:JMNewScheduleVCSectionTypeOutputOptions
-                                                                              rows:@[
-                                                                                      kJMJobOutputFileURI,
-                                                                                      kJMJobOutputFolderURI,
-                                                                                      kJMJobFormat,
-                                                                              ]];
+                                                                                       type:JMNewScheduleVCSectionTypeOutputOptions
+                                                                                       rows:@[
+                                                                                               kJMJobOutputFileURI,
+                                                                                               kJMJobOutputFolderURI,
+                                                                                               kJMJobFormat,
+                                                                                       ]];
+    return outputOptionsSection;
+}
 
+- (JMNewScheduleVCSection *)schedleSection
+{
     // TODO: at the moment we support only simple trigger
     JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
     NSArray *scheduleRows;
@@ -377,14 +492,34 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
         ];
     }
     JMNewScheduleVCSection *scheduleSection = [JMNewScheduleVCSection sectionWithTitle:@"Schedule Start"
-                                                                              type:JMNewScheduleVCSectionTypeSchedule
-                                                                              rows:scheduleRows];
-    self.sections = @[
-            mainSection,
-            outputOptionsSection,
-            scheduleSection
-    ];
+                                                                                  type:JMNewScheduleVCSectionTypeSchedule
+                                                                                  rows:scheduleRows];
+    return scheduleSection;
 }
+
+- (JMNewScheduleVCSection *)recurrenceSection
+{
+    // TODO: at the moment we support only simple trigger
+    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+    NSArray *rows;
+    if (simpleTrigger.recurrenceIntervalUnit == JSScheduleSimpleTriggerRecurrenceIntervalTypeNone) {
+        rows = @[
+                kJMJobRepeatType
+        ];
+    } else {
+        rows = @[
+                kJMJobRepeatType,
+                kJMJobRepeatCount,
+                kJMJobRepeatTimeInterval
+        ];
+    }
+    JMNewScheduleVCSection *recurrenceSection = [JMNewScheduleVCSection sectionWithTitle:@"Recurrence"
+                                                                                    type:JMNewScheduleVCSectionTypeRecurrence
+                                                                                    rows:rows];
+    return recurrenceSection;
+}
+
+#pragma mark - Helpers
 
 - (NSString *)dateStringFromDate:(NSDate *)date
 {
@@ -448,6 +583,36 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     } else {
         completion(YES, nil);
     }
+}
+
+- (NSString *)stringValueForRecurrenceType:(JSScheduleSimpleTriggerRecurrenceIntervalType)recurrenceType
+{
+    NSString *stringValue;
+
+    switch(recurrenceType) {
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeNone: {
+            stringValue = @"None";
+            break;
+        }
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeMinute: {
+            stringValue = @"Minutes";
+            break;
+        }
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeHour: {
+            stringValue = @"Hours";
+            break;
+        }
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeDay: {
+            stringValue = @"Days";
+            break;
+        }
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek: {
+            stringValue = @"Weeks";
+            break;
+        }
+    }
+
+    return stringValue;
 }
 
 @end

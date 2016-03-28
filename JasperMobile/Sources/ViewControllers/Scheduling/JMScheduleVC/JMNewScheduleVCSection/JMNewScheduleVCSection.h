@@ -36,6 +36,7 @@ typedef NS_ENUM(NSInteger, JMNewScheduleVCSectionType) {
     JMNewScheduleVCSectionTypeMain = 0,
     JMNewScheduleVCSectionTypeOutputOptions,
     JMNewScheduleVCSectionTypeSchedule,
+    JMNewScheduleVCSectionTypeRecurrence,
 };
 
 @interface JMNewScheduleVCSection : NSObject

@@ -316,9 +316,13 @@
 "schedules.new.job.output.file.name" = "Output File Name";
 "schedules.new.job.output.file.path" = "Repository Output Folder";
 "schedules.new.job.format" = "Format";
-"schedules.new.job.start.date" = "Run once at:";
+"schedules.new.job.repeat.type" = "Repeat";
+"schedules.new.job.repeat.interval" = "Interval Unit";
+"schedules.new.job.repeat.count" = "Count";
+"schedules.new.job.start.date" = "Run at:";
 "schedules.new.job.start.immediately" = "Start immediately";
 "schedules.new.job.output.format" = "Output Format"; //title of alert
+"schedules.new.job.recurrenceType.alert.title" = "Repeat"; //title of alert
 "schedules.error.domain" = "Validation of creating new schedule job";
 "schedules.error.empty.filename" = "File name is empty";
 "schedules.error.empty.output.folder" = "Output folder is empty";
