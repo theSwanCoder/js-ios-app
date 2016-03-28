@@ -136,6 +136,8 @@ static JMSessionManager *_sharedManager = nil;
     // Clear webView
     [[JMWebViewManager sharedInstance] reset];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
+
+    [JMUtils sendAnalyticsEventAboutLogout];
 }
 
 - (NSPredicate *)predicateForCurrentServerProfile

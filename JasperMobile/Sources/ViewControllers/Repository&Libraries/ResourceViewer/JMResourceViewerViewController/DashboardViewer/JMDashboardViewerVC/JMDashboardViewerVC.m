@@ -304,10 +304,10 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         if (success) {
             // Analytics
             NSString *label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
-            [JMUtils logEventWithInfo:@{
-                    kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
-                    kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
-                    kJMAnalyticsLabelKey         : label
+            [JMUtils sendAnalyticsEventWithInfo:@{
+                    kJMAnalyticsCategoryKey : kJMAnalyticsResourceEventCategoryTitle,
+                    kJMAnalyticsActionKey : kJMAnalyticsResourceEventActionOpenTitle,
+                    kJMAnalyticsLabelKey : label
             }];
 
             if ([strongSelf isContentOnTV]) {

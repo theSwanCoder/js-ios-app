@@ -198,10 +198,10 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             id nextVC;
             if([item vcIdentifierForSelectedItem]) {
                 // Analytics
-                [JMUtils logEventWithInfo:@{
-                        kJMAnalyticsCategoryKey      : kJMAnalyticsRepositoryEventCategoryTitle,
-                        kJMAnalyticsActionKey        : kJMAnalyticsRepositoryEventActionOpen,
-                        kJMAnalyticsLabelKey         : [item nameForAnalytics]
+                [JMUtils sendAnalyticsEventWithInfo:@{
+                        kJMAnalyticsCategoryKey : kJMAnalyticsRepositoryEventCategoryTitle,
+                        kJMAnalyticsActionKey : kJMAnalyticsRepositoryEventActionOpen,
+                        kJMAnalyticsLabelKey : [item nameForAnalytics]
                 }];
 
                 nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];

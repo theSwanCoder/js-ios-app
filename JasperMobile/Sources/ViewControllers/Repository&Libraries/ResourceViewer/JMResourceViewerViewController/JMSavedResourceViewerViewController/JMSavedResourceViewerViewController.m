@@ -75,11 +75,11 @@
 
     // Analytics
     NSString *label = [kJMAnalyticsResourceEventLabelSavedResource stringByAppendingFormat:@" (%@)", [self.savedReports.format uppercaseString]];
-    [JMUtils logEventWithInfo:@{
-                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
-                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
-                        kJMAnalyticsLabelKey         : label
-                }];
+    [JMUtils sendAnalyticsEventWithInfo:@{
+            kJMAnalyticsCategoryKey : kJMAnalyticsResourceEventCategoryTitle,
+            kJMAnalyticsActionKey : kJMAnalyticsResourceEventActionOpenTitle,
+            kJMAnalyticsLabelKey : label
+    }];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource

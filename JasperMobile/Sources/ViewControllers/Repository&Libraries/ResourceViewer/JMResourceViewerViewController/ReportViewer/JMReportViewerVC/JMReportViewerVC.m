@@ -475,11 +475,11 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         if (success) {
             // Analytics
             NSString *label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
-            [JMUtils logEventWithInfo:@{
-                                kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
-                                kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
-                                kJMAnalyticsLabelKey         : label
-                        }];
+            [JMUtils sendAnalyticsEventWithInfo:@{
+                    kJMAnalyticsCategoryKey : kJMAnalyticsResourceEventCategoryTitle,
+                    kJMAnalyticsActionKey : kJMAnalyticsResourceEventActionOpenTitle,
+                    kJMAnalyticsLabelKey : label
+            }];
 
             [strongSelf showReportView];
         } else {

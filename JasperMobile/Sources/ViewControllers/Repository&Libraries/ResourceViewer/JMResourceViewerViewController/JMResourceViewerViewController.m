@@ -170,11 +170,11 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
     } else if ([self.resourceLookup isDashboard]) {
         label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
     }
-    [JMUtils logEventWithInfo:@{
-                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
-                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionPrintTitle,
-                        kJMAnalyticsLabelKey         : label
-                }];
+    [JMUtils sendAnalyticsEventWithInfo:@{
+            kJMAnalyticsCategoryKey : kJMAnalyticsResourceEventCategoryTitle,
+            kJMAnalyticsActionKey : kJMAnalyticsResourceEventActionPrintTitle,
+            kJMAnalyticsLabelKey : label
+    }];
 }
 
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion
