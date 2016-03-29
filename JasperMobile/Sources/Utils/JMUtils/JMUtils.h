@@ -169,8 +169,10 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (UIViewController *__nonnull)launchScreenViewController;
 
 + (BOOL)isDemoAccount;
-+ (void)logEventWithInfo:(NSDictionary *__nonnull)eventInfo;
-+ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
++ (void)sendAnalyticsEventWithInfo:(NSDictionary *)eventInfo;
++ (void)sendAnalyticsEventAboutLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo;
+
++ (void)sendAnalyticsEventAboutLogout;
 
 + (BOOL)isCompactWidth;
 

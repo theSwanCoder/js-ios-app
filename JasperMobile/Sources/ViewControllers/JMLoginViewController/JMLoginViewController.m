@@ -220,12 +220,12 @@
         __strong typeof(self)strongSelf = weakSelf;
         [JMCancelRequestPopup dismiss];
         // Analytics
-        [JMUtils logLoginSuccess:!error
-                    additionInfo:@{
-                                   kJMAnalyticsCategoryKey      : kJMAnalyticsAuthenticationEventCategoryTitle,
-                                   kJMAnalyticsActionKey        : kJMAnalyticsAuthenticationEventActionLoginTitle,
-                                   kJMAnalyticsLabelKey         : kJMAnalyticsAuthenticationEventLabelSuccess
-                                   }];
+        [JMUtils sendAnalyticsEventAboutLoginSuccess:!error
+                                        additionInfo:@{
+                                                kJMAnalyticsCategoryKey : kJMAnalyticsAuthenticationEventCategoryTitle,
+                                                kJMAnalyticsActionKey : kJMAnalyticsAuthenticationEventActionLoginTitle,
+                                                kJMAnalyticsLabelKey : kJMAnalyticsAuthenticationEventLabelSuccess
+                                        }];
         
         if (!error) {
             [strongSelf dismissViewControllerAnimated:NO completion:nil];

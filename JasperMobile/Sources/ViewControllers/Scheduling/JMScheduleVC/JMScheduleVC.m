@@ -295,14 +295,15 @@ NSString *const kJMJobStartImmediately = @"kJMJobStartImmediately";
     JMNewScheduleVCSection *section = self.sections[indexPath.section];
     NSString *jobProperty = section.rows[indexPath.row];
 
+    NSString *trimmedValue = [newValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([jobProperty isEqualToString:kJMJobLabel]) {
-        self.scheduleMetadata.label = [newValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        self.scheduleMetadata.label = trimmedValue;
     } else if ([jobProperty isEqualToString:kJMJobDescription]) {
-        self.scheduleMetadata.scheduleDescription = newValue;
+        self.scheduleMetadata.scheduleDescription = trimmedValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
-        self.scheduleMetadata.baseOutputFilename = newValue;
+        self.scheduleMetadata.baseOutputFilename = trimmedValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
-        self.scheduleMetadata.folderURI = newValue;
+        self.scheduleMetadata.folderURI = trimmedValue;
     }
 }
 

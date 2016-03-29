@@ -43,21 +43,14 @@
 {
     _components = components;
 
-    NSMutableArray *visibleComponents = [NSMutableArray array];
+    NSMutableArray <JSDashboardComponent *>*visibleComponents = [NSMutableArray array];
     NSMutableDictionary *maximizedComponets = [NSMutableDictionary dictionary];
-    for (JMDashlet *dashlet in components) {
-        JMDashletType type = dashlet.type;
-        switch(type) {
-            case JMDashletTypeChart:
-            case JMDashletTypeReportUnit:
-            case JMDashletTypeAdhocView: {
-                [visibleComponents addObject:dashlet];
-                maximizedComponets[dashlet.identifier] = @(NO);
-                break;
-            }
-            default:{
-                break;
-            }
+    for (JSDashboardComponent *component in components) {
+        BOOL isReportUnitComponent = [component.type isEqualToString:@"reportUnit"];
+        BOOL isChartComponent = [component.type isEqualToString:@"chart"];
+        BOOL isAdhocComponent = [component.type isEqualToString:@"adhocDataView"];
+        if (isReportUnitComponent || isChartComponent || isAdhocComponent) {
+            [visibleComponents addObject:component];
         }
     }
     self.visibleComponents = visibleComponents;
@@ -86,9 +79,9 @@
 {
     JMExternalWindowDashboardControlsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JMExternalWindowDashboardControlsTableViewCell"
                                                                                            forIndexPath:indexPath];
-    JMDashlet *dashlet = self.visibleComponents[indexPath.row];
-    cell.nameLabel.text = dashlet.name;
-    BOOL isMaximized = self.maximizedComponents[dashlet.identifier].boolValue;
+    JSDashboardComponent *component = self.visibleComponents[indexPath.row];
+    cell.nameLabel.text = component.label;
+    BOOL isMaximized = ((NSNumber *)self.maximizedComponents[component.identifier]).boolValue;
     NSString *buttonTitle;
     if (isMaximized) {
         buttonTitle = JMCustomLocalizedString(@"external.screen.button.title.manimize", nil);
@@ -109,20 +102,20 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     // find maximized component
-    JMDashlet *selectedDashlet = self.visibleComponents[indexPath.row];
-    NSString *selectedComponentID = selectedDashlet.identifier;
-    BOOL isSelectedComponentMaximized = self.maximizedComponents[selectedComponentID].boolValue;
+    JSDashboardComponent *selectedComponent = self.visibleComponents[indexPath.row];
+    NSString *selectedComponentID = selectedComponent.identifier;
+    BOOL isSelectedComponentMaximized = ((NSNumber *)self.maximizedComponents[selectedComponentID]).boolValue;
     if (isSelectedComponentMaximized) {
         // minimize
         self.maximizedComponents[selectedComponentID] = @(NO);
         if ([self.delegate respondsToSelector:@selector(externalWindowDashboardControlsVC:didAskMinimizeDashlet:)]) {
-            [self.delegate externalWindowDashboardControlsVC:self didAskMinimizeDashlet:selectedDashlet];
+            [self.delegate externalWindowDashboardControlsVC:self didAskMinimizeDashlet:selectedComponent];
         }
     } else {
         // maximize if there aren't any other maximized
         NSString *maximizedComponentID;
         for (NSString *componentID in self.maximizedComponents.allKeys) {
-            BOOL isMaximized = self.maximizedComponents[componentID].boolValue;
+            BOOL isMaximized = ((NSNumber *)self.maximizedComponents[componentID]).boolValue;
             if (isMaximized) {
                 maximizedComponentID = componentID;
                 break;
@@ -133,7 +126,7 @@
             // maximize
             self.maximizedComponents[selectedComponentID] = @(YES);
             if ([self.delegate respondsToSelector:@selector(externalWindowDashboardControlsVC:didAskMaximizeDashlet:)]) {
-                [self.delegate externalWindowDashboardControlsVC:self didAskMaximizeDashlet:selectedDashlet];
+                [self.delegate externalWindowDashboardControlsVC:self didAskMaximizeDashlet:selectedComponent];
             }
         }
     }

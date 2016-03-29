@@ -171,12 +171,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     [self destroyDashboard];
 }
 
-- (void)maximizeDashlet:(JMDashlet *)dashlet
+- (void)maximizeDashletForComponent:(JSDashboardComponent *__nonnull)component
 {
     JMLog(@"%@", NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.maximizeDashlet";
-    request.parametersAsString = [NSString stringWithFormat:@"\"%@\"", dashlet.identifier];
+    request.parametersAsString = [NSString stringWithFormat:@"\"%@\"", component.identifier];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
@@ -186,12 +186,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     }];
 }
 
-- (void)minimizeDashlet:(JMDashlet *)dashlet
+- (void)minimizeDashletForComponent:(JSDashboardComponent *__nonnull)component
 {
     JMLog(@"%@", NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.minimizeDashlet";
-    request.parametersAsString = [NSString stringWithFormat:@"\"%@\"", dashlet.identifier];
+    request.parametersAsString = [NSString stringWithFormat:@"\"%@\"", component.identifier];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
@@ -302,6 +302,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     NSString *dashletDidMaximizeFailedListenerId = @"JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed";
     [self.webEnvironment addListenerWithId:dashletDidMaximizeFailedListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(@"JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed");
+        [JMUtils presentAlertControllerWithError:error
+                                      completion:nil];
     }];
 
     // Links
@@ -412,7 +414,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
 {
     JMLog(@"parameters: %@", parameters);
-    NSString *title = parameters[@"component"][@"name"];
+    NSString *title;
+    if ([JMUtils isServerAmber]) {
+        title = parameters[@"componentId"];
+    } else {
+        title = parameters[@"component"][@"name"];
+    }
     [self.delegate dashboardLoader:self didStartMaximazeDashletWithTitle:title];
 }
 

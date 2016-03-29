@@ -430,7 +430,7 @@ void jmDebugLog(NSString *format, ...) {
 }
 
 #pragma mark - Analytics
-+ (void)logEventWithInfo:(NSDictionary *)eventInfo
++ (void)sendAnalyticsEventWithInfo:(NSDictionary *)eventInfo
 {
 #ifndef __RELEASE__
     NSString *version = self.restClient.serverInfo.version;
@@ -461,7 +461,7 @@ void jmDebugLog(NSString *format, ...) {
 #endif
 }
 
-+ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
++ (void)sendAnalyticsEventAboutLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
 {
 #ifndef __RELEASE__
     NSString *version = self.restClient.serverInfo.version;
@@ -483,7 +483,9 @@ void jmDebugLog(NSString *format, ...) {
     GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:additionInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
                                                                            action:additionInfo[kJMAnalyticsActionKey]                   // Event action (required)
                                                                             label:additionInfo[kJMAnalyticsLabelKey]                    // Event label
-                                                                            value:nil];                                                 // Event value
+                                                                            value:nil];
+    [builder set:@"start" forKey:kGAISessionControl];
+    // Event value
     [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
            value:version];
     [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
@@ -491,6 +493,15 @@ void jmDebugLog(NSString *format, ...) {
 
     [tracker send:[builder build]];
 #endif
+}
+
++ (void)sendAnalyticsEventAboutLogout
+{
+    // Google Analytics
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createScreenView];
+    [builder set:@"start" forKey:kGAISessionControl];
+    [tracker send:[builder build]];
 }
 
 @end
