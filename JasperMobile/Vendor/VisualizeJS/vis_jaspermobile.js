@@ -447,7 +447,6 @@ JasperMobile.Dashboard.API = {
                     click: function(event, link, defaultHandler) {
                         var type = link.type;
                         JasperMobile.Callback.log("link type: " + type);
-
                         switch (type) {
                             case "ReportExecution": {
                                 var data = {
@@ -475,10 +474,13 @@ JasperMobile.Dashboard.API = {
                                 });
                                 break;
                             }
-                            case "AdHocExecution":
-                                defaultHandler.call();
-                                JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution", {});
+                            case "AdHocExecution": {
+                                // defaultHandler.call();
+                                JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution", {
+                                    "link" : link
+                                });
                                 break;
+                            }
                             default: {
                                 defaultHandler.call();
                             }

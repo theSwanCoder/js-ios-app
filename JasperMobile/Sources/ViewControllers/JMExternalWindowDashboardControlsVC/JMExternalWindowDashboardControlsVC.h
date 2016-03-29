@@ -26,7 +26,6 @@
 //  TIBCO JasperMobile
 //
 
-@class JMDashlet;
 @protocol JMExternalWindowDashboardControlsVCDelegate;
 
 /**

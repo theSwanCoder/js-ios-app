@@ -34,7 +34,6 @@
 #import "JMDashboard.h"
 #import "JMWebViewManager.h"
 #import "JMExternalWindowDashboardControlsVC.h"
-#import "JMDashlet.h"
 #import "JMDashboardParameter.h"
 #import "JSResourceDashboardUnit.h"
 #import "JSDashboardResource.h"
@@ -313,7 +312,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
             }];
 
             if ([strongSelf isContentOnTV]) {
-                strongSelf.controlsViewController.components = strongSelf.dashboard.dashlets;
+                strongSelf.controlsViewController.components = strongSelf.dashboard.components;
             }
         } else {
             if (error.code == JMJavascriptNativeBridgeErrorAuthError) {

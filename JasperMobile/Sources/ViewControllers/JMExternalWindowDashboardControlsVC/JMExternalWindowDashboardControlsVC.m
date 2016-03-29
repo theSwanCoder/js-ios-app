@@ -28,11 +28,10 @@
 
 #import "JMExternalWindowDashboardControlsVC.h"
 #import "JMExternalWindowDashboardControlsTableViewCell.h"
-#import "JMDashlet.h"
 
 @interface JMExternalWindowDashboardControlsVC () <UITableViewDelegate, UITableViewDataSource, JMExternalWindowDashboardControlsTableViewCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, copy) NSArray <JMDashlet *> *visibleComponents;
+@property (nonatomic, copy) NSArray <JSDashboardComponent *> *visibleComponents;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, NSNumber *>*maximizedComponents;
 @end
 

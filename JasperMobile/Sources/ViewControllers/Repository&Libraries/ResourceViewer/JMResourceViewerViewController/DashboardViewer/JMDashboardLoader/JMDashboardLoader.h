@@ -34,7 +34,6 @@
 #import "JMJavascriptNativeBridge.h"
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;
-@class JMDashlet;
 @class JMWebEnvironment;
 
 typedef void(^JMDashboardLoaderCompletion)(BOOL success, NSError * __nullable error);

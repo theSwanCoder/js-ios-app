@@ -33,18 +33,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 #import "JMVisDashboardLoader.h"
 #import "JMVisualizeManager.h"
-#import "JMDashboardLoader.h"
 #import "JMDashboard.h"
-#import "JMWebViewManager.h"
-#import "JMDashlet.h"
-#import "JMDashboardParameter.h"
 #import "JMWebEnvironment.h"
 
 @interface JMVisDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
-@property (nonatomic, copy) NSURL *externalURL;
 @property (nonatomic, weak) JMWebEnvironment *webEnvironment;
-//@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @end
 
 @implementation JMVisDashboardLoader
@@ -192,11 +186,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.minimizeDashlet";
     request.parametersAsString = [NSString stringWithFormat:@"\"%@\"", component.identifier];
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
         if (error) {
             JMLog(@"error: %@", error);
         } else {
             JMLog(@"parameters: %@", parameters);
+            strongSelf.dashboard.maximizedComponent = nil;
         }
     }];
 }
@@ -205,11 +202,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Dashboard.API.minimizeDashlet";
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
         if (error) {
             JMLog(@"error: %@", error);
         } else {
             JMLog(@"parameters: %@", parameters);
+            strongSelf.dashboard.maximizedComponent = nil;
         }
     }];
 }
@@ -321,7 +321,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     }];
     NSString *adHocExecutionLinkOptionListenerId = @"JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution";
     [self.webEnvironment addListenerWithId:adHocExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.ReportExecution");
+        JMLog(@"JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution");
         __typeof(self) strongSelf = weakSelf;
         [strongSelf handleOnAdHocExecution:parameters];
     }];
@@ -342,10 +342,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     BOOL shouldLoad = NO;
     // TODO: verify all cases
 
-    if (request.URL.host) {
-        self.externalURL = request.URL;
-        shouldLoad = NO;
-    } else {
+    if (!request.URL.host) {
         // Request for cleaning webview
         if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
             shouldLoad = YES;
@@ -390,25 +387,9 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         if (error) {
             heapBlock(NO, error);
         } else {
-//            JMLog(@"callback: %@", callback);
-            [strongSelf handleOnLoadDoneWithParameters:parameters];
             heapBlock(YES, nil);
         }
     }];
-}
-
-- (void)handleOnLoadDoneWithParameters:(NSDictionary *)parameters
-{
-    // Components
-    NSArray *rawComponents = parameters[@"components"];
-    NSMutableArray *dashlets = [NSMutableArray array];
-    for (NSDictionary *rawComponent in rawComponents) {
-        JMDashlet *dashlet = [self parseComponentsFromData:rawComponent];
-        if (dashlet) {
-            [dashlets addObject:dashlet];
-        }
-    }
-    self.dashboard.dashlets = [dashlets copy];
 }
 
 - (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
@@ -419,6 +400,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         title = parameters[@"componentId"];
     } else {
         title = parameters[@"component"][@"name"];
+        NSString *componentId = parameters[@"component"][@"id"];
+        for(JSDashboardComponent *component in self.dashboard.components) {
+            if ([componentId isEqualToString:component.identifier]) {
+                self.dashboard.maximizedComponent = component;
+            }
+        }
     }
     [self.delegate dashboardLoader:self didStartMaximazeDashletWithTitle:title];
 }
@@ -464,17 +451,29 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleOnAdHocExecution:(NSDictionary *)parameters
 {
-    if (self.externalURL) {
-        [self.delegate dashboardLoader:self
-           didReceiveHyperlinkWithType:JMHyperlinkTypeReference
-                        resourceLookup:nil
-                            parameters:@[self.externalURL]];
+    if (self.dashboard.maximizedComponent.dashletHyperlinkTarget == JSDashletHyperlinksTargetTypeBlank) {
+        NSDictionary *params = parameters[@"link"][@"parameters"];
+        NSString *urlString;
+        for(NSString *key in params) {
+            if([self.dashboard.maximizedComponent.dashletHyperlinkUrl containsString:key]) {
+                NSString *fullPlaceholder = [NSString stringWithFormat:@"$P{%@}", key];
+                urlString = [self.dashboard.maximizedComponent.dashletHyperlinkUrl stringByReplacingOccurrencesOfString:fullPlaceholder
+                                                                                                             withString:params[key]];
+                break;
+            }
+        }
+        if (urlString) {
+            [self.delegate dashboardLoader:self
+               didReceiveHyperlinkWithType:JMHyperlinkTypeReference
+                            resourceLookup:nil
+                                parameters:@[[NSURL URLWithString:urlString]]];
+        }
     }
 }
 
 - (void)handleOnReferenceClick:(NSDictionary *)parameters
 {
-    NSString *URLString = parameters[@"href"];
+    NSString *URLString = parameters[@"location"];
     if (URLString) {
         [self.delegate dashboardLoader:self
            didReceiveHyperlinkWithType:JMHyperlinkTypeReference
@@ -492,37 +491,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                                             value:parameters[key]]];
     }
     return [reportParameters copy];
-}
-
-- (JMDashlet *)parseComponentsFromData:(NSDictionary *)rawData
-{
-    NSString *type = rawData[@"type"];
-
-    if ([type isEqualToString:@"inputControl"]) {
-        return nil;
-    }
-
-    JMDashlet *dashlet = [JMDashlet new];
-    dashlet.identifier = rawData[@"id"];
-    NSNumber *rawInterective = (NSNumber *) rawData[@"interactive"];
-    dashlet.interactive = [rawInterective isKindOfClass:[NSNull class]] ? NO : rawInterective.boolValue;
-    NSNumber *rawMaximized = (NSNumber *) rawData[@"maximized"];
-    dashlet.maximized = [rawMaximized isKindOfClass:[NSNull class]] ? NO : rawMaximized.boolValue;
-    dashlet.name = rawData[@"name"];
-    if ([type isEqualToString:@"value"]) {
-        dashlet.type = JMDashletTypeValue;
-    } else if ([type isEqualToString:@"chart"]) {
-        dashlet.type = JMDashletTypeChart;
-    } else if ([type isEqualToString:@"filterGroup"]) {
-        dashlet.type = JMDashletTypeFilterGroup;
-    } else if ([type isEqualToString:@"reportUnit"]) {
-        dashlet.type = JMDashletTypeReportUnit;
-    } else if ([type isEqualToString:@"adhocDataView"]) {
-        dashlet.type = JMDashletTypeAdhocView;
-    } else if ([type isEqualToString:@"image"]) {
-        dashlet.type = JMDashletTypeImage;
-    }
-    return dashlet;
 }
 
 @end

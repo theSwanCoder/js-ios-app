@@ -140,9 +140,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 #pragma mark - WKWebViewDelegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
-//    NSLog(@"request from webView: %@", navigationAction.request);
-//    NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
-
     if ([self isLocalFileRequest:navigationAction.request]) {
         // TODO: request from delegate to allow such requests.
         decisionHandler(WKNavigationActionPolicyAllow);
@@ -183,25 +180,30 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     NSString *requestURLString = navigationAction.request.URL.absoluteString;
 
     if ([requestURLString rangeOfString:kJMJavascriptNativeBridgeCallbackURL].length) {
-        NSString *callback = [NSString stringWithFormat:@"http://%@/", kJMJavascriptNativeBridgeCallbackURL];
-        NSRange callbackRange = [requestURLString rangeOfString:callback];
-        NSRange commandRange = NSMakeRange(callbackRange.length, requestURLString.length - callbackRange.length);
-        NSString *command = [requestURLString substringWithRange:commandRange];
-
-        NSDictionary *parameters = [self parseCommand:command];
-
-//        JMLog(@"parameters: %@", parameters);
-
-        if (parameters) {
-            JMJavascriptCallback *response = [JMJavascriptCallback new];
-            response.type = parameters[@"callback.type"];
-            response.parameters = parameters[@"parameters"];
-            [self didReceiveCallback:response];
-        } else {
-            // TODO: add general errors handling
-        }
         decisionHandler(WKNavigationActionPolicyCancel);
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            NSString *callback = [NSString stringWithFormat:@"http://%@/", kJMJavascriptNativeBridgeCallbackURL];
+            NSRange callbackRange = [requestURLString rangeOfString:callback];
+            NSRange commandRange = NSMakeRange(callbackRange.length, requestURLString.length - callbackRange.length);
+            NSString *command = [requestURLString substringWithRange:commandRange];
+
+            NSDictionary *parameters = [self parseCommand:command];
+
+    //        JMLog(@"parameters: %@", parameters);
+            if (parameters) {
+                JMJavascriptCallback *response = [JMJavascriptCallback new];
+                response.type = parameters[@"callback.type"];
+                response.parameters = parameters[@"parameters"];
+                [self didReceiveCallback:response];
+            } else {
+                // TODO: add general errors handling
+            }
+        });
     } else {
+        NSLog(@"request from webView: %@", navigationAction.request);
+        NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
+
         decisionHandler(WKNavigationActionPolicyAllow);
     }
 }
@@ -212,8 +214,8 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     if (self.jsInitCode && !self.isJSInitCodeInjected) {
         self.isJSInitCodeInjected = YES;
         [self.webView evaluateJavaScript:self.jsInitCode completionHandler:^(id result, NSError *error) {
-            JMLog(@"error: %@", error);
-            JMLog(@"result: %@", result);
+//            JMLog(@"error: %@", error);
+//            JMLog(@"result: %@", result);
         }];
     }
 
@@ -331,7 +333,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     if([callback.type isEqualToString:@"logging"]) {
         JMLog(@"Bridge Message: %@", callback.parameters[@"message"]);
     } else {
-        JMLog(@"%@", callback);
+//        JMLog(@"%@", callback);
         BOOL isRequestCompletionFound = NO;
         for (JMJavascriptRequest *request in self.requestCompletions) {
 //            JMLog(@"request.command: %@", request.command);
@@ -341,9 +343,13 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                 if (callback.parameters[@"error"]) {
                     NSDictionary *errorJSON = callback.parameters[@"error"];
                     NSError *error = [self makeErrorFromWebViewError:errorJSON];
-                    completion(nil, error);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        completion(nil, error);
+                    });
                 } else {
-                    completion(callback, nil);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        completion(callback, nil);
+                    });
                 }
                 [self.requestCompletions removeObjectForKey:request];
                 isRequestCompletionFound = YES;
@@ -358,9 +364,13 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                     if (callback.parameters[@"error"]) {
                         NSDictionary *errorJSON = callback.parameters[@"error"];
                         NSError *error = [self makeErrorFromWebViewError:errorJSON];
-                        completion(nil, error);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            completion(nil, error);
+                        });
                     } else {
-                        completion(callback, nil);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            completion(callback, nil);
+                        });
                     }
                     break;
                 }
