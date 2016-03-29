@@ -85,7 +85,13 @@ static JMSessionManager *_sharedManager = nil;
 
 - (void) restoreLastSessionWithCompletion:(void(^)(BOOL isSessionRestored))completion
 {
-
+    if (self.restClient && [self.restClient.cookies count]) {
+        if (completion) {
+            completion(YES);
+        }
+        return;
+    }
+    
     if (!self.restClient) { // try restore restClient
         NSData *savedSession = [[NSUserDefaults standardUserDefaults] objectForKey:kJMSavedSessionKey];
         if (savedSession) {
