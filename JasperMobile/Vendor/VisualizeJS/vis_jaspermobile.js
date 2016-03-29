@@ -67,6 +67,13 @@ var JasperMobile = {
             var viewport = document.querySelector("meta[name=viewport]");
             if (viewport != null) {
                 viewport.setAttribute('content', 'initial-scale='+ scale + ', width=device-width, maximum-scale=2.0, user-scalable=yes');
+            } else {
+                var viewPortTag=document.createElement('meta');
+                viewPortTag.id="viewport";
+                viewPortTag.name = "viewport";
+                viewPortTag.content = "initial-scale="+ scale +"; width=device-width, maximum-scale=2.0, user-scalable=yes";
+                var head = document.getElementsByTagName('head')[0];
+                head.appendChild(viewPortTag);
             }
         }
     }
