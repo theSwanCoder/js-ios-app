@@ -74,7 +74,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
 
-    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+    if (![self isContentOnTV] && [self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
         CGFloat initialScaleViewport = 0.75;
         BOOL isCompactWidth = newCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
         if (isCompactWidth) {
@@ -616,6 +616,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
     [self hideExternalWindowWithCompletion:^(void) {
         [self configViewport];
+        [self.webEnvironment.webView.scrollView setZoomScale:0.1 animated:YES];
     }];
 }
 
