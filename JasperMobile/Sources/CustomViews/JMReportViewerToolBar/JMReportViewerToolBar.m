@@ -32,7 +32,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet UIButton *previousButton;
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
-@property (nonatomic, strong) UIView *inputAccessoryView;
 @end
 
 @implementation JMReportViewerToolBar
@@ -45,7 +44,7 @@
 
     self.currentPageField.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
     self.currentPageField.inputView = self.pickerView;
-    self.currentPageField.inputAccessoryView = self.inputAccessoryView;
+    self.currentPageField.inputAccessoryView = [self pickerToolbar];
 }
 
 - (void)dealloc
@@ -55,6 +54,15 @@
 }
 
 #pragma mark - Properties
+- (BOOL)enable
+{
+    return self.userInteractionEnabled;
+}
+
+- (void)setEnable:(BOOL)enable
+{
+    self.userInteractionEnabled = enable;
+}
 
 - (void)setCountOfPages:(NSInteger)countOfPages
 {
@@ -87,67 +95,30 @@
 
 - (IBAction)firstButtonTapped:(id)sender
 {
-    NSInteger currentPage = self.currentPage;
-    NSInteger nextPage = 1;
-    self.previousButton.enabled = NO;
-    self.firstButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-            self.previousButton.enabled = YES;
-            self.firstButton.enabled = YES;
-            if (success) {
-                self.currentPage = nextPage;
-            }
-        }];
+    [self.toolbarDelegate toolbar:self changeFromPage:self.currentPage toPage:1];
 }
 
 - (IBAction)lastButtonTapped:(id)sender
 {
-    NSInteger currentPage = self.currentPage;
-    NSInteger nextPage = self.countOfPages;
-    self.nextButton.enabled = NO;
-    self.lastButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-            self.nextButton.enabled = YES;
-            self.lastButton.enabled = YES;
-            if (success) {
-                self.currentPage = nextPage;
-            }
-        }];
+    [self.toolbarDelegate toolbar:self changeFromPage:self.currentPage toPage:self.countOfPages];
 }
 
 - (IBAction)nextButtonTapped:(id)sender
 {
-    NSInteger currentPage = self.currentPage;
-    NSInteger nextPage = currentPage+1;
-    self.nextButton.enabled = NO;
-    self.lastButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-        self.nextButton.enabled = YES;
-        self.lastButton.enabled = YES;
-        if (success) {
-            self.currentPage = nextPage;
-        }
-    }];
+    [self.toolbarDelegate toolbar:self changeFromPage:self.currentPage toPage:(self.currentPage + 1)];
 }
 
 - (IBAction)previousButtonTapped:(id)sender
 {
-    NSInteger currentPage = self.currentPage;
-    NSInteger nextPage = currentPage-1;
-    self.previousButton.enabled = NO;
-    self.firstButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-            self.previousButton.enabled = YES;
-            self.firstButton.enabled = YES;
-            if (success) {
-                self.currentPage = nextPage;
-            }
-        }];
+    [self.toolbarDelegate toolbar:self changeFromPage:self.currentPage toPage:(self.currentPage - 1)];
 }
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
+    UIPickerView *pickerView = self.inputAccessoryView.subviews.firstObject;
+    [pickerView sizeToFit];
+
     if (self.countOfPages != NSNotFound) {
         [self.pickerView selectRow:self.currentPage - 1 inComponent:0 animated:NO];
         return YES;
@@ -184,36 +155,12 @@
     return pickerToolbar;
 }
 
-- (UIView *)inputAccessoryView
-{
-    if (!_inputAccessoryView) {
-        CGRect viewFrame = CGRectMake(0, 0, CGRectGetWidth(self.frame), 44);
-        _inputAccessoryView = [[UIView alloc] initWithFrame:viewFrame];
-        UIToolbar *toolbar = [self pickerToolbar];
-        [_inputAccessoryView addSubview:toolbar];
-    }
-    return _inputAccessoryView;
-}
-
 #pragma mark - Actions
 
 - (void)done:(id)sender
 {
-    NSInteger currentPage = self.currentPage;
     NSInteger nextPage = [self.pickerView selectedRowInComponent:0] + 1;
-    self.previousButton.enabled = NO;
-    self.firstButton.enabled = NO;
-    self.nextButton.enabled = NO;
-    self.lastButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-            self.previousButton.enabled = YES;
-            self.firstButton.enabled = YES;
-            self.nextButton.enabled = YES;
-            self.lastButton.enabled = YES;
-            if (success) {
-                self.currentPage = nextPage;
-            }
-        }];
+    [self.toolbarDelegate toolbar:self changeFromPage:self.currentPage toPage:nextPage];
 
     [self hidePicker];
 }

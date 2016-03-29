@@ -33,6 +33,7 @@
 #import "JMSessionManager.h"
 #import "JMCancelRequestPopup.h"
 #import "JasperMobileAppDelegate.h"
+#import "JMMenuViewController.h"
 
 @interface JMLoginViewController () <UITextFieldDelegate, JMServersGridViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
@@ -72,20 +73,7 @@
     [self.loginButton setTitleColor:[[JMThemesManager sharedManager] loginViewLoginButtonTextColor] forState:UIControlStateNormal];
     [self.loginButton setTitle:JMCustomLocalizedString(@"login.button.login", nil) forState:UIControlStateNormal];
     
-    self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
-    [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
     [self.tryDemoButton setTitle:JMCustomLocalizedString(@"login.button.try.demo", nil) forState:UIControlStateNormal];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
 
     if (self.showForRestoreSession) {
         // setup previous session
@@ -94,7 +82,16 @@
         self.tryDemoButton.enabled = NO;
         self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonDisabledBackgroundColor];
         [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoDisabledButtonTextColor] forState:UIControlStateNormal];
+    } else {
+        self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
+        [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [super viewWillAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -190,17 +187,17 @@
 #pragma mark - Autorotation
 - (BOOL)shouldAutorotate
 {
-    return ![JMUtils isIphone];
+    return ![JMUtils isCompactWidth];
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
-    return [JMUtils isIphone] ? UIInterfaceOrientationPortrait : [super preferredInterfaceOrientationForPresentation];
+    return [JMUtils isCompactWidth] ? UIInterfaceOrientationPortrait : [super preferredInterfaceOrientationForPresentation];
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return [JMUtils isIphone] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
+    return [JMUtils isCompactWidth] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
 }
 
 
@@ -221,41 +218,23 @@
     
     [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:^(BOOL success) {
         __strong typeof(self)strongSelf = weakSelf;
-
         [JMCancelRequestPopup dismiss];
+        // Analytics
+        [JMUtils logLoginSuccess:success
+                    additionInfo:@{
+                                   kJMAnalyticsCategoryKey      : kJMAnalyticsAuthenticationEventCategoryTitle,
+                                   kJMAnalyticsActionKey        : kJMAnalyticsAuthenticationEventActionLoginTitle,
+                                   kJMAnalyticsLabelKey         : kJMAnalyticsAuthenticationEventLabelSuccess
+                                   }];
+        
         if (success) {
-            // Analytics
-            NSString *version = jsServerProfile.serverInfo.version;
-            if ([JMUtils isDemoAccount]) {
-                version = [version stringByAppendingString:@"(Demo)"];
-            }
-            [JMUtils logLoginSuccess:YES
-                        additionInfo:@{
-                                kJMAnalyticsCategoryKey      : kJMAnalyticsAuthenticationEventCategoryTitle,
-                                kJMAnalyticsActionKey        : kJMAnalyticsAuthenticationEventActionLoginTitle,
-                                kJMAnalyticsLabelKey         : kJMAnalyticsAuthenticationEventLabelSuccess,
-                                kJMAnalyticsServerVersionKey : version
-                        }];
-
             strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
+
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
             if (strongSelf.completion) {
                 strongSelf.completion();
             }
         } else {
-            // Analytics
-            NSString *version = jsServerProfile.serverInfo.version;
-            if ([JMUtils isDemoAccount]) {
-                version = [version stringByAppendingString:@"(Demo)"];
-            }
-            [JMUtils logLoginSuccess:YES
-                        additionInfo:@{
-                                kJMAnalyticsCategoryKey      : kJMAnalyticsAuthenticationEventCategoryTitle,
-                                kJMAnalyticsActionKey        : kJMAnalyticsAuthenticationEventActionLoginTitle,
-                                kJMAnalyticsLabelKey         : kJMAnalyticsAuthenticationEventLabelFailure,
-                                kJMAnalyticsServerVersionKey : version
-                        }];
-
             NSString *errorTitle = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
             NSString *errorMessage = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
             NSError *error = [NSError errorWithDomain:errorTitle code:JSInvalidCredentialsErrorCode userInfo:@{NSLocalizedDescriptionKey : errorMessage}];

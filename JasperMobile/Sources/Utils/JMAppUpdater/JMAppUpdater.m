@@ -50,29 +50,30 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     NSNumber *latestAppVersion = [self latestAppVersion];
     NSNumber *currentAppVersion = [self currentAppVersion];
     if (currentAppVersion != nil && [currentAppVersion compare:latestAppVersion] == NSOrderedSame) return;
-    
+
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMDefaultsIntroDidApear];
+    [[JMSessionManager sharedManager] logout];
 
     if ([[JMCoreDataManager sharedInstance] isMigrationNeeded]) {
         [[JMCoreDataManager sharedInstance] migrate:nil];
     }
-    
+
     NSMutableDictionary *versionsToUpdate = [NSMutableDictionary dictionary];
-    
+
     // Add update methods
     versionsToUpdate[@1.9] = [NSValue valueWithPointer:@selector(update_1_9)];
     BOOL updateDidSuccess = YES;
     for (NSNumber *version in versionsToUpdate.allKeys) {
         if (version.doubleValue <= currentAppVersion.doubleValue) continue;
-        
+
         SEL selector = [versionsToUpdate[version] pointerValue];
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:selector]];
         invocation.selector = selector;
         invocation.target = self;
         [invocation invoke];
-        
+
         [invocation getReturnValue:&updateDidSuccess];
-        
+
         if (updateDidSuccess) {
             // Update app version for each migration. This allows to track which migration was failed
             [self updateAppVersionTo:version];
@@ -137,9 +138,10 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
             NSString *reportName = [report stringByReplacingOccurrencesOfString:reportExtension withString:@""];
             
             JSResourceLookup *resource = [JSResourceLookup new];
-            resource.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
+            resource.resourceType = kJS_WS_TYPE_REPORT_UNIT;
             resource.version = @(0);
-            [JMSavedResources addReport:resource withName:reportName format:[reportExtension stringByReplacingOccurrencesOfString:@"." withString:@""]];
+            NSURL *reportSourcesURL = [NSURL fileURLWithPath:[reportsDirectory stringByAppendingPathComponent:report] isDirectory:YES];
+            [JMSavedResources addReport:resource withName:reportName format:[reportExtension stringByReplacingOccurrencesOfString:@"." withString:@""] sourcesURL:reportSourcesURL];
         }
     }
 
@@ -202,7 +204,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         NSString *newPath = [documentPath stringByAppendingPathComponent:newURI];
 
         // 3. move from old path to new path
-        [JMSavedResources moveSavedItemFromPath:oldPath toPath:newPath];
+        [JMSavedResources migrateSavedItemFromPath:oldPath toPath:newPath];
 
         // 4. save new uri
         savedResource.uri = newURI;

@@ -92,7 +92,7 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
     };
 }
 
-- (void)reloadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
+- (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion)completion
 {
     [self.bridge reset];
 
@@ -109,7 +109,12 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
     [self.bridge sendRequest:request];
 }
 
-- (void)reset
+- (void)cancel
+{
+    [self.bridge reset];
+}
+
+- (void)destroy
 {
     [self.bridge reset];
 }
@@ -202,7 +207,7 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
     NSError *error;
     NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
     CGFloat initialScale = 0.5;
-    if ([JMUtils isIphone]) {
+    if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
         initialScale = 0.25;
     }
     jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScale).stringValue];

@@ -39,5 +39,5 @@
 
 @property (nonatomic, strong) JMReport *report;
 
-@property (nonatomic, copy) void(^completionBlock)(JMExtendedReportOption *reportOption);
+@property (nonatomic, copy) void(^completionBlock)(JSReportOption *reportOption);
 @end

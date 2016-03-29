@@ -104,7 +104,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 {
     [super viewWillAppear:animated];
 
-    [self setupImages];
+    [self setupImagesForTraitCollection:self.traitCollection];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 }
 
@@ -119,19 +119,19 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
     if (self.isViewLoaded && self.view.window) {
-        [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+       [self setupImagesForTraitCollection:newCollection];
     }
 }
 
 #pragma mark - Rotation
 - (BOOL)shouldAutorotate
 {
-    return ![JMUtils isIphone];
+    return ![JMUtils isCompactWidth];
 }
 
 -(UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return [JMUtils isIphone] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
+    return [JMUtils isCompactWidth] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -140,24 +140,27 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 }
 
 #pragma mark - Setup
-- (void)setupImages
+- (void)setupImagesForTraitCollection:(UITraitCollection *)traitCollection
 {
     self.serverScreenImage.hidden = YES;
     self.reportScreenIpadImage.hidden = YES;
     self.reportScreenIphoneImage.hidden = YES;
 
-    [self setupStartPositions];
+    [self setupStartPositionsForTraitCollection:traitCollection];
 }
 
-- (void)setupStartPositions
+- (void)setupStartPositionsForTraitCollection:(UITraitCollection *)traitCollection
 {
+    CGFloat width = traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact ? 282 : 605;
+    CGFloat height = traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact ? 470 : 658;
+
     // home screen
-    self.homeScreenImageHeightConstraint.constant = self.homeScreenImage.image.size.height;
-    self.homeScreenImageWidthConstraint.constant = self.homeScreenImage.image.size.width;
+    self.homeScreenImageHeightConstraint.constant = height;
+    self.homeScreenImageWidthConstraint.constant = width;
 
     // server screen
-    self.serverScreenImageHeightConstraint.constant = (CGFloat) (self.serverScreenImage.image.size.height * 0.2);
-    self.serverScreenImageWidthConstraint.constant = (CGFloat) (self.serverScreenImage.image.size.width * 0.2);
+    self.serverScreenImageHeightConstraint.constant = (CGFloat) (height * 0.2);
+    self.serverScreenImageWidthConstraint.constant = (CGFloat) (width * 0.2);
 }
 
 
@@ -297,9 +300,9 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 #pragma mark - Private methods
 - (void)updateConstraintsForPage:(JMOnboardIntroPage)introPage
 {
-    CGFloat homeScreenImageTopConstantStartValue = 15;
-    CGFloat serverScreenImageTopConstantStartValue = 15;
-    CGFloat titleViewTopConstant = -215;
+    CGFloat homeScreenImageTopConstantStartValue = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? 15 : 40;
+    CGFloat serverScreenImageTopConstantStartValue = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact ? 15 : 40;
+    CGFloat titleViewTopConstant = -180;
 
     switch (introPage) {
         case JMOnboardIntroPageWelcome: {
@@ -318,9 +321,12 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             self.reportScreenIphoneCenterXConstraint.constant = (CGFloat) -(contentViewWidth/2.0 + reportScreenIphoneWidth/2.0);
 
             // home screen
+            CGFloat width = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact ? 282 : 605;
+            CGFloat height = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact ? 470 : 658;
+
             self.homeScreenImageTopConstraint.constant = homeScreenImageTopConstantStartValue;
-            self.homeScreenImageHeightConstraint.constant = self.homeScreenImage.image.size.height;
-            self.homeScreenImageWidthConstraint.constant = self.homeScreenImage.image.size.width;
+            self.homeScreenImageHeightConstraint.constant = height;
+            self.homeScreenImageWidthConstraint.constant = width;
 
             break;
         }
@@ -336,8 +342,13 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             self.serverScreenImageWidthConstraint.constant = (CGFloat) (self.serverScreenImage.image.size.width * 0.2);
 
             // reports screens
-            self.reportScreenIpadCenterXConstraint.constant = (CGFloat) (self.reportScreenIpadImage.image.size.width / 6.0);
-            self.reportScreenIphoneCenterXConstraint.constant = -self.reportScreenIphoneImage.image.size.width;
+            if ([JMUtils isIphone]) {
+                self.reportScreenIpadCenterXConstraint.constant = 50;
+                self.reportScreenIphoneCenterXConstraint.constant = - (CGFloat) self.reportScreenIphoneImage.image.size.width / 2;
+            } else {
+                self.reportScreenIpadCenterXConstraint.constant = (CGFloat) (self.reportScreenIpadImage.image.size.width / 6.0);
+                self.reportScreenIphoneCenterXConstraint.constant = -self.reportScreenIphoneImage.image.size.width;
+            }
 
             break;
         }
@@ -352,9 +363,12 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             self.reportScreenIphoneCenterXConstraint.constant = (CGFloat) -(contentViewWidth/2.0 + reportScreenIphoneWidth/2.0);
 
             // server screen
+            CGFloat width = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact ? 282 : 605;
+            CGFloat height = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact ? 470 : 658;
+
             self.serverScreenImageTopConstraint.constant = serverScreenImageTopConstantStartValue;
-            self.serverScreenImageHeightConstraint.constant = self.serverScreenImage.image.size.height;
-            self.serverScreenImageWidthConstraint.constant = self.serverScreenImage.image.size.width;
+            self.serverScreenImageHeightConstraint.constant = height;
+            self.serverScreenImageWidthConstraint.constant = width;
 
             break;
         }
@@ -363,6 +377,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 
 - (void)updateVisibilityOfImagesForIntroPage:(JMOnboardIntroPage)introPage
 {
+
     switch (introPage) {
         case JMOnboardIntroPageWelcome: {
             self.welcomeView.hidden = NO;
@@ -471,7 +486,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 
     if (velocity.y < 0) { // move up
         if (self.homeScreenImageTopConstraint.constant < homeScreenImageTopConstantMaxValue) {
-            self.homeScreenImageTopConstraint.constant += kDefaultStepValue;
+            self.homeScreenImageTopConstraint.constant += kDefaultStepValue * 2;
 
             self.homeScreenImageWidthConstraint.constant -= kDefaultStepValue;
             self.homeScreenImageHeightConstraint.constant = self.homeScreenImageWidthConstraint.constant * k;
@@ -598,7 +613,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
         }
     } else { // move down
         if (self.serverScreenImageTopConstraint.constant < serverScreenImageTopConstantMaxValue) {
-            self.serverScreenImageTopConstraint.constant += kDefaultStepValue;
+            self.serverScreenImageTopConstraint.constant += kDefaultStepValue * 2;
 
             self.serverScreenImageWidthConstraint.constant -= kDefaultStepValue;
             self.serverScreenImageHeightConstraint.constant = self.serverScreenImageWidthConstraint.constant * k;

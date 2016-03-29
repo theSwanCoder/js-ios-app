@@ -28,6 +28,7 @@
 @property (nonatomic, weak) IBOutlet UISearchBar *icSearchBar;
 
 @property (nonatomic, strong) NSArray *filteredListOfValues;
+
 @property (nonatomic, strong) NSMutableSet *previousSelectedValues;
 
 @end
@@ -65,20 +66,17 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
-        [self.cell updateWithParameters:[self.selectedValues allObjects]];
+    JMLog(@"\nPrevious Selection :%@\nNew Selection: %@", self.previousSelectedValues, self.selectedValues);
+    if (![self.previousSelectedValues isEqualToSet:[NSSet setWithArray:self.selectedValues]]) {
+        [self.cell updateWithParameters:self.selectedValues];
     }
 }
 
 #pragma mark - Accessors
 
-- (NSMutableSet *)selectedValues
+- (NSArray *)selectedValues
 {
-    if (!_selectedValues) {
-        _selectedValues = [NSMutableSet set];
-    }
-    
-    return _selectedValues;
+    return [self.listOfValues filteredArrayUsingPredicate:[self selectedValuesPredicate]];
 }
 
 - (NSArray *)listOfValues
@@ -89,18 +87,13 @@
 - (void)setCell:(JMSingleSelectInputControlCell *)cell
 {
     _cell = cell;
-    
-    for (JSInputControlOption *option in cell.inputControlDescriptor.state.options) {
-        if (option.selected.boolValue) {
-            [self.selectedValues addObject:option];
-        }
-    }
-    
-    if ([self.selectedValues count] == 1) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.cell.inputControlDescriptor.state.options indexOfObject:[self.selectedValues anyObject]] inSection:0];
+    self.previousSelectedValues = [NSMutableSet setWithArray:self.selectedValues];
+
+    if ([self.previousSelectedValues count] == 1) {
+        NSInteger indexOfSelectedRow = [self.cell.inputControlDescriptor.state.options indexOfObject:[self.previousSelectedValues anyObject]];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:indexOfSelectedRow inSection:0];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];
     }
-    self.previousSelectedValues = [self.selectedValues mutableCopy];
 }
 
 #pragma mark - Table view data source
@@ -135,17 +128,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JSInputControlOption *selectedOption = self.listOfValues[indexPath.row];
-    JSInputControlOption *previousSelectedOption = [self.selectedValues anyObject];
+    JSInputControlOption *previousSelectedOption = [self.previousSelectedValues anyObject];
 
     if (previousSelectedOption != selectedOption) {
-        selectedOption.selected = [JSConstants stringFromBOOL:YES];
-        previousSelectedOption.selected = [JSConstants stringFromBOOL:NO];
-
-        [self.previousSelectedValues removeAllObjects];
-        [self.previousSelectedValues addObject:previousSelectedOption];
-
-        [self.selectedValues removeAllObjects];
-        [self.selectedValues addObject:selectedOption];
+        selectedOption.selected = [JSUtils stringFromBOOL:YES];
+        previousSelectedOption.selected = [JSUtils stringFromBOOL:NO];
     }
 
     [self.navigationController popViewControllerAnimated:YES];
@@ -153,18 +140,22 @@
 
 
 #pragma mark - UISearchBarDelegate
+- (NSPredicate *)selectedValuesPredicate
+{
+    return [NSPredicate predicateWithFormat:@"SELF.selected LIKE[cd] %@", [JSUtils stringFromBOOL:YES]];
+}
+    
+- (NSPredicate *)filteredPredicateWithText:(NSString *)text
+{
+    if (text.length) {
+        return [NSPredicate predicateWithFormat:@"SELF.label LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", text]];
+    }
+    return nil;
+}
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    if (searchBar.text.length) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.label LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", searchBar.text]];
-        self.filteredListOfValues = [self.cell.inputControlDescriptor.state.options filteredArrayUsingPredicate:predicate];
-    } else {
-        self.filteredListOfValues = nil;
-    }
-    self.noResultLabel.hidden = ([self.listOfValues count] > 0);
-    
-    [self.tableView reloadData];
+    [self applyFiltering];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
@@ -191,4 +182,17 @@
     return YES;
 }
 
+- (void) applyFiltering
+{
+    NSPredicate *predicate = [self filteredPredicateWithText:self.icSearchBar.text];
+    if (predicate) {
+        self.filteredListOfValues = [self.cell.inputControlDescriptor.state.options filteredArrayUsingPredicate:predicate];
+    } else {
+        self.filteredListOfValues = nil;
+    }
+    
+    self.noResultLabel.hidden = ([self.listOfValues count] > 0);
+    
+    [self.tableView reloadData];
+}
 @end

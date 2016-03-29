@@ -23,10 +23,10 @@
 
 #import "JMResourceInfoViewController.h"
 #import "JMFavorites+Helpers.h"
-#import "UITableViewCell+Additions.h"
 #import "JSResourceLookup+Helpers.h"
 #import "PopoverView.h"
 #import "JMSavedResources+Helpers.h"
+#import "UIViewController+Additions.h"
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
@@ -52,6 +52,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     [super viewDidLoad];
     
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
     [self showNavigationItems];
     [self resetResourceProperties];
@@ -169,14 +170,12 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 - (void)setNeedLayoutUI:(BOOL)needLayoutUI
 {
     _needLayoutUI = needLayoutUI;
-    if (self.isViewLoaded && self.view.window && needLayoutUI) {
-        [self updateIfNeeded];
-    }
+    [self updateIfNeeded];
 }
 
 - (void)updateIfNeeded
 {
-    if (self.needLayoutUI) {
+    if (self.needLayoutUI && [self isVisible]) {
         [self showNavigationItems];
         self.needLayoutUI = NO;
     }
@@ -191,7 +190,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 #pragma mark - Setup Navigation Items
 - (BOOL) favoriteItemShouldDisplaySeparately
 {
-    return (![JMUtils isIphone]) || ([JMUtils isIphone] && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation));
+    return (![JMUtils isCompactWidth] || ([JMUtils isCompactWidth] && [JMUtils isCompactHeight]));
 }
 
 - (void) showNavigationItems
@@ -273,11 +272,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         cell.detailTextLabel.textColor = [[JMThemesManager sharedManager] tableViewCellDetailsTextColor];
         cell.detailTextLabel.numberOfLines = 2;
     }
-    
-    if (indexPath.row) {
-        [cell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
-    }
-    
+        
     NSDictionary *item = self.resourceProperties[indexPath.row];
     cell.textLabel.text = JMCustomLocalizedString([NSString stringWithFormat:@"resource.%@.title", item[kJMTitleKey]], nil);
     cell.detailTextLabel.text = item[kJMValueKey];

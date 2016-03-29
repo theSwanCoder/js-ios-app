@@ -41,6 +41,12 @@
 @property (nonatomic, weak) JMSingleSelectInputControlCell *cell;
 @property (nonatomic, readonly) NSArray *listOfValues;
 
-@property (nonatomic, strong) NSMutableSet *selectedValues;
+@property (nonatomic, readonly) NSArray *selectedValues;
+
+- (void) applyFiltering;
+
+- (NSPredicate *)selectedValuesPredicate;
+
+- (NSPredicate *)filteredPredicateWithText:(NSString *)text;
 
 @end

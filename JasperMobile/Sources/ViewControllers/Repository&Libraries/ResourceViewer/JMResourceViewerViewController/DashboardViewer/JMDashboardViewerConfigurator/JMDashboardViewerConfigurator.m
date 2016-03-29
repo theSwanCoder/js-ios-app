@@ -43,6 +43,11 @@
 
 @implementation JMDashboardViewerConfigurator
 
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 #pragma mark - Initializers
 - (instancetype)initWithDashboard:(JMDashboard *)dashboard
 {
@@ -59,10 +64,10 @@
 }
 
 #pragma mark - Public API
-- (id)webViewWithFrame:(CGRect)frame asSecondary:(BOOL)asSecondary
+- (id)webViewAsSecondary:(BOOL)asSecondary
 {
     if (!_webView) {
-        _webView = [[JMVisualizeWebViewManager sharedInstance] webViewWithParentFrame:frame asSecondary:asSecondary];
+        _webView = [[JMWebViewManager sharedInstance] webViewAsSecondary:asSecondary];
     }
     return _webView;
 }

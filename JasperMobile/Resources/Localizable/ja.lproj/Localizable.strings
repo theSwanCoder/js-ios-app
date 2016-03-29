@@ -27,7 +27,7 @@
 
 /* Application Info */
 
-"application.info" = "TIBCO JasperReports%@ Server %.1f 以降向けの管理ツール/レポートビューア。\n\n詳細は以下の URL をご覧ください。\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+"application.info" = "TIBCO JasperReports%@ Server %.1f 以降向けの管理ツール/レポートビューア。\n\n%@\n\n詳細は以下の URL をご覧ください。\n\n%@";
 
 /* Login Page */
 
@@ -150,7 +150,7 @@
 "report.viewer.save.name.errmsg.maxlength" = "%i 文字を超えないようにしてください。";
 "report.viewer.save.name.errmsg.characters" = "文字 %@ は使用できません。";
 "report.viewer.save.saving.status.title" = "レポートを保存しています...";
-"report.viewer.save.name.errmsg.tooBigRange" = "%@ページ以上のレポートを、HTML形式で保存できませんでした。PDF形式で保存しますか？";
+"report.viewer.save.name.errmsg.tooBigRange" = "%@ページ以上のレポートを、%@形式で保存できませんでした。PDF形式で保存しますか？";
 
 // Report viewer Options view
 "report.viewer.options.singleselect.titlelabel.title" = "1 つのアイテムを選択";

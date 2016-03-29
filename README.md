@@ -4,7 +4,7 @@ TIBCO JasperMobile for iOS
 
 TIBCO JasperMobile for iOS is a native application which allows you to browse your JasperReports Server repository and view reports/dashboards in several formats.
 
-It is built using the Jaspersoft Mobile SDK for iOS version 2.1, and it is compatible with JasperReports Server 5.5 or higher, Community or Commercial editions.  
+It is built using the Jaspersoft Mobile SDK for iOS, and it is compatible with JasperReports Server 5.5 or higher, Community or Commercial editions.  
 
 The source code of TIBCO JasperMobile for iOS is freely available and can be used as a good example of how to integrate reporting and analysis services of JasperReports Server with your own native applications.
 

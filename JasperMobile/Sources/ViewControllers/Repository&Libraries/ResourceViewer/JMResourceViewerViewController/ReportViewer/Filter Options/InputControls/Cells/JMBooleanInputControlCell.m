@@ -49,7 +49,7 @@
 
 - (IBAction)switchChanged:(id)sender
 {
-    [self updateValue:[JSConstants stringFromBOOL:[sender isOn]]];
+    [self performSelector:@selector(updateValue:) withObject:[JSUtils stringFromBOOL:[sender isOn]] afterDelay:0.1]; // Fix issue with animations
 }
 
 @end

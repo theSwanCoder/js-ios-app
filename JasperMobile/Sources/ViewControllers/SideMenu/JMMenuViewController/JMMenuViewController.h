@@ -39,6 +39,9 @@
 
 + (NSInteger)defaultItemIndex;
 
-- (void) setSelectedItemIndex:(NSUInteger)itemIndex;
+- (void)reset;
+
+- (void)setSelectedItemIndex:(NSUInteger)itemIndex;
+- (void)openCurrentSection;
 
 @end

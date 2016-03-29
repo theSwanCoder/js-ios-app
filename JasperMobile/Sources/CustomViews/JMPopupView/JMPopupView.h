@@ -40,9 +40,9 @@ typedef NS_ENUM(NSInteger, JMPopupViewType) {
 };
 
 
-#define kJMPopupViewContentMaxHeight        ([JMUtils isIphone] ? 260.f : 360.f)
-#define kJMPopupViewDefaultWidth            ([JMUtils isIphone] ? 260.f : 360.f)
-#define kJMPopupViewButtonsHeight           ([JMUtils isIphone] ? 35.f  : 44.f)
+#define kJMPopupViewContentMaxHeight        ([JMUtils isCompactHeight] ? 260.f : 360.f)
+#define kJMPopupViewDefaultWidth            ([JMUtils isCompactWidth]  ? 260.f : 360.f)
+#define kJMPopupViewButtonsHeight           ([JMUtils isCompactHeight] ? 35.f  : 44.f)
 
 @class JMPopupView;
 @protocol JMPopupViewDelegate <NSObject>

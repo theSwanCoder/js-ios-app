@@ -36,9 +36,7 @@
     if (self) {
         _resourceType = resourceType;
         _itemTitle = [self titleWithResourceType];
-        _itemIcon = [self iconWithResourceType];
-        _selectedItemIcon = [self selectedIconWithResourceType];
-        
+        _showNotes = NO;
         _selected = NO;
     }
     return self;
@@ -54,6 +52,16 @@
     _selected = selected;
 }
 
+- (UIImage *)itemIcon
+{
+    return self.showNotes ? [self iconWithNoteWithResourceType] : [self iconWithResourceType];
+}
+
+- (UIImage *)selectedItemIcon
+{
+    return self.showNotes ? [self selectedIconWithNoteWithResourceType] : [self selectedIconWithResourceType];
+}
+
 #pragma mark - Private API
 - (NSString *) vcIdentifierForSelectedItem
 {
@@ -66,6 +74,8 @@
             return @"JMSavedItemsNavigationViewController";
         case JMResourceTypeFavorites:
             return @"JMFavoritesNavigationViewController";
+        case JMResourceTypeScheduling:
+            return @"JMSchedulingListNC";
         case JMResourceTypeRepository:
             return @"JMRepositoryNavigationViewController";
         case JMResourceTypeAbout:
@@ -86,10 +96,14 @@
             return JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
         case JMResourceTypeFavorites:
             return JMCustomLocalizedString(@"menuitem.favorites.label", nil);
+        case JMResourceTypeScheduling:
+            return JMCustomLocalizedString(@"menuitem.schedules.label", nil);
         case JMResourceTypeRepository:
             return JMCustomLocalizedString(@"menuitem.repository.label", nil);
         case JMResourceTypeAbout:
             return JMCustomLocalizedString(@"menuitem.about.label", nil);
+        case JMResourceTypeFeedback:
+            return JMCustomLocalizedString(@"menuitem.feedback.label", nil);
         case JMResourceTypeLogout:
             return JMCustomLocalizedString(@"menuitem.logout.label", nil);
         default:
@@ -110,6 +124,8 @@
             return [UIImage imageNamed:@"ic_saved_items"];
         case JMResourceTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites"];
+        case JMResourceTypeScheduling:
+            return [UIImage imageNamed:@"ic_scheduling"];
         default:
             return nil;
     }
@@ -128,12 +144,50 @@
             return [UIImage imageNamed:@"ic_saved_items_selected"];
         case JMResourceTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites_selected"];
+        case JMResourceTypeScheduling:
+            return [UIImage imageNamed:@"ic_scheduling_selected"];
         default:
             return nil;
     }
 }
 
-- (NSString *)nameForCrashlytics
+- (UIImage *)iconWithNoteWithResourceType
+{
+    switch (self.resourceType) {
+        case JMResourceTypeLibrary:
+            return [UIImage imageNamed:@"ic_library"];
+        case JMResourceTypeRecentViews:
+            return [UIImage imageNamed:@"ic_recent_views"];
+        case JMResourceTypeRepository:
+            return [UIImage imageNamed:@"ic_repository"];
+        case JMResourceTypeSavedItems:
+            return [UIImage imageNamed:@"ic_saved_items_note"];
+        case JMResourceTypeFavorites:
+            return [UIImage imageNamed:@"ic_favorites"];
+        default:
+            return nil;
+    }
+}
+
+- (UIImage *)selectedIconWithNoteWithResourceType
+{
+    switch (self.resourceType) {
+        case JMResourceTypeLibrary:
+            return [UIImage imageNamed:@"ic_library_selected"];
+        case JMResourceTypeRecentViews:
+            return [UIImage imageNamed:@"ic_recent_views_selected"];
+        case JMResourceTypeRepository:
+            return [UIImage imageNamed:@"ic_repository_selected"];
+        case JMResourceTypeSavedItems:
+            return [UIImage imageNamed:@"ic_saved_items_selected_note"];
+        case JMResourceTypeFavorites:
+            return [UIImage imageNamed:@"ic_favorites_selected"];
+        default:
+            return nil;
+    }
+}
+
+- (NSString *)nameForAnalytics
 {
     switch (self.resourceType) {
         case JMResourceTypeLibrary:
@@ -146,6 +200,8 @@
             return @"Saved Items";
         case JMResourceTypeFavorites:
             return @"Favorites";
+        case JMResourceTypeScheduling:
+            return @"Scheduling";
         case JMResourceTypeAbout:
             return @"AboutApp";
         default:

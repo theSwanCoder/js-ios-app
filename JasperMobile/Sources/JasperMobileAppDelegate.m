@@ -35,7 +35,7 @@
 #import "JMMenuViewController.h"
 #import "JMOnboardIntroViewController.h"
 #import "UIImage+Additions.h"
-
+#import "JMExportManager.h"
 
 static NSString * const kGAITrackingID = @"UA-57445224-1";
 static const NSInteger kSplashViewTag = 100;
@@ -93,12 +93,7 @@ static const NSInteger kSplashViewTag = 100;
     [[JMThemesManager sharedManager] applyCurrentTheme];
     [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:^(BOOL isSessionRestored) {
 
-        SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
-        JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-
         LoginCompletionBlock loginCompletionBlock = ^{
-            [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
-
             // Configure Appirater
             [Appirater setAppId:@"467317446"];
             [Appirater setDaysUntilPrompt:0];
@@ -111,18 +106,15 @@ static const NSInteger kSplashViewTag = 100;
         };
 
         if (isSessionRestored) {
-            if (!menuViewController.selectedItem) {
-                loginCompletionBlock();
-            }
+            loginCompletionBlock();
+            // TODO: remove reseting of session's 'environment'
+            SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
+            JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
+            [menuViewController openCurrentSection];
         } else {
-            JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-            if (activeServerProfile && activeServerProfile.askPassword.boolValue) {
-                [JMUtils showLoginViewForRestoreSessionWithCompletion:loginCompletionBlock];
-            } else {
-                [JMUtils showLoginViewAnimated:NO
-                                    completion:nil
-                               loginCompletion:loginCompletionBlock];
-            }
+            [JMUtils showLoginViewAnimated:NO
+                                completion:nil
+                           loginCompletion:loginCompletionBlock];
         }
     }];
 }
@@ -130,6 +122,7 @@ static const NSInteger kSplashViewTag = 100;
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [self addSplashView];
+    [[JMExportManager sharedInstance] cancelAll];
 }
 
 - (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier {

@@ -16,8 +16,12 @@
 - (BOOL) isFolder;
 - (BOOL) isReport;
 - (BOOL) isSavedReport;
+- (BOOL) isTempExportedReport;
+
 - (BOOL) isDashboard;
+- (BOOL) isLegacyDashboard;
 - (BOOL) isNewDashboard;
+- (BOOL) isFile;
 
 - (NSString *) resourceViewerVCIdentifier;
 

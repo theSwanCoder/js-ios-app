@@ -36,6 +36,7 @@
 #import "JMMenuViewController.h"
 #import "JMEULAViewController.h"
 #import "JMServerProfile+Helpers.h"
+#import "JSConstants.h"
 #import "JMServersGridViewController.h"
 #import "JMServerOptionsViewController.h"
 
@@ -57,7 +58,7 @@ void jmDebugLog(NSString *format, ...) {
 
 #define kJMNameMin 1
 #define kJMNameMax 250
-#define kJMInvalidCharacters     @"~!#$%^|`@&*()-+={}[]:;\"'<>,?/|\\"
+#define kJMInvalidCharacters     @"~!#$%^`@&*()-+={}[]:;\"'<>,?/|\\"
 
 + (BOOL)validateReportName:(NSString *)reportName errorMessage:(NSString **)errorMessage
 {
@@ -68,20 +69,7 @@ void jmDebugLog(NSString *format, ...) {
     } else if (reportName.length > kJMNameMax) {
         *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.maxlength", nil), kJMNameMax];
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
-        NSMutableString *invalidCharsString = [NSMutableString string];
-
-        NSInteger subLocation = 0;
-        while (subLocation < (reportName.length)) {
-            NSString *subString = [reportName substringWithRange:NSMakeRange(subLocation ++, 1)];
-            if ([kJMInvalidCharacters rangeOfString:subString].location != NSNotFound) {
-                if ([invalidCharsString length]) {
-                    [invalidCharsString appendString:@", "];
-                }
-                [invalidCharsString appendFormat:@"'%@'", subString];
-            }
-
-        }
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.characters", nil), invalidCharsString];
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.characters", nil), kJMInvalidCharacters];
     }
     return [*errorMessage length] == 0;
 }
@@ -118,7 +106,6 @@ void jmDebugLog(NSString *format, ...) {
 + (BOOL)isIphone
 {
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
-
 }
 
 + (BOOL)isSystemVersion9
@@ -153,9 +140,9 @@ void jmDebugLog(NSString *format, ...) {
     static NSArray *reportFormats;
     if (!reportFormats) {
         reportFormats = @[
-                           [JSConstants sharedInstance].CONTENT_TYPE_HTML,
-                           [JSConstants sharedInstance].CONTENT_TYPE_PDF,
-                           [JSConstants sharedInstance].CONTENT_TYPE_XLS,
+                           kJS_CONTENT_TYPE_HTML,
+                           kJS_CONTENT_TYPE_PDF,
+                           kJS_CONTENT_TYPE_XLS,
                            ];
     }
     return reportFormats;
@@ -206,10 +193,10 @@ void jmDebugLog(NSString *format, ...) {
     JMLoginViewController *loginViewController = (JMLoginViewController *)loginNavController.topViewController;
     loginViewController.showForRestoreSession = restoreSession;
     loginViewController.completion = ^(void){
+        [menuViewController reset];
+
         if (loginCompletion) {
             loginCompletion();
-        } else {
-            [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
         }
     };
 
@@ -270,6 +257,15 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)presentAlertControllerWithError:(NSError *)error completion:(void (^)(void))completion
 {
+    NSString *sourceString = [[NSThread callStackSymbols] objectAtIndex:1];
+    
+    NSCharacterSet *separatorSet = [NSCharacterSet characterSetWithCharactersInString:@" -[]+?.,"];
+    NSMutableArray *array = [NSMutableArray arrayWithArray:[sourceString  componentsSeparatedByCharactersInSet:separatorSet]];
+    [array removeObject:@""];
+    
+    NSLog(@"Class caller = %@", [array objectAtIndex:3]);
+    NSLog(@"Method caller = %@", [array objectAtIndex:4]);
+    
     NSString *title = error.domain;
     NSString *message = error.localizedDescription;
 //    if (![title isEqualToString:@"dialod.title.error"]) {
@@ -315,22 +311,22 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isServerVersionUpOrEqual6
 {
-    return self.restClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0;
+    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_0_0;
 }
 
 + (BOOL)isServerAmber2
 {
-    return self.restClient.serverProfile.serverInfo.versionAsFloat == [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
+    return self.restClient.serverProfile.serverInfo.versionAsFloat == kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
 + (BOOL)isServerAmber2OrHigher
 {
-    return self.restClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
+    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
 + (BOOL)isServerProEdition
 {
-    return [self.restClient.serverProfile.serverInfo.edition isEqualToString: [JSConstants sharedInstance].SERVER_EDITION_PRO];
+    return [self.restClient.serverProfile.serverInfo.edition isEqualToString: kJS_SERVER_EDITION_PRO];
 }
 
 + (NSString *)localizedStringFromDate:(NSDate *)date
@@ -395,6 +391,18 @@ void jmDebugLog(NSString *format, ...) {
     return [launchStoryboard instantiateInitialViewController];
 }
 
++ (BOOL)isCompactWidth
+{
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    return (rootViewController.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact);
+}
+
++ (BOOL)isCompactHeight
+{
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    return (rootViewController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact);
+}
+
 + (BOOL)isDemoAccount
 {
     BOOL isDemoServer = [self.restClient.serverProfile.serverUrl isEqualToString:kJMDemoServerUrl];
@@ -407,11 +415,19 @@ void jmDebugLog(NSString *format, ...) {
 #pragma mark - Analytics
 + (void)logEventWithInfo:(NSDictionary *)eventInfo
 {
-    JMLog(@"%@: %@", NSStringFromSelector(_cmd), eventInfo);
 #ifndef __RELEASE__
+    NSString *version = self.restClient.serverInfo.version;
+    NSString *edition = self.restClient.serverInfo.edition;
+    if ([JMUtils isDemoAccount]) {
+        version = [version stringByAppendingString:@"(Demo)"];
+    }
+    
     // Crashlytics - Answers
+    NSMutableDictionary *extendedEventInfo = [eventInfo mutableCopy];
+    extendedEventInfo[kJMAnalyticsServerVersionKey] = version;
+    extendedEventInfo[kJMAnalyticsServerEditionKey] = edition;
     [Answers logCustomEventWithName:eventInfo[kJMAnalyticsCategoryKey]
-                   customAttributes:eventInfo];
+                   customAttributes:extendedEventInfo];
 
     // Google Analytics
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
@@ -419,31 +435,43 @@ void jmDebugLog(NSString *format, ...) {
                                                                            action:eventInfo[kJMAnalyticsActionKey]                   // Event action (required)
                                                                             label:eventInfo[kJMAnalyticsLabelKey]                    // Event label
                                                                             value:nil];                                              // Event value
-    [tracker set:[GAIFields customDimensionForIndex:1]
-           value:eventInfo[kJMAnalyticsServerVersionKey]];
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
+           value:version];
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
+           value:edition];
+
     [tracker send:[builder build]];
 #endif
 }
 
 + (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
 {
-    JMLog(@"%@: %@", NSStringFromSelector(_cmd), additionInfo);
 #ifndef __RELEASE__
+    NSString *version = self.restClient.serverInfo.version;
+    NSString *edition = self.restClient.serverInfo.edition;
+    if ([JMUtils isDemoAccount]) {
+        version = [version stringByAppendingString:@"(Demo)"];
+    }
+
     // Crashlytics - Answers
+    NSMutableDictionary *extendedEventInfo = [additionInfo mutableCopy];
+    extendedEventInfo[kJMAnalyticsServerVersionKey] = version;
+    extendedEventInfo[kJMAnalyticsServerEditionKey] = edition;
     [Answers logLoginWithMethod:@"Digits"
                         success:@(success)
-               customAttributes:additionInfo];
-
+               customAttributes:extendedEventInfo];
+    
     // Google Analytics
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker set:@"Server Version"
-           value:additionInfo[kJMAnalyticsLabelKey]];
     GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:additionInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
                                                                            action:additionInfo[kJMAnalyticsActionKey]                   // Event action (required)
                                                                             label:additionInfo[kJMAnalyticsLabelKey]                    // Event label
                                                                             value:nil];                                                 // Event value
-    [tracker set:[GAIFields customDimensionForIndex:1]
-           value:additionInfo[kJMAnalyticsServerVersionKey]];
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
+           value:version];
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
+           value:edition];
+
     [tracker send:[builder build]];
 #endif
 }

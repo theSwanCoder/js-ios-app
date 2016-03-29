@@ -32,6 +32,9 @@
  */
 
 #import "JMSavedResources.h"
+#import "JSResourceLookup.h"
+
+@class JMExportResource;
 
 extern NSString * const kJMSavedResources;
 
@@ -40,21 +43,20 @@ extern NSString * const kJMSavedResources;
 // Returns saved report from JSResourceLookup
 + (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource;
 
++ (JMSavedResources *)savedResourceWithReportName:(NSString *)reportName format:(NSString *)reportFormat;
+
 // Adds saved resource with path to CoreData
-+ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format;
++ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format sourcesURL:(NSURL *)sourcesURL;
 
 // Returns YES if report with name reportName with format reportFormat is absent
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat;
 
 + (NSArray *)allSavedItems;
 
-+ (BOOL)moveSavedItemFromPath:(NSString *)fromPath toPath:(NSString *)toPath;
++ (BOOL)migrateSavedItemFromPath:(NSString *)fromPath toPath:(NSString *)toPath;
 
 // Rename saved resource
 - (BOOL)renameReportTo:(NSString *)newName;
-
-// Remove saved resource from DB
-- (void)removeFromDB;
 
 // Removes saved resource
 - (void)removeReport;
@@ -66,12 +68,10 @@ extern NSString * const kJMSavedResources;
 - (JSResourceLookup *)wrapperFromSavedReports;
 
 // paths
-+ (NSString *)pathToFolderForSavedReport:(JMSavedResources *)savedReport;
-+ (NSString *)pathToTempFolderForSavedReport:(JMSavedResources *)savedReport;
-+ (NSString *)absolutePathToSavedReport:(JMSavedResources *)savedReport;
-+ (NSString *)absoluteTempPathToSavedReport:(JMSavedResources *)savedReport;
++ (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format;
 
-+ (NSString *)pathToTempReportsFolder;
++ (NSString *)pathToFolderForSavedReport:(JMSavedResources *)savedReport;
++ (NSString *)absolutePathToSavedReport:(JMSavedResources *)savedReport;
 
 + (NSString *)oldPathForSavedReport:(JMSavedResources *)savedResource;
 + (NSString *)newURIForSavedReport:(JMSavedResources *)savedResource;

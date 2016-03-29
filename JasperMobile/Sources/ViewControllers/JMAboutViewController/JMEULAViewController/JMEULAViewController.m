@@ -45,7 +45,7 @@
 {
     [super viewDidLoad];
 
-    self.title = JMCustomLocalizedString(@"settings.privacy.EULA.title", nil);
+    self.title = JMCustomLocalizedString(@"about.eula.title", nil);
 
     if (self.shouldUserAccept) {
         UIBarButtonItem *acceptButton = [[UIBarButtonItem alloc] initWithTitle:@"Accept"
@@ -67,6 +67,11 @@
     if (self.completion) {
         self.completion();
     }
+}
+
+- (IBAction)doneAction:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIWebViewDelegate

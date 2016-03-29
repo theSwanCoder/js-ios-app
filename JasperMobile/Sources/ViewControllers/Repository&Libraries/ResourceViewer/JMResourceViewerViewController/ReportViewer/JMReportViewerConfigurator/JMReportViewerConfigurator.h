@@ -32,16 +32,17 @@
 @since 2.1
 */
 
-@protocol JMReportLoader;
+@protocol JMReportLoaderProtocol;
 @class JMReport;
 @protocol JMReportLoaderDelegate;
 
 @interface JMReportViewerConfigurator : NSObject
+@property (nonatomic, assign) CGFloat viewportScaleFactor;
 @property (nonatomic, weak) id webView;
 
 - (instancetype)initWithReport:(JMReport *)report;
 + (instancetype)configuratorWithReport:(JMReport *)report;
-- (id)webViewWithFrame:(CGRect)frame asSecondary:(BOOL)asSecondary;
-- (id<JMReportLoader>)reportLoader;
+- (id)webViewAsSecondary:(BOOL)asSecondary;
+- (id<JMReportLoaderProtocol>)reportLoader;
 - (void)updateReportLoaderDelegateWithObject:(id<JMReportLoaderDelegate>)delegate;
 @end

@@ -30,8 +30,10 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMCancelRequestPopup.h"
 #import "JMWebViewManager.h"
-#import "JSRESTBase+Session.h"
-#import "JSRESTBase+Serialization.h"
+#import "JMExportManager.h"
+
+#import "JMMenuViewController.h"
+#import "SWRevealViewController.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -58,8 +60,9 @@ static JMSessionManager *_sharedManager = nil;
 {
     self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile keepLogged:keepLogged];
     [self setDefaults];
-    
-    [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
+    [self.restClient deleteCookies];
+
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
             if (completionBlock) {
                 BOOL isServerInfoExists = self.restClient.serverInfo != nil;
                 if (isServerInfoExists && isSessionAuthorized) {
@@ -74,7 +77,7 @@ static JMSessionManager *_sharedManager = nil;
 
 - (void) saveActiveSessionIfNeeded {
     if (self.restClient && self.restClient.keepSession) {
-        NSData *archivedSession = [self serializeRESTClient:self.restClient];
+        NSData *archivedSession = [NSKeyedArchiver archivedDataWithRootObject:self.restClient];
         [[NSUserDefaults standardUserDefaults] setObject:archivedSession forKey:kJMSavedSessionKey];
     } else {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMSavedSessionKey];
@@ -87,7 +90,10 @@ static JMSessionManager *_sharedManager = nil;
     if (!self.restClient) { // try restore restClient
         NSData *savedSession = [[NSUserDefaults standardUserDefaults] objectForKey:kJMSavedSessionKey];
         if (savedSession) {
-            self.restClient = [self deserializeRESTClientFromData:savedSession];
+            id unarchivedSession = [NSKeyedUnarchiver unarchiveObjectWithData:savedSession];
+            if (unarchivedSession && [unarchivedSession isKindOfClass:[JSRESTBase class]]) {
+                self.restClient = unarchivedSession;
+            }
         }
     }
 
@@ -98,12 +104,12 @@ static JMSessionManager *_sharedManager = nil;
 
             JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
-                [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
-                    BOOL isRestoredSession = (isSessionAuthorized && self.restClient.serverInfo);
-                    if (isRestoredSession) {
-                        [self setDefaults];
-                    }
+                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
                     dispatch_async(dispatch_get_main_queue(), ^(void){
+                        BOOL isRestoredSession = (isSessionAuthorized && self.restClient.serverInfo);
+                        if (isRestoredSession) {
+                            [self setDefaults];
+                        }
                         if (completion) {
                             completion(isRestoredSession);
                         }
@@ -126,6 +132,8 @@ static JMSessionManager *_sharedManager = nil;
 
 - (void) logout
 {
+    [[JMExportManager sharedInstance] cancelAll];
+    
     [self.restClient cancelAllRequests];
     [self.restClient deleteCookies];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMSavedSessionKey];
@@ -133,7 +141,6 @@ static JMSessionManager *_sharedManager = nil;
     
     // Clear webView
     [[JMWebViewManager sharedInstance] reset];
-    [[JMVisualizeWebViewManager sharedInstance] reset];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
@@ -158,29 +165,6 @@ static JMSessionManager *_sharedManager = nil;
 - (void)setDefaults
 {
     self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-}
-
-#pragma mark - Serialization
-- (NSData *)serializeRESTClient:(JSRESTBase *)restClient
-{
-    NSError* error;
-    NSDictionary *restClientDictionary = [restClient convertToDictionary];
-    NSData* restClientData = [NSPropertyListSerialization dataWithPropertyList:restClientDictionary
-                                                                        format:NSPropertyListBinaryFormat_v1_0
-                                                                       options:0
-                                                                         error:&error];
-    return restClientData;
-}
-
-- (JSRESTBase *)deserializeRESTClientFromData:(NSData *)data
-{
-    NSError *error = nil;
-    NSDictionary *dictionary = [NSPropertyListSerialization propertyListWithData:data
-                                                                          options:NSPropertyListImmutable
-                                                                           format:NULL
-                                                                           error:&error];
-    JSRESTBase *restClient = [JSRESTBase clientFromDictionary:dictionary];
-    return restClient;
 }
 
 @end

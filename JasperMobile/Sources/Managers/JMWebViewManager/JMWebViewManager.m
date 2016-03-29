@@ -36,7 +36,11 @@
 
 @implementation JMWebViewManager
 
-#pragma mark - Public API
+#pragma mark - Lifecycle
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
 
 + (instancetype)sharedInstance {
     static JMWebViewManager *sharedMyManager = nil;
@@ -47,12 +51,13 @@
     return sharedMyManager;
 }
 
-- (UIWebView *)webViewWithParentFrame:(CGRect)frame
+#pragma mark - Public API
+- (UIWebView *)webView
 {
-    return [self webViewWithParentFrame:frame asSecondary:NO];
+    return [self webViewAsSecondary:NO];
 }
 
-- (UIWebView *)webViewWithParentFrame:(CGRect)frame asSecondary:(BOOL)asSecondary
+- (UIWebView *)webViewAsSecondary:(BOOL)asSecondary
 {
     UIWebView *webView;
     if (asSecondary) {
@@ -61,16 +66,24 @@
         webView = self.primaryWebView;
     }
 
-    [self updateFrame:frame forWebView:webView];
-
+    webView.scrollView.zoomScale = 1;
     webView.scrollView.minimumZoomScale = 1;
     webView.scrollView.maximumZoomScale = 2;
 
     return webView;
 }
 
+- (BOOL)isWebViewLoadedVisualize:(UIWebView *)webView
+{
+    NSString *jsCommand = @"typeof(visualize)";
+    NSString *result = [webView stringByEvaluatingJavaScriptFromString:jsCommand];
+    BOOL isWebViewLoadedVisualize = [result isEqualToString:@"function"];
+    return isWebViewLoadedVisualize;
+}
+
 - (void)reset
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     _primaryWebView.delegate = nil;
     _primaryWebView = nil;
 
@@ -79,8 +92,17 @@
 
 - (void)resetChildWebView
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     _secondaryWebView.delegate = nil;
     _secondaryWebView = nil;
+}
+
+- (void)resetZoom
+{
+    [_primaryWebView.scrollView setZoomScale:0.1
+                                        animated:YES];
+    [_secondaryWebView.scrollView setZoomScale:0.1
+                                          animated:YES];
 }
 
 #pragma mark - Private API
@@ -103,19 +125,19 @@
 
 - (UIWebView *)createWebView
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     webView.scrollView.bounces = NO;
     webView.scalesPageToFit = YES;
     webView.dataDetectorTypes = UIDataDetectorTypeNone;
     webView.suppressesIncrementalRendering = YES;
+
+    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
+    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+    [webView loadHTMLString:htmlString
+                    baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
+
     return webView;
 }
-
-- (void)updateFrame:(CGRect)frame forWebView:(UIWebView *)webView
-{
-    webView.frame = frame;
-}
-
 
 @end

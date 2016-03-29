@@ -167,4 +167,8 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (void)logEventWithInfo:(NSDictionary *__nonnull)eventInfo;
 + (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
 
++ (BOOL)isCompactWidth;
+
++ (BOOL)isCompactHeight;
+
 @end

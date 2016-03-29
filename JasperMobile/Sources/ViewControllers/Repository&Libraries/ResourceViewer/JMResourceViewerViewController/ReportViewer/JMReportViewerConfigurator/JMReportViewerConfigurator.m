@@ -27,15 +27,17 @@
 //
 
 #import "JMReportViewerConfigurator.h"
-#import "JMReportLoader.h"
+#import "JMReportLoaderProtocol.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMRestReportLoader.h"
 #import "JMReport.h"
+#import "JMVisualizeManager.h"
+#import "JMWebViewManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, weak) JMReport *report;
-@property (nonatomic, strong) id <JMReportLoader>reportLoader;
+@property (nonatomic, strong) id <JMReportLoaderProtocol> reportLoader;
 @end
 
 @implementation JMReportViewerConfigurator
@@ -55,21 +57,24 @@
     return [[self alloc] initWithReport:report];
 }
 
-- (id)webViewWithFrame:(CGRect)frame asSecondary:(BOOL)asSecondary
+- (id)webViewAsSecondary:(BOOL)asSecondary
 {
     if (!_webView) {
-        _webView = [[JMVisualizeWebViewManager sharedInstance] webViewWithParentFrame:frame asSecondary:asSecondary];
+        _webView = [[JMWebViewManager sharedInstance] webViewAsSecondary:asSecondary];
     }
     return _webView;
 }
 
-- (id <JMReportLoader>)reportLoader
+- (id <JMReportLoaderProtocol>)reportLoader
 {
     if (!_reportLoader) {
         if ([JMUtils isSupportVisualize]) {
-            _reportLoader = [JMVisualizeReportLoader loaderWithReport:self.report];
+            _reportLoader = [JMVisualizeReportLoader loaderWithReport:self.report restClient:self.restClient];
+            JMVisualizeManager *visualizeManager = [JMVisualizeManager new];
+            visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
+            ((JMVisualizeReportLoader *)_reportLoader).visualizeManager = visualizeManager;
         } else {
-            _reportLoader = [JMRestReportLoader loaderWithReport:self.report];
+            _reportLoader = [JMRestReportLoader loaderWithReport:self.report restClient:self.restClient];
         }
         JMJavascriptNativeBridge *bridge = [JMJavascriptNativeBridge new];
         bridge.webView = self.webView;

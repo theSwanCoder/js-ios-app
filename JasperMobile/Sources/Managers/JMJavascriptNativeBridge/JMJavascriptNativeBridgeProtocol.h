@@ -44,6 +44,7 @@
 
 - (void)injectJSInitCode:(NSString *)jsCode;
 - (void)sendRequest:(JMJavascriptRequest *)request;
+- (void)sendRequest:(JMJavascriptRequest *)request completion:(void(^)(JMJavascriptCallback *callback, NSError *error))completion;
 - (void)reset;
 @end
 

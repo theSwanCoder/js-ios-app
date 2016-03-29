@@ -22,7 +22,6 @@
 
 
 #import "JMAboutViewController.h"
-#import "UITableViewCell+Additions.h"
 #import <QuartzCore/QuartzCore.h>
 #import "JMServerProfile+Helpers.h"
 #import "JMPopupView.h"
@@ -33,170 +32,223 @@
 #import "ALToastView.h"
 #import "JMOnboardIntroViewController.h"
 #import "JMEULAViewController.h"
+#import "UIColor+RGBComponent.h"
 
-@interface JMAboutViewController () <MFMailComposeViewControllerDelegate, UITextViewDelegate>
+NSString * const kJMCommunitySiteURL = @"http://community.jaspersoft.com/project/jaspermobile-ios";
+NSString * const kJMWhatsNewURL = @"https://github.com/Jaspersoft/js-ios-app/wiki/What's-new";
+NSString * const kJMCommunitySiteInternalLink = @"community_site";
+NSString * const kJMPrivacyPolicyInternalLink = @"privacy_policy";
+NSString * const kJMEULAInternalLink = @"eula";
+NSString * const kJMWhatsNewInternalLink = @"whats_new";
 
-
-@property (weak, nonatomic) IBOutlet UIButton *privacyPolicyButton;
-@property (weak, nonatomic) IBOutlet UIButton *showEULAButton;
-@property (weak, nonatomic) IBOutlet UIButton *sendFeedbackButton;
-
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttonsCollection;
-
+@interface JMAboutViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *aboutAppTextView;
-
 @end
 
 @implementation JMAboutViewController
 
+#pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"menuitem.about.label", nil);
-
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
-    
-    [self.privacyPolicyButton setTitle:JMCustomLocalizedString(@"settings.privacy.policy.title", nil) forState:UIControlStateNormal];
-    [self.showEULAButton setTitle:JMCustomLocalizedString(@"settings.privacy.EULA.title", nil) forState:UIControlStateNormal];
-    [self.sendFeedbackButton setTitle:JMCustomLocalizedString(@"settings.feedback", nil) forState:UIControlStateNormal];
-
-    for (UIButton * button in self.buttonsCollection) {
-        [button setBackgroundColor:[[JMThemesManager sharedManager] aboutAppButtonsBackgroundColor]];
-        [button setTitleColor:[[JMThemesManager sharedManager] aboutAppButtonsTextColor] forState:UIControlStateNormal];
-    }
-    
-    NSDictionary *appNameAttributes = @{
-                                 NSFontAttributeName : [UIFont boldSystemFontOfSize:[JMUtils isIphone] ? 16 : 25],
-                                 NSForegroundColorAttributeName : [[JMThemesManager sharedManager] aboutAppAppNameTextColor]
-                                 };
-
-    NSString *appNameString = [NSString stringWithFormat:@"%@ v %@\n\n", kJMAppName, [JMAppUpdater latestAppVersionAsString]];
-    NSAttributedString *appNameAttributedString = [[NSAttributedString alloc] initWithString:appNameString attributes:appNameAttributes];
-    
-    NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
-    NSString *appAboutString = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil),
-                         @"\u00AE",
-                         [JMServerProfile minSupportedServerVersion],
-                         currentYear];
-    
-    NSDictionary *appAboutAttributes = @{
-                                 NSFontAttributeName : [UIFont systemFontOfSize:[JMUtils isIphone] ? 14 : 20],
-                                 NSForegroundColorAttributeName : [[JMThemesManager sharedManager] aboutAppAppAboutTextColor]
-                                 };
-    NSAttributedString *appAboutAttributedString = [[NSAttributedString alloc] initWithString:appAboutString attributes:appAboutAttributes];
-    
-    NSMutableAttributedString *aboutString = [[NSMutableAttributedString alloc] initWithAttributedString:appNameAttributedString];
-    [aboutString appendAttributedString:appAboutAttributedString];
-    
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init] ;
-    [paragraphStyle setAlignment:NSTextAlignmentCenter];
-    [aboutString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [aboutString length])];
-    
-    self.aboutAppTextView.attributedText = aboutString;
+    [self setupTextView];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                           target:self
+                                                                                           action:@selector(closeAboutAction:)];
 }
 
-- (void)viewDidLayoutSubviews
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
-    [super viewDidLayoutSubviews];
-    
-    CGSize size = [self.aboutAppTextView sizeThatFits:self.aboutAppTextView.bounds.size];
-    self.aboutAppTextView.contentSize = size;
-}
-
-#pragma mark - Menu Utils
-- (BOOL)isMenuShown
-{
-    return (self.revealViewController.frontViewPosition == FrontViewPositionRight);
-}
-
-- (void)closeMenu
-{
-    [self.revealViewController setFrontViewPosition:FrontViewPositionLeft];
-}
-
-#pragma mark - Actions
-- (IBAction)privacyPolicyButtonTapped:(id)sender
-{
-    [self performSegueWithIdentifier:@"showPrivacyPolicy" sender:self];
-    if ([self isMenuShown]) {
-        [self closeMenu];
-    }
-}
-
-- (IBAction)showEULAButtonTapped:(id)sender
-{
-    if ([self isMenuShown]) {
-        [self closeMenu];
-    }
-    JMEULAViewController *EULAViewController = (JMEULAViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
-    EULAViewController.completion = nil;
-    EULAViewController.shouldUserAccept = NO;
-    
-    [self.navigationController pushViewController:EULAViewController animated:YES];
-}
-
-- (IBAction)sendFeedbackButtonTapped:(id)sender
-{
-#if !TARGET_IPHONE_SIMULATOR
-    if ([MFMailComposeViewController canSendMail]) {
-        // Email Subject
-        NSString *emailTitle = @"JasperMobile (iOS)";
-        // Email Content
-        NSString *messageBody = [NSString stringWithFormat:@"Send from build version: %@", [JMUtils buildVersion]];
-        // To address
-        NSArray *toRecipents = @[kFeedbackPrimaryEmail, kFeedbackSecondaryEmail];
-        
-        MFMailComposeViewController *mc = [MFMailComposeViewController new];
-        mc.mailComposeDelegate = self;
-        [mc setSubject:emailTitle];
-        [mc setMessageBody:messageBody isHTML:NO];
-        [mc setToRecipients:toRecipents];
-        
-        [self presentViewController:mc animated:YES completion:NULL];
-    } else {
-        NSString *errorMessage = JMCustomLocalizedString(@"settings.feedback.errorShowClient", nil);
-        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-        [JMUtils presentAlertControllerWithError:error completion:nil];
-    }
-#endif
-}
-
-#pragma mark - MFMailComposeViewControllerDelegate
-- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
-{
-    switch (result) {
-        case MFMailComposeResultCancelled:
-            JMLog(@"Mail cancelled");
-            break;
-        case MFMailComposeResultSaved:
-            JMLog(@"Mail saved");
-            break;
-        case MFMailComposeResultSent:
-            JMLog(@"Mail sent");
-            break;
-        case MFMailComposeResultFailed:
-            JMLog(@"Mail sent failure: %@", [error localizedDescription]);
-            break;
-        default:
-            break;
-    }
-    
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self.aboutAppTextView sizeToFit];
 }
 
 #pragma mark - UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
-    return [[UIApplication sharedApplication] canOpenURL:URL];
+    BOOL shouldInteract = YES;
+    if ([URL.absoluteString isEqualToString:kJMCommunitySiteInternalLink]) {
+        [self showCommunitySite];
+    } else if ([URL.absoluteString isEqualToString:kJMPrivacyPolicyInternalLink]) {
+        [self showPrivacyPolicy];
+    } else if ([URL.absoluteString isEqualToString:kJMEULAInternalLink]) {
+        [self showEULA];
+    }  else if ([URL.absoluteString isEqualToString:kJMWhatsNewInternalLink]) {
+        [self showWhatsNew];
+    } else {
+        shouldInteract = NO;
+    }
+    return shouldInteract;
 }
 
-- (void)showOnboardIntro
+#pragma mark - Actions
+- (void)closeAboutAction:(id)sender
 {
-    JMOnboardIntroViewController *introViewController = (JMOnboardIntroViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
-    [self presentViewController:introViewController animated:YES completion:nil];
-    if ([self isMenuShown]) {
-        [self closeMenu];
-    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Private Actions
+- (void)showPrivacyPolicy
+{
+    NSURL *url = [NSURL URLWithString:kJMPrivacyPolicyURI];
+    [[UIApplication sharedApplication] openURL:url];
+}
+
+- (void)showCommunitySite
+{
+    NSURL *url = [NSURL URLWithString:kJMCommunitySiteURL];
+    [[UIApplication sharedApplication] openURL:url];
+}
+
+- (void)showEULA
+{
+    UINavigationController *EULANavViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"EULANavViewController"];
+    [self presentViewController:EULANavViewController animated:YES completion:nil];
+}
+
+- (void)showWhatsNew
+{
+    NSURL *url = [NSURL URLWithString:kJMWhatsNewURL];
+    [[UIApplication sharedApplication] openURL:url];
+}
+
+#pragma mark - Helpers
+- (void)setupTextView
+{
+    NSMutableAttributedString *aboutString = [[NSMutableAttributedString alloc] initWithAttributedString:[self appName]];
+    [aboutString appendAttributedString:[self appAbout]];
+//    [aboutString appendAttributedString:[self appVersion]];
+    [aboutString appendAttributedString:[self privacyPolicy]];
+    [aboutString appendAttributedString:[self eula]];
+    [aboutString appendAttributedString:[self whatsNew]];
+    [aboutString appendAttributedString:[self copyright]];
+
+    [self setupLinksForString:aboutString];
+
+    self.aboutAppTextView.attributedText = aboutString;
+}
+
+- (void)setupLinksForString:(NSMutableAttributedString *)attributedString
+{
+    NSDictionary *attributes = @{
+            NSForegroundColorAttributeName : [UIColor colorFromHexString:[NSString stringWithFormat:@"#007aff"]],
+            NSUnderlineStyleAttributeName: @1
+    };
+
+    // Community Site
+    NSRange range = [attributedString.string rangeOfString:JMCustomLocalizedString(@"about.comminity.title", nil)];
+    [attributedString addAttributes:attributes range:range];
+    [attributedString addAttribute:NSLinkAttributeName
+                        value:kJMCommunitySiteInternalLink
+                        range:range];
+
+    // Privacy Policy
+    range = [attributedString.string rangeOfString:JMCustomLocalizedString(@"about.privacy_policy.title", nil)];
+    [attributedString addAttributes:attributes range:range];
+    [attributedString addAttribute:NSLinkAttributeName
+                        value:kJMPrivacyPolicyInternalLink
+                        range:range];
+
+    // EULA
+    range = [attributedString.string rangeOfString:JMCustomLocalizedString(@"about.eula.title", nil)];
+    [attributedString addAttributes:attributes range:range];
+    [attributedString addAttribute:NSLinkAttributeName
+                        value:kJMEULAInternalLink
+                        range:range];
+
+    // What's New
+    range = [attributedString.string rangeOfString:JMCustomLocalizedString(@"about.whats_new.title", nil)];
+    [attributedString addAttributes:attributes range:range];
+    [attributedString addAttribute:NSLinkAttributeName
+                             value:kJMWhatsNewInternalLink
+                             range:range];
+}
+
+#pragma mark - Generating attributed strings
+- (NSAttributedString *)appName
+{
+    NSString *appNameString = kJMAppName;
+    return [self createAttributedStringWithString:appNameString
+                                       attributes:[self titleAttributes]];
+}
+
+- (NSAttributedString *)appAbout
+{
+    NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+    NSString *appVersionString = [NSString stringWithFormat:@"Version: %@ (%@)", [JMAppUpdater latestAppVersionAsString], build];
+    NSString *appAboutString = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil),
+                    @"\u00AE",
+                    [JMServerProfile minSupportedServerVersion],
+                    appVersionString,
+                    JMCustomLocalizedString(@"about.comminity.title", nil)];
+    return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n%@", appAboutString]
+                                       attributes:[self commonAttributes]];
+}
+
+- (NSAttributedString *)copyright
+{
+    NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
+    NSString *copyrightString = [NSString stringWithFormat:JMCustomLocalizedString(@"about.copyright", nil), currentYear];
+    return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n\n%@", copyrightString]
+                                       attributes:[self commonAttributes]];
+}
+
+- (NSAttributedString *)privacyPolicy
+{
+    NSString *privacyPolicyString = JMCustomLocalizedString(@"about.privacy_policy.title", nil);
+    return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n%@", privacyPolicyString]
+                                       attributes:[self commonAttributes]];
+}
+
+- (NSAttributedString *)eula
+{
+    NSString *eulaString = JMCustomLocalizedString(@"about.eula.title", nil);
+    return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n%@", eulaString]
+                                       attributes:[self commonAttributes]];
+}
+
+- (NSAttributedString *)whatsNew
+{
+    NSString *whatsNewString = JMCustomLocalizedString(@"about.whats_new.title", nil);
+    return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n%@", whatsNewString]
+                                       attributes:[self commonAttributes]];
+}
+
+#pragma mark - Helper for attributed strings
+- (NSAttributedString *)createAttributedStringWithString:(NSString *)string attributes:(NSDictionary *)attributes
+{
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string
+                                                                           attributes:attributes];
+    return attributedString;
+}
+
+- (NSDictionary *)commonAttributes
+{
+    NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
+    paragraphStyle.headIndent = 20;
+    paragraphStyle.firstLineHeadIndent = 20;
+
+    NSDictionary *attributes = @{
+            NSFontAttributeName : [[JMThemesManager sharedManager] appAboutCommonTextFont],
+            NSForegroundColorAttributeName : [[JMThemesManager sharedManager] aboutAppAppAboutTextColor],
+            NSParagraphStyleAttributeName: paragraphStyle
+    };
+
+    return attributes;
+}
+
+- (NSDictionary *)titleAttributes
+{
+    NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new] ;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+
+    NSDictionary *attributes = @{
+            NSFontAttributeName : [[JMThemesManager sharedManager] appAboutTitleFont],
+            NSForegroundColorAttributeName : [[JMThemesManager sharedManager] aboutAppAppNameTextColor],
+            NSParagraphStyleAttributeName: paragraphStyle
+    };
+    return attributes;
 }
 
 @end

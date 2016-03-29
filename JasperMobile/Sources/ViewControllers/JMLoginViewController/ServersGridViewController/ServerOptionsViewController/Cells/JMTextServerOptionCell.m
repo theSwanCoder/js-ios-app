@@ -47,7 +47,7 @@
 
     UIColor *placeholderColor = [UIColor сolorFromColor:self.textField.textColor differents:0.25 increase:YES];
     NSDictionary *attributes = @{
-                                 NSFontAttributeName : [UIFont systemFontOfSize:[JMUtils isIphone] ? 12 : 15],
+                                 NSFontAttributeName : [[JMThemesManager sharedManager] menuItemDescriptionFont],
                                  NSForegroundColorAttributeName : placeholderColor
                                  };
     NSString *trimmedPlaceholderString = [serverOption.titleString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" *"]];

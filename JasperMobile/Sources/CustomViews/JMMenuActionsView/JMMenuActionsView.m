@@ -22,7 +22,6 @@
 
 
 #import "JMMenuActionsView.h"
-#import "UITableViewCell+Additions.h"
 #import "UIImage+Additions.h"
 #import "JMLocalization.h"
 #import "JMMenuAction.h"
@@ -30,7 +29,8 @@
 #import "UIColor+RGBComponent.h"
 
 
-CGFloat static kJMMenuActionsViewCellHeight = 40;
+CGFloat static kJMMenuActionsViewCellPortraitHeight = 40;
+CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
 
 @interface JMMenuActionsView () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -63,6 +63,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     tableView.backgroundView = nil;
     tableView.delegate = self;
     tableView.dataSource = self;
+    tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     return tableView;
 }
 
@@ -103,6 +104,9 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
             @(JMMenuActionsViewAction_Edit) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Edit
                                                                        available:NO
                                                                          enabled:YES],
+            @(JMMenuActionsViewAction_EditFilters) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_EditFilters
+                                                                       available:NO
+                                                                         enabled:YES],
             @(JMMenuActionsViewAction_Sort) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Sort
                                                                        available:NO
                                                                          enabled:YES],
@@ -133,6 +137,15 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
             @(JMMenuActionsViewAction_OpenIn) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_OpenIn
                                                                        available:NO
                                                                          enabled:YES],
+            @(JMMenuActionsViewAction_Schedule) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Schedule
+                                                                       available:NO
+                                                                         enabled:YES],
+            @(JMMenuActionsViewAction_ShowExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ShowExternalDisplay
+                                                                                      available:NO
+                                                                                        enabled:YES],
+            @(JMMenuActionsViewAction_HideExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_HideExternalDisplay
+                                                                                      available:NO
+                                                                                        enabled:YES],
     };
 }
 
@@ -201,7 +214,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return kJMMenuActionsViewCellHeight;
+    return [self actionCellHeight];
 }
 
 - (void)tableView: (UITableView*)tableView willDisplayCell: (UITableViewCell*)cell forRowAtIndexPath: (NSIndexPath*)indexPath
@@ -222,7 +235,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
 - (void)updateFrameFitContent
 {
     NSInteger countOfActions = self.availableMenuActions.count;
-    CGFloat tableViewHeight = kJMMenuActionsViewCellHeight * countOfActions;
+    CGFloat tableViewHeight = [self actionCellHeight] * countOfActions;
     CGRect selfRect = self.frame;
     selfRect.size.height = tableViewHeight;
     CGFloat leftPadding = 20;
@@ -233,7 +246,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     self.tableView.frame = CGRectIntegral(selfRect);
     
     [self.tableView sizeToFit];
-    self.tableView.scrollEnabled = NO;
+    self.tableView.scrollEnabled = CGRectGetHeight(self.tableView.frame) < self.tableView.contentSize.height;
 }
 
 - (CGFloat)maxTextWidth
@@ -260,6 +273,11 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
         }
     }
     return maxImageWidth;
+}
+
+- (CGFloat) actionCellHeight
+{
+    return [JMUtils isCompactHeight] ? kJMMenuActionsViewCellLandscapeHeight : kJMMenuActionsViewCellPortraitHeight;
 }
 
 #pragma mark - Helpers

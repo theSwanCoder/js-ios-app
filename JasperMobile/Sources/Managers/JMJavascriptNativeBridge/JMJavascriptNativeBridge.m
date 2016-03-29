@@ -49,8 +49,10 @@
 #pragma mark - Public API
 - (void)startLoadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL
 {
-    [(UIWebView *)self.webView stopLoading];
-    [(UIWebView *)self.webView loadHTMLString:HTMLString baseURL:baseURL];
+    if (baseURL) {
+        [(UIWebView *)self.webView stopLoading];
+        [(UIWebView *)self.webView loadHTMLString:HTMLString baseURL:baseURL];
+    }
 }
 
 - (void)loadRequest:(NSURLRequest *)request
@@ -68,6 +70,37 @@
     [self.webView stringByEvaluatingJavaScriptFromString:fullJavascriptString];
 }
 
+- (void)sendRequest:(JMJavascriptRequest *)request completion:(void(^)(JMJavascriptCallback *callback, NSError *error))completion
+{
+    if (!completion) {
+        return;
+    }
+    NSString *javascriptString = request.command;
+    NSString *parameters = request.parametersAsString ?: @"";
+    NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
+//    JMLog(@"send request: %@", fullJavascriptString);
+    NSString *jsResponse = [self.webView stringByEvaluatingJavaScriptFromString:fullJavascriptString];
+//    NSLog(@"jsResponse: %@", jsResponse);
+
+    NSData *parametersAsData = [jsResponse dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error;
+    id json = [NSJSONSerialization JSONObjectWithData:parametersAsData
+                                                         options:NSJSONReadingMutableContainers
+                                                           error:&error];
+    if (json) {
+        JMJavascriptCallback *response = [JMJavascriptCallback new];
+        response.type = @"callback";
+        if ([json isKindOfClass:[NSDictionary class]]) {
+            response.parameters = json;
+        } else if ([json isKindOfClass:[NSArray class]]) {
+            response.parameters = @{@"parameters" : json };
+        }
+        completion(response, nil);
+    } else {
+        completion(nil, error);
+    }
+}
+
 - (void)injectJSInitCode:(NSString *)jsCode
 {
     self.isJSInitCodeInjected = NO;
@@ -77,7 +110,8 @@
 - (void)reset
 {
     self.isJSInitCodeInjected = NO;
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@""]];
+    [(UIWebView *) self.webView loadRequest:clearingRequest];
 }
 
 #pragma mark - UIWebViewDelegate
@@ -144,9 +178,11 @@
 
     if ([callbackType isEqualToString:@"json"]) {
         NSString *parameters = components[1];
+//        JMLog(@"origin parameters: %@", parameters);
         parameters = [parameters stringByReplacingOccurrencesOfString:@"/\"" withString:@"\""];
         parameters = [parameters stringByReplacingOccurrencesOfString:@"\"{" withString:@"{"];
         parameters = [parameters stringByReplacingOccurrencesOfString:@"}\"" withString:@"}"];
+//        JMLog(@"sanitized parameters: %@", parameters);
         NSData *parametersAsData = [parameters dataUsingEncoding:NSUTF8StringEncoding];
         NSError *error;
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:parametersAsData
@@ -163,6 +199,7 @@
         result[@"callback.type"] = callbackType;
 
         NSMutableArray *parameters = [NSMutableArray arrayWithArray:components];
+//        JMLog(@"origin parameters: %@", parameters);
         [parameters removeObjectAtIndex:0];
         for (NSString *component in parameters) {
             NSArray *keyValue = [component componentsSeparatedByString:@"="];

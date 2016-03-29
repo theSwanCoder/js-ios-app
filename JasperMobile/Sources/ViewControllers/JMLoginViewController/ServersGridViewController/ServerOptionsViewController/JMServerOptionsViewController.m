@@ -28,7 +28,6 @@
 
 #import "ALToastView.h"
 
-#import "UITableViewCell+Additions.h"
 #import "JMServerOptionCell.h"
 
 #import "JMCancelRequestPopup.h"
@@ -67,6 +66,7 @@
     }
     self.serverOptions.editable = self.editable;
     self.tableView.rowHeight = 50.f;
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -102,7 +102,6 @@
     JMServerOption *option = self.serverOptions.optionsArray[indexPath.row];
     
     JMServerOptionCell *cell = (JMServerOptionCell *) [tableView dequeueReusableCellWithIdentifier:option.cellIdentifier];
-    [cell setBottomSeparatorWithHeight:1 color:self.view.backgroundColor tableViewStyle:tableView.style];
     cell.serverOption = option;
     return cell;
 }

@@ -36,7 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"settings.privacy.policy.title", nil);
+    self.title = JMCustomLocalizedString(@"about.privacy_policy.title", nil);
     
     self.webView.scrollView.bounces = NO;
     

@@ -27,6 +27,7 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMExportManager.h"
 
 @implementation JMSavedResourcesListLoader
 
@@ -45,29 +46,29 @@
 }
 
 - (void)loadNextPage {
-    NSFetchRequest *fetchRequest = [self fetchRequest];
-    fetchRequest.predicate = [self predicates];
-    
     NSError *error;
-    NSArray *fetchedObjects = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest
+    NSArray *fetchedObjects = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:[self fetchRequest]
                                                                                                      error:&error];
     if (error) {
         [self finishLoadingWithError:error];
     } else {
-        NSMutableArray *folders = [NSMutableArray array];
-        NSMutableArray *resources = [NSMutableArray array];
+        NSMutableArray *commonResourcesArray = [NSMutableArray array];
         for(JMSavedResources *savedResource in fetchedObjects) {
-            if ([savedResource.wsType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FOLDER]) {
-                [folders addObject:[savedResource wrapperFromSavedReports]];
-            } else {
-                [resources addObject:[savedResource wrapperFromSavedReports]];
+            [commonResourcesArray addObject:[savedResource wrapperFromSavedReports]];
+        }
+        
+        NSArray *exportedResources = [[[JMExportManager sharedInstance] exportedResources] filteredArrayUsingPredicate:[self predicate]];
+        if (exportedResources.count) {
+            [commonResourcesArray addObjectsFromArray:exportedResources];
+            NSSortDescriptor *sortDescriptor = [self sortDescriptor];
+            if (sortDescriptor) {
+                commonResourcesArray = [[commonResourcesArray sortedArrayUsingDescriptors:@[sortDescriptor]] mutableCopy];
             }
         }
-        [self addResourcesWithResources:folders];
-        [self addResourcesWithResources:resources];
+        [self addResourcesWithResources:commonResourcesArray];
 
         _needUpdateData = NO;
-        
+
         [self finishLoadingWithError:nil];
     }
 }
@@ -80,12 +81,12 @@
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *filterItems = [NSMutableArray array];
             [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-                                     kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
+                    kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
 
             for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
                 [filterItems addObject:
-                 @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],
-                   kJMResourceListLoaderOptionItemValueKey: @[format]}];
+                        @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],
+                                kJMResourceListLoaderOptionItemValueKey: @[format]}];
             }
             return filterItems;
         }
@@ -97,20 +98,22 @@
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:kJMSavedResources inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
-    if ([self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]) {
-        BOOL ascending = self.sortBySelectedIndex == 0;
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:ascending];
+    
+    NSSortDescriptor *sortDescriptor = [self sortDescriptor];
+    if (sortDescriptor) {
         [fetchRequest setSortDescriptors:@[sortDescriptor]];
     }
-    
+
     [fetchRequest setEntity:entity];
-    
+    NSMutableArray *predicates = [NSMutableArray arrayWithObject:[[JMSessionManager sharedManager] predicateForCurrentServerProfile]];
+    [predicates addObject:[self predicate]];
+    fetchRequest.predicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
     return fetchRequest;
 }
 
-- (NSPredicate *)predicates
+- (NSPredicate *)predicate
 {
-    NSMutableArray *predicates = [@[[[JMSessionManager sharedManager] predicateForCurrentServerProfile]] mutableCopy];
+    NSMutableArray *predicates = [NSMutableArray array];
     [predicates addObject:[NSPredicate predicateWithFormat:@"format IN %@", [self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]]];
     if (self.searchQuery && self.searchQuery.length) {
         NSMutableArray *queryPredicates = [NSMutableArray array];
@@ -119,6 +122,15 @@
         [predicates addObject:[[NSCompoundPredicate alloc] initWithType:NSOrPredicateType subpredicates:queryPredicates]];
     }
     return [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
+}
+
+- (NSSortDescriptor *)sortDescriptor
+{
+    if ([self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]) {
+        BOOL ascending = self.sortBySelectedIndex == 0;
+        return [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:ascending];
+    }
+    return nil;
 }
 
 @end

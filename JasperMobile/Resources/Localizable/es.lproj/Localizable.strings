@@ -27,7 +27,7 @@
 
 /* Application Info */
 
-"application.info" = "Herramienta de administración y visor de informes de TIBCO JasperReports%@ Server %.1f y posterior.\n\nPara obtener más información, visite:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+"application.info" = "Herramienta de administración y visor de informes de TIBCO JasperReports%@ Server %.1f y posterior.\n\n%@\n\nPara obtener más información, visite:\n\n%@";
 
 /* Login Page */
 
@@ -150,7 +150,7 @@
 "report.viewer.save.name.errmsg.maxlength" = "Debe tener menos de %i caracteres.";
 "report.viewer.save.name.errmsg.characters" = "No se admiten los caracteres %@.";
 "report.viewer.save.saving.status.title" = "Guardando informe...";
-"report.viewer.save.name.errmsg.tooBigRange" = "No se puede guardar un informe de más de %@ páginas en formato HTML. ¿Desea guardarlo en formato PDF?";
+"report.viewer.save.name.errmsg.tooBigRange" = "No se puede guardar un informe de más de %@ páginas en formato %@. ¿Desea guardarlo en formato PDF?";
 
 // Report viewer Options view
 "report.viewer.options.singleselect.titlelabel.title" = "Seleccione un único elemento";

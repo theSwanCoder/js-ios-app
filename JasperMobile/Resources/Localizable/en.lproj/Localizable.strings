@@ -27,7 +27,14 @@
 
 /* Application Info */
 
-"application.info" = "Management tool and report viewer for TIBCO JasperReports%@ Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+"application.info" = "Management tool and report viewer for TIBCO JasperReports%@ Server %.1f and greater.\n\n%@\n\n\nFor more information visit:\n\n%@";
+
+/* About */
+"about.copyright" = "© 2005-%zd TIBCO Software, Inc.";
+"about.comminity.title" = "Jaspersoft Community";
+"about.whats_new.title" = "What's New";
+"about.privacy_policy.title" = "Privacy Policy";
+"about.eula.title" = "End user license agreement";
 
 /* Login Page */
 
@@ -76,10 +83,12 @@
 "menuitem.recentviews.label" = "Recently Viewed";
 "menuitem.saveditems.label" = "Saved Items";
 "menuitem.settings.label" = "Settings";
+"menuitem.schedules.label" = "Schedules";
 "menuitem.about.label" = "About";
 "menuitem.repository.label" = "Repository";
 "menuitem.favorites.label" = "Favorites";
 "menuitem.logout.label" = "Log Out";
+"menuitem.feedback.label" = "Feedback by email";
 
 // Descriptions
 
@@ -104,6 +113,7 @@
 "resources.filterby.type.reportUnit" = "Reports";
 "resources.filterby.type.dashboard" = "Dashboards";
 "resources.filterby.type.folder" = "Folders";
+"resources.filterby.type.files" = "Content Resources";
 "resources.filterby.type.saved.reportUnit" = "Saved Items";
 
 // Sort by
@@ -127,6 +137,8 @@
 "resource.viewer.print.button.title" = "Print...";
 "resource.viewer.print.preview.title" = "Preview";
 "resource.viewer.print.prepare.title" = "Prepare...";
+"resource.viewer.memory.warning" = "Sorry, Your device is low on memory...";
+
 
 // Report viewer
 "report.viewer.error.title" = "Error while loading report.";
@@ -135,6 +147,9 @@
 "report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filters, or tap 'Cancel' to return to the previous report.";
 "report.viewer.pagecount" = "of %d";
 "report.viewer.wrongNumberOfCurrentPage" = "The requested page is out of range (%@).";
+
+// Dashboard Viewer
+"dashboard.viewer.absent.input.controls.alert.message" = "Filters are absent";
 
 // Report Saver view
 "report.viewer.save.title" = "Save Report";
@@ -145,18 +160,21 @@
 "report.viewer.save.pages.range.fromPage" = "From page:";
 "report.viewer.save.pages.range.toPage" = "To page:";
 "report.viewer.save.saved" = "The report was saved successfully.";
+"report.viewer.save.addedToQueue" = "The report is being saved.";
 "report.viewer.save.name.errmsg.empty" = "This field is required.";
 "report.viewer.save.name.errmsg.notunique" = "This name already exists, choose a unique name.";
 "report.viewer.save.name.errmsg.notunique.rewrite" = "This name already exists, do you want to overwrite it?";
 "report.viewer.save.name.errmsg.maxlength" = "Must be less than %i characters.";
 "report.viewer.save.name.errmsg.characters" = "Characters %@ are not allowed.";
 "report.viewer.save.saving.status.title" = "Saving report...";
-"report.viewer.save.name.errmsg.tooBigRange" = "Can't save report of more than %@ pages in HTML format. Would you like to save it in PDF format?";
+"report.viewer.save.name.errmsg.tooBigRange" = "Can't save report of more than %@ pages in %@ format. Would you like to save it in PDF format?";
 
 // Report viewer Options view
 "report.viewer.options.title" = "Filters";
 "report.viewer.options.singleselect.titlelabel.title" = "Select a single item";
 "report.viewer.options.multiselect.titlelabel.title" = "Select one or more items";
+"report.viewer.options.multiselect.available.title" = "Available";
+"report.viewer.options.multiselect.selected.title" = "Selected";
 "report.viewer.options.search.value.placeholder" = "Search Values";
 "report.viewer.options.ic.title.date" = "Date";
 "report.viewer.options.ic.title.time" = "Time";
@@ -203,9 +221,6 @@
 "settings.crashtracking.title" = "Send crash reports";
 "settings.crashtracking.alert.title" = "Note";
 "settings.crashtracking.alert.message" = "Restart the app after changing this setting.";
-"settings.privacy.policy.title" = "Privacy Policy";
-"settings.privacy.EULA.title" = "End user license agreement";
-"settings.feedback" = "Feedback by email";
 "settings.feedback.errorShowClient" = "An email address is required.";
 "settings.save.message" = "Saving Settings...";
 
@@ -214,7 +229,8 @@
 
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
-"action.title.edit" = "Edit Filters";
+"action.title.edit" = "Edit Values";
+"action.title.edit.filters" = "Filters";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";
@@ -228,7 +244,13 @@
 "action.title.print" = "Print";
 "action.title.openIn" = "Open with...";
 "action.title.accept" = "Accept";
+"action.title.schedule" = "Schedule";
 
+/* External screens*/
+"action.title.showExternalDisplay" = "Show on TV";
+"action.title.hideExternalDisplay" = "Show on Device";
+"external.screen.button.title.maximize" = "Tap to maximize";
+"external.screen.button.title.manimize" = "Tap to minimize";
 /* Error messages */
 
 "error.readingresponse.dialog.msg" = "Failed to load data!";
@@ -278,4 +300,19 @@
 "back.button.title" = "Back";
 
 /* Security */
-"secutiry.http.message" = "You are using unsecure HTTP protocol. Please consider migrating to HTTPS.";
+"secutiry.http.message" = "\"HTTP connections are not secure. You should specify HTTPS if your server supports it.";
+
+/*Schedules*/
+"schedules.title" = "Schedules";
+"schedules.no.jobs.message" = "No jobs are scheduled.";
+// New Job
+"schedules.new.job.label" = "Schedule Label";
+"schedules.new.job.button.create" = "Create Schedule";
+"schedules.new.job.output.file.name" = "Output File Name";
+"schedules.new.job.output.file.path" = "Repository Output Folder";
+"schedules.new.job.format" = "Format";
+"schedules.new.job.start.date" = "Run once at:";
+"schedules.new.job.output.format" = "Output Format"; //title of alert
+"schedules.error.domain" = "Validation of creating new schedule job";
+"schedules.error.empty.filename" = "File name is empty";
+"schedules.error.empty.format" = "Output file format not selected";

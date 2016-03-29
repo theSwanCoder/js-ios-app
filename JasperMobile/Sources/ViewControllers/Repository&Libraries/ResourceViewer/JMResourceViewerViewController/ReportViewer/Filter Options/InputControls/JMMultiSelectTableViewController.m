@@ -27,6 +27,7 @@
 
 @interface JMMultiSelectTableViewController () <JMMenuActionsViewDelegate, PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *itemsSegmentedControl;
 
 @end
 
@@ -34,16 +35,26 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.titleLabel.text = JMCustomLocalizedString(@"report.viewer.options.multiselect.titlelabel.title", nil);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
 
+    self.itemsSegmentedControl.tintColor = [[JMThemesManager sharedManager] reportOptionsItemsSegmentedTintColor];
+    [self setupSegmentedControlAppearence];
 }
 
-#pragma mark - Initialization
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
+- (void) setupSegmentedControlAppearence
 {
-    return [super initWithNibName:NSStringFromClass([JMSingleSelectTableViewController class]) bundle:nil];
+    NSArray <JSInputControlOption *>*allOptions = self.cell.inputControlDescriptor.state.options;
+    NSString *availableTitle = JMCustomLocalizedString(@"report.viewer.options.multiselect.available.title", nil);
+    availableTitle = [availableTitle stringByAppendingFormat:@": %zd", allOptions.count];
+    [self.itemsSegmentedControl setTitle:availableTitle forSegmentAtIndex:0];
+    
+    NSString *selectedTitle = JMCustomLocalizedString(@"report.viewer.options.multiselect.selected.title", nil);
+    NSArray <JSInputControlOption *> *selectedOptions = [allOptions filteredArrayUsingPredicate:[self selectedValuesPredicate]];
+    NSInteger selectedOptionsCount = selectedOptions.count;
+    selectedTitle = [selectedTitle stringByAppendingFormat:@": %zd", selectedOptionsCount];
+    [self.itemsSegmentedControl setTitle:selectedTitle forSegmentAtIndex:1];
 }
 
 #pragma mark - Table view delegate
@@ -51,28 +62,28 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JSInputControlOption *option = self.listOfValues[indexPath.row];
-    option.selected = [JSConstants stringFromBOOL:!option.selected.boolValue];
+    option.selected = [JSUtils stringFromBOOL:!option.selected.boolValue];
     
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
-    if (option.selected.boolValue) {
-        [self.selectedValues addObject:option];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    if (self.itemsSegmentedControl.selectedSegmentIndex != 0) {
+        [self applyFiltering];
     } else {
-        if ([self.selectedValues containsObject:option]) {
-            [self.selectedValues removeObject:option];
-        }
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+    [self setupSegmentedControlAppearence];
 }
 
 #pragma mark - Actions
 
 - (void)actionButtonClicked:(id) sender
 {
+    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_ClearSelections;
+    if (self.itemsSegmentedControl.selectedSegmentIndex == 0) {
+        availableAction |= JMMenuActionsViewAction_SelectAll;
+    }
+    
     JMMenuActionsView *actionsView = [JMMenuActionsView new];
     actionsView.delegate = self;
-    actionsView.availableActions = JMMenuActionsViewAction_SelectAll | JMMenuActionsViewAction_ClearSelections;
+    actionsView.availableActions = availableAction;
     CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), -10);
     
     self.popoverView = [PopoverView showPopoverAtPoint:point
@@ -80,6 +91,32 @@
                                              withTitle:nil
                                        withContentView:actionsView
                                               delegate:self];
+}
+
+- (IBAction)itemsSegmentedControlDidChangedValue:(id)sender
+{
+    [self applyFiltering];
+}
+
+- (NSPredicate *)filteredPredicateWithText:(NSString *)text
+{
+    NSMutableArray *predicates = [NSMutableArray array];
+    NSPredicate *filterPredicate = [super filteredPredicateWithText:text];
+    if (filterPredicate) {
+        [predicates addObject:filterPredicate];
+    }
+    if (self.itemsSegmentedControl.selectedSegmentIndex != 0) {
+        [predicates addObject:[super selectedValuesPredicate]];
+    }
+    
+    if (predicates.count) {
+        if (predicates.count > 1) {
+            return [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+        } else {
+            return [predicates firstObject];
+        }
+    }
+    return nil;
 }
 
 #pragma mark - PopoverViewDelegate Methods
@@ -98,16 +135,12 @@
 #pragma mark - JMMenuActionsViewDelegate
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
-    [self.selectedValues removeAllObjects];
-    if (action == JMMenuActionsViewAction_SelectAll) {
-        [self.selectedValues addObjectsFromArray:self.listOfValues];
-    }
-    
     for (JSInputControlOption *option in self.listOfValues) {
-        option.selected = [JSConstants stringFromBOOL:(action == JMMenuActionsViewAction_SelectAll)];
+        option.selected = [JSUtils stringFromBOOL:(action == JMMenuActionsViewAction_SelectAll)];
     }
-    [self.tableView reloadData];
-    
+    [self applyFiltering];
+    [self setupSegmentedControlAppearence];
+
     [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
 }
 

@@ -55,6 +55,8 @@
             return @"action.title.filter";
         case JMMenuActionsViewAction_Edit:
             return @"action.title.edit";
+        case JMMenuActionsViewAction_EditFilters:
+            return @"action.title.edit.filters";
         case JMMenuActionsViewAction_Refresh:
             return @"action.title.refresh";
         case JMMenuActionsViewAction_Save:
@@ -81,6 +83,12 @@
             return @"action.title.print";
         case JMMenuActionsViewAction_OpenIn:
             return @"action.title.openIn";
+        case JMMenuActionsViewAction_Schedule:
+            return @"action.title.schedule";
+        case JMMenuActionsViewAction_ShowExternalDisplay:
+            return @"action.title.showExternalDisplay";
+        case JMMenuActionsViewAction_HideExternalDisplay:
+            return @"action.title.hideExternalDisplay";
     }
 }
 
@@ -92,6 +100,8 @@
         case JMMenuActionsViewAction_Filter:
             return @"filter_action";
         case JMMenuActionsViewAction_Edit:
+            return @"filter_action";
+        case JMMenuActionsViewAction_EditFilters:
             return @"filter_action";
         case JMMenuActionsViewAction_Refresh:
             return @"refresh_action";
@@ -119,6 +129,12 @@
             return @"print_action";
         case JMMenuActionsViewAction_OpenIn:
             return @"open_in_new";
+        case JMMenuActionsViewAction_Schedule:
+            return @"schedule_action";
+        case JMMenuActionsViewAction_ShowExternalDisplay:
+            return @"print_action";
+        case JMMenuActionsViewAction_HideExternalDisplay:
+            return @"print_action";
     }
 }
 

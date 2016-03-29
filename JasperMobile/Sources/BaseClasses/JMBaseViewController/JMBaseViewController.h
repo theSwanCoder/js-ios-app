@@ -33,5 +33,17 @@
 
 #import "GAITrackedViewController.h"
 
+
 @interface JMBaseViewController : GAITrackedViewController
+- (BOOL)isExternalScreenAvailable;
+
+- (BOOL)createExternalWindow;
+- (void)showExternalWindowWithCompletion:(void(^)(BOOL success))completion;
+- (void)hideExternalWindowWithCompletion:(void(^)(void))completion;
+- (UIView *)viewToShowOnExternalWindow;
+
+- (BOOL)isContentOnTV;
+
+- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title target:(id)target action:(SEL)action;
+- (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle;
 @end

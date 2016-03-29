@@ -44,6 +44,12 @@ extern NSString * const kJMDefaultsIntroDidApear;
 extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMFavoritesDidChangedNotification;
 extern NSString * const kJMSavedResourcesDidChangedNotification;
+extern NSString * const kJMExportedResourceDidLoadNotification;
+extern NSString * const kJMExportedResourceDidCancelNotification;
+
+// Local Notifications
+extern NSString * const kJMLocalNotificationKey;
+extern NSString * const kJMExportResourceLocalNotification;
 
 // Shared keys for dictionary
 extern NSString * const kJMTitleKey;
@@ -81,6 +87,7 @@ extern NSString * const kJMReportsDirectory;
 
 // Saved Items ws types
 extern NSString * const kJMSavedReportUnit;
+extern NSString * const kJMTempExportedReportUnit;
 
 // Name of the main report file (outputResource)
 extern NSString * const kJMReportFilename;
@@ -109,6 +116,7 @@ extern NSString * const kJMCurrentThemeFileName;
 
 // Analytics - Common
 extern NSString * const kJMAnalyticsServerVersionKey;
+extern NSString * const kJMAnalyticsServerEditionKey;
 extern NSString * const kJMAnalyticsCategoryKey;
 extern NSString * const kJMAnalyticsActionKey;
 extern NSString * const kJMAnalyticsLabelKey;
@@ -133,3 +141,7 @@ extern NSString * const kJMAnalyticsResourceEventLabelSavedResource;
 // Analytics - Repository
 extern NSString * const kJMAnalyticsRepositoryEventCategoryTitle;
 extern NSString * const kJMAnalyticsRepositoryEventActionOpen;
+
+// Custom Dimensions
+extern NSUInteger  const kJMAnalyticsCustomDimensionServerVersionIndex;
+extern NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex;

@@ -25,21 +25,30 @@
 #import "JMWebViewManager.h"
 #import "ALToastView.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMPrintResourceViewController.h"
 #import "JMMainNavigationController.h"
 
 @interface JMResourceViewerViewController () <UIPrintInteractionControllerDelegate>
 @property (nonatomic, weak, readwrite) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) UINavigationController *printNavController;
 @property (nonatomic, assign) CGSize printSettingsPreferredContentSize;
+@property (nonatomic, assign) NSInteger lowMemoryWarningsCount;
 @end
 
 @implementation JMResourceViewerViewController
 
-- (void)dealloc
+#pragma mark - Handle Memory Warnings
+- (void)didReceiveMemoryWarning
 {
-    [[JMWebViewManager sharedInstance] reset];
+    // Skip first warning.
+    // TODO: Consider replace this approach.
+    //
+    if (self.lowMemoryWarningsCount++ >= 1) {
+        [self handleLowMemory];
+    }
+
+    [super didReceiveMemoryWarning];
 }
+
 
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
@@ -47,6 +56,13 @@
     [super viewDidLoad];
 
     self.printSettingsPreferredContentSize = CGSizeMake(540, 580);
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    self.lowMemoryWarningsCount = 0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -74,22 +90,27 @@
 #pragma mark - Setups
 - (void)setupSubviews
 {
-    CGRect rootViewBounds = self.navigationController.view.bounds;
-    UIWebView *webView = [[JMWebViewManager sharedInstance] webViewWithParentFrame:rootViewBounds];
+    UIWebView *webView = [[JMWebViewManager sharedInstance] webView];
     webView.delegate = self;
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
 
+    [self setupWebViewLayout];
+}
+
+- (void)setupWebViewLayout
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": webView}]];
+                                                                        views:@{@"webView": self.webView}]];
 
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": webView}]];
+                                                                        views:@{@"webView": self.webView}]];
 }
 
 - (void)resetSubViews
@@ -112,7 +133,9 @@
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
     JMMenuActionsViewAction availableActions = [super availableActionForResource:resource];
-    if (![self.resourceLookup isSavedReport]) {
+    BOOL isSaveReport = [self.resourceLookup isSavedReport];
+    BOOL isFile = [self.resourceLookup isFile];
+    if ( !(isSaveReport || isFile) ) {
         availableActions |= JMMenuActionsViewAction_Print;
     }
     return availableActions;
@@ -130,10 +153,6 @@
 - (void)printResource
 {
     // Analytics
-    NSString *version = self.restClient.serverInfo.version;
-    if ([JMUtils isDemoAccount]) {
-        version = [version stringByAppendingString:@"(Demo)"];
-    }
     NSString *label = kJMAnalyticsResourceEventLabelSavedResource;
     if ([self.resourceLookup isReport]) {
         label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
@@ -143,16 +162,8 @@
     [JMUtils logEventWithInfo:@{
                         kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
                         kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionPrintTitle,
-                        kJMAnalyticsLabelKey         : label,
-                        kJMAnalyticsServerVersionKey : version
+                        kJMAnalyticsLabelKey         : label
                 }];
-}
-
-- (void)printItem:(id)printingItem withName:(NSString *)itemName
-{
-    [self printItem:printingItem
-           withName:itemName
-         completion:nil];
 }
 
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion
@@ -168,10 +179,12 @@
     printInteractionController.printingItem = printingItem;
 
     UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
-            if (completion) {
-                completion(completed, error);
-            }
-        };
+        if (completion) {
+            completion(completed, error);
+        }
+        // reassign keyWindow status (there is an issue when using showing a report on tv and printing the report).
+        [self.view.window makeKeyWindow];
+    };
 
     if ([JMUtils isIphone]) {
         [printInteractionController presentAnimated:YES completionHandler:completionHandler];
@@ -256,6 +269,22 @@
 {
     [self stopShowLoadingIndicators];
     self.isResourceLoaded = NO;
+}
+
+#pragma mark - Helpers
+- (void)handleLowMemory
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self.webView stopLoading];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+
+    NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
+    NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    __weak typeof(self) weakSelf = self;
+    [JMUtils presentAlertControllerWithError:error completion:^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf cancelResourceViewingAndExit:YES];
+    }];
 }
 
 @end
