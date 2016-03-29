@@ -302,6 +302,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     NSString *dashletDidMaximizeFailedListenerId = @"JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed";
     [self.webEnvironment addListenerWithId:dashletDidMaximizeFailedListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(@"JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed");
+        [JMUtils presentAlertControllerWithError:error
+                                      completion:nil];
     }];
 
     // Links
@@ -412,7 +414,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
 {
     JMLog(@"parameters: %@", parameters);
-    NSString *title = parameters[@"component"][@"name"];
+    NSString *title;
+    if ([JMUtils isServerAmber]) {
+        title = parameters[@"componentId"];
+    } else {
+        title = parameters[@"component"][@"name"];
+    }
     [self.delegate dashboardLoader:self didStartMaximazeDashletWithTitle:title];
 }
 
