@@ -275,7 +275,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
                     }];
                 } else {
                     [JMUtils presentAlertControllerWithError:error
-                                                  completion:nil];
+                                                  completion:^{
+                                                      [strongSelf cancelResourceViewingAndExit:YES];
+                                                  }];
                 }
             } else {
                 strongSelf.dashboard.components = components;
@@ -332,11 +334,8 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     JMMenuActionsViewAction menuActions = [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
 
-    // TODO: enable in next releases
-    if ([JMUtils isServerAmber2OrHigher]) {
-        if ([self isExternalScreenAvailable]) {
-            menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
-        }
+    if ([self isExternalScreenAvailable]) {
+        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
     }
 
     if ([self isInputControlsAvailable]) {
@@ -605,7 +604,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)addControlsForExternalWindow
 {
     self.controlsViewController = [JMExternalWindowDashboardControlsVC new];
-    self.controlsViewController.components = self.dashboard.dashlets;
+    self.controlsViewController.components = self.dashboard.components;
     [self.view addSubview:self.controlsViewController.view];
 
     self.controlsViewController.delegate = self;
@@ -637,10 +636,10 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 }
 
 #pragma mark - JMExternalWindowDashboardControlsVCDelegate
-- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JMDashlet *)dashlet
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JSDashboardComponent *)component
 {
-    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
-        [self.dashboardLoader maximizeDashlet:dashlet];
+    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashletForComponent:)]) {
+        [self.dashboardLoader maximizeDashletForComponent:component];
 
         // TODO: move to separate method
         self.navigationItem.rightBarButtonItems = nil;
@@ -653,14 +652,14 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         }
 
         self.leftButtonItem = self.navigationItem.leftBarButtonItem;
-        self.navigationItem.title = dashlet.name;
+        self.navigationItem.title = component.name;
     }
 }
 
-- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JMDashlet *)dashlet
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JSDashboardComponent *)component
 {
-    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
-        [self.dashboardLoader minimizeDashlet:dashlet];
+    if ([self.dashboardLoader respondsToSelector:@selector(minimizeDashletForComponent:)]) {
+        [self.dashboardLoader minimizeDashletForComponent:component];
 
         // TODO: move to separate method
         self.navigationItem.leftBarButtonItem = self.leftButtonItem;
