@@ -403,26 +403,11 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
              parameters:(NSArray *)parameters
 {
     if (hyperlinkType == JMHyperlinkTypeReportExecution) {
-        NSString *reportURI = resourceLookup.uri;
-        __weak typeof(self)weakSelf = self;
-        [self loadInputControlsWithReportURI:reportURI completion:^(NSArray *inputControls, NSError *error) {
-            __strong typeof(self)strongSelf = weakSelf;
-            if (error) {
-                __weak typeof(self) weakSelf = strongSelf;
-                [JMUtils presentAlertControllerWithError:error completion:^{
-                    __strong typeof(self) strongSelf = weakSelf;
-                    [strongSelf cancelResourceViewingAndExit:YES];
-                }];
-            } else {
-                JMReportViewerVC *reportViewController = (JMReportViewerVC *) [strongSelf.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-                reportViewController.resourceLookup = resourceLookup;
-                [reportViewController.report generateReportOptionsWithInputControls:inputControls];
-                [reportViewController.report updateReportParameters:parameters];
-                reportViewController.isChildReport = YES;
-
-                [strongSelf.navigationController pushViewController:reportViewController animated:YES];
-            }
-        }];
+        JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+        reportViewController.resourceLookup = resourceLookup;
+        reportViewController.initialReportParameters = parameters;
+        reportViewController.isChildReport = YES;
+        [self.navigationController pushViewController:reportViewController animated:YES];
     } else if (hyperlinkType == JMHyperlinkTypeReference) {
         NSURL *URL = parameters.firstObject;
         if (URL) {

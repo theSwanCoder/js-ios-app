@@ -425,38 +425,41 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleOnReportExecution:(NSDictionary *)parameters
 {
-    NSString *resource = parameters[@"resource"];
-    NSDictionary *params = parameters[@"params"];
+    NSString *resource = parameters[@"data"][@"resource"];
+    NSDictionary *params = parameters[@"data"][@"params"];
 
-    __weak typeof(self)weakSelf = self;
-    [self.restClient resourceLookupForURI:resource
-                             resourceType:kJS_WS_TYPE_REPORT_UNIT
-                               modelClass:[JSResourceLookup class]
-                          completionBlock:^(JSOperationResult *result) {
-                              __strong typeof(self)strongSelf = weakSelf;
-                                NSError *error = result.error;
-                                if (error) {
-                                    // TODO: add error handling
+    if (resource) {
+        __weak typeof(self)weakSelf = self;
+        [self.restClient resourceLookupForURI:resource
+                                 resourceType:kJS_WS_TYPE_REPORT_UNIT
+                                   modelClass:[JSResourceLookup class]
+                              completionBlock:^(JSOperationResult *result) {
+                                  __strong typeof(self)strongSelf = weakSelf;
+                                  NSError *error = result.error;
+                                  if (error) {
+                                      // TODO: add error handling
 //                                    NSString *errorString = error.localizedDescription;
 //                                    JMDashboardLoaderErrorType errorType = JMDashboardLoaderErrorTypeUndefined;
 //                                    if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
 //                                        errorType = JMDashboardLoaderErrorTypeAuthentification;
 //                                    }
-                                } else {
-                                    JMLog(@"objects: %@", result.objects);
-                                    JSResourceLookup *resourceLookup = [result.objects firstObject];
-                                    if (resourceLookup) {
-                                        resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
+                                  } else {
+                                      JMLog(@"objects: %@", result.objects);
+                                      JSResourceLookup *resourceLookup = [result.objects firstObject];
+                                      if (resourceLookup) {
+                                          resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
 
-                                        NSArray *reportParameters = [strongSelf createReportParametersFromParameters:params];
-                                        [strongSelf.delegate dashboardLoader:strongSelf
-                                                 didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
-                                                              resourceLookup:resourceLookup
-                                                                  parameters:reportParameters];
-                                    }
-                                }
-    }];
+                                          NSArray *reportParameters = [strongSelf createReportParametersFromParameters:params];
+                                          [strongSelf.delegate dashboardLoader:strongSelf
+                                                   didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
+                                                                resourceLookup:resourceLookup
+                                                                    parameters:reportParameters];
+                                      }
+                                  }
+                              }];
+    } else {
 
+    }
 }
 
 - (void)handleOnAdHocExecution:(NSDictionary *)parameters
