@@ -233,7 +233,7 @@
                 strongSelf.completion();
             }
         } else {
-            if (error.code != JSServerVersionNotSupportedErrorCode && error.code != JSServerNotReachableErrorCode) {
+            if ([error.domain isEqualToString:JSAuthErrorDomain]) {
                 NSString *errorTitle = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
                 NSString *errorMessage = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
                 error = [NSError errorWithDomain:errorTitle code:JSInvalidCredentialsErrorCode userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
