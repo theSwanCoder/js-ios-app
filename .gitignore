@@ -28,3 +28,7 @@ TIBCO JasperMobile.xcworkspace
 #Tests Output
 output
 build
+
+#Localizable String (Because we generate localizable strings dynamically)
+JasperMobile/Resources/Localizable/New_Strings/*
+JasperMobile/Resources/Localizable/Localizable.strings/*
