@@ -47,6 +47,7 @@
 		fr = Programmes
 		it = Programmi
 		ja = スケジュール
+		pt = Cronogramas
 		tags = ios,new
 	[menuitem_about_label]
 		en = About
@@ -54,7 +55,8 @@
 		es = Acerca de
 		fr = À propos
 		it = Informazioni
-		it = 詳細
+		jp = 詳細
+		pt = Sobre
 		tags = ios,new
 	[menuitem_repository_label]
 		en = Repository
@@ -93,4 +95,5 @@
 		fr = Évaluation par e-mail
 		it = Commenti tramite e-mail
 		ja = メールでフィードバックを送信
+		pt = Feedback por e-mail
 		tags = ios,new

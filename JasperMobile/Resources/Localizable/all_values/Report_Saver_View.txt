@@ -87,6 +87,7 @@
 		fr = Le rapport a été ajouté à la file d\'attente.
 		it = Il rapporto è stato aggiunto alla coda.
 		ja = レポートがキューに追加されました。
+		pt = O relatório foi adicionado à fila
 		tags = ios,new
 	[report_viewer_save_name_errmsg_empty]
 		en = This field is required.

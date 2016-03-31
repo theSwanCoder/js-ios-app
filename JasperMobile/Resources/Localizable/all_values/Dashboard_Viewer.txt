@@ -7,4 +7,5 @@
 		fr = Les filtres sont absents
 		it = I filtri sono assenti
 		ja = フィルタがありません
+		pt = Ausência de filtros
 		tags = ios,new,unused

@@ -57,6 +57,7 @@
 		fr = Ressources de contenu
 		it = Risorse sui contenuti
 		ja = コンテンツ リソース
+		pt = Recursos de conteúdo
 		tags = ios,new
 	[resources_filterby_type_saved_reportUnit]
 		en = Saved Items

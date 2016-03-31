@@ -27,6 +27,7 @@
 		fr = Modifier les valeurs
 		it = Modifica valori
 		ja = 値を編集する
+		pt = Editar valores
 		tags = ios,new
 	[action_title_edit_filters]
 		en = Filters
@@ -148,6 +149,7 @@
 		fr = Ouvrir avec...
 		it = Apri con...
 		ja = 次の項目で開く...
+		pt = Abrir com...
 		tags = ios,new
 	[action_title_accept]
 		en = Accept
@@ -156,6 +158,7 @@
 		fr = Accepter
 		it = Accetta
 		ja = 受け入れる
+		pt = Aceitar
 		tags = ios,new
 	[action_title_schedule]
 		en = Schedule
@@ -164,6 +167,7 @@
 		fr = Programme
 		it = Programma
 		ja = スケジュール
+		pt = Cronograma
 		tags = ios,new
 	[action_title_share]
 		en = Share
