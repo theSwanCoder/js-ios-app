@@ -433,7 +433,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     __weak typeof(self)weakSelf = self;
     [self.restClient inputControlsForReport:reportURI
-                                        ids:nil
                              selectedValues:nil
                             completionBlock:^(JSOperationResult *result) {
                                 __strong typeof(self)strongSelf = weakSelf;
