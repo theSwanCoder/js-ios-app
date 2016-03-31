@@ -6,20 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		93B2D7DA1CAC1BC200F60BF7 /* Localization */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 93B2D7DE1CAC1BC200F60BF7 /* Build configuration list for PBXAggregateTarget "Localization" */;
-			buildPhases = (
-				93B2D7DF1CAC1BCC00F60BF7 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = Localization;
-			productName = Localization;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		0801DF951AAF2CC000DD072C /* JMSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF941AAF2CC000DD072C /* JMSessionManager.m */; };
 		0801DF9D1AAF2CC900DD072C /* JMFavorites.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF981AAF2CC900DD072C /* JMFavorites.m */; };
@@ -2880,6 +2866,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F55CC375174CFFCF00CEB39E /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile" */;
 			buildPhases = (
+				93B2D7EA1CAD4B7100F60BF7 /* Run Script Generate Localizations */,
 				6F5F5E6592158193EE742D9E /* Check Pods Manifest.lock */,
 				F55CC32B174CFFCE00CEB39E /* Sources */,
 				F55CC32C174CFFCE00CEB39E /* Frameworks */,
@@ -2912,9 +2899,6 @@
 					9356EC961A30752800ACE2C6 = {
 						CreatedOnToolsVersion = 6.1;
 						TestTargetID = F55CC32E174CFFCE00CEB39E;
-					};
-					93B2D7DA1CAC1BC200F60BF7 = {
-						CreatedOnToolsVersion = 7.3;
 					};
 					93DC8C381C6CCEEE000DEADF = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -2952,7 +2936,6 @@
 				F55CC32E174CFFCE00CEB39E /* TIBCO JasperMobile */,
 				9356EC961A30752800ACE2C6 /* TIBCO JasperMobile Tests */,
 				93DC8C381C6CCEEE000DEADF /* TIBCO JasperMobileUITests */,
-				93B2D7DA1CAC1BC200F60BF7 /* Localization */,
 			);
 		};
 /* End PBXProject section */
@@ -3059,13 +3042,14 @@
 			shellPath = /bin/sh;
 			shellScript = "./Fabric.framework/run 9a63aa49c0a9ed0e9134fa82dab01ca1c99718a8 73aeeb1fc973ce845d6ee97b0279597de87d6411a1bbe82ba65e104f873d08c8";
 		};
-		93B2D7DF1CAC1BCC00F60BF7 /* ShellScript */ = {
+		93B2D7EA1CAD4B7100F60BF7 /* Run Script Generate Localizations */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Script Generate Localizations";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3585,27 +3569,6 @@
 			};
 			name = Release;
 		};
-		93B2D7DB1CAC1BC200F60BF7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		93B2D7DC1CAC1BC200F60BF7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		93B2D7DD1CAC1BC200F60BF7 /* Adhoc */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Adhoc;
-		};
 		93DC8C401C6CCEEE000DEADF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */;
@@ -3879,16 +3842,6 @@
 				9356ECA01A30752900ACE2C6 /* Debug */,
 				9356ECA11A30752900ACE2C6 /* Release */,
 				08DD18221B13519000856112 /* Adhoc */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		93B2D7DE1CAC1BC200F60BF7 /* Build configuration list for PBXAggregateTarget "Localization" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				93B2D7DB1CAC1BC200F60BF7 /* Debug */,
-				93B2D7DC1CAC1BC200F60BF7 /* Release */,
-				93B2D7DD1CAC1BC200F60BF7 /* Adhoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
