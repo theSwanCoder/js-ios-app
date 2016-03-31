@@ -380,10 +380,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                                    isServerAmberParam,
                                                    uriParam];
     runRequest.parametersAsString = requestParameters;
-
-    __weak typeof(self)weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
-        __strong typeof(self)strongSelf = weakSelf;
         if (error) {
             heapBlock(NO, error);
         } else {
