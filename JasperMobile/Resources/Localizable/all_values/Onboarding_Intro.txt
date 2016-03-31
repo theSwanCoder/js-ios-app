@@ -1,0 +1,102 @@
+
+[[Onboarding Intro]]
+	[intro_title]
+		en = Welcome to\nTIBCO JasperMobile
+		de = Willkommen bei\nTIBCO JasperMobile
+		fr = Bienvenue dans\nTIBCO JasperMobile
+		es = Bienvenido a\nTIBCO JasperMobile
+		it = Benvenuto a\nTIBCO JasperMobile
+		pt = Bem-vindo ao\nTIBCO JasperMobile
+		ja = TIBCO JasperMobile へようこそ
+		zh = 欢迎使用 TIBCO JasperMobile
+		tags = ios
+	[intro_description]
+		en = Swipe up to begin
+		de = Zum Beginnen nach oben wischen
+		fr = Faire glisser vers le haut pour commencer
+		es = Deslice hacia arriba para comenzar
+		it = Scorri rapidamente per iniziare
+		pt = Passe o dedo para começar
+		ja = 最初までスワイプします
+		zh = 向上轻扫以开始
+		tags = ios
+	[intro_button_skip_skip]
+		en = Skip Intro
+		de = Einführung überspringen
+		fr = Passer l’intro
+		es = Omitir introducción
+		it = Salta intr
+		pt = Pular introdução
+		ja = イントロをスキップ
+		zh = 跳过简介
+		tags = ios
+	[intro_button_skip_startUsing]
+		en = Start using TIBCO JasperMobile
+		de = Arbeit mit TIBCO JasperMobile beginnen
+		fr = Commencer à utiliser\nTIBCO JasperMobile
+		es = Empezar a usar TIBCO JasperMobile
+		it = Inizia a usare TIBCO JasperMobile
+		pt = Comece a usar o TIBCO JasperMobile
+		ja = TIBCO JasperMobile の使用を開始
+		zh = 开始使用 TIBCO JasperMobile
+		tags = ios
+	[intro_model_firstScreen_title]
+		en = Stay Connected
+		de = In Kontakt bleiben
+		fr = Rester connecté
+		es = Seguir conectado
+		it = Rimani collegato
+		pt = Fique conectado
+		ja = 接続を維持する
+		zh = 保持连接
+		tags = ios
+	[intro_model_firstScreen_description]
+		en = TIBCO JasperMobile keeps you connected to\nyour business wherever you are.
+		de = Durch TIBCO JasperMobile bleiben Sie in Kontakt\nmit Ihrem Geschäft. Egal wo Sie sich aufhalten.
+		fr = TIBCO JasperMobile vous permet de rester connecté à\nvotre entreprise où que vous soyez.
+		es = TIBCO JasperMobile le mantiene conectado a\nsu negocio en cualquier lugar.
+		it = TIBCO JasperMobile ti consente di essere sempre\nconnesso al tuo business, ovunque ti trovi.
+		pt = A TIBCO JasperMobile mantém você conectado a\nseus negócios onde estiver.
+		ja = TIBCO JasperMobile を使用すると、場所を問わず業務を続けることができます。
+		zh = TIBCO JasperMobile 可随时随地让您连接到您的企业。
+		tags = ios
+	[intro_model_secondScreen_title]
+		en = Instant Access
+		de = Unmittelbarer Zugriff
+		fr = Accès immédiat
+		es = Acceso al instante
+		it = Accesso istantaneo
+		pt = Acesso instantâneo
+		ja = 簡易アクセス
+		zh = 即时访问
+		tags = ios
+	[intro_model_secondScreen_description]
+		en = Get access to live interactive reports\ndriven from your operational applications.
+		de = Lesen Sie in Echtzeit erstellte interaktive Berichte,\ndie auf Ihren betrieblichen Anwendungen beruhen.
+		fr = Accédez aux rapports interactifs en direct\nà partir de vos applications opérationnelles.
+		es = Obtenga acceso a informes interactivos en directo\nimpulsados desde sus aplicaciones operativas.
+		it = Accedi a report interattivi in tempo reale\nrealizzati dalle tue applicazioni operative.
+		pt = Obtenha acesso a relatórios interativos ao vivo\ndirecionados de suas aplicações operacionais.
+		ja = 操作中のアプリケーションから実行されている\nインタラクティブなライブ レポートにアクセスします。
+		zh = 访问通过您运行的应用程序生成的实时交互报表。
+		tags = ios
+	[intro_model_thirdScreen_title]
+		en = Seemless Integration
+		de = Nahtlose Integration
+		fr = Intégration facile
+		es = Integración optimizada
+		it = Integrazione senza interruzioni
+		pt = Integração perfeita
+		ja = シームレスな統合
+		zh = 无缝集成
+		tags = ios
+	[intro_model_thirdScreen_description]
+		en = View and interact with your TIBCO JasperReports\nServer v%_1f or greater environment.
+		de = Nutzen Sie die Arbeitsumgebung Ihres TIBCO\nJasperReports Servers v%_1f oder höher.
+		fr = Affichez et interagissez avec votre TIBCO JasperReports\nServer v%_1f ou environnement ultérieur.
+		es = Vea el entorno de TIBCO JasperReports\nServer v%_1f o posterior e interactúe con él.
+		it = Visualizza e interagisci con il tuo ambiente\nTIBCO JasperReports Server v%_1f o versioni successive.
+		pt = Exiba e interaja com o ambiente do\nTIBCO JasperReports Server v%_1f ou superior.
+		ja = TIBCO JasperReports Server v%_1f 以降の環境を\n表示して連携します。
+		zh = 查看并与您的 TIBCO JasperReports Server v%_1f 或更大的环境交互。
+		tags = ios

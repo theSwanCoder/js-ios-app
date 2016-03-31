@@ -1,0 +1,66 @@
+
+[[Schedules]]
+	[schedules_title]
+		en = Schedules
+		tags = ios,new
+	[schedules_no_jobs_message]
+		en = No jobs are scheduled.
+		tags = ios,new
+
+[[New Job]]
+	[schedules_new_job_label]
+		en = Name
+		tags = ios,new
+	[schedules_new_job_description]
+		en = Description
+		tags = ios,new
+	[schedules_new_job_button_create]
+		en = Create Schedule
+		tags = ios,new
+	[schedules_new_job_output_file_name]
+		en = Output File Name
+		tags = ios,new
+	[schedules_new_job_output_file_path]
+		en = Repository Output Folder
+		tags = ios,new
+	[schedules_new_job_format]
+		en = Format
+		tags = ios,new
+	[schedules_new_job_start_date]
+		en = Run once at:
+		tags = ios,new
+	[schedules_new_job_start_immediately]
+		en = Start immediately
+		tags = ios,new
+	[schedules_new_job_output_format]
+		en = Output Format
+		tags = ios,new
+
+[[Schedule Errors]]
+	[schedules_error_domain]
+		en = Validation of a new schedule
+		tags = ios,new
+	[schedules_error_empty_filename]
+		en = Specify an output file name.
+		tags = ios,new
+	[schedules_error_empty_filename_invalid_characters]
+		en = The base output name contains invalid characters. You might have mistyped it.
+		tags = ios,new
+	[schedules_error_empty_output_folder]
+		en = Specify a folder.
+		tags = ios,new
+	[schedules_error_empty_label]
+		en = Specify a name for the scheduled job.
+		tags = ios,new
+	[schedules_error_empty_format]
+		en = Select output formats for the job.
+		tags = ios,new
+	[schedules_error_date_past]
+		en = The start date is in the past. It should be in the future.
+		tags = ios,new
+	[schedules_error_duplicate_filename]
+		en = There is a scheduled job of the same output file name. Please try different name.
+		tags = ios,new
+	[schedules_error_output_folder_inexistent]
+		en = The job output folder cannot be found. It might have been deleted or moved.
+		tags = ios,new

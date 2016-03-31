@@ -1,0 +1,5 @@
+
+[[Dashboard Viewer]]
+	[dashboard_viewer_absent_input_controls_alert_message]
+		en = Filters are absent
+		tags = ios,unused

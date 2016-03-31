@@ -1,0 +1,92 @@
+
+[[Report viewer Options view]]
+	[report_viewer_options_title]
+		en = Filters
+		tags = ios,new
+	[report_viewer_options_singleselect_titlelabel_title]
+		en = Select a single item
+		de = Ein einzelnes Element auswählen
+		fr = Sélectionner un seul élément
+		es = Seleccione un único elemento
+		it = Selezionare un unico elemento
+		pt = Selecione um único item
+		ja = 1 つのアイテムを選択
+		zh = 选择一个项目
+		tags = ios
+	[report_viewer_options_multiselect_titlelabel_title]
+		en = Select one or more items
+		de = Ein oder mehr Elemente auswählen
+		fr = Sélectionner un ou plusieurs éléments
+		es = Seleccione uno o más elementos
+		it = Selezionare uno o più elementi
+		pt = Selecione um ou mais itens.
+		ja = 1 つまたは複数のアイテムを選択
+		zh = 选择一个或多个项目
+		tags = ios
+	[report_viewer_options_multiselect_available_title]
+		en = Available
+		tags = ios,new
+	[report_viewer_options_multiselect_selected_title]
+		en = Selected
+		tags = ios,new
+	[report_viewer_options_search_value_placeholder]
+		en = Search Values
+		de = Werte durchsuchen
+		fr = Rechercher des valeurs
+		es = Buscar valores
+		it = Cerca valori
+		pt = Buscar valores
+		ja = 値を検索
+		zh = 搜索值
+		tags = ios
+	[report_viewer_options_ic_title_date]
+		en = Date
+		de = Datum
+		fr = Date
+		es = Fecha
+		it = Data
+		pt = Data
+		ja = 日付
+		zh = 日期
+		tags = ios
+	[report_viewer_options_ic_title_time]
+		en = Time
+		de = Zeit
+		fr = Heure
+		es = Hora
+		it = Ora
+		pt = Hora
+		ja = 時間
+		zh = 时间
+		tags = ios
+	[report_viewer_options_ic_title_unset]
+		en = Unset
+		de = Festlegung aufheben
+		fr = Non défini
+		es = Sin establecer
+		it = Annulla impostazione
+		pt = Cancelar definição
+		ja = 未設定
+		zh = 未设置
+		tags = ios
+	[report_viewer_report_options_title]
+		en = Saved Values
+		tags = ios,new
+	[report_viewer_report_options_active_option_title]
+		en = -- None --
+		tags = ios,new,unused
+	[report_viewer_report_options_new_option_title]
+		en = Enter name of a new ReportOption
+		tags = ios,new
+	[report_viewer_report_options_new_option_title_alreadyexist]
+		en = This report already has saved values with this name. Do you want to overwrite them?
+		tags = ios,new
+	[report_viewer_report_options_create_permission_error]
+		en = You do not have permission to save this option for the report. Log in as a permitted user if you can.
+		tags = ios,new
+	[report_viewer_report_options_remove_permission_error]
+		en = You do not have permission to remove this option for the report. Log in as a permitted user if you can.
+		tags = ios,new
+	[report_viewer_report_options_remove_confirmation_message]
+		en = Do you really want to remove\n%@?
+		tags = ios,new

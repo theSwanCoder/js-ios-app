@@ -1,0 +1,81 @@
+
+[[Menu View]]
+	[menuitem_library_label]
+		en = Library
+		de = Bibliothek
+		fr = Bibliothèque
+		es = Biblioteca
+		it = Libreria
+		pt = Biblioteca
+		ja = ライブラリ
+		zh = 库
+		tags = ios
+	[menuitem_recentviews_label]
+		en = Recently Viewed
+		de = Zuletzt angesehen
+		fr = Vu récemment
+		es = Recientemente visto
+		it = Visualizzato recentemente
+		pt = Recently Viewed
+		ja = 最近表示した項目
+		zh = 最近浏览
+		tags = ios
+	[menuitem_saveditems_label]
+		en = Saved Items
+		de = Gespeicherte Elemente
+		fr = Éléments enregistrés
+		es = Elementos guardados
+		it = Elementi salvati
+		pt = Itens salvos
+		ja = 保存されたアイテム
+		zh = 已保存项目
+		tags = ios
+	[menuitem_settings_label]
+		en = Settings
+		de = Einstellungen
+		fr = Paramètres
+		es = Configuración
+		it = Impostazioni
+		pt = Configurações
+		ja = 設定
+		zh = 设置
+		tags = ios,unused
+	[menuitem_schedules_label]
+		en = Schedules
+		tags = ios,new
+	[menuitem_about_label]
+		en = About
+		tags = ios,new
+	[menuitem_repository_label]
+		en = Repository
+		de = Repository
+		fr = Référentiel
+		es = Repositorio
+		it = Archivio
+		pt = Repositório
+		ja = リポジトリ
+		zh = 资料库
+		tags = ios
+	[menuitem_favorites_label]
+		en = Favorites
+		de = Favoriten
+		fr = Favoris
+		es = Favoritos
+		it = Preferiti
+		pt = Favoritos
+		ja = お気に入り
+		zh = 收藏夹
+		tags = ios
+	[menuitem_logout_label]
+		en = Log Out
+		de = Abmelden
+		fr = Déconnexion
+		es = Cerrar sesión
+		it = Disconnetti
+		pt = SAIR
+		ja = ログアウト
+		zh = 退出
+		tags = ios
+	[menuitem_feedback_label]
+		en = Feedback by email
+		tags = ios,new

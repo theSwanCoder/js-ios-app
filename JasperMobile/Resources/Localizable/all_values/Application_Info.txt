@@ -1,0 +1,12 @@
+
+[[Application Info]]
+	[application_info]
+		en = %@™ v %@\n\nManagement tool and report viewer for TIBCO JasperReports Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.
+		de = %@™ v %@\n\nManagementtool und Berichts-Viewer für TIBCO JasperReports Server %.1f und höher.\n\nWeitere Informationen erhalten Sie unter:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.
+		fr = %@™ v %@\n\nOutil de gestion et visionneuse de rapports pour TIBCO JasperReports Server %.1f et versions ultérieures.\n\nPour plus d'informations, consultez la page :\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.
+		es = %@™ v %@\n\nHerramienta de administración y visor de informes de TIBCO JasperReports Server %.1f y posterior.\n\nPara obtener más información, visite:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.
+		it = %@™ v %@\n\nStrumento di gestione e visualizzatore report per server TIBCO JasperReports %.1f e versioni successive.\n\nPer ulteriori informazioni visitare la pagina:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.
+		pt = %@™ v %@\n\nFerramenta de gerenciamento e visualizador de relatório para o TIBCO JasperReports Server %.1f e posterior.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.
+		ja = %@™ v %@\n\nTIBCO JasperReports Server %.1f 以降向けの管理ツール/レポートビューア。\n\n詳細は以下の URL をご覧ください。\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.
+		zh = %@™ v %@\n\nTIBCO JasperReports Server %.1f 及更高版本的管理工具和报告查看程序。\n\n有关更多信息，请访问: \nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\n版权所有 © 2005-%zd TIBCO Software, Inc.
+		tags = ios

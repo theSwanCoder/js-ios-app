@@ -1,0 +1,14 @@
+
+[[External Screens]]
+	[action_title_showExternalDisplay]
+		en = Show on TV
+		tags = ios,new
+	[action_title_hideExternalDisplay]
+		en = Show on Device
+		tags = ios,new
+	[external_screen_button_title_maximize]
+		en = Tap to maximize
+		tags = ios,new
+	[external_screen_button_title_manimize]
+		en = Tap to minimize
+		tags = ios,new

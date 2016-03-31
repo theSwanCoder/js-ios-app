@@ -1,0 +1,5 @@
+
+[[Security]]
+	[secutiry_http_message]
+		en = HTTP connections are not secure. You should specify HTTPS if your server supports it.
+		tags = ios,new

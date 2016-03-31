@@ -1,0 +1,112 @@
+
+[[Buttons]]
+	[dialog_button_applyUpdate]
+		en = Apply
+		de = Anwenden
+		fr = Appliquer
+		es = Aplicar
+		it = Applica
+		pt = Aplicar
+		ja = 適用
+		zh = 应用
+		tags = ios
+	[dialog_button_ok]
+		en = OK
+		de = OK
+		fr = OK
+		es = Aceptar
+		it = OK
+		pt = OK
+		ja = OK
+		zh = 确定
+		tags = ios
+	[dialog_button_cancel]
+		en = Cancel
+		de = Abbrechen
+		fr = Annuler
+		es = Cancelar
+		it = Annulla
+		pt = Cancelar
+		ja = キャンセル
+		zh = 取消
+		tags = ios
+	[dialog_button_continue]
+		en = Continue
+		de = Weiter
+		fr = Continuer
+		es = Continuar
+		it = Continua
+		pt = Continuar
+		ja = 続行
+		zh = 继续
+		tags = ios, unused
+	[dialog_button_retry]
+		en = Retry
+		de = Wiederholen
+		fr = Réessayer
+		es = Reintentar
+		it = Riprova
+		pt = Tentar novamente
+		ja = 再試行
+		zh = 重试
+		tags = ios
+	[dialog_button_run_report]
+		en = Run Report
+		de = Bericht ausführen
+		fr = Lancer le rapport
+		es = Ejecutar informe
+		it = Esegui report
+		pt = Executar relatório
+		ja = レポートの実行
+		zh = 运行报表
+		tags = ios
+	[dialog_button_save]
+		en = Save
+		de = Speichern
+		fr = Enregistrer
+		es = Guardar
+		it = Salva
+		pt = Salvar
+		ja = 保存
+		zh = 保存
+		tags = ios
+	[dialog_button_delete]
+		en = Delete
+		de = Löschen
+		fr = Supprimer
+		es = Eliminar
+		it = Elimina
+		pt = Excluir
+		ja = 削除
+		zh = 删除
+		tags = ios
+	[dialod_title_attention]
+		en = Warning
+		de = Warnung
+		fr = Avertissement
+		es = Advertencia
+		it = Avviso
+		pt = Atenção
+		ja = 警告
+		zh = 警告
+		tags = ios
+	[dialod_title_error]
+		en = Error
+		de = Fehler
+		fr = Erreur
+		es = Error
+		it = Errore
+		pt = Erro
+		ja = エラー
+		zh = 错误
+		tags = ios
+	[dialod_title_confirmation]
+		en = Confirmation
+		de = Bestätigung
+		fr = Confirmation
+		es = Confirmación
+		it = Conferma
+		pt = Confirmação
+		ja = 確認
+		zh = 确认
+		tags = ios

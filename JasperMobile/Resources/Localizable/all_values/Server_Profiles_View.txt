@@ -1,0 +1,152 @@
+
+[[Server Profiles view]]
+	[servers_profile_title]
+		en = Server Profiles
+		de = Serverprofile
+		fr = Profils de serveur
+		es = Perfiles del servidor
+		it = Profili server
+		pt = Perfis do servidor
+		ja = サーバー プロファイル
+		zh = 服务器配置文件
+		tags = ios
+	[servers_url_label]
+		en = Server address
+		de = Serveradresse
+		fr = Adresse du serveur
+		es = Dirección del servidor
+		it = Indirizzo server
+		pt = Endereço do servidor
+		ja = サーバー アドレス
+		zh = 服务器地址
+		tags = ios
+	[servers_url_errmsg]
+		en = Specify a valid URL.
+		de = Geben Sie eine gültige URL an.
+		fr = Spécifiez une URL valide.
+		es = Especifique una URL válida.
+		it = Specificare un URL valido.
+		pt = Especifique uma data válida
+		ja = 有効な URL を指定してください。
+		zh = 指定一个有效的 URL。
+		tags = ios
+	[servers_name_label]
+		en = Profile name
+		de = Profilname
+		fr = Nom du profil
+		es = Nombre del perfil
+		it = Nome profilo
+		pt = Nome da função
+		ja = プロファイル名
+		zh = 配置文件名
+		tags = ios
+	[servers_name_errmsg_empty]
+		en = Specify a valid profile name
+		de = Geben Sie einen gültigen Profilnamen an.
+		fr = Spécifier un nom de profil valide
+		es = Especifique un nombre de perfil válido
+		it = Indicare un nome di profilo valido
+		pt = Especifique um nome de perfil válido
+		ja = 有効なプロファイ名を指定してください
+		zh = 指定一个有效的配置文件名
+		tags = ios
+	[servers_name_errmsg_exists]
+		en = Profile name already exists. Specify a unique name.
+		de = Der Profilname ist bereits vorhanden. Geben Sie einen eindeutigen Namen an.
+		fr = Le nom de profil existe déjà. Spécifiez un nom unique.
+		es = El nombre de perfil ya existe. Especifique un nombre exclusivo.
+		it = Nome di profilo già esistente. Indicare un nome univoco.
+		pt = O nome do perfil já existe. Especifique um nome único.
+		ja = プロファイル名は既に存在します。一意の名前を指定してください。
+		zh = 配置文件名已存在。指定一个唯一的名称。
+		tags = ios
+	[servers_orgid_label]
+		en = Organization ID
+		de = Organisations-ID
+		fr = ID de l’organisation
+		es = ID de la organización
+		it = ID organizzazione
+		pt = ID da organização
+		ja = 組織 ID
+		zh = 组织 ID
+		tags = ios
+	[servers_askpassword_label]
+		en = Always ask for password
+		de = Passwort immer abfragen
+		fr = Toujours demander un mot de passe
+		es = Solicitar siempre una contraseña
+		it = Chiedere sempre la password
+		pt = Sempre peça a senha
+		ja = 常にパスワードを尋ねる
+		zh = 始终询问密码
+		tags = ios
+	[servers_keepSession_label]
+		en = Automatically extend the session
+		de = Sitzung automatisch verlängern
+		fr = Prolonger automatiquement la session
+		es = Ampliar automáticamente la sesión
+		it = Estendi automaticamente la sessione
+		pt = Estender a sessão automaticamente
+		ja = 自動的にセッションを延長する
+		zh = 自动扩展会话
+		tags = ios
+	[servers_title_new]
+		en = New Server Profile
+		de = Neues Serverprofil
+		fr = Nouveau profil de serveur
+		es = Nuevo perfil del servidor
+		it = Nuovo profilo server
+		pt = Novo perfil do servidor
+		ja = 新しいサーバー プロファイル
+		zh = 新服务器配置文件
+		tags = ios
+	[servers_action_profile_edit]
+		en = Edit
+		de = Bearbeiten
+		fr = Modifier
+		es = Editar
+		it = Modifica
+		pt = Editar
+		ja = 編集
+		zh = 编辑
+		tags = ios
+	[servers_action_profile_clone]
+		en = Clone Profile
+		de = Profil klonen
+		fr = Cloner le profil
+		es = Clonar perfil
+		it = Clona profilo
+		pt = Clonar perfil
+		ja = プロファイルの複製
+		zh = 克隆配置文件
+		tags = ios
+	[servers_action_profile_delete]
+		en = Delete
+		de = Löschen
+		fr = Supprimer
+		es = Eliminar
+		it = Elimina
+		pt = Excluir
+		ja = 削除
+		zh = 删除
+		tags = ios
+	[servers_profile_delete_message]
+		en = Confirm to delete this server profile.
+		de = Bestätigen Sie, dass dieses Serverprofil gelöscht werden soll.
+		fr = Confirmez la suppression de ce profil de serveur.
+		es = Confirme la eliminación de este perfil del servidor.
+		it = Assicurati di eliminare il profilo server.
+		pt = Confirmar para excluir este perfil do servidor.
+		ja = このサーバー プロファイルを削除するかどうかを確認してください。
+		zh = 确认删除此服务器配置文件。
+		tags = ios
+	[servers_profile_list_empty]
+		en = There are no Server Profiles
+		de = Es gibt keine Serverprofile.
+		fr = Aucun profil de serveur
+		es = No hay ningún perfil del servidor.
+		it = Nessun profilo server
+		pt = Não há Perfis do servidor
+		ja = サーバー プロファイルがありません
+		zh = 没有服务器配置文件
+		tags = ios

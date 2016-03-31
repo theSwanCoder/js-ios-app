@@ -1,0 +1,41 @@
+
+[[Saved Reports viewer view]]
+	[savedreport_viewer_modify_title]
+		en = Rename Report
+		de = Bericht umbenennen
+		fr = Renommer le rapport
+		es = Cambiar nombre de informe
+		it = Rinomina report
+		pt = Criar relatório
+		ja = レポートの名前変更
+		zh = 重命名报表
+		tags = ios
+	[savedreport_viewer_modify_reportname]
+		en = Item name
+		de = Elementname
+		fr = Nom de l’élément
+		es = Nombre del elemento
+		it = Nome dell'elemento
+		pt = Nome do item
+		ja = アイテム名
+		zh = 项目名称
+		tags = ios
+	[savedreport_viewer_delete_confirmation_message]
+		en = Do you really want to delete this item?
+		de = Möchten Sie dieses Element wirklich löschen?
+		fr = Voulez-vous vraiment supprimer cet élément ?
+		es = ¿Desea realmente eliminar este elemento?
+		it = Eliminare questo elemento?
+		pt = Tem certeza de que deseja excluir esse item?
+		ja = このアイテムを削除しますか?
+		zh = 是否确定要删除此项目?
+		tags = ios
+	[savedreport_viewer_show_resource_error_message]
+		en = Report could not be loaded. Try to save a report with less count of pages.
+		tags = ios,new,unused
+	[savedreport_viewer_file_not_exists]
+		en = File doesn't exists
+		tags = ios,new,unused
+	[savedreport_viewer_format_not_supported]
+		en = Format not supported
+		tags = ios,new
