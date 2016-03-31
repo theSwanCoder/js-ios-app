@@ -112,4 +112,5 @@
 		tags = ios, unused
 	[error_openIn_message]
 		en = There is no application to open this resource.
+		de = Es gibt keine Anwendung zum Öffnen dieses Bereichs.
 		tags = ios,new

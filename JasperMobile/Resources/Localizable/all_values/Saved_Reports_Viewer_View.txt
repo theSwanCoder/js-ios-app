@@ -32,10 +32,13 @@
 		tags = ios
 	[savedreport_viewer_show_resource_error_message]
 		en = Report could not be loaded. Try to save a report with less count of pages.
+		de = Der Bericht konnte nicht geladen werden. Versuchen Sie, einen Bericht mit geringerer Seitenanzahl zu speichern.
 		tags = ios,new,unused
 	[savedreport_viewer_file_not_exists]
 		en = File doesn't exists
+		de = Datei existiert nicht
 		tags = ios,new,unused
 	[savedreport_viewer_format_not_supported]
 		en = Format not supported
+		de = Das Format wird nicht unterstützt
 		tags = ios,new

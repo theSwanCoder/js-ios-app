@@ -2,16 +2,21 @@
 [[About]]
 	[about_copyright]
 		en = © 2005-%zd TIBCO Software, Inc.
+		de = © 2005-%zd TIBCO Software, Inc.
 		tags = ios,new
 	[about_comminity_title]
 		en = Jaspersoft Community
+		de = Jaspersoft Community
 		tags = ios,new
 	[about_whats_new_title]
 		en = What's New
+		de = Was gibt es Neues?
 		tags = ios,new
 	[about_privacy_policy_title]
 		en = Privacy Policy
+		de = Datenschutzerklärung
 		tags = ios,new
 	[about_eula_title]
 		en = End user license agreement
+		de = Endnutzer-Lizenzvereinbarung
 		tags = ios,new

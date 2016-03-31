@@ -2,4 +2,5 @@
 [[Security]]
 	[secutiry_http_message]
 		en = HTTP connections are not secure. You should specify HTTPS if your server supports it.
+		de = Sie verwenden ein unsicheres HTTP-Protokoll. Bitte erwägen Sie, zu HTTPS zu wechseln.
 		tags = ios,new

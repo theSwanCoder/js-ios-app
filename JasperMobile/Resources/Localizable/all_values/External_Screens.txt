@@ -2,13 +2,17 @@
 [[External Screens]]
 	[action_title_showExternalDisplay]
 		en = Show on TV
+		de = Auf dem TV zeigen
 		tags = ios,new
 	[action_title_hideExternalDisplay]
 		en = Show on Device
+		de = Auf dem Gerät zeigen
 		tags = ios,new
 	[external_screen_button_title_maximize]
 		en = Tap to maximize
+		de = Zum Maximieren tippen
 		tags = ios,new
 	[external_screen_button_title_manimize]
 		en = Tap to minimize
+		de = Zum Minimieren tippen
 		tags = ios,new

@@ -2,6 +2,7 @@
 [[Report viewer Options view]]
 	[report_viewer_options_title]
 		en = Filters
+		de = Filter
 		tags = ios,new
 	[report_viewer_options_singleselect_titlelabel_title]
 		en = Select a single item
@@ -25,9 +26,11 @@
 		tags = ios
 	[report_viewer_options_multiselect_available_title]
 		en = Available
+		de = Erhältlich
 		tags = ios,new
 	[report_viewer_options_multiselect_selected_title]
 		en = Selected
+		de = Ausgewählt
 		tags = ios,new
 	[report_viewer_options_search_value_placeholder]
 		en = Search Values
@@ -71,22 +74,29 @@
 		tags = ios
 	[report_viewer_report_options_title]
 		en = Saved Values
+		de = Gespeicherte Werte
 		tags = ios,new
 	[report_viewer_report_options_active_option_title]
 		en = -- None --
+		de = -- Keine --
 		tags = ios,new,unused
 	[report_viewer_report_options_new_option_title]
 		en = Enter name of a new ReportOption
+		de = Geben Sie die Bezeichnung einer neuen Berichts-Option ein
 		tags = ios,new
 	[report_viewer_report_options_new_option_title_alreadyexist]
 		en = This report already has saved values with this name. Do you want to overwrite them?
+		de = Ein Bericht mit dieser Bezeichnung hat bereits Werte gespeichert. Wollen Sie sie überschreiben?
 		tags = ios,new
 	[report_viewer_report_options_create_permission_error]
 		en = You do not have permission to save this option for the report. Log in as a permitted user if you can.
+		de = Sie haben zur Speicherung dieser Option für den Bericht keine Berechtigung. Melden Sie sich als genehmigter Benutzer an, wenn Ihnen das möglich ist.
 		tags = ios,new
 	[report_viewer_report_options_remove_permission_error]
 		en = You do not have permission to remove this option for the report. Log in as a permitted user if you can.
+		de = Sie haben zum Löschen dieser Option für den Bericht keine Berechtigung. Melden Sie sich als genehmigter Benutzer an, wenn Ihnen das möglich ist.
 		tags = ios,new
 	[report_viewer_report_options_remove_confirmation_message]
 		en = Do you really want to remove\n%@?
+		de = Wollen Sie %@ wirklich entfernen?
 		tags = ios,new

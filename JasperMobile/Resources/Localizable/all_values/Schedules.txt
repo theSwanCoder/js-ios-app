@@ -2,46 +2,57 @@
 [[Schedules]]
 	[schedules_title]
 		en = Schedules
+		de = Terminpläne
 		tags = ios,new
 	[schedules_no_jobs_message]
 		en = No jobs are scheduled.
+		de = Keine Aufträge sind geplant.
 		tags = ios,new
 
 [[New Job]]
 	[schedules_new_job_label]
 		en = Name
+		de = Auftrags-Etikett
 		tags = ios,new
 	[schedules_new_job_description]
 		en = Description
 		tags = ios,new
 	[schedules_new_job_button_create]
 		en = Create Schedule
+		de = Auftrag erstellen
 		tags = ios,new
 	[schedules_new_job_output_file_name]
 		en = Output File Name
+		de = Bezeichnung der Ausgabedatei
 		tags = ios,new
 	[schedules_new_job_output_file_path]
 		en = Repository Output Folder
+		de = Ausgabeverzeichnispfad
 		tags = ios,new
 	[schedules_new_job_format]
 		en = Format
+		de = Format
 		tags = ios,new
 	[schedules_new_job_start_date]
 		en = Run once at:
+		de = Anfangsdatum:
 		tags = ios,new
 	[schedules_new_job_start_immediately]
 		en = Start immediately
 		tags = ios,new
 	[schedules_new_job_output_format]
 		en = Output Format
+		de = Ausgabeformat
 		tags = ios,new
 
 [[Schedule Errors]]
 	[schedules_error_domain]
 		en = Validation of a new schedule
+		de = Validierung der Erstellung eines Terminplans für einen neuen Auftrag
 		tags = ios,new
 	[schedules_error_empty_filename]
 		en = Specify an output file name.
+		de = Dateiname ist leer.
 		tags = ios,new
 	[schedules_error_empty_filename_invalid_characters]
 		en = The base output name contains invalid characters. You might have mistyped it.
@@ -54,6 +65,7 @@
 		tags = ios,new
 	[schedules_error_empty_format]
 		en = Select output formats for the job.
+		de = Ausgabe-Dateiformat wurde nicht ausgewählt.
 		tags = ios,new
 	[schedules_error_date_past]
 		en = The start date is in the past. It should be in the future.

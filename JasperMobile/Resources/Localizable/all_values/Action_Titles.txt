@@ -22,6 +22,7 @@
 		tags = ios
 	[action_title_edit]
 		en = Edit Values
+		de = Werte bearbeiten
 		tags = ios,new
 	[action_title_edit_filters]
 		en = Filters
@@ -138,12 +139,15 @@
 		tags = ios
 	[action_title_openIn]
 		en = Open with...
+		de = Öffnen mit ...
 		tags = ios,new
 	[action_title_accept]
 		en = Accept
+		de = Akzeptieren
 		tags = ios,new
 	[action_title_schedule]
 		en = Schedule
+		de = Zeitplan
 		tags = ios,new
 	[action_title_share]
 		en = Share
