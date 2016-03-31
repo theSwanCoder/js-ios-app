@@ -6,7 +6,7 @@
 
 /********** About **********/
 
-"about.copyright" = "© 2005-%zd TIBCO Software, Inc.";
+"about_copyright" = "© 2005-%zd TIBCO Software, Inc.";
 
 "about_comminity_title" = "Jaspersoft Community";
 

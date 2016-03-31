@@ -32,6 +32,11 @@
 "action_title_share" = "Share";
 
 
+/********** Dashboard Viewer **********/
+
+"dashboard_viewer_absent_input_controls_alert_message" = "Filters are absent";
+
+
 /********** Error messages **********/
 
 "error_openIn_message" = "There is no application to open this resource.";
