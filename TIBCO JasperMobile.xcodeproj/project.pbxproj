@@ -184,6 +184,14 @@
 		938E1F991C1EEF6C009E1B79 /* vis_jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = A1478BF95DE687CDEB03D288 /* vis_jaspermobile.js */; };
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
 		939917321BC67737006CC2A7 /* old_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = A14785AF90B597E785B4A30A /* old_dashboard.js */; };
+		93B2D7E01CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14780F9AC66CD181A7D4662 /* Localizable.strings */; };
+		93B2D7E11CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478DEB63BFB19C76EE0F51 /* Localizable.strings */; };
+		93B2D7E21CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14785095AFB6CA6381BA957 /* Localizable.strings */; };
+		93B2D7E31CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14782938D2027B3C7755AAB /* Localizable.strings */; };
+		93B2D7E41CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478D318630E8E65F67373A /* Localizable.strings */; };
+		93B2D7E51CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478507E7AB10737467AF01 /* Localizable.strings */; };
+		93B2D7E61CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478B3040B5E554EBAD617D /* Localizable.strings */; };
+		93B2D7E71CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A147869D5A4968747665F846 /* Localizable.strings */; };
 		93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C4E3111C737DB300A19D64 /* JMUITestConstants.m */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
@@ -192,66 +200,31 @@
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
 		93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FD91BD7975E00355A30 /* Fabric.framework */; };
 		93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FDA1BD7975E00355A30 /* Crashlytics.framework */; };
-		A1478000AE2763C5EDEEBA90 /* Other.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478A67DDF3F43CD44C0DB1 /* Other.txt */; };
-		A147809E08170FA7A40EC1DB /* Resource_Viewer_View.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478D9D0720E660DDCA5388 /* Resource_Viewer_View.txt */; };
-		A14780B8C67379E42C6BFB54 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478507E7AB10737467AF01 /* Localizable.strings */; };
-		A14781AA2FCEAEA5018E5BFB /* Buttons.txt in Resources */ = {isa = PBXBuildFile; fileRef = A14781434FC5B3E2E32F77C8 /* Buttons.txt */; };
 		A14781F70628D2FE3607A35B /* resource_viewer.html in Resources */ = {isa = PBXBuildFile; fileRef = A14786368BF66101195146EB /* resource_viewer.html */; };
 		A1478208EF52280BF30EDEEE /* JMExternalWindowControlsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A147875D25959A63159192C8 /* JMExternalWindowControlsVC.xib */; };
 		A147820FB57EFF402452B6E9 /* JMVisDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478B04CE024F4DDDFDF22D /* JMVisDashboardLoader.m */; };
 		A147822581385266BCDCA6FB /* JMNewScheduleVCSection.m in Sources */ = {isa = PBXBuildFile; fileRef = A14787FB73FB92A6F9125E20 /* JMNewScheduleVCSection.m */; };
-		A1478269689B5F132E17E2D5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478B3040B5E554EBAD617D /* Localizable.strings */; };
-		A147828E4CD6A055C9C9B690 /* Dashboard_Viewer.txt in Resources */ = {isa = PBXBuildFile; fileRef = A14789E4E464A269362693AA /* Dashboard_Viewer.txt */; };
-		A147828F3DC3C97B29C5AD4D /* Action_Titles.txt in Resources */ = {isa = PBXBuildFile; fileRef = A147834B570BBE48E0A0B2D0 /* Action_Titles.txt */; };
-		A14782AFBA176150D5E70DAD /* Settings_View.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478DAD836BF0D06561BCAB /* Settings_View.txt */; };
-		A147832DB70D3C145E25C8E5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14782938D2027B3C7755AAB /* Localizable.strings */; };
 		A147837E1991885EC48D81AC /* JMScheduleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478E85ED789BDE76646F55 /* JMScheduleVC.m */; };
 		A147845B677EC917000192AB /* JMJavascriptRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A14789ABBB4628995F7040B6 /* JMJavascriptRequest.m */; };
-		A147845C08B0082260BAA3C3 /* Resource_Info_View.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478670922D02A9CE23C091 /* Resource_Info_View.txt */; };
 		A14784AF61EB18E6AD372AEB /* JMDashboardViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478D6859B60B36A4F9FCC8 /* JMDashboardViewerConfigurator.m */; };
-		A14784DD1107BD6F3801F829 /* Application_Info.txt in Resources */ = {isa = PBXBuildFile; fileRef = A14784886067CCB6544284BC /* Application_Info.txt */; };
 		A147858BEA4F571933B35D28 /* JMScheduleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478385D33526419265D48F /* JMScheduleCell.m */; };
-		A14785B34F6D96E5D91E5B73 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14780F9AC66CD181A7D4662 /* Localizable.strings */; };
-		A14785C35A6E49F58DB39F00 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478DEB63BFB19C76EE0F51 /* Localizable.strings */; };
 		A14785CEE1595A4C5D894C11 /* JMJavascriptNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = A14786A5622B2E985A799F21 /* JMJavascriptNativeBridge.m */; };
 		A14785D6EB9D46719DE946BD /* JMBaseDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A147866AB6450EAF0CD1CE44 /* JMBaseDashboardLoader.m */; };
-		A14785FAD0CB4219CDC7CD0A /* Saved_Reports_Viewer_View.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478004BA83FE92F7423390 /* Saved_Reports_Viewer_View.txt */; };
 		A14786008BE180F7DCADD5B7 /* JMDashboardInputControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478E970FE9B5FF46756AFF /* JMDashboardInputControlsVC.m */; };
 		A147862ACF2E0D9C1DAB389F /* JMNewScheduleBoolenCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478F3424586DD36ECD3DE4 /* JMNewScheduleBoolenCell.m */; };
 		A147864EBDE7A5C24D8D3588 /* JMExternalWindowControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478E3C1428657C98ECC2A2 /* JMExternalWindowControlsVC.m */; };
-		A147869EC4237098363DAC67 /* Error_Messages.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478C1601C45343C0DC98BC /* Error_Messages.txt */; };
 		A14786ADC7F4369E9DEDD26C /* JMScheduleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A147838F086DC01DE5EBC830 /* JMScheduleLoader.m */; };
-		A14786CBA25FDE2368B00987 /* Server_Profiles_View.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478F6E88F93749D4C42AAB /* Server_Profiles_View.txt */; };
-		A147872CC86FAABCAA277AD7 /* About.txt in Resources */ = {isa = PBXBuildFile; fileRef = A14786A95E92E4DBDCF30CF3 /* About.txt */; };
 		A14787748E391A1967D72E74 /* JMJavascriptCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A147806D6CC4CAC23BF4488F /* JMJavascriptCallback.m */; };
-		A14787A0FB0647713F065D15 /* Resource_Views.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478DB085E57E2AAFA392A1 /* Resource_Views.txt */; };
-		A147886811C12CAC10C9068E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14785095AFB6CA6381BA957 /* Localizable.strings */; };
-		A14788A0254E7447B8C3815F /* Login_Page.txt in Resources */ = {isa = PBXBuildFile; fileRef = A14787BAC45D98D85474E38F /* Login_Page.txt */; };
-		A14788C4802CF652888BEFE4 /* External_Screens.txt in Resources */ = {isa = PBXBuildFile; fileRef = A14787FE77399046BBBC00B1 /* External_Screens.txt */; };
-		A14788E8CA32D0CCC0BE3425 /* Resource_Views_Filter_By.txt in Resources */ = {isa = PBXBuildFile; fileRef = A147879D87F6B10D7B72E9AC /* Resource_Views_Filter_By.txt */; };
-		A1478901940526D427573D1B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14782558FC38AFDCE5164B4 /* Localizable.strings */; };
-		A1478955BD47791EA49D4740 /* Report_Viewer_Options_View.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478288629CDC8C0AA27ABF /* Report_Viewer_Options_View.txt */; };
-		A14789AA20332E586FE2FA24 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A147869D5A4968747665F846 /* Localizable.strings */; };
 		A14789C39DF01A718B92E97C /* JMDashboardViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478203D1D9D597184D040F /* JMDashboardViewerVC.m */; };
 		A14789DAD19DCADECAAAC548 /* JMDashboardParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = A14781FFF7CCBB2CBA23D0D0 /* JMDashboardParameter.m */; };
 		A1478A179D378E8F76BDD03C /* JMMenuAction.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478B758E018C4B68EDB8F3 /* JMMenuAction.m */; };
-		A1478A3B1A22D862C6C2BBA5 /* Menu_View.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478E75A2572A0FE57D4C40 /* Menu_View.txt */; };
-		A1478A4E4E6E72374C9231BF /* Schedules.txt in Resources */ = {isa = PBXBuildFile; fileRef = A14780AC179AEE75F176117E /* Schedules.txt */; };
-		A1478ABF5539CCA2E69AD7B7 /* Repository_View.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478E5443D2760B9551E174 /* Repository_View.txt */; };
 		A1478AE7CC7C6C85F153C9CC /* JMSchedulesListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A14788039BC56AEEEB389C6F /* JMSchedulesListVC.m */; };
 		A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = A147833F01EC956738C2E56A /* JMReportViewerToolBar.xib */; };
-		A1478B795A0D0CD1BDB0B338 /* Report_Viewer.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478D9DF582ED51DCD42CD8 /* Report_Viewer.txt */; };
-		A1478BC582C534840FD04524 /* Security.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478C8C597CA592190270E4 /* Security.txt */; };
 		A1478BC60E4CEBC8141E12EC /* JMNewScheduleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478FF2E87954F5F6AF096E /* JMNewScheduleCell.m */; };
-		A1478BD177151EB45BF250CB /* HTTP_Error_Messages.txt in Resources */ = {isa = PBXBuildFile; fileRef = A147872851E5C13C280816AB /* HTTP_Error_Messages.txt */; };
-		A1478BE5D6FC29681FB587FA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478D318630E8E65F67373A /* Localizable.strings */; };
 		A1478C6FB612042252B18107 /* JMScheduleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478961EB70C13590B1CBE5 /* JMScheduleManager.m */; };
-		A1478CE6CD426522EB5635A2 /* Report_Saver_View.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478AFFC93E5D3342BAE32D /* Report_Saver_View.txt */; };
-		A1478D38DF222BBEBB3EF455 /* Resource_Views_Sort_By.txt in Resources */ = {isa = PBXBuildFile; fileRef = A147871B3A082719D1232C44 /* Resource_Views_Sort_By.txt */; };
 		A1478D40CCAF657421DA2D40 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = A1478E1EEE6B448244A33391 /* README.md */; };
 		A1478D6B609C61DEF3A3AC92 /* JMVisualizeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AE10405430D44256CA0 /* JMVisualizeManager.m */; };
 		A1478E2F53F91CD7BCDACB1E /* JMWebEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = A14781236AC9524AE2DDCA14 /* JMWebEnvironment.m */; };
-		A1478EF7C6BC843D846C9BCA /* Onboarding_Intro.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1478895608DDEB59D767F01 /* Onboarding_Intro.txt */; };
 		A1478EFBFF648E171A39F2BF /* JMReportViewerToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */; };
 		BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */; };
 		BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */; };
@@ -3003,6 +2976,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93B2D7E01CAD167E00F60BF7 /* Localizable.strings in Resources */,
+				93B2D7E11CAD167E00F60BF7 /* Localizable.strings in Resources */,
+				93B2D7E21CAD167E00F60BF7 /* Localizable.strings in Resources */,
+				93B2D7E31CAD167E00F60BF7 /* Localizable.strings in Resources */,
+				93B2D7E41CAD167E00F60BF7 /* Localizable.strings in Resources */,
+				93B2D7E51CAD167E00F60BF7 /* Localizable.strings in Resources */,
+				93B2D7E61CAD167E00F60BF7 /* Localizable.strings in Resources */,
+				93B2D7E71CAD167E00F60BF7 /* Localizable.strings in Resources */,
 				938E1F991C1EEF6C009E1B79 /* vis_jaspermobile.js in Resources */,
 				939917321BC67737006CC2A7 /* old_dashboard.js in Resources */,
 				08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */,
@@ -3030,41 +3011,6 @@
 				93826C7F1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib in Resources */,
 				A1478208EF52280BF30EDEEE /* JMExternalWindowControlsVC.xib in Resources */,
 				A14781F70628D2FE3607A35B /* resource_viewer.html in Resources */,
-				A14784DD1107BD6F3801F829 /* Application_Info.txt in Resources */,
-				A147872CC86FAABCAA277AD7 /* About.txt in Resources */,
-				A14788A0254E7447B8C3815F /* Login_Page.txt in Resources */,
-				A14786CBA25FDE2368B00987 /* Server_Profiles_View.txt in Resources */,
-				A1478EF7C6BC843D846C9BCA /* Onboarding_Intro.txt in Resources */,
-				A1478A3B1A22D862C6C2BBA5 /* Menu_View.txt in Resources */,
-				A14787A0FB0647713F065D15 /* Resource_Views.txt in Resources */,
-				A147809E08170FA7A40EC1DB /* Resource_Viewer_View.txt in Resources */,
-				A1478B795A0D0CD1BDB0B338 /* Report_Viewer.txt in Resources */,
-				A1478CE6CD426522EB5635A2 /* Report_Saver_View.txt in Resources */,
-				A1478955BD47791EA49D4740 /* Report_Viewer_Options_View.txt in Resources */,
-				A14785FAD0CB4219CDC7CD0A /* Saved_Reports_Viewer_View.txt in Resources */,
-				A147845C08B0082260BAA3C3 /* Resource_Info_View.txt in Resources */,
-				A14782AFBA176150D5E70DAD /* Settings_View.txt in Resources */,
-				A147828F3DC3C97B29C5AD4D /* Action_Titles.txt in Resources */,
-				A147869EC4237098363DAC67 /* Error_Messages.txt in Resources */,
-				A1478BD177151EB45BF250CB /* HTTP_Error_Messages.txt in Resources */,
-				A14781AA2FCEAEA5018E5BFB /* Buttons.txt in Resources */,
-				A1478000AE2763C5EDEEBA90 /* Other.txt in Resources */,
-				A14788E8CA32D0CCC0BE3425 /* Resource_Views_Filter_By.txt in Resources */,
-				A1478D38DF222BBEBB3EF455 /* Resource_Views_Sort_By.txt in Resources */,
-				A1478ABF5539CCA2E69AD7B7 /* Repository_View.txt in Resources */,
-				A147828E4CD6A055C9C9B690 /* Dashboard_Viewer.txt in Resources */,
-				A14788C4802CF652888BEFE4 /* External_Screens.txt in Resources */,
-				A1478BC582C534840FD04524 /* Security.txt in Resources */,
-				A1478A4E4E6E72374C9231BF /* Schedules.txt in Resources */,
-				A1478901940526D427573D1B /* Localizable.strings in Resources */,
-				A14785B34F6D96E5D91E5B73 /* Localizable.strings in Resources */,
-				A14785C35A6E49F58DB39F00 /* Localizable.strings in Resources */,
-				A147886811C12CAC10C9068E /* Localizable.strings in Resources */,
-				A147832DB70D3C145E25C8E5 /* Localizable.strings in Resources */,
-				A1478BE5D6FC29681FB587FA /* Localizable.strings in Resources */,
-				A14780B8C67379E42C6BFB54 /* Localizable.strings in Resources */,
-				A1478269689B5F132E17E2D5 /* Localizable.strings in Resources */,
-				A14789AA20332E586FE2FA24 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3124,7 +3070,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Start compiling localizations\"\nlocalizationFolderPath=${SRCROOT}/JasperMobile/Resources/Localizable\nallLocalizationsFolderPath=$localizationFolderPath/all_values\nallLocalizationsFileName=locales.txt\noutupPathNewStrings=$localizationFolderPath/New_Strings\noutupPath=$localizationFolderPath/Localizable.strings\ncat \"$allLocalizationsFolderPath\"/*.txt > $localizationFolderPath/$allLocalizationsFileName\ntwine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outupPathNewStrings/\" --tags new\ntwine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outupPath/\"\nrm \"$localizationFolderPath/$allLocalizationsFileName\"";
+			shellScript = "echo \"Start compiling localizations\"\nlocalizationFolderPath=${SRCROOT}/JasperMobile/Resources/Localizable\nallLocalizationsFolderPath=$localizationFolderPath/all_values\nallLocalizationsFileName=locales.txt\noutupPathNewStrings=$localizationFolderPath/New_Strings\noutupPath=$localizationFolderPath/Localizable.strings\ncat \"$allLocalizationsFolderPath\"/*.txt > $localizationFolderPath/$allLocalizationsFileName\ntwine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outupPathNewStrings/\" --tags new\ntwine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outupPath/\"\nrm \"$localizationFolderPath/$allLocalizationsFileName\"\necho \"Finish compiling localizations\"";
 		};
 		9D3415DC47E90FD0EB7D031E /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
