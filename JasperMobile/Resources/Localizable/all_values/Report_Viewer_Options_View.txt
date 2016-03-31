@@ -8,7 +8,8 @@
 		it = Filtri
 		ja = フィルター
 		pt = Filtros
-		tags = ios,new
+		zh = 过滤器
+		tags = ios
 	[report_viewer_options_singleselect_titlelabel_title]
 		en = Select a single item
 		de = Ein einzelnes Element auswählen
@@ -37,7 +38,8 @@
 		it = Disponibile
 		ja = 利用可能です
 		pt = Disponível
-		tags = ios,new
+		zh = 可用的
+		tags = ios
 	[report_viewer_options_multiselect_selected_title]
 		en = Selected
 		de = Ausgewählt
@@ -46,7 +48,8 @@
 		it = Selezionato
 		ja = 選択されました
 		pt = Selecionado
-		tags = ios,new
+		zh = 已选
+		tags = ios
 	[report_viewer_options_search_value_placeholder]
 		en = Search Values
 		de = Werte durchsuchen
@@ -95,7 +98,8 @@
 		it = Valori salvati
 		ja = 保存された値
 		pt = Valores gravados
-		tags = ios,new
+		zh = 已保存的值
+		tags = ios
 	[report_viewer_report_options_active_option_title]
 		en = -- None --
 		de = -- Keine --
@@ -104,7 +108,8 @@
 		it = -- Nessuno --
 		ja =  -  なし  -
 		pt = -- Nenhum --
-		tags = ios,new,unused
+		zh = -  无  -
+		tags = ios,unused
 	[report_viewer_report_options_new_option_title]
 		en = Enter name of a new ReportOption
 		de = Geben Sie die Bezeichnung einer neuen Berichts-Option ein
@@ -113,7 +118,8 @@
 		it = Inserire il nome di un nuovo OpzioneRapporto
 		ja = 新しいレポートオプションの名前を入力してください
 		pt = Digite o nome de uma nova Opção de Relatório
-		tags = ios,new
+		zh = 输入新的ReportOption名称
+		tags = ios
 	[report_viewer_report_options_new_option_title_alreadyexist]
 		en = This report already has saved values with this name. Do you want to overwrite them?
 		de = Ein Bericht mit dieser Bezeichnung hat bereits Werte gespeichert. Wollen Sie sie überschreiben?
@@ -122,7 +128,8 @@
 		it = Questo rapporto ha già salvato i valori con questo nome. Sovrascriverli?
 		ja = このレポートには既に、この名前で保存された値が存在しています。内容を上書きしますか？
 		pt = Este relatório já contém valores gravados com este nome. Deseja substituí-los?
-		tags = ios,new
+		zh = 该报告已经有这个名称下的已保存的值。要覆盖它们吗？
+		tags = ios
 	[report_viewer_report_options_create_permission_error]
 		en = You do not have permission to save this option for the report. Log in as a permitted user if you can.
 		de = Sie haben zur Speicherung dieser Option für den Bericht keine Berechtigung. Melden Sie sich als genehmigter Benutzer an, wenn Ihnen das möglich ist.
@@ -131,7 +138,8 @@
 		it = Non si dispone dell\'autorizzazione necessaria per salvare questa opzione per il rapporto. Eseguire l\'accesso come utente autorizzato, se possibile.
 		ja = あなたは、このレポートにこのオプションを保存する権限を持っていません。お望みであれば、権限を保有するユーザーとしてログインしていただけます。
 		pt = Você não tem permissão para salvar esta opção no relatório. Conecte-se como um usuário autorizado.
-		tags = ios,new
+		zh = 您没有权限为本报告保存该选项。如果可以请您登录为许可用户。
+		tags = ios
 	[report_viewer_report_options_remove_permission_error]
 		en = You do not have permission to remove this option for the report. Log in as a permitted user if you can.
 		de = Sie haben zum Löschen dieser Option für den Bericht keine Berechtigung. Melden Sie sich als genehmigter Benutzer an, wenn Ihnen das möglich ist.
@@ -140,7 +148,8 @@
 		it = Non si dispone dell\'autorizzazione necessaria per rimuovere questa opzione dal rapporto. Eseguire l\'accesso come utente autorizzato, se possibile.
 		ja = あなたは、このレポートにこのオプションを削除する権限を持っていません。お望みであれば、権限を保有するユーザーとしてログインしていただけます。
 		pt = Você não tem permissão para remover esta opção no relatório. Conecte-se como um usuário autorizado.
-		tags = ios,new
+		zh = 您没有权限为本报告移除该选项。如果可以请您登录为许可用户。
+		tags = ios
 	[report_viewer_report_options_remove_confirmation_message]
 		en = Do you really want to remove\n%@?
 		de = Wollen Sie %@ wirklich entfernen?
@@ -149,4 +158,5 @@
 		it = Si desidera rimuovere davvero\n%@?
 		ja = 本当に次の項目を削除しますか\n%s？
 		pt = Deseja realmente remover\n%@?
-		tags = ios,new
+		zh = 您确定要移除\n%s?
+		tags = ios

@@ -58,7 +58,8 @@
 		it = Risorse sui contenuti
 		ja = コンテンツ リソース
 		pt = Recursos de conteúdo
-		tags = ios,new
+		zh = 内容资源
+		tags = ios
 	[resources_filterby_type_saved_reportUnit]
 		en = Saved Items
 		de = Gespeicherte Elemente

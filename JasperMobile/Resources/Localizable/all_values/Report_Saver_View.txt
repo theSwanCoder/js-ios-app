@@ -88,7 +88,8 @@
 		it = Il rapporto è stato aggiunto alla coda.
 		ja = レポートがキューに追加されました。
 		pt = O relatório foi adicionado à fila
-		tags = ios,new
+		zh = 该报告已加入队列。
+		tags = ios
 	[report_viewer_save_name_errmsg_empty]
 		en = This field is required.
 		de = Dieses Feld ist erforderlich.

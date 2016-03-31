@@ -8,7 +8,8 @@
 		it = Pianificazioni
 		ja = スケジュール
 		pt = Cronogramas
-		tags = ios,new
+		zh = 时间规划表
+		tags = ios
 	[schedules_no_jobs_message]
 		en = No jobs are scheduled.
 		de = Keine Aufträge sind geplant.
@@ -17,7 +18,8 @@
 		it = Nessun lavoro pianificato.
 		ja = ジョブはなにもスケジュールされていません。
 		pt = Não há tarefas agendadas
-		tags = ios,new
+		zh = 未规划任何工作。
+		tags = ios
 
 [[New Job]]
 	[schedules_new_job_label]
@@ -28,7 +30,8 @@
 		it = Informazioni sul lavoro
 		ja = ジョブ ラベル
 		pt = Classificação da tarefa
-		tags = ios,new
+		zh = 工作标签
+		tags = ios
 	[schedules_new_job_description]
 		en = Description
 		tags = ios,new
@@ -40,7 +43,8 @@
 		it = Crea lavoro
 		ja = ジョブを作成する
 		pt = Criar tarefa
-		tags = ios,new
+		zh = 创建工作
+		tags = ios
 	[schedules_new_job_output_file_name]
 		en = Output File Name
 		de = Bezeichnung der Ausgabedatei
@@ -48,7 +52,8 @@
 		fr = Nom du fichier de sortie
 		ja = ファイル名を出力する
 		pt = Nome do arquivo de saída
-		tags = ios,new
+		zh = 输出文件名
+		tags = ios
 	[schedules_new_job_output_file_path]
 		en = Repository Output Folder
 		de = Ausgabeverzeichnispfad
@@ -57,7 +62,8 @@
 		it = Percorso cartella di stampa
 		ja = フォルダ パスを出力する
 		pt = Diretório da pasta de saída
-		tags = ios,new
+		zh = 输出文件夹路径
+		tags = ios
 	[schedules_new_job_format]
 		en = Format
 		de = Format
@@ -66,7 +72,8 @@
 		it = Formato
 		ja = 形式
 		pt = Formato
-		tags = ios,new
+		zh = 格式
+		tags = ios
 	[schedules_new_job_start_date]
 		en = Run once at:
 		de = Anfangsdatum:
@@ -75,7 +82,8 @@
 		it = Data di inizio:
 		ja = 開始日
 		pt = Data de início
-		tags = ios,new
+		zh = 开始日期
+		tags = ios
 	[schedules_new_job_start_immediately]
 		en = Start immediately
 		tags = ios,new
@@ -87,7 +95,8 @@
 		it = Formato di stampa
 		ja = 出力形式
 		pt = Formato de saída
-		tags = ios,new
+		zh = 输出格式
+		tags = ios
 
 [[Schedule Errors]]
 	[schedules_error_domain]
@@ -98,7 +107,8 @@
 		it = Validazione per la creazione di un nuovo lavoro pianificato
 		ja = 新しいスケジュール ジョブの作成を許可する
 		pt = Validação da criação de nova tarefa agendada
-		tags = ios,new
+		zh = 创造新工作计划的验证
+		tags = ios
 	[schedules_error_empty_filename]
 		en = Specify an output file name.
 		de = Dateiname ist leer.
@@ -107,7 +117,8 @@
 		it = Il nome del file è vuoto
 		ja = ファイル名が空です。
 		pt = O campo \'nome do arquivo\' está em branco
-		tags = ios,new
+		zh = 文件名称为空
+		tags = ios
 	[schedules_error_empty_filename_invalid_characters]
 		en = The base output name contains invalid characters. You might have mistyped it.
 		tags = ios,new
@@ -125,7 +136,8 @@
 		it = Formato del file di stampa non selezionato.
 		ja = 出力したいファイル形式が選択されていません
 		pt = Formato de saída do arquivo não selecionado
-		tags = ios,new
+		zh = 输出文件格式未选择
+		tags = ios
 	[schedules_error_date_past]
 		en = The start date is in the past. It should be in the future.
 		tags = ios,new

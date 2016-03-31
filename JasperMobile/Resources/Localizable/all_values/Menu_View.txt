@@ -48,7 +48,8 @@
 		it = Programmi
 		ja = スケジュール
 		pt = Cronogramas
-		tags = ios,new
+		zh = 时间规划表
+		tags = ios
 	[menuitem_about_label]
 		en = About
 		de = Über
@@ -57,7 +58,8 @@
 		it = Informazioni
 		jp = 詳細
 		pt = Sobre
-		tags = ios,new
+		zh = 关于
+		tags = ios
 	[menuitem_repository_label]
 		en = Repository
 		de = Repository
@@ -96,4 +98,5 @@
 		it = Commenti tramite e-mail
 		ja = メールでフィードバックを送信
 		pt = Feedback por e-mail
-		tags = ios,new
+		zh = 通过电子邮件反馈
+		tags = ios

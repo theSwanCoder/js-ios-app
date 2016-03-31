@@ -8,7 +8,8 @@
 		it = © 2005-%zd TIBCO Software, Inc.
 		ja = © 2005-%zd TIBCO Software, Inc.
 		pt = © 2005-%zd TIBCO Software, Inc.
-		tags = ios,new
+		zh = © 2005-%zd TIBCO Software, Inc.
+		tags = ios
 	[about_comminity_title]
 		en = Jaspersoft Community
 		de = Jaspersoft Community
@@ -17,7 +18,8 @@
 		it = Communauté Jaspersoft
 		ja = Jaspersoft コミュニティ
 		pt = Comunidade Jaspersoft
-		tags = ios,new
+		zh = Jaspersoft社区
+		tags = ios
 	[about_whats_new_title]
 		en = What's New
 		de = Was gibt es Neues
@@ -26,7 +28,8 @@
 		it = Cosa c\'è di nuovo
 		ja = 新着情報
 		pt = Novidades
-		tags = ios,new
+		zh = 新内容
+		tags = ios
 	[about_privacy_policy_title]
 		en = Privacy Policy
 		de = Datenschutzerklärung
@@ -35,7 +38,8 @@
 		it = Informativa sulla privacy
 		ja = 個人情報保護方針
 		pt = Política de Privacidade
-		tags = ios,new
+		zh = 隐私政策
+		tags = ios
 	[about_eula_title]
 		en = End user license agreement
 		de = Endnutzer-Lizenzvereinbarung
@@ -44,4 +48,5 @@
 		it = Contratto di licenza per l\'utente
 		ja = エンドユーザーライセンス契約
 		pt = Contrato de licença de usuário final
-		tags = ios,new
+		zh = 终止用户许可协议
+		tags = ios

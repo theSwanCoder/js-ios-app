@@ -38,7 +38,8 @@
 		it = Non è stato possibile caricare il rapporto. Provare a salvare un rapporto con minore numero di pagine.
 		ja = レポートを読み込めませんでした。より少ないページ数でレポートを保存してみてください。
 		pt = Não foi possível carregar o relatório. Experimente salvar um relatório com uma contagem menor de palavras.
-		tags = ios,new,unused
+		zh = 无法加载报告。尝试保存页面数较少的报告。
+		tags = ios,unused
 	[savedreport_viewer_file_not_exists]
 		en = File doesn't exists
 		de = Datei existiert nicht
@@ -47,7 +48,8 @@
 		it = File inesistente
 		ja = ファイルがありません
 		pt = Arquivo inexistente
-		tags = ios,new,unused
+		zh = 文件不存在
+		tags = ios,unused
 	[savedreport_viewer_format_not_supported]
 		en = Format not supported
 		de = Das Format wird nicht unterstützt
@@ -56,4 +58,5 @@
 		it = Formato non supportato
 		ja = この形式はサポートされていません
 		pt = Formato não suportado
-		tags = ios,new
+		zh = 不支持的格式
+		tags = ios

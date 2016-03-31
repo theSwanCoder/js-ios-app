@@ -8,4 +8,5 @@
 		it = I filtri sono assenti
 		ja = フィルタがありません
 		pt = Ausência de filtros
-		tags = ios,new,unused
+		zh = 过滤器缺失
+		tags = ios,unused

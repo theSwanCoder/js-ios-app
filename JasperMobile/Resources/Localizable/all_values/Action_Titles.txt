@@ -28,7 +28,8 @@
 		it = Modifica valori
 		ja = 値を編集する
 		pt = Editar valores
-		tags = ios,new
+		zh = 编辑值
+		tags = ios
 	[action_title_edit_filters]
 		en = Filters
 		tags = ios,new
@@ -150,7 +151,8 @@
 		it = Apri con...
 		ja = 次の項目で開く...
 		pt = Abrir com...
-		tags = ios,new
+		zh = 以下列方式打开：
+		tags = ios
 	[action_title_accept]
 		en = Accept
 		de = Akzeptieren
@@ -159,7 +161,8 @@
 		it = Accetta
 		ja = 受け入れる
 		pt = Aceitar
-		tags = ios,new
+		zh = 接受
+		tags = ios
 	[action_title_schedule]
 		en = Schedule
 		de = Zeitplan
@@ -168,7 +171,8 @@
 		it = Programma
 		ja = スケジュール
 		pt = Cronograma
-		tags = ios,new
+		zh = 时间规划表
+		tags = ios
 	[action_title_share]
 		en = Share
 		tags = ios,new

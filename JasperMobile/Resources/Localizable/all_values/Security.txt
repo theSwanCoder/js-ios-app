@@ -8,4 +8,5 @@
 		it = Si sta utilizzando un protocollo HTTP non protetto. Si prega di prendere in considerazione la migrazione a HTTPS.
 		ja = あなたは安全でないHTTPプロトコルを使用しています。 HTTPSへの移行を検討してください。
 		pt = Você está utilizando um protocolo HTTP de baixa segurança. Considere migrar para HTTPS.
-		tags = ios,new
+		zh = 您正在使用不安全的HTTP协议。请考虑迁移到HTTPS。
+		tags = ios

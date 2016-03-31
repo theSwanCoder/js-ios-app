@@ -8,7 +8,8 @@
 		it = Mostra su TV
 		ja = テレビ画面上で表示する
 		pt = Exibir na TV
-		tags = ios,new
+		zh = 在电视上显示
+		tags = ios
 	[action_title_hideExternalDisplay]
 		en = Show on Device
 		de = Auf dem Gerät zeigen
@@ -17,7 +18,8 @@
 		it = Mostra su Periferica
 		ja = デバイス上で表示する
 		pt = Exibir no dispositivo
-		tags = ios,new
+		zh = 在设备上显示
+		tags = ios
 	[external_screen_button_title_maximize]
 		en = Tap to maximize
 		de = Zum Maximieren tippen
@@ -26,7 +28,8 @@
 		it = Tocca per ingrandire
 		ja = タップして最大化する
 		pt = Toque para maximizar
-		tags = ios,new
+		zh = 点击最大化
+		tags = ios
 	[external_screen_button_title_manimize]
 		en = Tap to minimize
 		de = Zum Minimieren tippen
@@ -35,4 +38,5 @@
 		it = Toccare per ridurre
 		ja = タップして最小化する
 		pt = Toque para minimizar
-		tags = ios,new
+		zh = 点击最小化
+		tags = ios
