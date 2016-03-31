@@ -4,19 +4,23 @@
 		en = Show on TV
 		de = Auf dem TV zeigen
 		es = Mostrar en el televisor
+		fr = Afficher sur la Télévision
 		tags = ios,new
 	[action_title_hideExternalDisplay]
 		en = Show on Device
 		de = Auf dem Gerät zeigen
 		es = Mostrar en el dispositivo
+		fr = Afficher sur l\'appareil
 		tags = ios,new
 	[external_screen_button_title_maximize]
 		en = Tap to maximize
 		de = Zum Maximieren tippen
 		es = Toque para maximizar
+		fr = Appuyez pour agrandir
 		tags = ios,new
 	[external_screen_button_title_manimize]
 		en = Tap to minimize
 		de = Zum Minimieren tippen
 		es = Toque para minimizar
+		fr = Appuyez pour réduire
 		tags = ios,new

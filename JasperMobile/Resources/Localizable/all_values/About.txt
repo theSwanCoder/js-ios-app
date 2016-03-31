@@ -4,24 +4,29 @@
 		en = © 2005-%zd TIBCO Software, Inc.
 		de = © 2005-%zd TIBCO Software, Inc.
 		es = © 2005-%zd TIBCO Software, Inc.
+		fr = © 2005-%zd TIBCO Software, Inc.
 		tags = ios,new
 	[about_comminity_title]
 		en = Jaspersoft Community
 		de = Jaspersoft Community
 		es = Jaspersoft Community
+		fr = Communauté Jaspersoft
 		tags = ios,new
 	[about_whats_new_title]
 		en = What's New
 		de = Was gibt es Neues
 		es = Lo nuevo
+		fr = Nouveautés
 		tags = ios,new
 	[about_privacy_policy_title]
 		en = Privacy Policy
 		de = Datenschutzerklärung
 		es = Política de Privacidad
+		fr = Politique de confidentialité
 		tags = ios,new
 	[about_eula_title]
 		en = End user license agreement
 		de = Endnutzer-Lizenzvereinbarung
 		es = Acuerdo de licencia de usuario final
+		fr = Contrat de licence d\'utilisateur final
 		tags = ios,new

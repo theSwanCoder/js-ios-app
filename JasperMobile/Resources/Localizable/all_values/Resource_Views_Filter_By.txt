@@ -54,6 +54,7 @@
 		en = Content Resources
 		de = Content-Ressourcen
 		es = Recursos de contenido
+		fr = Ressources de contenu
 		tags = ios,new
 	[resources_filterby_type_saved_reportUnit]
 		en = Saved Items

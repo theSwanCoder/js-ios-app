@@ -4,4 +4,5 @@
 		en = HTTP connections are not secure. You should specify HTTPS if your server supports it.
 		de = Sie verwenden ein unsicheres HTTP-Protokoll. Bitte erwägen Sie, zu HTTPS zu wechseln.
 		es = Está usando un protocolo HTTP inseguro. Por favor considere migrar a HTTPS.
+		fr = Vous utilisez le protocole HTTP non sécurisé. Veuillez envisager de migrer vers HTTPS.
 		tags = ios,new

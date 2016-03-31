@@ -4,11 +4,13 @@
 		en = Schedules
 		de = Terminpläne
 		es = Programaciones
+		fr = Programmes
 		tags = ios,new
 	[schedules_no_jobs_message]
 		en = No jobs are scheduled.
 		de = Keine Aufträge sind geplant.
 		es = No hay trabajos programados.
+		fr = Aucune tâche n\'est prévue.
 		tags = ios,new
 
 [[New Job]]
@@ -16,6 +18,7 @@
 		en = Name
 		de = Auftrags-Etikett
 		es = Etiqueta del trabajo
+		fr = Étiquette de la tâche
 		tags = ios,new
 	[schedules_new_job_description]
 		en = Description
@@ -24,26 +27,31 @@
 		en = Create Schedule
 		de = Auftrag erstellen
 		es = Crear trabajo
+		fr = Créer une tâche
 		tags = ios,new
 	[schedules_new_job_output_file_name]
 		en = Output File Name
 		de = Bezeichnung der Ausgabedatei
 		es = Nombre del archivo de salida
+		fr = Nom du fichier de sortie
 		tags = ios,new
 	[schedules_new_job_output_file_path]
 		en = Repository Output Folder
 		de = Ausgabeverzeichnispfad
 		es = Ruta de la carpeta de salida
+		fr = Chemin du dossier de sortie
 		tags = ios,new
 	[schedules_new_job_format]
 		en = Format
 		de = Format
 		es = Formato
+		fr = Format
 		tags = ios,new
 	[schedules_new_job_start_date]
 		en = Run once at:
 		de = Anfangsdatum:
 		es = Fecha de inicio:
+		fr = Date de début:
 		tags = ios,new
 	[schedules_new_job_start_immediately]
 		en = Start immediately
@@ -52,6 +60,7 @@
 		en = Output Format
 		de = Ausgabeformat
 		es = Formato de salida
+		fr = Format de sortie
 		tags = ios,new
 
 [[Schedule Errors]]
@@ -59,11 +68,13 @@
 		en = Validation of a new schedule
 		de = Validierung der Erstellung eines Terminplans für einen neuen Auftrag
 		es = Validación de la creación de una nueva programación de trabajo
+		fr = Validation de la création d\'une nouvelle tâche ajoutée au programme
 		tags = ios,new
 	[schedules_error_empty_filename]
 		en = Specify an output file name.
 		de = Dateiname ist leer.
 		es = El nombre de archivo está vacío
+		fr = Le nom du fichier est vide
 		tags = ios,new
 	[schedules_error_empty_filename_invalid_characters]
 		en = The base output name contains invalid characters. You might have mistyped it.
@@ -78,6 +89,7 @@
 		en = Select output formats for the job.
 		de = Ausgabe-Dateiformat wurde nicht ausgewählt.
 		es = No se ha seleccionado un formato de archivo de salida.
+		fr = Le format du fichier de sortie n\'a pas été sélectionné
 		tags = ios,new
 	[schedules_error_date_past]
 		en = The start date is in the past. It should be in the future.

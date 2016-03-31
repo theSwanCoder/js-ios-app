@@ -4,4 +4,5 @@
 		en = Filters are absent
 		de = Filter sind nicht vorhanden
 		es = No hay filtros
+		fr = Les filtres sont absents
 		tags = ios,new,unused

@@ -84,6 +84,7 @@
 		en = The report is being saved.
 		de = Der Bericht wurde in die Warteschlange eingereiht.
 		es = El informe se añadió a la cola.
+		fr = Le rapport a été ajouté à la file d\'attente.
 		tags = ios,new
 	[report_viewer_save_name_errmsg_empty]
 		en = This field is required.
