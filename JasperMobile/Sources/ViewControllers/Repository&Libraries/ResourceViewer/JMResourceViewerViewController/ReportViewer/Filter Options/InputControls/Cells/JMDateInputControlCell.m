@@ -51,11 +51,11 @@
     [super setInputControlDescriptor:inputControlDescriptor];
     self.dateFormatter.dateFormat = inputControlDescriptor.dateTimeFormatValidationRule.format;
 
-    if ([inputControlDescriptor.type isEqualToString:@"singleValueDate"]) {
+    if (inputControlDescriptor.type == kJS_ICD_TYPE_SINGLE_VALUE_DATE) {
         self.fieldDateFormatter = [JMUtils formatterForSimpleDate];
-    } else if([inputControlDescriptor.type isEqualToString:@"singleValueTime"]) {
+    } else if(inputControlDescriptor.type == kJS_ICD_TYPE_SINGLE_VALUE_TIME) {
         self.fieldDateFormatter = [JMUtils formatterForSimpleTime];
-    } else if ([inputControlDescriptor.type isEqualToString:@"singleValueDatetime"]) {
+    } else if (inputControlDescriptor.type == kJS_ICD_TYPE_SINGLE_VALUE_DATETIME) {
         self.fieldDateFormatter = [JMUtils formatterForSimpleDateTime];
     }
 

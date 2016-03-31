@@ -428,7 +428,6 @@
             
             __weak typeof(self)weakSelf = self;
             [self.restClient inputControlsForReport:self.currentReportOption.uri
-                                                ids:nil
                                      selectedValues:nil
                                     completionBlock:^(JSOperationResult *result) {
                                         __strong typeof(self) strongSelf = weakSelf;
@@ -468,19 +467,19 @@
     }
     JSInputControlDescriptor *inputControlDescriptor = self.currentInputControls[indexPath.row];
     NSDictionary *inputControlDescriptorTypes = @{
-                                                  kJS_ICD_TYPE_BOOL                     : @"BooleanCell",
-                                                  kJS_ICD_TYPE_SINGLE_VALUE_TEXT        : @"TextEditCell",
-                                                  kJS_ICD_TYPE_SINGLE_VALUE_NUMBER      : @"NumberCell",
-                                                  kJS_ICD_TYPE_SINGLE_VALUE_DATE        : @"DateCell",
-                                                  kJS_ICD_TYPE_SINGLE_VALUE_TIME        : @"TimeCell",
-                                                  kJS_ICD_TYPE_SINGLE_VALUE_DATETIME    : @"DateTimeCell",
-                                                  kJS_ICD_TYPE_SINGLE_SELECT            : @"SingleSelectCell",
-                                                  kJS_ICD_TYPE_SINGLE_SELECT_RADIO      : @"SingleSelectCell",
-                                                  kJS_ICD_TYPE_MULTI_SELECT             : @"MultiSelectCell",
-                                                  kJS_ICD_TYPE_MULTI_SELECT_CHECKBOX    : @"MultiSelectCell",
+                                                  @(kJS_ICD_TYPE_BOOL)                     : @"BooleanCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_TEXT)        : @"TextEditCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_NUMBER)      : @"NumberCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_DATE)        : @"DateCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_TIME)        : @"TimeCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_DATETIME)    : @"DateTimeCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_SELECT)            : @"SingleSelectCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_SELECT_RADIO)      : @"SingleSelectCell",
+                                                  @(kJS_ICD_TYPE_MULTI_SELECT)             : @"MultiSelectCell",
+                                                  @(kJS_ICD_TYPE_MULTI_SELECT_CHECKBOX)    : @"MultiSelectCell",
                                                   };
 
-    return inputControlDescriptorTypes[inputControlDescriptor.type];
+    return inputControlDescriptorTypes[@(inputControlDescriptor.type)];
 }
 
 - (BOOL)isMultyReportOptions

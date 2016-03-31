@@ -248,55 +248,57 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
                                   if (reportUnit) {
                                       // get report input controls
                                       __weak typeof(self) weakSelf = strongSelf;
-                                      [strongSelf.restClient inputControlsForReport:reportURI ids:nil selectedValues:nil completionBlock:^(JSOperationResult * _Nullable result) {
-                                          __strong typeof(self) strongSelf = weakSelf;
-                                          if (result.error) {
-                                              errorHandlingBlock(result.error, @"Report Input Controls Loading Error");
-                                          } else {
-                                              NSMutableArray *visibleInputControls = [NSMutableArray array];
-                                              for (JSInputControlDescriptor *inputControl in result.objects) {
-                                                  if (inputControl.visible.boolValue) {
-                                                      [visibleInputControls addObject:inputControl];
-                                                  }
-                                              }
-
-                                              if ([visibleInputControls count]) {
-                                                  [strongSelf.report generateReportOptionsWithInputControls:visibleInputControls];
-
-                                                  // get report options
-                                                  __weak typeof(self) weakSelf = strongSelf;
-                                                  [strongSelf.restClient reportOptionsForReportURI:strongSelf.report.reportURI completion:^(JSOperationResult * _Nullable result) {
-                                                      __strong typeof(self) strongSelf = weakSelf;
-                                                      if (result.error && result.error.code == JSSessionExpiredErrorCode) {
-                                                          errorHandlingBlock(result.error, @"Report Options Loading Error");
-                                                      } else {
-                                                          [strongSelf stopShowLoader];
-                                                          strongSelf.isReportAlreadyConfigured = YES;
-                                                          NSMutableArray *reportOptions = [NSMutableArray array];
-                                                          for (id reportOption in result.objects) {
-                                                              if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
-                                                                  [reportOptions addObject:reportOption];
-                                                              }
-                                                          }
-
-                                                          [strongSelf.report addReportOptions:reportOptions];
-
-                                                          if ([reportOptions count] || (reportUnit.alwaysPromptControls && [visibleInputControls count])) {
-                                                              [strongSelf showInputControlsViewControllerWithBackButton:YES];
-                                                          } else  {
-                                                              if (strongSelf.initialReportParameters) {
-                                                                  [strongSelf.report updateReportParameters:strongSelf.initialReportParameters];
-                                                              }
-                                                              [strongSelf startLoadReportWithPage:1];
-                                                          }
-                                                      }
-                                                  }];
-                                              } else {
-                                                  [strongSelf stopShowLoader];
-                                                  [strongSelf startLoadReportWithPage:1];
-                                              }
-                                          }
-                                      }];
+                                      [strongSelf.restClient inputControlsForReport:reportURI
+                                                                     selectedValues:strongSelf.initialReportParameters
+                                                                    completionBlock:^(JSOperationResult * _Nullable result) {
+                                                                        __strong typeof(self) strongSelf = weakSelf;
+                                                                        if (result.error) {
+                                                                            errorHandlingBlock(result.error, @"Report Input Controls Loading Error");
+                                                                        } else {
+                                                                            NSMutableArray *visibleInputControls = [NSMutableArray array];
+                                                                            for (JSInputControlDescriptor *inputControl in result.objects) {
+                                                                                if (inputControl.visible.boolValue) {
+                                                                                    [visibleInputControls addObject:inputControl];
+                                                                                }
+                                                                            }
+                                                                            
+                                                                            if ([visibleInputControls count]) {
+                                                                                [strongSelf.report generateReportOptionsWithInputControls:visibleInputControls];
+                                                                                
+                                                                                // get report options
+                                                                                __weak typeof(self) weakSelf = strongSelf;
+                                                                                [strongSelf.restClient reportOptionsForReportURI:strongSelf.report.reportURI completion:^(JSOperationResult * _Nullable result) {
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    if (result.error && result.error.code == JSSessionExpiredErrorCode) {
+                                                                                        errorHandlingBlock(result.error, @"Report Options Loading Error");
+                                                                                    } else {
+                                                                                        [strongSelf stopShowLoader];
+                                                                                        strongSelf.isReportAlreadyConfigured = YES;
+                                                                                        NSMutableArray *reportOptions = [NSMutableArray array];
+                                                                                        for (id reportOption in result.objects) {
+                                                                                            if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
+                                                                                                [reportOptions addObject:reportOption];
+                                                                                            }
+                                                                                        }
+                                                                                        
+                                                                                        [strongSelf.report addReportOptions:reportOptions];
+                                                                                        
+                                                                                        if ([reportOptions count] || (reportUnit.alwaysPromptControls && [visibleInputControls count])) {
+                                                                                            [strongSelf showInputControlsViewControllerWithBackButton:YES];
+                                                                                        } else  {
+                                                                                            if (strongSelf.initialReportParameters) {
+                                                                                                [strongSelf.report updateReportParameters:strongSelf.initialReportParameters];
+                                                                                            }
+                                                                                            [strongSelf startLoadReportWithPage:1];
+                                                                                        }
+                                                                                    }
+                                                                                }];
+                                                                            } else {
+                                                                                [strongSelf stopShowLoader];
+                                                                                [strongSelf startLoadReportWithPage:1];
+                                                                            }
+                                                                        }
+                                                                    }];
                                   } else {
                                       NSDictionary *userInfo = @{NSURLErrorFailingURLErrorKey : @"Report Unit Loading Error"};
                                       NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:JSClientErrorCode userInfo:userInfo];
