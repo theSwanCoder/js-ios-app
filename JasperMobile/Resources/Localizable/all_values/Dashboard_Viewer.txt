@@ -5,4 +5,5 @@
 		de = Filter sind nicht vorhanden
 		es = No hay filtros
 		fr = Les filtres sont absents
+		it = I filtri sono assenti
 		tags = ios,new,unused

@@ -45,12 +45,14 @@
 		de = Terminpläne
 		es = Programaciones
 		fr = Programmes
+		it = Programmi
 		tags = ios,new
 	[menuitem_about_label]
 		en = About
 		de = Über
 		es = Acerca de
 		fr = À propos
+		it = Informazioni
 		tags = ios,new
 	[menuitem_repository_label]
 		en = Repository
@@ -87,4 +89,5 @@
 		de = Feedback per E-Mail
 		es = Comentarios por correo electrónico
 		fr = Évaluation par e-mail
+		it = Commenti tramite e-mail
 		tags = ios,new

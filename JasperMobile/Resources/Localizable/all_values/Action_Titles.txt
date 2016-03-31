@@ -25,6 +25,7 @@
 		de = Werte bearbeiten
 		es = Editar valores
 		fr = Modifier les valeurs
+		it = Modifica valori
 		tags = ios,new
 	[action_title_edit_filters]
 		en = Filters
@@ -144,18 +145,21 @@
 		de = Öffnen mit ...
 		es = Abrir con...
 		fr = Ouvrir avec...
+		it = Apri con...
 		tags = ios,new
 	[action_title_accept]
 		en = Accept
 		de = Akzeptieren
 		es = Aceptar
 		fr = Accepter
+		it = Accetta
 		tags = ios,new
 	[action_title_schedule]
 		en = Schedule
 		de = Zeitplan
 		es = Programación
 		fr = Programme
+		it = Programma
 		tags = ios,new
 	[action_title_share]
 		en = Share

@@ -5,4 +5,5 @@
 		de = Sie verwenden ein unsicheres HTTP-Protokoll. Bitte erwägen Sie, zu HTTPS zu wechseln.
 		es = Está usando un protocolo HTTP inseguro. Por favor considere migrar a HTTPS.
 		fr = Vous utilisez le protocole HTTP non sécurisé. Veuillez envisager de migrer vers HTTPS.
+		it = Si sta utilizzando un protocollo HTTP non protetto. Si prega di prendere in considerazione la migrazione a HTTPS.
 		tags = ios,new
