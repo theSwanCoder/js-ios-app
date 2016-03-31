@@ -23,7 +23,7 @@
 
 "action_title_save" = "保存";
 
-"action_title_edit" = "Edit Values";
+"action_title_edit" = "値を編集する";
 
 "action_title_edit_filters" = "Filters";
 
@@ -49,11 +49,11 @@
 
 "action_title_print" = "印刷";
 
-"action_title_openIn" = "Open with...";
+"action_title_openIn" = "次の項目で開く...";
 
-"action_title_accept" = "Accept";
+"action_title_accept" = "受け入れる";
 
-"action_title_schedule" = "Schedule";
+"action_title_schedule" = "スケジュール";
 
 "action_title_share" = "Share";
 
@@ -117,18 +117,18 @@
 
 "error_server_notsupported_msg" = "サーバー バージョンが %_1f より古い (サポートされていない) か、URL が正しくありません。";
 
-"error_openIn_message" = "There is no application to open this resource.";
+"error_openIn_message" = "このリソースを開くためのアプリケーションがありません。";
 
 
 /********** External Screens **********/
 
-"action_title_showExternalDisplay" = "Show on TV";
+"action_title_showExternalDisplay" = "テレビ画面上で表示する";
 
-"action_title_hideExternalDisplay" = "Show on Device";
+"action_title_hideExternalDisplay" = "デバイス上で表示する";
 
-"external_screen_button_title_maximize" = "Tap to maximize";
+"external_screen_button_title_maximize" = "タップして最大化する";
 
-"external_screen_button_title_manimize" = "Tap to minimize";
+"external_screen_button_title_manimize" = "タップして最小化する";
 
 
 /********** HTTP error messages **********/
@@ -278,9 +278,9 @@
 
 "report_viewer_options_multiselect_titlelabel_title" = "1 つまたは複数のアイテムを選択";
 
-"report_viewer_options_multiselect_available_title" = "Available";
+"report_viewer_options_multiselect_available_title" = "利用可能です";
 
-"report_viewer_options_multiselect_selected_title" = "Selected";
+"report_viewer_options_multiselect_selected_title" = "選択されました";
 
 "report_viewer_options_search_value_placeholder" = "値を検索";
 
@@ -290,19 +290,19 @@
 
 "report_viewer_options_ic_title_unset" = "未設定";
 
-"report_viewer_report_options_title" = "Saved Values";
+"report_viewer_report_options_title" = "保存された値";
 
-"report_viewer_report_options_active_option_title" = "-- None --";
+"report_viewer_report_options_active_option_title" = "-  なし  -";
 
-"report_viewer_report_options_new_option_title" = "Enter name of a new ReportOption";
+"report_viewer_report_options_new_option_title" = "新しいレポートオプションの名前を入力してください";
 
-"report_viewer_report_options_new_option_title_alreadyexist" = "This report already has saved values with this name. Do you want to overwrite them?";
+"report_viewer_report_options_new_option_title_alreadyexist" = "このレポートには既に、この名前で保存された値が存在しています。内容を上書きしますか？";
 
-"report_viewer_report_options_create_permission_error" = "You do not have permission to save this option for the report. Log in as a permitted user if you can.";
+"report_viewer_report_options_create_permission_error" = "あなたは、このレポートにこのオプションを保存する権限を持っていません。お望みであれば、権限を保有するユーザーとしてログインしていただけます。";
 
-"report_viewer_report_options_remove_permission_error" = "You do not have permission to remove this option for the report. Log in as a permitted user if you can.";
+"report_viewer_report_options_remove_permission_error" = "あなたは、このレポートにこのオプションを削除する権限を持っていません。お望みであれば、権限を保有するユーザーとしてログインしていただけます。";
 
-"report_viewer_report_options_remove_confirmation_message" = "Do you really want to remove\n%@?";
+"report_viewer_report_options_remove_confirmation_message" = "本当に次の項目を削除しますか\n%s？";
 
 
 /********** Repository view **********/
@@ -411,46 +411,46 @@
 
 "savedreport_viewer_delete_confirmation_message" = "このアイテムを削除しますか?";
 
-"savedreport_viewer_show_resource_error_message" = "Report could not be loaded. Try to save a report with less count of pages.";
+"savedreport_viewer_show_resource_error_message" = "レポートを読み込めませんでした。より少ないページ数でレポートを保存してみてください。";
 
-"savedreport_viewer_file_not_exists" = "File doesn't exists";
+"savedreport_viewer_file_not_exists" = "ファイルがありません";
 
-"savedreport_viewer_format_not_supported" = "Format not supported";
+"savedreport_viewer_format_not_supported" = "この形式はサポートされていません";
 
 
 /********** Schedules **********/
 
-"schedules_title" = "Schedules";
+"schedules_title" = "スケジュール";
 
-"schedules_no_jobs_message" = "No jobs are scheduled.";
+"schedules_no_jobs_message" = "ジョブはなにもスケジュールされていません。";
 
 
 /********** New Job **********/
 
-"schedules_new_job_label" = "Name";
+"schedules_new_job_label" = "ジョブ ラベル";
 
 "schedules_new_job_description" = "Description";
 
-"schedules_new_job_button_create" = "Create Schedule";
+"schedules_new_job_button_create" = "ジョブを作成する";
 
-"schedules_new_job_output_file_name" = "Output File Name";
+"schedules_new_job_output_file_name" = "ファイル名を出力する";
 
-"schedules_new_job_output_file_path" = "Repository Output Folder";
+"schedules_new_job_output_file_path" = "フォルダ パスを出力する";
 
-"schedules_new_job_format" = "Format";
+"schedules_new_job_format" = "形式";
 
-"schedules_new_job_start_date" = "Run once at:";
+"schedules_new_job_start_date" = "開始日";
 
 "schedules_new_job_start_immediately" = "Start immediately";
 
-"schedules_new_job_output_format" = "Output Format";
+"schedules_new_job_output_format" = "出力形式";
 
 
 /********** Schedule Errors **********/
 
-"schedules_error_domain" = "Validation of a new schedule";
+"schedules_error_domain" = "新しいスケジュール ジョブの作成を許可する";
 
-"schedules_error_empty_filename" = "Specify an output file name.";
+"schedules_error_empty_filename" = "ファイル名が空です。";
 
 "schedules_error_empty_filename_invalid_characters" = "The base output name contains invalid characters. You might have mistyped it.";
 
@@ -458,7 +458,7 @@
 
 "schedules_error_empty_label" = "Specify a name for the scheduled job.";
 
-"schedules_error_empty_format" = "Select output formats for the job.";
+"schedules_error_empty_format" = "出力したいファイル形式が選択されていません";
 
 "schedules_error_date_past" = "The start date is in the past. It should be in the future.";
 
@@ -469,7 +469,7 @@
 
 /********** Security **********/
 
-"secutiry_http_message" = "HTTP connections are not secure. You should specify HTTPS if your server supports it.";
+"secutiry_http_message" = "あなたは安全でないHTTPプロトコルを使用しています。 HTTPSへの移行を検討してください。";
 
 
 /********** Server Profiles view **********/

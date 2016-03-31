@@ -8,13 +8,13 @@
 
 "about_copyright" = "© 2005-%zd TIBCO Software, Inc.";
 
-"about_comminity_title" = "Jaspersoft Community";
+"about_comminity_title" = "Jaspersoft社区";
 
-"about_whats_new_title" = "What's New";
+"about_whats_new_title" = "新内容";
 
-"about_privacy_policy_title" = "Privacy Policy";
+"about_privacy_policy_title" = "隐私政策";
 
-"about_eula_title" = "End user license agreement";
+"about_eula_title" = "终止用户许可协议";
 
 
 /********** Action titles **********/
@@ -23,7 +23,7 @@
 
 "action_title_save" = "保存";
 
-"action_title_edit" = "Edit Values";
+"action_title_edit" = "编辑值";
 
 "action_title_edit_filters" = "Filters";
 
@@ -49,11 +49,11 @@
 
 "action_title_print" = "打印";
 
-"action_title_openIn" = "Open with...";
+"action_title_openIn" = "以下列方式打开：";
 
-"action_title_accept" = "Accept";
+"action_title_accept" = "接受";
 
-"action_title_schedule" = "Schedule";
+"action_title_schedule" = "时间规划表";
 
 "action_title_share" = "Share";
 
@@ -90,7 +90,7 @@
 
 /********** Dashboard Viewer **********/
 
-"dashboard_viewer_absent_input_controls_alert_message" = "Filters are absent";
+"dashboard_viewer_absent_input_controls_alert_message" = "过滤器缺失";
 
 
 /********** Error messages **********/
@@ -122,13 +122,13 @@
 
 /********** External Screens **********/
 
-"action_title_showExternalDisplay" = "Show on TV";
+"action_title_showExternalDisplay" = "在电视上显示";
 
-"action_title_hideExternalDisplay" = "Show on Device";
+"action_title_hideExternalDisplay" = "在设备上显示";
 
-"external_screen_button_title_maximize" = "Tap to maximize";
+"external_screen_button_title_maximize" = "点击最大化";
 
-"external_screen_button_title_manimize" = "Tap to minimize";
+"external_screen_button_title_manimize" = "点击最小化";
 
 
 /********** HTTP error messages **********/
@@ -175,9 +175,9 @@
 
 "menuitem_settings_label" = "设置";
 
-"menuitem_schedules_label" = "Schedules";
+"menuitem_schedules_label" = "时间规划表";
 
-"menuitem_about_label" = "About";
+"menuitem_about_label" = "关于";
 
 "menuitem_repository_label" = "资料库";
 
@@ -185,7 +185,7 @@
 
 "menuitem_logout_label" = "退出";
 
-"menuitem_feedback_label" = "Feedback by email";
+"menuitem_feedback_label" = "通过电子邮件反馈";
 
 
 /********** Onboarding Intro **********/
@@ -238,7 +238,7 @@
 
 "report_viewer_save_saved" = "已成功保存报表。";
 
-"report_viewer_save_addedToQueue" = "The report is being saved.";
+"report_viewer_save_addedToQueue" = "该报告已加入队列。";
 
 "report_viewer_save_name_errmsg_empty" = "此字段为必填字段。";
 
@@ -272,15 +272,15 @@
 
 /********** Report viewer Options view **********/
 
-"report_viewer_options_title" = "Filters";
+"report_viewer_options_title" = "过滤器";
 
 "report_viewer_options_singleselect_titlelabel_title" = "选择一个项目";
 
 "report_viewer_options_multiselect_titlelabel_title" = "选择一个或多个项目";
 
-"report_viewer_options_multiselect_available_title" = "Available";
+"report_viewer_options_multiselect_available_title" = "可用的";
 
-"report_viewer_options_multiselect_selected_title" = "Selected";
+"report_viewer_options_multiselect_selected_title" = "已选";
 
 "report_viewer_options_search_value_placeholder" = "搜索值";
 
@@ -290,19 +290,19 @@
 
 "report_viewer_options_ic_title_unset" = "未设置";
 
-"report_viewer_report_options_title" = "Saved Values";
+"report_viewer_report_options_title" = "已保存的值";
 
-"report_viewer_report_options_active_option_title" = "-- None --";
+"report_viewer_report_options_active_option_title" = "-  无  -";
 
-"report_viewer_report_options_new_option_title" = "Enter name of a new ReportOption";
+"report_viewer_report_options_new_option_title" = "输入新的ReportOption名称";
 
-"report_viewer_report_options_new_option_title_alreadyexist" = "This report already has saved values with this name. Do you want to overwrite them?";
+"report_viewer_report_options_new_option_title_alreadyexist" = "该报告已经有这个名称下的已保存的值。要覆盖它们吗？";
 
-"report_viewer_report_options_create_permission_error" = "You do not have permission to save this option for the report. Log in as a permitted user if you can.";
+"report_viewer_report_options_create_permission_error" = "您没有权限为本报告保存该选项。如果可以请您登录为许可用户。";
 
-"report_viewer_report_options_remove_permission_error" = "You do not have permission to remove this option for the report. Log in as a permitted user if you can.";
+"report_viewer_report_options_remove_permission_error" = "您没有权限为本报告移除该选项。如果可以请您登录为许可用户。";
 
-"report_viewer_report_options_remove_confirmation_message" = "Do you really want to remove\n%@?";
+"report_viewer_report_options_remove_confirmation_message" = "您确定要移除\n%s?";
 
 
 /********** Repository view **********/
@@ -357,7 +357,7 @@
 
 "resource_viewer_print_prepare_title" = "准备...";
 
-"resource_viewer_memory_warning" = "Sorry, Your device is low on memory...";
+"resource_viewer_memory_warning" = "对不起，您的设备内存不足...";
 
 
 /********** Resource views **********/
@@ -385,7 +385,7 @@
 
 "resources_filterby_type_folder" = "文件夹";
 
-"resources_filterby_type_files" = "Content Resources";
+"resources_filterby_type_files" = "内容资源";
 
 "resources_filterby_type_saved_reportUnit" = "已保存项目";
 
@@ -411,46 +411,46 @@
 
 "savedreport_viewer_delete_confirmation_message" = "是否确定要删除此项目?";
 
-"savedreport_viewer_show_resource_error_message" = "Report could not be loaded. Try to save a report with less count of pages.";
+"savedreport_viewer_show_resource_error_message" = "无法加载报告。尝试保存页面数较少的报告。";
 
-"savedreport_viewer_file_not_exists" = "File doesn't exists";
+"savedreport_viewer_file_not_exists" = "文件不存在";
 
-"savedreport_viewer_format_not_supported" = "Format not supported";
+"savedreport_viewer_format_not_supported" = "不支持的格式";
 
 
 /********** Schedules **********/
 
-"schedules_title" = "Schedules";
+"schedules_title" = "时间规划表";
 
-"schedules_no_jobs_message" = "No jobs are scheduled.";
+"schedules_no_jobs_message" = "未规划任何工作。";
 
 
 /********** New Job **********/
 
-"schedules_new_job_label" = "Name";
+"schedules_new_job_label" = "工作标签";
 
 "schedules_new_job_description" = "Description";
 
-"schedules_new_job_button_create" = "Create Schedule";
+"schedules_new_job_button_create" = "创建工作";
 
-"schedules_new_job_output_file_name" = "Output File Name";
+"schedules_new_job_output_file_name" = "输出文件名";
 
-"schedules_new_job_output_file_path" = "Repository Output Folder";
+"schedules_new_job_output_file_path" = "输出文件夹路径";
 
-"schedules_new_job_format" = "Format";
+"schedules_new_job_format" = "格式";
 
-"schedules_new_job_start_date" = "Run once at:";
+"schedules_new_job_start_date" = "开始日期";
 
 "schedules_new_job_start_immediately" = "Start immediately";
 
-"schedules_new_job_output_format" = "Output Format";
+"schedules_new_job_output_format" = "输出格式";
 
 
 /********** Schedule Errors **********/
 
-"schedules_error_domain" = "Validation of a new schedule";
+"schedules_error_domain" = "创造新工作计划的验证";
 
-"schedules_error_empty_filename" = "Specify an output file name.";
+"schedules_error_empty_filename" = "文件名称为空";
 
 "schedules_error_empty_filename_invalid_characters" = "The base output name contains invalid characters. You might have mistyped it.";
 
@@ -458,7 +458,7 @@
 
 "schedules_error_empty_label" = "Specify a name for the scheduled job.";
 
-"schedules_error_empty_format" = "Select output formats for the job.";
+"schedules_error_empty_format" = "输出文件格式未选择";
 
 "schedules_error_date_past" = "The start date is in the past. It should be in the future.";
 
@@ -469,7 +469,7 @@
 
 /********** Security **********/
 
-"secutiry_http_message" = "HTTP connections are not secure. You should specify HTTPS if your server supports it.";
+"secutiry_http_message" = "您正在使用不安全的HTTP协议。请考虑迁移到HTTPS。";
 
 
 /********** Server Profiles view **********/

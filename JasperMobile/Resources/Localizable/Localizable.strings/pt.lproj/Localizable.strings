@@ -8,13 +8,13 @@
 
 "about_copyright" = "© 2005-%zd TIBCO Software, Inc.";
 
-"about_comminity_title" = "Jaspersoft Community";
+"about_comminity_title" = "Comunidade Jaspersoft";
 
-"about_whats_new_title" = "What's New";
+"about_whats_new_title" = "Novidades";
 
-"about_privacy_policy_title" = "Privacy Policy";
+"about_privacy_policy_title" = "Política de Privacidade";
 
-"about_eula_title" = "End user license agreement";
+"about_eula_title" = "Contrato de licença de usuário final";
 
 
 /********** Action titles **********/
@@ -23,7 +23,7 @@
 
 "action_title_save" = "Salvar";
 
-"action_title_edit" = "Edit Values";
+"action_title_edit" = "Editar valores";
 
 "action_title_edit_filters" = "Filters";
 
@@ -49,11 +49,11 @@
 
 "action_title_print" = "Imprimir";
 
-"action_title_openIn" = "Open with...";
+"action_title_openIn" = "Abrir com...";
 
-"action_title_accept" = "Accept";
+"action_title_accept" = "Aceitar";
 
-"action_title_schedule" = "Schedule";
+"action_title_schedule" = "Cronograma";
 
 "action_title_share" = "Share";
 
@@ -90,7 +90,7 @@
 
 /********** Dashboard Viewer **********/
 
-"dashboard_viewer_absent_input_controls_alert_message" = "Filters are absent";
+"dashboard_viewer_absent_input_controls_alert_message" = "Ausência de filtros";
 
 
 /********** Error messages **********/
@@ -117,18 +117,18 @@
 
 "error_server_notsupported_msg" = "A versão do servidor é mais antiga que %_1f (não suportado), ou a URL está incorreta.";
 
-"error_openIn_message" = "There is no application to open this resource.";
+"error_openIn_message" = "Não há um aplicativo capaz de executar este recurso";
 
 
 /********** External Screens **********/
 
-"action_title_showExternalDisplay" = "Show on TV";
+"action_title_showExternalDisplay" = "Exibir na TV";
 
-"action_title_hideExternalDisplay" = "Show on Device";
+"action_title_hideExternalDisplay" = "Exibir no dispositivo";
 
-"external_screen_button_title_maximize" = "Tap to maximize";
+"external_screen_button_title_maximize" = "Toque para maximizar";
 
-"external_screen_button_title_manimize" = "Tap to minimize";
+"external_screen_button_title_manimize" = "Toque para minimizar";
 
 
 /********** HTTP error messages **********/
@@ -175,9 +175,9 @@
 
 "menuitem_settings_label" = "Configurações";
 
-"menuitem_schedules_label" = "Schedules";
+"menuitem_schedules_label" = "Cronogramas";
 
-"menuitem_about_label" = "About";
+"menuitem_about_label" = "Sobre";
 
 "menuitem_repository_label" = "Repositório";
 
@@ -185,7 +185,7 @@
 
 "menuitem_logout_label" = "SAIR";
 
-"menuitem_feedback_label" = "Feedback by email";
+"menuitem_feedback_label" = "Feedback por e-mail";
 
 
 /********** Onboarding Intro **********/
@@ -238,7 +238,7 @@
 
 "report_viewer_save_saved" = "O relatório foi validado com sucesso.";
 
-"report_viewer_save_addedToQueue" = "The report is being saved.";
+"report_viewer_save_addedToQueue" = "O relatório foi adicionado à fila";
 
 "report_viewer_save_name_errmsg_empty" = "Este campo é obrigatório.";
 
@@ -272,15 +272,15 @@
 
 /********** Report viewer Options view **********/
 
-"report_viewer_options_title" = "Filters";
+"report_viewer_options_title" = "Filtros";
 
 "report_viewer_options_singleselect_titlelabel_title" = "Selecione um único item";
 
 "report_viewer_options_multiselect_titlelabel_title" = "Selecione um ou mais itens.";
 
-"report_viewer_options_multiselect_available_title" = "Available";
+"report_viewer_options_multiselect_available_title" = "Disponível";
 
-"report_viewer_options_multiselect_selected_title" = "Selected";
+"report_viewer_options_multiselect_selected_title" = "Selecionado";
 
 "report_viewer_options_search_value_placeholder" = "Buscar valores";
 
@@ -290,19 +290,19 @@
 
 "report_viewer_options_ic_title_unset" = "Cancelar definição";
 
-"report_viewer_report_options_title" = "Saved Values";
+"report_viewer_report_options_title" = "Valores gravados";
 
-"report_viewer_report_options_active_option_title" = "-- None --";
+"report_viewer_report_options_active_option_title" = "-- Nenhum --";
 
-"report_viewer_report_options_new_option_title" = "Enter name of a new ReportOption";
+"report_viewer_report_options_new_option_title" = "Digite o nome de uma nova Opção de Relatório";
 
-"report_viewer_report_options_new_option_title_alreadyexist" = "This report already has saved values with this name. Do you want to overwrite them?";
+"report_viewer_report_options_new_option_title_alreadyexist" = "Este relatório já contém valores gravados com este nome. Deseja substituí-los?";
 
-"report_viewer_report_options_create_permission_error" = "You do not have permission to save this option for the report. Log in as a permitted user if you can.";
+"report_viewer_report_options_create_permission_error" = "Você não tem permissão para salvar esta opção no relatório. Conecte-se como um usuário autorizado.";
 
-"report_viewer_report_options_remove_permission_error" = "You do not have permission to remove this option for the report. Log in as a permitted user if you can.";
+"report_viewer_report_options_remove_permission_error" = "Você não tem permissão para remover esta opção no relatório. Conecte-se como um usuário autorizado.";
 
-"report_viewer_report_options_remove_confirmation_message" = "Do you really want to remove\n%@?";
+"report_viewer_report_options_remove_confirmation_message" = "Deseja realmente remover\n%@?";
 
 
 /********** Repository view **********/
@@ -357,7 +357,7 @@
 
 "resource_viewer_print_prepare_title" = "Preparação...";
 
-"resource_viewer_memory_warning" = "Sorry, Your device is low on memory...";
+"resource_viewer_memory_warning" = "Dispositivo está com pouca memória disponível...";
 
 
 /********** Resource views **********/
@@ -385,7 +385,7 @@
 
 "resources_filterby_type_folder" = "Pastas";
 
-"resources_filterby_type_files" = "Content Resources";
+"resources_filterby_type_files" = "Recursos de conteúdo";
 
 "resources_filterby_type_saved_reportUnit" = "Itens gravados";
 
@@ -411,46 +411,46 @@
 
 "savedreport_viewer_delete_confirmation_message" = "Tem certeza de que deseja excluir esse item?";
 
-"savedreport_viewer_show_resource_error_message" = "Report could not be loaded. Try to save a report with less count of pages.";
+"savedreport_viewer_show_resource_error_message" = "Não foi possível carregar o relatório. Experimente salvar um relatório com uma contagem menor de palavras.";
 
-"savedreport_viewer_file_not_exists" = "File doesn't exists";
+"savedreport_viewer_file_not_exists" = "Arquivo inexistente";
 
-"savedreport_viewer_format_not_supported" = "Format not supported";
+"savedreport_viewer_format_not_supported" = "Formato não suportado";
 
 
 /********** Schedules **********/
 
-"schedules_title" = "Schedules";
+"schedules_title" = "Cronogramas";
 
-"schedules_no_jobs_message" = "No jobs are scheduled.";
+"schedules_no_jobs_message" = "Não há tarefas agendadas";
 
 
 /********** New Job **********/
 
-"schedules_new_job_label" = "Name";
+"schedules_new_job_label" = "Classificação da tarefa";
 
 "schedules_new_job_description" = "Description";
 
-"schedules_new_job_button_create" = "Create Schedule";
+"schedules_new_job_button_create" = "Criar tarefa";
 
-"schedules_new_job_output_file_name" = "Output File Name";
+"schedules_new_job_output_file_name" = "Nome do arquivo de saída";
 
-"schedules_new_job_output_file_path" = "Repository Output Folder";
+"schedules_new_job_output_file_path" = "Diretório da pasta de saída";
 
-"schedules_new_job_format" = "Format";
+"schedules_new_job_format" = "Formato";
 
-"schedules_new_job_start_date" = "Run once at:";
+"schedules_new_job_start_date" = "Data de início";
 
 "schedules_new_job_start_immediately" = "Start immediately";
 
-"schedules_new_job_output_format" = "Output Format";
+"schedules_new_job_output_format" = "Formato de saída";
 
 
 /********** Schedule Errors **********/
 
-"schedules_error_domain" = "Validation of a new schedule";
+"schedules_error_domain" = "Validação da criação de nova tarefa agendada";
 
-"schedules_error_empty_filename" = "Specify an output file name.";
+"schedules_error_empty_filename" = "O campo \'nome do arquivo\' está em branco";
 
 "schedules_error_empty_filename_invalid_characters" = "The base output name contains invalid characters. You might have mistyped it.";
 
@@ -458,7 +458,7 @@
 
 "schedules_error_empty_label" = "Specify a name for the scheduled job.";
 
-"schedules_error_empty_format" = "Select output formats for the job.";
+"schedules_error_empty_format" = "Formato de saída do arquivo não selecionado";
 
 "schedules_error_date_past" = "The start date is in the past. It should be in the future.";
 
@@ -469,7 +469,7 @@
 
 /********** Security **********/
 
-"secutiry_http_message" = "HTTP connections are not secure. You should specify HTTPS if your server supports it.";
+"secutiry_http_message" = "Você está utilizando um protocolo HTTP de baixa segurança. Considere migrar para HTTPS.";
 
 
 /********** Server Profiles view **********/

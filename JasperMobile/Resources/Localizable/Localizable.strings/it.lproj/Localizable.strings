@@ -177,7 +177,7 @@
 
 "menuitem_schedules_label" = "Programmi";
 
-"menuitem_about_label" = "詳細";
+"menuitem_about_label" = "Informazioni";
 
 "menuitem_repository_label" = "Archivio";
 
@@ -433,7 +433,7 @@
 
 "schedules_new_job_button_create" = "Crea lavoro";
 
-"schedules_new_job_output_file_name" = "Nome file di stampa";
+"schedules_new_job_output_file_name" = "Output File Name";
 
 "schedules_new_job_output_file_path" = "Percorso cartella di stampa";
 
