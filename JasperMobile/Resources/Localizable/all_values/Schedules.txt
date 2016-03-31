@@ -6,6 +6,7 @@
 		es = Programaciones
 		fr = Programmes
 		it = Pianificazioni
+		ja = スケジュール
 		tags = ios,new
 	[schedules_no_jobs_message]
 		en = No jobs are scheduled.
@@ -13,6 +14,7 @@
 		es = No hay trabajos programados.
 		fr = Aucune tâche n\'est prévue.
 		it = Nessun lavoro pianificato.
+		ja = ジョブはなにもスケジュールされていません。
 		tags = ios,new
 
 [[New Job]]
@@ -22,6 +24,7 @@
 		es = Etiqueta del trabajo
 		fr = Étiquette de la tâche
 		it = Informazioni sul lavoro
+		ja = ジョブ ラベル
 		tags = ios,new
 	[schedules_new_job_description]
 		en = Description
@@ -32,13 +35,14 @@
 		es = Crear trabajo
 		fr = Créer une tâche
 		it = Crea lavoro
+		ja = ジョブを作成する
 		tags = ios,new
 	[schedules_new_job_output_file_name]
 		en = Output File Name
 		de = Bezeichnung der Ausgabedatei
 		es = Nombre del archivo de salida
 		fr = Nom du fichier de sortie
-		it = Nome file di stampa
+		ja = ファイル名を出力する
 		tags = ios,new
 	[schedules_new_job_output_file_path]
 		en = Repository Output Folder
@@ -46,6 +50,7 @@
 		es = Ruta de la carpeta de salida
 		fr = Chemin du dossier de sortie
 		it = Percorso cartella di stampa
+		ja = フォルダ パスを出力する
 		tags = ios,new
 	[schedules_new_job_format]
 		en = Format
@@ -53,6 +58,7 @@
 		es = Formato
 		fr = Format
 		it = Formato
+		ja = 形式
 		tags = ios,new
 	[schedules_new_job_start_date]
 		en = Run once at:
@@ -60,6 +66,7 @@
 		es = Fecha de inicio:
 		fr = Date de début:
 		it = Data di inizio:
+		ja = 開始日
 		tags = ios,new
 	[schedules_new_job_start_immediately]
 		en = Start immediately
@@ -70,6 +77,7 @@
 		es = Formato de salida
 		fr = Format de sortie
 		it = Formato di stampa
+		ja = 出力形式
 		tags = ios,new
 
 [[Schedule Errors]]
@@ -79,6 +87,7 @@
 		es = Validación de la creación de una nueva programación de trabajo
 		fr = Validation de la création d\'une nouvelle tâche ajoutée au programme
 		it = Validazione per la creazione di un nuovo lavoro pianificato
+		ja = 新しいスケジュール ジョブの作成を許可する
 		tags = ios,new
 	[schedules_error_empty_filename]
 		en = Specify an output file name.
@@ -86,6 +95,7 @@
 		es = El nombre de archivo está vacío
 		fr = Le nom du fichier est vide
 		it = Il nome del file è vuoto
+		ja = ファイル名が空です。
 		tags = ios,new
 	[schedules_error_empty_filename_invalid_characters]
 		en = The base output name contains invalid characters. You might have mistyped it.
@@ -102,6 +112,7 @@
 		es = No se ha seleccionado un formato de archivo de salida.
 		fr = Le format du fichier de sortie n\'a pas été sélectionné.
 		it = Formato del file di stampa non selezionato.
+		ja = 出力したいファイル形式が選択されていません
 		tags = ios,new
 	[schedules_error_date_past]
 		en = The start date is in the past. It should be in the future.

@@ -6,6 +6,7 @@
 		es = Filtros
 		fr = Filtres
 		it = Filtri
+		ja = フィルター
 		tags = ios,new
 	[report_viewer_options_singleselect_titlelabel_title]
 		en = Select a single item
@@ -33,6 +34,7 @@
 		es = Disponible
 		fr = Disponible
 		it = Disponibile
+		ja = 利用可能です
 		tags = ios,new
 	[report_viewer_options_multiselect_selected_title]
 		en = Selected
@@ -40,6 +42,7 @@
 		es = Seleccionado
 		fr = Sélectionné
 		it = Selezionato
+		ja = 選択されました
 		tags = ios,new
 	[report_viewer_options_search_value_placeholder]
 		en = Search Values
@@ -87,6 +90,7 @@
 		es = Valores guardados
 		fr = Valeurs enregistrées
 		it = Valori salvati
+		ja = 保存された値
 		tags = ios,new
 	[report_viewer_report_options_active_option_title]
 		en = -- None --
@@ -94,6 +98,7 @@
 		es = -- Ninguno --
 		fr = -- Aucun --
 		it = -- Nessuno --
+		ja =  -  なし  -
 		tags = ios,new,unused
 	[report_viewer_report_options_new_option_title]
 		en = Enter name of a new ReportOption
@@ -101,6 +106,7 @@
 		es = Ingrese el nombre de la nueva Opción de Informe
 		fr = Saisissez le nom d\'une nouvelle Option de rapport
 		it = Inserire il nome di un nuovo OpzioneRapporto
+		ja = 新しいレポートオプションの名前を入力してください
 		tags = ios,new
 	[report_viewer_report_options_new_option_title_alreadyexist]
 		en = This report already has saved values with this name. Do you want to overwrite them?
@@ -108,6 +114,7 @@
 		es = Este informe ya tiene valores guardados con este nombre. ¿Desea sobrescribirlos?
 		fr = Ce rapport a déjà enregistré des valeurs avec ce nom. Souhaitez-vous les remplacer?
 		it = Questo rapporto ha già salvato i valori con questo nome. Sovrascriverli?
+		ja = このレポートには既に、この名前で保存された値が存在しています。内容を上書きしますか？
 		tags = ios,new
 	[report_viewer_report_options_create_permission_error]
 		en = You do not have permission to save this option for the report. Log in as a permitted user if you can.
@@ -115,6 +122,7 @@
 		es = No tiene permisos para guardar esta opción del informe. Si puede, inicie sesión como un usuario autorizado.
 		fr = Vous n\'êtes pas autorisé à enregistrer cette option pour le rapport. Connectez-vous en tant qu\'utilisateur autorisé si vous le pouvez.
 		it = Non si dispone dell\'autorizzazione necessaria per salvare questa opzione per il rapporto. Eseguire l\'accesso come utente autorizzato, se possibile.
+		ja = あなたは、このレポートにこのオプションを保存する権限を持っていません。お望みであれば、権限を保有するユーザーとしてログインしていただけます。
 		tags = ios,new
 	[report_viewer_report_options_remove_permission_error]
 		en = You do not have permission to remove this option for the report. Log in as a permitted user if you can.
@@ -122,6 +130,7 @@
 		es = No tiene permisos para quitar esta opción del informe. Si puede, inicie sesión como un usuario autorizado.
 		fr = Vous n\'êtes pas autorisé à retirer cette option pour le rapport. Connectez-vous en tant qu\'utilisateur autorisé si vous le pouvez.
 		it = Non si dispone dell\'autorizzazione necessaria per rimuovere questa opzione dal rapporto. Eseguire l\'accesso come utente autorizzato, se possibile.
+		ja = あなたは、このレポートにこのオプションを削除する権限を持っていません。お望みであれば、権限を保有するユーザーとしてログインしていただけます。
 		tags = ios,new
 	[report_viewer_report_options_remove_confirmation_message]
 		en = Do you really want to remove\n%@?
@@ -129,4 +138,5 @@
 		es = ¿Realmente desea quitar %@?
 		fr = Souhaitez-vous vraiment retirer \n%@ ?
 		it = Si desidera rimuovere davvero\n%@?
+		ja = 本当に次の項目を削除しますか\n%s？
 		tags = ios,new

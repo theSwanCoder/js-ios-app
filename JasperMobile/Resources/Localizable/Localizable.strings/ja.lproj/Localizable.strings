@@ -8,13 +8,13 @@
 
 "about_copyright" = "© 2005-%zd TIBCO Software, Inc.";
 
-"about_comminity_title" = "Jaspersoft Community";
+"about_comminity_title" = "Jaspersoft コミュニティ";
 
-"about_whats_new_title" = "What's New";
+"about_whats_new_title" = "新着情報";
 
-"about_privacy_policy_title" = "Privacy Policy";
+"about_privacy_policy_title" = "個人情報保護方針";
 
-"about_eula_title" = "End user license agreement";
+"about_eula_title" = "エンドユーザーライセンス契約";
 
 
 /********** Action titles **********/
@@ -90,7 +90,7 @@
 
 /********** Dashboard Viewer **********/
 
-"dashboard_viewer_absent_input_controls_alert_message" = "Filters are absent";
+"dashboard_viewer_absent_input_controls_alert_message" = "フィルタがありません";
 
 
 /********** Error messages **********/
@@ -175,7 +175,7 @@
 
 "menuitem_settings_label" = "設定";
 
-"menuitem_schedules_label" = "Schedules";
+"menuitem_schedules_label" = "スケジュール";
 
 "menuitem_about_label" = "About";
 
@@ -185,7 +185,7 @@
 
 "menuitem_logout_label" = "ログアウト";
 
-"menuitem_feedback_label" = "Feedback by email";
+"menuitem_feedback_label" = "メールでフィードバックを送信";
 
 
 /********** Onboarding Intro **********/
@@ -238,7 +238,7 @@
 
 "report_viewer_save_saved" = "レポートは正常に保存されました。";
 
-"report_viewer_save_addedToQueue" = "The report is being saved.";
+"report_viewer_save_addedToQueue" = "レポートがキューに追加されました。";
 
 "report_viewer_save_name_errmsg_empty" = "このフィールドは必須です。";
 
@@ -272,7 +272,7 @@
 
 /********** Report viewer Options view **********/
 
-"report_viewer_options_title" = "Filters";
+"report_viewer_options_title" = "フィルター";
 
 "report_viewer_options_singleselect_titlelabel_title" = "1 つのアイテムを選択";
 
@@ -357,7 +357,7 @@
 
 "resource_viewer_print_prepare_title" = "準備...";
 
-"resource_viewer_memory_warning" = "Sorry, Your device is low on memory...";
+"resource_viewer_memory_warning" = "申し訳ありませんが、お使いのデバイスでメモリが不足しています...";
 
 
 /********** Resource views **********/
@@ -385,7 +385,7 @@
 
 "resources_filterby_type_folder" = "フォルダ";
 
-"resources_filterby_type_files" = "Content Resources";
+"resources_filterby_type_files" = "コンテンツ リソース";
 
 "resources_filterby_type_saved_reportUnit" = "保存されたアイテム";
 

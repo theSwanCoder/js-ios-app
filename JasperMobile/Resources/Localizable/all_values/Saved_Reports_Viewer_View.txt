@@ -36,6 +36,7 @@
 		es = El informe no se pudo cargar. Intente guardar el informe con un menor número de páginas.
 		fr = Impossible de charger le rapport. Essayez d\'enregistrer un rapport avec un nombre inférieur de pages.
 		it = Non è stato possibile caricare il rapporto. Provare a salvare un rapporto con minore numero di pagine.
+		ja = レポートを読み込めませんでした。より少ないページ数でレポートを保存してみてください。
 		tags = ios,new,unused
 	[savedreport_viewer_file_not_exists]
 		en = File doesn't exists
@@ -43,6 +44,7 @@
 		es = El archivo no existe
 		fr = Le fichier n\'existe pas
 		it = File inesistente
+		ja = ファイルがありません
 		tags = ios,new,unused
 	[savedreport_viewer_format_not_supported]
 		en = Format not supported
@@ -50,4 +52,5 @@
 		es = Formato no compatible
 		fr = Ce format n\'est pas pris en charge
 		it = Formato non supportato
+		ja = この形式はサポートされていません
 		tags = ios,new

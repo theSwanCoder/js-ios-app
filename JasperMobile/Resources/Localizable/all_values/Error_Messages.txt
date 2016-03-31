@@ -116,4 +116,5 @@
 		es = No hay una aplicación para abrir este recurso.
 		fr = Il n\'y a aucune application pour ouvrir cette ressource.
 		it = Nessuna applicazione esistente per aprire questa risorsa.
+		ja = このリソースを開くためのアプリケーションがありません。
 		tags = ios,new
