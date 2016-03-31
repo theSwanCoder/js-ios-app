@@ -113,4 +113,5 @@
 	[error_openIn_message]
 		en = There is no application to open this resource.
 		de = Es gibt keine Anwendung zum Öffnen dieses Bereichs.
+		es = No hay una aplicación para abrir este recurso.
 		tags = ios,new

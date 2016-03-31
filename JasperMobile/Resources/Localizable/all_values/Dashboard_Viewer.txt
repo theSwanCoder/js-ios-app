@@ -3,4 +3,5 @@
 	[dashboard_viewer_absent_input_controls_alert_message]
 		en = Filters are absent
 		de = Filter sind nicht vorhanden
+		es = No hay filtros
 		tags = ios,new,unused

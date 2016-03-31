@@ -3,16 +3,19 @@
 	[schedules_title]
 		en = Schedules
 		de = Terminpläne
+		es = Programaciones
 		tags = ios,new
 	[schedules_no_jobs_message]
 		en = No jobs are scheduled.
 		de = Keine Aufträge sind geplant.
+		es = No hay trabajos programados.
 		tags = ios,new
 
 [[New Job]]
 	[schedules_new_job_label]
 		en = Name
 		de = Auftrags-Etikett
+		es = Etiqueta del trabajo
 		tags = ios,new
 	[schedules_new_job_description]
 		en = Description
@@ -20,22 +23,27 @@
 	[schedules_new_job_button_create]
 		en = Create Schedule
 		de = Auftrag erstellen
+		es = Crear trabajo
 		tags = ios,new
 	[schedules_new_job_output_file_name]
 		en = Output File Name
 		de = Bezeichnung der Ausgabedatei
+		es = Nombre del archivo de salida
 		tags = ios,new
 	[schedules_new_job_output_file_path]
 		en = Repository Output Folder
 		de = Ausgabeverzeichnispfad
+		es = Ruta de la carpeta de salida
 		tags = ios,new
 	[schedules_new_job_format]
 		en = Format
 		de = Format
+		es = Formato
 		tags = ios,new
 	[schedules_new_job_start_date]
 		en = Run once at:
 		de = Anfangsdatum:
+		es = Fecha de inicio:
 		tags = ios,new
 	[schedules_new_job_start_immediately]
 		en = Start immediately
@@ -43,16 +51,19 @@
 	[schedules_new_job_output_format]
 		en = Output Format
 		de = Ausgabeformat
+		es = Formato de salida
 		tags = ios,new
 
 [[Schedule Errors]]
 	[schedules_error_domain]
 		en = Validation of a new schedule
 		de = Validierung der Erstellung eines Terminplans für einen neuen Auftrag
+		es = Validación de la creación de una nueva programación de trabajo
 		tags = ios,new
 	[schedules_error_empty_filename]
 		en = Specify an output file name.
 		de = Dateiname ist leer.
+		es = El nombre de archivo está vacío
 		tags = ios,new
 	[schedules_error_empty_filename_invalid_characters]
 		en = The base output name contains invalid characters. You might have mistyped it.
@@ -66,6 +77,7 @@
 	[schedules_error_empty_format]
 		en = Select output formats for the job.
 		de = Ausgabe-Dateiformat wurde nicht ausgewählt.
+		es = No se ha seleccionado un formato de archivo de salida.
 		tags = ios,new
 	[schedules_error_date_past]
 		en = The start date is in the past. It should be in the future.
