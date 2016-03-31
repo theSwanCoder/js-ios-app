@@ -45,19 +45,19 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"servers.profile.title", nil);
+    self.title = JMCustomLocalizedString(@"servers_profile_title", nil);
     self.view.backgroundColor = [[JMThemesManager sharedManager] serversViewBackgroundColor];
     self.collectionView.backgroundColor = [UIColor clearColor];
     
-    self.errorLabel.text = JMCustomLocalizedString(@"servers.profile.list.empty", nil);
+    self.errorLabel.text = JMCustomLocalizedString(@"servers_profile_list_empty", nil);
     self.errorLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];
     
-    UIMenuItem *editItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers.action.profile.edit", nil) action:@selector(editServerProfile:)];
-    UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers.action.profile.delete", nil) action:@selector(deleteServerProfile:)];
-    UIMenuItem *cloneItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers.action.profile.clone", nil) action:@selector(cloneServerProfile:)];
+    UIMenuItem *editItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers_action_profile_edit", nil) action:@selector(editServerProfile:)];
+    UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers_action_profile_delete", nil) action:@selector(deleteServerProfile:)];
+    UIMenuItem *cloneItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers_action_profile_clone", nil) action:@selector(cloneServerProfile:)];
 
     [[UIMenuController sharedMenuController] setMenuItems:@[editItem, deleteItem, cloneItem]];
 }
@@ -159,13 +159,13 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 - (void)deleteServerProfileForCell:(JMServerCollectionViewCell *)cell
 {
     JMServerProfile *serverProfile = cell.serverProfile;
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
-                                                                                      message:@"servers.profile.delete.message"
-                                                                            cancelButtonTitle:@"dialog.button.cancel"
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
+                                                                                      message:@"servers_profile_delete_message"
+                                                                            cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
     
     __weak typeof(self) weakSelf = self;
-    [alertController addActionWithLocalizedTitle:@"dialog.button.delete" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    [alertController addActionWithLocalizedTitle:@"dialog_button_delete" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         __strong typeof(self) strongSelf = weakSelf;
         [JMServerProfile deleteServerProfile:serverProfile];
         [strongSelf refreshDatasource];
@@ -190,9 +190,9 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 #pragma mark - Helpers
 - (void)showSecurityHTTPAlertForServerProfile:(JMServerProfile *)serverProfile
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
-                                                                                      message:@"secutiry.http.message"
-                                                                            cancelButtonTitle:@"dialog.button.ok"
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_attention"
+                                                                                      message:@"secutiry_http_message"
+                                                                            cancelButtonTitle:@"dialog_button_ok"
                                                                       cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
                                                                           if ([self.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
                                                                               [self.delegate serverGridControllerDidSelectProfile:serverProfile];

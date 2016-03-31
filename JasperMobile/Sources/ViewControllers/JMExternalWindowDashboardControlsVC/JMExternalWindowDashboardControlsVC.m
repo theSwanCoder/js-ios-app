@@ -83,10 +83,10 @@
     BOOL isMaximized = ((NSNumber *)self.maximizedComponents[component.identifier]).boolValue;
     NSString *buttonTitle;
     if (isMaximized) {
-        buttonTitle = JMCustomLocalizedString(@"external.screen.button.title.manimize", nil);
+        buttonTitle = JMCustomLocalizedString(@"external_screen_button_title_manimize", nil);
         cell.backgroundColor = [UIColor lightGrayColor];
     } else {
-        buttonTitle = JMCustomLocalizedString(@"external.screen.button.title.maximize", nil);
+        buttonTitle = JMCustomLocalizedString(@"external_screen_button_title_maximize", nil);
         cell.backgroundColor = [UIColor whiteColor];
     }
     [cell.maximizeButton setTitle:buttonTitle

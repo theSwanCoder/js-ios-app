@@ -195,7 +195,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 - (void)reloadDashboard
 {
-    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                cancelBlock:^(void) {
                                    [self.dashboardLoader cancel];
                                    [super cancelResourceViewingAndExit:YES];
@@ -226,7 +226,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
 
         __weak typeof(self)weakSelf = self;
-        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)];
+        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)];
 
         [self.dashboardLoader reloadMaximizedDashletWithCompletion:^(BOOL success, NSError *error){
             __weak typeof(self)strongSelf = weakSelf;
@@ -255,7 +255,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)startResourceViewing
 {
     if (![self.resourceLookup isLegacyDashboard]) {
-        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                    cancelBlock:^(void) {
                                        [super cancelResourceViewingAndExit:YES];
                                    }];
@@ -291,7 +291,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 - (void)startShowDashboard
 {
-    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                cancelBlock:^(void) {
                                    [self.dashboardLoader cancel];
                                    [super cancelResourceViewingAndExit:YES];

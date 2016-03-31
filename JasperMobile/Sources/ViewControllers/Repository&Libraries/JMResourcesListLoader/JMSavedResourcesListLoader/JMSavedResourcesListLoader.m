@@ -80,7 +80,7 @@
             return [super listItemsWithOption:option];
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *filterItems = [NSMutableArray array];
-            [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"resources.filterby.type.all", nil),
+            [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"resources_filterby_type_all", nil),
                     kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
 
             for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {

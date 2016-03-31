@@ -270,17 +270,17 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 
     if (!isParentHost && isLinkClicked) {
         if ([[UIApplication sharedApplication] canOpenURL:navigationAction.request.URL]) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
-                                                                                              message:@"resource.viewer.open.link"
-                                                                                    cancelButtonTitle:@"dialog.button.cancel"
+            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_attention"
+                                                                                              message:@"resource_viewer_open_link"
+                                                                                    cancelButtonTitle:@"dialog_button_cancel"
                                                                               cancelCompletionHandler:nil];
-            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+            [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                 [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
             }];
             [self presentViewController:alertController animated:YES completion:nil];
         } else {
             [ALToastView toastInView:webView
-                            withText:JMCustomLocalizedString(@"resource.viewer.can't.open.link", nil)];
+                            withText:JMCustomLocalizedString(@"resource_viewer_can_not_open_link", nil)];
         }
         decisionHandler(WKNavigationActionPolicyCancel);
     }
@@ -309,8 +309,8 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self resetSubViews];
 
-    NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
-    NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    NSString *errorMessage = JMCustomLocalizedString(@"resource_viewer_memory_warning", nil);
+    NSError *error = [NSError errorWithDomain:@"dialod_title_attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
     __weak typeof(self) weakSelf = self;
     [JMUtils presentAlertControllerWithError:error completion:^{
         __strong typeof(self) strongSelf = weakSelf;

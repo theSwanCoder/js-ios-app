@@ -60,7 +60,7 @@
 
 /********** Application Info **********/
 
-"application_info" = "%@™ v %@\n\nManagementtool und Berichts-Viewer für TIBCO JasperReports Server %.1f und höher.\n\nWeitere Informationen erhalten Sie unter:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+"application_info" = "%@™ %@\n\nManagementtool und Berichts-Viewer für TIBCO JasperReports Server %.1f und höher.\n\nWeitere Informationen erhalten Sie unter:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
 
 
 /********** Buttons **********/

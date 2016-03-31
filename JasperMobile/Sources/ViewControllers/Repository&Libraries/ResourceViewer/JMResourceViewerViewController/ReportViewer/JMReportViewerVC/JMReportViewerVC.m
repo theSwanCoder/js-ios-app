@@ -236,7 +236,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
     NSString *reportURI = self.resourceLookup.uri;
 
-    [self startShowLoaderWithMessage:@"status.loading"];
+    [self startShowLoaderWithMessage:@"status_loading"];
     [self.restClient resourceLookupForURI:reportURI resourceType:kJS_WS_TYPE_REPORT_UNIT
                                modelClass:[JSResourceReportUnit class]
                           completionBlock:^(JSOperationResult *result) {
@@ -339,7 +339,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 - (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
 {
     JSReportSaver *reportSaver = [[JSReportSaver alloc] initWithReport:self.report restClient:self.restClient];
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
+    [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:^{
         [reportSaver cancelSavingReport];
     }];
     
@@ -451,7 +451,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         }
     };
     if ([self.reportLoader respondsToSelector:@selector(shouldDisplayLoadingView)] && [self.reportLoader shouldDisplayLoadingView]) {
-        [self startShowLoaderWithMessage:@"status.loading"];
+        [self startShowLoaderWithMessage:@"status_loading"];
     }
     [self.reportLoader fetchPageNumber:toPage withCompletion:changePageCompletion];
 }
@@ -465,7 +465,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
     self.toolbar.enable = NO;
 
     __weak typeof(self)weakSelf = self;
-    [self startShowLoaderWithMessage:@"status.loading"];
+    [self startShowLoaderWithMessage:@"status_loading"];
     [self.reportLoader runReportWithPage:page completion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf stopShowLoader];
@@ -510,7 +510,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         [self hideReportView];
 
         __weak typeof(self)weakSelf = self;
-        [self startShowLoaderWithMessage:@"status.loading"];
+        [self startShowLoaderWithMessage:@"status_loading"];
         [self.reportLoader applyReportParametersWithCompletion:^(BOOL success, NSError *error) {
             __strong typeof(self)strongSelf = weakSelf;
             [strongSelf stopShowLoader];
@@ -542,7 +542,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
     [self hideReportView];
     
     __weak typeof(self)weakSelf = self;
-    [self startShowLoaderWithMessage:@"status.loading"];
+    [self startShowLoaderWithMessage:@"status_loading"];
     
     [self.reportLoader refreshReportWithCompletion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
@@ -570,7 +570,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
         case JSSessionExpiredErrorCode:
             if (self.restClient.keepSession) {
                 __weak typeof(self)weakSelf = self;
-                [self startShowLoaderWithMessage:@"status.loading"];
+                [self startShowLoaderWithMessage:@"status_loading"];
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
                     __strong typeof(self)strongSelf = weakSelf;
 
@@ -701,7 +701,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 - (void)reportDidSavedSuccessfully
 {
     [ALToastView toastInView:self.navigationController.view
-                    withText:JMCustomLocalizedString(@"report.viewer.save.addedToQueue", nil)];
+                    withText:JMCustomLocalizedString(@"report_viewer_save_addedToQueue", nil)];
 }
 
 #pragma mark - Input Controls
@@ -747,7 +747,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 - (void)startShowLoaderWithMessage:(NSString *)message
 {
     __weak typeof(self) weakSelf = self;
-    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
+    [self startShowLoaderWithMessage:@"status_loading" cancelBlock:^(void) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf.reportLoader cancel];
         [strongSelf cancelResourceViewingAndExit:YES];

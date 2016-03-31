@@ -121,7 +121,7 @@
                 fullMessage = [fullMessage stringByAppendingFormat:@"\n%@\n", message];
             }
             // TODO: enhance error
-            NSError *createScheduledJobError = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules.error.domain", nil)
+            NSError *createScheduledJobError = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules_error_domain", nil)
                                                                           code:0
                                                                       userInfo:@{NSLocalizedDescriptionKey: fullMessage}];
             completion(nil, createScheduledJobError);
@@ -142,11 +142,11 @@
 {
     NSString *message = @"General error of creating a new schedule.";
     if ([errorCode isEqualToString:@"error.duplicate.report.job.output.filename"]) {
-        message = JMCustomLocalizedString(@"schedules.error.duplicate.filename", nil);
+        message = JMCustomLocalizedString(@"schedules_error_duplicate_filename", nil);
     } else if ([errorCode isEqualToString:@"error.report.job.output.folder.inexistent"]) {
-        message = JMCustomLocalizedString(@"schedules.error.date.past", nil);
+        message = JMCustomLocalizedString(@"schedules_error_date_past", nil);
     } else if ([errorCode isEqualToString:@"error.before.current.date"]) {
-        message = JMCustomLocalizedString(@"schedules.error.date.past", nil);
+        message = JMCustomLocalizedString(@"schedules_error_date_past", nil);
     }
     return message;
 }

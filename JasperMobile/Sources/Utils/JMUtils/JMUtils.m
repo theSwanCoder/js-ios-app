@@ -65,11 +65,11 @@ void jmDebugLog(NSString *format, ...) {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
     reportName = [reportName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (reportName.length < kJMNameMin) {
-        *errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.empty", nil);
+        *errorMessage = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_empty", nil);
     } else if (reportName.length > kJMNameMax) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.maxlength", nil), kJMNameMax];
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_maxlength", nil), kJMNameMax];
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.characters", nil), kJMInvalidCharacters];
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_characters", nil), kJMInvalidCharacters];
     }
     return [*errorMessage length] == 0;
 }
@@ -279,11 +279,11 @@ void jmDebugLog(NSString *format, ...) {
 //        title = @"error.readingresponse.dialog.msg";
 //    }
     if (error.code == JSInvalidCredentialsErrorCode) {
-        title = @"error.authenication.dialog.title";
-        message = @"error.authenication.dialog.msg";
+        title = @"error_authenication_dialog_title";
+        message = @"error_authenication_dialog_msg";
     }
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonTitle:@"dialog.button.ok" cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonTitle:@"dialog_button_ok" cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         if (completion) {
             completion();
         }

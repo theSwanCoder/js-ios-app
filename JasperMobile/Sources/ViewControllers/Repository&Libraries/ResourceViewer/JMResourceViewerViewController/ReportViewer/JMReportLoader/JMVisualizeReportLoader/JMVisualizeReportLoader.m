@@ -522,7 +522,7 @@
 
 - (NSError *)createErrorWithType:(JSReportLoaderErrorType)errorType errorMessage:(NSString *)errorMessage
 {
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report.viewer.visualize.render.error", nil) };
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report_viewer_visualize_render_error", nil) };
     NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
                                          code:errorType
                                      userInfo:userInfo];
