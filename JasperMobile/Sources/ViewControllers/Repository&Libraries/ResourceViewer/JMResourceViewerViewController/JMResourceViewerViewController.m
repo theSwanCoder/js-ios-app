@@ -28,7 +28,10 @@
 #import "JMMainNavigationController.h"
 #import "JMWebEnvironment.h"
 #import "UIView+Additions.h"
+
 #import "JMShareActivityItemProvider.h"
+#import "JMShareViewController.h"
+
 
 NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewerWebEnvironmentIdentifier";
 
@@ -218,26 +221,30 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 
 - (void)shareResource
 {
-    JMShareActivityItemProvider * textProvider = [[JMShareActivityItemProvider alloc] initWithPlaceholderItem:kSkypeActivityType];
-    UIImage *imageForSharing = [self.resourceView renderedImage];
+    JMShareViewController *shareViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMShareViewController"];
+    shareViewController.imageForSharing = [self.resourceView renderedImage];
+    [self.navigationController pushViewController:shareViewController animated:YES];
     
-    NSArray *objectsToShare = @[textProvider, imageForSharing];
-  
-    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
-    
-    NSMutableArray *excludeActivities = [@[UIActivityTypePrint,
-                                           UIActivityTypeCopyToPasteboard,
-                                           UIActivityTypeAssignToContact,
-                                           UIActivityTypeAddToReadingList,
-                                           UIActivityTypeAirDrop] mutableCopy];
-    if ([JMUtils isSystemVersion9]) {
-        [excludeActivities addObject:UIActivityTypeOpenInIBooks];
-    }
-    
-    activityVC.excludedActivityTypes = excludeActivities;
-    activityVC.popoverPresentationController.barButtonItem = [self.navigationItem.rightBarButtonItems firstObject];
-    
-    [self presentViewController:activityVC animated:YES completion:nil];
+//    JMShareActivityItemProvider * textProvider = [[JMShareActivityItemProvider alloc] initWithPlaceholderItem:kSkypeActivityType];
+//    UIImage *imageForSharing = [self.resourceView renderedImage];
+//    
+//    NSArray *objectsToShare = @[textProvider, imageForSharing];
+//  
+//    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
+//    
+//    NSMutableArray *excludeActivities = [@[UIActivityTypePrint,
+//                                           UIActivityTypeCopyToPasteboard,
+//                                           UIActivityTypeAssignToContact,
+//                                           UIActivityTypeAddToReadingList,
+//                                           UIActivityTypeAirDrop] mutableCopy];
+//    if ([JMUtils isSystemVersion9]) {
+//        [excludeActivities addObject:UIActivityTypeOpenInIBooks];
+//    }
+//    
+//    activityVC.excludedActivityTypes = excludeActivities;
+//    activityVC.popoverPresentationController.barButtonItem = [self.navigationItem.rightBarButtonItems firstObject];
+//    
+//    [self presentViewController:activityVC animated:YES completion:nil];
 }
 
 #pragma mark - UIPrintInteractionControllerDelegate

@@ -211,7 +211,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="im_full_name" translatesAutoresizingMaskIntoConstraints="NO" id="8eL-An-K7e">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="im_full_name" translatesAutoresizingMaskIntoConstraints="NO" id="8eL-An-K7e">
                                 <rect key="frame" x="150" y="55" width="300" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </imageView>
@@ -1506,6 +1506,48 @@ your business wherever you are.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rOj-6o-aXF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-490" y="-129"/>
+        </scene>
+        <!--Share View Controller-->
+        <scene sceneID="Pw6-0q-LJh">
+            <objects>
+                <viewController storyboardIdentifier="JMShareViewController" id="CJu-hb-lOG" customClass="JMShareViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="hwv-P0-SqU"/>
+                        <viewControllerLayoutGuide type="bottom" id="CAH-bl-m6T"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Hjt-ix-ARU">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rHo-0Q-koA">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hO1-nB-0Le">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="rHo-0Q-koA" firstAttribute="leading" secondItem="Hjt-ix-ARU" secondAttribute="leading" id="0cW-pS-HJj"/>
+                            <constraint firstItem="hO1-nB-0Le" firstAttribute="top" secondItem="Hjt-ix-ARU" secondAttribute="top" id="3Ma-IP-4ck"/>
+                            <constraint firstItem="rHo-0Q-koA" firstAttribute="top" secondItem="Hjt-ix-ARU" secondAttribute="top" id="75O-3s-50o"/>
+                            <constraint firstAttribute="trailing" secondItem="hO1-nB-0Le" secondAttribute="trailing" id="L3V-kt-E13"/>
+                            <constraint firstAttribute="trailing" secondItem="rHo-0Q-koA" secondAttribute="trailing" id="UC9-LU-aJ6"/>
+                            <constraint firstItem="hO1-nB-0Le" firstAttribute="leading" secondItem="Hjt-ix-ARU" secondAttribute="leading" id="VSo-Zc-W57"/>
+                            <constraint firstItem="CAH-bl-m6T" firstAttribute="top" secondItem="rHo-0Q-koA" secondAttribute="bottom" id="ZWY-Uk-uDe"/>
+                            <constraint firstItem="CAH-bl-m6T" firstAttribute="top" secondItem="hO1-nB-0Le" secondAttribute="bottom" id="fo6-C7-P9q"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="mainImageView" destination="rHo-0Q-koA" id="h0F-Lc-nBV"/>
+                        <outlet property="tempDrawImageView" destination="hO1-nB-0Le" id="1zs-sx-Ryq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Qf-Ih-2a9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1145" y="-129"/>
         </scene>
         <!--Saved Resource Viewer View Controller-->
         <scene sceneID="H8W-pD-vyf">
