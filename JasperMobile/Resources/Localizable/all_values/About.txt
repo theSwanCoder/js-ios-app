@@ -1,5 +1,15 @@
 
 [[About]]
+	[application_info]
+		en = %@™ %@\n\nManagement tool and report viewer for TIBCO JasperReports Server %.1f and greater.\n\nFor more information visit:\n\n%@
+		de = %@™ %@\n\nManagementtool und Berichts-Viewer für TIBCO JasperReports Server %.1f und höher.\n\nWeitere Informationen erhalten Sie unter:\n\n%@
+		fr = %@™ %@\n\nOutil de gestion et visionneuse de rapports pour TIBCO JasperReports Server %.1f et versions ultérieures.\n\nPour plus d'informations, consultez la page :\n\n%@
+		es = %@™ %@\n\nHerramienta de administración y visor de informes de TIBCO JasperReports Server %.1f y posterior.\n\nPara obtener más información, visite:\n\n%@
+		it = %@™ %@\n\nStrumento di gestione e visualizzatore report per server TIBCO JasperReports %.1f e versioni successive.\n\nPer ulteriori informazioni visitare la pagina:\n\n%@
+		pt = %@™ %@\n\nFerramenta de gerenciamento e visualizador de relatório para o TIBCO JasperReports Server %.1f e posterior.\n\nFor more information visit:\n\n%@
+		ja = %@™ %@\n\nTIBCO JasperReports Server %.1f 以降向けの管理ツール/レポートビューア。\n\n詳細は以下の URL をご覧ください。\n\n%@
+		zh = %@™ %@\n\nTIBCO JasperReports Server %.1f 及更高版本的管理工具和报告查看程序。\n\n有关更多信息，请访问: \n\n%@
+		tags = ios
 	[about_copyright]
 		en = © 2005-%zd TIBCO Software, Inc.
 		de = © 2005-%zd TIBCO Software, Inc.
