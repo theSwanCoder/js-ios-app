@@ -83,6 +83,10 @@
         self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonDisabledBackgroundColor];
         [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoDisabledButtonTextColor] forState:UIControlStateNormal];
     } else {
+        NSString *lastUserName = [JMUtils lastUserName];
+        self.userNameTextField.text = lastUserName;
+        JMServerProfile *lastServerProfile = [JMUtils lastServerProfile];
+        self.selectedServerProfile = lastServerProfile;
         self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
         [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
     }
@@ -145,7 +149,8 @@
         NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:0 userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         [JMUtils presentAlertControllerWithError:error completion:nil];
     } else {
-
+        [JMUtils saveLastUserName:self.userNameTextField.text];
+        [JMUtils saveLastServerProfile:self.selectedServerProfile];
         [self loginWithServerProfile:self.selectedServerProfile userName:self.userNameTextField.text password:self.passwordTextField.text];
     }
 }

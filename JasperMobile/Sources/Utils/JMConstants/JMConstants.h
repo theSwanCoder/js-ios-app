@@ -144,3 +144,7 @@ extern NSString * const kJMAnalyticsRepositoryEventActionOpen;
 // Custom Dimensions
 extern NSUInteger  const kJMAnalyticsCustomDimensionServerVersionIndex;
 extern NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex;
+
+// Login VC
+extern NSString *const JMLoginVCLastUserNameKey;
+extern NSString *const JMLoginVCLastServerProfileAliasKey;

@@ -105,6 +105,14 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock __nonnull)loginCompletion;
 
++ (NSString *)lastUserName;
+
++ (void)saveLastUserName:(NSString *)userName;
+
++ (JMServerProfile *)lastServerProfile;
+
++ (void)saveLastServerProfile:(JMServerProfile *)serverProfile;
+
 + (void)askUserAgreementWithCompletion:(void (^ __nonnull)(BOOL isAgree))completion;
 
 + (BOOL)isUserAcceptAgreement;

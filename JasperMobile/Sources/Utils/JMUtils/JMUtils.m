@@ -210,6 +210,41 @@ void jmDebugLog(NSString *format, ...) {
     [revealViewController presentViewController:loginNavController animated:animated completion:completion];
 }
 
++ (NSString *)lastUserName
+{
+    NSString *lastUserName;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastUserNameKey]) {
+        lastUserName = [[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastUserNameKey];
+    }
+    return lastUserName;
+}
+
++ (void)saveLastUserName:(NSString *)userName
+{
+    [[NSUserDefaults standardUserDefaults] setObject:userName
+                                              forKey:JMLoginVCLastUserNameKey];
+}
+
++ (JMServerProfile *)lastServerProfile
+{
+    JMServerProfile *lastServerProfile;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastServerProfileAliasKey]) {
+        NSString *lastServerProfileAliase = [[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastServerProfileAliasKey];
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"alias = %@", lastServerProfileAliase];
+        NSArray *serverProfiles = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
+        JMLog(@"serverProfiles: %@", serverProfiles);
+        lastServerProfile = serverProfiles.firstObject;
+    }
+    return lastServerProfile;
+}
+
++ (void)saveLastServerProfile:(JMServerProfile *)serverProfile
+{
+    [[NSUserDefaults standardUserDefaults] setObject:serverProfile.alias
+                                              forKey:JMLoginVCLastServerProfileAliasKey];
+}
+
 #pragma mark - EULA
 + (void)askUserAgreementWithCompletion:(void(^ __nonnull)(BOOL isAgree))completion
 {
