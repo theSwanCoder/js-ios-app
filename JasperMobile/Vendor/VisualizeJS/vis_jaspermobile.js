@@ -429,9 +429,12 @@ JasperMobile.Dashboard.API = {
                 } else {
                     JasperMobile.Dashboard.API._defineComponentsClickEvent();
                 }
-                JasperMobile.Dashboard.API._setupFiltersApperance();
+
             }, 6000);
 
+            // hide input controls dashlet
+            var filterGroup = document.querySelectorAll('[data-componentid="Filter_Group"]')[0];
+            filterGroup.style.display = "none";
         };
         var errorFn = function(error) {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.runDashboard", {
@@ -937,20 +940,6 @@ JasperMobile.Dashboard.API = {
                 return components[i];
             }
         }
-    },
-    _setupFiltersApperance: function() {
-        var interval = window.setInterval(function() {
-            window.clearInterval(interval);
-            var div = document.querySelector(".msPlaceholder > div");
-            if (div !== null) {
-                var divHeight;
-                divHeight = document.querySelector(".msPlaceholder > div").style.height;
-                if (divHeight !== 'undefined') {
-                    document.querySelector(".msPlaceholder > div").style.height = "";
-                }
-                document.querySelector(".filterRow > div > div").style.height = "";
-            }
-        }, 500);
     }
 };
 
