@@ -105,13 +105,13 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock __nonnull)loginCompletion;
 
-+ (NSString *)lastUserName;
++ (NSString *__nullable)lastUserName;
 
-+ (void)saveLastUserName:(NSString *)userName;
++ (void)saveLastUserName:(NSString *__nullable)userName;
 
-+ (JMServerProfile *)lastServerProfile;
++ (JMServerProfile *__nullable)lastServerProfile;
 
-+ (void)saveLastServerProfile:(JMServerProfile *)serverProfile;
++ (void)saveLastServerProfile:(JMServerProfile *__nullable)serverProfile;
 
 + (void)askUserAgreementWithCompletion:(void (^ __nonnull)(BOOL isAgree))completion;
 
@@ -140,15 +140,6 @@ void jmDebugLog(NSString * __nonnull format, ...);
 */
 + (BOOL)isServerAmber;
 
-/**
- Returns YES if JRS instance has version equal 6.1
-
- @return YES if JRS instance has version equal 6.1
- */
-
-+ (BOOL)isServerAmber2;
-
-+ (BOOL)isServerAmber2OrHigher;
 
 /**
  Returns YES if visualize is supported on current JRS instance

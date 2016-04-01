@@ -47,7 +47,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 @property (nonatomic, strong, readwrite) JMReport *report;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
-@property (nonatomic, strong) JMWebEnvironment *webEnvironment;
+@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 @end
 
 @implementation JMReportViewerVC

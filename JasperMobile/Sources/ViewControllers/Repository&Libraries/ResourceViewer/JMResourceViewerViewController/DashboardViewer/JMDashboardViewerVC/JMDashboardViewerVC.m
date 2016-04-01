@@ -54,7 +54,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
 @property (nonatomic) JMExternalWindowDashboardControlsVC *controlsViewController;
-@property (nonatomic, strong) JMWebEnvironment *webEnvironment;
+@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 @end
 
 
@@ -169,6 +169,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     [self.dashboardLoader destroy];
     [self.webEnvironment resetZoom];
+    [self.webEnvironment.webView removeFromSuperview];
+
+    self.webEnvironment = nil;
 }
 
 
@@ -304,7 +307,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
         if (success) {
             // Analytics
-            NSString *label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+            NSString *label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
             [JMUtils sendAnalyticsEventWithInfo:@{
                     kJMAnalyticsCategoryKey : kJMAnalyticsResourceEventCategoryTitle,
                     kJMAnalyticsActionKey : kJMAnalyticsResourceEventActionOpenTitle,
@@ -421,7 +424,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self minimizeDashlet];
     }
 
-    if ([JMUtils isServerAmber2OrHigher]) {
+    if ([JMUtils isServerVersionUpOrEqual6]) {
         [self startResourceViewing];
     } else {
         [self reloadDashboard];

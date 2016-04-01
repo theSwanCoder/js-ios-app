@@ -173,7 +173,7 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)showLoginViewWithRestoreSession:(BOOL)restoreSession animated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion
 {
-    if (!restoreSession) {
+    if (!restoreSession && self.restClient) {
         [[JMSessionManager sharedManager] logout];
     }
 
@@ -233,7 +233,6 @@ void jmDebugLog(NSString *format, ...) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"alias = %@", lastServerProfileAliase];
         NSArray *serverProfiles = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
-        JMLog(@"serverProfiles: %@", serverProfiles);
         lastServerProfile = serverProfiles.firstObject;
     }
     return lastServerProfile;
@@ -364,16 +363,6 @@ void jmDebugLog(NSString *format, ...) {
         isAmberServer = YES;
     }
     return isAmberServer;
-}
-
-+ (BOOL)isServerAmber2
-{
-    return self.restClient.serverProfile.serverInfo.versionAsFloat == kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
-}
-
-+ (BOOL)isServerAmber2OrHigher
-{
-    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
 + (BOOL)isServerProEdition

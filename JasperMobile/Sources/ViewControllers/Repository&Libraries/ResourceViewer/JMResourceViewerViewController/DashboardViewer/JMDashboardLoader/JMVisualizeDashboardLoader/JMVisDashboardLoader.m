@@ -264,24 +264,26 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     JMLog(@"visuzalise.js did start load");
     JMDashboardLoaderCompletion heapBlock = [completion copy];
+    __weak __typeof(self) weakSelf = self;
     [self.visualizeManager loadVisualizeJSWithCompletion:^(BOOL success, NSError *error){
-            if (success) {
-                JMLog(@"visuzalise.js did end load");
-                NSString *baseURLString = self.restClient.serverProfile.serverUrl;
-                NSString *htmlString = [self.visualizeManager htmlStringForDashboard];
-                [self.webEnvironment loadHTML:htmlString
-                                      baseURL:[NSURL URLWithString:baseURLString]
-                                   completion:heapBlock];
-            } else {
-                // TODO: handle this error
-                JMLog(@"Error loading visualize.js");
-                // TODO: add error code
-                error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
-                                            code:0
-                                        userInfo:nil];
-                completion(NO, error);
-            }
-        }];
+        __typeof(self) strongSelf = weakSelf;
+        if (success) {
+            JMLog(@"visuzalise.js did end load");
+            NSString *baseURLString = strongSelf.restClient.serverProfile.serverUrl;
+            NSString *htmlString = [strongSelf.visualizeManager htmlStringForDashboard];
+            [strongSelf.webEnvironment loadHTML:htmlString
+                                        baseURL:[NSURL URLWithString:baseURLString]
+                                     completion:heapBlock];
+        } else {
+            // TODO: handle this error
+            JMLog(@"Error loading visualize.js");
+            // TODO: add error code
+            error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
+                                        code:0
+                                    userInfo:nil];
+            completion(NO, error);
+        }
+    }];
 }
 
 - (void)addListenersForVisualizeEvents
