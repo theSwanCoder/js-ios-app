@@ -7,8 +7,10 @@
 //
 
 #import "JMShareViewController.h"
+#import "JMShareActivityItemProvider.h"
+#import "JMShareSettingsViewController.h"
 
-@interface JMShareViewController ()
+@interface JMShareViewController () <JMShareSettingsViewControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UIImageView *mainImageView;
 @property (nonatomic, weak) IBOutlet UIImageView *tempDrawImageView;
@@ -33,21 +35,61 @@
     self.title = JMCustomLocalizedString(@"resource.sharing.title", nil);
     
     
-    UIBarButtonItem *resetItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:nil action:nil];
-    UIBarButtonItem *settingsItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:nil action:nil];
-    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
+    UIBarButtonItem *resetItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reset_action"] style:UIBarButtonItemStylePlain target:self action:@selector(resetButtonDidTapped:)];
+    UIBarButtonItem *settingsItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings_action"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsButtonDidTapped:)];
+    UIBarButtonItem *shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share_action"] style:UIBarButtonItemStylePlain target:self action:@selector(shareButtonDidTapped:)];
 
     UIBarButtonItem *dividerItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *dividerItem1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
     
-    self.toolbarItems = @[resetItem, dividerItem, settingsItem, dividerItem1, doneItem];
+    self.toolbarItems = @[resetItem, dividerItem, settingsItem, dividerItem1, shareItem];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     self.navigationController.toolbarHidden = NO;
+}
+
+#pragma mark - Actions
+- (void)resetButtonDidTapped:(id)sender
+{
+    self.mainImageView.image = self.imageForSharing;
+}
+
+- (void)settingsButtonDidTapped:(id)sender
+{
+    JMShareSettingsViewController *settingsController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMShareSettingsViewController"];
+    settingsController.drawingColor = self.drawingColor;
+    settingsController.brushWidth = self.brushWidth;
+    settingsController.opacity = self.opacity;
+    settingsController.delegate = self;
+    [self.navigationController pushViewController:settingsController animated:YES];
+}
+
+- (void)shareButtonDidTapped:(id)sender
+{
+    JMShareActivityItemProvider * textProvider = [[JMShareActivityItemProvider alloc] initWithPlaceholderItem:kSkypeActivityType];
+    UIImage *imageForSharing = self.mainImageView.image;
+    
+    NSArray *objectsToShare = @[textProvider, imageForSharing];
+    
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
+    
+    NSMutableArray *excludeActivities = [@[UIActivityTypePrint,
+                                           UIActivityTypeCopyToPasteboard,
+                                           UIActivityTypeAssignToContact,
+                                           UIActivityTypeAddToReadingList,
+                                           UIActivityTypeAirDrop] mutableCopy];
+    if ([JMUtils isSystemVersion9]) {
+        [excludeActivities addObject:UIActivityTypeOpenInIBooks];
+    }
+    
+    activityVC.excludedActivityTypes = excludeActivities;
+    activityVC.popoverPresentationController.barButtonItem = [self.navigationItem.rightBarButtonItems firstObject];
+    
+    [self presentViewController:activityVC animated:YES completion:nil];    
 }
 
 #pragma mark - Touches
@@ -91,11 +133,22 @@
     CGPoint currentPoint = [self locationFromTouches:touches];
     [self drawLineFromPoint:self.lastDrawingPoint toPoint:currentPoint];
     
-    UIGraphicsBeginImageContext(self.mainImageView.bounds.size);
-    [self.mainImageView.image drawInRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) blendMode:kCGBlendModeNormal alpha:1.0];
-    [self.tempDrawImageView.image drawInRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) blendMode:kCGBlendModeNormal alpha:1.0];
+    UIGraphicsBeginImageContextWithOptions(self.mainImageView.bounds.size, 0, self.mainImageView.image.scale);
+    [self.mainImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    [self.tempDrawImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
     self.mainImageView.image = UIGraphicsGetImageFromCurrentImageContext();
     self.tempDrawImageView.image = nil;
     UIGraphicsEndImageContext();
 }
+
+#pragma mark - JMShareSettingsViewControllerDelegate
+- (void)settingsDidChangedOnController:(JMShareSettingsViewController *)settingsController
+{
+    self.drawingColor = settingsController.drawingColor;
+    self.brushWidth = settingsController.brushWidth;
+    self.opacity = settingsController.opacity;
+
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 @end

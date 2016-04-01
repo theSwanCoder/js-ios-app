@@ -20,6 +20,7 @@
 		0801DFBE1AAF2E7500DD072C /* JMIntroModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */; };
 		0801DFBF1AAF2E7500DD072C /* JMOnboardIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */; };
 		080CC4881CAD7D0A005C3344 /* JMShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080CC4871CAD7D0A005C3344 /* JMShareViewController.m */; };
+		080CC48F1CAE970F005C3344 /* JMShareSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080CC48E1CAE970F005C3344 /* JMShareSettingsViewController.m */; };
 		08221C421AE54DA000F94F1D /* JMCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C411AE54DA000F94F1D /* JMCoreDataManager.m */; };
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
 		08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */; };
@@ -272,6 +273,8 @@
 		0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMOnboardIntroViewController.m; sourceTree = "<group>"; };
 		080CC4861CAD7D0A005C3344 /* JMShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMShareViewController.h; sourceTree = "<group>"; };
 		080CC4871CAD7D0A005C3344 /* JMShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareViewController.m; sourceTree = "<group>"; };
+		080CC48D1CAE970F005C3344 /* JMShareSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMShareSettingsViewController.h; sourceTree = "<group>"; };
+		080CC48E1CAE970F005C3344 /* JMShareSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareSettingsViewController.m; sourceTree = "<group>"; };
 		08221C401AE54DA000F94F1D /* JMCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCoreDataManager.h; sourceTree = "<group>"; };
 		08221C411AE54DA000F94F1D /* JMCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMCoreDataManager.m; sourceTree = "<group>"; };
 		08221C911AE78CD300F94F1D /* JMMigrationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMigrationManager.h; sourceTree = "<group>"; };
@@ -808,6 +811,15 @@
 				0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */,
 			);
 			path = JMIntroModelManager;
+			sourceTree = "<group>";
+		};
+		080CC48C1CAE970F005C3344 /* JMShareSettingsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				080CC48D1CAE970F005C3344 /* JMShareSettingsViewController.h */,
+				080CC48E1CAE970F005C3344 /* JMShareSettingsViewController.m */,
+			);
+			path = JMShareSettingsViewController;
 			sourceTree = "<group>";
 		};
 		08221C3F1AE54DA000F94F1D /* JMCoreDataManager */ = {
@@ -2515,6 +2527,7 @@
 		BD6DB2B61C982B9C002DEFDF /* JMShareViewController */ = {
 			isa = PBXGroup;
 			children = (
+				080CC48C1CAE970F005C3344 /* JMShareSettingsViewController */,
 				BD6DB2B71C982B9C002DEFDF /* JMShareActivityItemProvider */,
 				080CC4861CAD7D0A005C3344 /* JMShareViewController.h */,
 				080CC4871CAD7D0A005C3344 /* JMShareViewController.m */,
@@ -3042,6 +3055,7 @@
 				08DD182B1B135BE500856112 /* JasperMobile.xcdatamodeld in Sources */,
 				08DF00941B25F87C0056F683 /* JMSaveReportPagesCell.m in Sources */,
 				089B15B11AA756BD0021A915 /* JasperMobileAppDelegate.m in Sources */,
+				080CC48F1CAE970F005C3344 /* JMShareSettingsViewController.m in Sources */,
 				08E2AC891B1E056900AC462B /* JMInputControlCell.m in Sources */,
 				089B15AB1AA756BD0021A915 /* JMMenuActionsView.m in Sources */,
 				BDE6A0861B5A891000A7FDEC /* JMTextField.m in Sources */,
