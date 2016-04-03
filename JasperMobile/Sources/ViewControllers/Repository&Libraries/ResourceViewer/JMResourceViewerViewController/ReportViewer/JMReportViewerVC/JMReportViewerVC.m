@@ -562,7 +562,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 {
     switch (error.code) {
         case JSReportLoaderErrorTypeAuthentification:
-            [self resetSubViews];
+            [self.webEnvironment.webView removeFromSuperview];
+            self.webEnvironment = nil;
             [[JMWebViewManager sharedInstance] removeWebEnvironmentForId:[self currentWebEnvironmentIdentifier]];
 
             NSInteger reportCurrentPage = self.report.currentPage;

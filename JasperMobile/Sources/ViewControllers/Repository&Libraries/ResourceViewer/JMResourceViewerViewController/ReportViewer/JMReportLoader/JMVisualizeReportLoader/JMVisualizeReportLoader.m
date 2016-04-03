@@ -43,6 +43,11 @@
 @implementation JMVisualizeReportLoader
 
 #pragma mark - Lifecycle
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 - (id<JMReportLoaderProtocol>)initWithReport:(nonnull JSReport *)report
                                   restClient:(nonnull JSRESTBase *)restClient
                               webEnvironment:(JMWebEnvironment *)webEnvironment
@@ -245,13 +250,15 @@
 
 - (void)destroy
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"JasperMobile.Report.API.destroyReport";
     request.parametersAsString = @"";
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        // Need capture self to wait until this request finishes
-        self.report.isReportAlreadyLoaded = NO;
-        [self.webEnvironment removeAllListeners];
+        __typeof(self) strongSelf = weakSelf;
+        strongSelf.report.isReportAlreadyLoaded = NO;
+        [strongSelf.webEnvironment removeAllListeners];
 
         if (parameters) {
             JMLog(@"callback: %@", parameters);
