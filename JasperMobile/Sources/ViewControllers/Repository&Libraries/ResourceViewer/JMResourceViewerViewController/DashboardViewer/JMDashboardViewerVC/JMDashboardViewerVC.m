@@ -228,9 +228,13 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
 
-        __weak typeof(self)weakSelf = self;
-        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)];
+        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
+                             cancelBlock:^(void) {
+                                 [self.dashboardLoader cancel];
+                                 [super cancelResourceViewingAndExit:YES];
+                             }];
 
+        __weak typeof(self)weakSelf = self;
         [self.dashboardLoader reloadMaximizedDashletWithCompletion:^(BOOL success, NSError *error){
             __weak typeof(self)strongSelf = weakSelf;
             [strongSelf stopShowLoader];
