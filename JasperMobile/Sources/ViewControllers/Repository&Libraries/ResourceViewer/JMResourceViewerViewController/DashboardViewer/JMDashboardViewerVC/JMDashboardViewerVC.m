@@ -201,7 +201,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                cancelBlock:^(void) {
                                    [self.dashboardLoader cancel];
-                                   [super cancelResourceViewingAndExit:YES];
                                }];
     __weak typeof(self)weakSelf = self;
     [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
@@ -231,7 +230,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                              cancelBlock:^(void) {
                                  [self.dashboardLoader cancel];
-                                 [super cancelResourceViewingAndExit:YES];
                              }];
 
         __weak typeof(self)weakSelf = self;
