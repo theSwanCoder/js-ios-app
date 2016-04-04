@@ -3308,6 +3308,11 @@ your business wherever you are.</string>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="SDb-ZS-36l">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="x3d-lX-wsj">
+                            <connections>
+                                <action selector="cancelButtonDidTapped:" destination="mRx-bB-oYD" id="afF-p4-vye"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="apply_item" id="FHa-BK-5yA">
                             <connections>
                                 <action selector="applyButtonDidTapped:" destination="mRx-bB-oYD" id="h83-SB-eZ0"/>

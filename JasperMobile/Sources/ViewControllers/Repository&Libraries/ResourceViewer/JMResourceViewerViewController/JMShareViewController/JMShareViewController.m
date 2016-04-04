@@ -9,6 +9,7 @@
 #import "JMShareViewController.h"
 #import "JMShareActivityItemProvider.h"
 #import "JMShareSettingsViewController.h"
+#import "JMMainNavigationController.h"
 
 @interface JMShareViewController () <JMShareSettingsViewControllerDelegate>
 
@@ -65,7 +66,12 @@
     settingsController.brushWidth = self.brushWidth;
     settingsController.opacity = self.opacity;
     settingsController.delegate = self;
-    [self.navigationController pushViewController:settingsController animated:YES];
+    
+    JMMainNavigationController *nextNC = [[JMMainNavigationController alloc] initWithRootViewController:settingsController];
+    
+    nextNC.modalPresentationStyle = UIModalPresentationFormSheet;
+
+    [self presentViewController:nextNC animated:YES completion:nil];
 }
 
 - (void)shareButtonDidTapped:(id)sender
@@ -148,7 +154,7 @@
     self.brushWidth = settingsController.brushWidth;
     self.opacity = settingsController.opacity;
 
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

@@ -83,6 +83,11 @@
     [self.delegate settingsDidChangedOnController:self];
 }
 
+- (IBAction)cancelButtonDidTapped:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (IBAction)sliderValueChanged:(id)sender
 {
     UISlider * changedSlider = (UISlider*)sender;
