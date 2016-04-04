@@ -40,6 +40,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.title = JMCustomLocalizedString(@"resource_viewer_share_settings_title", nil);
+    self.opacityTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_opacity", nil);
+    self.brushTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_brush", nil);
+    self.rgbPaletteTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_rgb", nil);
+
+
     self.brushSlider.value = self.brushWidth;
     [self sliderValueChanged:self.brushSlider];
     
@@ -88,13 +95,13 @@
         self.opacityValueLabel.text = [NSString stringWithFormat:@"%.1f", self.opacity];
     } else if(changedSlider == self.redSlider) {
         self.redComponent = self.redSlider.value/255.0;
-        self.redValueLabel.text = [NSString stringWithFormat:@"Red: %d", (int)self.redSlider.value];
+        self.redValueLabel.text = [NSString stringWithFormat:@"%@: %d", JMCustomLocalizedString(@"resource_viewer_share_settings_red", nil), (int)self.redSlider.value];
     } else if(changedSlider == self.greenSlider){
         self.greenComponent = self.greenSlider.value/255.0;
-        self.greenValueLabel.text = [NSString stringWithFormat:@"Green: %d", (int)self.greenSlider.value];
+        self.greenValueLabel.text = [NSString stringWithFormat:@"%@: %d", JMCustomLocalizedString(@"resource_viewer_share_settings_green", nil), (int)self.greenSlider.value];
     } else if (changedSlider == self.blueSlider){
         self.blueComponent = self.blueSlider.value/255.0;
-        self.blueValueLabel.text = [NSString stringWithFormat:@"Blue: %d", (int)self.blueSlider.value];
+        self.blueValueLabel.text = [NSString stringWithFormat:@"%@: %d", JMCustomLocalizedString(@"resource_viewer_share_settings_blue", nil), (int)self.blueSlider.value];
     }
     
     UIGraphicsBeginImageContext(self.brushPreviewImageView.bounds.size);

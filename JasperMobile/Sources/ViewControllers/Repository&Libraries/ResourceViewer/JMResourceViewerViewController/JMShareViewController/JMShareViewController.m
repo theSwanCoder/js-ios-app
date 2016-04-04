@@ -32,7 +32,7 @@
     self.brushWidth = 10.f;
     self.opacity = 1.f;
     
-    self.title = JMCustomLocalizedString(@"resource.sharing.title", nil);
+    self.title = JMCustomLocalizedString(@"resource_viewer_share_title", nil);
     
     
     UIBarButtonItem *resetItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reset_action"] style:UIBarButtonItemStylePlain target:self action:@selector(resetButtonDidTapped:)];

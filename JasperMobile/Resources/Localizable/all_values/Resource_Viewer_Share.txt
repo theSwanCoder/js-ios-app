@@ -1,0 +1,29 @@
+
+[[Resource viewer share]]
+	[resource_viewer_share_title]
+		en = Resource sharing
+		tags = ios,new
+    [resource_viewer_share_text]
+        en = Look at this awesome report, builded via %@!
+        tags = ios,new
+    [resource_viewer_share_settings_title]
+        en = Share settings
+        tags = ios,new
+    [resource_viewer_share_settings_opacity]
+        en = Opacity
+        tags = ios,new
+    [resource_viewer_share_settings_brush]
+        en = Brush
+        tags = ios,new
+    [resource_viewer_share_settings_rgb]
+        en = RGB color settings
+        tags = ios,new
+    [resource_viewer_share_settings_red]
+        en = Red
+        tags = ios,new
+    [resource_viewer_share_settings_green]
+        en = Green
+        tags = ios,new
+    [resource_viewer_share_settings_blue]
+        en = Blue
+        tags = ios,new

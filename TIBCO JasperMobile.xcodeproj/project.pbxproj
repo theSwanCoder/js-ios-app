@@ -130,6 +130,7 @@
 		08E2AC9C1B1E056900AC462B /* JMSaveReportSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC791B1E056900AC462B /* JMSaveReportSection.m */; };
 		08E2AC9D1B1E056900AC462B /* JMSaveReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC7B1B1E056900AC462B /* JMSaveReportViewController.m */; };
 		08E62C8319922B0B0081CA83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E62C8019922B0B0081CA83 /* main.m */; };
+		08F2D1701CB268C500C6E4EF /* Resource_Viewer_Share.txt in Resources */ = {isa = PBXBuildFile; fileRef = 08F2D16F1CB268C500C6E4EF /* Resource_Viewer_Share.txt */; };
 		7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */; };
 		93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */; };
 		930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D431ABB1CDF005F93FB /* dashboard.html */; };
@@ -493,6 +494,7 @@
 		08E62C7E19922B0B0081CA83 /* TIBCO JasperMobile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TIBCO JasperMobile.plist"; sourceTree = "<group>"; };
 		08E62C7F19922B0B0081CA83 /* TIBCO JasperMobile.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile.pch"; sourceTree = "<group>"; };
 		08E62C8019922B0B0081CA83 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		08F2D16F1CB268C500C6E4EF /* Resource_Viewer_Share.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Resource_Viewer_Share.txt; sourceTree = "<group>"; };
 		20A5E8D0860C986563FB740C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2347,6 +2349,7 @@
 				A1478E75A2572A0FE57D4C40 /* Menu_View.txt */,
 				A1478DB085E57E2AAFA392A1 /* Resource_Views.txt */,
 				A1478D9D0720E660DDCA5388 /* Resource_Viewer_View.txt */,
+				08F2D16F1CB268C500C6E4EF /* Resource_Viewer_Share.txt */,
 				A1478D9DF582ED51DCD42CD8 /* Report_Viewer.txt */,
 				A1478AFFC93E5D3342BAE32D /* Report_Saver_View.txt */,
 				A1478288629CDC8C0AA27ABF /* Report_Viewer_Options_View.txt */,
@@ -2993,6 +2996,7 @@
 				087A71AD1BD95FBF007B98A4 /* Settings.bundle in Resources */,
 				089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */,
 				9331B2C71C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib in Resources */,
+				08F2D1701CB268C500C6E4EF /* Resource_Viewer_Share.txt in Resources */,
 				089B15FC1AA756BD0021A915 /* JMBaseCollectionView.xib in Resources */,
 				08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */,
 				08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */,
