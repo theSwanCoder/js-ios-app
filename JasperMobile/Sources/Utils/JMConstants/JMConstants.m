@@ -121,15 +121,20 @@ NSString * const kJMAnalyticsAuthenticationEventLabelSuccess      = @"Success";
 NSString * const kJMAnalyticsAuthenticationEventLabelFailure      = @"Failure";
 
 // Analytics - Resource
-NSString * const kJMAnalyticsResourceEventCategoryTitle           = @"Resource";
-NSString * const kJMAnalyticsResourceEventActionOpenTitle         = @"Open";
-NSString * const kJMAnalyticsResourceEventActionPrintTitle        = @"Print";
-NSString * const kJMAnalyticsResourceEventActionExportTitle       = @"Export";
-NSString * const kJMAnalyticsResourceEventLabelReportREST         = @"Report (REST)";
-NSString * const kJMAnalyticsResourceEventLabelReportVisualize    = @"Report (Visualize)";
-NSString * const kJMAnalyticsResourceEventLabelDashboardFlow      = @"Dashboard (Flow)";
-NSString * const kJMAnalyticsResourceEventLabelDashboardVisualize = @"Dashboard (Visualize)";
-NSString * const kJMAnalyticsResourceEventLabelSavedResource      = @"Saved Resource";
+NSString * const kJMAnalyticsEventCategoryResource           = @"Resource";
+NSString * const kJMAnalyticsEventCategoryOther              = @"Other";
+
+NSString * const kJMAnalyticsEventActionOpen         = @"Open";
+NSString * const kJMAnalyticsEventActionPrint        = @"Print";
+NSString * const kJMAnalyticsEventActionExport       = @"Export";
+NSString * const kJMAnalyticsEventActionViewed       = @"Viewed";
+
+NSString * const kJMAnalyticsResourceLabelReportREST         = @"Report (REST)";
+NSString * const kJMAnalyticsResourceLabelReportVisualize    = @"Report (Visualize)";
+NSString * const kJMAnalyticsResourceLabelDashboardFlow      = @"Dashboard (Flow)";
+NSString * const kJMAnalyticsResourceLabelDashboardVisualize = @"Dashboard (Visualize)";
+NSString * const kJMAnalyticsResourceLabelSavedResource      = @"Saved Resource";
+NSString * const kJMAnalyticsLabelThumbnail          = @"Thumbnail";
 
 // Analytics - Repository
 NSString * const kJMAnalyticsRepositoryEventCategoryTitle     = @"Repository";

@@ -28,6 +28,7 @@
 #import "JSResourceLookup+Helpers.h"
 #import "JMWebViewManager.h"
 #import "JMWebEnvironment.h"
+#import "JMAnalyticsManager.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
@@ -74,11 +75,11 @@
     }
 
     // Analytics
-    NSString *label = [kJMAnalyticsResourceEventLabelSavedResource stringByAppendingFormat:@" (%@)", [self.savedReports.format uppercaseString]];
-    [JMUtils sendAnalyticsEventWithInfo:@{
-            kJMAnalyticsCategoryKey : kJMAnalyticsResourceEventCategoryTitle,
-            kJMAnalyticsActionKey : kJMAnalyticsResourceEventActionOpenTitle,
-            kJMAnalyticsLabelKey : label
+    NSString *label = [kJMAnalyticsResourceLabelSavedResource stringByAppendingFormat:@" (%@)", [self.savedReports.format uppercaseString]];
+    [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+            kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
+            kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
+            kJMAnalyticsLabelKey    : label
     }];
 }
 

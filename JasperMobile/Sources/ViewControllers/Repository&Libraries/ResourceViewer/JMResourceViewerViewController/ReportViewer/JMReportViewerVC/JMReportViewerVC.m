@@ -35,6 +35,7 @@
 #import "JMScheduleVC.h"
 #import "JMWebEnvironment.h"
 #import "JMScheduleManager.h"
+#import "JMAnalyticsManager.h"
 
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifier = @"kJMReportViewerPrimaryWebEnvironmentIdentifier";
 NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportViewerSecondaryWebEnvironmentIdentifier";
@@ -475,11 +476,11 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifier = @"kJMReportV
 
         if (success) {
             // Analytics
-            NSString *label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
-            [JMUtils sendAnalyticsEventWithInfo:@{
-                    kJMAnalyticsCategoryKey : kJMAnalyticsResourceEventCategoryTitle,
-                    kJMAnalyticsActionKey : kJMAnalyticsResourceEventActionOpenTitle,
-                    kJMAnalyticsLabelKey : label
+            NSString *label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceLabelReportVisualize : kJMAnalyticsResourceLabelReportREST;
+            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                    kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
+                    kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
+                    kJMAnalyticsLabelKey    : label
             }];
 
             [strongSelf showReportView];

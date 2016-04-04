@@ -34,6 +34,7 @@
 
 #import "JMMenuViewController.h"
 #import "SWRevealViewController.h"
+#import "JMAnalyticsManager.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -143,7 +144,7 @@ static JMSessionManager *_sharedManager = nil;
     [[JMWebViewManager sharedInstance] reset];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 
-    [JMUtils sendAnalyticsEventAboutLogout];
+    [[JMAnalyticsManager sharedManager] sendAnalyticsEventAboutLogout];
 }
 
 - (NSPredicate *)predicateForCurrentServerProfile

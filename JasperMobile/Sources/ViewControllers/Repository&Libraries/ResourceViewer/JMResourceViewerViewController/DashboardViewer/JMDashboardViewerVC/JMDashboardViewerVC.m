@@ -44,6 +44,7 @@
 #import "JMWebEnvironment.h"
 
 #import "UIView+Additions.h"
+#import "JMAnalyticsManager.h"
 
 NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashboardViewerPrimaryWebEnvironmentIdentifier";
 
@@ -309,11 +310,11 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
         if (success) {
             // Analytics
-            NSString *label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
-            [JMUtils sendAnalyticsEventWithInfo:@{
-                    kJMAnalyticsCategoryKey : kJMAnalyticsResourceEventCategoryTitle,
-                    kJMAnalyticsActionKey : kJMAnalyticsResourceEventActionOpenTitle,
-                    kJMAnalyticsLabelKey : label
+            NSString *label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceLabelDashboardVisualize : kJMAnalyticsResourceLabelDashboardFlow;
+            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                    kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
+                    kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
+                    kJMAnalyticsLabelKey    : label
             }];
 
             if ([strongSelf isContentOnTV]) {

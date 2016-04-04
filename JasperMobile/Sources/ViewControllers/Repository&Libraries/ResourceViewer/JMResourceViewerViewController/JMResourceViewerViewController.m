@@ -30,6 +30,7 @@
 #import "UIView+Additions.h"
 
 #import "JMShareViewController.h"
+#import "JMAnalyticsManager.h"
 
 
 NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewerWebEnvironmentIdentifier";
@@ -166,16 +167,16 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 - (void)printResource
 {
     // Analytics
-    NSString *label = kJMAnalyticsResourceEventLabelSavedResource;
+    NSString *label = kJMAnalyticsResourceLabelSavedResource;
     if ([self.resourceLookup isReport]) {
-        label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
+        label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceLabelReportVisualize : kJMAnalyticsResourceLabelReportREST;
     } else if ([self.resourceLookup isDashboard]) {
-        label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+        label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceLabelDashboardVisualize : kJMAnalyticsResourceLabelDashboardFlow;
     }
-    [JMUtils sendAnalyticsEventWithInfo:@{
-            kJMAnalyticsCategoryKey : kJMAnalyticsResourceEventCategoryTitle,
-            kJMAnalyticsActionKey : kJMAnalyticsResourceEventActionPrintTitle,
-            kJMAnalyticsLabelKey : label
+    [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+            kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
+            kJMAnalyticsActionKey   : kJMAnalyticsEventActionPrint,
+            kJMAnalyticsLabelKey    : label
     }];
 }
 

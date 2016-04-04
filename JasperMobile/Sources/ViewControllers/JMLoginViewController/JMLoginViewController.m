@@ -34,6 +34,7 @@
 #import "JMCancelRequestPopup.h"
 #import "JasperMobileAppDelegate.h"
 #import "JMMenuViewController.h"
+#import "JMAnalyticsManager.h"
 
 @interface JMLoginViewController () <UITextFieldDelegate, JMServersGridViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
@@ -225,11 +226,11 @@
         __strong typeof(self)strongSelf = weakSelf;
         [JMCancelRequestPopup dismiss];
         // Analytics
-        [JMUtils sendAnalyticsEventAboutLoginSuccess:!error
-                                        additionInfo:@{
-                                                kJMAnalyticsCategoryKey : kJMAnalyticsAuthenticationEventCategoryTitle,
-                                                kJMAnalyticsActionKey : kJMAnalyticsAuthenticationEventActionLoginTitle,
-                                                kJMAnalyticsLabelKey : kJMAnalyticsAuthenticationEventLabelSuccess
+        [[JMAnalyticsManager sharedManager] sendAnalyticsEventAboutLoginSuccess:!error
+                                                                   additionInfo:@{
+                                                                           kJMAnalyticsCategoryKey : kJMAnalyticsAuthenticationEventCategoryTitle,
+                                                                           kJMAnalyticsActionKey   : kJMAnalyticsAuthenticationEventActionLoginTitle,
+                                                                           kJMAnalyticsLabelKey    : kJMAnalyticsAuthenticationEventLabelSuccess
                                         }];
         
         if (!error) {

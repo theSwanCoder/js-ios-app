@@ -38,6 +38,7 @@
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
+#import "JMAnalyticsManager.h"
 
 typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonStateNormal,
@@ -198,7 +199,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             id nextVC;
             if([item vcIdentifierForSelectedItem]) {
                 // Analytics
-                [JMUtils sendAnalyticsEventWithInfo:@{
+                [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
                         kJMAnalyticsCategoryKey : kJMAnalyticsRepositoryEventCategoryTitle,
                         kJMAnalyticsActionKey : kJMAnalyticsRepositoryEventActionOpen,
                         kJMAnalyticsLabelKey : [item nameForAnalytics]

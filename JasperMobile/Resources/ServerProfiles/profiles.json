@@ -51,6 +51,11 @@
       "mOrganization" : ""
     },
     {
+      "mAlias" : "csrf - Misha",
+      "mServerUrl" : "http://192.168.88.13:8082/jasperserver-pro-csrf",
+      "mOrganization" : ""
+    },
+    {
       "mAlias" : "temp 6.2.1",
       "mServerUrl" : "http://infra-platforms-phase2-2632-akoptel.pfa.jaspersoft.com:8080/jasperserver-pro",
       "mOrganization" : ""
