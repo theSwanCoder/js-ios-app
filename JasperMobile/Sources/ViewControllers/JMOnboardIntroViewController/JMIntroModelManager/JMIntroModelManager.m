@@ -50,16 +50,16 @@
 
 - (void)setupModel {
 
-    NSString *description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.model.firstScreen.description", nil), kJMAppName];
-    JMIntroModel *stayConnectedPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.firstScreen.title", nil)
+    NSString *description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro_model_firstScreen_description", nil), kJMAppName];
+    JMIntroModel *stayConnectedPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro_model_firstScreen_title", nil)
                                                               description:description
                                                                     image:nil];
-    JMIntroModel *instantAccessPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.secondScreen.title", nil)
-                                                              description:JMCustomLocalizedString(@"intro.model.secondScreen.description", nil)
+    JMIntroModel *instantAccessPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro_model_secondScreen_title", nil)
+                                                              description:JMCustomLocalizedString(@"intro_model_secondScreen_description", nil)
                                                                     image:nil];
 
-    description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.model.thirdScreen.description", nil), @"\u00AE", [JSUtils minSupportedServerVersion]];
-    JMIntroModel *seemlessIntegrationPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.thirdScreen.title", nil)
+    description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro_model_thirdScreen_description", nil), @"\u00AE", [JSUtils minSupportedServerVersion]];
+    JMIntroModel *seemlessIntegrationPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro_model_thirdScreen_title", nil)
                                                                     description:description
                                                                           image:nil];
     self.pageData = @[

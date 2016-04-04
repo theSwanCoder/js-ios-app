@@ -1,0 +1,149 @@
+
+[[Schedules]]
+	[schedules_title]
+		en = Schedules
+		de = Terminpläne
+		es = Programaciones
+		fr = Programmes
+		it = Pianificazioni
+		ja = スケジュール
+		pt = Cronogramas
+		zh = 时间规划表
+		tags = ios
+	[schedules_no_jobs_message]
+		en = No jobs are scheduled.
+		de = Keine Aufträge sind geplant.
+		es = No hay trabajos programados.
+		fr = Aucune tâche n\'est prévue.
+		it = Nessun lavoro pianificato.
+		ja = ジョブはなにもスケジュールされていません。
+		pt = Não há tarefas agendadas
+		zh = 未规划任何工作。
+		tags = ios
+
+[[New Job]]
+	[schedules_new_job_label]
+		en = Name
+		de = Auftrags-Etikett
+		es = Etiqueta del trabajo
+		fr = Étiquette de la tâche
+		it = Informazioni sul lavoro
+		ja = ジョブ ラベル
+		pt = Classificação da tarefa
+		zh = 工作标签
+		tags = ios
+	[schedules_new_job_description]
+		en = Description
+		tags = ios,new
+	[schedules_new_job_button_create]
+		en = Create Schedule
+		de = Auftrag erstellen
+		es = Crear trabajo
+		fr = Créer une tâche
+		it = Crea lavoro
+		ja = ジョブを作成する
+		pt = Criar tarefa
+		zh = 创建工作
+		tags = ios
+	[schedules_new_job_output_file_name]
+		en = Output File Name
+		de = Bezeichnung der Ausgabedatei
+		es = Nombre del archivo de salida
+		fr = Nom du fichier de sortie
+		ja = ファイル名を出力する
+		pt = Nome do arquivo de saída
+		zh = 输出文件名
+		tags = ios
+	[schedules_new_job_output_file_path]
+		en = Repository Output Folder
+		de = Ausgabeverzeichnispfad
+		es = Ruta de la carpeta de salida
+		fr = Chemin du dossier de sortie
+		it = Percorso cartella di stampa
+		ja = フォルダ パスを出力する
+		pt = Diretório da pasta de saída
+		zh = 输出文件夹路径
+		tags = ios
+	[schedules_new_job_format]
+		en = Format
+		de = Format
+		es = Formato
+		fr = Format
+		it = Formato
+		ja = 形式
+		pt = Formato
+		zh = 格式
+		tags = ios
+	[schedules_new_job_start_date]
+		en = Run once at:
+		de = Anfangsdatum:
+		es = Fecha de inicio:
+		fr = Date de début:
+		it = Data di inizio:
+		ja = 開始日
+		pt = Data de início
+		zh = 开始日期
+		tags = ios
+	[schedules_new_job_start_immediately]
+		en = Start immediately
+		tags = ios,new
+	[schedules_new_job_output_format]
+		en = Output Format
+		de = Ausgabeformat
+		es = Formato de salida
+		fr = Format de sortie
+		it = Formato di stampa
+		ja = 出力形式
+		pt = Formato de saída
+		zh = 输出格式
+		tags = ios
+
+[[Schedule Errors]]
+	[schedules_error_domain]
+		en = Validation of a new schedule
+		de = Validierung der Erstellung eines Terminplans für einen neuen Auftrag
+		es = Validación de la creación de una nueva programación de trabajo
+		fr = Validation de la création d\'une nouvelle tâche ajoutée au programme
+		it = Validazione per la creazione di un nuovo lavoro pianificato
+		ja = 新しいスケジュール ジョブの作成を許可する
+		pt = Validação da criação de nova tarefa agendada
+		zh = 创造新工作计划的验证
+		tags = ios
+	[schedules_error_empty_filename]
+		en = Specify an output file name.
+		de = Dateiname ist leer.
+		es = El nombre de archivo está vacío
+		fr = Le nom du fichier est vide
+		it = Il nome del file è vuoto
+		ja = ファイル名が空です。
+		pt = O campo \'nome do arquivo\' está em branco
+		zh = 文件名称为空
+		tags = ios
+	[schedules_error_empty_filename_invalid_characters]
+		en = The base output name contains invalid characters. You might have mistyped it.
+		tags = ios,new
+	[schedules_error_empty_output_folder]
+		en = Specify a folder.
+		tags = ios,new
+	[schedules_error_empty_label]
+		en = Specify a name for the scheduled job.
+		tags = ios,new
+	[schedules_error_empty_format]
+		en = Select output formats for the job.
+		de = Ausgabe-Dateiformat wurde nicht ausgewählt.
+		es = No se ha seleccionado un formato de archivo de salida.
+		fr = Le format du fichier de sortie n\'a pas été sélectionné.
+		it = Formato del file di stampa non selezionato.
+		ja = 出力したいファイル形式が選択されていません
+		pt = Formato de saída do arquivo não selecionado
+		zh = 输出文件格式未选择
+		tags = ios
+	[schedules_error_date_past]
+		en = The start date is in the past. It should be in the future.
+		tags = ios,new
+	[schedules_error_duplicate_filename]
+		en = There is a scheduled job of the same output file name. Please try different name.
+		tags = ios,new
+	[schedules_error_output_folder_inexistent]
+		en = The job output folder cannot be found. It might have been deleted or moved.
+		tags = ios,new

@@ -136,3 +136,7 @@ NSString * const kJMAnalyticsRepositoryEventCategoryTitle     = @"Repository";
 NSString * const kJMAnalyticsRepositoryEventActionOpen        = @"Open";
 NSUInteger  const kJMAnalyticsCustomDimensionServerVersionIndex = 1;
 NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex = 2;
+
+// Login VC
+NSString *const JMLoginVCLastUserNameKey           = @"JMLoginVCLastUserNameKey";
+NSString *const JMLoginVCLastServerProfileAliasKey = @"JMLoginVCLastServerProfileAliasKey";

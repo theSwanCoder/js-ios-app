@@ -1,0 +1,72 @@
+
+[[Resource views: Filter By]]
+	[resources_filterby_title]
+		en = Resource Type
+		de = Objekttyp
+		fr = Type d’objet
+		es = Tipo de objeto
+		it = Tipo di oggetto
+		pt = Tipo de objeto
+		ja = オブジェクト タイプ
+		zh = 对象类型
+		tags = ios
+	[resources_filterby_type_all]
+		en = All
+		de = Alle
+		fr = Tout
+		es = Todo
+		it = Tutto
+		pt = Todos
+		ja = すべて
+		zh = 全部
+		tags = ios
+	[resources_filterby_type_reportUnit]
+		en = Reports
+		de = Berichte
+		fr = Rapports
+		es = Informes
+		it = Report
+		pt = Relatórios
+		ja = レポート
+		zh = 报表
+		tags = ios
+	[resources_filterby_type_dashboard]
+		en = Dashboards
+		de = Dashboards
+		fr = Tableaux de bord
+		es = Paneles
+		it = Dashboard
+		pt = Painéis
+		ja = ダッシュボード
+		zh = 仪表板
+		tags = ios
+	[resources_filterby_type_folder]
+		en = Folders
+		de = Ordner
+		fr = Dossiers
+		es = Carpetas
+		it = Cartelle
+		pt = Pastas
+		ja = フォルダ
+		zh = 文件夹
+		tags = ios
+	[resources_filterby_type_files]
+		en = Content Resources
+		de = Content-Ressourcen
+		es = Recursos de contenido
+		fr = Ressources de contenu
+		it = Risorse sui contenuti
+		ja = コンテンツ リソース
+		pt = Recursos de conteúdo
+		zh = 内容资源
+		tags = ios
+	[resources_filterby_type_saved_reportUnit]
+		en = Saved Items
+		de = Gespeicherte Elemente
+		fr = Éléments enregistrés
+		es = Elementos guardados
+		it = Elementi salvati.
+		pt = Itens gravados
+		ja = 保存されたアイテム
+		zh = 已保存项目
+		tags = ios

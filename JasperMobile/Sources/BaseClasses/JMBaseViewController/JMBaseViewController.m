@@ -221,7 +221,7 @@
             UIViewController *previousViewController = viewControllers[index - 1];
             backItemTitle = previousViewController.title;
         } else {
-            backItemTitle = JMCustomLocalizedString(@"back.button.title", nil);
+            backItemTitle = JMCustomLocalizedString(@"back_button_title", nil);
         }
     }
 
@@ -247,8 +247,8 @@
 
     CGFloat viewWidth = CGRectGetWidth(self.navigationController.navigationBar.frame);
 
-    if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back.button.title", nil)]) {
-        return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back.button.title", nil)];
+    if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back_button_title", nil)]) {
+        return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back_button_title", nil)];
     }
     return backButtonTitle;
 }

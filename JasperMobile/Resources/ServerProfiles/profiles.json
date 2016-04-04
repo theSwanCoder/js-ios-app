@@ -49,6 +49,11 @@
       "mAlias" : "csrf",
       "mServerUrl" : "http://build-master.jaspersoft.com:8480/jrs-pro-feature-csrf-protection",
       "mOrganization" : ""
+    },
+    {
+      "mAlias" : "temp 6.2.1",
+      "mServerUrl" : "http://infra-platforms-phase2-2632-akoptel.pfa.jaspersoft.com:8080/jasperserver-pro",
+      "mOrganization" : ""
     }
   ]
 }

@@ -54,7 +54,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
 @property (nonatomic) JMExternalWindowDashboardControlsVC *controlsViewController;
-@property (nonatomic, strong) JMWebEnvironment *webEnvironment;
+@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 @end
 
 
@@ -169,6 +169,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     [self.dashboardLoader destroy];
     [self.webEnvironment resetZoom];
+    [self.webEnvironment.webView removeFromSuperview];
+
+    self.webEnvironment = nil;
 }
 
 
@@ -195,10 +198,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 - (void)reloadDashboard
 {
-    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                cancelBlock:^(void) {
                                    [self.dashboardLoader cancel];
-                                   [super cancelResourceViewingAndExit:YES];
                                }];
     __weak typeof(self)weakSelf = self;
     [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
@@ -225,9 +227,12 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
 
-        __weak typeof(self)weakSelf = self;
-        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)];
+        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
+                             cancelBlock:^(void) {
+                                 [self.dashboardLoader cancel];
+                             }];
 
+        __weak typeof(self)weakSelf = self;
         [self.dashboardLoader reloadMaximizedDashletWithCompletion:^(BOOL success, NSError *error){
             __weak typeof(self)strongSelf = weakSelf;
             [strongSelf stopShowLoader];
@@ -255,7 +260,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)startResourceViewing
 {
     if (![self.resourceLookup isLegacyDashboard]) {
-        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                    cancelBlock:^(void) {
                                        [super cancelResourceViewingAndExit:YES];
                                    }];
@@ -291,7 +296,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 - (void)startShowDashboard
 {
-    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                cancelBlock:^(void) {
                                    [self.dashboardLoader cancel];
                                    [super cancelResourceViewingAndExit:YES];
@@ -304,7 +309,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
         if (success) {
             // Analytics
-            NSString *label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+            NSString *label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
             [JMUtils sendAnalyticsEventWithInfo:@{
                     kJMAnalyticsCategoryKey : kJMAnalyticsResourceEventCategoryTitle,
                     kJMAnalyticsActionKey : kJMAnalyticsResourceEventActionOpenTitle,
@@ -421,7 +426,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self minimizeDashlet];
     }
 
-    if ([JMUtils isServerAmber2OrHigher]) {
+    if ([JMUtils isServerVersionUpOrEqual6]) {
         [self startResourceViewing];
     } else {
         [self reloadDashboard];

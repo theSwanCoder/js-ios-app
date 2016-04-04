@@ -1,0 +1,48 @@
+
+[[Report viewer]]
+	[report_viewer_error_title]
+		en = Error while loading report.
+		de = Fehler beim Laden des Berichts.
+		fr = Erreur lors du chargement du rapport.
+		es = Error al cargar el informe.
+		it = Errore durante il caricamento del report.
+		pt = Ocorreu um erro ao carregar o relatório
+		ja = レポートの読み込み中にエラーが発生しました。
+		zh = 加载报表时出错。
+		tags = ios
+	[report_viewer_visualize_render_error]
+		en = Report rendering failed.
+		de = Die Darstellung des Berichts ist fehlgeschlagen.
+		fr = Échec de rendu du rapport.
+		es = Error al procesar el informe.
+		it = Impossibile eseguire il rendering del report.
+		pt = A renderização do relatório falhou.
+		ja = レポートのレンダリングに失敗しました。
+		zh = 报表渲染失败。
+		tags = ios
+	[report_viewer_emptyreport_title]
+		en = Report is empty.
+		de = Der Bericht ist leer.
+		fr = Le rapport est vide.
+		es = El informe está vacío.
+		it = Il report è vuoto.
+		pt = O relatório está vazio.
+		ja = レポートは空です。
+		zh = 报表为空。
+		tags = ios
+	[report_viewer_emptyreport_message]
+		en = Tap 'Ok' if you want to change filters, or tap 'Cancel' to return to the previous report.
+		tags = ios,unused
+	[report_viewer_pagecount]
+		en = of %d
+		de = von %d
+		fr = sur %d
+		es = de %d
+		it = di %d
+		pt = de %d
+		ja = /%d
+		zh = /%d
+		tags = ios
+	[report_viewer_wrongNumberOfCurrentPage]
+		en = The requested page is out of range (%@).
+		tags = ios,unused

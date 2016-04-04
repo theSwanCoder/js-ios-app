@@ -48,7 +48,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"report.viewer.options.title", nil);    
+    self.title = JMCustomLocalizedString(@"report_viewer_options_title", nil);
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     
     // Remove extra separators
@@ -58,7 +58,7 @@
     self.runReportButton.backgroundColor = [[JMThemesManager sharedManager] reportOptionsRunReportButtonBackgroundColor];
     [self.runReportButton setTitleColor:[[JMThemesManager sharedManager] reportOptionsRunReportButtonTextColor]
                                forState:UIControlStateNormal];
-    [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog.button.run.report", nil)
+    [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog_button_run_report", nil)
                           forState:UIControlStateNormal];
 
     [self setupReportOptions];
@@ -94,7 +94,7 @@
                     __strong typeof(self) strongSelf = weakSelf;
                     if (dataIsValid) {
                         __weak typeof(self) weakSelf = strongSelf;
-                        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"report.viewer.report.options.new.option.title"
+                        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"report_viewer_report_options_new_option_title"
                                                                                                                       message:nil
                                                                                                 textFieldConfigurationHandler:nil
                                                                                                         textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
@@ -103,7 +103,7 @@
                                                                                                             if (strongSelf) {
                                                                                                                 [JMUtils validateReportName:text errorMessage:&errorMessage];
                                                                                                                 if (!errorMessage && ![strongSelf isUniqueNewReportOptionName:text]) {
-                                                                                                                    errorMessage = JMCustomLocalizedString(@"report.viewer.report.options.new.option.title.alreadyexist", nil);
+                                                                                                                    errorMessage = JMCustomLocalizedString(@"report_viewer_report_options_new_option_title_alreadyexist", nil);
                                                                                                                 }
                                                                                                             }
                                                                                                             return errorMessage;
@@ -115,8 +115,8 @@
                     }
                 }];
             } else {
-                NSString *errorMessage = JMCustomLocalizedString(@"report.viewer.report.options.create.permission.error", nil);
-                NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:0 userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                NSString *errorMessage = JMCustomLocalizedString(@"report_viewer_report_options_create_permission_error", nil);
+                NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:0 userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
                 [JMUtils presentAlertControllerWithError:error completion:nil];
             }
         }];
@@ -131,16 +131,16 @@
     [self checkParentFolderPermissionWithCompletion:^(BOOL reportOptionsEditingAvailable) {
         __strong typeof(self) strongSelf = weakSelf;
         if (reportOptionsEditingAvailable) {
-                NSString *confirmationMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.report.options.remove.confirmation.message", nil), strongSelf.currentReportOption.label];
-                UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
+                NSString *confirmationMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_report_options_remove_confirmation_message", nil), strongSelf.currentReportOption.label];
+                UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
                                                                                                   message:confirmationMessage
-                                                                                        cancelButtonTitle:@"dialog.button.cancel"
+                                                                                        cancelButtonTitle:@"dialog_button_cancel"
                                                                                   cancelCompletionHandler:nil];
                 __weak typeof(self) weakSelf = strongSelf;
-                [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                     __strong typeof(self) strongSelf = weakSelf;
                     if (strongSelf) {
-                        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+                        [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:nil];
                         [self.restClient deleteReportOption:strongSelf.currentReportOption withReportURI:strongSelf.report.reportURI completion:^(JSOperationResult * _Nullable result) {
                             [JMCancelRequestPopup dismiss];
                             if (result.error) {
@@ -158,8 +158,8 @@
                 }];
                 [strongSelf presentViewController:alertController animated:YES completion:nil];
             } else {
-                NSString *errorMessage = JMCustomLocalizedString(@"report.viewer.report.options.remove.permission.error", nil);
-                NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                NSString *errorMessage = JMCustomLocalizedString(@"report_viewer_report_options_remove_permission_error", nil);
+                NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
                 [JMUtils presentAlertControllerWithError:error completion:nil];
             }
         }];
@@ -287,9 +287,9 @@
     titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
     titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     titleLabel.backgroundColor = [UIColor clearColor];
-    NSString *sectionTitle = JMCustomLocalizedString(@"report.viewer.options.title", nil);
+    NSString *sectionTitle = JMCustomLocalizedString(@"report_viewer_options_title", nil);
     if ([self isMultyReportOptions] && section == 0) {
-        sectionTitle = JMCustomLocalizedString(@"report.viewer.report.options.title", nil);
+        sectionTitle = JMCustomLocalizedString(@"report_viewer_report_options_title", nil);
     }
     titleLabel.text = [sectionTitle uppercaseString];
     [titleLabel sizeToFit];
@@ -392,7 +392,7 @@
 - (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
 {
     if (descriptor.slaveDependencies.count) {
-        [JMCancelRequestPopup presentWithMessage:@"status.loading"
+        [JMCancelRequestPopup presentWithMessage:@"status_loading"
                                      cancelBlock:^(void) {
                                          [self.restClient cancelAllRequests];
                                          [self.navigationController popViewControllerAnimated:YES];
@@ -424,7 +424,7 @@
         self.currentReportOption = option;
         
         if (![self.currentInputControls count]) {
-            [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+            [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:nil];
             
             __weak typeof(self)weakSelf = self;
             [self.restClient inputControlsForReport:self.currentReportOption.uri
@@ -491,7 +491,7 @@
 {
     self.currentReportOption = self.report.activeReportOption;
     if (![self isMultyReportOptions]) {
-        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+        [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:nil];
         
         __weak typeof(self) weakSelf = self;
         [self.restClient reportOptionsForReportURI:self.report.reportURI completion:^(JSOperationResult * _Nullable result) {
@@ -536,7 +536,7 @@
         [allInputControls addObject:descriptor.uuid];
     }
     
-    [JMCancelRequestPopup presentWithMessage:@"status.loading"
+    [JMCancelRequestPopup presentWithMessage:@"status_loading"
                                  cancelBlock:^(void) {
                                      [self.restClient cancelAllRequests];
                                      if (self.completionBlock) {
@@ -590,7 +590,7 @@
             completion([self isReportOptionsEditingAvailable]);
         }
     } else {
-        [JMCancelRequestPopup presentWithMessage:@"status.loading"
+        [JMCancelRequestPopup presentWithMessage:@"status_loading"
                                      cancelBlock:^(void) {
                                          [self.restClient cancelAllRequests];
                                      }];
@@ -632,7 +632,7 @@
 {
     NSArray *reportParameters = [JSUtils reportParametersFromInputControls:self.currentInputControls];
 
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+    [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:nil];
     NSString *newReportOptionName = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     __weak typeof(self) weakSelf = self;

@@ -44,7 +44,7 @@
     switch (option) {
         case JMResourcesListLoaderOption_Sort: {
             NSDictionary *optionForSortByAccessTime = @{
-                    kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.accessTime", nil),
+                    kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources_sortby_accessTime", nil),
                     kJMResourceListLoaderOptionItemValueKey: @"accessTime"
             };
             NSArray *optionsArray = @[optionForSortByAccessTime];

@@ -1,0 +1,162 @@
+
+[[Report viewer Options view]]
+	[report_viewer_options_title]
+		en = Filters
+		de = Filter
+		es = Filtros
+		fr = Filtres
+		it = Filtri
+		ja = フィルター
+		pt = Filtros
+		zh = 过滤器
+		tags = ios
+	[report_viewer_options_singleselect_titlelabel_title]
+		en = Select a single item
+		de = Ein einzelnes Element auswählen
+		fr = Sélectionner un seul élément
+		es = Seleccione un único elemento
+		it = Selezionare un unico elemento
+		pt = Selecione um único item
+		ja = 1 つのアイテムを選択
+		zh = 选择一个项目
+		tags = ios
+	[report_viewer_options_multiselect_titlelabel_title]
+		en = Select one or more items
+		de = Ein oder mehr Elemente auswählen
+		fr = Sélectionner un ou plusieurs éléments
+		es = Seleccione uno o más elementos
+		it = Selezionare uno o più elementi
+		pt = Selecione um ou mais itens.
+		ja = 1 つまたは複数のアイテムを選択
+		zh = 选择一个或多个项目
+		tags = ios
+	[report_viewer_options_multiselect_available_title]
+		en = Available
+		de = Erhältlich
+		es = Disponible
+		fr = Disponible
+		it = Disponibile
+		ja = 利用可能です
+		pt = Disponível
+		zh = 可用的
+		tags = ios
+	[report_viewer_options_multiselect_selected_title]
+		en = Selected
+		de = Ausgewählt
+		es = Seleccionado
+		fr = Sélectionné
+		it = Selezionato
+		ja = 選択されました
+		pt = Selecionado
+		zh = 已选
+		tags = ios
+	[report_viewer_options_search_value_placeholder]
+		en = Search Values
+		de = Werte durchsuchen
+		fr = Rechercher des valeurs
+		es = Buscar valores
+		it = Cerca valori
+		pt = Buscar valores
+		ja = 値を検索
+		zh = 搜索值
+		tags = ios
+	[report_viewer_options_ic_title_date]
+		en = Date
+		de = Datum
+		fr = Date
+		es = Fecha
+		it = Data
+		pt = Data
+		ja = 日付
+		zh = 日期
+		tags = ios
+	[report_viewer_options_ic_title_time]
+		en = Time
+		de = Zeit
+		fr = Heure
+		es = Hora
+		it = Ora
+		pt = Hora
+		ja = 時間
+		zh = 时间
+		tags = ios
+	[report_viewer_options_ic_title_unset]
+		en = Unset
+		de = Festlegung aufheben
+		fr = Non défini
+		es = Sin establecer
+		it = Annulla impostazione
+		pt = Cancelar definição
+		ja = 未設定
+		zh = 未设置
+		tags = ios
+	[report_viewer_report_options_title]
+		en = Saved Values
+		de = Gespeicherte Werte
+		es = Valores guardados
+		fr = Valeurs enregistrées
+		it = Valori salvati
+		ja = 保存された値
+		pt = Valores gravados
+		zh = 已保存的值
+		tags = ios
+	[report_viewer_report_options_active_option_title]
+		en = -- None --
+		de = -- Keine --
+		es = -- Ninguno --
+		fr = -- Aucun --
+		it = -- Nessuno --
+		ja =  -  なし  -
+		pt = -- Nenhum --
+		zh = -  无  -
+		tags = ios,unused
+	[report_viewer_report_options_new_option_title]
+		en = Enter name of a new ReportOption
+		de = Geben Sie die Bezeichnung einer neuen Berichts-Option ein
+		es = Ingrese el nombre de la nueva Opción de Informe
+		fr = Saisissez le nom d\'une nouvelle Option de rapport
+		it = Inserire il nome di un nuovo OpzioneRapporto
+		ja = 新しいレポートオプションの名前を入力してください
+		pt = Digite o nome de uma nova Opção de Relatório
+		zh = 输入新的ReportOption名称
+		tags = ios
+	[report_viewer_report_options_new_option_title_alreadyexist]
+		en = This report already has saved values with this name. Do you want to overwrite them?
+		de = Ein Bericht mit dieser Bezeichnung hat bereits Werte gespeichert. Wollen Sie sie überschreiben?
+		es = Este informe ya tiene valores guardados con este nombre. ¿Desea sobrescribirlos?
+		fr = Ce rapport a déjà enregistré des valeurs avec ce nom. Souhaitez-vous les remplacer?
+		it = Questo rapporto ha già salvato i valori con questo nome. Sovrascriverli?
+		ja = このレポートには既に、この名前で保存された値が存在しています。内容を上書きしますか？
+		pt = Este relatório já contém valores gravados com este nome. Deseja substituí-los?
+		zh = 该报告已经有这个名称下的已保存的值。要覆盖它们吗？
+		tags = ios
+	[report_viewer_report_options_create_permission_error]
+		en = You do not have permission to save this option for the report. Log in as a permitted user if you can.
+		de = Sie haben zur Speicherung dieser Option für den Bericht keine Berechtigung. Melden Sie sich als genehmigter Benutzer an, wenn Ihnen das möglich ist.
+		es = No tiene permisos para guardar esta opción del informe. Si puede, inicie sesión como un usuario autorizado.
+		fr = Vous n\'êtes pas autorisé à enregistrer cette option pour le rapport. Connectez-vous en tant qu\'utilisateur autorisé si vous le pouvez.
+		it = Non si dispone dell\'autorizzazione necessaria per salvare questa opzione per il rapporto. Eseguire l\'accesso come utente autorizzato, se possibile.
+		ja = あなたは、このレポートにこのオプションを保存する権限を持っていません。お望みであれば、権限を保有するユーザーとしてログインしていただけます。
+		pt = Você não tem permissão para salvar esta opção no relatório. Conecte-se como um usuário autorizado.
+		zh = 您没有权限为本报告保存该选项。如果可以请您登录为许可用户。
+		tags = ios
+	[report_viewer_report_options_remove_permission_error]
+		en = You do not have permission to remove this option for the report. Log in as a permitted user if you can.
+		de = Sie haben zum Löschen dieser Option für den Bericht keine Berechtigung. Melden Sie sich als genehmigter Benutzer an, wenn Ihnen das möglich ist.
+		es = No tiene permisos para quitar esta opción del informe. Si puede, inicie sesión como un usuario autorizado.
+		fr = Vous n\'êtes pas autorisé à retirer cette option pour le rapport. Connectez-vous en tant qu\'utilisateur autorisé si vous le pouvez.
+		it = Non si dispone dell\'autorizzazione necessaria per rimuovere questa opzione dal rapporto. Eseguire l\'accesso come utente autorizzato, se possibile.
+		ja = あなたは、このレポートにこのオプションを削除する権限を持っていません。お望みであれば、権限を保有するユーザーとしてログインしていただけます。
+		pt = Você não tem permissão para remover esta opção no relatório. Conecte-se como um usuário autorizado.
+		zh = 您没有权限为本报告移除该选项。如果可以请您登录为许可用户。
+		tags = ios
+	[report_viewer_report_options_remove_confirmation_message]
+		en = Do you really want to remove\n%@?
+		de = Wollen Sie %@ wirklich entfernen?
+		es = ¿Realmente desea quitar %@?
+		fr = Souhaitez-vous vraiment retirer \n%@ ?
+		it = Si desidera rimuovere davvero\n%@?
+		ja = 本当に次の項目を削除しますか\n%s？
+		pt = Deseja realmente remover\n%@?
+		zh = 您确定要移除\n%s?
+		tags = ios

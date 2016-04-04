@@ -1,0 +1,12 @@
+
+[[Dashboard Viewer]]
+	[dashboard_viewer_absent_input_controls_alert_message]
+		en = Filters are absent
+		de = Filter sind nicht vorhanden
+		es = No hay filtros
+		fr = Les filtres sont absents
+		it = I filtri sono assenti
+		ja = フィルタがありません
+		pt = Ausência de filtros
+		zh = 过滤器缺失
+		tags = ios,unused

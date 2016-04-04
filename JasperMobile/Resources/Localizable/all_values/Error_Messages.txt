@@ -1,0 +1,121 @@
+
+[[Error messages]]
+	[error_readingresponse_dialog_msg]
+		en = Failed to load data!
+		de = Die Daten konnten nicht geladen werden.
+		fr = Echec du chargement des données !
+		es = Error al cargar los datos.
+		it = Impossibile caricare i dati.
+		pt = Falha ao carregar dados!
+		ja = データの読み込みが失敗しました。
+		zh = 加载数据失败！
+		tags = ios, unused
+	[error_noconnection_dialog_title]
+		en = Network is not available
+		de = Netzwerk ist nicht verfügbar
+		fr = Le réseau n'est pas disponible
+		es = La red no está disponible
+		it = La rete non è disponibile
+		pt = Rede não está disponível
+		ja = ネットワークは利用不可
+		zh = 网络没有
+		tags = ios
+	[error_noconnection_dialog_msg]
+		en = Check your network settings (mobile data or wifi) and try again.
+		de = Prüfen Sie Ihre Netzwerkeinstellungen (Mobildaten oder WLAN), und versuchen Sie es erneut.
+		fr = Vérifiez vos paramètres réseau (données mobiles ou Wi-Fi) et réessayez.
+		es = Compruebe la configuración de red (datos móviles o Wi-Fi) e inténtelo de nuevo.
+		it = Verificare le impostazioni di rete (dati mobili o wi-fi) e riprovare.
+		pt = Verifique as configurações da rede (dados móveis ou wifi) e tente novamente.
+		ja = ネットワーク設定 (モバイル データや WiFi) を確認して、やり直してください。
+		zh = 检查您的网络设置(移动数据或 WiFi)并重试。
+		tags = ios
+	[error_authenication_dialog_title]
+		en = Invalid credentials supplied.
+		de = Ungültige Anmeldedaten
+		fr = Données d’identification non valides
+		es = Credenciales no válidas
+		it = Credenziali non valide
+		pt = Credenciais inválidas
+		ja = 無効な認証情報
+		zh = 凭据无效
+		tags = ios
+	[error_authenication_dialog_msg]
+		en = Could not login to JasperReports Server.
+		de = Der Benutzername oder das Passwort ist falsch. Geben Sie Ihre Anmeldedaten erneut ein.
+		fr = Le nom d’utilisateur ou le mot de passe est incorrect. Saisissez à nouveau vos données d’identification.
+		es = El nombre de usuario o la contraseña son incorrectos. Vuelva a introducir las credenciales.
+		it = Nome utente o password non corretti. Immettere nuovamente le credenziali.
+		pt = O nome de usuário ou senha está incorreta. Reinsira suas credenciais.
+		ja = ユーザー名またはパスワードが正しくありません。認証情報をもう一度入力してください。
+		zh = 用户名或密码不正确。重新输入您的凭据。
+		tags = ios
+	[error_unknownhost_dialog_title]
+		en = Unknown server
+		de = Unbekannter Server
+		fr = Serveur inconnu
+		es = Servidor desconocido
+		it = Server sconosciuto
+		pt = Servidor desconhecido
+		ja = 不明なサーバー
+		zh = 未知服务器
+		tags = ios, unused
+	[error_unknownhost_dialog_msg]
+		en = The specified hostname could not be found.
+		de = Der angegebene Hostname konnte nicht gefunden werden.
+		fr = Le nom d’hôte spécifié est introuvable.
+		es = No se pudo encontrar el nombre de host especificado.
+		it = Impossibile trovare il nome host specificato.
+		pt = Não foi possível encontrar o nome de host especificado.
+		ja = 指定されたホスト名を見つけることができませんでした。
+		zh = 找不到指定主机名。
+		tags = ios, unused
+	[error_upgrade_data_title]
+		en = Upgrade Error - User Data Update
+		de = Upgrade-Fehler - Aktualisieren der Benutzerdaten
+		fr = Erreur de mise à niveau - Mise à jour des données utilisateur
+		es = Error de actualización: actualización de datos de usuario
+		it = Errore di upgrade -Aggiornamento dati utente
+		pt = Erro de atualização - Atualização de dados do usuário
+		ja = アップグレード エラー - ユーザー データの更新
+		zh = 升级错误 - 用户数据更新
+		tags = ios
+	[error_upgrade_data_msg]
+		en = There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at the current version)
+		de = Beim Aktualisieren der Benutzerdaten (Server, Favoriten, Filterwerte und Einstellungen) während des Upgrade-Vorgangs ist ein Fehler aufgetreten. Wählen Sie:\nWiederholen, um die Aktualisierung der Daten zu wiederholen,\nAnwenden, um den Fehler zu ignorieren und mit dem Upgrade fortzufahren; hierbei gehen möglicherweise alle Benutzerdaten VERLOREN,\nAbbrechen, um das Upgrade abzubrechen (wobei Sie bei der aktuellen Version verbleiben).
+		fr = Une erreur s’est produite lors de la mise à jour des données utilisateur (Serveurs, Favoris, Valeurs de filtre & Paramètres) pendant le processus de mise à niveau. Appuyez sur :\nRéessayer : pour ré-exécuter la mise à jour des données\nAppliquer : pour ignorer l’erreur et poursuivre la mise à niveau ; toutes les données utilisateur peuvent être PERDUES\nAnnuler : pour annuler la mise à niveau (vous restez à la version actuelle)
+		es = Se ha producido un error al actualizar los datos de usuario (servidores, favoritos, y valores y configuración del filtro) durante el proceso de actualización. Pulse:\nReintentar para volver a ejecutar de nuevo la actualización_\nAplicar para omitir el error y continuar con la actualización; es posible que PIERDA todos los datos de usuario_\nCancelar para cancelar la actualización (esta acción dejará la versión actual).
+		it = Si è verificato un errore di aggiornamento dei dati utente (Server, Preferiti, Valori dei filtri e Impostazioni) durante il processo di upgrade. Premere:\nRiprova - per ritentare l'aggiornamento dei dati\nApplica - per ignorare l'errore e continuare con l'upgrade, tutti i dati utente potrebbero essere ELIMINATI\nAnnulla - per annullare l'upgrade (verrà mantenuta la versione attuale)
+		pt = Houve um erro ao atualizar os dados do usuário (Servidores, Favoritos, Valores do filtro e Configurações) durante o processo de atualização. Pressione:\nTentar novamente - reexecutar a atualização de dados novamente\nAplicar - ignorar o erro e prosseguir com a atualização, você pode PERDER todos os dados de usuários\nCancelar - cancelar a atualização (isso disponibilizará a versão atual)
+		ja = アップグレード プロセス中にユーザー データ (サーバー、お気に入り、フィルタの値と設定) の更新でエラーが発生しました。次を押してください。\n再試行 - データ更新をもう一度実行します\n適用 - エラーを無視してアップグレードを続けます。すべてのユーザー データが失われる可能性があります\nキャンセル - アップグレードをキャンセルします (現在のバージョンから変更されません)
+		zh = 在升级过程中更新用户数据(服务器、收藏夹、过滤器值和设置)时出错。按:\n重试 - 再次重新执行数据更新\n应用 - 忽略错误并继续升级，您可能会丢失所有用户数据\n取消 - 取消升级(保留当前版本)
+		tags = ios
+	[error_server_notsupported_title]
+		en = Wrong server version or URL
+		de = Falsche Serverversion oder URL
+		fr = Version ou URL du serveur incorrecte
+		es = URL o versión del servidor incorrecta
+		it = Versione del server o URL non corretti
+		pt = Versão do servidor ou URL errada
+		ja = サーバー バージョンまたは URL が不正
+		zh = 服务器版本或 URL 不正确
+		tags = ios, unused
+	[error_server_notsupported_msg]
+		en = The server version is not supported, or the URL is incorrect.
+		de = Die Serverversion ist älter als %_1f (nicht unterstützt), oder die URL ist falsch.
+		fr = La version du serveur est antérieure à %_1f (non prise en charge), ou l’URL est incorrecte.
+		es = La versión del servidor es anterior a la versión %_1f (no admitida) o la URL es incorrecta.
+		it = La versione del server è precedente alla %_1f (non supportata), oppure l'URL non è corretto.
+		pt = A versão do servidor é mais antiga que %_1f (não suportado), ou a URL está incorreta.
+		ja = サーバー バージョンが %_1f より古い (サポートされていない) か、URL が正しくありません。
+		zh = 服务器版本比 %_1f (不支持)更旧，或 URL 不正确。
+		tags = ios, unused
+	[error_openIn_message]
+		en = There is no application to open this resource.
+		de = Es gibt keine Anwendung zum Öffnen dieses Bereichs.
+		es = No hay una aplicación para abrir este recurso.
+		fr = Il n\'y a aucune application pour ouvrir cette ressource.
+		it = Nessuna applicazione esistente per aprire questa risorsa.
+		ja = このリソースを開くためのアプリケーションがありません。
+		pt = Não há um aplicativo capaz de executar este recurso
+		tags = ios,new

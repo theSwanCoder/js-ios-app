@@ -66,7 +66,7 @@
     UIAlertController *alertController = [self alertControllerWithLocalizedTitle:title message:message];
     __block id textFieldObserver;
     
-    [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         if (editCompletionHandler) {
             NSString *text = [controller.textFields objectAtIndex:0].text;
             editCompletionHandler(text);
@@ -74,7 +74,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:textFieldObserver name:UITextFieldTextDidChangeNotification object:controller.textFields[0]];
     }];
     
-    [alertController addActionWithLocalizedTitle:@"dialog.button.cancel" style:UIAlertActionStyleCancel handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    [alertController addActionWithLocalizedTitle:@"dialog_button_cancel" style:UIAlertActionStyleCancel handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         [[NSNotificationCenter defaultCenter] removeObserver:textFieldObserver name:UITextFieldTextDidChangeNotification object:controller.textFields[0]];
     }];
     

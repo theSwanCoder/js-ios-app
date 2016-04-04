@@ -108,7 +108,7 @@
                                                                                                       message:nil
                                                                                 textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
                                                                                     __strong typeof(self) strongSelf = weakSelf;
-                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
+                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport_viewer_modify_reportname", nil);
                                                                                     textField.text = [strongSelf.resourceLookup.label copy];
                                                                                 } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                     NSString *errorMessage = nil;
@@ -116,7 +116,7 @@
                                                                                     if (strongSelf) {
                                                                                         [JMUtils validateReportName:text errorMessage:&errorMessage];
                                                                                         if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
-                                                                                            errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
+                                                                                            errorMessage = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_notunique", nil);
                                                                                         }
                                                                                     }
                                                                                     return errorMessage;
@@ -131,12 +131,12 @@
                                                                                 }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if(action == JMMenuActionsViewAction_Delete) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
-                                                                                          message:@"savedreport.viewer.delete.confirmation.message"
-                                                                                cancelButtonTitle:@"dialog.button.cancel"
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
+                                                                                          message:@"savedreport_viewer_delete_confirmation_message"
+                                                                                cancelButtonTitle:@"dialog_button_cancel"
                                                                           cancelCompletionHandler:nil];
         __weak typeof(self) weakSelf = self;
-        [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
             __strong typeof(self) strongSelf = weakSelf;
             BOOL shouldCloseViewer = YES;
             if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:shouldCloseViewerAfterDeletingResource:)]) {
@@ -163,8 +163,8 @@
         
         BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
         if (!canOpen) {
-            NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
-            NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            NSString *errorMessage = JMCustomLocalizedString(@"error_openIn_message", nil);
+            NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }
@@ -203,7 +203,7 @@
 
 - (void)showRemoteResource
 {
-    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
+    [self startShowLoaderWithMessage:@"status_loading" cancelBlock:^{
         [self cancelResourceViewingAndExit:YES];
     }];
 
@@ -219,7 +219,7 @@
                                                                           }];
                                                 } else {
                                                     if ([strongSelf isSupportedResource:resource]) {
-                                                        [strongSelf startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
+                                                        [strongSelf startShowLoaderWithMessage:@"status_loading" cancelBlock:^{
                                                             [strongSelf cancelResourceViewingAndExit:YES];
                                                         }];
                                                         
@@ -259,7 +259,7 @@
                                                                                            }];
                                                     } else {
                                                         // TODO: add showing with ...
-                                                        [strongSelf showErrorWithMessage:JMCustomLocalizedString(@"savedreport.viewer.format.not.supported", nil)
+                                                        [strongSelf showErrorWithMessage:JMCustomLocalizedString(@"savedreport_viewer_format_not_supported", nil)
                                                                               completion:^{
                                                                                   [strongSelf cancelResourceViewingAndExit:YES];
                                                                               }];
@@ -323,9 +323,9 @@
 
 - (void)showErrorWithMessage:(NSString *)message completion:(void(^)(void))completion
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
                                                                                       message:message
-                                                                            cancelButtonTitle:@"dialog.button.ok"
+                                                                            cancelButtonTitle:@"dialog_button_ok"
                                                                       cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
                                                                           if (completion) {
                                                                               completion();

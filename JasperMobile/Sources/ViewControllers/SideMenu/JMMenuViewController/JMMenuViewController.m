@@ -356,8 +356,8 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
         [self presentViewController:mc animated:YES completion:NULL];
     } else {
-        NSString *errorMessage = JMCustomLocalizedString(@"settings.feedback.errorShowClient", nil);
-        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        NSString *errorMessage = JMCustomLocalizedString(@"settings_feedback_errorShowClient", nil);
+        NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         [JMUtils presentAlertControllerWithError:error completion:nil];
     }
 #endif

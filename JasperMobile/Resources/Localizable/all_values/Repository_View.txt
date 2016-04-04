@@ -1,0 +1,11 @@
+
+[[Repository view]]
+	[repository_root_organization]
+		en = Organization
+		tags = ios,unused
+	[repository_root_root]
+		en = Root
+		tags = ios,unused
+	[repository_root_public]
+		en = Public
+		tags = ios,unused
