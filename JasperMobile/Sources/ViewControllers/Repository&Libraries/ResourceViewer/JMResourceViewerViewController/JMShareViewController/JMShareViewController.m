@@ -87,7 +87,7 @@
     }
     
     activityVC.excludedActivityTypes = excludeActivities;
-    activityVC.popoverPresentationController.barButtonItem = [self.navigationItem.rightBarButtonItems firstObject];
+    activityVC.popoverPresentationController.barButtonItem = [self.toolbarItems lastObject];
     
     [self presentViewController:activityVC animated:YES completion:nil];    
 }
