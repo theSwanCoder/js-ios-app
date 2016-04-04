@@ -29,6 +29,14 @@
 		0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */; };
 		0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503B19F1265B00C5875E /* CoreTelephony.framework */; };
 		0871503E19F1266900C5875E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503D19F1266900C5875E /* libz.dylib */; };
+		087633FF1CB28322000F0667 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14780F9AC66CD181A7D4662 /* Localizable.strings */; };
+		087634001CB28322000F0667 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478DEB63BFB19C76EE0F51 /* Localizable.strings */; };
+		087634011CB28322000F0667 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14785095AFB6CA6381BA957 /* Localizable.strings */; };
+		087634021CB28322000F0667 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14782938D2027B3C7755AAB /* Localizable.strings */; };
+		087634031CB28322000F0667 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478D318630E8E65F67373A /* Localizable.strings */; };
+		087634041CB28322000F0667 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478507E7AB10737467AF01 /* Localizable.strings */; };
+		087634051CB28323000F0667 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478B3040B5E554EBAD617D /* Localizable.strings */; };
+		087634061CB28323000F0667 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A147869D5A4968747665F846 /* Localizable.strings */; };
 		087A71AD1BD95FBF007B98A4 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 087A71AC1BD95FBF007B98A4 /* Settings.bundle */; };
 		087A71B41BD95FD1007B98A4 /* JMAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087A71B01BD95FD1007B98A4 /* JMAboutViewController.m */; };
 		087A71B51BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087A71B31BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m */; };
@@ -173,14 +181,6 @@
 		938E1F991C1EEF6C009E1B79 /* vis_jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = A1478BF95DE687CDEB03D288 /* vis_jaspermobile.js */; };
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
 		939917321BC67737006CC2A7 /* old_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = A14785AF90B597E785B4A30A /* old_dashboard.js */; };
-		93B2D7E01CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14780F9AC66CD181A7D4662 /* Localizable.strings */; };
-		93B2D7E11CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478DEB63BFB19C76EE0F51 /* Localizable.strings */; };
-		93B2D7E21CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14785095AFB6CA6381BA957 /* Localizable.strings */; };
-		93B2D7E31CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14782938D2027B3C7755AAB /* Localizable.strings */; };
-		93B2D7E41CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478D318630E8E65F67373A /* Localizable.strings */; };
-		93B2D7E51CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478507E7AB10737467AF01 /* Localizable.strings */; };
-		93B2D7E61CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478B3040B5E554EBAD617D /* Localizable.strings */; };
-		93B2D7E71CAD167E00F60BF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A147869D5A4968747665F846 /* Localizable.strings */; };
 		93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C4E3111C737DB300A19D64 /* JMUITestConstants.m */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
@@ -211,7 +211,6 @@
 		A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = A147833F01EC956738C2E56A /* JMReportViewerToolBar.xib */; };
 		A1478BC60E4CEBC8141E12EC /* JMNewScheduleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478FF2E87954F5F6AF096E /* JMNewScheduleCell.m */; };
 		A1478C6FB612042252B18107 /* JMScheduleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478961EB70C13590B1CBE5 /* JMScheduleManager.m */; };
-		A1478D40CCAF657421DA2D40 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = A1478E1EEE6B448244A33391 /* README.md */; };
 		A1478D6B609C61DEF3A3AC92 /* JMVisualizeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AE10405430D44256CA0 /* JMVisualizeManager.m */; };
 		A1478E2F53F91CD7BCDACB1E /* JMWebEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = A14781236AC9524AE2DDCA14 /* JMWebEnvironment.m */; };
 		A1478EFBFF648E171A39F2BF /* JMReportViewerToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */; };
@@ -2889,9 +2888,9 @@
 				6F5F5E6592158193EE742D9E /* Check Pods Manifest.lock */,
 				F55CC32B174CFFCE00CEB39E /* Sources */,
 				F55CC32C174CFFCE00CEB39E /* Frameworks */,
-				0844F14019F694730082C6E5 /* ShellScript */,
 				F55CC32D174CFFCE00CEB39E /* Resources */,
 				9D3415DC47E90FD0EB7D031E /* Copy Pods Resources */,
+				0844F14019F694730082C6E5 /* Run Update Build Version Script */,
 				935E06761BD7969C007F8DDA /* Run Script (Fabric) */,
 			);
 			buildRules = (
@@ -2978,14 +2977,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93B2D7E01CAD167E00F60BF7 /* Localizable.strings in Resources */,
-				93B2D7E11CAD167E00F60BF7 /* Localizable.strings in Resources */,
-				93B2D7E21CAD167E00F60BF7 /* Localizable.strings in Resources */,
-				93B2D7E31CAD167E00F60BF7 /* Localizable.strings in Resources */,
-				93B2D7E41CAD167E00F60BF7 /* Localizable.strings in Resources */,
-				93B2D7E51CAD167E00F60BF7 /* Localizable.strings in Resources */,
-				93B2D7E61CAD167E00F60BF7 /* Localizable.strings in Resources */,
-				93B2D7E71CAD167E00F60BF7 /* Localizable.strings in Resources */,
+				087633FF1CB28322000F0667 /* Localizable.strings in Resources */,
+				087634001CB28322000F0667 /* Localizable.strings in Resources */,
+				087634011CB28322000F0667 /* Localizable.strings in Resources */,
+				087634021CB28322000F0667 /* Localizable.strings in Resources */,
+				087634031CB28322000F0667 /* Localizable.strings in Resources */,
+				087634041CB28322000F0667 /* Localizable.strings in Resources */,
+				087634051CB28323000F0667 /* Localizable.strings in Resources */,
+				087634061CB28323000F0667 /* Localizable.strings in Resources */,
 				938E1F991C1EEF6C009E1B79 /* vis_jaspermobile.js in Resources */,
 				939917321BC67737006CC2A7 /* old_dashboard.js in Resources */,
 				08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */,
@@ -3020,13 +3019,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0844F14019F694730082C6E5 /* ShellScript */ = {
+		0844F14019F694730082C6E5 /* Run Update Build Version Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Update Build Version Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3074,7 +3074,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Start compiling localizations\"\nlocalizationFolderPath=${SRCROOT}/JasperMobile/Resources/Localizable\nallLocalizationsFolderPath=$localizationFolderPath/all_values\nallLocalizationsFileName=locales.txt\noutputPathNewStrings=$localizationFolderPath/New_Strings\noutputPath=$localizationFolderPath/Localizable.strings\ncat \"$allLocalizationsFolderPath/\"*.txt > $localizationFolderPath/$allLocalizationsFileName\n\nif [ -d \"$outputPath\" ]; then\n    echo \"$outputPath exist\"\n    twine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outupPathNewStrings/\" --tags new\n    twine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outupPath/\"\nelse\n    echo \"$outputPath doesn't exist\"\n    #localizable strings\n    mkdir \"$outputPath\"\n    mkdir \"$outputPath/de.lproj\"\n    mkdir \"$outputPath/en.lproj\"\n    mkdir \"$outputPath/es.lproj\"\n    mkdir \"$outputPath/fr.lproj\"\n    mkdir \"$outputPath/it.lproj\"\n    mkdir \"$outputPath/ja.lproj\"\n    mkdir \"$outputPath/pt.lproj\"\n    mkdir \"$outputPath/zh.lproj\"\n    #new strings\n    mkdir \"$outputPathNewStrings\"\n    mkdir \"$outputPathNewStrings/en.lproj\"\n    #create new localizables\n    twine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPathNewStrings/\" --tags new\n    twine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPath/\"\nfi\nrm \"$localizationFolderPath/$allLocalizationsFileName\"\necho \"Finish compiling localizations\"";
+			shellScript = "echo \"Start compiling localizations\"\nlocalizationFolderPath=${SRCROOT}/JasperMobile/Resources/Localizable\nallLocalizationsFolderPath=$localizationFolderPath/all_values\nallLocalizationsFileName=locales.txt\noutputPathNewStrings=$localizationFolderPath/New_Strings\noutputPath=$localizationFolderPath/Localizable.strings\ncat \"$allLocalizationsFolderPath/\"*.txt > $localizationFolderPath/$allLocalizationsFileName\n\nif [ -d \"$outputPath\" ]; then\n    echo \"$outputPath exist\"\n    rm -r \"$outputPath\"\n    rm -r \"$outputPathNewStrings\"\nfi\n\necho \"$outputPath doesn't exist\"\n#localizable strings\nmkdir \"$outputPath\"\nmkdir \"$outputPath/de.lproj\"\nmkdir \"$outputPath/en.lproj\"\nmkdir \"$outputPath/es.lproj\"\nmkdir \"$outputPath/fr.lproj\"\nmkdir \"$outputPath/it.lproj\"\nmkdir \"$outputPath/ja.lproj\"\nmkdir \"$outputPath/pt.lproj\"\nmkdir \"$outputPath/zh.lproj\"\n#new strings\nmkdir \"$outputPathNewStrings\"\nmkdir \"$outputPathNewStrings/en.lproj\"\n#create new localizables\ntwine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPathNewStrings/\" --tags new\ntwine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPath/\"\n\nrm \"$localizationFolderPath/$allLocalizationsFileName\"\necho \"Finish compiling localizations\"";
 		};
 		9D3415DC47E90FD0EB7D031E /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3284,7 +3284,6 @@
 				A14785CEE1595A4C5D894C11 /* JMJavascriptNativeBridge.m in Sources */,
 				A1478E2F53F91CD7BCDACB1E /* JMWebEnvironment.m in Sources */,
 				A14786ADC7F4369E9DEDD26C /* JMScheduleLoader.m in Sources */,
-				A1478D40CCAF657421DA2D40 /* README.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
