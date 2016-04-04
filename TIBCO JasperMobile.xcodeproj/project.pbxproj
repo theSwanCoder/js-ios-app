@@ -2901,9 +2901,9 @@
 				6F5F5E6592158193EE742D9E /* Check Pods Manifest.lock */,
 				F55CC32B174CFFCE00CEB39E /* Sources */,
 				F55CC32C174CFFCE00CEB39E /* Frameworks */,
+				0844F14019F694730082C6E5 /* Run Update Build Version Script */,
 				F55CC32D174CFFCE00CEB39E /* Resources */,
 				9D3415DC47E90FD0EB7D031E /* Copy Pods Resources */,
-				0844F14019F694730082C6E5 /* Run Update Build Version Script */,
 				935E06761BD7969C007F8DDA /* Run Script (Fabric) */,
 			);
 			buildRules = (
