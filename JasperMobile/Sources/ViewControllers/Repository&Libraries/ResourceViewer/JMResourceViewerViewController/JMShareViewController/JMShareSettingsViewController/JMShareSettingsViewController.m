@@ -12,12 +12,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *brushTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *brushValueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *brushSlider;
-@property (weak, nonatomic) IBOutlet UIImageView *brushPreviewImageView;
 
 @property (weak, nonatomic) IBOutlet UILabel *opacityTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *opacityValueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *opacitySlider;
-@property (weak, nonatomic) IBOutlet UIImageView *opacityPreviewImageView;
+
+@property (weak, nonatomic) IBOutlet UIImageView *colorPreviewImageView;
 
 @property (weak, nonatomic) IBOutlet UILabel *rgbPaletteTitleLabel;
 @property (weak, nonatomic) IBOutlet UISlider *redSlider;
@@ -104,24 +104,14 @@
         self.blueValueLabel.text = [NSString stringWithFormat:@"%@: %d", JMCustomLocalizedString(@"resource_viewer_share_settings_blue", nil), (int)self.blueSlider.value];
     }
     
-    UIGraphicsBeginImageContext(self.brushPreviewImageView.bounds.size);
-    CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
-    CGContextSetLineWidth(UIGraphicsGetCurrentContext(),self.brushWidth);
-    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), self.redComponent, self.greenComponent, self.blueComponent, 1.0);
-    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), CGRectGetMidX(self.brushPreviewImageView.bounds), CGRectGetMidY(self.brushPreviewImageView.bounds));
-    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), CGRectGetMidX(self.brushPreviewImageView.bounds), CGRectGetMidY(self.brushPreviewImageView.bounds));
-    CGContextStrokePath(UIGraphicsGetCurrentContext());
-    self.brushPreviewImageView.image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    UIGraphicsBeginImageContext(self.opacityPreviewImageView.bounds.size);
+    UIGraphicsBeginImageContext(self.colorPreviewImageView.bounds.size);
     CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(),self.brushWidth);
     CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), self.redComponent, self.greenComponent, self.blueComponent, self.opacity);
-    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), CGRectGetMidX(self.opacityPreviewImageView.bounds), CGRectGetMidY(self.opacityPreviewImageView.bounds));
-    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), CGRectGetMidX(self.opacityPreviewImageView.bounds), CGRectGetMidY(self.opacityPreviewImageView.bounds));
+    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), CGRectGetMidX(self.colorPreviewImageView.bounds), CGRectGetMidY(self.colorPreviewImageView.bounds));
+    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), CGRectGetMidX(self.colorPreviewImageView.bounds), CGRectGetMidY(self.colorPreviewImageView.bounds));
     CGContextStrokePath(UIGraphicsGetCurrentContext());
-    self.opacityPreviewImageView.image = UIGraphicsGetImageFromCurrentImageContext();
+    self.colorPreviewImageView.image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 }
 
