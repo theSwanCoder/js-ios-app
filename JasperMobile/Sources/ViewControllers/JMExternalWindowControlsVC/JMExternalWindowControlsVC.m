@@ -72,7 +72,9 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
 - (IBAction)upActionEnd:(id)sender
 {
     [self stopAction];
+    [self upAction];
 }
+
 #pragma mark - Actions Down
 - (IBAction)downActionBegin:(id)sender
 {
@@ -82,12 +84,14 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
 - (IBAction)downActionEnd:(id)sender
 {
     [self stopAction];
+    [self downAction];
 }
 
 #pragma mark - Actions Right
 - (IBAction)rightActionEnd:(id)sender
 {
     [self stopAction];
+    [self rightAction];
 }
 
 - (IBAction)rightActionBegin:(id)sender
@@ -99,6 +103,7 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
 - (IBAction)leftActionEnd:(id)sender
 {
     [self stopAction];
+    [self leftAction];
 }
 
 - (IBAction)leftActionBegin:(id)sender
@@ -107,30 +112,27 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
 }
 
 #pragma mark - Actions Zoom
-- (IBAction)zoomUpAction:(id)sender
+- (IBAction)zoomUpActionBegin:(id)sender
 {
-    WKWebView *contentView = (WKWebView *) self.contentView;
-    CGFloat zoomScale = contentView.scrollView.zoomScale;
-    zoomScale += 0.1;
-    if (zoomScale >= 2 * self.defaultZoomScale) {
-        return;
-    }
-    [contentView.scrollView setZoomScale:zoomScale
-                                animated:YES];
+    [self startZoomUpAction];
 }
 
-- (IBAction)zoomDownAction:(id)sender
+- (IBAction)zoomUpActionEnd:(id)sender
 {
-    WKWebView *contentView = (WKWebView *) self.contentView;
-    CGFloat zoomScale = contentView.scrollView.zoomScale;
-    zoomScale -= 0.1;
-    if (zoomScale <= self.defaultZoomScale) {
-        return;
-    }
-    [contentView.scrollView setZoomScale:zoomScale
-                                animated:YES];
+    [self stopAction];
+    [self zoomUpAction];
 }
 
+- (IBAction)zoomDownActionBegin:(id)sender
+{
+    [self startZoomDownAction];
+}
+
+- (IBAction)zoomDownActionEnd:(id)sender
+{
+    [self stopAction];
+    [self zoomDownAction];
+}
 
 #pragma mark - Action Helpers Up
 - (void)startUpAction
@@ -244,6 +246,55 @@ CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
     scrollView.contentOffset = upPoint;
 }
 
+#pragma mark - Action Helpers Zoom Up
+- (void)startZoomUpAction
+{
+    if (self.timer) {
+        return;
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:kJMExternalWindowControlsScrollTimeInterval
+                                                  target:self
+                                                selector:@selector(zoomUpAction)
+                                                userInfo:nil
+                                                 repeats:YES];
+}
+
+- (void)zoomUpAction
+{
+    WKWebView *contentView = (WKWebView *) self.contentView;
+    CGFloat zoomScale = contentView.scrollView.zoomScale;
+    zoomScale += 0.1;
+    if (zoomScale >= 2 * self.defaultZoomScale) {
+        return;
+    }
+    [contentView.scrollView setZoomScale:zoomScale
+                                animated:YES];
+}
+
+#pragma mark - Action Helpers Zoom Down
+- (void)startZoomDownAction
+{
+    if (self.timer) {
+        return;
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:kJMExternalWindowControlsScrollTimeInterval
+                                                  target:self
+                                                selector:@selector(zoomDownAction)
+                                                userInfo:nil
+                                                 repeats:YES];
+}
+
+- (void)zoomDownAction
+{
+    WKWebView *contentView = (WKWebView *) self.contentView;
+    CGFloat zoomScale = contentView.scrollView.zoomScale;
+    zoomScale -= 0.1;
+    if (zoomScale <= self.defaultZoomScale) {
+        return;
+    }
+    [contentView.scrollView setZoomScale:zoomScale
+                                animated:YES];
+}
 
 - (void)stopAction
 {

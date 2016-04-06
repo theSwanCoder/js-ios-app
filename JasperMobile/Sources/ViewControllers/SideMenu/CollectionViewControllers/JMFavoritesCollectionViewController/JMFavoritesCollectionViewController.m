@@ -38,7 +38,7 @@
 -(void)awakeFromNib
 {
     [super awakeFromNib];
-    self.title = JMCustomLocalizedString(@"menuitem.favorites.label", nil);
+    self.title = JMCustomLocalizedString(@"menuitem_favorites_label", nil);
 }
 
 #pragma mark - UIViewController LifeCycle
@@ -71,7 +71,7 @@
 
 - (NSString *)noResultText
 {
-    return JMCustomLocalizedString(@"resources.noresults.favorites.msg", nil);
+    return JMCustomLocalizedString(@"resources_noresults_favorites_msg", nil);
 }
 
 #pragma mark - Helpers

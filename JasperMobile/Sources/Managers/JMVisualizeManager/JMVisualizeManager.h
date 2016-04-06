@@ -32,8 +32,8 @@
 */
 
 @interface JMVisualizeManager : NSObject
+@property (nonatomic, strong) NSString *visualizePath;
+@property (nonatomic, strong) NSString *htmlString;
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
 - (void)loadVisualizeJSWithCompletion:(void (^)(BOOL success, NSError *error))completion;
-- (NSString *)htmlStringForReport;
-- (NSString *)htmlStringForDashboard;
 @end

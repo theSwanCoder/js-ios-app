@@ -34,6 +34,7 @@
 
 #import "JMMenuViewController.h"
 #import "SWRevealViewController.h"
+#import "JMAnalyticsManager.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -85,7 +86,13 @@ static JMSessionManager *_sharedManager = nil;
 
 - (void) restoreLastSessionWithCompletion:(void(^)(BOOL isSessionRestored))completion
 {
-
+    if (self.restClient && [self.restClient.cookies count]) {
+        if (completion) {
+            completion(YES);
+        }
+        return;
+    }
+    
     if (!self.restClient) { // try restore restClient
         NSData *savedSession = [[NSUserDefaults standardUserDefaults] objectForKey:kJMSavedSessionKey];
         if (savedSession) {
@@ -136,6 +143,8 @@ static JMSessionManager *_sharedManager = nil;
     // Clear webView
     [[JMWebViewManager sharedInstance] reset];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
+
+    [[JMAnalyticsManager sharedManager] sendAnalyticsEventAboutLogout];
 }
 
 - (NSPredicate *)predicateForCurrentServerProfile

@@ -67,7 +67,6 @@ extern NSString * const kJMDashboardKey;
 
 // Settings keys
 extern NSString * const kJMDefaultSendingCrashReport;
-extern NSString * const kJMDefaultUseVisualize;
 extern NSString * const kJMUserAcceptAgreement;
 
 // Demo server parameters
@@ -129,16 +128,21 @@ extern NSString * const kJMAnalyticsAuthenticationEventActionLoginTitle;
 extern NSString * const kJMAnalyticsAuthenticationEventLabelSuccess;
 extern NSString * const kJMAnalyticsAuthenticationEventLabelFailure;
 
-// Analytics - Resource
-extern NSString * const kJMAnalyticsResourceEventCategoryTitle;
-extern NSString * const kJMAnalyticsResourceEventActionOpenTitle;
-extern NSString * const kJMAnalyticsResourceEventActionPrintTitle;
-extern NSString * const kJMAnalyticsResourceEventActionExportTitle;
-extern NSString * const kJMAnalyticsResourceEventLabelReportREST;
-extern NSString * const kJMAnalyticsResourceEventLabelReportVisualize;
-extern NSString * const kJMAnalyticsResourceEventLabelDashboardFlow;
-extern NSString * const kJMAnalyticsResourceEventLabelDashboardVisualize;
-extern NSString * const kJMAnalyticsResourceEventLabelSavedResource;
+// Analytics - Categories
+extern NSString * const kJMAnalyticsEventCategoryResource;
+extern NSString * const kJMAnalyticsEventCategoryOther;
+// Analytics - Resource Actions
+extern NSString * const kJMAnalyticsEventActionOpen;
+extern NSString * const kJMAnalyticsEventActionPrint;
+extern NSString * const kJMAnalyticsEventActionExport;
+extern NSString * const kJMAnalyticsEventActionViewed;
+// Analytics - Resources Titles
+extern NSString * const kJMAnalyticsResourceLabelReportREST;
+extern NSString * const kJMAnalyticsResourceLabelReportVisualize;
+extern NSString * const kJMAnalyticsResourceLabelDashboardFlow;
+extern NSString * const kJMAnalyticsResourceLabelDashboardVisualize;
+extern NSString * const kJMAnalyticsResourceLabelSavedResource;
+extern NSString * const kJMAnalyticsLabelThumbnail;
 
 // Analytics - Repository
 extern NSString * const kJMAnalyticsRepositoryEventCategoryTitle;
@@ -147,3 +151,7 @@ extern NSString * const kJMAnalyticsRepositoryEventActionOpen;
 // Custom Dimensions
 extern NSUInteger  const kJMAnalyticsCustomDimensionServerVersionIndex;
 extern NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex;
+
+// Login VC
+extern NSString *const JMLoginVCLastUserNameKey;
+extern NSString *const JMLoginVCLastServerProfileAliasKey;

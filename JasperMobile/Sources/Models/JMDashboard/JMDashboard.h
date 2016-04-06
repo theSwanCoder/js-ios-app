@@ -26,8 +26,6 @@
 //  TIBCO JasperMobile
 //
 
-@class JMDashlet;
-@class JMResource;
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
@@ -39,10 +37,10 @@
 @property (nonatomic, strong, readonly) JMResource *resource;
 @property (nonatomic, copy, readonly) NSString *resourceURI;
 @property (nonatomic, strong, readonly) NSURLRequest *resourceRequest;
-@property (nonatomic, copy) NSArray <JMDashlet *>*dashlets;
 @property (nonatomic, copy) NSArray <JSInputControlDescriptor *>*inputControls;
 @property (nonatomic, copy) NSArray <JSDashboardResource *>*resources;
 @property (nonatomic, copy) NSArray <JSDashboardComponent *>*components;
+@property (nonatomic, weak) JSDashboardComponent *maximizedComponent;
 
 - (instancetype)initWithResource:(JMResource *)resource;
 + (instancetype)dashboardWithResource:(JMResource *)resource;

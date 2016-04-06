@@ -46,4 +46,6 @@
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, retain) JMServerProfile *serverProfile;
 @property (nonatomic, weak) id <JMServerOptionsViewControllerDelegate> delegate;
+@property (nonatomic, copy) void(^exitBlock)(void);
+- (void)cancel;
 @end

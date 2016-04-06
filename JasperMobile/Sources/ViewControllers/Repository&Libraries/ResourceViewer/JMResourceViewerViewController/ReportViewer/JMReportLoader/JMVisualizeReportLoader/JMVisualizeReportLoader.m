@@ -44,13 +44,30 @@
 @implementation JMVisualizeReportLoader
 
 #pragma mark - Lifecycle
-- (id<JMReportLoaderProtocol>)initWithReport:(nonnull JSReport *)report
-                                  restClient:(nonnull JSRESTBase *)restClient
-                              webEnvironment:(JMWebEnvironment *)webEnvironment
+- (instancetype)initWithReport:(JSReport *)report restClient:(JSRESTBase *)restClient
 {
     self = [super init];
     if (self) {
         _report = report;
+    }
+    return self;
+}
+
++ (instancetype)loaderWithReport:(JSReport *)report restClient:(JSRESTBase *)restClient {
+    return [[self alloc] initWithReport:report restClient:restClient];
+}
+
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
+- (id<JMReportLoaderProtocol>)initWithReport:(nonnull JSReport *)report
+                                  restClient:(nonnull JSRESTBase *)restClient
+                              webEnvironment:(JMWebEnvironment *)webEnvironment
+{
+    self = [self initWithReport:report restClient:restClient];
+    if (self) {
         _visualizeManager = [JMVisualizeManager new];
         _webEnvironment = webEnvironment;
     }
@@ -90,8 +107,20 @@
                                              completion:^(BOOL isSuccess, NSError *error) {
                                                  __typeof(self) strongSelf = weakSelf;
                                                  if (isSuccess) {
-                                                     [strongSelf freshLoadReportWithPageNumber:page
-                                                                                    completion:completionBlock];
+                                                     // load vis into web environment
+                                                     JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+                                                                                                                              parameters:@{
+                                                                                                                                      @"scriptURL" : strongSelf.visualizeManager.visualizePath,
+                                                                                                                              }];
+                                                     [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
+                                                                                     completion:^(NSDictionary *params, NSError *error) {
+                                                                                         if (error) {
+                                                                                             JMLog(@"error: %@", error);
+                                                                                         } else {
+                                                                                             [strongSelf freshLoadReportWithPageNumber:page
+                                                                                                                            completion:completionBlock];
+                                                                                         }
+                                                                                     }];
                                                  } else {
                                                      if (heapBlock) {
                                                          NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
@@ -150,8 +179,20 @@
                                                  completion:^(BOOL isSuccess, NSError *error) {
                                                      __typeof(self) strongSelf = weakSelf;
                                                      if (isSuccess) {
-                                                         [strongSelf freshLoadReportWithPageNumber:strongSelf.report.currentPage
-                                                                                        completion:completion];
+                                                         // load vis into web environment
+                                                         JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+                                                                                                                                  parameters:@{
+                                                                                                                                          @"scriptURL" : strongSelf.visualizeManager.visualizePath,
+                                                                                                                                  }];
+                                                         [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
+                                                                                               completion:^(NSDictionary *params, NSError *error) {
+                                                                                                   if (error) {
+                                                                                                       JMLog(@"error: %@", error);
+                                                                                                   } else {
+                                                                                                       [strongSelf freshLoadReportWithPageNumber:strongSelf.report.currentPage
+                                                                                                                                      completion:completion];
+                                                                                                   }
+                                                                                               }];
                                                      } else {
                                                          NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
                                                          heapBlock(NO, vizError);
@@ -167,9 +208,8 @@
             [strongSelf.report updateCurrentPage:1];
             [strongSelf.report updateCountOfPages:NSNotFound];
 
-            JMJavascriptRequest *request = [JMJavascriptRequest new];
-            request.command = @"JasperMobile.Report.API.applyReportParams";
-            request.parametersAsString = [strongSelf createParametersAsString];
+            JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.applyReportParams"
+                                                                        parameters:[self runParameters]];
             __weak __typeof(self) weakSelf = strongSelf;
             [strongSelf.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
                 __typeof(self) strongSelf = weakSelf;
@@ -218,41 +258,15 @@
                             }];
 }
 
-- (void)exportReportWithFormat:(NSString *)exportFormat
-{
-    // TODO: make refactor - use completion
-    self.exportFormat = exportFormat;
-
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Report.API.exportReport";
-    request.parametersAsString = [NSString stringWithFormat:@"'%@'", exportFormat];
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (parameters) {
-            JMLog(@"getting output resource link was finished");
-            NSString *outputResourcesPath = parameters[@"link"];
-            if (outputResourcesPath) {
-                if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveOutputResourcePath:fullReportName:)]) {
-                    NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", strongSelf.report.resourceLookup.label, strongSelf.exportFormat];
-                    [strongSelf.delegate reportLoader:strongSelf didReceiveOutputResourcePath:outputResourcesPath fullReportName:fullReportName];
-                }
-            }
-        } else {
-            JMLog(@"error: %@", error);
-        }
-    }];
-}
-
 - (void)destroy
 {
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Report.API.destroyReport";
-    request.parametersAsString = @"";
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.destroyReport"
+                                                                parameters:nil];
+    __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        // Need capture self to wait until this request finishes
-        self.report.isReportAlreadyLoaded = NO;
-        [self.webEnvironment removeAllListeners];
+        __typeof(self) strongSelf = weakSelf;
+        strongSelf.report.isReportAlreadyLoaded = NO;
+        [strongSelf.webEnvironment removeAllListeners];
 
         if (parameters) {
             JMLog(@"callback: %@", parameters);
@@ -269,9 +283,10 @@
     if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
         self.visualizeManager.viewportScaleFactor = scaleFactor;
 
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"JasperMobile.Helper.updateViewPortInitialScale";
-        request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
+        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortInitialScale"
+                                                                    parameters:@{
+                                                                            @"scale" : @(scaleFactor)
+                                                                    }];
         [self.webEnvironment sendJavascriptRequest:request
                                         completion:nil];
     }
@@ -296,10 +311,13 @@
     [self.report updateCountOfPages:NSNotFound];
     [self.report updateCurrentPage:pageNumber];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Report.API.runReport";
-    request.parametersAsString = [self makeParametersForRunReportRequestWithPageNumber:pageNumber];
-
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.runReport"
+                                                                parameters: @{
+                                                                        @"uri"        : self.report.reportURI,
+                                                                        @"params"     : [self runParameters],
+                                                                        @"pages"      : @(pageNumber),
+                                                                        @"is_for_6_0" : @([JMUtils isServerAmber]),
+                                                                }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:^(NSDictionary *parameters, NSError *error) {
@@ -325,10 +343,10 @@
 {
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Report.API.selectPage";
-    request.parametersAsString = @(pageNumber).stringValue;
-
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.selectPage"
+                                                                parameters:@{
+                                                                        @"pageNumber" : @(pageNumber)
+                                                                }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
                             completion:^(NSDictionary *parameters, NSError *error) {
@@ -353,8 +371,10 @@
     [self.visualizeManager loadVisualizeJSWithCompletion:^(BOOL success, NSError *error){
         if (success) {
             JMLog(@"visuzalise.js did end load");
+
             NSString *baseURLString = self.restClient.serverProfile.serverUrl;
-            [self.report updateHTMLString:[self.visualizeManager htmlStringForReport] baseURLSring:baseURLString];
+            [self.report updateHTMLString:self.visualizeManager.htmlString
+                             baseURLSring:baseURLString];
 
             if (completion) {
                 completion(YES, nil);
@@ -436,46 +456,13 @@
 }
 
 #pragma mark - Helpers
-- (NSString *)makeParametersForRunReportRequestWithPageNumber:(NSInteger)pageNumber
+- (NSDictionary *)runParameters
 {
-    NSString *parametersAsString = [self createParametersAsString];
-    NSString *uriParam = [NSString stringWithFormat:@"'uri' : '%@'", self.report.reportURI];
-    NSString *reportParams = [NSString stringWithFormat:@"'params' : %@", parametersAsString];
-    NSString *pagesParam = [NSString stringWithFormat:@"'pages' : '%@'", @(pageNumber)];
-
-    NSString *requestParameters;
-
-    BOOL isServerAmber = [JMUtils isServerAmber];
-    NSString *isServerAmberParam;
-    if (isServerAmber) {
-        isServerAmberParam = @"'is_for_6_0' : true";
-    } else {
-        isServerAmberParam = @"'is_for_6_0' : false";
-    }
-    requestParameters = [NSString stringWithFormat:@"{%@, %@, %@, %@}",
-                                                   isServerAmberParam,
-                                                   uriParam,
-                                                   reportParams,
-                                                   pagesParam];
-
-    JMLog(@"request parameters: %@", reportParams);
-
-    return requestParameters;
-}
-
-- (NSString *)createParametersAsString
-{
-    NSMutableString *parametersAsString = [@"{" mutableCopy];
+    NSMutableDictionary *runParams = [@{} mutableCopy];
     for (JSReportParameter *parameter in self.report.reportParameters) {
-        NSArray *values = parameter.value;
-        NSString *stringValues = @"";
-        for (NSString *value in values) {
-            stringValues = [stringValues stringByAppendingFormat:@"\"%@\",", value];
-        }
-        [parametersAsString appendFormat:@"\"%@\":[%@],", parameter.name, stringValues];
+        runParams[parameter.name] = parameter.value;
     }
-    [parametersAsString appendString:@"}"];
-    return [parametersAsString copy];
+    return runParams;
 }
 
 #pragma mark - Hyperlinks handlers
@@ -524,7 +511,7 @@
 
 - (NSError *)createErrorWithType:(JSReportLoaderErrorType)errorType errorMessage:(NSString *)errorMessage
 {
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report.viewer.visualize.render.error", nil) };
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report_viewer_visualize_render_error", nil) };
     NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
                                          code:errorType
                                      userInfo:userInfo];

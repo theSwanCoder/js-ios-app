@@ -57,6 +57,7 @@
 "servers.orgid.label" = "Organization ID";
 "servers.askpassword.label" = "Always ask for password";
 "servers.keepSession.label" = "Automatically extend the session";
+"servers.useVisualize.label" = "Use Visualize.js (if supported)";
 "servers.title.new" = "New Server Profile";
 "servers.action.profile.edit" = "Edit";
 "servers.action.profile.clone" = "Clone Profile";
@@ -88,6 +89,7 @@
 "menuitem.repository.label" = "Repository";
 "menuitem.favorites.label" = "Favorites";
 "menuitem.logout.label" = "Log Out";
+"menuitem.settings.label" = "Settings";
 "menuitem.feedback.label" = "Feedback by email";
 
 // Descriptions

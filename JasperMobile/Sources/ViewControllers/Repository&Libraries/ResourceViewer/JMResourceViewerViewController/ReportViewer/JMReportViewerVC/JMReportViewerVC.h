@@ -40,4 +40,5 @@
 @property (nonatomic, strong, readonly) JMReport *report;
 @property (nonatomic, assign) BOOL isChildReport;
 @property (nonatomic, copy) void(^exitBlock)(void);
+@property (nonatomic, strong) NSArray *initialReportParameters;
 @end

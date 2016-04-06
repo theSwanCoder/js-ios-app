@@ -80,6 +80,8 @@
             return @"JMRepositoryNavigationViewController";
         case JMSectionTypeAbout:
             return @"JMAboutNavigationViewController";
+        case JMSectionTypeSettings:
+            return @"JMServerOptionsViewController";
         default:
             return nil;
     }
@@ -104,6 +106,8 @@
             return JMCustomLocalizedString(@"menuitem.about.label", nil);
         case JMSectionTypeFeedback:
             return JMCustomLocalizedString(@"menuitem.feedback.label", nil);
+        case JMSectionTypeSettings:
+            return JMCustomLocalizedString(@"menuitem.settings.label", nil);
         case JMSectionTypeLogout:
             return JMCustomLocalizedString(@"menuitem.logout.label", nil);
         default:
@@ -204,6 +208,8 @@
             return @"Scheduling";
         case JMSectionTypeAbout:
             return @"AboutApp";
+        case JMSectionTypeSettings:
+            return @"Settings";
         default:
             return nil;
     }

@@ -114,9 +114,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     NSDate *newDate = self.datePicker.date;
     NSDate *currentDate = [NSDate date];
     if ([newDate compare:currentDate] == NSOrderedAscending) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
-                                                                                          message:JMCustomLocalizedString(@"schedules.error.date.past", nil)
-                                                                                cancelButtonTitle:@"dialog.button.ok"
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
+                                                                                          message:JMCustomLocalizedString(@"schedules_error_date_past", nil)
+                                                                                cancelButtonTitle:@"dialog_button_ok"
                                                                           cancelCompletionHandler:nil];
         [self presentViewController:alertController animated:YES completion:nil];
         return;
@@ -163,9 +163,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             kJS_CONTENT_TYPE_XLS
     ];
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules.new.job.output.format", nil)
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_output_format", nil)
                                                                                       message:nil
-                                                                            cancelButtonTitle:@"dialog.button.cancel"
+                                                                            cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
 
     JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeOutputOptions];
@@ -292,37 +292,37 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
     if ([jobProperty isEqualToString:kJMJobLabel]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.label", nil);
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_label", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.label;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobDescription]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.description", nil);
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_description", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.scheduleDescription;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.output.file.name", nil);
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_output_file_name", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.baseOutputFilename;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     }  else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.output.file.path", nil);
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_output_file_path", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.folderURI;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobFormat]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.format", nil);
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_format", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.outputFormats.firstObject;
         scheduleCell.valueTextField.userInteractionEnabled = NO;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.start.date", nil);
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_start_date", nil);
 
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
@@ -332,7 +332,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobStartImmediately]) {
         JMNewScheduleBoolenCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleBoolenCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.start.immediately", nil);
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_start_immediately", nil);
 
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
@@ -390,12 +390,13 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     JMNewScheduleVCSection *section = self.sections[indexPath.section];
     NSString *jobProperty = section.rows[indexPath.row];
 
+    NSString *trimmedValue = [newValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([jobProperty isEqualToString:kJMJobLabel]) {
-        self.scheduleMetadata.label = [newValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        self.scheduleMetadata.label = trimmedValue;
     } else if ([jobProperty isEqualToString:kJMJobDescription]) {
-        self.scheduleMetadata.scheduleDescription = newValue;
+        self.scheduleMetadata.scheduleDescription = trimmedValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
-        self.scheduleMetadata.baseOutputFilename = newValue;
+        self.scheduleMetadata.baseOutputFilename = trimmedValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
         self.scheduleMetadata.folderURI = newValue;
     } else if ([jobProperty isEqualToString:kJMJobRepeatCount]) {
@@ -644,17 +645,17 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     NSString *message;
 
     if (!self.scheduleMetadata.baseOutputFilename.length) {
-        message = JMCustomLocalizedString(@"schedules.error.empty.filename", nil);
+        message = JMCustomLocalizedString(@"schedules_error_empty_filename", nil);
     } else if (!self.scheduleMetadata.folderURI.length) {
-        message = JMCustomLocalizedString(@"schedules.error.empty.output.folder", nil);
+        message = JMCustomLocalizedString(@"schedules_error_empty_output_folder", nil);
     } else if (!self.scheduleMetadata.label.length) {
-        message = JMCustomLocalizedString(@"schedules.error.empty.label", nil);
+        message = JMCustomLocalizedString(@"schedules_error_empty_label", nil);
     } else if (!self.scheduleMetadata.outputFormats.count) {
-        message = JMCustomLocalizedString(@"schedules.error.empty.format", nil);
+        message = JMCustomLocalizedString(@"schedules_error_empty_format", nil);
     }
 
     if (message) {
-        NSError *error = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules.error.domain", nil)
+        NSError *error = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules_error_domain", nil)
                                                     code:0
                                                 userInfo:@{ NSLocalizedDescriptionKey : message }];
         completion(NO, error);

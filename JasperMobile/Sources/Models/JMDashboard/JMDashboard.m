@@ -27,7 +27,6 @@
 //
 
 #import "JMDashboard.h"
-#import "JMDashlet.h"
 #import "JMDashboardParameter.h"
 #import "JMResource.h"
 

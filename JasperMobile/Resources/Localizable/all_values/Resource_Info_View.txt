@@ -1,0 +1,125 @@
+
+[[Resource Info View ]]
+	[resource_label_title]
+		en = Name
+		de = Name
+		fr = Nom
+		es = Nombre
+		it = Nome
+		pt = Nome
+		ja = 名前
+		zh = 名称
+		tags = ios
+	[resource_description_title]
+		en = Description
+		de = Beschreibung
+		fr = Description
+		es = Descripción
+		it = Descrizione
+		pt = Descrição
+		ja = 説明
+		zh = 说明
+		tags = ios
+	[resource_type_title]
+		en = Type
+		de = Typ
+		fr = Type
+		es = Tipo
+		it = Tipo
+		pt = Tipo
+		ja = タイプ
+		zh = 类型
+		tags = ios
+	[resource_uri_title]
+		en = URI
+		de = URI
+		fr = URI
+		es = URI
+		it = URI
+		pt = URI
+		ja = URI
+		zh = URI
+		tags = ios
+	[resource_version_title]
+		en = Version
+		de = Version
+		fr = Version
+		es = Versión
+		it = Versione
+		pt = Versão
+		ja = バージョン
+		zh = 版本
+		tags = ios
+	[resource_creationDate_title]
+		en = Creation Date
+		de = Erstellungsdatum
+		fr = Date de création
+		es = Fecha de creación
+		it = Data creazione
+		pt = Data de criação
+		ja = 作成日
+		zh = 创建日期
+		tags = ios
+	[resource_modifiedDate_title]
+		en = Modified Date
+		de = Änderungsdatum
+		fr = Date de modification
+		es = Fecha de modificación
+		it = Data modifica
+		pt = Data Modificada
+		ja = 変更日
+		zh = 修改日期
+		tags = ios
+	[resource_format_title]
+		en = Format
+		tags = ios,unused
+	[resources_type_reportUnit]
+		en = Report
+		de = Bericht
+		fr = Rapport
+		es = Informe
+		it = Rapporto
+		pt = Relatório
+		ja = レポート
+		zh = 报告
+		tags = ios
+	[resources_type_dashboard]
+		en = Dashboard
+		de = Dashboard
+		fr = Tableau de bord
+		es = Panel de control
+		it = Pannello dei comandi
+		pt = Painel de Controle
+		ja = ダッシュボード
+		zh = 控制面板
+		tags = ios
+	[resources_type_dashboard_legacy]
+		en = Legacy Dashboard
+		de = Legacy-Dashboard
+		fr = Ancien tableau de bord
+		es = Panel de control antiguo
+		it = Pannello dei comandi versione precedente
+		pt = Painel de Controle Legacy
+		ja = レガシーダッシュボード
+		zh = 传统控制面板
+		tags = ios
+	[resources_type_folder]
+		en = Folder
+		de = Ordner
+		fr = Dossier
+		es = Carpeta
+		it = Cartella
+		pt = Pasta
+		ja = フォルダ
+		zh = 文件夹
+		tags = ios
+	[resources_type_saved_reportUnit]
+		en = Content Resource
+		de = Inhaltsressource
+		fr = Ressource du contenu
+		es = Recurso de contenido
+		it = Risorse dei contenuti
+		pt = Recursos do Conteúdo
+		ja = コンテンツリソース
+		zh = 内容资源
+		tags = ios

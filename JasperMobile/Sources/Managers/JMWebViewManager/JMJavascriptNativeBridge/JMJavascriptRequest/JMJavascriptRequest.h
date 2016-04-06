@@ -32,6 +32,9 @@
 */
 
 @interface JMJavascriptRequest : NSObject <NSCopying>
-@property (nonatomic, copy) NSString *command;
-@property (nonatomic, copy) NSString *parametersAsString;
+@property (nonatomic, copy) NSString *__nonnull command;
+- (instancetype __nullable)initWithCommand:(NSString * __nonnull)command parameters:(NSDictionary * __nullable)parameters;
++ (instancetype __nullable)requestWithCommand:(NSString * __nonnull)command parameters:(NSDictionary * __nullable)parameters;
+// Public API
+- (NSString *__nonnull)fullJavascriptRequestString;
 @end

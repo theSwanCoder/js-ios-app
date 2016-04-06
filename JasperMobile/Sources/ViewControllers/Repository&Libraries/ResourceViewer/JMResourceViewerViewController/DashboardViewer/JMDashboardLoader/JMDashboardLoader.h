@@ -34,7 +34,6 @@
 #import "JMJavascriptNativeBridge.h"
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;
-@class JMDashlet;
 @class JMWebEnvironment;
 @class JMResource;
 
@@ -67,8 +66,8 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)applyParameters:(NSString *__nonnull)parametersAsString;
-- (void)maximizeDashlet:(JMDashlet *__nonnull)dashlet;
-- (void)minimizeDashlet:(JMDashlet *__nonnull)dashlet;
+- (void)maximizeDashletForComponent:(JSDashboardComponent *__nonnull)component;
+- (void)minimizeDashletForComponent:(JSDashboardComponent *__nonnull)component;
 - (void)minimizeDashlet;
 - (void)cancel;
 - (void)destroy;

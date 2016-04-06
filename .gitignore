@@ -28,3 +28,17 @@ TIBCO JasperMobile.xcworkspace
 #Tests Output
 output
 build
+
+#Localizable String (Because we generate localizable strings dynamically)
+JasperMobile/Resources/Localizable/New_Strings/*.*
+#JasperMobile/Resources/Localizable/New_Strings/en.lproj/Localizable.string
+
+JasperMobile/Resources/Localizable/Localizable.strings/*.*
+#JasperMobile/Resources/Localizable/Localizable.strings/en.lproj/Localizable.strings
+#JasperMobile/Resources/Localizable/Localizable.strings/de.lproj/Localizable.strings
+#JasperMoblie/Resources/Localizable/Localizable.strings/es.lproj/Localizable.strings
+#JasperMobile/Resources/Localizable/Localizable.strings/fr.lproj/Localizable.strings
+#JasperMobile/Resources/Localizable/Localizable.strings/it.lproj/Localizable.strings
+#JasperMobile/Resources/Localizable/Localizable.strings/ja.lproj/Localizable.strings
+#JasperMobile/Resources/Localizable/Localizable.strings/pt.lproj/Localizable.strings
+#JasperMobile/Resources/Localizable/Localizable.strings/zh.lproj/Localizable.strings

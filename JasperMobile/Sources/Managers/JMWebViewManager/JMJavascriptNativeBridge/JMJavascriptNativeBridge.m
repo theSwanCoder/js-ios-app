@@ -31,8 +31,6 @@
 NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 @interface JMJavascriptNativeBridge() <WKNavigationDelegate>
-@property (nonatomic, copy) NSString *jsInitCode;
-@property (nonatomic, assign) BOOL isJSInitCodeInjected;
 @property (nonatomic, weak, readwrite) WKWebView *webView;
 @property (nonatomic, strong) NSMutableDictionary <JMJavascriptRequest *, JMJavascriptRequestCompletion>*requestCompletions;
 @property (nonatomic, strong) NSMutableDictionary <JMJavascriptRequest *, JMJavascriptRequestCompletion>*listenerCallbacks ;
@@ -50,7 +48,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         _listenerCallbacks = [NSMutableDictionary dictionary];
         _webView = webView;
         _webView.navigationDelegate = self;
-        _isJSInitCodeInjected = NO;
     }
     return self;
 }
@@ -75,7 +72,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     request.command = @"DOMContentLoaded";
     JMJavascriptRequestCompletion heapBlock = [completion copy];
     JMJavascriptRequestCompletion completionWithCookies = ^(JMJavascriptCallback *callback, NSError *error) {
-//        JMLog(@"Callback: DOMContentLoaded");
+        JMLog(@"Callback: DOMContentLoaded");
         if (heapBlock) {
             heapBlock(callback, error);
         }
@@ -99,26 +96,12 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         self.requestCompletions[request] = [completion copy];
     }
 
-    NSString *command = request.command;
-    NSString *parameters = request.parametersAsString ?: @"";
-    NSString *fullJavascriptString = [NSString stringWithFormat:@"%@(%@);", command, parameters];
-    [self.webView evaluateJavaScript:fullJavascriptString completionHandler:^(id result, NSError *error) {
-        JMLog(@"error: %@", error);
-        JMLog(@"result: %@", request);
-    }];
-}
-
-- (void)injectJSInitCode:(NSString *)jsCode
-{
-    self.isJSInitCodeInjected = NO;
-    self.jsInitCode = jsCode;
-}
-
-- (void)reset
-{
-//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    self.isJSInitCodeInjected = NO;
-    [self removeAllListeners];
+    [self.webView evaluateJavaScript:[request fullJavascriptRequestString]
+                   completionHandler:^(id result, NSError *error) {
+                       JMLog(@"request: %@", request);
+                       JMLog(@"error: %@", error);
+                       JMLog(@"result: %@", result);
+                   }];
 }
 
 - (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nullable)callback
@@ -140,9 +123,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 #pragma mark - WKWebViewDelegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
-//    NSLog(@"request from webView: %@", navigationAction.request);
-//    NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
-
     if ([self isLocalFileRequest:navigationAction.request]) {
         // TODO: request from delegate to allow such requests.
         decisionHandler(WKNavigationActionPolicyAllow);
@@ -183,25 +163,12 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     NSString *requestURLString = navigationAction.request.URL.absoluteString;
 
     if ([requestURLString rangeOfString:kJMJavascriptNativeBridgeCallbackURL].length) {
-        NSString *callback = [NSString stringWithFormat:@"http://%@/", kJMJavascriptNativeBridgeCallbackURL];
-        NSRange callbackRange = [requestURLString rangeOfString:callback];
-        NSRange commandRange = NSMakeRange(callbackRange.length, requestURLString.length - callbackRange.length);
-        NSString *command = [requestURLString substringWithRange:commandRange];
-
-        NSDictionary *parameters = [self parseCommand:command];
-
-//        JMLog(@"parameters: %@", parameters);
-
-        if (parameters) {
-            JMJavascriptCallback *response = [JMJavascriptCallback new];
-            response.type = parameters[@"callback.type"];
-            response.parameters = parameters[@"parameters"];
-            [self didReceiveCallback:response];
-        } else {
-            // TODO: add general errors handling
-        }
+        [self handleCallbackWithRequestURLString:requestURLString];
         decisionHandler(WKNavigationActionPolicyCancel);
     } else {
+        NSLog(@"request from webView: %@", navigationAction.request);
+        NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
+
         decisionHandler(WKNavigationActionPolicyAllow);
     }
 }
@@ -209,13 +176,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
 //    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if (self.jsInitCode && !self.isJSInitCodeInjected) {
-        self.isJSInitCodeInjected = YES;
-        [self.webView evaluateJavaScript:self.jsInitCode completionHandler:^(id result, NSError *error) {
-            JMLog(@"error: %@", error);
-            JMLog(@"result: %@", result);
-        }];
-    }
 
     // add window.onerror listener
     NSString *listenerId = @"JasperMobile.Events.Window.OnError";
@@ -325,27 +285,54 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 }
 
 #pragma mark - Callbacks
+- (void)handleCallbackWithRequestURLString:(NSString *)requestURLString
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSString *callback = [NSString stringWithFormat:@"http://%@/", kJMJavascriptNativeBridgeCallbackURL];
+        NSRange callbackRange = [requestURLString rangeOfString:callback];
+        NSRange commandRange = NSMakeRange(callbackRange.length, requestURLString.length - callbackRange.length);
+        NSString *command = [requestURLString substringWithRange:commandRange];
+
+        NSDictionary *parameters = [self parseCommand:command];
+
+//        JMLog(@"parameters: %@", parameters);
+
+        if (parameters) {
+            JMJavascriptCallback *response = [JMJavascriptCallback new];
+            response.type = parameters[@"callback.type"];
+            response.parameters = parameters[@"parameters"];
+            [self didReceiveCallback:response];
+        } else {
+            // TODO: add general errors handling
+        }
+    });
+}
+
 - (void)didReceiveCallback:(JMJavascriptCallback *)callback
 {
 //    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if([callback.type isEqualToString:@"logging"]) {
         JMLog(@"Bridge Message: %@", callback.parameters[@"message"]);
     } else {
-        JMLog(@"%@", callback);
+//        JMLog(@"%@", callback);
         BOOL isRequestCompletionFound = NO;
         for (JMJavascriptRequest *request in self.requestCompletions) {
 //            JMLog(@"request.command: %@", request.command);
 //            JMLog(@"callback.type: %@", callback.type);
             if ([request.command isEqualToString:callback.type]) {
                 JMJavascriptRequestCompletion completion = self.requestCompletions[request];
+                [self.requestCompletions removeObjectForKey:request];
                 if (callback.parameters[@"error"]) {
                     NSDictionary *errorJSON = callback.parameters[@"error"];
                     NSError *error = [self makeErrorFromWebViewError:errorJSON];
-                    completion(nil, error);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        completion(nil, error);
+                    });
                 } else {
-                    completion(callback, nil);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        completion(callback, nil);
+                    });
                 }
-                [self.requestCompletions removeObjectForKey:request];
                 isRequestCompletionFound = YES;
                 break;
             }
@@ -358,9 +345,13 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                     if (callback.parameters[@"error"]) {
                         NSDictionary *errorJSON = callback.parameters[@"error"];
                         NSError *error = [self makeErrorFromWebViewError:errorJSON];
-                        completion(nil, error);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            completion(nil, error);
+                        });
                     } else {
-                        completion(callback, nil);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            completion(callback, nil);
+                        });
                     }
                     break;
                 }
@@ -372,13 +363,18 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 - (NSError *)makeErrorFromWebViewError:(NSDictionary *)errorJSON
 {
     NSString *visualizeErrorDomain = @"Visualize Error Domain";
-    NSString *errorCodeString = errorJSON[@"code"];
+    id errorCode = errorJSON[@"code"];
     NSInteger code = JMJavascriptNativeBridgeErrorTypeOther;
-    if ([errorCodeString isEqualToString:@"window.onerror"]) {
-        code = JMJavascriptNativeBridgeErrorTypeWindow;
-    } else if ([errorCodeString isEqualToString:@"authentication.error"]) {
-        code = JMJavascriptNativeBridgeErrorAuthError;
+    if ([errorCode isKindOfClass:[NSString class]]) {
+        NSString *errorCodeString = errorCode;
+        if ([errorCodeString isEqualToString:@"window.onerror"]) {
+            code = JMJavascriptNativeBridgeErrorTypeWindow;
+        } else if ([errorCodeString isEqualToString:@"authentication.error"]) {
+            code = JMJavascriptNativeBridgeErrorAuthError;
+        }
     }
+    // TODO: need add handle integer codes?
+
     NSString *errorMessage = errorJSON[@"message"];
     NSError *error = [NSError errorWithDomain:visualizeErrorDomain
                                          code:code

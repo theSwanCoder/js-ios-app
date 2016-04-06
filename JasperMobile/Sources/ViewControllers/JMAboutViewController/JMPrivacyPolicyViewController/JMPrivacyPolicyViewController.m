@@ -36,7 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"about.privacy_policy.title", nil);
+    self.title = JMCustomLocalizedString(@"about_privacy_policy_title", nil);
     
     self.webView.scrollView.bounces = NO;
     
@@ -66,8 +66,8 @@
     
     NSString *cachePath = [[RNCachingURLProtocol new] cachePathForRequest:ppRequest];
     if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath] && [[Reachability reachabilityWithHostName:[ppURL host]] currentReachabilityStatus] == NotReachable) {
-        NSString *errorMessage = JMCustomLocalizedString(@"error.noconnection.dialog.msg", nil);
-        NSError *error = [NSError errorWithDomain:@"error.noconnection.dialog.title" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        NSString *errorMessage = JMCustomLocalizedString(@"error_noconnection_dialog_msg", nil);
+        NSError *error = [NSError errorWithDomain:@"error_noconnection_dialog_title" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         __weak typeof(self) weakSelf = self;
         [JMUtils presentAlertControllerWithError:error completion:^{
             __strong typeof(self) strongSelf = weakSelf;
@@ -84,16 +84,16 @@
 {
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
-                                                                                              message:@"resource.viewer.open.link"
-                                                                                    cancelButtonTitle:@"dialog.button.cancel"
+            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_attention"
+                                                                                              message:@"resource_viewer_open_link"
+                                                                                    cancelButtonTitle:@"dialog_button_cancel"
                                                                               cancelCompletionHandler:nil];
-            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+            [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                 [[UIApplication sharedApplication] openURL:request.URL];
             }];
             [self presentViewController:alertController animated:YES completion:nil];
         } else {
-            [ALToastView toastInView:webView withText:JMCustomLocalizedString(@"resource.viewer.can't.open.link", nil)];
+            [ALToastView toastInView:webView withText:JMCustomLocalizedString(@"resource_viewer_can_not_open_link", nil)];
         }
         return NO;
     }

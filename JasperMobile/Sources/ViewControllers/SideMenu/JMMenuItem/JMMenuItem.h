@@ -41,7 +41,6 @@ typedef NS_ENUM(NSInteger, JMSectionType){
     JMSectionTypeAbout,
     JMSectionTypeFeedback,
     JMSectionTypeLogout,
-
     JMSectionTypeNone
 };
 

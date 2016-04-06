@@ -93,19 +93,19 @@
         [self runReport];
     }else if (action == JMMenuActionsViewAction_Rename) {
         __weak typeof(self) weakSelf = self;
-        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"savedreport.viewer.modify.title"
+        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"savedreport_viewer_modify_title"
                                                                                                       message:nil
                                                                                 textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
                                                                                     __strong typeof (self) strongSelf = weakSelf;
-                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
-                                                                                    textField.text = [strongSelf.resource.resourceLookup.label copy];
+                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport_viewer_modify_reportname", nil);
+                                                                                    textField.text = [strongSelf.resourceLookup.label copy];
                                                                                 } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                     NSString *errorMessage = nil;
                                                                                     __strong typeof (self) strongSelf = weakSelf;
                                                                                     if (strongSelf) {
                                                                                         [JMUtils validateReportName:text errorMessage:&errorMessage];
                                                                                         if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
-                                                                                            errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
+                                                                                            errorMessage = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_notunique", nil);
                                                                                         }
                                                                                     }
                                                                                     return errorMessage;
@@ -117,13 +117,13 @@
                                                                                 }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if(action == JMMenuActionsViewAction_Delete) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
-                                                                                          message:@"savedreport.viewer.delete.confirmation.message"
-                                                                                cancelButtonTitle:@"dialog.button.cancel"
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
+                                                                                          message:@"savedreport_viewer_delete_confirmation_message"
+                                                                                cancelButtonTitle:@"dialog_button_cancel"
                                                                           cancelCompletionHandler:nil];
         
         __weak typeof(self) weakSelf = self;
-        [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
             __strong typeof(self) strongSelf = weakSelf;
             [strongSelf.savedReports removeReport];
             [strongSelf.navigationController popViewControllerAnimated:YES];

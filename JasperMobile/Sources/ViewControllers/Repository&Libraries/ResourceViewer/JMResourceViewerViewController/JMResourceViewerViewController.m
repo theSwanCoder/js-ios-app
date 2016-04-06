@@ -29,6 +29,8 @@
 #import "UIView+Additions.h"
 #import "JMShareActivityItemProvider.h"
 #import "JMResource.h"
+#import "JMShareViewController.h"
+#import "JMAnalyticsManager.h"
 
 NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewerWebEnvironmentIdentifier";
 
@@ -164,17 +166,17 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 - (void)printResource
 {
     // Analytics
-    NSString *label = kJMAnalyticsResourceEventLabelSavedResource;
-    if (self.resource.type == JMResourceTypeReport) {
-        label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
-    } else if (self.resource.type == JMResourceTypeDashboard) {
-        label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+    NSString *label = kJMAnalyticsResourceLabelSavedResource;
+    if ([self.resourceLookup isReport]) {
+        label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceLabelReportVisualize : kJMAnalyticsResourceLabelReportREST;
+    } else if ([self.resourceLookup isDashboard]) {
+        label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceLabelDashboardVisualize : kJMAnalyticsResourceLabelDashboardFlow;
     }
-    [JMUtils logEventWithInfo:@{
-                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
-                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionPrintTitle,
-                        kJMAnalyticsLabelKey         : label
-                }];
+    [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+            kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
+            kJMAnalyticsActionKey   : kJMAnalyticsEventActionPrint,
+            kJMAnalyticsLabelKey    : label
+    }];
 }
 
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion
@@ -218,26 +220,9 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 
 - (void)shareResource
 {
-    JMShareActivityItemProvider * textProvider = [[JMShareActivityItemProvider alloc] initWithPlaceholderItem:kSkypeActivityType];
-    UIImage *imageForSharing = [self.resourceView renderedImage];
-    
-    NSArray *objectsToShare = @[textProvider, imageForSharing];
-  
-    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
-    
-    NSMutableArray *excludeActivities = [@[UIActivityTypePrint,
-                                           UIActivityTypeCopyToPasteboard,
-                                           UIActivityTypeAssignToContact,
-                                           UIActivityTypeAddToReadingList,
-                                           UIActivityTypeAirDrop] mutableCopy];
-    if ([JMUtils isSystemVersion9]) {
-        [excludeActivities addObject:UIActivityTypeOpenInIBooks];
-    }
-    
-    activityVC.excludedActivityTypes = excludeActivities;
-    activityVC.popoverPresentationController.barButtonItem = [self.navigationItem.rightBarButtonItems firstObject];
-    
-    [self presentViewController:activityVC animated:YES completion:nil];
+    JMShareViewController *shareViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMShareViewController"];
+    shareViewController.imageForSharing = [self.resourceView renderedImage];
+    [self.navigationController pushViewController:shareViewController animated:YES];
 }
 
 #pragma mark - UIPrintInteractionControllerDelegate
@@ -270,17 +255,17 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 
     if (!isParentHost && isLinkClicked) {
         if ([[UIApplication sharedApplication] canOpenURL:navigationAction.request.URL]) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
-                                                                                              message:@"resource.viewer.open.link"
-                                                                                    cancelButtonTitle:@"dialog.button.cancel"
+            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_attention"
+                                                                                              message:@"resource_viewer_open_link"
+                                                                                    cancelButtonTitle:@"dialog_button_cancel"
                                                                               cancelCompletionHandler:nil];
-            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+            [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                 [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
             }];
             [self presentViewController:alertController animated:YES completion:nil];
         } else {
             [ALToastView toastInView:webView
-                            withText:JMCustomLocalizedString(@"resource.viewer.can't.open.link", nil)];
+                            withText:JMCustomLocalizedString(@"resource_viewer_can_not_open_link", nil)];
         }
         decisionHandler(WKNavigationActionPolicyCancel);
     }
@@ -309,8 +294,8 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self resetSubViews];
 
-    NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
-    NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    NSString *errorMessage = JMCustomLocalizedString(@"resource_viewer_memory_warning", nil);
+    NSError *error = [NSError errorWithDomain:@"dialod_title_attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
     __weak typeof(self) weakSelf = self;
     [JMUtils presentAlertControllerWithError:error completion:^{
         __strong typeof(self) strongSelf = weakSelf;

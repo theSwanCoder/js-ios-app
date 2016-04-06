@@ -39,7 +39,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"menuitem.library.label", nil);
+    self.title = JMCustomLocalizedString(@"menuitem_library_label", nil);
 }
 
 #pragma mark - Overloaded methods

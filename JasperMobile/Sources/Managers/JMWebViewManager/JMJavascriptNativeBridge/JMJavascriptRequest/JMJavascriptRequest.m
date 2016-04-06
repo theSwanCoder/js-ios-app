@@ -28,7 +28,28 @@
 
 #import "JMJavascriptRequest.h"
 
+@interface JMJavascriptRequest()
+@property (nonatomic, strong) NSDictionary *parameters;
+@property (nonatomic, strong) NSString *parametersAsString;
+@end
+
 @implementation JMJavascriptRequest
+
+#pragma mark - Init
+- (instancetype __nullable)initWithCommand:(NSString * __nonnull)command parameters:(NSDictionary * __nullable)parameters
+{
+    self = [super init];
+    if (self) {
+        _command = command;
+        _parameters = parameters;
+    }
+    return self;
+}
+
++ (instancetype __nullable)requestWithCommand:(NSString * __nonnull)command parameters:(NSDictionary * __nullable)parameters
+{
+    return [[self alloc] initWithCommand:command parameters:parameters];
+}
 
 #pragma mark - NSCopying + NSObject Protocol
 - (NSUInteger)hash
@@ -58,6 +79,35 @@
 {
     NSString *description = [NSString stringWithFormat:@"\nJMJavascriptRequest: %@\ncommand:%@\nparametersAsString:%@", [super description], self.command, self.parametersAsString];
     return description;
+}
+
+
+#pragma mark - Public API
+- (NSString *)fullJavascriptRequestString
+{
+    NSString *command = self.command;
+    self.parametersAsString = [self prepareParamsAsStringFromParameters:self.parameters];
+    NSString *fullJavascriptString;
+    fullJavascriptString = [NSString stringWithFormat:@"%@(%@);", command, self.parametersAsString];
+//    JMLog(@"fullJavascriptString: %@", fullJavascriptString);
+    return fullJavascriptString;
+}
+
+#pragma mark - Helpers
+- (NSString *)prepareParamsAsStringFromParameters:(NSDictionary *)parameters
+{
+    if (!parameters) {
+        return @"";
+    }
+
+    NSError *serializeError;
+    NSData *paramsData = [NSJSONSerialization dataWithJSONObject:parameters
+                                                         options:NSJSONWritingPrettyPrinted
+                                                           error:&serializeError];
+
+    NSString *paramsDataAsString = [[NSString alloc] initWithData:paramsData
+                                               encoding:NSUTF8StringEncoding];
+    return paramsDataAsString;
 }
 
 @end

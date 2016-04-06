@@ -37,17 +37,9 @@
 - (void)dealloc
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self discardScreenConnectionNotifications];
 }
 
 #pragma mark - UIViewController LifeCycle
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    [self setupScreenConnectionNotifications];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -61,6 +53,20 @@
            value:self.restClient.serverInfo.edition];
     self.screenName = NSStringFromClass(self.class);
 #endif
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    [self setupScreenConnectionNotifications];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+
+    [self discardScreenConnectionNotifications];
 }
 
 #pragma mark - Work with external screens
@@ -156,7 +162,10 @@
 
     self.externalWindow.hidden = YES;
 }
-
+- (void)switchFromTV
+{
+    // override in childs
+}
 
 #pragma mark - Notifications
 - (void)setupScreenConnectionNotifications
@@ -187,6 +196,7 @@
 - (void)handleScreenDidConnectNotification:(NSNotification *)notification
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"notification: %@", notification);
     // TODO: update working with TV with this
 }
 
@@ -194,6 +204,8 @@
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     // TODO: update working with TV with this
+    JMLog(@"notification: %@", notification);
+    [self switchFromTV];
 }
 
 #pragma mark - Work with navigation items
@@ -209,7 +221,7 @@
             UIViewController *previousViewController = viewControllers[index - 1];
             backItemTitle = previousViewController.title;
         } else {
-            backItemTitle = JMCustomLocalizedString(@"back.button.title", nil);
+            backItemTitle = JMCustomLocalizedString(@"back_button_title", nil);
         }
     }
 
@@ -235,8 +247,8 @@
 
     CGFloat viewWidth = CGRectGetWidth(self.navigationController.navigationBar.frame);
 
-    if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back.button.title", nil)]) {
-        return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back.button.title", nil)];
+    if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back_button_title", nil)]) {
+        return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back_button_title", nil)];
     }
     return backButtonTitle;
 }

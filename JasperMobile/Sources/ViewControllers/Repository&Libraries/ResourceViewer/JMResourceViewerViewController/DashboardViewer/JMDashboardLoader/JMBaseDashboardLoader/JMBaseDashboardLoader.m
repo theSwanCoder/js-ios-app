@@ -64,7 +64,7 @@
     // TODO: reimplement without request
     [self.webEnvironment loadRequest:self.dashboard.resourceRequest];
 
-    [self injectJSCodeOldDashboard];
+//    [self injectJSCodeOldDashboard];
     if (completion) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             completion(YES, nil);
@@ -83,9 +83,8 @@
 }
 
 - (void)minimizeDashlet {
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileDashboard.minimizeDashlet();";
-    request.parametersAsString = @"";
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"MobileDashboard.minimizeDashlet"
+                                                                parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             JMLog(@"error: %@", error);
@@ -132,9 +131,10 @@
         initialScale = 0.25;
     }
 
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Helper.updateViewPortInitialScale";
-    request.parametersAsString = [NSString stringWithFormat:@"%@", @(initialScale)];
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortInitialScale"
+                                                                parameters:@{
+                                                                        @"scale" : @(initialScale)
+                                                                }];
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:nil];
 

@@ -283,7 +283,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     }
         
     NSDictionary *item = self.resourceProperties[indexPath.row];
-    cell.textLabel.text = JMCustomLocalizedString([NSString stringWithFormat:@"resource.%@.title", item[kJMTitleKey]], nil);
+    cell.textLabel.text = JMCustomLocalizedString([NSString stringWithFormat:@"resource_%@_title", item[kJMTitleKey]], nil);
     cell.detailTextLabel.text = item[kJMValueKey];
     return cell;
 }
@@ -307,8 +307,8 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
             BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
             if (!canOpen) {
-                NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
-                NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                NSString *errorMessage = JMCustomLocalizedString(@"error_openIn_message", nil);
+                NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
                 [JMUtils presentAlertControllerWithError:error completion:nil];
             }
             break;

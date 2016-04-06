@@ -114,18 +114,6 @@
         case JMResourcesListLoaderOptionType_Sort:
             return [super listOptionsWithOptionType:optionType];
         case JMResourcesListLoaderOptionType_Filter:
-//            return @[
-//                     @{
-//                             kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-//                             kJMResourceListLoaderOptionItemValueKey: @[
-//                                                                        kJS_WS_TYPE_REPORT_UNIT,
-//                                                                        kJS_WS_TYPE_DASHBOARD,
-//                                                                        kJS_WS_TYPE_DASHBOARD_LEGACY,
-//                                                                        kJS_WS_TYPE_FOLDER,
-//                                                                        kJS_WS_TYPE_FILE
-//                                                                        ]
-//                     }
-//            ];
             return @[
                     [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.all", nil)
                                                       value:@[

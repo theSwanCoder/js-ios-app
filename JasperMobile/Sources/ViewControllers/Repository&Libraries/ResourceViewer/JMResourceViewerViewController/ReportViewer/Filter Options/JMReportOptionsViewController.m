@@ -47,7 +47,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"report.viewer.options.title", nil);    
+    self.title = JMCustomLocalizedString(@"report_viewer_options_title", nil);
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     
     // Remove extra separators
@@ -55,7 +55,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
     
     // setup "Run Report" button
     self.runReportButton.backgroundColor = kJMResourcePreviewBackgroundColor;
-    [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog.button.run.report", nil)
+    [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog_button_run_report", nil)
                           forState:UIControlStateNormal];
 }
 
@@ -194,7 +194,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 - (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
 {
     if (descriptor.slaveDependencies.count) {
-        [JMCancelRequestPopup presentWithMessage:@"status.loading"
+        [JMCancelRequestPopup presentWithMessage:@"status_loading"
                                      cancelBlock:@weakself(^(void)) {
                                          [self.restClient cancelAllRequests];
                                          [self.navigationController popViewControllerAnimated:YES];
@@ -244,7 +244,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
         [allInputControls addObject:descriptor.uuid];
     }
     
-    [JMCancelRequestPopup presentWithMessage:@"status.loading"
+    [JMCancelRequestPopup presentWithMessage:@"status_loading"
                                  cancelBlock:@weakself(^(void)) {
                                      [self.restClient cancelAllRequests];
                                      [self.navigationController popViewControllerAnimated:YES];

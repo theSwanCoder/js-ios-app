@@ -51,11 +51,11 @@
     [super setInputControlDescriptor:inputControlDescriptor];
     self.dateFormatter.dateFormat = inputControlDescriptor.dateTimeFormatValidationRule.format;
 
-    if ([inputControlDescriptor.type isEqualToString:@"singleValueDate"]) {
+    if (inputControlDescriptor.type == kJS_ICD_TYPE_SINGLE_VALUE_DATE) {
         self.fieldDateFormatter = [JMUtils formatterForSimpleDate];
-    } else if([inputControlDescriptor.type isEqualToString:@"singleValueTime"]) {
+    } else if(inputControlDescriptor.type == kJS_ICD_TYPE_SINGLE_VALUE_TIME) {
         self.fieldDateFormatter = [JMUtils formatterForSimpleTime];
-    } else if ([inputControlDescriptor.type isEqualToString:@"singleValueDatetime"]) {
+    } else if (inputControlDescriptor.type == kJS_ICD_TYPE_SINGLE_VALUE_DATETIME) {
         self.fieldDateFormatter = [JMUtils formatterForSimpleDateTime];
     }
 
@@ -83,7 +83,7 @@
 - (NSArray *)leftInputAccessoryViewToolbarItems
 {
     NSMutableArray *items = [NSMutableArray arrayWithArray:[super leftInputAccessoryViewToolbarItems]];
-    UIBarButtonItem *unset = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"report.viewer.options.ic.title.unset", nil) style:UIBarButtonItemStylePlain target:self action:@selector(unset:)];
+    UIBarButtonItem *unset = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"report_viewer_options_ic_title_unset", nil) style:UIBarButtonItemStylePlain target:self action:@selector(unset:)];
     [items addObject:unset];
     return items;
 }

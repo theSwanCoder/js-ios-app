@@ -38,6 +38,8 @@
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
+#import "JMServerOptionsViewController.h"
+#import "JMAnalyticsManager.h"
 
 typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonStateNormal,
@@ -177,7 +179,28 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         [[JMSessionManager sharedManager] logout];
         [JMUtils showLoginViewAnimated:YES completion:nil];
         self.menuItems = nil;
-    } else if (item.sectionType == JMSectionTypeAbout) {
+    } else if (item.resourceType == JMSectionTypeSettings) {
+        [self closeMenu];
+
+        JMServerOptionsViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+        settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
+                                                                                        style:UIBarButtonItemStyleDone
+                                                                                       target:settingsVC
+                                                                                       action:@selector(cancel)];
+        settingsVC.serverProfile = [JMUtils activeServerProfile];
+        __weak __typeof(settingsVC) weakSettingVC = settingsVC;
+        settingsVC.exitBlock = ^{
+            __typeof(settingsVC) strongSettingVC = weakSettingVC;
+            [strongSettingVC dismissViewControllerAnimated:YES completion:nil];
+        };
+        JMMainNavigationController *navController = [[JMMainNavigationController alloc] initWithRootViewController:settingsVC];
+        navController.modalPresentationStyle = UIModalPresentationFormSheet;
+
+        [self.revealViewController.frontViewController presentViewController:navController
+                                                                    animated:YES
+                                                                  completion:nil];
+
+    } else if (item.resourceType == JMSectionTypeAbout) {
         [self closeMenu];
 
         JMMainNavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
@@ -198,10 +221,10 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             id nextVC;
             if([item vcIdentifierForSelectedItem]) {
                 // Analytics
-                [JMUtils logEventWithInfo:@{
-                        kJMAnalyticsCategoryKey      : kJMAnalyticsRepositoryEventCategoryTitle,
-                        kJMAnalyticsActionKey        : kJMAnalyticsRepositoryEventActionOpen,
-                        kJMAnalyticsLabelKey         : [item nameForAnalytics]
+                [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                        kJMAnalyticsCategoryKey : kJMAnalyticsRepositoryEventCategoryTitle,
+                        kJMAnalyticsActionKey : kJMAnalyticsRepositoryEventActionOpen,
+                        kJMAnalyticsLabelKey : [item nameForAnalytics]
                 }];
 
                 nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
@@ -266,6 +289,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             [JMMenuItem menuItemWithSectionType:JMSectionTypeFavorites],
             [JMMenuItem menuItemWithSectionType:JMSectionTypeScheduling],
             [JMMenuItem menuItemWithSectionType:JMSectionTypeAbout],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeSettings],
             [JMMenuItem menuItemWithSectionType:JMSectionTypeFeedback],
             [JMMenuItem menuItemWithSectionType:JMSectionTypeLogout]
     ] mutableCopy];
@@ -356,8 +380,8 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
         [self presentViewController:mc animated:YES completion:NULL];
     } else {
-        NSString *errorMessage = JMCustomLocalizedString(@"settings.feedback.errorShowClient", nil);
-        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        NSString *errorMessage = JMCustomLocalizedString(@"settings_feedback_errorShowClient", nil);
+        NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         [JMUtils presentAlertControllerWithError:error completion:nil];
     }
 #endif

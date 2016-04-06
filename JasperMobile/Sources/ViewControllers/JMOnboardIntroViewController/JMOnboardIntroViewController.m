@@ -96,8 +96,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     [self addGestureRecognizer];
     
     [self setButtonTitleForPage:self.introPage];
-    self.titleLabel.text = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.title", nil), kJMAppName];
-    self.descriptionLabel.text = JMCustomLocalizedString(@"intro.description", nil);
+    self.titleLabel.text = [NSString stringWithFormat:JMCustomLocalizedString(@"intro_title", nil), kJMAppName];
+    self.descriptionLabel.text = JMCustomLocalizedString(@"intro_description", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -432,13 +432,13 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 
 - (void)setButtonTitleForPage:(JMOnboardIntroPage)introPage
 {
-    NSString *buttonTitle = JMCustomLocalizedString(@"intro.button.skip.skip", nil);
+    NSString *buttonTitle = JMCustomLocalizedString(@"intro_button_skip_skip", nil);
     switch (introPage) {
         case JMOnboardIntroPageWelcome:
         case JMOnboardIntroPageStayConnected:
         case JMOnboardIntroPageInstanceAccess: break;
         case JMOnboardIntroPageSeemlessIntegration: {
-            buttonTitle = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.button.skip.startUsing", nil), kJMAppName];
+            buttonTitle = [NSString stringWithFormat:JMCustomLocalizedString(@"intro_button_skip_startUsing", nil), kJMAppName];
             break;
         }
     };

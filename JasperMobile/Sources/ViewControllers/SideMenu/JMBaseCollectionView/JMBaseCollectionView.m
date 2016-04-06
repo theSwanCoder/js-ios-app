@@ -39,14 +39,14 @@
     [self addSubview: self.contentView];
 
     self.searchBar.tintColor = [[JMThemesManager sharedManager] barItemsColor];
-    self.searchBar.placeholder = JMCustomLocalizedString(@"resources.search.placeholder", nil);
+    self.searchBar.placeholder = JMCustomLocalizedString(@"resources_search_placeholder", nil);
 }
 
 - (void)setupWithNoResultText:(NSString *)noResult
 {
     self.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
     
-    self.activityViewTitleLabel.text = JMCustomLocalizedString(@"resources.loading.msg", nil);
+    self.activityViewTitleLabel.text = JMCustomLocalizedString(@"resources_loading_msg", nil);
     self.noResultsViewTitleLabel.text = noResult;
     
     self.activityViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
