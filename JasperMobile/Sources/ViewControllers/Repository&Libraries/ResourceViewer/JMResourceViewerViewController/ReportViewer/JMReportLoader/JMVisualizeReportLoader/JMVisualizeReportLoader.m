@@ -261,6 +261,7 @@
 {
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.destroyReport"
                                                                 parameters:nil];
+    __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
         strongSelf.report.isReportAlreadyLoaded = NO;
@@ -281,9 +282,10 @@
     if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
         self.visualizeManager.viewportScaleFactor = scaleFactor;
 
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"JasperMobile.Helper.updateViewPortInitialScale";
-        request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
+        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortInitialScale"
+                                                                    parameters:@{
+                                                                            @"scale" : @(scaleFactor)
+                                                                    }];
         [self.webEnvironment sendJavascriptRequest:request
                                         completion:nil];
     }

@@ -63,7 +63,8 @@ var JasperMobile = {
             }
             return params;
         },
-        updateViewPortScale: function (scale) {
+        updateViewPortScale: function (params) {
+            var scale = params["scale"];
             var viewPortContent = 'initial-scale='+ scale + ', width=device-width, maximum-scale=2.0, user-scalable=yes';
             var viewport = document.querySelector("meta[name=viewport]");
             if (!viewport) {
@@ -729,7 +730,7 @@ JasperMobile.Dashboard.API = {
     },
     minimizeDashlet: function(parameters) {
         var dashletId = parameters["identifier"];
-        if (dashletId) {
+        if (dashletId != "null") {
             if (JasperMobile.Dashboard.API.isAmber) {
                 JasperMobile.Dashboard.API.minimizeDashletForAmber();
             } else {

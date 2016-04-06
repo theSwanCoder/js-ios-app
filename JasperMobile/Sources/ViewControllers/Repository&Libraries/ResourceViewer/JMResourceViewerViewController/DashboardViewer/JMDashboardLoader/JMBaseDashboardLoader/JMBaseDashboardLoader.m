@@ -131,9 +131,10 @@
         initialScale = 0.25;
     }
 
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Helper.updateViewPortInitialScale";
-    request.parametersAsString = [NSString stringWithFormat:@"%@", @(initialScale)];
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortInitialScale"
+                                                                parameters:@{
+                                                                        @"scale" : @(initialScale)
+                                                                }];
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:nil];
 

@@ -76,13 +76,29 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     [self addListenersForVisualizeEvents];
 
     JMDashboardLoaderCompletion heapBlock = [completion copy];
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment verifyEnvironmentReadyWithCompletion:^(BOOL isWebViewLoaded) {
+        __typeof(self) strongSelf = weakSelf;
         if (isWebViewLoaded) {
-            [self handleDOMContentLoadedWithCompletion:heapBlock];
+            [strongSelf handleDOMContentLoadedWithCompletion:heapBlock];
         } else {
-            [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
+            __weak __typeof(self) weakSelf = strongSelf;
+            [strongSelf startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
+                __typeof(self) strongSelf = weakSelf;
                 if (success) {
-                    [self handleDOMContentLoadedWithCompletion:heapBlock];
+                    // load vis into web environment
+                    JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+                                                                                             parameters:@{
+                                                                                                     @"scriptURL" : strongSelf.visualizeManager.visualizePath,
+                                                                                             }];
+                    [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
+                                                          completion:^(NSDictionary *params, NSError *error) {
+                                                              if (error) {
+                                                                  JMLog(@"error: %@", error);
+                                                              } else {
+                                                                  [strongSelf handleDOMContentLoadedWithCompletion:heapBlock];
+                                                              }
+                                                          }];
                 } else {
                     NSLog(@"Error loading HTML%@", error.localizedDescription);
                 }
@@ -185,6 +201,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                                                 parameters:@{
                                                                         @"identifier" : component != nil ? component.identifier : @"null"
                                                                 }];
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
         if (error) {
@@ -198,7 +215,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)minimizeDashlet
 {
-    [self minimizeDashlet:nil];
+    [self minimizeDashletForComponent:nil];
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
@@ -207,10 +224,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     BOOL isInitialScaleFactorTheSame = fabs(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49;
     if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
         self.visualizeManager.viewportScaleFactor = scaleFactor;
-
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"JasperMobile.Helper.updateViewPortInitialScale";
-        request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
+        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortInitialScale"
+                                                                    parameters:@{
+                                                                            @"scale" : @(scaleFactor)
+                                                                    }];
         [self.webEnvironment sendJavascriptRequest:request completion:nil];
     }
 }
@@ -257,7 +274,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         if (success) {
             JMLog(@"visuzalise.js did end load");
             NSString *baseURLString = strongSelf.restClient.serverProfile.serverUrl;
-            NSString *htmlString = [strongSelf.visualizeManager htmlStringForDashboard];
+            NSString *htmlString = [strongSelf.visualizeManager htmlString];
             [strongSelf.webEnvironment loadHTML:htmlString
                                         baseURL:[NSURL URLWithString:baseURLString]
                                      completion:heapBlock];
@@ -359,21 +376,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                                                            @"is_for_6_0" : @([JMUtils isServerAmber]),
                                                                    }];
     runRequest.command = @"JasperMobile.Dashboard.API.runDashboard";
-    __weak typeof(self)weakSelf = self;
-
-//    NSString *uriParam = [NSString stringWithFormat:@"'uri' : '%@'", self.dashboard.resourceURI];
-//    NSString *requestParameters;
-//    BOOL isServerAmber = [JMUtils isServerAmber];
-//    NSString *isServerAmberParam;
-//    if (isServerAmber) {
-//        isServerAmberParam = @"'is_for_6_0' : true";
-//    } else {
-//        isServerAmberParam = @"'is_for_6_0' : false";
-//    }
-//    requestParameters = [NSString stringWithFormat:@"{%@, %@}",
-//                                                   isServerAmberParam,
-//                                                   uriParam];
-//    runRequest.parametersAsString = requestParameters;
     [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             heapBlock(NO, error);

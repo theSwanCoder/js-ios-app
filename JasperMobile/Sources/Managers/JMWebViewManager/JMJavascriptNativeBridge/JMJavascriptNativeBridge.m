@@ -176,16 +176,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
 //    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-<<<<<<< HEAD
-=======
-    if (self.jsInitCode && !self.isJSInitCodeInjected) {
-        self.isJSInitCodeInjected = YES;
-        [self.webView evaluateJavaScript:self.jsInitCode completionHandler:^(id result, NSError *error) {
-//            JMLog(@"error: %@", error);
-//            JMLog(@"result: %@", result);
-        }];
-    }
->>>>>>> develop
 
     // add window.onerror listener
     NSString *listenerId = @"JasperMobile.Events.Window.OnError";

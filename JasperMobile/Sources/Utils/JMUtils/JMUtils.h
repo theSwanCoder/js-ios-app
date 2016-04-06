@@ -164,6 +164,8 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (BOOL)isDemoAccount;
 
++ (JMServerProfile *__nullable)activeServerProfile;
+
 + (BOOL)isCompactWidth;
 
 + (BOOL)isCompactHeight;

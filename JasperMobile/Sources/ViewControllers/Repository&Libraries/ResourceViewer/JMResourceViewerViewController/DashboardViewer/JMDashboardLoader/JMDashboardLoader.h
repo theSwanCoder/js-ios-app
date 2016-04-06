@@ -71,6 +71,7 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 - (void)cancel;
 - (void)destroy;
 - (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end
 
 

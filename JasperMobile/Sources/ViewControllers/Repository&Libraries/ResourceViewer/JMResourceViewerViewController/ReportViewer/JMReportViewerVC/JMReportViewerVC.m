@@ -402,13 +402,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 {
     NSString *webEnvironmentIdentifier;
     if (self.isChildReport) {
-        if ([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize.boolValue) {
+        if ([JMUtils isSupportVisualize]) {
             webEnvironmentIdentifier = kJMReportViewerSecondaryWebEnvironmentIdentifierViz;
         } else {
             webEnvironmentIdentifier = kJMReportViewerSecondaryWebEnvironmentIdentifierREST;
         }
     } else {
-        if ([JMUtils isSupportVisualize] && [JMUtils activeServerProfile].useVisualize.boolValue) {
+        if ([JMUtils isSupportVisualize]) {
             webEnvironmentIdentifier = kJMReportViewerPrimaryWebEnvironmentIdentifierViz;
         } else {
             webEnvironmentIdentifier = kJMReportViewerPrimaryWebEnvironmentIdentifierREST;

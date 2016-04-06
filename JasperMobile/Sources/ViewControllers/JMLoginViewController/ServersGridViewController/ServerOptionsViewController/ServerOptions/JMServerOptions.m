@@ -84,7 +84,6 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
     self.serverProfile.organization = [self.optionsArray[2] optionValue];
     self.serverProfile.askPassword  = [self.optionsArray[3] optionValue];
     self.serverProfile.keepSession  = [self.optionsArray[4] optionValue];
-//    self.serverProfile.useVisualize  = [self.optionsArray[5] optionValue];
     for (JMServerOption *option in self.optionsArray) {
         if (option.errorString) {
             return NO;
