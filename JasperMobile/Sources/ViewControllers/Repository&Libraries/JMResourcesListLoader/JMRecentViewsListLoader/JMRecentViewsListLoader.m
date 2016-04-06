@@ -39,7 +39,7 @@
     return self;
 }
 
-- (NSArray <JMResourceLoaderOption *>*)listOptionsWithOptionType:(JMResourcesListLoaderOptionType)optionType
+- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
 {
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Sort: {
@@ -54,7 +54,7 @@
             ];
         }
         case JMResourcesListLoaderOptionType_Filter:
-            return [super listOptionsWithOptionType:optionType];
+            return [super listItemsWithOption:optionType];
     }
 }
 

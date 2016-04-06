@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, JMSectionType){
     JMSectionTypeScheduling,
     JMSectionTypeAbout,
     JMSectionTypeFeedback,
+    JMSectionTypeSettings,
     JMSectionTypeLogout,
     JMSectionTypeNone
 };

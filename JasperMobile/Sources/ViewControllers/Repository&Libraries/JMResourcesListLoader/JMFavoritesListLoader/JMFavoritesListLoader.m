@@ -63,11 +63,11 @@
     }
 }
 
-- (NSArray <JMResourceLoaderOption *>*)listOptionsWithOptionType:(JMResourcesListLoaderOptionType)optionType
+- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
 {
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Sort: {
-            return [super listOptionsWithOptionType:optionType];
+            return [super listItemsWithOption:optionType];
         }
         case JMResourcesListLoaderOptionType_Filter: {
             NSMutableArray *allFilterOptions = [@[

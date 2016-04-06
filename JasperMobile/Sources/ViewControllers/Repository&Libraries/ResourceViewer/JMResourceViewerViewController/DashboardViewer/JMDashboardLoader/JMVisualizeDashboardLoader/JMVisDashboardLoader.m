@@ -406,12 +406,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleOnReportExecution:(NSDictionary *)parameters
 {
-    NSString *resource = parameters[@"data"][@"resource"];
+    NSString *resourceURI = parameters[@"data"][@"resource"];
     NSDictionary *params = parameters[@"data"][@"params"];
 
-    if (resource) {
+    if (resourceURI) {
         __weak typeof(self)weakSelf = self;
-        [self.restClient resourceLookupForURI:resource
+        [self.restClient resourceLookupForURI:resourceURI
                                  resourceType:kJS_WS_TYPE_REPORT_UNIT
                                    modelClass:[JSResourceLookup class]
                               completionBlock:^(JSOperationResult *result) {
@@ -429,11 +429,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                       JSResourceLookup *resourceLookup = [result.objects firstObject];
                                       if (resourceLookup) {
                                           resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
+                                          JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
 
                                           NSArray *reportParameters = [strongSelf createReportParametersFromParameters:params];
                                           [strongSelf.delegate dashboardLoader:strongSelf
                                                    didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
-                                                                resourceLookup:resourceLookup
+                                                                      resource:resource
                                                                     parameters:reportParameters];
                                       }
                                   }
@@ -459,7 +460,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         if (urlString) {
             [self.delegate dashboardLoader:self
                didReceiveHyperlinkWithType:JMHyperlinkTypeReference
-                            resourceLookup:nil
+                                  resource:nil
                                 parameters:@[[NSURL URLWithString:urlString]]];
         }
     }

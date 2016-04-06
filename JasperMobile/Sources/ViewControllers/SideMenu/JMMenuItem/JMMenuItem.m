@@ -91,25 +91,25 @@
 {
     switch (self.sectionType) {
         case JMSectionTypeLibrary:
-            return JMCustomLocalizedString(@"menuitem.library.label", nil);
+            return JMCustomLocalizedString(@"menuitem_library_label", nil);
         case JMSectionTypeRecentViews:
-            return JMCustomLocalizedString(@"menuitem.recentviews.label", nil);
+            return JMCustomLocalizedString(@"menuitem_recentviews_label", nil);
         case JMSectionTypeSavedItems:
-            return JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
+            return JMCustomLocalizedString(@"menuitem_saveditems_label", nil);
         case JMSectionTypeFavorites:
-            return JMCustomLocalizedString(@"menuitem.favorites.label", nil);
+            return JMCustomLocalizedString(@"menuitem_favorites_label", nil);
         case JMSectionTypeScheduling:
-            return JMCustomLocalizedString(@"menuitem.schedules.label", nil);
+            return JMCustomLocalizedString(@"menuitem_schedules_label", nil);
         case JMSectionTypeRepository:
-            return JMCustomLocalizedString(@"menuitem.repository.label", nil);
+            return JMCustomLocalizedString(@"menuitem_repository_label", nil);
         case JMSectionTypeAbout:
-            return JMCustomLocalizedString(@"menuitem.about.label", nil);
+            return JMCustomLocalizedString(@"menuitem_about_label", nil);
         case JMSectionTypeFeedback:
-            return JMCustomLocalizedString(@"menuitem.feedback.label", nil);
+            return JMCustomLocalizedString(@"menuitem_feedback_label", nil);
         case JMSectionTypeSettings:
-            return JMCustomLocalizedString(@"menuitem.settings.label", nil);
+            return JMCustomLocalizedString(@"menuitem_settings_label", nil);
         case JMSectionTypeLogout:
-            return JMCustomLocalizedString(@"menuitem.logout.label", nil);
+            return JMCustomLocalizedString(@"menuitem_logout_label", nil);
         default:
             return nil;
     }

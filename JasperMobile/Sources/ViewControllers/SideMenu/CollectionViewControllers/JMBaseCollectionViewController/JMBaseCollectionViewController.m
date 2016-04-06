@@ -206,7 +206,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     JMListOptionsPopupView *sortPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
                                                                                     type:JMPopupViewType_ContentViewOnly
-                                                                                   items:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOption_Sort]];
+                                                                                 options:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOptionType_Sort]];
     sortPopup.titleString = JMCustomLocalizedString(@"resources_sortby_title", nil);
     sortPopup.selectedIndex = self.resourceListLoader.sortBySelectedIndex;
     sortPopup.optionType = JMResourcesListLoaderOptionType_Sort;
@@ -217,7 +217,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     JMListOptionsPopupView *filterPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
                                                                                       type:JMPopupViewType_ContentViewOnly
-                                                                                     items:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOption_Filter]];
+                                                                                   options:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOptionType_Filter]];
     filterPopup.titleString = JMCustomLocalizedString(@"resources_filterby_title", nil);
     filterPopup.selectedIndex = self.resourceListLoader.filterBySelectedIndex;
     filterPopup.optionType = JMResourcesListLoaderOptionType_Filter;
@@ -293,7 +293,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (JMMenuActionsViewAction)availableAction
 {
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Sort;
-    NSArray *filterItems = [self.resourceListLoader listOptionsWithOptionType:JMResourcesListLoaderOptionType_Filter];
+    NSArray *filterItems = [self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOptionType_Filter];
     if ([filterItems count] > 1) {
         availableAction |= JMMenuActionsViewAction_Filter;
     }

@@ -134,16 +134,16 @@
         @throw wrongActionxception;
     }
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
-                                                                                      message:@"savedreport.viewer.delete.confirmation.message"
-                                                                            cancelButtonTitle:@"dialog.button.cancel"
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
+                                                                                      message:@"savedreport_viewer_delete_confirmation_message"
+                                                                            cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
     __weak typeof(self) weakSelf = self;
-    [alertController addActionWithLocalizedTitle:@"dialog.button.ok"
+    [alertController addActionWithLocalizedTitle:@"dialog_button_ok"
                                            style:UIAlertActionStyleDefault
                                          handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         __strong typeof(self) strongSelf = weakSelf;
-        [self startShowLoaderWithMessage:@"status.loading"];
+        [self startShowLoaderWithMessage:@"status_loading"];
         __weak __typeof(self) weakSelf = strongSelf;
         [[JMScheduleManager sharedManager] deleteScheduleWithJobIdentifier:scheduleLookup.jobIdentifier
                                                                 completion:^(NSError *error) {

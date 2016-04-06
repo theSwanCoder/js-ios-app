@@ -138,9 +138,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     // TODO: from ipad we can get letters
     NSString *value = cell.valueTextField.text;
     if (value.length == 0 || !value.integerValue) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
-                                                                                          message:JMCustomLocalizedString(@"schedules.error.repeat.count.wrong", nil)
-                                                                                cancelButtonTitle:@"dialog.button.ok"
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
+                                                                                          message:JMCustomLocalizedString(@"schedules_error_repeat_count_wrong", nil)
+                                                                                cancelButtonTitle:@"dialog_button_ok"
                                                                           cancelCompletionHandler:nil];
         [self presentViewController:alertController animated:YES completion:nil];
         return;
@@ -194,9 +194,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             @(JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek)
     ];
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules.new.job.recurrenceType.alert.title", nil)
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_recurrenceType_alert_title", nil)
                                                                                       message:nil
-                                                                            cancelButtonTitle:@"dialog.button.cancel"
+                                                                            cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
 
     JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeRecurrence];

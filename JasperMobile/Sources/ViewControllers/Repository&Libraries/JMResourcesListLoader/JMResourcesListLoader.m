@@ -228,7 +228,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 }
 
 #pragma mark - Utils
-- (NSArray <JMResourceLoaderOption *>*)listOptionsWithOptionType:(JMResourcesListLoaderOptionType)optionType
+- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
 {
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Sort: {
@@ -273,7 +273,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 {
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Sort: {
-            NSArray *allSortOptions = [self listOptionsWithOptionType:optionType];
+            NSArray *allSortOptions = [self listItemsWithOption:optionType];
             if (allSortOptions.count > self.sortBySelectedIndex) {
                 JMResourceLoaderOption *option = allSortOptions[self.sortBySelectedIndex];
                 id value = option.value;
@@ -282,8 +282,8 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
             break;
         }
         case JMResourcesListLoaderOptionType_Filter:
-            if ([self listOptionsWithOptionType:optionType].count > self.filterBySelectedIndex) {
-                return [[self listOptionsWithOptionType:optionType][self.filterBySelectedIndex] value];
+            if ([self listItemsWithOption:optionType].count > self.filterBySelectedIndex) {
+                return [[self listItemsWithOption:optionType][self.filterBySelectedIndex] value];
             }
             break;
     }

@@ -179,11 +179,11 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         [[JMSessionManager sharedManager] logout];
         [JMUtils showLoginViewAnimated:YES completion:nil];
         self.menuItems = nil;
-    } else if (item.resourceType == JMSectionTypeSettings) {
+    } else if (item.sectionType == JMSectionTypeSettings) {
         [self closeMenu];
 
         JMServerOptionsViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-        settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
+        settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"dialog_button_cancel", nil)
                                                                                         style:UIBarButtonItemStyleDone
                                                                                        target:settingsVC
                                                                                        action:@selector(cancel)];
@@ -200,7 +200,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
                                                                     animated:YES
                                                                   completion:nil];
 
-    } else if (item.resourceType == JMSectionTypeAbout) {
+    } else if (item.sectionType == JMSectionTypeAbout) {
         [self closeMenu];
 
         JMMainNavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];

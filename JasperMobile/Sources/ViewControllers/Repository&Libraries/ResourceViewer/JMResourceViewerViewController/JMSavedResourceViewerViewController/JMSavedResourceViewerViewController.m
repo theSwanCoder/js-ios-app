@@ -110,7 +110,7 @@
                                                                                 textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
                                                                                     __strong typeof(self) strongSelf = weakSelf;
                                                                                     textField.placeholder = JMCustomLocalizedString(@"savedreport_viewer_modify_reportname", nil);
-                                                                                    textField.text = [strongSelf.resourceLookup.label copy];
+                                                                                    textField.text = [strongSelf.resource.resourceLookup.label copy];
                                                                                 } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                     NSString *errorMessage = nil;
                                                                                     __strong typeof(self) strongSelf = weakSelf;

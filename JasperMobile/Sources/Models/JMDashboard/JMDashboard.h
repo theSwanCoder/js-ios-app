@@ -32,6 +32,8 @@
  @since 2.0
  */
 
+@class JMResource;
+
 @interface JMDashboard : NSObject
 // getters
 @property (nonatomic, strong, readonly) JMResource *resource;

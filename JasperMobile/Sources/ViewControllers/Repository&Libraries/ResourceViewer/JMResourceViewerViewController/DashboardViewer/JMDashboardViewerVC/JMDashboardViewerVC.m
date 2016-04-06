@@ -251,7 +251,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-    if (![self.resourceLookup isLegacyDashboard]) {
+    if (self.resource.type != JMResourceTypeLegacyDashboard) {
         [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                    cancelBlock:^(void) {
                                        [super cancelResourceViewingAndExit:YES];
@@ -399,8 +399,8 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
              parameters:(NSArray *)parameters
 {
     if (hyperlinkType == JMHyperlinkTypeReportExecution) {
-        JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-        reportViewController.resourceLookup = resourceLookup;
+        JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+        reportViewController.resource = resource;
         reportViewController.initialReportParameters = parameters;
         reportViewController.isChildReport = YES;
         [self.navigationController pushViewController:reportViewController animated:YES];

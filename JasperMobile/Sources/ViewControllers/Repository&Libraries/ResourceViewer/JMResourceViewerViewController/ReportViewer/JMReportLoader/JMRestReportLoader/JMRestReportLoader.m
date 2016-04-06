@@ -393,9 +393,9 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                                                                            value:@[params[@"customerId"]]];
                     [reportParameters addObject:reportParameter];
 
-                    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResourceLookup:withParameters:)]) {
-                        [self.delegate reportLoader:self didReceiveOnClickEventForResourceLookup:resourceLookup withParameters:[reportParameters copy]];
-                    }
+//                    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResourceLookup:withParameters:)]) {
+//                        [self.delegate reportLoader:self didReceiveOnClickEventForResourceLookup:resourceLookup withParameters:[reportParameters copy]];
+//                    }
                 }
             }
         }];
