@@ -27,7 +27,6 @@
 //
 
 #import "JMDashboard.h"
-#import "JMDashlet.h"
 #import "JMDashboardParameter.h"
 
 @interface JMDashboard()
@@ -69,7 +68,21 @@
     
     NSMutableURLRequest *dashboardRequest = [self.restClient.requestSerializer requestWithMethod:@"GET" URLString:dashboardUrl parameters:nil error:nil];
     dashboardRequest.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
+    [dashboardRequest addValue:[self cookiesAsStringFromCookies:self.restClient.cookies]
+            forHTTPHeaderField:@"Cookie"];
+
     return dashboardRequest;
+}
+
+- (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
+{
+    NSString *cookiesAsString = @"";
+    for (NSHTTPCookie *cookie in cookies) {
+        NSString *name = cookie.name;
+        NSString *value = cookie.value;
+        cookiesAsString = [cookiesAsString stringByAppendingFormat:@"%@=%@; ", name, value];
+    }
+    return cookiesAsString;
 }
 
 @end

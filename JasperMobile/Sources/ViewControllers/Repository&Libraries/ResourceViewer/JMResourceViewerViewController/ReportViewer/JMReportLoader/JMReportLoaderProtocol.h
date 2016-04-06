@@ -49,6 +49,9 @@
 + (nullable id<JMReportLoaderProtocol>)loaderWithReport:(nonnull JSReport *)report
                                            restClient:(nonnull JSRESTBase *)restClient
                                        webEnvironment:(nonnull JMWebEnvironment *)webEnvironment;
+- (void)exportReportWithFormat:(NSString * __nonnull)exportFormat;
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
+- (void)fitReportViewToScreen;
 @end
 
 @protocol JMReportLoaderDelegate <NSObject>

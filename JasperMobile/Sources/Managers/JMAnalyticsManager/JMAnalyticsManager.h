@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -20,14 +20,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
-//  JMDashlet.h
+//  JMAnalyticsManager.h
 //  TIBCO JasperMobile
 //
 
-#import "JMDashlet.h"
+/**
+ @author Olexandr Dahno odahno@tibco.com
+ @since 2.5
+ */
 
 
-@implementation JMDashlet
+@interface JMAnalyticsManager : NSObject
++ (instancetype __nullable)sharedManager;
+- (void)sendAnalyticsEventWithInfo:(NSDictionary *__nonnull)eventInfo;
+- (void)sendAnalyticsEventAboutLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
+- (void)sendAnalyticsEventAboutLogout;
+- (void)sendThumbnailEventIfNeed;
 @end

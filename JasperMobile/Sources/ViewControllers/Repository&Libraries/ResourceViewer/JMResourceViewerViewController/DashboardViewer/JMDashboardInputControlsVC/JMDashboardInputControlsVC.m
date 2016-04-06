@@ -43,7 +43,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"report.viewer.options.title", nil);
+    self.title = JMCustomLocalizedString(@"report_viewer_options_title", nil);
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     // Remove extra separators
@@ -53,7 +53,7 @@
     self.applyButton.backgroundColor = [[JMThemesManager sharedManager] reportOptionsRunReportButtonBackgroundColor];
     [self.applyButton setTitleColor:[[JMThemesManager sharedManager] reportOptionsRunReportButtonTextColor]
                            forState:UIControlStateNormal];
-    [self.applyButton setTitle:JMCustomLocalizedString(@"dialog.button.applyUpdate", nil)
+    [self.applyButton setTitle:JMCustomLocalizedString(@"dialog_button_applyUpdate", nil)
                       forState:UIControlStateNormal];
 
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
@@ -117,7 +117,7 @@
     titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
     titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     titleLabel.backgroundColor = [UIColor clearColor];
-    NSString *sectionTitle = JMCustomLocalizedString(@"report.viewer.options.title", nil);
+    NSString *sectionTitle = JMCustomLocalizedString(@"report_viewer_options_title", nil);
 
     titleLabel.text = [sectionTitle uppercaseString];
     [titleLabel sizeToFit];
@@ -185,7 +185,7 @@
 - (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
 {
     if (descriptor.slaveDependencies.count) {
-        [JMCancelRequestPopup presentWithMessage:@"status.loading"
+        [JMCancelRequestPopup presentWithMessage:@"status_loading"
                                      cancelBlock:^(void) {
                                          [self.restClient cancelAllRequests];
                                          [self.navigationController popViewControllerAnimated:YES];
@@ -214,24 +214,24 @@
 {
     JSInputControlDescriptor *inputControlDescriptor = self.dashboard.inputControls[indexPath.row];
     NSDictionary *inputControlDescriptorTypes = @{
-            kJS_ICD_TYPE_BOOL                     : @"BooleanCell",
-            kJS_ICD_TYPE_SINGLE_VALUE_TEXT        : @"TextEditCell",
-            kJS_ICD_TYPE_SINGLE_VALUE_NUMBER      : @"NumberCell",
-            kJS_ICD_TYPE_SINGLE_VALUE_DATE        : @"DateCell",
-            kJS_ICD_TYPE_SINGLE_VALUE_TIME        : @"TimeCell",
-            kJS_ICD_TYPE_SINGLE_VALUE_DATETIME    : @"DateTimeCell",
-            kJS_ICD_TYPE_SINGLE_SELECT            : @"SingleSelectCell",
-            kJS_ICD_TYPE_SINGLE_SELECT_RADIO      : @"SingleSelectCell",
-            kJS_ICD_TYPE_MULTI_SELECT             : @"MultiSelectCell",
-            kJS_ICD_TYPE_MULTI_SELECT_CHECKBOX    : @"MultiSelectCell",
-    };
-
-    return inputControlDescriptorTypes[inputControlDescriptor.type];
+                                                  @(kJS_ICD_TYPE_BOOL)                     : @"BooleanCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_TEXT)        : @"TextEditCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_NUMBER)      : @"NumberCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_DATE)        : @"DateCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_TIME)        : @"TimeCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_DATETIME)    : @"DateTimeCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_SELECT)            : @"SingleSelectCell",
+                                                  @(kJS_ICD_TYPE_SINGLE_SELECT_RADIO)      : @"SingleSelectCell",
+                                                  @(kJS_ICD_TYPE_MULTI_SELECT)             : @"MultiSelectCell",
+                                                  @(kJS_ICD_TYPE_MULTI_SELECT_CHECKBOX)    : @"MultiSelectCell",
+                                                  };
+    
+    return inputControlDescriptorTypes[@(inputControlDescriptor.type)];
 }
 
 - (void)updatedInputControlsValuesWithCompletion:(void(^)(BOOL dataIsValid))completion
 {
-    [JMCancelRequestPopup presentWithMessage:@"status.loading"
+    [JMCancelRequestPopup presentWithMessage:@"status_loading"
                                  cancelBlock:^(void) {
                                      [self.restClient cancelAllRequests];
                                      [self backButtonTapped:nil];

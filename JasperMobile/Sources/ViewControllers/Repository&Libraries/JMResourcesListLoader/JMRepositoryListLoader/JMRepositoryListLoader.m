@@ -113,7 +113,7 @@
         case JMResourcesListLoaderOption_Filter:
             return @[
                      @{
-                             kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
+                             kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources_filterby_type_all", nil),
                              kJMResourceListLoaderOptionItemValueKey: @[
                                                                         kJS_WS_TYPE_REPORT_UNIT,
                                                                         kJS_WS_TYPE_DASHBOARD,

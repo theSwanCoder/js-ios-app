@@ -1,0 +1,62 @@
+
+[[Saved Reports viewer view]]
+	[savedreport_viewer_modify_title]
+		en = Rename Report
+		de = Bericht umbenennen
+		fr = Renommer le rapport
+		es = Cambiar nombre de informe
+		it = Rinomina report
+		pt = Criar relatório
+		ja = レポートの名前変更
+		zh = 重命名报表
+		tags = ios
+	[savedreport_viewer_modify_reportname]
+		en = Item name
+		de = Elementname
+		fr = Nom de l’élément
+		es = Nombre del elemento
+		it = Nome dell'elemento
+		pt = Nome do item
+		ja = アイテム名
+		zh = 项目名称
+		tags = ios
+	[savedreport_viewer_delete_confirmation_message]
+		en = Do you really want to delete this item?
+		de = Möchten Sie dieses Element wirklich löschen?
+		fr = Voulez-vous vraiment supprimer cet élément ?
+		es = ¿Desea realmente eliminar este elemento?
+		it = Eliminare questo elemento?
+		pt = Tem certeza de que deseja excluir esse item?
+		ja = このアイテムを削除しますか?
+		zh = 是否确定要删除此项目?
+		tags = ios
+	[savedreport_viewer_show_resource_error_message]
+		en = Report could not be loaded. Try to save a report with less count of pages.
+		de = Der Bericht konnte nicht geladen werden. Versuchen Sie, einen Bericht mit geringerer Seitenanzahl zu speichern.
+		es = El informe no se pudo cargar. Intente guardar el informe con un menor número de páginas.
+		fr = Impossible de charger le rapport. Essayez d\'enregistrer un rapport avec un nombre inférieur de pages.
+		it = Non è stato possibile caricare il rapporto. Provare a salvare un rapporto con minore numero di pagine.
+		ja = レポートを読み込めませんでした。より少ないページ数でレポートを保存してみてください。
+		pt = Não foi possível carregar o relatório. Experimente salvar um relatório com uma contagem menor de palavras.
+		zh = 无法加载报告。尝试保存页面数较少的报告。
+		tags = ios,unused
+	[savedreport_viewer_file_not_exists]
+		en = File doesn't exists
+		de = Datei existiert nicht
+		es = El archivo no existe
+		fr = Le fichier n\'existe pas
+		it = File inesistente
+		ja = ファイルがありません
+		pt = Arquivo inexistente
+		zh = 文件不存在
+		tags = ios,unused
+	[savedreport_viewer_format_not_supported]
+		en = Format not supported
+		de = Das Format wird nicht unterstützt
+		es = Formato no compatible
+		fr = Ce format n\'est pas pris en charge
+		it = Formato non supportato
+		ja = この形式はサポートされていません
+		pt = Formato não suportado
+		zh = 不支持的格式
+		tags = ios

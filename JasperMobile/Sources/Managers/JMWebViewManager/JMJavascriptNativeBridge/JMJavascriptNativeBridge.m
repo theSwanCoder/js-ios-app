@@ -123,9 +123,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 #pragma mark - WKWebViewDelegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
-//    NSLog(@"request from webView: %@", navigationAction.request);
-//    NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
-
     if ([self isLocalFileRequest:navigationAction.request]) {
         // TODO: request from delegate to allow such requests.
         decisionHandler(WKNavigationActionPolicyAllow);
@@ -169,6 +166,9 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         [self handleCallbackWithRequestURLString:requestURLString];
         decisionHandler(WKNavigationActionPolicyCancel);
     } else {
+        NSLog(@"request from webView: %@", navigationAction.request);
+        NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
+
         decisionHandler(WKNavigationActionPolicyAllow);
     }
 }
@@ -176,6 +176,16 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
 //    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+<<<<<<< HEAD
+=======
+    if (self.jsInitCode && !self.isJSInitCodeInjected) {
+        self.isJSInitCodeInjected = YES;
+        [self.webView evaluateJavaScript:self.jsInitCode completionHandler:^(id result, NSError *error) {
+//            JMLog(@"error: %@", error);
+//            JMLog(@"result: %@", result);
+        }];
+    }
+>>>>>>> develop
 
     // add window.onerror listener
     NSString *listenerId = @"JasperMobile.Events.Window.OnError";
@@ -314,7 +324,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     if([callback.type isEqualToString:@"logging"]) {
         JMLog(@"Bridge Message: %@", callback.parameters[@"message"]);
     } else {
-        JMLog(@"%@", callback);
+//        JMLog(@"%@", callback);
         BOOL isRequestCompletionFound = NO;
         for (JMJavascriptRequest *request in self.requestCompletions) {
 //            JMLog(@"request.command: %@", request.command);

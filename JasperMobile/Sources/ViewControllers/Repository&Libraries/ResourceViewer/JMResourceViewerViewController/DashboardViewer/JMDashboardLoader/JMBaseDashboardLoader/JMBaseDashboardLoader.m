@@ -32,7 +32,6 @@
 
 @interface JMBaseDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
-@property (nonatomic, copy) void(^loadCompletion)(BOOL success, NSError *error);
 @property (nonatomic) BOOL isLoadDone;
 @property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 @end
@@ -108,10 +107,7 @@
 #pragma mark - JMJavascriptNativeBridgeProtocol
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(JMJavascriptNativeBridge *)bridge
 {
-    if (self.loadCompletion) {
-        // TODO: Need add auth error
-        self.loadCompletion(NO, nil);
-    }
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
 }
 
@@ -128,17 +124,19 @@
 
 
 #pragma mark - Helpers
-//- (void)injectJSCodeOldDashboard
-//{
-//    NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"old_dashboard" ofType:@"js"];
-//    NSError *error;
-//    NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
-//    CGFloat initialScale = 0.5;
-//    if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
-//        initialScale = 0.25;
-//    }
-//    jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScale).stringValue];
-//    [self.webEnvironment injectJSInitCode:jsMobile];
-//}
+- (void)injectJSCodeOldDashboard
+{
+   CGFloat initialScale = 0.5;
+    if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
+        initialScale = 0.25;
+    }
+
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"JasperMobile.Helper.updateViewPortInitialScale";
+    request.parametersAsString = [NSString stringWithFormat:@"%@", @(initialScale)];
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:nil];
+
+}
 
 @end

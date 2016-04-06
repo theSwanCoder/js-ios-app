@@ -29,6 +29,7 @@
 
 #import "JSResourceLookup+Helpers.h"
 #import "JMExportResource.h"
+#import "JMAnalyticsManager.h"
 
 NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
@@ -101,6 +102,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                    if (image) {
                                                        strongSelf.thumbnailImage = image;
                                                        [strongSelf updateResourceImage:self.thumbnailImage thumbnails:YES];
+                                                       [[JMAnalyticsManager sharedManager] sendThumbnailEventIfNeed];
                                                    }
                                                }
                                                failure:nil];

@@ -47,7 +47,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"schedules.title", nil);
+    self.title = JMCustomLocalizedString(@"schedules_title", nil);
 
     self.view.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
 
@@ -61,7 +61,7 @@
     [self.tableView addSubview:refreshControl];
     self.refreshControl = refreshControl;
 
-    self.noJobsLabel.text = JMCustomLocalizedString(@"schedules.no.jobs.message", nil);
+    self.noJobsLabel.text = JMCustomLocalizedString(@"schedules_no_jobs_message", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated

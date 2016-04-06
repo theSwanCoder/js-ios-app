@@ -36,7 +36,7 @@ NSString * const kSkypeActivityType = @"com.skype.SkypeForiPad.sharingextension"
     if ([activityType isEqualToString:kSkypeActivityType]) {
         return nil;
     } else {
-        return [NSString stringWithFormat:@"Look at this awesome report, builded via %@!", kJMAppName];
+        return [NSString stringWithFormat:JMCustomLocalizedString(@"resource_viewer_share_text", nil), kJMAppName];
     }
 }
 @end

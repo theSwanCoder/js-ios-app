@@ -52,45 +52,45 @@
         case JMMenuActionsViewAction_None:
             return nil;
         case JMMenuActionsViewAction_Filter:
-            return @"action.title.filter";
+            return @"action_title_filter";
         case JMMenuActionsViewAction_Edit:
-            return @"action.title.edit";
+            return @"action_title_edit";
         case JMMenuActionsViewAction_EditFilters:
-            return @"action.title.edit.filters";
+            return @"action_title_edit_filters";
         case JMMenuActionsViewAction_Refresh:
-            return @"action.title.refresh";
+            return @"action_title_refresh";
         case JMMenuActionsViewAction_Save:
-            return @"action.title.save";
+            return @"action_title_save";
         case JMMenuActionsViewAction_Delete:
-            return @"action.title.delete";
+            return @"action_title_delete";
         case JMMenuActionsViewAction_Rename:
-            return @"action.title.rename";
+            return @"action_title_rename";
         case JMMenuActionsViewAction_MakeFavorite:
-            return @"action.title.markasfavorite";
+            return @"action_title_markasfavorite";
         case JMMenuActionsViewAction_MakeUnFavorite:
-            return @"action.title.markasunfavorite";
+            return @"action_title_markasunfavorite";
         case JMMenuActionsViewAction_Info:
-            return @"action.title.info";
+            return @"action_title_info";
         case JMMenuActionsViewAction_Sort:
-            return @"action.title.sort";
+            return @"action_title_sort";
         case JMMenuActionsViewAction_SelectAll:
-            return @"action.title.selectall";
+            return @"action_title_selectall";
         case JMMenuActionsViewAction_ClearSelections:
-            return @"action.title.clearselections";
+            return @"action_title_clearselections";
         case JMMenuActionsViewAction_Run:
-            return @"action.title.run";
+            return @"action_title_run";
         case JMMenuActionsViewAction_Print:
-            return @"action.title.print";
+            return @"action_title_print";
         case JMMenuActionsViewAction_OpenIn:
-            return @"action.title.openIn";
+            return @"action_title_openIn";
         case JMMenuActionsViewAction_Schedule:
-            return @"action.title.schedule";
+            return @"action_title_schedule";
         case JMMenuActionsViewAction_Share:
-            return @"action.title.share";
+            return @"action_title_share";
         case JMMenuActionsViewAction_ShowExternalDisplay:
-            return @"action.title.showExternalDisplay";
+            return @"action_title_showExternalDisplay";
         case JMMenuActionsViewAction_HideExternalDisplay:
-            return @"action.title.hideExternalDisplay";
+            return @"action_title_hideExternalDisplay";
     }
 }
 

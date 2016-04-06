@@ -64,7 +64,7 @@
                                      NSError *error = result.error;
                                      if (error) {
                                          if (error.code == 1007) {
-                                             [self handleErrorWithData:result.body completion:completion];
+                                             [self handleErrorsWithData:result.body completion:completion];
                                          } else {
                                             completion(nil, result.error);
                                         }
@@ -108,7 +108,7 @@
 }
 
 #pragma mark - Hanlde Errors
-- (void)handleErrorWithData:(NSData *)jsonData completion:(JMScheduleCompletion)completion
+- (void)handleErrorsWithData:(NSData *)jsonData completion:(JMScheduleCompletion)completion
 {
     NSError *serializeError;
     NSDictionary *bodyJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&serializeError];
@@ -117,30 +117,11 @@
         if (errors.count > 0) {
             NSString *fullMessage = @"";
             for (NSDictionary *errorJSON in errors) {
-                id message = errorJSON[@"defaultMessage"];
-                NSString *errorMessage = @"";
-                NSString *field = errorJSON[@"field"];
-                if (message && [message isKindOfClass:[NSString class]]) {
-                    errorMessage = [NSString stringWithFormat:@"Message: '%@', field: %@", message, field];
-                } else {
-                    NSString *errorCode = errorJSON[@"errorCode"];
-                    errorMessage = [NSString stringWithFormat:@"Error Code: '%@'", errorCode];
-                }
-                NSArray *arguments = errorJSON[@"errorArguments"];
-                NSString *argumentsString = @"";
-                if (arguments) {
-                    for (NSString *argument in arguments) {
-                        argumentsString = [argumentsString stringByAppendingFormat:@"'%@', ", argument];
-                    }
-                }
-                if (arguments.count) {
-                    fullMessage = [fullMessage stringByAppendingFormat:@"%@.\nArguments: %@.\n", errorMessage, argumentsString];
-                } else {
-                    fullMessage = [fullMessage stringByAppendingFormat:@"%@.\n", errorMessage];
-                }
+                NSString *message = [self errorMessageFromData:errorJSON];
+                fullMessage = [fullMessage stringByAppendingFormat:@"\n%@\n", message];
             }
             // TODO: enhance error
-            NSError *createScheduledJobError = [[NSError alloc] initWithDomain:@"Error"
+            NSError *createScheduledJobError = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules_error_domain", nil)
                                                                           code:0
                                                                       userInfo:@{NSLocalizedDescriptionKey: fullMessage}];
             completion(nil, createScheduledJobError);
@@ -150,6 +131,25 @@
     }
 }
 
+- (NSString *)errorMessageFromData:(NSDictionary *)data
+{
+    NSString *errorCode = data[@"errorCode"];
+    NSString *errorMessage = [self messageFromErrorCode:errorCode];
+    return errorMessage;
+}
+
+- (NSString *)messageFromErrorCode:(NSString *)errorCode
+{
+    NSString *message = @"General error of creating a new schedule.";
+    if ([errorCode isEqualToString:@"error.duplicate.report.job.output.filename"]) {
+        message = JMCustomLocalizedString(@"schedules_error_duplicate_filename", nil);
+    } else if ([errorCode isEqualToString:@"error.report.job.output.folder.inexistent"]) {
+        message = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+    } else if ([errorCode isEqualToString:@"error.before.current.date"]) {
+        message = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+    }
+    return message;
+}
 
 #pragma mark - New Schedule Metadata
 - (JSScheduleMetadata *)createNewScheduleMetadataWithResourceLookup:(JSResourceLookup *)resourceLookup

@@ -65,11 +65,11 @@ void jmDebugLog(NSString *format, ...) {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
     reportName = [reportName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (reportName.length < kJMNameMin) {
-        *errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.empty", nil);
+        *errorMessage = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_empty", nil);
     } else if (reportName.length > kJMNameMax) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.maxlength", nil), kJMNameMax];
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_maxlength", nil), kJMNameMax];
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.characters", nil), kJMInvalidCharacters];
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_characters", nil), kJMInvalidCharacters];
     }
     return [*errorMessage length] == 0;
 }
@@ -173,7 +173,7 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)showLoginViewWithRestoreSession:(BOOL)restoreSession animated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion
 {
-    if (!restoreSession) {
+    if (!restoreSession && self.restClient) {
         [[JMSessionManager sharedManager] logout];
     }
 
@@ -208,6 +208,40 @@ void jmDebugLog(NSString *format, ...) {
     };
 
     [revealViewController presentViewController:loginNavController animated:animated completion:completion];
+}
+
++ (NSString *)lastUserName
+{
+    NSString *lastUserName;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastUserNameKey]) {
+        lastUserName = [[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastUserNameKey];
+    }
+    return lastUserName;
+}
+
++ (void)saveLastUserName:(NSString *)userName
+{
+    [[NSUserDefaults standardUserDefaults] setObject:userName
+                                              forKey:JMLoginVCLastUserNameKey];
+}
+
++ (JMServerProfile *)lastServerProfile
+{
+    JMServerProfile *lastServerProfile;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastServerProfileAliasKey]) {
+        NSString *lastServerProfileAliase = [[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastServerProfileAliasKey];
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"alias = %@", lastServerProfileAliase];
+        NSArray *serverProfiles = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
+        lastServerProfile = serverProfiles.firstObject;
+    }
+    return lastServerProfile;
+}
+
++ (void)saveLastServerProfile:(JMServerProfile *)serverProfile
+{
+    [[NSUserDefaults standardUserDefaults] setObject:serverProfile.alias
+                                              forKey:JMLoginVCLastServerProfileAliasKey];
 }
 
 #pragma mark - EULA
@@ -279,11 +313,11 @@ void jmDebugLog(NSString *format, ...) {
 //        title = @"error.readingresponse.dialog.msg";
 //    }
     if (error.code == JSInvalidCredentialsErrorCode) {
-        title = @"error.authenication.dialog.title";
-        message = @"error.authenication.dialog.msg";
+        title = @"error_authenication_dialog_title";
+        message = @"error_authenication_dialog_msg";
     }
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonTitle:@"dialog.button.ok" cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonTitle:@"dialog_button_ok" cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         if (completion) {
             completion();
         }
@@ -321,16 +355,6 @@ void jmDebugLog(NSString *format, ...) {
         isAmberServer = YES;
     }
     return isAmberServer;
-}
-
-+ (BOOL)isServerAmber2
-{
-    return self.restClient.serverProfile.serverInfo.versionAsFloat == kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
-}
-
-+ (BOOL)isServerAmber2OrHigher
-{
-    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
 + (BOOL)isServerProEdition
@@ -425,70 +449,6 @@ void jmDebugLog(NSString *format, ...) {
 {
     JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
     return activeServerProfile;
-}
-
-#pragma mark - Analytics
-+ (void)logEventWithInfo:(NSDictionary *)eventInfo
-{
-#ifndef __RELEASE__
-    NSString *version = self.restClient.serverInfo.version;
-    NSString *edition = self.restClient.serverInfo.edition;
-    if ([JMUtils isDemoAccount]) {
-        version = [version stringByAppendingString:@"(Demo)"];
-    }
-    
-    // Crashlytics - Answers
-    NSMutableDictionary *extendedEventInfo = [eventInfo mutableCopy];
-    extendedEventInfo[kJMAnalyticsServerVersionKey] = version;
-    extendedEventInfo[kJMAnalyticsServerEditionKey] = edition;
-    [Answers logCustomEventWithName:eventInfo[kJMAnalyticsCategoryKey]
-                   customAttributes:extendedEventInfo];
-
-    // Google Analytics
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:eventInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
-                                                                           action:eventInfo[kJMAnalyticsActionKey]                   // Event action (required)
-                                                                            label:eventInfo[kJMAnalyticsLabelKey]                    // Event label
-                                                                            value:nil];                                              // Event value
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
-           value:version];
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
-           value:edition];
-
-    [tracker send:[builder build]];
-#endif
-}
-
-+ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
-{
-#ifndef __RELEASE__
-    NSString *version = self.restClient.serverInfo.version;
-    NSString *edition = self.restClient.serverInfo.edition;
-    if ([JMUtils isDemoAccount]) {
-        version = [version stringByAppendingString:@"(Demo)"];
-    }
-
-    // Crashlytics - Answers
-    NSMutableDictionary *extendedEventInfo = [additionInfo mutableCopy];
-    extendedEventInfo[kJMAnalyticsServerVersionKey] = version;
-    extendedEventInfo[kJMAnalyticsServerEditionKey] = edition;
-    [Answers logLoginWithMethod:@"Digits"
-                        success:@(success)
-               customAttributes:extendedEventInfo];
-    
-    // Google Analytics
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:additionInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
-                                                                           action:additionInfo[kJMAnalyticsActionKey]                   // Event action (required)
-                                                                            label:additionInfo[kJMAnalyticsLabelKey]                    // Event label
-                                                                            value:nil];                                                 // Event value
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
-           value:version];
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
-           value:edition];
-
-    [tracker send:[builder build]];
-#endif
 }
 
 @end

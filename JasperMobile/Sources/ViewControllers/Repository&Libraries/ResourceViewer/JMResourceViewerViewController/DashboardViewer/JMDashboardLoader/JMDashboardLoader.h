@@ -34,7 +34,6 @@
 #import "JMJavascriptNativeBridge.h"
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;
-@class JMDashlet;
 @class JMWebEnvironment;
 
 typedef void(^JMDashboardLoaderCompletion)(BOOL success, NSError * __nullable error);
@@ -56,7 +55,7 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 };
 
 @protocol JMDashboardLoader <NSObject>
-@property (nonatomic, weak) id<JMDashboardLoaderDelegate> delegate;
+@property (nonatomic, weak, nullable) id<JMDashboardLoaderDelegate> delegate;
 
 - (id<JMDashboardLoader> __nullable)initWithDashboard:(JMDashboard *__nonnull)dashboard webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
 + (id<JMDashboardLoader> __nullable)loaderWithDashboard:(JMDashboard *__nonnull)dashboard webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
@@ -65,9 +64,9 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 - (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)applyParameters:(NSDictionary *__nonnull)parametersAsString;
-- (void)maximizeDashlet:(JMDashlet *__nullable)dashlet;
-- (void)minimizeDashlet:(JMDashlet *__nullable)dashlet;
+- (void)applyParameters:(NSString *__nonnull)parametersAsString;
+- (void)maximizeDashletForComponent:(JSDashboardComponent *__nonnull)component;
+- (void)minimizeDashletForComponent:(JSDashboardComponent *__nonnull)component;
 - (void)minimizeDashlet;
 - (void)cancel;
 - (void)destroy;

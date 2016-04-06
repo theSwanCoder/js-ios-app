@@ -91,25 +91,25 @@
 {
     switch (self.resourceType) {
         case JMResourceTypeLibrary:
-            return JMCustomLocalizedString(@"menuitem.library.label", nil);
+            return JMCustomLocalizedString(@"menuitem_library_label", nil);
         case JMResourceTypeRecentViews:
-            return JMCustomLocalizedString(@"menuitem.recentviews.label", nil);
+            return JMCustomLocalizedString(@"menuitem_recentviews_label", nil);
         case JMResourceTypeSavedItems:
-            return JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
+            return JMCustomLocalizedString(@"menuitem_saveditems_label", nil);
         case JMResourceTypeFavorites:
-            return JMCustomLocalizedString(@"menuitem.favorites.label", nil);
+            return JMCustomLocalizedString(@"menuitem_favorites_label", nil);
         case JMResourceTypeScheduling:
-            return JMCustomLocalizedString(@"menuitem.schedules.label", nil);
+            return JMCustomLocalizedString(@"menuitem_schedules_label", nil);
         case JMResourceTypeRepository:
-            return JMCustomLocalizedString(@"menuitem.repository.label", nil);
+            return JMCustomLocalizedString(@"menuitem_repository_label", nil);
         case JMResourceTypeAbout:
-            return JMCustomLocalizedString(@"menuitem.about.label", nil);
+            return JMCustomLocalizedString(@"menuitem_about_label", nil);
         case JMResourceTypeFeedback:
-            return JMCustomLocalizedString(@"menuitem.feedback.label", nil);
+            return JMCustomLocalizedString(@"menuitem_feedback_label", nil);
         case JMResourceTypeSettings:
-            return JMCustomLocalizedString(@"menuitem.settings.label", nil);
+            return JMCustomLocalizedString(@"menuitem_settings_label", nil);
         case JMResourceTypeLogout:
-            return JMCustomLocalizedString(@"menuitem.logout.label", nil);
+            return JMCustomLocalizedString(@"menuitem_logout_label", nil);
         default:
             return nil;
     }

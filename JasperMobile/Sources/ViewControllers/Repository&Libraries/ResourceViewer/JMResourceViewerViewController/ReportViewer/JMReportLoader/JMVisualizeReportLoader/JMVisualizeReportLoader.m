@@ -52,9 +52,13 @@
     return self;
 }
 
-+ (instancetype)loaderWithReport:(JSReport *)report restClient:(JSRESTBase *)restClient
-{
++ (instancetype)loaderWithReport:(JSReport *)report restClient:(JSRESTBase *)restClient {
     return [[self alloc] initWithReport:report restClient:restClient];
+}
+
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 }
 
 - (id<JMReportLoaderProtocol>)initWithReport:(nonnull JSReport *)report
@@ -258,9 +262,9 @@
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.destroyReport"
                                                                 parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        // Need capture self to wait until this request finishes
-        self.report.isReportAlreadyLoaded = NO;
-        [self.webEnvironment removeAllListeners];
+        __typeof(self) strongSelf = weakSelf;
+        strongSelf.report.isReportAlreadyLoaded = NO;
+        [strongSelf.webEnvironment removeAllListeners];
 
         if (parameters) {
             JMLog(@"callback: %@", parameters);
@@ -268,6 +272,29 @@
             JMLog(@"error: %@", error);
         }
     }];
+}
+
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
+{
+    BOOL isInitialScaleFactorSet = self.visualizeManager.viewportScaleFactor > 0.01;
+    BOOL isInitialScaleFactorTheSame = fabs(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49;
+    if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
+        self.visualizeManager.viewportScaleFactor = scaleFactor;
+
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = @"JasperMobile.Helper.updateViewPortInitialScale";
+        request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
+        [self.webEnvironment sendJavascriptRequest:request
+                                        completion:nil];
+    }
+}
+
+- (void)fitReportViewToScreen
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"JasperMobile.Report.API.fitReportViewToScreen";
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:nil];
 }
 
 #pragma mark - Private
@@ -480,7 +507,7 @@
 
 - (NSError *)createErrorWithType:(JSReportLoaderErrorType)errorType errorMessage:(NSString *)errorMessage
 {
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report.viewer.visualize.render.error", nil) };
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report_viewer_visualize_render_error", nil) };
     NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
                                          code:errorType
                                      userInfo:userInfo];
