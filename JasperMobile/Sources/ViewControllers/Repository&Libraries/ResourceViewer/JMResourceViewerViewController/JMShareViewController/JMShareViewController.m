@@ -16,6 +16,9 @@
 @property (nonatomic, weak) IBOutlet UIImageView *mainImageView;
 @property (nonatomic, weak) IBOutlet UIImageView *tempDrawImageView;
 
+@property (nonatomic, strong) UIButton *settingsButton;
+
+
 @property (nonatomic, assign) CGPoint lastDrawingPoint;
 
 @property (nonatomic, strong) UIColor *drawingColor;
@@ -28,29 +31,76 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.mainImageView.image = self.imageForSharing;
-    self.drawingColor = [UIColor redColor];
-    self.brushWidth = 10.f;
-    self.opacity = 1.f;
     
     self.title = JMCustomLocalizedString(@"resource_viewer_share_title", nil);
     
-    
     UIBarButtonItem *resetItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reset_action"] style:UIBarButtonItemStylePlain target:self action:@selector(resetButtonDidTapped:)];
-    UIBarButtonItem *settingsItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings_action"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsButtonDidTapped:)];
+    UIBarButtonItem *settingsItem = [[UIBarButtonItem alloc] initWithCustomView:self.settingsButton];
     UIBarButtonItem *shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share_action"] style:UIBarButtonItemStylePlain target:self action:@selector(shareButtonDidTapped:)];
 
     UIBarButtonItem *dividerItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *dividerItem1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-
     
     self.toolbarItems = @[resetItem, dividerItem, settingsItem, dividerItem1, shareItem];
+    
+    [self setDefaults];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     self.navigationController.toolbarHidden = NO;
+}
+
+- (void)setDefaults
+{
+    self.mainImageView.image = self.imageForSharing;
+    self.drawingColor = [UIColor redColor];
+    self.brushWidth = 10.f;
+    self.opacity = 1.f;
+}
+
+#pragma mark - Custom Accessories
+- (UIButton *)settingsButton
+{
+    if (!_settingsButton) {
+        _settingsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, 34)];
+        _settingsButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        _settingsButton.layer.cornerRadius = 4.f;
+        [_settingsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_settingsButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+        [_settingsButton addTarget:self action:@selector(settingsButtonDidTapped:) forControlEvents:UIControlEventTouchUpInside];
+
+        // Configure shadow
+        CGRect shadowRect = CGRectMake(-1, -1, _settingsButton.bounds.size.width + 2, _settingsButton.bounds.size.height + 2);
+        UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:shadowRect];
+        _settingsButton.layer.masksToBounds = NO;
+        _settingsButton.layer.shadowOffset = CGSizeZero;
+        _settingsButton.layer.shadowOpacity = 1.f;
+        _settingsButton.layer.shadowRadius = 2.f;
+        _settingsButton.layer.shadowPath = shadowPath.CGPath;
+        
+        // Configure title label
+        _settingsButton.titleLabel.backgroundColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.6];
+        _settingsButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        _settingsButton.titleLabel.layer.cornerRadius = 5.f;
+        _settingsButton.titleLabel.layer.masksToBounds = YES;
+    }
+    return _settingsButton;
+}
+
+- (void)setBrushWidth:(CGFloat)brushWidth
+{
+    _brushWidth = brushWidth;
+    NSString *settingsButtonTitle = [NSString stringWithFormat:@"  %dpx  ", (int)round(brushWidth)];
+    [_settingsButton setTitle:settingsButtonTitle forState:UIControlStateNormal];
+}
+
+- (void)setDrawingColor:(UIColor *)drawingColor
+{
+    _drawingColor = drawingColor;
+    [_settingsButton setBackgroundColor:drawingColor];
+    _settingsButton.layer.shadowColor = drawingColor.CGColor;
 }
 
 #pragma mark - Actions
@@ -68,18 +118,20 @@
     settingsController.delegate = self;
     
     JMMainNavigationController *nextNC = [[JMMainNavigationController alloc] initWithRootViewController:settingsController];
-    
     nextNC.modalPresentationStyle = UIModalPresentationFormSheet;
-
     [self presentViewController:nextNC animated:YES completion:nil];
 }
 
 - (void)shareButtonDidTapped:(id)sender
 {
-    JMShareActivityItemProvider * textProvider = [[JMShareActivityItemProvider alloc] initWithPlaceholderItem:kSkypeActivityType];
-    UIImage *imageForSharing = self.mainImageView.image;
+    JMShareActivityItemProvider * textProvider = [JMShareActivityItemProvider new];
     
-    NSArray *objectsToShare = @[textProvider, imageForSharing];
+    NSString *imagePath = [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:@"image.png"];
+    
+    NSData *imageData = UIImagePNGRepresentation(self.mainImageView.image);
+    [imageData writeToFile:imagePath atomically:YES];
+    
+    NSArray *objectsToShare = @[textProvider, [NSURL fileURLWithPath:imagePath]];
     
     UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
     
@@ -94,6 +146,9 @@
     
     activityVC.excludedActivityTypes = excludeActivities;
     activityVC.popoverPresentationController.barButtonItem = [self.toolbarItems lastObject];
+    activityVC.completionWithItemsHandler = ^(NSString * __nullable activityType, BOOL completed, NSArray * __nullable returnedItems, NSError * __nullable activityError) {
+        [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
+    };
     
     [self presentViewController:activityVC animated:YES completion:nil];    
 }
