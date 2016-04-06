@@ -71,7 +71,7 @@
         }
         case JMResourcesListLoaderOptionType_Filter: {
             NSMutableArray *allFilterOptions = [@[
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.all", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_all", nil)
                                                       value:@[
                                                               kJS_WS_TYPE_REPORT_UNIT,
                                                               kJS_WS_TYPE_DASHBOARD,
@@ -80,18 +80,18 @@
                                                               kJS_WS_TYPE_FILE,
                                                               kJMSavedReportUnit
                                                       ]],
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_reportUnit", nil)
                                                       value:@[kJS_WS_TYPE_REPORT_UNIT]],
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.saved.reportUnit", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_saved_reportUnit", nil)
                                                       value:@[kJMSavedReportUnit]],
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.folder", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_folder", nil)
                                                       value:@[kJS_WS_TYPE_FOLDER]],
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.files", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_files", nil)
                                                       value:@[kJS_WS_TYPE_FILE]],
             ] mutableCopy];
 
             if ([JMUtils isServerProEdition]) {
-                JMResourceLoaderOption *filterByDashboardOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil)
+                JMResourceLoaderOption *filterByDashboardOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_dashboard", nil)
                                                                                                     value:@[
                                                                                                             kJS_WS_TYPE_DASHBOARD,
                                                                                                             kJS_WS_TYPE_DASHBOARD_LEGACY

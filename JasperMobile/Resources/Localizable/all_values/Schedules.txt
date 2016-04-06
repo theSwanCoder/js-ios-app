@@ -20,6 +20,18 @@
 		pt = Não há tarefas agendadas
 		zh = 未规划任何工作。
 		tags = ios
+	[resource_schedule_owner_title]
+		en = Owner
+		tags = ios,new
+	[resource_schedule_state_title]
+		en = State
+		tags = ios,new
+	[resource_schedule_previousFireTime_title]
+		en = Previous Fire Time
+		tags = ios,new
+	[resource_schedule_nextFireTime_title]
+		en = Next Fire Time
+		tags = ios,new
 
 [[New Job]]
 	[schedules_new_job_label]
@@ -97,6 +109,15 @@
 		pt = Formato de saída
 		zh = 输出格式
 		tags = ios
+	[schedules_new_job_repeat_type]
+		en = Repeat
+		tags = ios,new
+	[schedules_new_job_repeat_count]
+		en = Count
+		tags = ios,new
+	[schedules_new_job_repeat_interval]
+		en = Interval
+		tags = ios,new
 
 [[Schedule Errors]]
 	[schedules_error_domain]

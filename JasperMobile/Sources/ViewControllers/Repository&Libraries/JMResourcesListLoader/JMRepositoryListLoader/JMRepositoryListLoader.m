@@ -115,7 +115,7 @@
             return [super listItemsWithOption:optionType];
         case JMResourcesListLoaderOptionType_Filter:
             return @[
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.all", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_all", nil)
                                                       value:@[
                                                               kJS_WS_TYPE_REPORT_UNIT,
                                                               kJS_WS_TYPE_DASHBOARD,

@@ -233,23 +233,23 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Sort: {
             NSArray *allOptions = @[
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.sortby.name", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_sortby_name", nil)
                                                       value:@"label"],
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.sortby.creationDate", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_sortby_creationDate", nil)
                                                       value:@"creationDate"],
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.sortby.modifiedDate", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_sortby_modifiedDate", nil)
                                                       value:@"updateDate"]
             ];
             return allOptions;
         }
         case JMResourcesListLoaderOptionType_Filter:{
             NSMutableArray *allOptions = [@[
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_reportUnit", nil)
                                                       value:@[kJS_WS_TYPE_REPORT_UNIT]],
             ] mutableCopy];
 
             if ([JMUtils isServerProEdition]) {
-                JMResourceLoaderOption *dashboardFilterOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil)
+                JMResourceLoaderOption *dashboardFilterOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_dashboard", nil)
                                                                                                   value:@[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY]];
                 [allOptions addObject:dashboardFilterOption];
             }
@@ -258,7 +258,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                 for (JMResourceLoaderOption *option in allOptions) {
                     [allAvailableItems addObjectsFromArray:option.value];
                 }
-                JMResourceLoaderOption *allItemsOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.filterby.type.all", nil)
+                JMResourceLoaderOption *allItemsOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_all", nil)
                                                                                            value:allAvailableItems];
                 [allOptions insertObject:allItemsOption
                                  atIndex:0];
@@ -294,9 +294,9 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 {
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Filter:
-            return JMCustomLocalizedString(@"resources.filterby.title", nil);
+            return JMCustomLocalizedString(@"resources_filterby_title", nil);
         case JMResourcesListLoaderOptionType_Sort:
-            return JMCustomLocalizedString(@"resources.sortby.title", nil);
+            return JMCustomLocalizedString(@"resources_sortby_title", nil);
     }
     return nil;
 }

@@ -87,35 +87,35 @@
     NSString *localizedResourceType;
     switch (self.type) {
         case JMResourceTypeFile: {
-            localizedResourceType = JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
+            localizedResourceType = JMCustomLocalizedString(@"resources_type_saved_reportUnit", nil);
             break;
         }
         case JMResourceTypeFolder: {
-            localizedResourceType = JMCustomLocalizedString(@"resources.type.folder", nil);
+            localizedResourceType = JMCustomLocalizedString(@"resources_type_folder", nil);
             break;
         }
         case JMResourceTypeSavedResource: {
-            localizedResourceType = JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
+            localizedResourceType = JMCustomLocalizedString(@"resources_type_saved_reportUnit", nil);
             break;
         }
         case JMResourceTypeReport: {
-            localizedResourceType = JMCustomLocalizedString(@"resources.type.reportUnit", nil);
+            localizedResourceType = JMCustomLocalizedString(@"resources_type_reportUnit", nil);
             break;
         }
         case JMResourceTypeTempExportedReport: {
-            localizedResourceType = JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
+            localizedResourceType = JMCustomLocalizedString(@"resources_type_saved_reportUnit", nil);
             break;
         }
         case JMResourceTypeDashboard: {
-            localizedResourceType = JMCustomLocalizedString(@"resources.type.dashboard", nil);
+            localizedResourceType = JMCustomLocalizedString(@"resources_type_dashboard", nil);
             break;
         }
         case JMResourceTypeLegacyDashboard: {
-            localizedResourceType = JMCustomLocalizedString(@"resources.type.dashboard.legacy", nil);
+            localizedResourceType = JMCustomLocalizedString(@"resources_type_dashboard_legacy", nil);
             break;
         }
         case JMResourceTypeSchedule: {
-            localizedResourceType = JMCustomLocalizedString(@"resources.type.schedule", nil);
+            localizedResourceType = JMCustomLocalizedString(@"resources_type_schedule", nil);
             break;
         }
     }

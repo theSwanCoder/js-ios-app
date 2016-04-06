@@ -103,19 +103,19 @@
                     kJMValueKey : scheduleLookup.scheduleDescription ?: @"-"
             },
             @{
-                    kJMTitleKey : @"owner",
+                    kJMTitleKey : @"schedule_owner",
                     kJMValueKey : scheduleLookup.owner ?: @"-"
             },
             @{
-                    kJMTitleKey : @"state",
+                    kJMTitleKey : @"schedule_state",
                     kJMValueKey : scheduleLookup.state.value ?: @"-"
             },
             @{
-                    kJMTitleKey : @"previousFireTime",
+                    kJMTitleKey : @"schedule_previousFireTime",
                     kJMValueKey : [self dateStringFromDate:scheduleLookup.state.previousFireTime] ?: @"-"
             },
             @{
-                    kJMTitleKey : @"nextFireTime",
+                    kJMTitleKey : @"schedule_nextFireTime",
                     kJMValueKey : [self dateStringFromDate:scheduleLookup.state.nextFireTime] ?: @"-"
             }
     ];

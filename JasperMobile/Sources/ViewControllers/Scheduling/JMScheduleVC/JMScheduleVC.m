@@ -341,7 +341,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobRepeatType]) {
         JMNewScheduleBoolenCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleBoolenCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.repeat.type", nil);
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_repeat_type", nil);
 
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
@@ -350,7 +350,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobRepeatCount]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.repeat.count", nil);
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_repeat_count", nil);
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         scheduleCell.valueTextField.text = simpleTrigger.recurrenceInterval.stringValue;
@@ -359,7 +359,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobRepeatTimeInterval]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules.new.job.repeat.interval", nil);
+        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_repeat_interval", nil);
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         scheduleCell.valueTextField.text = [self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit];

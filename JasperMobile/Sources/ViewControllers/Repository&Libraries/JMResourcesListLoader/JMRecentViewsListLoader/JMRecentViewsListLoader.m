@@ -49,7 +49,7 @@
 //            };
 //            NSArray *optionsArray = @[optionForSortByAccessTime];
             return @[
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources.sortby.accessTime", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_sortby_accessTime", nil)
                                                       value:@"accessTime"]
             ];
         }
