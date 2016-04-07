@@ -177,11 +177,12 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
 {
     NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
     NSString *appVersionString = [NSString stringWithFormat:@"Version: %@ (%@)", [JMAppUpdater latestAppVersionAsString], build];
+    CGFloat minVersion = [JSUtils minSupportedServerVersion];
+    NSString *comminityTitle = JMCustomLocalizedString(@"about_comminity_title", nil);
     NSString *appAboutString = [NSString stringWithFormat:JMCustomLocalizedString(@"application_info", nil),
-                    @"\u00AE",
-                    [JSUtils minSupportedServerVersion],
+                    minVersion,
                     appVersionString,
-                    JMCustomLocalizedString(@"about_comminity_title", nil)];
+                    comminityTitle];
     return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n%@", appAboutString]
                                        attributes:[self commonAttributes]];
 }
