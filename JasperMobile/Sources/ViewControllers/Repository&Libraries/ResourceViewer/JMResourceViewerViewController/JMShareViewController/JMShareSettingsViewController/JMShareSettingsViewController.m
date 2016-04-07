@@ -93,11 +93,11 @@
     UISlider * changedSlider = (UISlider*)sender;
     
     if(changedSlider == self.brushSlider) {
-        self.brushWidth = self.brushSlider.value;
-        self.brushValueLabel.text = [NSString stringWithFormat:@"%.1f", self.brushWidth];
+        self.brushWidth = round(self.brushSlider.value);
+        self.brushValueLabel.text = [NSString stringWithFormat:@"%dpx", (int)self.brushWidth];
     } else if(changedSlider == self.opacitySlider) {
         self.opacity = self.opacitySlider.value;
-        self.opacityValueLabel.text = [NSString stringWithFormat:@"%.1f", self.opacity];
+        self.opacityValueLabel.text = [NSString stringWithFormat:@"%d%%", (int)(self.opacity * 100)];
     } else if(changedSlider == self.redSlider) {
         self.redComponent = self.redSlider.value/255.0;
         self.redValueLabel.text = [NSString stringWithFormat:@"%@: %d", JMCustomLocalizedString(@"resource_viewer_share_settings_red", nil), (int)self.redSlider.value];
@@ -110,12 +110,14 @@
     }
     
     UIGraphicsBeginImageContext(self.colorPreviewImageView.bounds.size);
-    CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
-    CGContextSetLineWidth(UIGraphicsGetCurrentContext(),self.brushWidth);
-    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), self.redComponent, self.greenComponent, self.blueComponent, self.opacity);
-    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), CGRectGetMidX(self.colorPreviewImageView.bounds), CGRectGetMidY(self.colorPreviewImageView.bounds));
-    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), CGRectGetMidX(self.colorPreviewImageView.bounds), CGRectGetMidY(self.colorPreviewImageView.bounds));
-    CGContextStrokePath(UIGraphicsGetCurrentContext());
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetLineWidth(context,self.brushWidth);
+    CGContextSetRGBStrokeColor(context, self.redComponent, self.greenComponent, self.blueComponent, self.opacity);
+    CGContextMoveToPoint(context, CGRectGetMidX(self.colorPreviewImageView.bounds), CGRectGetMidY(self.colorPreviewImageView.bounds));
+    CGContextAddLineToPoint(context, CGRectGetMidX(self.colorPreviewImageView.bounds), CGRectGetMidY(self.colorPreviewImageView.bounds));
+    CGContextStrokePath(context);
+
     self.colorPreviewImageView.image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 }
