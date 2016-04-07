@@ -28,9 +28,10 @@
 
 #import "JMScheduleVC.h"
 #import "JMScheduleManager.h"
-#import "JMNewScheduleCell.h"
-#import "JMNewScheduleBoolenCell.h"
-#import "JMNewScheduleVCSection.h"
+#import "JMScheduleCell.h"
+#import "JMScheduleBoolenCell.h"
+#import "JMScheduleVCSection.h"
+#import "JMScheduleVCRow.h"
 
 
 NSString *const kJMJobLabel              = @"kJMJobLabel";
@@ -44,9 +45,9 @@ NSString *const kJMJobRepeatType         = @"kJMJobRepeatType";
 NSString *const kJMJobRepeatCount        = @"kJMJobRepeatCount";
 NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
-@interface JMScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewScheduleCellDelegate, JMNewScheduleBoolenCellDelegate>
-@property (weak, nonatomic) UIDatePicker *datePicker;
-@property (nonatomic, strong) NSArray <JMNewScheduleVCSection *> *sections;
+@interface JMScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMScheduleCellDelegate, JMScheduleBoolenCellDelegate>
+@property (strong, nonatomic) UIDatePicker *datePicker;
+@property (nonatomic, strong) NSArray <JMScheduleVCSection *> *sections;
 @property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) UITableViewCell *tappedCell;
@@ -54,6 +55,24 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 @end
 
 @implementation JMScheduleVC
+
+#pragma mark - Custom Accessors
+- (UIDatePicker *)datePicker
+{
+    if (!_datePicker) {
+        _datePicker = [UIDatePicker new];
+        // need set timezone to 0 because of received value
+        _datePicker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+
+        // TODO: at the moment we support only simple trigger
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+        _datePicker.date = simpleTrigger.startDate;
+        [_datePicker addTarget:self
+                       action:@selector(updateDate:)
+             forControlEvents:UIControlEventValueChanged];
+    }
+    return _datePicker;
+}
 
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
@@ -103,10 +122,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     if ([newDate compare:currentDate] == NSOrderedAscending) {
         return;
     } else {
-        // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        simpleTrigger.startDate = newDate;
-
         [self updateDateCellWithDate:newDate];
     }
 }
@@ -127,14 +142,20 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
     simpleTrigger.startDate = newDate;
 
-    [self updateDateCellWithDate:newDate];
+    [[self dateCell].valueTextField resignFirstResponder];
+}
+
+- (void)cancelEditDate:(UIBarButtonItem *)sender
+{
+    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+    [self updateDateCellWithDate:simpleTrigger.startDate];
 
     [[self dateCell].valueTextField resignFirstResponder];
 }
 
 - (void)setRecurrenceCount:(UIBarButtonItem *)sender
 {
-    JMNewScheduleCell *cell = [self recurrenceCountCell];
+    JMScheduleCell *cell = [self recurrenceCountCell];
     // TODO: at the moment we support only simple trigger
     JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
     // TODO: from ipad we can get letters
@@ -170,11 +191,11 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                                                                             cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
 
-    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeOutputOptions];
+    JMScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeOutputOptions];
     NSInteger rowFormatCell = [section.rows indexOfObject:kJMJobFormat];
     NSIndexPath *formatCellIndexPath = [NSIndexPath indexPathForRow:rowFormatCell
                                                           inSection:JMNewScheduleVCSectionTypeOutputOptions];
-    JMNewScheduleCell *formatCell = [self.tableView cellForRowAtIndexPath:formatCellIndexPath];
+    JMScheduleCell *formatCell = [self.tableView cellForRowAtIndexPath:formatCellIndexPath];
 
     for (NSString *format in availableFormats) {
         [alertController addActionWithLocalizedTitle:format style:UIAlertActionStyleDefault
@@ -201,11 +222,11 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                                                                             cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
 
-    JMNewScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeRecurrence];
+    JMScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeRecurrence];
     NSInteger cellIndex = [section.rows indexOfObject:kJMJobRepeatTimeInterval];
     NSIndexPath *cellIndexPath = [NSIndexPath indexPathForRow:cellIndex
                                                     inSection:JMNewScheduleVCSectionTypeRecurrence];
-    JMNewScheduleCell *cell = [self.tableView cellForRowAtIndexPath:cellIndexPath];
+    JMScheduleCell *cell = [self.tableView cellForRowAtIndexPath:cellIndexPath];
     for (NSNumber *interval in intervals) {
         JSScheduleSimpleTriggerRecurrenceIntervalType intervalType = (JSScheduleSimpleTriggerRecurrenceIntervalType) interval.integerValue;
         NSString *title = [self stringValueForRecurrenceType:intervalType];
@@ -231,16 +252,16 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    JMNewScheduleVCSection *section = self.sections[indexPath.section];
-    NSString *jobProperty = section.rows[indexPath.row];
-    if ([jobProperty isEqualToString:kJMJobFormat]) {
+    JMScheduleVCSection *section = self.sections[indexPath.section];
+    JMScheduleVCRow *row = section.rows[indexPath.row];
+    if (row.type == JMScheduleVCRowTypeFormat) {
         [self selectFormat:nil];
-    } else if ([jobProperty isEqualToString:kJMJobRepeatTimeInterval]) {
+    } else if (row.type == JMScheduleVCRowTypeRepeatTimeInterval) {
         [self selectRecurrenceType];
     } else {
         id cell = [tableView cellForRowAtIndexPath:indexPath];
-        if ([cell isKindOfClass:[JMNewScheduleCell class]]) {
-            JMNewScheduleCell *scheduleCell = cell;
+        if ([cell isKindOfClass:[JMScheduleCell class]]) {
+            JMScheduleCell *scheduleCell = cell;
             [scheduleCell.valueTextField becomeFirstResponder];
         }
     }
@@ -265,7 +286,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     titleLabel.backgroundColor = [UIColor clearColor];
 
-    JMNewScheduleVCSection *scheduleVCSection = self.sections[section];
+    JMScheduleVCSection *scheduleVCSection = self.sections[section];
     NSString *sectionTitle = scheduleVCSection.title;
 
     titleLabel.text = [sectionTitle uppercaseString];
@@ -285,7 +306,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    JMNewScheduleVCSection *scheduleVCSection = self.sections[section];
+    JMScheduleVCSection *scheduleVCSection = self.sections[section];
     NSArray *rows = scheduleVCSection.rows;
 
     return rows.count;
@@ -293,108 +314,65 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    JMScheduleVCSection *section = self.sections[indexPath.section];
+    JMScheduleVCRow *row = section.rows[indexPath.row];
     UITableViewCell *cell;
 
-    JMNewScheduleVCSection *section = self.sections[indexPath.section];
-    NSString *jobProperty = section.rows[indexPath.row];
-
-    if ([jobProperty isEqualToString:kJMJobLabel]) {
-        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_label", nil);
-        scheduleCell.valueTextField.text = self.scheduleMetadata.label;
-        scheduleCell.valueTextField.inputAccessoryView = nil;
-        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
-        scheduleCell.valueTextField.userInteractionEnabled = YES;
-        scheduleCell.delegate = self;
-        cell = scheduleCell;
-    } else if ([jobProperty isEqualToString:kJMJobDescription]) {
-        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_description", nil);
-        scheduleCell.valueTextField.text = self.scheduleMetadata.scheduleDescription;
-        scheduleCell.valueTextField.inputAccessoryView = nil;
-        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
-        scheduleCell.valueTextField.userInteractionEnabled = YES;
-        scheduleCell.delegate = self;
-        cell = scheduleCell;
-    } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
-        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_output_file_name", nil);
-        scheduleCell.valueTextField.text = self.scheduleMetadata.baseOutputFilename;
-        scheduleCell.valueTextField.inputAccessoryView = nil;
-        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
-        scheduleCell.valueTextField.userInteractionEnabled = YES;
-        scheduleCell.delegate = self;
-        cell = scheduleCell;
-    }  else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
-        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_output_file_path", nil);
-        scheduleCell.valueTextField.text = self.scheduleMetadata.folderURI;
-        scheduleCell.valueTextField.inputAccessoryView = nil;
-        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
-        scheduleCell.valueTextField.userInteractionEnabled = YES;
-        scheduleCell.delegate = self;
-        cell = scheduleCell;
-    } else if ([jobProperty isEqualToString:kJMJobFormat]) {
-        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_format", nil);
-        scheduleCell.valueTextField.text = self.scheduleMetadata.outputFormats.firstObject;
-        scheduleCell.valueTextField.inputAccessoryView = nil;
-        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
-        scheduleCell.valueTextField.userInteractionEnabled = NO;
-        cell = scheduleCell;
-    } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
-        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_start_date", nil);
-
-        // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        scheduleCell.valueTextField.text = [self dateStringFromDate:simpleTrigger.startDate];
-        scheduleCell.valueTextField.inputAccessoryView = nil;
-        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
-        scheduleCell.valueTextField.userInteractionEnabled = YES;
-        [self setupToolbarForStartDateCell:scheduleCell];
-        scheduleCell.delegate = self;
-        cell = scheduleCell;
-    } else if ([jobProperty isEqualToString:kJMJobStartImmediately]) {
-        JMNewScheduleBoolenCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleBoolenCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_start_immediately", nil);
-
-        // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        scheduleCell.uiSwitch.on = simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately;
-        scheduleCell.delegate = self;
-        cell = scheduleCell;
-    } else if ([jobProperty isEqualToString:kJMJobRepeatType]) {
-        JMNewScheduleBoolenCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleBoolenCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_repeat_type", nil);
-
-        // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        scheduleCell.uiSwitch.on = simpleTrigger.recurrenceIntervalUnit != JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
-        scheduleCell.delegate = self;
-        cell = scheduleCell;
-    } else if ([jobProperty isEqualToString:kJMJobRepeatCount]) {
-        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_repeat_count", nil);
-        // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        scheduleCell.valueTextField.text = simpleTrigger.recurrenceInterval.stringValue;
-        scheduleCell.valueTextField.inputAccessoryView = nil;
-        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeNumberPad;
-        scheduleCell.valueTextField.userInteractionEnabled = YES;
-        [self setupToolbarForRecurrenceCountCell:scheduleCell];
-        scheduleCell.delegate = self;
-        cell = scheduleCell;
-    } else if ([jobProperty isEqualToString:kJMJobRepeatTimeInterval]) {
-        JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
-        scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_repeat_interval", nil);
-        // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        scheduleCell.valueTextField.text = [self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit];
-        scheduleCell.valueTextField.inputAccessoryView = nil;
-        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
-        scheduleCell.valueTextField.userInteractionEnabled = NO;
-        cell = scheduleCell;
+    switch(row.type) {
+        case JMScheduleVCRowTypeLabel: {
+            cell = [self scheduleCellForIndexPath:indexPath row:row];
+            break;
+        }
+        case JMScheduleVCRowTypeDescription: {
+            cell = [self scheduleCellForIndexPath:indexPath row:row];
+            break;
+        }
+        case JMScheduleVCRowTypeOutputFileURI: {
+            cell = [self scheduleCellForIndexPath:indexPath row:row];
+            break;
+        }
+        case JMScheduleVCRowTypeOutputFolderURI: {
+            cell = [self scheduleCellForIndexPath:indexPath row:row];
+            break;
+        }
+        case JMScheduleVCRowTypeFormat: {
+            cell = [self scheduleCellForIndexPath:indexPath row:row];
+            JMScheduleCell *scheduleCell = (JMScheduleCell *) cell;
+            scheduleCell.valueTextField.userInteractionEnabled = NO;
+            break;
+        }
+        case JMScheduleVCRowTypeStartDate: {
+            cell = [self scheduleCellForIndexPath:indexPath row:row];
+            JMScheduleCell *scheduleCell = (JMScheduleCell *) cell;
+            scheduleCell.valueTextField.inputView = self.datePicker;
+            scheduleCell.valueTextField.inputAccessoryView = [self toolbarForStartDateCell];
+            break;
+        }
+        case JMScheduleVCRowTypeEndDate: {
+            cell = [self scheduleCellForIndexPath:indexPath row:row];
+            break;
+        }
+        case JMScheduleVCRowTypeStartImmediately: {
+            cell = [self scheduleBooleanCellForIndexPath:indexPath row:row];
+            break;
+        }
+        case JMScheduleVCRowTypeRepeatType: {
+            cell = [self scheduleBooleanCellForIndexPath:indexPath row:row];
+            break;
+        }
+        case JMScheduleVCRowTypeRepeatCount: {
+            cell = [self scheduleCellForIndexPath:indexPath row:row];
+            JMScheduleCell *scheduleCell = (JMScheduleCell *) cell;
+            scheduleCell.valueTextField.keyboardType = UIKeyboardTypeNumberPad;
+            scheduleCell.valueTextField.inputAccessoryView = [self toolbarForRecurrenceCountCell];
+            break;
+        }
+        case JMScheduleVCRowTypeRepeatTimeInterval: {
+            cell = [self scheduleCellForIndexPath:indexPath row:row];
+            JMScheduleCell *scheduleCell = (JMScheduleCell *) cell;
+            scheduleCell.valueTextField.userInteractionEnabled = NO;
+            break;
+        }
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -415,27 +393,27 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 }
 
 #pragma mark - JMNewScheduleCellDelegate
-- (void)scheduleCellDidStartChangeValue:(JMNewScheduleCell *)cell
+- (void)scheduleCellDidStartChangeValue:(JMScheduleCell *)cell
 {
     self.tappedCell = cell;
 }
 
-- (void)scheduleCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue
+- (void)scheduleCell:(JMScheduleCell *)cell didChangeValue:(NSString *)newValue
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    JMNewScheduleVCSection *section = self.sections[indexPath.section];
-    NSString *jobProperty = section.rows[indexPath.row];
+    JMScheduleVCSection *section = self.sections[indexPath.section];
+    JMScheduleVCRow *row = section.rows[indexPath.row];
 
     NSString *trimmedValue = [newValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if ([jobProperty isEqualToString:kJMJobLabel]) {
+    if (row.type == JMScheduleVCRowTypeLabel) {
         self.scheduleMetadata.label = trimmedValue;
-    } else if ([jobProperty isEqualToString:kJMJobDescription]) {
+    } else if (row.type == JMScheduleVCRowTypeDescription) {
         self.scheduleMetadata.scheduleDescription = trimmedValue;
-    } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
+    } else if (row.type == JMScheduleVCRowTypeOutputFileURI) {
         self.scheduleMetadata.baseOutputFilename = trimmedValue;
-    } else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
+    } else if (row.type == JMScheduleVCRowTypeOutputFolderURI) {
         self.scheduleMetadata.folderURI = newValue;
-    } else if ([jobProperty isEqualToString:kJMJobRepeatCount]) {
+    } else if (row.type == JMScheduleVCRowTypeRepeatCount) {
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^?:|0|[1-9]\\d*$"
@@ -457,58 +435,50 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 }
 
 #pragma mark - JMNewScheduleBoolenCellDelegate
-- (void)scheduleBoolenCell:(JMNewScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue
+- (void)scheduleBoolenCell:(JMScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    JMNewScheduleVCSection *section = self.sections[indexPath.section];
-    NSString *jobProperty = section.rows[indexPath.row];
+    JMScheduleVCSection *section = self.sections[indexPath.section];
 
-    if ([jobProperty isEqualToString:kJMJobStartImmediately]) {
-        // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        NSArray *scheduleRows;
+    // TODO: at the moment we support only simple trigger
+    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+    if (section.type == JMNewScheduleVCSectionTypeSchedule) {
         if (newValue) {
             simpleTrigger.startType = JSScheduleTriggerStartTypeImmediately;
             // Need save previous state?
             simpleTrigger.startDate = nil;
-            scheduleRows = @[
-                    kJMJobStartImmediately,
-            ];
+
+            // Update Rows
+            [section hideRowWithType:JMScheduleVCRowTypeStartDate];
         } else {
             simpleTrigger.startType = JSScheduleTriggerStartTypeAtDate;
             simpleTrigger.startDate = [NSDate date];
-            scheduleRows = @[
-                    kJMJobStartImmediately,
-                    kJMJobStartDate,
-            ];
+
+            // Update Rows
+            [section showRowWithType:JMScheduleVCRowTypeStartDate];
         }
-        section.rows = scheduleRows;
 
         NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeSchedule];
         [self.tableView reloadSections:sectionIndecies withRowAnimation:UITableViewRowAnimationAutomatic];
-    } else if([jobProperty isEqualToString:kJMJobRepeatType]) {
-        // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        NSArray *rows;
+    } else if(section.type == JMNewScheduleVCSectionTypeRecurrence) {
         if (newValue) {
             simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeMinute;
             simpleTrigger.occurrenceCount = @1;
             simpleTrigger.recurrenceInterval = @1;
-            rows = @[
-                    kJMJobRepeatType,
-                    kJMJobRepeatCount,
-                    kJMJobRepeatTimeInterval
-            ];
+
+            // Update Rows
+            [section showRowWithType:JMScheduleVCRowTypeRepeatCount];
+            [section showRowWithType:JMScheduleVCRowTypeRepeatTimeInterval];
         } else {
             simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
             // Need save previous state?
             simpleTrigger.occurrenceCount = nil;
             simpleTrigger.recurrenceInterval = nil;
-            rows = @[
-                    kJMJobRepeatType,
-            ];
+
+            // Update Rows
+            [section hideRowWithType:JMScheduleVCRowTypeRepeatCount];
+            [section hideRowWithType:JMScheduleVCRowTypeRepeatTimeInterval];
         }
-        section.rows = rows;
 
         NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeRecurrence];
         [self.tableView reloadSections:sectionIndecies withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -528,69 +498,53 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 #pragma mark - Setup Sections
 
-- (JMNewScheduleVCSection *)mainSection
+- (JMScheduleVCSection *)mainSection
 {
-    JMNewScheduleVCSection *mainSection = [JMNewScheduleVCSection sectionWithTitle:@"Main"
-                                                                              type:JMNewScheduleVCSectionTypeMain
+    JMScheduleVCSection *mainSection = [JMScheduleVCSection sectionWithSectionType:JMNewScheduleVCSectionTypeMain
                                                                               rows:@[
-                                                                                      kJMJobLabel,
-                                                                                      kJMJobDescription,
+                                                                                      [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeLabel],
+                                                                                      [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeDescription],
                                                                               ]];
     return mainSection;
 }
 
-- (JMNewScheduleVCSection *)outupOptionsSection
+- (JMScheduleVCSection *)outupOptionsSection
 {
-    JMNewScheduleVCSection *outputOptionsSection = [JMNewScheduleVCSection sectionWithTitle:@"Output Options"
-                                                                                       type:JMNewScheduleVCSectionTypeOutputOptions
+    JMScheduleVCSection *outputOptionsSection = [JMScheduleVCSection sectionWithSectionType:JMNewScheduleVCSectionTypeOutputOptions
                                                                                        rows:@[
-                                                                                               kJMJobOutputFileURI,
-                                                                                               kJMJobOutputFolderURI,
-                                                                                               kJMJobFormat,
+                                                                                               [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeOutputFileURI],
+                                                                                               [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeOutputFolderURI],
+                                                                                               [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeFormat],
                                                                                        ]];
     return outputOptionsSection;
 }
 
-- (JMNewScheduleVCSection *)schedleSection
+- (JMScheduleVCSection *)schedleSection
 {
     // TODO: at the moment we support only simple trigger
     JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-    NSArray *scheduleRows;
-    if (simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately) {
-        scheduleRows = @[
-                kJMJobStartImmediately,
-        ];
-    } else {
-        scheduleRows = @[
-                kJMJobStartImmediately,
-                kJMJobStartDate,
-        ];
-    }
-    JMNewScheduleVCSection *scheduleSection = [JMNewScheduleVCSection sectionWithTitle:@"Schedule Start"
-                                                                                  type:JMNewScheduleVCSectionTypeSchedule
-                                                                                  rows:scheduleRows];
+    BOOL isStartImmediately = simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately;
+
+    JMScheduleVCSection *scheduleSection = [JMScheduleVCSection sectionWithSectionType:JMNewScheduleVCSectionTypeSchedule
+                                                                                  rows:@[
+                                                                                          [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeStartImmediately],
+                                                                                          [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeStartDate hidden:isStartImmediately],
+                                                                                  ]];
     return scheduleSection;
 }
 
-- (JMNewScheduleVCSection *)recurrenceSection
+- (JMScheduleVCSection *)recurrenceSection
 {
     // TODO: at the moment we support only simple trigger
     JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-    NSArray *rows;
-    if (simpleTrigger.recurrenceIntervalUnit == JSScheduleSimpleTriggerRecurrenceIntervalTypeNone) {
-        rows = @[
-                kJMJobRepeatType
-        ];
-    } else {
-        rows = @[
-                kJMJobRepeatType,
-                kJMJobRepeatCount,
-                kJMJobRepeatTimeInterval
-        ];
-    }
-    JMNewScheduleVCSection *recurrenceSection = [JMNewScheduleVCSection sectionWithTitle:@"Recurrence"
-                                                                                    type:JMNewScheduleVCSectionTypeRecurrence
-                                                                                    rows:rows];
+    BOOL isNeedRepeat = simpleTrigger.recurrenceIntervalUnit == JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
+
+    JMScheduleVCSection *recurrenceSection = [JMScheduleVCSection sectionWithSectionType:JMNewScheduleVCSectionTypeRecurrence
+                                                                                    rows:@[
+                                                                                            [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeRepeatType],
+                                                                                            [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeRepeatCount hidden:isNeedRepeat],
+                                                                                            [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeRepeatTimeInterval hidden:isNeedRepeat],
+                                                                                    ]];
     return recurrenceSection;
 }
 
@@ -652,38 +606,25 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     return dateString;
 }
 
-- (void)setupToolbarForStartDateCell:(JMNewScheduleCell *)cell
+- (UIToolbar *)toolbarForStartDateCell
 {
-    if (!self.datePicker) {
-        UIDatePicker *datePicker = [UIDatePicker new];
-        // need set timezone to 0 because of received value
-        datePicker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
-
-        // TODO: at the moment we support only simple trigger
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        datePicker.date = simpleTrigger.startDate;
-        [datePicker addTarget:self
-                       action:@selector(updateDate:)
-             forControlEvents:UIControlEventValueChanged];
-        cell.valueTextField.inputView = datePicker;
-        self.datePicker = datePicker;
-    }
-
     UIToolbar *toolbar = [UIToolbar new];
     [toolbar sizeToFit];
     UIBarButtonItem* doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                               target:self
                                                               action:@selector(setDate:)];
+    UIBarButtonItem* cancelButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                              target:self
+                                                              action:@selector(cancelEditDate:)];
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                                    target:nil
                                                                                    action:nil];
-    [toolbar setItems:@[flexibleSpace, doneButton] animated:YES];
-    cell.valueTextField.inputAccessoryView = toolbar;
+    [toolbar setItems:@[cancelButton, flexibleSpace, doneButton] animated:YES];
+    return toolbar;
 }
 
-- (void)setupToolbarForRecurrenceCountCell:(JMNewScheduleCell *)cell
+- (UIToolbar *)toolbarForRecurrenceCountCell
 {
-
     UIToolbar *toolbar = [UIToolbar new];
     [toolbar sizeToFit];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
@@ -693,7 +634,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                                                                                    target:nil
                                                                                    action:nil];
     [toolbar setItems:@[flexibleSpace, doneButton] animated:YES];
-    cell.valueTextField.inputAccessoryView = toolbar;
+    return toolbar;
 }
 
 - (void)validateJobWithCompletion:(void(^)(BOOL success, NSError *error))completion
@@ -754,29 +695,99 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     return stringValue;
 }
 
-- (JMNewScheduleCell *)dateCell
+- (JMScheduleCell *)dateCell
 {
-    JMNewScheduleCell *cell = [self cellInSection:JMNewScheduleVCSectionTypeSchedule
-                                           andRow:kJMJobStartDate];
+    JMScheduleCell *cell = [self cellInSection:JMNewScheduleVCSectionTypeSchedule
+                                           andRow:JMScheduleVCRowTypeStartDate];
     return cell;
 }
 
-- (JMNewScheduleCell *)recurrenceCountCell
+- (JMScheduleCell *)recurrenceCountCell
 {
-    JMNewScheduleCell *cell = [self cellInSection:JMNewScheduleVCSectionTypeRecurrence
-                                           andRow:kJMJobRepeatCount];
+    JMScheduleCell *cell = [self cellInSection:JMNewScheduleVCSectionTypeRecurrence
+                                        andRow:JMScheduleVCRowTypeRepeatCount];
     return cell;
 }
 
-- (JMNewScheduleCell *)cellInSection:(JMNewScheduleVCSectionType)sectionType andRow:(NSString *)row
+- (JMScheduleCell *)cellInSection:(JMScheduleVCSectionType)sectionType andRow:(JMScheduleVCRowType)rowType
 {
-    JMNewScheduleVCSection *section = self.sections[sectionType];
-    NSArray *rows = section.rows;
-    NSInteger cellIndex = [rows indexOfObject:row];
+    JMScheduleVCSection *searchSection;
+    for (JMScheduleVCSection *section in self.sections) {
+        if (section.type == sectionType) {
+            searchSection = section;
+            break;
+        }
+    }
+    JMScheduleVCRow *row = [searchSection rowWithType:rowType];
+    NSInteger cellIndex = [searchSection.rows indexOfObject:row];
     NSIndexPath *cellIndexPath = [NSIndexPath indexPathForRow:cellIndex
                                                     inSection:sectionType];
-    JMNewScheduleCell *cell = [self.tableView cellForRowAtIndexPath:cellIndexPath];
+    JMScheduleCell *cell = [self.tableView cellForRowAtIndexPath:cellIndexPath];
     return cell;
+}
+
+- (JMScheduleCell *)scheduleCellForIndexPath:(NSIndexPath *)indexPath row:(JMScheduleVCRow *)row
+{
+    JMScheduleCell *scheduleCell = [self.tableView dequeueReusableCellWithIdentifier:@"JMScheduleCell" forIndexPath:indexPath];
+    scheduleCell.titleLabel.text = row.title;
+    scheduleCell.valueTextField.text = [self propertyValueForRowType:row.type];
+    scheduleCell.valueTextField.inputView = nil;
+    scheduleCell.valueTextField.inputAccessoryView = nil;
+    scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
+    scheduleCell.valueTextField.userInteractionEnabled = YES;
+    scheduleCell.delegate = self;
+    return scheduleCell;
+}
+
+- (JMScheduleBoolenCell *)scheduleBooleanCellForIndexPath:(NSIndexPath *)indexPath row:(JMScheduleVCRow *)row
+{
+    JMScheduleBoolenCell *scheduleCell = [self.tableView dequeueReusableCellWithIdentifier:@"JMScheduleBoolenCell" forIndexPath:indexPath];
+    scheduleCell.titleLabel.text = row.title;
+    scheduleCell.uiSwitch.on = [self booleanValueForRowType:row.type];
+    scheduleCell.delegate = self;
+    return scheduleCell;
+}
+
+- (NSString *)propertyValueForRowType:(JMScheduleVCRowType)type
+{
+    NSString *propertyValue;
+
+    // TODO: at the moment we support only simple trigger
+    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+
+    if (type == JMScheduleVCRowTypeLabel) {
+        propertyValue = self.scheduleMetadata.label;
+    } else if (type == JMScheduleVCRowTypeDescription) {
+        propertyValue = self.scheduleMetadata.scheduleDescription;
+    } else if (type == JMScheduleVCRowTypeOutputFileURI) {
+        propertyValue = self.scheduleMetadata.baseOutputFilename;
+    }  else if (type == JMScheduleVCRowTypeOutputFolderURI) {
+        propertyValue = self.scheduleMetadata.folderURI;
+    } else if (type == JMScheduleVCRowTypeFormat) {
+        // TODO: extend for using several formats
+        propertyValue = self.scheduleMetadata.outputFormats.firstObject;
+    } else if (type == JMScheduleVCRowTypeStartDate) {
+        propertyValue = [self dateStringFromDate:simpleTrigger.startDate];
+    } else if (type == JMScheduleVCRowTypeRepeatCount) {
+        propertyValue = simpleTrigger.recurrenceInterval.stringValue;
+    } else if (type == JMScheduleVCRowTypeRepeatTimeInterval) {
+        propertyValue = [self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit];
+    }
+    return propertyValue;
+}
+
+- (BOOL)booleanValueForRowType:(JMScheduleVCRowType)type
+{
+    BOOL boolenValue = NO;
+
+    // TODO: at the moment we support only simple trigger
+    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
+    if (type == JMScheduleVCRowTypeStartImmediately) {
+        boolenValue = simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately;
+    } else if (type == JMScheduleVCRowTypeRepeatType) {
+        boolenValue = simpleTrigger.recurrenceIntervalUnit != JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
+    }
+    return boolenValue;
 }
 
 @end

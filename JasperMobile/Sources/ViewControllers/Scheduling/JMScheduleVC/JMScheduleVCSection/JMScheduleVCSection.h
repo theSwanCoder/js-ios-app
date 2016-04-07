@@ -22,31 +22,33 @@
 
 
 //
-//  JMNewScheduleVCSection.h
+//  JMScheduleVCSection.h
 //  TIBCO JasperMobile
 //
 
 
-#import "JMNewScheduleVCSection.h"
 
+/**
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.3
+*/
 
-@implementation JMNewScheduleVCSection
+#import "JMScheduleVCRow.h"
 
-- (instancetype)initWithTitle:(NSString *)title type:(JMNewScheduleVCSectionType)type rows:(NSArray *)rows
-{
-    self = [super init];
-    if (self) {
-        _title = title;
-        _type = type;
-        _rows = rows;
-    }
-    return self;
-}
+typedef NS_ENUM(NSInteger, JMScheduleVCSectionType) {
+    JMNewScheduleVCSectionTypeMain = 0,
+    JMNewScheduleVCSectionTypeOutputOptions,
+    JMNewScheduleVCSectionTypeSchedule,
+    JMNewScheduleVCSectionTypeRecurrence,
+};
 
-
-+ (instancetype)sectionWithTitle:(NSString *)title type:(JMNewScheduleVCSectionType)type rows:(NSArray *)rows
-{
-    return [[self alloc] initWithTitle:title type:type rows:rows];
-}
-
+@interface JMScheduleVCSection : NSObject
+@property (nonatomic, strong, readonly) NSString *title;
+@property (nonatomic, assign, readonly) JMScheduleVCSectionType type;
+@property (nonatomic, strong, readonly) NSArray <JMScheduleVCRow *>*rows;
+- (instancetype)initWithSectionType:(JMScheduleVCSectionType)type rows:(NSArray <JMScheduleVCRow *> *)rows;
++ (instancetype)sectionWithSectionType:(JMScheduleVCSectionType)type rows:(NSArray <JMScheduleVCRow *> *)rows;
+- (JMScheduleVCRow *)rowWithType:(JMScheduleVCRowType)type;
+- (void)hideRowWithType:(JMScheduleVCRowType)type;
+- (void)showRowWithType:(JMScheduleVCRowType)type;
 @end

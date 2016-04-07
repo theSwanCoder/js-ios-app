@@ -22,14 +22,14 @@
 
 
 //
-//  JMNewScheduleCell.m
+//  JMScheduleCell.m
 //  TIBCO JasperMobile
 //
 
-#import "JMNewScheduleCell.h"
+#import "JMScheduleCell.h"
 
 
-@implementation JMNewScheduleCell
+@implementation JMScheduleCell
 
 #pragma mark - UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField

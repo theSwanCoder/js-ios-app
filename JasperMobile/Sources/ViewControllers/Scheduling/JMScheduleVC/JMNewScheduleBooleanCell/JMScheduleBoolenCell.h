@@ -22,7 +22,7 @@
 
 
 //
-//  JMNewScheduleBoolenCell.h
+//  JMScheduleBoolenCell.h
 //  TIBCO JasperMobile
 //
 
@@ -32,15 +32,15 @@
 @since 2.3
 */
 
-@protocol JMNewScheduleBoolenCellDelegate;
+@protocol JMScheduleBoolenCellDelegate;
 
-@interface JMNewScheduleBoolenCell : UITableViewCell
+@interface JMScheduleBoolenCell : UITableViewCell
 @property(nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *uiSwitch;
-@property (nonatomic, weak) NSObject <JMNewScheduleBoolenCellDelegate> *delegate;
+@property (nonatomic, weak) NSObject <JMScheduleBoolenCellDelegate> *delegate;
 @end
 
-@protocol JMNewScheduleBoolenCellDelegate
+@protocol JMScheduleBoolenCellDelegate
 @optional
-- (void)scheduleBoolenCell:(JMNewScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue;
+- (void)scheduleBoolenCell:(JMScheduleBoolenCell *)cell didChangeValue:(BOOL)newValue;
 @end

@@ -22,27 +22,25 @@
 
 
 //
-//  JMNewScheduleVCSection.h
+//  JMScheduleCell.h
 //  TIBCO JasperMobile
 //
-
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.3
 */
 
-typedef NS_ENUM(NSInteger, JMNewScheduleVCSectionType) {
-    JMNewScheduleVCSectionTypeMain = 0,
-    JMNewScheduleVCSectionTypeOutputOptions,
-    JMNewScheduleVCSectionTypeSchedule,
-    JMNewScheduleVCSectionTypeRecurrence,
-};
+@protocol JMScheduleCellDelegate;
 
-@interface JMNewScheduleVCSection : NSObject
-@property (nonatomic, strong) NSString *title;
-@property (nonatomic, assign) JMNewScheduleVCSectionType type;
-@property (nonatomic, strong) NSArray *rows;
-- (instancetype)initWithTitle:(NSString *)title type:(JMNewScheduleVCSectionType)type rows:(NSArray *)rows;
-+ (instancetype)sectionWithTitle:(NSString *)title type:(JMNewScheduleVCSectionType)type rows:(NSArray *)rows;
+@interface JMScheduleCell : UITableViewCell <UITextFieldDelegate>
+@property(nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UITextField *valueTextField;
+@property (nonatomic, weak) NSObject <JMScheduleCellDelegate> *delegate;
+@end
+
+@protocol JMScheduleCellDelegate
+@optional
+- (void)scheduleCellDidStartChangeValue:(JMScheduleCell *)cell;
+- (void)scheduleCell:(JMScheduleCell *)cell didChangeValue:(NSString *)newValue;
 @end

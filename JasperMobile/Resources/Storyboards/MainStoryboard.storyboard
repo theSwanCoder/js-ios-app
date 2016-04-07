@@ -915,7 +915,7 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMNewScheduleCell" id="MKQ-VM-tbH" customClass="JMNewScheduleCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMScheduleCell" id="MKQ-VM-tbH" customClass="JMScheduleCell">
                                         <rect key="frame" x="0.0" y="50" width="580" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MKQ-VM-tbH" id="S6T-zm-Iq6">
@@ -957,7 +957,7 @@
                                             <outlet property="valueTextField" destination="3S9-aJ-DWe" id="Efb-YH-29D"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMNewScheduleBoolenCell" id="znw-aI-v6a" customClass="JMNewScheduleBoolenCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMScheduleBoolenCell" id="znw-aI-v6a" customClass="JMScheduleBoolenCell">
                                         <rect key="frame" x="0.0" y="110" width="580" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="znw-aI-v6a" id="klQ-WF-c9F">
