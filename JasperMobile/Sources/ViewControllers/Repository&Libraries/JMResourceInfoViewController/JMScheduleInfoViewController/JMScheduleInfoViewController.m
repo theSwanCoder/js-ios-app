@@ -170,7 +170,7 @@
         @throw wrongActionxception;
     }
 
-    [self startShowLoaderWithMessage:@"status.loading"];
+    [self startShowLoaderWithMessage:@"status_loading"];
     __weak __typeof(self) weakSelf = self;
     [[JMScheduleManager sharedManager] loadScheduleMetadataForScheduleWithId:scheduleLookup.jobIdentifier completion:^(JSScheduleMetadata *metadata, NSError *error) {
         __typeof(self) strongSelf = weakSelf;

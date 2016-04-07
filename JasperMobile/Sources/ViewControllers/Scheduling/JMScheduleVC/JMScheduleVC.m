@@ -49,7 +49,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 @property (nonatomic, strong) NSArray <JMNewScheduleVCSection *> *sections;
 @property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (assign, nonatomic) CGFloat keyboardHeight;
+@property (weak, nonatomic) UITableViewCell *tappedCell;
+@property (assign, nonatomic) CGPoint originalTableViewContentOffset;
 @end
 
 @implementation JMScheduleVC
@@ -68,6 +69,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                           forState:UIControlStateNormal];
 
     [self setupLeftBarButtonItems];
+    self.originalTableViewContentOffset = CGPointZero;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -235,6 +237,12 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         [self selectFormat:nil];
     } else if ([jobProperty isEqualToString:kJMJobRepeatTimeInterval]) {
         [self selectRecurrenceType];
+    } else {
+        id cell = [tableView cellForRowAtIndexPath:indexPath];
+        if ([cell isKindOfClass:[JMNewScheduleCell class]]) {
+            JMNewScheduleCell *scheduleCell = cell;
+            [scheduleCell.valueTextField becomeFirstResponder];
+        }
     }
 }
 
@@ -356,6 +364,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         scheduleCell.valueTextField.text = simpleTrigger.recurrenceInterval.stringValue;
         scheduleCell.valueTextField.keyboardType = UIKeyboardTypeNumberPad;
         [self setupToolbarForRecurrenceCountCell:scheduleCell];
+        scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobRepeatTimeInterval]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
@@ -366,6 +375,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         scheduleCell.valueTextField.userInteractionEnabled = NO;
         cell = scheduleCell;
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     return cell;
 }
@@ -384,6 +394,12 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 }
 
 #pragma mark - JMNewScheduleCellDelegate
+- (void)scheduleCellDidStartChangeValue:(JMNewScheduleCell *)cell
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    self.tappedCell = cell;
+}
+
 - (void)scheduleCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -570,17 +586,36 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (void)keyboardDidShow:(NSNotification *)notification
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     CGRect keyboardRect = ((NSValue *)notification.userInfo[UIKeyboardFrameEndUserInfoKey]).CGRectValue;
-    CGPoint offset = CGPointMake(0, self.tableView.contentOffset.y + CGRectGetHeight(keyboardRect));
-    // Height of keyboard get wrong sometimes on UIKeyboardDidHideNotification
-    self.keyboardHeight = CGRectGetHeight(keyboardRect);
-    [self.tableView setContentOffset:offset animated:YES];
+
+    if (!self.tappedCell) {
+        return;
+    }
+
+    JMLog(@"self.tableView.contentOffset: %@", NSStringFromCGPoint(self.tableView.contentOffset));
+
+    CGRect cellFrame = self.tappedCell.frame;
+    CGFloat cellYPositionInVisibleFrame = CGRectGetMaxY(cellFrame) - self.tableView.contentOffset.y;
+    CGFloat visibleFrameHeightWithKeyboard = CGRectGetHeight(self.tableView.frame) - CGRectGetHeight(keyboardRect);
+    if (cellYPositionInVisibleFrame > visibleFrameHeightWithKeyboard) {
+        CGPoint offset = CGPointMake(0, self.tableView.contentOffset.y + (cellYPositionInVisibleFrame - visibleFrameHeightWithKeyboard));
+        self.originalTableViewContentOffset = self.tableView.contentOffset;
+        [self.tableView setContentOffset:offset animated:YES];
+    }
 }
 
 - (void)keyboardDidHide:(NSNotification *)notification
 {
-    CGPoint offset = CGPointMake(0, self.tableView.contentOffset.y - self.keyboardHeight);
-    [self.tableView setContentOffset:offset animated:YES];
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"self.originalTableViewContentOffset: %@", NSStringFromCGPoint(self.originalTableViewContentOffset));
+    JMLog(@"self.tableView.contentOffset: %@", NSStringFromCGPoint(self.tableView.contentOffset));
+    CGFloat diff = ceilf(self.originalTableViewContentOffset.y - self.tableView.contentOffset.y);
+    if (abs((int) diff) > 0) {
+        [self.tableView setContentOffset:self.originalTableViewContentOffset animated:YES];
+        self.originalTableViewContentOffset = CGPointZero;
+        self.tappedCell = nil;
+    }
 }
 
 #pragma mark - Helpers

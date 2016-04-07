@@ -87,7 +87,7 @@
 		zh = 格式
 		tags = ios
 	[schedules_new_job_start_date]
-		en = Run once at:
+		en = Run at:
 		de = Anfangsdatum:
 		es = Fecha de inicio:
 		fr = Date de début:

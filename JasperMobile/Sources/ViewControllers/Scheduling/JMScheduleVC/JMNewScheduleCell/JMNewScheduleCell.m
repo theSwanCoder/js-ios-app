@@ -32,6 +32,12 @@
 @implementation JMNewScheduleCell
 
 #pragma mark - UITextFieldDelegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if ([self.delegate respondsToSelector:@selector(scheduleCellDidStartChangeValue:)]) {
+        [self.delegate scheduleCellDidStartChangeValue:self];
+    }
+}
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];

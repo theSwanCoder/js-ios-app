@@ -41,5 +41,6 @@
 
 @protocol JMNewScheduleCellDelegate
 @optional
+- (void)scheduleCellDidStartChangeValue:(JMNewScheduleCell *)cell;
 - (void)scheduleCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue;
 @end
