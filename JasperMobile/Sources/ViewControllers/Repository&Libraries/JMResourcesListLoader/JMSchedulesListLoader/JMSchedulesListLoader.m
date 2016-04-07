@@ -41,7 +41,6 @@
     _needUpdateData = NO;
 
     JSScheduleSearchParameters *parameters = [JSScheduleSearchParameters new];
-    parameters.reportUnitURI = self.resource.resourceLookup.uri;
     parameters.label = self.searchQuery;
     parameters.startIndex = @(self.offset);
     parameters.numberOfRows = @([self limitOfLoadingResources]);
@@ -80,6 +79,7 @@
 - (JSResourceLookup *)resourceLookupFromScheduleLookup:(JSScheduleLookup *)scheduleLookup
 {
     JSResourceLookup *resourceLookup = [JSResourceLookup new];
+    resourceLookup.uri = scheduleLookup.reportUnitURI;
     resourceLookup.label = scheduleLookup.label;
     resourceLookup.resourceType = kJMScheduleUnit;
     NSString *nextFireDateString = [self dateStringFromDate:scheduleLookup.state.nextFireTime];

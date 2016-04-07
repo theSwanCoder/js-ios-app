@@ -88,7 +88,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 {
     self.contentView.alpha = 1;
     UIImage *resourceImage;
-    if (self.resource.type == JMResourceTypeReport) {
+    if (self.resource.type == JMResourceTypeReport || self.resource.type == JMResourceTypeSchedule) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
         if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
             NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.restClient generateThumbnailImageUrl:self.resource.resourceLookup.uri]]];
@@ -135,11 +135,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
             resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
         }
         self.contentView.alpha = 0.5;
-    } else if (self.resource.type == JMResourceTypeDashboard) {
+    } else if (self.resource.type == JMResourceTypeDashboard || self.resource.type == JMResourceTypeLegacyDashboard) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
-    } else if (self.resource.type == JMResourceTypeSchedule) {
-        // TODO: replace
-        resourceImage = [UIImage imageNamed:@"schedule_action"];
     } else if (self.resource.type == JMResourceTypeFolder) {
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
     } else if(self.resource.type == JMResourceTypeFile) {
