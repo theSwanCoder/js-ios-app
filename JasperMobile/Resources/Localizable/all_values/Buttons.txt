@@ -1,15 +1,8 @@
 
 [[Buttons]]
 	[dialog_button_applyUpdate]
-		en = Apply
-		de = Anwenden
-		fr = Appliquer
-		es = Aplicar
-		it = Applica
-		pt = Aplicar
-		ja = 適用
-		zh = 应用
-		tags = ios
+		en = Run Dashboard
+		tags = ios,new
 	[dialog_button_ok]
 		en = OK
 		de = OK

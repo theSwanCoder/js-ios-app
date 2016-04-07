@@ -28,12 +28,19 @@
 
 #import "JMShareActivityItemProvider.h"
 
-NSString * const kSkypeActivityType = @"com.skype.SkypeForiPad.sharingextension";
+NSString * const kSkypeActivityType = @"com.skype";
 
 @implementation JMShareActivityItemProvider
+- (nonnull instancetype)init
+{
+    NSString *jmActivity = [NSBundle mainBundle].bundleIdentifier;
+    self = [super initWithPlaceholderItem:jmActivity];
+    return self;
+}
+
 - (nullable id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
 {
-    if ([activityType isEqualToString:kSkypeActivityType]) {
+    if ([activityType rangeOfString:kSkypeActivityType].location != NSNotFound ) {
         return nil;
     } else {
         return [NSString stringWithFormat:JMCustomLocalizedString(@"resource_viewer_share_text", nil), kJMAppName];
