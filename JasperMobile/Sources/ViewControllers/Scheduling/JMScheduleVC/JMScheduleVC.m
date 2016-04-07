@@ -302,30 +302,44 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_label", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.label;
+        scheduleCell.valueTextField.inputAccessoryView = nil;
+        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
+        scheduleCell.valueTextField.userInteractionEnabled = YES;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobDescription]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_description", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.scheduleDescription;
+        scheduleCell.valueTextField.inputAccessoryView = nil;
+        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
+        scheduleCell.valueTextField.userInteractionEnabled = YES;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_output_file_name", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.baseOutputFilename;
+        scheduleCell.valueTextField.inputAccessoryView = nil;
+        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
+        scheduleCell.valueTextField.userInteractionEnabled = YES;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     }  else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_output_file_path", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.folderURI;
+        scheduleCell.valueTextField.inputAccessoryView = nil;
+        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
+        scheduleCell.valueTextField.userInteractionEnabled = YES;
         scheduleCell.delegate = self;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobFormat]) {
         JMNewScheduleCell *scheduleCell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
         scheduleCell.titleLabel.text = JMCustomLocalizedString(@"schedules_new_job_format", nil);
         scheduleCell.valueTextField.text = self.scheduleMetadata.outputFormats.firstObject;
+        scheduleCell.valueTextField.inputAccessoryView = nil;
+        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
         scheduleCell.valueTextField.userInteractionEnabled = NO;
         cell = scheduleCell;
     } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
@@ -335,6 +349,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         scheduleCell.valueTextField.text = [self dateStringFromDate:simpleTrigger.startDate];
+        scheduleCell.valueTextField.inputAccessoryView = nil;
+        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
+        scheduleCell.valueTextField.userInteractionEnabled = YES;
         [self setupToolbarForStartDateCell:scheduleCell];
         scheduleCell.delegate = self;
         cell = scheduleCell;
@@ -362,7 +379,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         scheduleCell.valueTextField.text = simpleTrigger.recurrenceInterval.stringValue;
+        scheduleCell.valueTextField.inputAccessoryView = nil;
         scheduleCell.valueTextField.keyboardType = UIKeyboardTypeNumberPad;
+        scheduleCell.valueTextField.userInteractionEnabled = YES;
         [self setupToolbarForRecurrenceCountCell:scheduleCell];
         scheduleCell.delegate = self;
         cell = scheduleCell;
@@ -372,6 +391,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
         scheduleCell.valueTextField.text = [self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit];
+        scheduleCell.valueTextField.inputAccessoryView = nil;
+        scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
         scheduleCell.valueTextField.userInteractionEnabled = NO;
         cell = scheduleCell;
     }
@@ -396,7 +417,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 #pragma mark - JMNewScheduleCellDelegate
 - (void)scheduleCellDidStartChangeValue:(JMNewScheduleCell *)cell
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     self.tappedCell = cell;
 }
 
@@ -418,8 +438,21 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     } else if ([jobProperty isEqualToString:kJMJobRepeatCount]) {
         // TODO: at the moment we support only simple trigger
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)self.scheduleMetadata.trigger[@(JSScheduleTriggerTypeSimple)];
-        // TODO: from ipad we can get letters
-        simpleTrigger.recurrenceInterval = @(newValue.integerValue);
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^?:|0|[1-9]\\d*$"
+                                                                               options:NSRegularExpressionCaseInsensitive
+                                                                                 error:nil];
+        NSArray *matches = [regex matchesInString:newValue
+                                          options:NSMatchingReportCompletion
+                                            range:NSMakeRange(0, newValue.length)];
+        if (matches.count) {
+            simpleTrigger.recurrenceInterval = @(newValue.integerValue);
+        } else {
+            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
+                                                                                          message:JMCustomLocalizedString(@"schedules_error_repeat_count_invalid_characters", nil)
+                                                                                cancelButtonTitle:@"dialog_button_ok"
+                                                                          cancelCompletionHandler:nil];
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
     }
 }
 
@@ -586,34 +619,26 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (void)keyboardDidShow:(NSNotification *)notification
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     CGRect keyboardRect = ((NSValue *)notification.userInfo[UIKeyboardFrameEndUserInfoKey]).CGRectValue;
 
     if (!self.tappedCell) {
         return;
     }
-
-    JMLog(@"self.tableView.contentOffset: %@", NSStringFromCGPoint(self.tableView.contentOffset));
-
     CGRect cellFrame = self.tappedCell.frame;
     CGFloat cellYPositionInVisibleFrame = CGRectGetMaxY(cellFrame) - self.tableView.contentOffset.y;
     CGFloat visibleFrameHeightWithKeyboard = CGRectGetHeight(self.tableView.frame) - CGRectGetHeight(keyboardRect);
     if (cellYPositionInVisibleFrame > visibleFrameHeightWithKeyboard) {
         CGPoint offset = CGPointMake(0, self.tableView.contentOffset.y + (cellYPositionInVisibleFrame - visibleFrameHeightWithKeyboard));
-        self.originalTableViewContentOffset = self.tableView.contentOffset;
         [self.tableView setContentOffset:offset animated:YES];
     }
+    self.originalTableViewContentOffset = self.tableView.contentOffset;
 }
 
 - (void)keyboardDidHide:(NSNotification *)notification
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    JMLog(@"self.originalTableViewContentOffset: %@", NSStringFromCGPoint(self.originalTableViewContentOffset));
-    JMLog(@"self.tableView.contentOffset: %@", NSStringFromCGPoint(self.tableView.contentOffset));
     CGFloat diff = ceilf(self.originalTableViewContentOffset.y - self.tableView.contentOffset.y);
     if (abs((int) diff) > 0) {
         [self.tableView setContentOffset:self.originalTableViewContentOffset animated:YES];
-        self.originalTableViewContentOffset = CGPointZero;
         self.tappedCell = nil;
     }
 }

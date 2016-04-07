@@ -143,6 +143,9 @@
 	[schedules_error_empty_filename_invalid_characters]
 		en = The base output name contains invalid characters. You might have mistyped it.
 		tags = ios,new
+	[schedules_error_repeat_count_invalid_characters]
+		en = Please enter only digits.
+		tags = ios,new
 	[schedules_error_empty_output_folder]
 		en = Specify a folder.
 		tags = ios,new
