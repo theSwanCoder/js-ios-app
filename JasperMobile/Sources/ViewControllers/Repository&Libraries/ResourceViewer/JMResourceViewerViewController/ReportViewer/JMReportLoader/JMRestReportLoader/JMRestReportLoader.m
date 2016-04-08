@@ -66,9 +66,6 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                       restClient:restClient];
     if (self) {
         _webEnvironment = webEnvironment;
-//        if ([JMUtils isSupportNewRESTFlow]) {
-//            self.needEmbeddableOutput = YES;
-//        }
     }
     return self;
 }
@@ -91,18 +88,27 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 - (void)destroy
 {
-    JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
-                                                                             parameters:@{
-                                                                                     @"HTMLString" : @""
-                                                                             }];
-    [self.webEnvironment sendJavascriptRequest:injectContentRequest
-                                    completion:^(NSDictionary *params, NSError *error) {
-                                        JMLog(@"params: %@", params);
-                                        JMLog(@"error: %@", error);
-                                        if (error) {
-                                            [self.webEnvironment clean];
-                                        }
-                                    }];
+    __weak __typeof(self) weakSelf = self;
+    [self verifyIsContentDivCreatedWithCompletion:^(BOOL isCreated, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (isCreated) {
+            JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
+                                                                                     parameters:@{
+                                                                                             @"HTMLString" : @""
+                                                                                     }];
+            [strongSelf.webEnvironment sendJavascriptRequest:injectContentRequest
+                                            completion:^(NSDictionary *params, NSError *error) {
+                                                JMLog(@"params: %@", params);
+                                                JMLog(@"error: %@", error);
+                                                if (error) {
+                                                    [strongSelf.webEnvironment clean];
+                                                }
+                                            }];
+        } else {
+            [strongSelf.webEnvironment clean];
+        }
+    }];
+
 }
 
 #pragma mark - Private API
@@ -309,13 +315,23 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 - (void)loadDependenciesFromLinks:(NSArray *)links
                        completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
+    // fusion chart dependencies need to be loaded first
+    NSString *jrsURI = self.restClient.serverProfile.serverUrl;
+    NSMutableArray *allLins = [@[
+            [NSString stringWithFormat:@"%@/fusion/maps/FusionCharts.js", jrsURI],
+            [NSString stringWithFormat:@"%@/fusion/maps/jquery.min.js", jrsURI],
+            [NSString stringWithFormat:@"%@/fusion/maps/FusionCharts.HC.js", jrsURI],
+            [NSString stringWithFormat:@"%@/fusion/maps/../widgets/FusionCharts.HC.Widgets.js", jrsURI],
+    ] mutableCopy];
+
+    [allLins addObjectsFromArray:links];
     JMJavascriptRequest *loadDependenciesRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
                                                                                  parameters:@{
-                                                                                         @"scriptURLs" : links,
+                                                                                         @"scriptURLs" : allLins,
                                                                                  }];
     [self.webEnvironment sendJavascriptRequest:loadDependenciesRequest
                                     completion:^(NSDictionary *params, NSError *error) {
-                                        JMLog(@"JasperMobile.Report.REST.API.loadScript");
+                                        JMLog(@"JasperMobile.Helper.loadScripts");
 //                                        JMLog(@"params: %@", params);
                                         JMLog(@"error: %@", error);
                                         if (params) {

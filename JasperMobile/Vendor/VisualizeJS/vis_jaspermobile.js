@@ -111,6 +111,34 @@ var JasperMobile = {
                 })(scriptURL);
             }
         },
+        removeAllScriptsFromHead: function(parameters) {
+            // remove links
+            // var allLinks = parameters["scriptURLs"];
+            // for(var i=0; i < allLinks.length; i++) {
+            //     var link = allLinks[i];
+            //     var selector = "[src='" + link + "']";
+            //     var foundScripts = document.head.querySelectorAll(selector);
+            //     if (foundScripts.length == 1) {
+            //         var script = foundScripts[0];
+            //         document.head.removeChild(script);
+            //     } else {
+            //         // TODO: need handle this case?
+            //     }
+            // }
+            // // remove dependencies
+            // var loadedModules = document.head.querySelectorAll("[data-requiremodule]");
+            // for(var j=0; j < loadedModules.length; j++) {
+            //     var module = loadedModules[j];
+            //     document.head.removeChild(module);
+            // }
+            // // remove other dependencies
+            // loadedModules = document.head.getElementsByTagName("script");
+            // for(j=0; j < loadedModules.length; j++) {
+            //     var module = loadedModules[j];
+            //     document.head.removeChild(module);
+            // }
+            JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Helper.removeAllScriptsFromHead", {});
+        },
         loadScript: function(parameters) {
             var scriptURL = parameters["scriptURL"];
             JasperMobile.Helper.addScript(scriptURL, function() {
@@ -120,6 +148,13 @@ var JasperMobile = {
                     }
                 });
             }, null);
+        },
+        cleanContent: function() {
+            var elements = document.getElementsByClassName("_SmartLabel_Container");
+            for(var i = 0; i < elements.length; i++) {
+                var element = elements[i];
+                document.body.removeChild(element);
+            }
         }
     }
 };
@@ -197,6 +232,8 @@ JasperMobile.Report.REST.API = {
         div.innerHTML = content;
 
         if (content == "") {
+            // clean content
+            JasperMobile.Helper.cleanContent();
             JasperMobile.Callback.log("clear content");
         } else {
             // setup scaling
@@ -212,8 +249,18 @@ JasperMobile.Report.REST.API = {
             }
 
             if (table != undefined) {
-                table.style.transform = "scale(" + innerWidth / parseInt(table.style.width) + ")";
-                table.style.transformOrigin = "0% 0%";
+                var navigator = window.navigator.appVersion;
+                //ios 8.4 - 5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H141
+                //ios 9.3 - 5.0 (iPhone; CPU iPhone OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13E230
+                var versionString = navigator.match(/(\d{3}\.\d+.\d+)/g)[0];
+
+                if (versionString == "600.1.4") {
+                    table.style.webkitTransform = "scale(" + innerWidth / parseInt(table.style.width) + ")";
+                    table.style.webkitTransformOrigin = "0% 0%";
+                } else {
+                    table.style.transform = "scale(" + innerWidth / parseInt(table.style.width) + ")";
+                    table.style.transformOrigin = "0% 0%";
+                }
             }
         }
         JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
