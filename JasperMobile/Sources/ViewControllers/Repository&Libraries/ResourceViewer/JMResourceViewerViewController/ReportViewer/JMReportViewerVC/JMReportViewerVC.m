@@ -456,17 +456,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         if (success) {
             toolbar.enable = YES;
             [strongSelf.report updateCurrentPage:toPage];
-            if (![JMUtils isSupportVisualize]) {
-                // fix an issue in webview after zooming and changing page (black areas)
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    if (![strongSelf isContentOnTV]) {
-                        JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
-                        runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
-                        [self.webEnvironment sendJavascriptRequest:runRequest
-                                                        completion:nil];
-                    }
-                });
-            }
         } else {
             [strongSelf handleError:error];
         }
