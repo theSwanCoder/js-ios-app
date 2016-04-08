@@ -22,28 +22,51 @@
 
 
 //
-//  JMResourceViewerViewController.h
+//  JMShareImageActivityItemProvider.m
 //  TIBCO JasperMobile
 //
 
-#import "JMShareActivityItemProvider.h"
+#import "JMShareImageActivityItemProvider.h"
 
 NSString * const kSkypeActivityType = @"com.skype";
+NSString * const kWhatsAppActivityType = @"net.whatsapp";
 
-@implementation JMShareActivityItemProvider
-- (nonnull instancetype)init
+@interface JMShareImageActivityItemProvider()
+@property (nonatomic, copy) UIImage *imageForSharing;
+@property (nonatomic, copy) NSString *imageForSharingFilePath;
+@end
+
+@implementation JMShareImageActivityItemProvider
+- (nonnull instancetype)initWithImage:(UIImage *)image
 {
     NSString *jmActivity = [NSBundle mainBundle].bundleIdentifier;
+    jmActivity = [jmActivity stringByAppendingPathExtension:@"image"];
     self = [super initWithPlaceholderItem:jmActivity];
+    if (self) {
+        self.imageForSharing = image;
+    }
     return self;
 }
 
 - (nullable id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
 {
-    if ([activityType rangeOfString:kSkypeActivityType].location != NSNotFound ) {
+    if ([activityType rangeOfString:kSkypeActivityType].location != NSNotFound ||
+        [activityType rangeOfString:kWhatsAppActivityType].location != NSNotFound) {
         return nil;
     } else {
         return [NSString stringWithFormat:JMCustomLocalizedString(@"resource_viewer_share_text", nil), kJMAppName];
     }
+}
+
+- (NSString *)imageForSharingFilePath {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _imageForSharingFilePath = [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:@"image.png"];
+        
+        NSData *imageData = UIImagePNGRepresentation(self.imageForSharing);
+        [imageData writeToFile:_imageForSharingFilePath atomically:YES];
+
+    });
+    return _imageForSharingFilePath;
 }
 @end

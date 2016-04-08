@@ -22,18 +22,31 @@
 
 
 //
-//  JMResourceViewerViewController.h
+//  JMShareTextActivityItemProvider.m
 //  TIBCO JasperMobile
 //
 
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 2.5
- */
+#import "JMShareTextActivityItemProvider.h"
 
+NSString * const kSkypeActivityType = @"com.skype";
+NSString * const kWhatsAppActivityType = @"net.whatsapp";
 
-#import <UIKit/UIKit.h>
+@implementation JMShareTextActivityItemProvider
+- (nonnull instancetype)init
+{
+    NSString *jmActivity = [NSBundle mainBundle].bundleIdentifier;
+    jmActivity = [jmActivity stringByAppendingPathExtension:@"text"];
+    self = [super initWithPlaceholderItem:jmActivity];
+    return self;
+}
 
-@interface JMShareActivityItemProvider : UIActivityItemProvider <UIActivityItemSource>
-
+- (nullable id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
+{
+    if ([activityType rangeOfString:kSkypeActivityType].location != NSNotFound ||
+        [activityType rangeOfString:kWhatsAppActivityType].location != NSNotFound) {
+        return nil;
+    } else {
+        return [NSString stringWithFormat:JMCustomLocalizedString(@"resource_viewer_share_text", nil), kJMAppName];
+    }
+}
 @end

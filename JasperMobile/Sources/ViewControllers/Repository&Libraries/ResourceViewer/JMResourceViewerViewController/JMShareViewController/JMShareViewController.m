@@ -126,10 +126,6 @@
 {
     JMShareActivityItemProvider * textProvider = [JMShareActivityItemProvider new];
     
-    NSString *imagePath = [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:@"image.png"];
-    
-    NSData *imageData = UIImagePNGRepresentation(self.mainImageView.image);
-    [imageData writeToFile:imagePath atomically:YES];
     
     NSArray *objectsToShare = @[textProvider, [NSURL fileURLWithPath:imagePath]];
     

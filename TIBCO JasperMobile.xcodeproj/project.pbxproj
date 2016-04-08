@@ -24,6 +24,8 @@
 		08221C421AE54DA000F94F1D /* JMCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C411AE54DA000F94F1D /* JMCoreDataManager.m */; };
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
 		08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */; };
+		083E3F211CB7FD7C00F83357 /* JMShareTextActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 083E3F201CB7FD7C00F83357 /* JMShareTextActivityItemProvider.m */; };
+		083E3F2C1CB8012300F83357 /* JMShareImageActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 083E3F2B1CB8012300F83357 /* JMShareImageActivityItemProvider.m */; };
 		0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */; };
 		0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */; };
 		0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503B19F1265B00C5875E /* CoreTelephony.framework */; };
@@ -225,7 +227,6 @@
 		BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */; };
 		BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */; };
 		BD6DB2A01C981E5F002DEFDF /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */; };
-		BD6DB2BA1C982B9C002DEFDF /* JMShareActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6DB2B91C982B9C002DEFDF /* JMShareActivityItemProvider.m */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8B9ED1B57D90B00758441 /* JMThemesManager.m */; };
@@ -298,6 +299,10 @@
 		08221C9C1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMigrateTo_v_2_0.h; sourceTree = "<group>"; };
 		08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMigrateTo_v_2_0.m; sourceTree = "<group>"; };
 		08221C9F1AE7A3B100F94F1D /* TIBCO JasperMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile-Bridging-Header.h"; sourceTree = "<group>"; };
+		083E3F1F1CB7FD7C00F83357 /* JMShareTextActivityItemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMShareTextActivityItemProvider.h; sourceTree = "<group>"; };
+		083E3F201CB7FD7C00F83357 /* JMShareTextActivityItemProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareTextActivityItemProvider.m; sourceTree = "<group>"; };
+		083E3F2A1CB8012300F83357 /* JMShareImageActivityItemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMShareImageActivityItemProvider.h; sourceTree = "<group>"; };
+		083E3F2B1CB8012300F83357 /* JMShareImageActivityItemProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareImageActivityItemProvider.m; sourceTree = "<group>"; };
 		0854B36E1BC54FFB0004E5B8 /* JMBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseViewController.h; sourceTree = "<group>"; };
 		0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseViewController.m; sourceTree = "<group>"; };
 		0854B3711BC6A53E0004E5B8 /* UIAlertController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Additions.h"; sourceTree = "<group>"; };
@@ -701,8 +706,6 @@
 		BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
-		BD6DB2B81C982B9C002DEFDF /* JMShareActivityItemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMShareActivityItemProvider.h; sourceTree = "<group>"; };
-		BD6DB2B91C982B9C002DEFDF /* JMShareActivityItemProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareActivityItemProvider.m; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -907,6 +910,24 @@
 				08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */,
 			);
 			path = JMMigrationPolicy;
+			sourceTree = "<group>";
+		};
+		083E3F1E1CB7FD7C00F83357 /* JMShareTextActivityItemProvider */ = {
+			isa = PBXGroup;
+			children = (
+				083E3F1F1CB7FD7C00F83357 /* JMShareTextActivityItemProvider.h */,
+				083E3F201CB7FD7C00F83357 /* JMShareTextActivityItemProvider.m */,
+			);
+			path = JMShareTextActivityItemProvider;
+			sourceTree = "<group>";
+		};
+		083E3F291CB8012300F83357 /* JMShareImageActivityItemProvider */ = {
+			isa = PBXGroup;
+			children = (
+				083E3F2A1CB8012300F83357 /* JMShareImageActivityItemProvider.h */,
+				083E3F2B1CB8012300F83357 /* JMShareImageActivityItemProvider.m */,
+			);
+			path = JMShareImageActivityItemProvider;
 			sourceTree = "<group>";
 		};
 		0854B36D1BC54FFB0004E5B8 /* JMBaseViewController */ = {
@@ -1246,10 +1267,10 @@
 				08DD182F1B136B8A00856112 /* JMDashBoardInfoViewController */,
 				08DD18321B136B8A00856112 /* JMReportInfoViewController */,
 				08DD18361B136B8A00856112 /* JMSavedItemsInfoViewController */,
+				A14788D98A85E3BB55694B25 /* JMScheduleInfoViewController */,
 				089B14F81AA756BD0021A915 /* JMResourceInfoViewController.h */,
 				089B14F91AA756BD0021A915 /* JMResourceInfoViewController.m */,
 				08DD18351B136B8A00856112 /* JMResourceInfoViewController.xib */,
-				A14788D98A85E3BB55694B25 /* JMScheduleInfoViewController */,
 			);
 			path = JMResourceInfoViewController;
 			sourceTree = "<group>";
@@ -2845,8 +2866,8 @@
 		BD6DB2B71C982B9C002DEFDF /* JMShareActivityItemProvider */ = {
 			isa = PBXGroup;
 			children = (
-				BD6DB2B81C982B9C002DEFDF /* JMShareActivityItemProvider.h */,
-				BD6DB2B91C982B9C002DEFDF /* JMShareActivityItemProvider.m */,
+				083E3F291CB8012300F83357 /* JMShareImageActivityItemProvider */,
+				083E3F1E1CB7FD7C00F83357 /* JMShareTextActivityItemProvider */,
 			);
 			path = JMShareActivityItemProvider;
 			sourceTree = "<group>";
@@ -3294,6 +3315,7 @@
 				08E2AC8D1B1E056900AC462B /* JMTextInputControlCell.m in Sources */,
 				089B15FA1AA756BD0021A915 /* JMSavedItemsCollectionViewController.m in Sources */,
 				089B159C1AA756BD0021A915 /* JMEditabledViewController.m in Sources */,
+				083E3F211CB7FD7C00F83357 /* JMShareTextActivityItemProvider.m in Sources */,
 				08E62C8319922B0B0081CA83 /* main.m in Sources */,
 				08E2AC9C1B1E056900AC462B /* JMSaveReportSection.m in Sources */,
 				089B15B81AA756BD0021A915 /* JMServersGridViewController.m in Sources */,
@@ -3307,7 +3329,6 @@
 				BDF3D25A1B8B166B0005AA28 /* JMReportOptionsCell.m in Sources */,
 				089F66501C3D727700ED683B /* UIViewController+Additions.m in Sources */,
 				0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */,
-				BD6DB2BA1C982B9C002DEFDF /* JMShareActivityItemProvider.m in Sources */,
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
 				089B15F81AA756BD0021A915 /* JMLibraryCollectionViewController.m in Sources */,
@@ -3330,6 +3351,7 @@
 				087A71B91BD95FEE007B98A4 /* JMEULAViewController.m in Sources */,
 				089B15CF1AA756BD0021A915 /* JMSavedResourcesListLoader.m in Sources */,
 				08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */,
+				083E3F2C1CB8012300F83357 /* JMShareImageActivityItemProvider.m in Sources */,
 				089B15A61AA756BD0021A915 /* UIView+Additions.m in Sources */,
 				089B15B01AA756BD0021A915 /* JMPopupView.m in Sources */,
 				089B159D1AA756BD0021A915 /* JMMainNavigationController.m in Sources */,
