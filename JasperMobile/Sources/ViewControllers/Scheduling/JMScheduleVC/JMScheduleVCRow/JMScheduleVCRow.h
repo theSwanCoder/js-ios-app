@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, JMScheduleVCRowType) {
     JMScheduleVCRowTypeFormat,
     JMScheduleVCRowTypeStartDate,
     JMScheduleVCRowTypeEndDate,
+    JMScheduleVCRowTypeTimeZone,
     JMScheduleVCRowTypeStartImmediately,
     JMScheduleVCRowTypeRepeatType,
     JMScheduleVCRowTypeRepeatCount,

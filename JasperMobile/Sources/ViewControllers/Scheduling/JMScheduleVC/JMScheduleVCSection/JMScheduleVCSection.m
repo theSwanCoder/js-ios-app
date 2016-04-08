@@ -103,12 +103,20 @@
             title = @"Output Options";
             break;
         }
-        case JMNewScheduleVCSectionTypeSchedule: {
+        case JMNewScheduleVCSectionTypeScheduleStart: {
             title = @"Schedule Start";
             break;
         }
         case JMNewScheduleVCSectionTypeRecurrence: {
             title = @"Recurrence";
+            break;
+        }
+        case JMNewScheduleVCSectionTypeScheduleEnd: {
+            title = @"Schedule End";
+            break;
+        }
+        case JMNewScheduleVCSectionTypeHolidays: {
+            title = @"Holidays";
             break;
         }
     }

@@ -38,8 +38,10 @@
 typedef NS_ENUM(NSInteger, JMScheduleVCSectionType) {
     JMNewScheduleVCSectionTypeMain = 0,
     JMNewScheduleVCSectionTypeOutputOptions,
-    JMNewScheduleVCSectionTypeSchedule,
+    JMNewScheduleVCSectionTypeScheduleStart,
     JMNewScheduleVCSectionTypeRecurrence,
+    JMNewScheduleVCSectionTypeScheduleEnd,
+    JMNewScheduleVCSectionTypeHolidays,
 };
 
 @interface JMScheduleVCSection : NSObject

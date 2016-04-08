@@ -90,6 +90,10 @@
             title = JMCustomLocalizedString(@"schedules_new_job_end_date", nil);
             break;
         }
+        case JMScheduleVCRowTypeTimeZone: {
+            title = @"Time Zone";
+            break;
+        }
         case JMScheduleVCRowTypeStartImmediately: {
             title = JMCustomLocalizedString(@"schedules_new_job_start_immediately", nil);
             break;

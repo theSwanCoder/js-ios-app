@@ -165,19 +165,33 @@
     scheduleMetadata.outputFormats = [self defaultFormats];
     scheduleMetadata.outputTimeZone = [self currentTimeZone];
 
-    JSScheduleSimpleTrigger *simpleTrigger = [self simpleTrigger];
-    scheduleMetadata.trigger = @{
-            @(JSScheduleTriggerTypeSimple) : simpleTrigger
-    };
+    JSScheduleSimpleTrigger *trigger = [self noneTrigger];
+    scheduleMetadata.trigger = trigger;
     return scheduleMetadata;
 }
 
 - (JSScheduleSimpleTrigger *)simpleTrigger
 {
     JSScheduleSimpleTrigger *simpleTrigger = [JSScheduleSimpleTrigger new];
+    simpleTrigger.type = JSScheduleTriggerTypeSimple;
     simpleTrigger.startType = JSScheduleTriggerStartTypeAtDate;
-    simpleTrigger.occurrenceCount = @1;
+    simpleTrigger.occurrenceCount = @-1;
     simpleTrigger.startDate = [NSDate date];
+    simpleTrigger.endDate = [NSNull null];
+    simpleTrigger.timezone = [self currentTimeZone];
+    simpleTrigger.recurrenceInterval = @1;
+    simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeDay;
+    return simpleTrigger;
+}
+
+- (JSScheduleSimpleTrigger *)noneTrigger
+{
+    JSScheduleSimpleTrigger *simpleTrigger = [JSScheduleSimpleTrigger new];
+    simpleTrigger.type = JSScheduleTriggerTypeSimple;
+    simpleTrigger.startType = JSScheduleTriggerStartTypeImmediately;
+    simpleTrigger.occurrenceCount = @-1;
+    simpleTrigger.startDate = [NSNull null];
+    simpleTrigger.endDate = [NSNull null];
     simpleTrigger.timezone = [self currentTimeZone];
     simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
     return simpleTrigger;

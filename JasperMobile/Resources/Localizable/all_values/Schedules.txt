@@ -110,13 +110,16 @@
 		zh = 输出格式
 		tags = ios
 	[schedules_new_job_repeat_type]
-		en = Repeat
+		en = Recurrence Type
 		tags = ios,new
 	[schedules_new_job_repeat_count]
 		en = Count
 		tags = ios,new
 	[schedules_new_job_repeat_interval]
 		en = Interval
+		tags = ios,new
+	[schedules_new_job_recurrenceType_alert_title]
+		en = Reccurence Type
 		tags = ios,new
 
 [[Schedule Errors]]
