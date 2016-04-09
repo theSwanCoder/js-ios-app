@@ -51,8 +51,6 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
         _isLoadingNow = NO;
         _resourcesFolders = [NSMutableArray array];
         _resourcesItems = [NSMutableArray array];
-        _filterBySelectedIndex = 0;
-        _sortBySelectedIndex = 0;
         _needUpdateData = YES;
         _loadRecursively = YES;
     }

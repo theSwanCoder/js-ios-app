@@ -107,7 +107,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     self.shouldShowButtonForChangingViewPresentation = YES;
     self.shouldShowRightNavigationItems = YES;
     self.isScrollToTop = NO;
-    self.needLayoutUI = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -116,6 +115,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
     self.screenName = NSStringFromClass(self.class);
     [self addKeyboardObservers];
+
+    self.needLayoutUI = YES;
 
     if (self.needReloadData) {
         [self updateStrong];
@@ -197,8 +198,22 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     if (!_resourceListLoader) {
         _resourceListLoader = [[self resourceLoaderClass] new];
         _resourceListLoader.delegate = self;
+        _resourceListLoader.filterBySelectedIndex = [self defaultFilterByIndex];
+        _resourceListLoader.sortBySelectedIndex = [self defaultSortByIndex];
     }
     return _resourceListLoader;
+}
+
+- (NSInteger)defaultFilterByIndex
+{
+    // Could be overriden in children
+    return 0;
+}
+
+- (NSInteger)defaultSortByIndex
+{
+    // Could be overriden in children
+    return 0;
 }
 
 #pragma mark - Actions
@@ -650,6 +665,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             NSUInteger selectedIndex = [popup selectedIndex];
             if (selectedIndex != self.resourceListLoader.filterBySelectedIndex) {
                  self.resourceListLoader.filterBySelectedIndex = selectedIndex;
+                [self.resourceListLoader setNeedsUpdate];
+                [self.resourceListLoader updateIfNeeded];
                 self.isScrollToTop = YES;
             }
             break;
@@ -658,6 +675,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             NSUInteger selectedIndex = [popup selectedIndex];
             if (selectedIndex != self.resourceListLoader.sortBySelectedIndex) {
                 self.resourceListLoader.sortBySelectedIndex = selectedIndex;
+                [self.resourceListLoader setNeedsUpdate];
+                [self.resourceListLoader updateIfNeeded];
                 self.isScrollToTop = YES;
             }
             break;

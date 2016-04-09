@@ -28,6 +28,7 @@
 
 #import "JMLibraryCollectionViewController.h"
 #import "SWRevealViewController.h"
+#import "JMLibraryListLoader.h"
 
 @interface JMLibraryCollectionViewController()
 @end
@@ -35,6 +36,11 @@
 @implementation JMLibraryCollectionViewController
 
 #pragma mark -LifeCycle
+-(void)awakeFromNib {
+    [super awakeFromNib];
+    self.filterByIndex = JMLibraryListLoaderFilterByAllIndex;
+    self.sortByIndex = JMLibraryListLoaderSortByNameIndex;
+}
 
 -(void)viewDidLoad
 {
@@ -53,6 +59,16 @@
 - (Class)resourceLoaderClass
 {
     return NSClassFromString(@"JMLibraryListLoader");
+}
+
+- (NSInteger)defaultFilterByIndex
+{
+    return self.filterByIndex;
+}
+
+- (NSInteger)defaultSortByIndex
+{
+    return self.sortByIndex;
 }
 
 @end

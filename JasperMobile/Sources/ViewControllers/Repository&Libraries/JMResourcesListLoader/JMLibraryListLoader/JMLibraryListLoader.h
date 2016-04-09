@@ -33,6 +33,16 @@
 
 #import "JMResourcesListLoader.h"
 
+// Filter By
+extern NSInteger JMLibraryListLoaderFilterByAllIndex;
+extern NSInteger JMLibraryListLoaderFilterByReportIndex;
+extern NSInteger JMLibraryListLoaderFilterByDashboardIndex;
+
+// Sort By
+extern NSInteger JMLibraryListLoaderSortByNameIndex;
+extern NSInteger JMLibraryListLoaderSortByCreationDateIndex;
+extern NSInteger JMLibraryListLoaderSortByModifiedDateIndex;
+
 @interface JMLibraryListLoader : JMResourcesListLoader
 
 @end
