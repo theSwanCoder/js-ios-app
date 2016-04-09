@@ -33,6 +33,7 @@
 #import "JMScheduleVC.h"
 #import "JMCancelRequestPopup.h"
 #import "JMLibraryCollectionViewController.h"
+#import "JMLibraryListLoader.h"
 
 
 @implementation JMSchedulesCollectionViewController
@@ -140,6 +141,7 @@
     libraryVC.shouldShowButtonForChangingViewPresentation = NO;
     libraryVC.shouldShowRightNavigationItems = NO;
     libraryVC.navigationItem.leftBarButtonItem = nil;
+    libraryVC.filterByIndex = JMLibraryListLoaderFilterByReportIndex;
     __weak __typeof(self) weakSelf = self;
     libraryVC.actionBlock = ^(JMResource *resource) {
         __typeof(self) strongSelf = weakSelf;
