@@ -77,24 +77,18 @@ var JasperMobile = {
             }
         },
         addScript: function(scriptURL, success, error) {
-            var isScriptAlreadyLoaded = false;
-            var allScripts = document.head.getElementsByTagName("script");
-
-            for(var i=0; i < allScripts.length; i++) {
-                var script = allScripts[i];
-                if (script.src === scriptURL) {
-                    isScriptAlreadyLoaded = true;
-                    success();
-                    break;
-                }
-            }
-            if (!isScriptAlreadyLoaded) {
+            var nodes = document.head.querySelectorAll("[src='" + scriptURL + "']");
+            console.log("all scripts: " + nodes.length);
+            if (nodes.length == 0) {
                 var scriptTag = document.createElement('script');
+                scriptTag.type = "text/javascript";
                 scriptTag.src = scriptURL;
                 scriptTag.onload = function() {
                     success();
                 };
                 document.head.appendChild(scriptTag);
+            } else {
+                success();
             }
         },
         loadScripts: function(parameters) {
@@ -249,18 +243,9 @@ JasperMobile.Report.REST.API = {
             }
 
             if (table != undefined) {
-                var navigator = window.navigator.appVersion;
-                //ios 8.4 - 5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H141
-                //ios 9.3 - 5.0 (iPhone; CPU iPhone OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13E230
-                var versionString = navigator.match(/(\d{3}\.\d+.\d+)/g)[0];
-
-                if (versionString == "600.1.4") {
-                    table.style.webkitTransform = "scale(" + innerWidth / parseInt(table.style.width) + ")";
-                    table.style.webkitTransformOrigin = "0% 0%";
-                } else {
-                    table.style.transform = "scale(" + innerWidth / parseInt(table.style.width) + ")";
-                    table.style.transformOrigin = "0% 0%";
-                }
+                var scale = "scale(" + innerWidth / parseInt(table.style.width) + ")";
+                var origin = "0% 0%";
+                JasperMobile.Report.REST.API.updateTransformStyles(table, scale, origin);
             }
         }
         JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
@@ -345,8 +330,9 @@ JasperMobile.Report.REST.API = {
             var container = document.getElementById("containter");
             container.appendChild(tableNode);
             var table = tableNode;
-            table.style.transform = "scale(" + innerWidth / parseInt(table.style.width) + ")";
-            table.style.transformOrigin = "50% 0%";
+            var scale = "scale(" + innerWidth / parseInt(table.style.width) + ")";
+            var origin = "50% 0%";
+            JasperMobile.Report.REST.API.updateTransformStyles(table, scale, origin);
             JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.applyZoomForReport", {});
         } else {
             JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Report.REST.API.applyZoomForReport", {
@@ -355,6 +341,20 @@ JasperMobile.Report.REST.API = {
                     "message" : "No table with class 'jrPage'."
                 })
             });
+        }
+    },
+    updateTransformStyles: function(element, scale, origin) {
+        var navigator = window.navigator.appVersion;
+        //ios 8.4 - 5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H141
+        //ios 9.3 - 5.0 (iPhone; CPU iPhone OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13E230
+        var versionString = navigator.match(/(\d{3}\.\d+.\d+)/g)[0];
+
+        if (versionString == "600.1.4") {
+            element.style.webkitTransform = scale;
+            element.style.webkitTransformOrigin = origin;
+        } else {
+            element.style.transform = scale;
+            element.style.transformOrigin = origin;
         }
     }
 };
