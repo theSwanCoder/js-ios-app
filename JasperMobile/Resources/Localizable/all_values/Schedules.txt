@@ -130,6 +130,27 @@
 	[schedules_new_job_repeat_type_alert_title]
 		en = Recurrence Type
 		tags = ios,new
+	[schedules_job_calendar_every_month]
+		en = Every Month
+		tags = ios,new
+	[schedules_job_calendar_selected_months]
+		en = Selected Months
+		tags = ios,new
+	[schedules_job_calendar_every_day]
+		en = Every Day
+		tags = ios,new
+	[schedules_job_calendar_selected_days]
+		en = Selected Days
+		tags = ios,new
+	[schedules_job_calendar_dates_in_month]
+		en = Dates In Month
+		tags = ios,new
+	[schedules_job_calendar_hours]
+		en = Hours
+		tags = ios,new
+	[schedules_job_calendar_minutes]
+		en = Minutes
+		tags = ios,new
 
 [[Schedule Errors]]
 	[schedules_error_domain]

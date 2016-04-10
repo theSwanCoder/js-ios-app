@@ -118,6 +118,34 @@
             title = JMCustomLocalizedString(@"schedules_new_job_number_of_runs", nil);
             break;
         }
+        case JMScheduleVCRowTypeCalendarEveryMonth: {
+            title = JMCustomLocalizedString(@"schedules_job_calendar_every_month", nil);
+            break;
+        }
+        case JMScheduleVCRowTypeCalendarSelectedMonths: {
+            title = JMCustomLocalizedString(@"schedules_job_calendar_selected_months", nil);
+            break;
+        }
+        case JMScheduleVCRowTypeCalendarEveryDay: {
+            title = JMCustomLocalizedString(@"schedules_job_calendar_every_day", nil);
+            break;
+        }
+        case JMScheduleVCRowTypeCalendarSelectedDays: {
+            title = JMCustomLocalizedString(@"schedules_job_calendar_selected_days", nil);
+            break;
+        }
+        case JMScheduleVCRowTypeCalendarDatesInMonth: {
+            title = JMCustomLocalizedString(@"schedules_job_calendar_dates_in_month", nil);
+            break;
+        }
+        case JMScheduleVCRowTypeCalendarHours: {
+            title = JMCustomLocalizedString(@"schedules_job_calendar_hours", nil);
+            break;
+        }
+        case JMScheduleVCRowTypeCalendarMinutes: {
+            title = JMCustomLocalizedString(@"schedules_job_calendar_minutes", nil);
+            break;
+        }
     }
     return title;
 }

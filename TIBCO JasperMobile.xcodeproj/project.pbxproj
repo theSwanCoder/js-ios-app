@@ -205,6 +205,8 @@
 		A147862ACF2E0D9C1DAB389F /* JMScheduleBoolenCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478F3424586DD36ECD3DE4 /* JMScheduleBoolenCell.m */; };
 		A147864EBDE7A5C24D8D3588 /* JMExternalWindowControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478E3C1428657C98ECC2A2 /* JMExternalWindowControlsVC.m */; };
 		A147868F7C53F429A32FC687 /* JMSchedulesCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A14784808066FBB816827E92 /* JMSchedulesCollectionViewController.m */; };
+		A14786B338581A88A709488F /* JMMultiSelectedItemsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A14786A52719B5573D359D68 /* JMMultiSelectedItemsVC.m */; };
+		A14786CAF514A7439077E943 /* JMSelectedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478B0A8AF6716FBED84C6F /* JMSelectedItem.m */; };
 		A14787748E391A1967D72E74 /* JMJavascriptCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A147806D6CC4CAC23BF4488F /* JMJavascriptCallback.m */; };
 		A14787F66450947BD9F35A1E /* JMSavedResources+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478C290748B548CC6FEF89 /* JMSavedResources+Helpers.m */; };
 		A14788CFC02FE10C3B77213E /* JMFavorites+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A14783B4F80FE846BE43F22C /* JMFavorites+Helpers.m */; };
@@ -625,6 +627,7 @@
 		A147866AB6450EAF0CD1CE44 /* JMBaseDashboardLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseDashboardLoader.m; sourceTree = "<group>"; };
 		A1478670922D02A9CE23C091 /* Resource_Info_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Resource_Info_View.txt; sourceTree = "<group>"; };
 		A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportViewerToolBar.m; sourceTree = "<group>"; };
+		A14786A52719B5573D359D68 /* JMMultiSelectedItemsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMultiSelectedItemsVC.m; sourceTree = "<group>"; };
 		A14786A5622B2E985A799F21 /* JMJavascriptNativeBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptNativeBridge.m; sourceTree = "<group>"; };
 		A14786A95E92E4DBDCF30CF3 /* About.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = About.txt; sourceTree = "<group>"; };
 		A14786AA8DB3F07D6540663D /* JMVisDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisDashboardLoader.h; sourceTree = "<group>"; };
@@ -648,6 +651,7 @@
 		A147888B65C694B48D97EBB8 /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = es; path = Localizable.strings; sourceTree = "<group>"; };
 		A1478895608DDEB59D767F01 /* Onboarding_Intro.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Onboarding_Intro.txt; sourceTree = "<group>"; };
 		A147889561B62823DCE4E2E9 /* JMScheduleVCRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleVCRow.m; sourceTree = "<group>"; };
+		A14788F8BFA0E9BC505565FC /* JMSelectedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSelectedItem.h; sourceTree = "<group>"; };
 		A14789076E29C9C7EBFAEC61 /* JMSchedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSchedule.h; sourceTree = "<group>"; };
 		A147892DC843D1F525D4DCB5 /* ja */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ja; path = Localizable.strings; sourceTree = "<group>"; };
 		A1478935CB12E39D40C6D7BF /* JMDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardLoader.h; sourceTree = "<group>"; };
@@ -664,6 +668,7 @@
 		A1478AE10405430D44256CA0 /* JMVisualizeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeManager.m; sourceTree = "<group>"; };
 		A1478AFFC93E5D3342BAE32D /* Report_Saver_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Report_Saver_View.txt; sourceTree = "<group>"; };
 		A1478B04CE024F4DDDFDF22D /* JMVisDashboardLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisDashboardLoader.m; sourceTree = "<group>"; };
+		A1478B0A8AF6716FBED84C6F /* JMSelectedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSelectedItem.m; sourceTree = "<group>"; };
 		A1478B758E018C4B68EDB8F3 /* JMMenuAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuAction.m; sourceTree = "<group>"; };
 		A1478B890A020A2A20D6ADA7 /* JMSchedulesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSchedulesListLoader.h; sourceTree = "<group>"; };
 		A1478BE421C2F228FFA2B6B8 /* zh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh; path = Localizable.strings; sourceTree = "<group>"; };
@@ -685,6 +690,7 @@
 		A1478E1EEE6B448244A33391 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A1478E3C1428657C98ECC2A2 /* JMExternalWindowControlsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowControlsVC.m; sourceTree = "<group>"; };
 		A1478E5443D2760B9551E174 /* Repository_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Repository_View.txt; sourceTree = "<group>"; };
+		A1478E55CC94D69C3A685F73 /* JMMultiSelectedItemsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMultiSelectedItemsVC.h; sourceTree = "<group>"; };
 		A1478E75A2572A0FE57D4C40 /* Menu_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Menu_View.txt; sourceTree = "<group>"; };
 		A1478E85ED789BDE76646F55 /* JMScheduleVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleVC.m; sourceTree = "<group>"; };
 		A1478E909A981A2610DA0081 /* JMSchedulesListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSchedulesListLoader.m; sourceTree = "<group>"; };
@@ -2347,6 +2353,15 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		A14780210DEDD7D0C186C25A /* JMSelectedItem */ = {
+			isa = PBXGroup;
+			children = (
+				A1478B0A8AF6716FBED84C6F /* JMSelectedItem.m */,
+				A14788F8BFA0E9BC505565FC /* JMSelectedItem.h */,
+			);
+			path = JMSelectedItem;
+			sourceTree = "<group>";
+		};
 		A14780484FE7F9CE8C01794B /* es.lproj */ = {
 			isa = PBXGroup;
 			children = (
@@ -2443,6 +2458,7 @@
 			isa = PBXGroup;
 			children = (
 				A1478F7A07AC295D59D4811F /* JMScheduleVC */,
+				A1478964C52D662AE616ED9B /* JMMultiSelectedItemsVC */,
 			);
 			path = Scheduling;
 			sourceTree = "<group>";
@@ -2682,6 +2698,16 @@
 				A1478D6859B60B36A4F9FCC8 /* JMDashboardViewerConfigurator.m */,
 			);
 			path = JMDashboardViewerConfigurator;
+			sourceTree = "<group>";
+		};
+		A1478964C52D662AE616ED9B /* JMMultiSelectedItemsVC */ = {
+			isa = PBXGroup;
+			children = (
+				A14786A52719B5573D359D68 /* JMMultiSelectedItemsVC.m */,
+				A1478E55CC94D69C3A685F73 /* JMMultiSelectedItemsVC.h */,
+				A14780210DEDD7D0C186C25A /* JMSelectedItem */,
+			);
+			path = JMMultiSelectedItemsVC;
 			sourceTree = "<group>";
 		};
 		A1478AB62A4F3291ACBD43F2 /* en.lproj */ = {
@@ -3432,6 +3458,8 @@
 				A147823B71F9BE372E2D53FE /* JMHTMLScript.m in Sources */,
 				A1478309B395E12F9B9F5BF3 /* JMAnalyticsManager.m in Sources */,
 				A1478929F3B48A50E30FC24F /* JMScheduleVCRow.m in Sources */,
+				A14786B338581A88A709488F /* JMMultiSelectedItemsVC.m in Sources */,
+				A14786CAF514A7439077E943 /* JMSelectedItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

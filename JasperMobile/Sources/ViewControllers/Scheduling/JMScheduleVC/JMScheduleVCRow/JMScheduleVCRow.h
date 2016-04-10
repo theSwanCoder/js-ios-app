@@ -42,16 +42,24 @@ typedef NS_ENUM(NSInteger, JMScheduleVCRowType) {
     JMScheduleVCRowTypeTimeZone,
     // Start Date policy
     JMScheduleVCRowTypeStartDate,
-    JMScheduleVCRowTypeStartImmediately,
+    JMScheduleVCRowTypeStartImmediately, // boolean
     // Trigger
     JMScheduleVCRowTypeRepeatType,
     // Repeat Policy for simple trigger
     JMScheduleVCRowTypeRepeatCount,
     JMScheduleVCRowTypeRepeatTimeInterval,
+    // Repeat Policy for calendar trigger
+    JMScheduleVCRowTypeCalendarEveryMonth, // boolean
+    JMScheduleVCRowTypeCalendarSelectedMonths,
+    JMScheduleVCRowTypeCalendarEveryDay,  // boolean
+    JMScheduleVCRowTypeCalendarSelectedDays,
+    JMScheduleVCRowTypeCalendarDatesInMonth, // TODO: implement in next release
+    JMScheduleVCRowTypeCalendarHours,
+    JMScheduleVCRowTypeCalendarMinutes,
     // End Policy (common)
     JMScheduleVCRowTypeEndDate,
     // End Policy for simple trigger
-    JMScheduleVCRowTypeRunIndefinitely,
+    JMScheduleVCRowTypeRunIndefinitely, // boolean
     JMScheduleVCRowTypeNumberOfRuns,
 };
 
