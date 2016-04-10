@@ -43,4 +43,7 @@ typedef void(^JMScheduleCompletion)(JSScheduleMetadata *__nullable, NSError *__n
 - (void)deleteScheduleWithJobIdentifier:(NSInteger)identifier completion:(void (^__nonnull)(NSError *__nullable))completion;
 // create new model
 - (JSScheduleMetadata *__nonnull)createNewScheduleMetadataWithResourceLookup:(JMResource *__nonnull)resourceLookup;
+- (JSScheduleSimpleTrigger *__nonnull)defaultSimpleTrigger;
+- (JSScheduleSimpleTrigger *__nonnull)defaultNoneTrigger;
+- (JSScheduleCalendarTrigger *__nonnull)defaultCalendarTrigger;
 @end

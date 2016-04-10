@@ -165,36 +165,62 @@
     scheduleMetadata.outputFormats = [self defaultFormats];
     scheduleMetadata.outputTimeZone = [self currentTimeZone];
 
-    JSScheduleSimpleTrigger *trigger = [self noneTrigger];
+    JSScheduleSimpleTrigger *trigger = [self defaultNoneTrigger];
     scheduleMetadata.trigger = trigger;
     return scheduleMetadata;
 }
 
-- (JSScheduleSimpleTrigger *)simpleTrigger
+- (JSScheduleSimpleTrigger *)defaultSimpleTrigger
 {
-    JSScheduleSimpleTrigger *simpleTrigger = [JSScheduleSimpleTrigger new];
-    simpleTrigger.type = JSScheduleTriggerTypeSimple;
-    simpleTrigger.startType = JSScheduleTriggerStartTypeAtDate;
-    simpleTrigger.occurrenceCount = @-1;
-    simpleTrigger.startDate = [NSDate date];
-    simpleTrigger.endDate = [NSNull null];
-    simpleTrigger.timezone = [self currentTimeZone];
-    simpleTrigger.recurrenceInterval = @1;
-    simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeDay;
-    return simpleTrigger;
+    JSScheduleSimpleTrigger *trigger = [JSScheduleSimpleTrigger new];
+    trigger.timezone = [self currentTimeZone];
+    trigger.type = JSScheduleTriggerTypeSimple;
+
+    // start date policy
+    trigger.startType = JSScheduleTriggerStartTypeImmediately;
+    trigger.startDate = [NSNull null];
+
+    // recurrence policy - default recurrence policy
+    trigger.occurrenceCount = @1;
+    trigger.recurrenceInterval = @1;
+    trigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeDay;
+
+    // end date policy
+    trigger.endDate = [NSNull null];
+
+    return trigger;
 }
 
-- (JSScheduleSimpleTrigger *)noneTrigger
+- (JSScheduleSimpleTrigger *)defaultNoneTrigger
 {
-    JSScheduleSimpleTrigger *simpleTrigger = [JSScheduleSimpleTrigger new];
-    simpleTrigger.type = JSScheduleTriggerTypeSimple;
-    simpleTrigger.startType = JSScheduleTriggerStartTypeImmediately;
-    simpleTrigger.occurrenceCount = @-1;
-    simpleTrigger.startDate = [NSNull null];
-    simpleTrigger.endDate = [NSNull null];
-    simpleTrigger.timezone = [self currentTimeZone];
-    simpleTrigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
-    return simpleTrigger;
+    JSScheduleSimpleTrigger *trigger = [JSScheduleSimpleTrigger new];
+    trigger.timezone = [self currentTimeZone];
+    trigger.type = JSScheduleTriggerTypeNone;
+
+    // start date policy
+    trigger.startType = JSScheduleTriggerStartTypeImmediately;
+    trigger.startDate = [NSNull null];
+
+    // recurrence policy - this detect a none trigger
+    trigger.occurrenceCount = @1;
+    trigger.recurrenceInterval = [NSNull null];
+    trigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
+
+    // end date policy
+    trigger.endDate = [NSNull null];
+
+    return trigger;
+}
+
+- (JSScheduleCalendarTrigger *)defaultCalendarTrigger
+{
+    JSScheduleCalendarTrigger *trigger = [JSScheduleCalendarTrigger new];
+    trigger.type = JSScheduleTriggerTypeCalendar;
+    trigger.timezone = [self currentTimeZone];
+
+    // end date policy
+    trigger.endDate = [NSNull null];
+    return trigger;
 }
 
 - (NSString *)currentTimeZone
