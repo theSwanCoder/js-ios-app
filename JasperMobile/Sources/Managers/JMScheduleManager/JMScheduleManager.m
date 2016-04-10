@@ -181,11 +181,11 @@
     trigger.startDate = [NSNull null];
 
     // recurrence policy - default recurrence policy
-    trigger.occurrenceCount = @1;
     trigger.recurrenceInterval = @1;
     trigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeDay;
 
     // end date policy
+    trigger.occurrenceCount = @1;
     trigger.endDate = [NSNull null];
 
     return trigger;
@@ -202,11 +202,11 @@
     trigger.startDate = [NSNull null];
 
     // recurrence policy - this detect a none trigger
-    trigger.occurrenceCount = @1;
     trigger.recurrenceInterval = [NSNull null];
     trigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
 
     // end date policy
+    trigger.occurrenceCount = @1;
     trigger.endDate = [NSNull null];
 
     return trigger;

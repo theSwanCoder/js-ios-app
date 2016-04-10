@@ -110,6 +110,14 @@
             title = JMCustomLocalizedString(@"schedules_new_job_repeat_interval", nil);
             break;
         }
+        case JMScheduleVCRowTypeRunIndefinitely: {
+            title = JMCustomLocalizedString(@"schedules_new_job_run_indefinitely", nil);
+            break;
+        }
+        case JMScheduleVCRowTypeNumberOfRuns: {
+            title = JMCustomLocalizedString(@"schedules_new_job_number_of_runs", nil);
+            break;
+        }
     }
     return title;
 }

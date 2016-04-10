@@ -96,6 +96,9 @@
 		pt = Data de início
 		zh = 开始日期
 		tags = ios
+	[schedules_new_job_end_date]
+		en = End Date
+		tags = ios,new
 	[schedules_new_job_start_immediately]
 		en = Start immediately
 		tags = ios,new
@@ -117,6 +120,12 @@
 		tags = ios,new
 	[schedules_new_job_repeat_interval]
 		en = Interval
+		tags = ios,new
+	[schedules_new_job_run_indefinitely]
+		en = Run Indefinitely
+		tags = ios,new
+	[schedules_new_job_number_of_runs]
+		en = Number of Runs
 		tags = ios,new
 	[schedules_new_job_repeat_type_alert_title]
 		en = Recurrence Type

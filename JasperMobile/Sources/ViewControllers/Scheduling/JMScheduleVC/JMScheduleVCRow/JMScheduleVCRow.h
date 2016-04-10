@@ -33,18 +33,26 @@
 */
 
 typedef NS_ENUM(NSInteger, JMScheduleVCRowType) {
+    // Common field
     JMScheduleVCRowTypeLabel,
     JMScheduleVCRowTypeDescription,
     JMScheduleVCRowTypeOutputFileURI,
     JMScheduleVCRowTypeOutputFolderURI,
     JMScheduleVCRowTypeFormat,
-    JMScheduleVCRowTypeStartDate,
-    JMScheduleVCRowTypeEndDate,
     JMScheduleVCRowTypeTimeZone,
+    // Start Date policy
+    JMScheduleVCRowTypeStartDate,
     JMScheduleVCRowTypeStartImmediately,
+    // Trigger
     JMScheduleVCRowTypeRepeatType,
+    // Repeat Policy for simple trigger
     JMScheduleVCRowTypeRepeatCount,
-    JMScheduleVCRowTypeRepeatTimeInterval
+    JMScheduleVCRowTypeRepeatTimeInterval,
+    // End Policy (common)
+    JMScheduleVCRowTypeEndDate,
+    // End Policy for simple trigger
+    JMScheduleVCRowTypeRunIndefinitely,
+    JMScheduleVCRowTypeNumberOfRuns,
 };
 
 @interface JMScheduleVCRow : NSObject
