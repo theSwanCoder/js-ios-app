@@ -52,6 +52,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) UITableViewCell *tappedCell;
 @property (assign, nonatomic) CGPoint originalTableViewContentOffset;
+@property (strong, nonatomic) JSScheduleTrigger *originTrigger;
 @end
 
 @implementation JMScheduleVC
@@ -88,6 +89,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
     [self setupLeftBarButtonItems];
     self.originalTableViewContentOffset = CGPointZero;
+
+    // TODO: need make this copy?
+    self.originTrigger = self.scheduleMetadata.trigger;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -538,6 +542,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             [self recurrenceSection],
             //[self schedleEndSection],
     ];
+
+    [self setupRecurrenceSection];
 }
 
 #pragma mark - Setup Sections
@@ -579,8 +585,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (JMScheduleVCSection *)recurrenceSection
 {
-    JSScheduleTrigger *trigger = [self currentTrigger];
-
     // TODO: add all needed fields
     JMScheduleVCSection *recurrenceSection;
     recurrenceSection = [JMScheduleVCSection sectionWithSectionType:JMNewScheduleVCSectionTypeRecurrence
@@ -589,7 +593,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                                                                        [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeRepeatCount hidden:YES],
                                                                        [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeRepeatTimeInterval hidden:YES],
                                                                ]];
-    [self setupRecurrenceSection];
     return recurrenceSection;
 }
 
@@ -957,15 +960,15 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     //   if existing trigger - take origin without changes
     switch(type) {
         case JSScheduleTriggerTypeNone: {
-            trigger = [[JMScheduleManager sharedManager] defaultNoneTrigger];
+            trigger = self.originTrigger.type == type ? self.originTrigger : [[JMScheduleManager sharedManager] defaultNoneTrigger];
             break;
         }
         case JSScheduleTriggerTypeSimple: {
-            trigger = [[JMScheduleManager sharedManager] defaultSimpleTrigger];
+            trigger = self.originTrigger.type == type ? self.originTrigger : [[JMScheduleManager sharedManager] defaultSimpleTrigger];
             break;
         }
         case JSScheduleTriggerTypeCalendar: {
-            trigger = [[JMScheduleManager sharedManager] defaultCalendarTrigger];
+            trigger = self.originTrigger.type == type ? self.originTrigger : [[JMScheduleManager sharedManager] defaultCalendarTrigger];
             break;
         }
     }
