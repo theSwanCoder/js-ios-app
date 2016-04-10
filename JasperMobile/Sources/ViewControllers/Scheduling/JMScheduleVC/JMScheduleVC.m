@@ -127,11 +127,11 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     if ([newDate compare:currentDate] == NSOrderedAscending) {
         return;
     } else {
-        [self updateDateCellWithDate:newDate];
+        [self updateCurrentDateCellWithDate:newDate];
     }
 }
 
-- (void)setDate:(UIBarButtonItem *)sender
+- (void)setStartDate:(UIBarButtonItem *)sender
 {
     NSDate *newDate = self.datePicker.date;
     NSDate *currentDate = [NSDate date];
@@ -146,15 +146,51 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     JSScheduleTrigger *trigger = [self currentTrigger];
     trigger.startDate = newDate;
 
-    [[self dateCell].valueTextField resignFirstResponder];
+    [[self startDateCell].valueTextField resignFirstResponder];
 }
 
-- (void)cancelEditDate:(UIBarButtonItem *)sender
+- (void)setEndDate:(UIBarButtonItem *)sender
+{
+    NSDate *newDate = self.datePicker.date;
+    NSDate *currentDate = [NSDate date];
+    if ([newDate compare:currentDate] == NSOrderedAscending) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
+                                                                                          message:JMCustomLocalizedString(@"schedules_error_date_past", nil)
+                                                                                cancelButtonTitle:@"dialog_button_ok"
+                                                                          cancelCompletionHandler:nil];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
+    JSScheduleTrigger *trigger = [self currentTrigger];
+    trigger.endDate = newDate;
+
+    if (trigger.type == JSScheduleTriggerTypeSimple) {
+        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
+        simpleTrigger.occurrenceCount = @-1;
+    }
+
+    [[self endDateCell].valueTextField resignFirstResponder];
+
+    [self setupEndPolicySection];
+    NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeScheduleEnd];
+    [self.tableView reloadSections:sectionIndecies
+                  withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)cancelEditStartDate:(UIBarButtonItem *)sender
 {
     JSScheduleTrigger *trigger = [self currentTrigger];
-    [self updateDateCellWithDate:trigger.startDate];
+    [self updateCurrentDateCellWithDate:trigger.startDate];
 
-    [[self dateCell].valueTextField resignFirstResponder];
+    [[self startDateCell].valueTextField resignFirstResponder];
+}
+
+- (void)cancelEditEndDate:(UIBarButtonItem *)sender
+{
+    JSScheduleTrigger *trigger = [self currentTrigger];
+    [self updateCurrentDateCellWithDate:trigger.endDate];
+
+    [[self endDateCell].valueTextField resignFirstResponder];
 }
 
 - (void)setRecurrenceCount:(UIBarButtonItem *)sender
@@ -163,8 +199,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     JSScheduleTrigger *trigger = [self currentTrigger];
     NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
 
-    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
-    // TODO: from ipad we can get letters
     NSString *value = cell.valueTextField.text;
     if (value.length == 0 || !value.integerValue) {
         UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
@@ -174,7 +208,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         [self presentViewController:alertController animated:YES completion:nil];
         return;
     } else {
-        simpleTrigger.recurrenceInterval = @(value.integerValue);
         [cell.valueTextField resignFirstResponder];
     }
 }
@@ -186,11 +219,15 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     JSScheduleTrigger *trigger = [self currentTrigger];
     NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
 
-    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
-    // TODO: from ipad we can get letters
-    NSString *value = cell.valueTextField.text;
-    simpleTrigger.occurrenceCount = @(value.integerValue);
     [cell.valueTextField resignFirstResponder];
+
+    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
+    simpleTrigger.endDate = [NSNull null];
+
+    [self setupEndPolicySection];
+    NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeScheduleEnd];
+    [self.tableView reloadSections:sectionIndecies
+                  withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)setCalendarHours:(UIBarButtonItem *)sender
@@ -221,9 +258,11 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     [cell.valueTextField resignFirstResponder];
 }
 
-- (void)updateDateCellWithDate:(NSDate *)date
+- (void)updateCurrentDateCellWithDate:(NSDate *)date
 {
-    [self dateCell].valueTextField.text = [self dateStringFromDate:date];
+    NSAssert(self.tappedCell != nil, @"date cell is nil");
+    JMScheduleCell *scheduleCell = (JMScheduleCell *) self.tappedCell;
+    scheduleCell.valueTextField.text = [self dateStringFromDate:date];
 }
 
 - (IBAction)selectFormat:(id)sender
@@ -535,14 +574,16 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             cell = [self scheduleCellForIndexPath:indexPath row:row];
             JMScheduleCell *scheduleCell = (JMScheduleCell *) cell;
             scheduleCell.valueTextField.inputView = self.datePicker;
-            scheduleCell.valueTextField.inputAccessoryView = [self toolbarForStartDateCell];
+            scheduleCell.valueTextField.inputAccessoryView = [self toolbarForCellWithDoneAction:@selector(setStartDate:)
+                                                                                   cancelAction:@selector(cancelEditStartDate:)];
             break;
         }
         case JMScheduleVCRowTypeEndDate: {
             cell = [self scheduleCellForIndexPath:indexPath row:row];
             JMScheduleCell *scheduleCell = (JMScheduleCell *) cell;
             scheduleCell.valueTextField.inputView = self.datePicker;
-            scheduleCell.valueTextField.inputAccessoryView = [self toolbarForStartDateCell];
+            scheduleCell.valueTextField.inputAccessoryView = [self toolbarForCellWithDoneAction:@selector(setEndDate:)
+                                                                                   cancelAction:@selector(cancelEditEndDate:)];
             break;
         }
         case JMScheduleVCRowTypeTimeZone: {
@@ -686,7 +727,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
         simpleTrigger.occurrenceCount = @(newValue.integerValue);
-        simpleTrigger.endDate = [NSNull null];
     }
 }
 
@@ -720,13 +760,15 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         if (newValue) {
             simpleTrigger.type = JSScheduleTriggerTypeNone;
             simpleTrigger.occurrenceCount = @-1;
+            simpleTrigger.endDate = [NSNull null];
 
             // Update Rows
             [section hideRowWithType:JMScheduleVCRowTypeEndDate];
             [section hideRowWithType:JMScheduleVCRowTypeNumberOfRuns];
         } else {
             simpleTrigger.type = JSScheduleTriggerTypeSimple;
-            simpleTrigger.occurrenceCount = [NSNull null]; // TODO: need other default value?
+            simpleTrigger.occurrenceCount = @-1;
+            simpleTrigger.endDate = [NSDate date];
 
             // Update Rows
             [section showRowWithType:JMScheduleVCRowTypeEndDate];
@@ -959,7 +1001,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
             [section showRowWithType:JMScheduleVCRowTypeRunIndefinitely];
             NSInteger occurenceCount = simpleTrigger.occurrenceCount.integerValue;
-            if (occurenceCount == -1) {
+            if (occurenceCount == -1 && [simpleTrigger.endDate isKindOfClass:[NSNull class]]) {
                 [section hideRowWithType:JMScheduleVCRowTypeNumberOfRuns];
                 [section hideRowWithType:JMScheduleVCRowTypeEndDate];
             } else {
@@ -1041,38 +1083,29 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     return dateString;
 }
 
-- (UIToolbar *)toolbarForStartDateCell
+- (UIToolbar *)toolbarForCellWithAction:(SEL)action
 {
-    UIToolbar *toolbar = [UIToolbar new];
-    [toolbar sizeToFit];
-    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                              target:self
-                                                              action:@selector(setDate:)];
-    UIBarButtonItem* cancelButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                              target:self
-                                                              action:@selector(cancelEditDate:)];
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                                   target:nil
-                                                                                   action:nil];
-    [toolbar setItems:@[cancelButton, flexibleSpace, doneButton] animated:YES];
-    return toolbar;
+    return [self toolbarForCellWithDoneAction:action cancelAction:NULL];
 }
 
-- (UIToolbar *)toolbarForCellWithAction:(SEL)action
+- (UIToolbar *)toolbarForCellWithDoneAction:(SEL)doneAction cancelAction:(SEL)cancelAction
 {
     UIToolbar *toolbar = [UIToolbar new];
     [toolbar sizeToFit];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                  target:self
-                                                                  action:action];
-    // TODO: add cancel button
-//    UIBarButtonItem* cancelButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-//                                                                                 target:self
-//                                                                                 action:@selector(cancelEditDate:)];
+                                                                               target:self
+                                                                               action:doneAction];
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                                    target:nil
                                                                                    action:nil];
-    [toolbar setItems:@[flexibleSpace, doneButton] animated:YES];
+    if (cancelAction != NULL) {
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                     target:self
+                                                                                     action:cancelAction];
+        [toolbar setItems:@[cancelButton, flexibleSpace, doneButton] animated:YES];
+    } else {
+        [toolbar setItems:@[flexibleSpace, doneButton] animated:YES];
+    }
     return toolbar;
 }
 
@@ -1158,10 +1191,17 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 #pragma mark - Cell Helpers
 
-- (JMScheduleCell *)dateCell
+- (JMScheduleCell *)startDateCell
 {
     JMScheduleCell *cell = [self cellInSection:JMNewScheduleVCSectionTypeScheduleStart
-                                           andRow:JMScheduleVCRowTypeStartDate];
+                                        andRow:JMScheduleVCRowTypeStartDate];
+    return cell;
+}
+
+- (JMScheduleCell *)endDateCell
+{
+    JMScheduleCell *cell = [self cellInSection:JMNewScheduleVCSectionTypeScheduleEnd
+                                        andRow:JMScheduleVCRowTypeEndDate];
     return cell;
 }
 
@@ -1259,6 +1299,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         propertyValue = self.scheduleMetadata.outputFormats.firstObject;
     } else if (type == JMScheduleVCRowTypeStartDate) {
         propertyValue = [self dateStringFromDate:trigger.startDate];
+    } else if (type == JMScheduleVCRowTypeEndDate) {
+        propertyValue = [self dateStringFromDate:trigger.endDate];
     } else if (type == JMScheduleVCRowTypeTimeZone) {
         propertyValue = trigger.timezone;
     }
@@ -1275,7 +1317,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             } else if (type == JMScheduleVCRowTypeEndDate) {
                 [self dateStringFromDate:simpleTrigger.endDate];
             } else if (type == JMScheduleVCRowTypeNumberOfRuns) {
-                propertyValue = [simpleTrigger.occurrenceCount isKindOfClass:[NSNull class]] ? @"" : simpleTrigger.occurrenceCount.stringValue;
+                propertyValue = (simpleTrigger.occurrenceCount.integerValue == -1) ? @"" : simpleTrigger.occurrenceCount.stringValue;
             }
             break;
         }
@@ -1332,8 +1374,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             if (type == JMScheduleVCRowTypeStartImmediately) {
                 boolenValue = simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately;
             } else if (type == JMScheduleVCRowTypeRunIndefinitely) {
-                NSInteger occurrenceCount = [simpleTrigger.occurrenceCount isKindOfClass:[NSNull class]] ? 0 : simpleTrigger.occurrenceCount.integerValue;
-                boolenValue = (occurrenceCount == -1);
+                NSInteger occurrenceCount = simpleTrigger.occurrenceCount.integerValue;
+                boolenValue = (occurrenceCount == -1) && [trigger.endDate isKindOfClass:[NSNull class]];
             }
             break;
         }
