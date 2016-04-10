@@ -118,8 +118,8 @@
 	[schedules_new_job_repeat_interval]
 		en = Interval
 		tags = ios,new
-	[schedules_new_job_recurrenceType_alert_title]
-		en = Reccurence Type
+	[schedules_new_job_repeat_type_alert_title]
+		en = Recurrence Type
 		tags = ios,new
 
 [[Schedule Errors]]
