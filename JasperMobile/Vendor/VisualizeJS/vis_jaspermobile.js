@@ -633,7 +633,9 @@ JasperMobile.Report.API = {
         var container = document.getElementById("container");
         container.width = width;
         container.height = height;
-        JasperMobile.Report.API.report.resize();
+        if (JasperMobile.Report.API.report.resize != undefined) {
+            JasperMobile.Report.API.report.resize();
+        }
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.API.fitReportViewToScreen", {
             size: JSON.stringify({
                 "width"  : width,
