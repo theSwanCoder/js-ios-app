@@ -196,7 +196,7 @@
 		zh = 输出文件格式未选择
 		tags = ios
 	[schedules_error_date_past]
-		en = The start date is in the past. It should be in the future.
+		en = The date is in the past. It should be in the future.
 		tags = ios,new
 	[schedules_error_duplicate_filename]
 		en = There is a scheduled job of the same output file name. Please try different name.
