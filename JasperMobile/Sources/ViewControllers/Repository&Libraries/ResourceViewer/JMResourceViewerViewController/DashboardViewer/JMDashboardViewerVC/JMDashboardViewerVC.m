@@ -181,11 +181,17 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)minimizeDashlet
 {
     [self.webEnvironment resetZoom];
+
+    if ([self isContentOnTV]) {
+        [self.controlsViewController markComponentAsMinimized:self.dashboard.maximizedComponent];
+    }
+
     [self.dashboardLoader minimizeDashlet];
     self.navigationItem.leftBarButtonItem = self.leftButtonItem;
     self.navigationItem.rightBarButtonItems = self.rightButtonItems;
     self.navigationItem.title = self.resource.resourceLookup.label;
     self.leftButtonItem = nil;
+
 }
 
 - (void)reloadDashboard
@@ -630,6 +636,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         }
 
         self.leftButtonItem = self.navigationItem.leftBarButtonItem;
+        self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
+                                                                   target:self
+                                                                   action:@selector(minimizeDashlet)];
         self.navigationItem.title = component.name;
     }
 }

@@ -36,6 +36,7 @@
 @interface JMExternalWindowDashboardControlsVC : UIViewController
 @property (nonatomic, copy) NSArray <JSDashboardComponent *>* components;
 @property (nonatomic, weak) NSObject <JMExternalWindowDashboardControlsVCDelegate> *delegate;
+- (void)markComponentAsMinimized:(JSDashboardComponent *)component;
 @end
 
 

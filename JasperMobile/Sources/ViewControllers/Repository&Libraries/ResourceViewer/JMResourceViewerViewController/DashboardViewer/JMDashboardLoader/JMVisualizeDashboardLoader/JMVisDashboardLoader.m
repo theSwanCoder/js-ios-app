@@ -192,6 +192,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
             JMLog(@"error: %@", error);
         } else {
             JMLog(@"parameters: %@", parameters);
+            self.dashboard.maximizedComponent = component;
         }
     }];
 }
@@ -216,7 +217,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)minimizeDashlet
 {
-    [self minimizeDashletForComponent:nil];
+    [self minimizeDashletForComponent:self.dashboard.maximizedComponent];
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor

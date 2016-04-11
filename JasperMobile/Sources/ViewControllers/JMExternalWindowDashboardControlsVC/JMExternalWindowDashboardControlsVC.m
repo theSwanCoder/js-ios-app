@@ -132,4 +132,19 @@
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
+#pragma mark - Public API
+
+- (void)markComponentAsMinimized:(JSDashboardComponent *)component
+{
+    NSString *minimizedComponentID = component.identifier;
+
+    for (NSString *componentID in self.maximizedComponents.allKeys) {
+        if ([componentID isEqualToString:minimizedComponentID]) {
+            self.maximizedComponents[componentID] = @NO;
+        }
+    }
+
+    [self.tableView reloadData];
+}
+
 @end
