@@ -22,7 +22,7 @@
 
 
 //
-//  JMResourceViewerViewController.h
+//  JMShareImageActivityItemProvider.h
 //  TIBCO JasperMobile
 //
 
@@ -30,10 +30,10 @@
  @author Alexey Gubarev ogubarie@tibco.com
  @since 2.5
  */
-
-
 #import <UIKit/UIKit.h>
 
-@interface JMShareActivityItemProvider : UIActivityItemProvider <UIActivityItemSource>
+@interface JMShareImageActivityItemProvider : UIActivityItemProvider <UIActivityItemSource>
+
+- (nonnull instancetype)initWithImage:(nonnull UIImage *)image;
 
 @end

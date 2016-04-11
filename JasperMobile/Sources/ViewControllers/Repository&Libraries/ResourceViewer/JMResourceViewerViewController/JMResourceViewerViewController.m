@@ -27,7 +27,6 @@
 #import "JMMainNavigationController.h"
 #import "JMWebEnvironment.h"
 #import "UIView+Additions.h"
-#import "JMShareActivityItemProvider.h"
 #import "JMResource.h"
 #import "JMShareViewController.h"
 #import "JMAnalyticsManager.h"

@@ -1,7 +1,7 @@
 
 [[Resource viewer share]]
 	[resource_viewer_share_title]
-		en = Resource sharing
+		en = Resource Sharing
 		tags = ios,new
     [resource_viewer_share_text]
         en = Look at this awesome report, builded via %@!
