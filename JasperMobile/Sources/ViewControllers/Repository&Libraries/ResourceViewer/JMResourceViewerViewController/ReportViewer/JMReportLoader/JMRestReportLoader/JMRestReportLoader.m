@@ -162,8 +162,19 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
         if (isCreated) {
             heapBlock(YES, nil);
         } else {
-            NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
-            NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+            NSString *htmlStringPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
+            NSString *htmlString = [NSString stringWithContentsOfFile:htmlStringPath encoding:NSUTF8StringEncoding error:nil];
+
+            // add static dependencies
+            // fusion chart dependencies need to be loaded first
+            NSString *jrsURI = self.restClient.serverProfile.serverUrl;
+            NSString *staticDependencies = @"";
+            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/FusionCharts.js\"></script>", jrsURI];
+            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/jquery.min.js\"></script>", jrsURI];
+            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/FusionCharts.HC.js\"></script>", jrsURI];
+            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/../widgets/FusionCharts.HC.Widgets.js\"></script>", jrsURI];
+
+            htmlString = [htmlString stringByReplacingOccurrencesOfString:@"STATIC_DEPENDENCIES" withString:staticDependencies];
 
             [strongSelf.webEnvironment loadHTML:htmlString
                                         baseURL:[NSURL URLWithString:strongSelf.restClient.serverProfile.serverUrl]
@@ -315,19 +326,9 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 - (void)loadDependenciesFromLinks:(NSArray *)links
                        completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
-    // fusion chart dependencies need to be loaded first
-    NSString *jrsURI = self.restClient.serverProfile.serverUrl;
-    NSMutableArray *allLins = [@[
-            [NSString stringWithFormat:@"%@/fusion/maps/FusionCharts.js", jrsURI],
-            [NSString stringWithFormat:@"%@/fusion/maps/jquery.min.js", jrsURI],
-            [NSString stringWithFormat:@"%@/fusion/maps/FusionCharts.HC.js", jrsURI],
-            [NSString stringWithFormat:@"%@/fusion/maps/../widgets/FusionCharts.HC.Widgets.js", jrsURI],
-    ] mutableCopy];
-
-    [allLins addObjectsFromArray:links];
     JMJavascriptRequest *loadDependenciesRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
                                                                                  parameters:@{
-                                                                                         @"scriptURLs" : allLins,
+                                                                                         @"scriptURLs" : links,
                                                                                  }];
     [self.webEnvironment sendJavascriptRequest:loadDependenciesRequest
                                     completion:^(NSDictionary *params, NSError *error) {

@@ -78,7 +78,6 @@ var JasperMobile = {
         },
         addScript: function(scriptURL, success, error) {
             var nodes = document.head.querySelectorAll("[src='" + scriptURL + "']");
-            console.log("all scripts: " + nodes.length);
             if (nodes.length == 0) {
                 var scriptTag = document.createElement('script');
                 scriptTag.type = "text/javascript";
@@ -311,14 +310,12 @@ JasperMobile.Report.REST.API = {
                     if (hyperlink.tooltip == span.title) {
                         // add click listener
                         span.addEventListener("click", function() {
-                            console.log("click " + hyperlink.id);
                             JasperMobile.Callback.Listeners.listener("JasperMobile.listener.hyperlink", {
                                 "type" : hyperlink.type,
                                 "params" : hyperlink.params
                             });
                         });
                     }
-                    //console.log("span: " + span.title);
                 }
             })(hyperlink);
         }
