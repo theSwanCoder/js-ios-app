@@ -145,7 +145,7 @@
     if ([errorCode isEqualToString:@"error.duplicate.report.job.output.filename"]) {
         message = JMCustomLocalizedString(@"schedules_error_duplicate_filename", nil);
     } else if ([errorCode isEqualToString:@"error.report.job.output.folder.inexistent"]) {
-        message = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+        message = JMCustomLocalizedString(@"schedules_error_output_folder_inexistent", nil);
     } else if ([errorCode isEqualToString:@"error.before.current.date"]) {
         message = JMCustomLocalizedString(@"schedules_error_date_past", nil);
     }
