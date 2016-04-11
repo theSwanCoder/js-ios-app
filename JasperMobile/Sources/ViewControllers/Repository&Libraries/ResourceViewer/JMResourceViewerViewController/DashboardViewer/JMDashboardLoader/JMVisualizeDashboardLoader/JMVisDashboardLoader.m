@@ -181,7 +181,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     [self destroyDashboard];
 }
 
-- (void)maximizeDashletForComponent:(JSDashboardComponent *__nonnull)component
+- (void)maximizeDashletForComponent:(JSDashboardComponent *__nullable)component
 {
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.maximizeDashlet"
                                                                 parameters:@{
@@ -196,7 +196,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     }];
 }
 
-- (void)minimizeDashletForComponent:(JSDashboardComponent *__nonnull)component
+- (void)minimizeDashletForComponent:(JSDashboardComponent *__nullable)component
 {
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.minimizeDashlet"
                                                                 parameters:@{

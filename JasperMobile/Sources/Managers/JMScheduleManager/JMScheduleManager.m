@@ -178,7 +178,7 @@
 
     // start date policy
     trigger.startType = JSScheduleTriggerStartTypeImmediately;
-    trigger.startDate = [NSNull null];
+    trigger.startDate = nil;
 
     // recurrence policy - default recurrence policy
     trigger.recurrenceInterval = @1;
@@ -186,7 +186,7 @@
 
     // end date policy
     trigger.occurrenceCount = @1;
-    trigger.endDate = [NSNull null];
+    trigger.endDate = nil;
 
     return trigger;
 }
@@ -199,15 +199,15 @@
 
     // start date policy
     trigger.startType = JSScheduleTriggerStartTypeImmediately;
-    trigger.startDate = [NSNull null];
+    trigger.startDate = nil;
 
     // recurrence policy - this detect a none trigger
-    trigger.recurrenceInterval = [NSNull null];
+    trigger.recurrenceInterval = nil;
     trigger.recurrenceIntervalUnit = JSScheduleSimpleTriggerRecurrenceIntervalTypeNone;
 
     // end date policy
     trigger.occurrenceCount = @1;
-    trigger.endDate = [NSNull null];
+    trigger.endDate = nil;
 
     return trigger;
 }
@@ -219,7 +219,7 @@
     trigger.timezone = [self currentTimeZone];
 
     // end date policy
-    trigger.endDate = [NSNull null];
+    trigger.endDate = nil;
     return trigger;
 }
 
