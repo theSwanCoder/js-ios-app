@@ -24,7 +24,6 @@
 		08221C421AE54DA000F94F1D /* JMCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C411AE54DA000F94F1D /* JMCoreDataManager.m */; };
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
 		08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */; };
-		083E3F211CB7FD7C00F83357 /* JMShareTextActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 083E3F201CB7FD7C00F83357 /* JMShareTextActivityItemProvider.m */; };
 		083E3F2C1CB8012300F83357 /* JMShareImageActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 083E3F2B1CB8012300F83357 /* JMShareImageActivityItemProvider.m */; };
 		0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */; };
 		0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */; };
@@ -299,8 +298,6 @@
 		08221C9C1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMigrateTo_v_2_0.h; sourceTree = "<group>"; };
 		08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMigrateTo_v_2_0.m; sourceTree = "<group>"; };
 		08221C9F1AE7A3B100F94F1D /* TIBCO JasperMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile-Bridging-Header.h"; sourceTree = "<group>"; };
-		083E3F1F1CB7FD7C00F83357 /* JMShareTextActivityItemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMShareTextActivityItemProvider.h; sourceTree = "<group>"; };
-		083E3F201CB7FD7C00F83357 /* JMShareTextActivityItemProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareTextActivityItemProvider.m; sourceTree = "<group>"; };
 		083E3F2A1CB8012300F83357 /* JMShareImageActivityItemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMShareImageActivityItemProvider.h; sourceTree = "<group>"; };
 		083E3F2B1CB8012300F83357 /* JMShareImageActivityItemProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareImageActivityItemProvider.m; sourceTree = "<group>"; };
 		0854B36E1BC54FFB0004E5B8 /* JMBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseViewController.h; sourceTree = "<group>"; };
@@ -910,15 +907,6 @@
 				08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */,
 			);
 			path = JMMigrationPolicy;
-			sourceTree = "<group>";
-		};
-		083E3F1E1CB7FD7C00F83357 /* JMShareTextActivityItemProvider */ = {
-			isa = PBXGroup;
-			children = (
-				083E3F1F1CB7FD7C00F83357 /* JMShareTextActivityItemProvider.h */,
-				083E3F201CB7FD7C00F83357 /* JMShareTextActivityItemProvider.m */,
-			);
-			path = JMShareTextActivityItemProvider;
 			sourceTree = "<group>";
 		};
 		083E3F291CB8012300F83357 /* JMShareImageActivityItemProvider */ = {
@@ -2867,7 +2855,6 @@
 			isa = PBXGroup;
 			children = (
 				083E3F291CB8012300F83357 /* JMShareImageActivityItemProvider */,
-				083E3F1E1CB7FD7C00F83357 /* JMShareTextActivityItemProvider */,
 			);
 			path = JMShareActivityItemProvider;
 			sourceTree = "<group>";
@@ -3315,7 +3302,6 @@
 				08E2AC8D1B1E056900AC462B /* JMTextInputControlCell.m in Sources */,
 				089B15FA1AA756BD0021A915 /* JMSavedItemsCollectionViewController.m in Sources */,
 				089B159C1AA756BD0021A915 /* JMEditabledViewController.m in Sources */,
-				083E3F211CB7FD7C00F83357 /* JMShareTextActivityItemProvider.m in Sources */,
 				08E62C8319922B0B0081CA83 /* main.m in Sources */,
 				08E2AC9C1B1E056900AC462B /* JMSaveReportSection.m in Sources */,
 				089B15B81AA756BD0021A915 /* JMServersGridViewController.m in Sources */,

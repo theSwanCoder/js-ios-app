@@ -34,4 +34,6 @@
 
 @interface JMShareImageActivityItemProvider : UIActivityItemProvider <UIActivityItemSource>
 
+- (nonnull instancetype)initWithImage:(nonnull UIImage *)image;
+
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "JMShareViewController.h"
-#import "JMShareActivityItemProvider.h"
+#import "JMShareImageActivityItemProvider.h"
 #import "JMShareSettingsViewController.h"
 #import "JMMainNavigationController.h"
 
@@ -124,10 +124,9 @@
 
 - (void)shareButtonDidTapped:(id)sender
 {
-    JMShareActivityItemProvider * textProvider = [JMShareActivityItemProvider new];
-    
-    
-    NSArray *objectsToShare = @[textProvider, [NSURL fileURLWithPath:imagePath]];
+    JMShareImageActivityItemProvider * imageProvider = [[JMShareImageActivityItemProvider alloc] initWithImage:self.mainImageView.image];
+
+    NSArray *objectsToShare = @[imageProvider];
     
     UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
     
@@ -142,9 +141,6 @@
     
     activityVC.excludedActivityTypes = excludeActivities;
     activityVC.popoverPresentationController.barButtonItem = [self.toolbarItems lastObject];
-    activityVC.completionWithItemsHandler = ^(NSString * __nullable activityType, BOOL completed, NSArray * __nullable returnedItems, NSError * __nullable activityError) {
-        [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
-    };
     
     [self presentViewController:activityVC animated:YES completion:nil];    
 }

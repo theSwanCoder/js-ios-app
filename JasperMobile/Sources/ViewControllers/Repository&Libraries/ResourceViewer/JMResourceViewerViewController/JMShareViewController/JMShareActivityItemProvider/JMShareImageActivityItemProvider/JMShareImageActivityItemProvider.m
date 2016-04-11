@@ -28,8 +28,7 @@
 
 #import "JMShareImageActivityItemProvider.h"
 
-NSString * const kSkypeActivityType = @"com.skype";
-NSString * const kWhatsAppActivityType = @"net.whatsapp";
+NSString * const kGoogleDriveActivityType = @"com.google.Drive";
 
 @interface JMShareImageActivityItemProvider()
 @property (nonatomic, copy) UIImage *imageForSharing;
@@ -39,22 +38,31 @@ NSString * const kWhatsAppActivityType = @"net.whatsapp";
 @implementation JMShareImageActivityItemProvider
 - (nonnull instancetype)initWithImage:(UIImage *)image
 {
-    NSString *jmActivity = [NSBundle mainBundle].bundleIdentifier;
-    jmActivity = [jmActivity stringByAppendingPathExtension:@"image"];
-    self = [super initWithPlaceholderItem:jmActivity];
+    self = [super initWithPlaceholderItem:image];
     if (self) {
         self.imageForSharing = image;
     }
     return self;
 }
 
+- (void)dealloc
+{
+    if (_imageForSharingFilePath && [[NSFileManager defaultManager] fileExistsAtPath:self.imageForSharingFilePath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:self.imageForSharingFilePath error:nil];
+    }
+}
+
+- (NSString *)activityViewController:(UIActivityViewController *)activityViewController subjectForActivityType:(nullable NSString *)activityType
+{
+    return [NSString stringWithFormat:JMCustomLocalizedString(@"resource_viewer_share_text", nil), kJMAppName];
+}
+
 - (nullable id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
 {
-    if ([activityType rangeOfString:kSkypeActivityType].location != NSNotFound ||
-        [activityType rangeOfString:kWhatsAppActivityType].location != NSNotFound) {
-        return nil;
+    if ([activityType rangeOfString:kGoogleDriveActivityType].location != NSNotFound) {
+        return [NSURL fileURLWithPath:self.imageForSharingFilePath];
     } else {
-        return [NSString stringWithFormat:JMCustomLocalizedString(@"resource_viewer_share_text", nil), kJMAppName];
+        return self.imageForSharing;
     }
 }
 
@@ -69,4 +77,5 @@ NSString * const kWhatsAppActivityType = @"net.whatsapp";
     });
     return _imageForSharingFilePath;
 }
+
 @end
