@@ -55,10 +55,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 @implementation JMReportViewerVC
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
-    JMLog(@"horizontal size class: %@", @(newCollection.horizontalSizeClass));
-    JMLog(@"vertical size class: %@", @(newCollection.verticalSizeClass));
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 
     [coordinator animateAlongsideTransition:nil completion:^(id <UIViewControllerTransitionCoordinatorContext> context) {
         if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {
@@ -66,7 +65,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         }
     }];
 
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
 #pragma mark - Lifecycle
