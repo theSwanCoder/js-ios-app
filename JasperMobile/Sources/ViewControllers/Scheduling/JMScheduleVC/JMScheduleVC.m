@@ -713,7 +713,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     self.tappedCell = cell;
 }
 
-- (void)scheduleCell:(JMScheduleCell *)cell didChangeValue:(NSString *)newValue
+- (void)scheduleCellDidEndChangeValue:(JMScheduleCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     JMScheduleVCSection *section = self.sections[indexPath.section];
@@ -721,7 +721,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
     JSScheduleTrigger *trigger = [self currentTrigger];
 
-    NSString *trimmedValue = [newValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *trimmedValue = [cell.valueTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
     if (row.type == JMScheduleVCRowTypeLabel) {
         self.scheduleMetadata.label = trimmedValue;
     } else if (row.type == JMScheduleVCRowTypeDescription) {
@@ -729,7 +730,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     } else if (row.type == JMScheduleVCRowTypeOutputFileURI) {
         self.scheduleMetadata.baseOutputFilename = trimmedValue;
     } else if (row.type == JMScheduleVCRowTypeOutputFolderURI) {
-        self.scheduleMetadata.folderURI = newValue;
+        self.scheduleMetadata.folderURI = trimmedValue;
     } else if (row.type == JMScheduleVCRowTypeRepeatCount) {
         NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
@@ -750,11 +751,11 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 //                [self presentViewController:alertController animated:YES completion:nil];
 //            }
 
-        simpleTrigger.recurrenceInterval = @(newValue.integerValue);
+        simpleTrigger.recurrenceInterval = @(trimmedValue.integerValue);
     } else if (row.type == JMScheduleVCRowTypeNumberOfRuns) {
         NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
-        simpleTrigger.occurrenceCount = @(newValue.integerValue);
+        simpleTrigger.occurrenceCount = @(trimmedValue.integerValue);
     }
 }
 

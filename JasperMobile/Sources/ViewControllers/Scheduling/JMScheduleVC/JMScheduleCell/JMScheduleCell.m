@@ -38,6 +38,14 @@
         [self.delegate scheduleCellDidStartChangeValue:self];
     }
 }
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if ([self.delegate respondsToSelector:@selector(scheduleCellDidEndChangeValue:)]) {
+        [self.delegate scheduleCellDidEndChangeValue:self];
+    }
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
