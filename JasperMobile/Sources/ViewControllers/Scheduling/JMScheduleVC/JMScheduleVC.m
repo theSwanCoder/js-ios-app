@@ -48,7 +48,8 @@ NSString *const kJMJobRepeatCount        = @"kJMJobRepeatCount";
 NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 @interface JMScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMScheduleCellDelegate, JMScheduleBoolenCellDelegate>
-@property (strong, nonatomic) UIDatePicker *datePicker;
+@property (strong, nonatomic) UIDatePicker *datePickerForStartDate;
+@property (strong, nonatomic) UIDatePicker *datePickerForEndDate;
 @property (nonatomic, strong) NSArray <JMScheduleVCSection *> *sections;
 @property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -60,20 +61,44 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 @implementation JMScheduleVC
 
 #pragma mark - Custom Accessors
-- (UIDatePicker *)datePicker
+- (UIDatePicker *)datePickerForStartDate
 {
-    if (!_datePicker) {
-        _datePicker = [UIDatePicker new];
+    if (!_datePickerForStartDate) {
+        _datePickerForStartDate = [UIDatePicker new];
         // need set timezone to 0 because of received value
-        _datePicker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+        _datePickerForStartDate.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
 
         JSScheduleTrigger *trigger = [self currentTrigger];
-        _datePicker.date = trigger.startDate;
-        [_datePicker addTarget:self
+        if (!trigger.startDate || [trigger.startDate isKindOfClass:[NSNull class]]) {
+            _datePickerForStartDate.date = [NSDate date];
+        } else {
+            _datePickerForStartDate.date = trigger.startDate;
+        }
+        [_datePickerForStartDate addTarget:self
                        action:@selector(updateDate:)
              forControlEvents:UIControlEventValueChanged];
     }
-    return _datePicker;
+    return _datePickerForStartDate;
+}
+
+- (UIDatePicker *)datePickerForEndDate
+{
+    if (!_datePickerForEndDate) {
+        _datePickerForEndDate = [UIDatePicker new];
+        // need set timezone to 0 because of received value
+        _datePickerForEndDate.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+
+        JSScheduleTrigger *trigger = [self currentTrigger];
+        if (!trigger.endDate || [trigger.endDate isKindOfClass:[NSNull class]]) {
+            _datePickerForEndDate.date = [NSDate date];
+        } else {
+            _datePickerForEndDate.date = trigger.endDate;
+        }
+        [_datePickerForEndDate addTarget:self
+                        action:@selector(updateDate:)
+              forControlEvents:UIControlEventValueChanged];
+    }
+    return _datePickerForEndDate;
 }
 
 #pragma mark - UIViewController LifeCycle
@@ -133,7 +158,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (void)setStartDate:(UIBarButtonItem *)sender
 {
-    NSDate *newDate = self.datePicker.date;
+    NSDate *newDate = self.datePickerForStartDate.date;
     NSDate *currentDate = [NSDate date];
     if ([newDate compare:currentDate] == NSOrderedAscending) {
         UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
@@ -151,7 +176,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (void)setEndDate:(UIBarButtonItem *)sender
 {
-    NSDate *newDate = self.datePicker.date;
+    NSDate *newDate = self.datePickerForEndDate.date;
     NSDate *currentDate = [NSDate date];
     if ([newDate compare:currentDate] == NSOrderedAscending) {
         UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
@@ -222,7 +247,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     [cell.valueTextField resignFirstResponder];
 
     JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
-    simpleTrigger.endDate = [NSNull null];
+    simpleTrigger.endDate = nil;
 
     [self setupEndPolicySection];
     NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeScheduleEnd];
@@ -573,7 +598,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         case JMScheduleVCRowTypeStartDate: {
             cell = [self scheduleCellForIndexPath:indexPath row:row];
             JMScheduleCell *scheduleCell = (JMScheduleCell *) cell;
-            scheduleCell.valueTextField.inputView = self.datePicker;
+            scheduleCell.valueTextField.inputView = self.datePickerForStartDate;
             scheduleCell.valueTextField.inputAccessoryView = [self toolbarForCellWithDoneAction:@selector(setStartDate:)
                                                                                    cancelAction:@selector(cancelEditStartDate:)];
             break;
@@ -581,7 +606,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         case JMScheduleVCRowTypeEndDate: {
             cell = [self scheduleCellForIndexPath:indexPath row:row];
             JMScheduleCell *scheduleCell = (JMScheduleCell *) cell;
-            scheduleCell.valueTextField.inputView = self.datePicker;
+            scheduleCell.valueTextField.inputView = self.datePickerForEndDate;
             scheduleCell.valueTextField.inputAccessoryView = [self toolbarForCellWithDoneAction:@selector(setEndDate:)
                                                                                    cancelAction:@selector(cancelEditEndDate:)];
             break;
@@ -660,6 +685,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             scheduleCell.valueTextField.inputAccessoryView = [self toolbarForCellWithAction:@selector(setCalendarMinutes:)];
             break;
         }
+        case JMScheduleVCRowTypeCalendarDatesInMonth:
+            // TODO: implement in next release.
+            break;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -740,7 +768,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     if (section.type == JMNewScheduleVCSectionTypeScheduleStart) {
         if (newValue) {
             trigger.startType = JSScheduleTriggerStartTypeImmediately;
-            trigger.startDate = [NSNull null];
+            trigger.startDate = nil;
 
             // Update Rows
             [section hideRowWithType:JMScheduleVCRowTypeStartDate];
@@ -760,7 +788,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         if (newValue) {
             simpleTrigger.type = JSScheduleTriggerTypeNone;
             simpleTrigger.occurrenceCount = @-1;
-            simpleTrigger.endDate = [NSNull null];
+            simpleTrigger.endDate = nil;
 
             // Update Rows
             [section hideRowWithType:JMScheduleVCRowTypeEndDate];
@@ -814,9 +842,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 #pragma mark - Setup
 - (void)createSections
 {
-    JSScheduleTrigger *trigger = [self currentTrigger];
-    // TODO: trigger denendence
-
     self.sections = @[
             [self mainSection],
             [self outupOptionsSection],
@@ -887,9 +912,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (JMScheduleVCSection *)schedleEndSection
 {
-    JSScheduleTrigger *trigger = [self currentTrigger];
-    // TODO: trigger denendence
-
     JMScheduleVCSection *section = [JMScheduleVCSection sectionWithSectionType:JMNewScheduleVCSectionTypeScheduleEnd
                                                                           rows:@[
                                                                                   [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeRunIndefinitely hidden:YES],
@@ -901,9 +923,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (JMScheduleVCSection *)holidaysSection
 {
-    JSScheduleTrigger *trigger = [self currentTrigger];
-    // TODO: trigger denendence
-
     JMScheduleVCSection *section = [JMScheduleVCSection sectionWithSectionType:JMNewScheduleVCSectionTypeHolidays
                                                                           rows:@[]];;
     return section;
@@ -943,7 +962,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         }
         case JSScheduleTriggerTypeSimple: {
             // enable simple trigger
-            JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
             [section showRowWithType:JMScheduleVCRowTypeRepeatCount];
             [section showRowWithType:JMScheduleVCRowTypeRepeatTimeInterval];
             // disable calendar trigger
@@ -1011,7 +1029,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             break;
         }
         case JSScheduleTriggerTypeCalendar: {
-            JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) trigger;
             [section hideRowWithType:JMScheduleVCRowTypeRunIndefinitely];
             [section hideRowWithType:JMScheduleVCRowTypeNumberOfRuns];
             [section showRowWithType:JMScheduleVCRowTypeEndDate];
@@ -1353,7 +1370,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             break;
         }
         case JSScheduleTriggerTypeNone: {
-            JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
             if (type == JMScheduleVCRowTypeRepeatType) {
                 propertyValue = [self stringValueForTriggerType:JSScheduleTriggerTypeNone];
             }
