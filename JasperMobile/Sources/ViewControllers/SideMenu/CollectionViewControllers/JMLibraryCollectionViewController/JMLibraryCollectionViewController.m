@@ -38,8 +38,8 @@
 #pragma mark -LifeCycle
 -(void)awakeFromNib {
     [super awakeFromNib];
-    self.filterByIndex = JMLibraryListLoaderFilterByAllIndex;
-    self.sortByIndex = JMLibraryListLoaderSortByNameIndex;
+    self.filterByIndex = JMLibraryListLoaderFilterIndexByAll;
+    self.sortByIndex = JMLibraryListLoaderSortIndexByName;
 }
 
 -(void)viewDidLoad

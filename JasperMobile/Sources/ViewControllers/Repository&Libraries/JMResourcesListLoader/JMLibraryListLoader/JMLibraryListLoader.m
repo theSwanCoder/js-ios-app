@@ -23,16 +23,6 @@
 
 #import "JMLibraryListLoader.h"
 
-// Filter By
-NSInteger JMLibraryListLoaderFilterByAllIndex       = 0;
-NSInteger JMLibraryListLoaderFilterByReportIndex    = 1;
-NSInteger JMLibraryListLoaderFilterByDashboardIndex = 2;
-
-// Sort By
-NSInteger JMLibraryListLoaderSortByNameIndex         = 0;
-NSInteger JMLibraryListLoaderSortByCreationDateIndex = 1;
-NSInteger JMLibraryListLoaderSortByModifiedDateIndex = 2;
-
 @implementation JMLibraryListLoader
 
 @end

@@ -141,7 +141,7 @@
     libraryVC.shouldShowButtonForChangingViewPresentation = NO;
     libraryVC.shouldShowRightNavigationItems = NO;
     libraryVC.navigationItem.leftBarButtonItem = nil;
-    libraryVC.filterByIndex = JMLibraryListLoaderFilterByReportIndex;
+    libraryVC.filterByIndex = JMLibraryListLoaderFilterIndexByReport;
     __weak __typeof(self) weakSelf = self;
     libraryVC.actionBlock = ^(JMResource *resource) {
         __typeof(self) strongSelf = weakSelf;
