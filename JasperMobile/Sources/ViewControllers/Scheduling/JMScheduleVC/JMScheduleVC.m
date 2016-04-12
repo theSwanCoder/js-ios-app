@@ -784,7 +784,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeScheduleStart];
         [self.tableView reloadSections:sectionIndecies withRowAnimation:UITableViewRowAnimationAutomatic];
     } else if (section.type == JMNewScheduleVCSectionTypeScheduleEnd) {
-        NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
+        NSAssert([trigger isKindOfClass:[JSScheduleSimpleTrigger class]], @"Should be simple trigger");
         JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
         if (newValue) {
             simpleTrigger.type = JSScheduleTriggerTypeNone;
@@ -1020,7 +1020,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
             [section showRowWithType:JMScheduleVCRowTypeRunIndefinitely];
             NSInteger occurenceCount = simpleTrigger.occurrenceCount.integerValue;
-            if (occurenceCount == -1 && [simpleTrigger.endDate isKindOfClass:[NSNull class]]) {
+            if (occurenceCount == -1 && !simpleTrigger.endDate) {
                 [section hideRowWithType:JMScheduleVCRowTypeNumberOfRuns];
                 [section hideRowWithType:JMScheduleVCRowTypeEndDate];
             } else {
@@ -1092,7 +1092,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (NSString *)dateStringFromDate:(NSDate *)date
 {
     NSString *dateString;
-    if ([date isKindOfClass:[NSNull class]]) {
+    if (!date) {
         dateString = @"";
     } else {
         NSDateFormatter *formatter = [[JSDateFormatterFactory sharedFactory] formatterWithPattern:@"yyyy-MM-dd HH:mm"];
@@ -1392,7 +1392,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                 boolenValue = simpleTrigger.startType == JSScheduleTriggerStartTypeImmediately;
             } else if (type == JMScheduleVCRowTypeRunIndefinitely) {
                 NSInteger occurrenceCount = simpleTrigger.occurrenceCount.integerValue;
-                boolenValue = (occurrenceCount == -1) && [trigger.endDate isKindOfClass:[NSNull class]];
+                boolenValue = (occurrenceCount == -1) && !trigger.endDate;
             }
             break;
         }

@@ -39,7 +39,7 @@
 
 - (IBAction)switchChangedValue:(UISwitch *)sender
 {
-    if ([self.delegate respondsToSelector:@selector(scheduleCell:didChangeValue:)]) {
+    if ([self.delegate respondsToSelector:@selector(scheduleBoolenCell:didChangeValue:)]) {
         [self.delegate scheduleBoolenCell:self didChangeValue:self.uiSwitch.isOn];
     }
 }
