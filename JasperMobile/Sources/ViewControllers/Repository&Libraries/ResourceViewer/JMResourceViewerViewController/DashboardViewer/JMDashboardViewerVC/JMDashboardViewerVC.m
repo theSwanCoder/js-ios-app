@@ -208,16 +208,21 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [strongSelf stopShowLoader];
 
         if (!success) {
-            JMLog(@"error of refreshing dashboard: %@", error);
             if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
                 __weak typeof(self)weakSelf = strongSelf;
                 [strongSelf handleAuthErrorWithCompletion:^(void) {
                     __weak typeof(self)strongSelf = weakSelf;
                     [strongSelf startShowDashboard];
                 }];
+            } else if (error.code == JMJavascriptNativeBridgeErrorTypeUnexpected) {
+                JMLog(@"reload dashboard");
+                JMLog(@"error: %@", error.localizedDescription);
             } else {
+                JMLog(@"error of refreshing dashboard: %@", error);
                 [JMUtils presentAlertControllerWithError:error
-                                              completion:nil];
+                                              completion:^{
+                                                  [strongSelf cancelResourceViewingAndExit:YES];
+                                              }];
             }
         }
     }];
@@ -243,6 +248,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
                         __weak typeof(self)strongSelf = weakSelf;
                         [strongSelf startShowDashboard];
                     }];
+                } else if (error.code == JMJavascriptNativeBridgeErrorTypeUnexpected) {
+                    JMLog(@"reload dashlet");
+                    JMLog(@"error: %@", error.localizedDescription);
                 } else {
                     [JMUtils presentAlertControllerWithError:error
                                                   completion:nil];
@@ -326,6 +334,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
                     __weak typeof(self)strongSelf = weakSelf;
                     [strongSelf startShowDashboard];
                 }];
+            } else if (error.code == JMJavascriptNativeBridgeErrorTypeUnexpected) {
+                JMLog(@"show dashboard");
+                JMLog(@"error: %@", error.localizedDescription);
             } else {
                 [JMUtils presentAlertControllerWithError:error
                                               completion:nil];

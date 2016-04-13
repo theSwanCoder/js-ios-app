@@ -369,6 +369,8 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         NSString *errorCodeString = errorCode;
         if ([errorCodeString isEqualToString:@"window.onerror"]) {
             code = JMJavascriptNativeBridgeErrorTypeWindow;
+        } else if ([errorCodeString isEqualToString:@"unexpected.error"]) {
+            code = JMJavascriptNativeBridgeErrorTypeUnexpected;
         } else if ([errorCodeString isEqualToString:@"authentication.error"]) {
             code = JMJavascriptNativeBridgeErrorAuthError;
         }

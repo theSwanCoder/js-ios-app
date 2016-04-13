@@ -112,8 +112,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     JMDashboardLoaderCompletion heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Dashboard.API.refresh";
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.refresh"
+                                                                parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             heapBlock(NO, error);
@@ -128,8 +128,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     JMDashboardLoaderCompletion heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Dashboard.API.refreshDashlet";
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.refreshDashlet"
+                                                                parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             heapBlock(NO, error);
@@ -150,8 +150,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     JMDashboardLoaderCompletion heapBlock = [completion copy];
 
-    JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest new];
-    applyParamsRequest.command = @"JasperMobile.Dashboard.API.getDashboardParameters";
+    JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.getDashboardParameters"
+                                                                           parameters:nil];
     [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             heapBlock(NO, error);
@@ -338,6 +338,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         JMLog(@"JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution");
         __typeof(self) strongSelf = weakSelf;
         [strongSelf handleOnAdHocExecution:parameters];
+    }];
+
+    // Authorization
+    NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.API.unauthorized";
+    [self.webEnvironment addListenerWithId:unauthorizedListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(@"JasperMobile.Dashboard.API.unauthorized");
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf.delegate dashboardLoaderDidReceiveAuthRequest:self];
     }];
 }
 

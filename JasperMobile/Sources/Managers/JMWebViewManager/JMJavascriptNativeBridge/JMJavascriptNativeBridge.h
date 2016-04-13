@@ -38,6 +38,7 @@
 typedef NS_ENUM(NSInteger, JMJavascriptNativeBrigdeErrorType) {
     JMJavascriptNativeBridgeErrorTypeWindow,
     JMJavascriptNativeBridgeErrorAuthError,
+    JMJavascriptNativeBridgeErrorTypeUnexpected,
     JMJavascriptNativeBridgeErrorTypeOther,
 };
 
