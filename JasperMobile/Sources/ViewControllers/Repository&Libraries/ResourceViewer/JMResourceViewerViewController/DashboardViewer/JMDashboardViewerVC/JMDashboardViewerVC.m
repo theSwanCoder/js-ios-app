@@ -259,7 +259,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-    if (self.resource.type != JMResourceTypeLegacyDashboard) {
+    if (self.resource.type != JMResourceTypeLegacyDashboard && [JMUtils isSupportVisualize]) {
         [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                    cancelBlock:^(void) {
                                        [super cancelResourceViewingAndExit:YES];
