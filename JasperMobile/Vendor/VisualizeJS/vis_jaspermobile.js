@@ -894,6 +894,9 @@ JasperMobile.Dashboard.API = {
                 });
             } else {
                 maximizeButton.click();
+                JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Dashboard.API.maximizeDashlet", {
+                    "component" : dashletId
+                });
             }
         } else {
             JasperMobile.Callback.log("There is not maximize button");

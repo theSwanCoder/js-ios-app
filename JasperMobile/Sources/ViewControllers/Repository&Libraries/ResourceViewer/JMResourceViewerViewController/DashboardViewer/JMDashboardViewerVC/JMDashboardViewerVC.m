@@ -141,9 +141,11 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)setupLeftBarButtonItems
 {
     if ([self isDashletShown]) {
-        self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
-                                                                   target:self
-                                                                   action:@selector(minimizeDashlet)];
+        if (!self.navigationItem.leftBarButtonItem) {
+            self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
+                                                                       target:self
+                                                                       action:@selector(minimizeDashlet)];
+        }
     } else {
         [super setupLeftBarButtonItems];
     }
