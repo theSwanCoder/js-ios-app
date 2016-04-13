@@ -7,8 +7,11 @@
 //
 
 #import "JMShareSettingsViewController.h"
+#import "JMTextField.h"
+#import "JMFontPickerView.h"
 
 @interface JMShareSettingsViewController ()
+
 @property (weak, nonatomic) IBOutlet UILabel *brushTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *brushValueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *brushSlider;
@@ -27,6 +30,10 @@
 @property (weak, nonatomic) IBOutlet UISlider *blueSlider;
 @property (weak, nonatomic) IBOutlet UILabel *blueValueLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *fontSettingsLabel;
+@property (weak, nonatomic) IBOutlet JMTextField *fontTextField;
+
+@property (nonatomic, strong) JMFontPickerView *fontPickerView;
 
 @property (nonatomic, assign) CGFloat redComponent;
 @property (nonatomic, assign) CGFloat greenComponent;
@@ -45,6 +52,7 @@
     self.opacityTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_opacity", nil);
     self.brushTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_brush", nil);
     self.rgbPaletteTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_rgb", nil);
+    self.fontSettingsLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_font", nil);
 
 
     self.brushSlider.value = self.brushWidth;
@@ -53,6 +61,10 @@
     self.opacitySlider.value = self.opacity;
     [self sliderValueChanged:self.opacitySlider];
     
+    self.selectedFont = self.selectedFont;
+    self.fontTextField.inputView = self.fontPickerView;
+    self.fontTextField.inputAccessoryView = [self pickerToolbar];
+
     int redIntValue = self.redComponent * 255.0;
     self.redSlider.value = redIntValue;
     [self sliderValueChanged:self.redSlider];
@@ -66,6 +78,12 @@
     [self sliderValueChanged:self.blueSlider];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.fontTextField resignFirstResponder];
+}
+
 #pragma mark - Custom Accessors
 - (UIColor *)drawingColor
 {
@@ -75,6 +93,12 @@
 - (void)setDrawingColor:(UIColor *)drawingColor
 {
     [drawingColor getRed:&_redComponent green:&_greenComponent blue:&_blueComponent alpha:nil];
+}
+
+- (void)setSelectedFont:(UIFont *)selectedFont
+{
+    _selectedFont = selectedFont;
+    self.fontTextField.text = [NSString stringWithFormat:JMCustomLocalizedString(@"resource_viewer_share_settings_selected_font", nil), self.selectedFont.fontName, (int) self.selectedFont.pointSize];
 }
 
 #pragma mark - Actions
@@ -120,6 +144,45 @@
 
     self.colorPreviewImageView.image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+}
+
+#pragma mark - Picker
+- (JMFontPickerView *)fontPickerView
+{
+    if (!_fontPickerView) {
+        _fontPickerView = [JMFontPickerView new];
+        _fontPickerView.currentFont = self.selectedFont;
+    }
+    return _fontPickerView;
+}
+
+- (UIToolbar *)pickerToolbar
+{
+    UIToolbar *pickerToolbar = [[UIToolbar alloc] init];
+    [pickerToolbar sizeToFit];
+    
+    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [pickerToolbar setItems:@[flexibleSpace, cancel, done]];
+    
+    return pickerToolbar;
+}
+
+- (void)done:(id)sender
+{
+    self.selectedFont = self.fontPickerView.currentFont;
+    [self hidePicker];
+}
+
+- (void)cancel:(id)sender
+{
+    [self hidePicker];
+}
+
+- (void)hidePicker
+{
+    [self.fontTextField resignFirstResponder];
 }
 
 @end

@@ -3,6 +3,15 @@
 	[resource_viewer_share_title]
 		en = Resource Sharing
 		tags = ios,new
+    [resource_viewer_share_annotation_title]
+        en = Input text, please
+        tags = ios,new
+    [resource_viewer_share_annotation_placeholder]
+        en = Annotation
+        tags = ios,new
+    [resource_viewer_share_annotation_empty_error]
+        en = Annotation text can't be empty!
+        tags = ios,new
     [resource_viewer_share_text]
         en = Look at this awesome report, builded via %@!
         tags = ios,new
@@ -26,4 +35,10 @@
         tags = ios,new
     [resource_viewer_share_settings_blue]
         en = Blue
+        tags = ios,new
+    [resource_viewer_share_settings_font]
+        en = Font Settings
+        tags = ios,new
+    [resource_viewer_share_settings_selected_font]
+        en = Font: %@ size: %dpt
         tags = ios,new

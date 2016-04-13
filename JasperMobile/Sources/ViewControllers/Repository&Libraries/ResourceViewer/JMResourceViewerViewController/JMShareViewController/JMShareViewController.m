@@ -11,6 +11,9 @@
 #import "JMShareSettingsViewController.h"
 #import "JMMainNavigationController.h"
 
+#import "UIAlertController+Additions.h"
+#import "JMShareTextAnnotationView.h"
+
 @interface JMShareViewController () <JMShareSettingsViewControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UIImageView *mainImageView;
@@ -24,6 +27,8 @@
 @property (nonatomic, strong) UIColor *drawingColor;
 @property (nonatomic, assign) CGFloat brushWidth;
 @property (nonatomic, assign) CGFloat opacity;
+
+@property (nonatomic, strong) UIFont *selectedFont;
 
 @end
 
@@ -58,13 +63,15 @@
     self.drawingColor = [UIColor redColor];
     self.brushWidth = 10.f;
     self.opacity = 1.f;
+    self.selectedFont = [UIFont systemFontOfSize:16];
 }
 
 #pragma mark - Custom Accessories
 - (UIButton *)settingsButton
 {
     if (!_settingsButton) {
-        _settingsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, 34)];
+        CGFloat toolbarHeight = CGRectGetHeight(self.navigationController.toolbar.bounds);
+        _settingsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, toolbarHeight - 8)];
         _settingsButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         _settingsButton.layer.cornerRadius = 4.f;
         [_settingsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -72,13 +79,10 @@
         [_settingsButton addTarget:self action:@selector(settingsButtonDidTapped:) forControlEvents:UIControlEventTouchUpInside];
 
         // Configure shadow
-        CGRect shadowRect = CGRectMake(-1, -1, _settingsButton.bounds.size.width + 2, _settingsButton.bounds.size.height + 2);
-        UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:shadowRect];
         _settingsButton.layer.masksToBounds = NO;
         _settingsButton.layer.shadowOffset = CGSizeZero;
         _settingsButton.layer.shadowOpacity = 1.f;
-        _settingsButton.layer.shadowRadius = 2.f;
-        _settingsButton.layer.shadowPath = shadowPath.CGPath;
+        _settingsButton.layer.shadowRadius = 4.f;
         
         // Configure title label
         _settingsButton.titleLabel.backgroundColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.6];
@@ -107,6 +111,7 @@
 - (void)resetButtonDidTapped:(id)sender
 {
     self.mainImageView.image = self.imageForSharing;
+    [self.mainImageView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
 - (void)settingsButtonDidTapped:(id)sender
@@ -115,8 +120,9 @@
     settingsController.drawingColor = self.drawingColor;
     settingsController.brushWidth = self.brushWidth;
     settingsController.opacity = self.opacity;
+    settingsController.selectedFont = self.selectedFont;
     settingsController.delegate = self;
-    
+
     JMMainNavigationController *nextNC = [[JMMainNavigationController alloc] initWithRootViewController:settingsController];
     nextNC.modalPresentationStyle = UIModalPresentationFormSheet;
     [self presentViewController:nextNC animated:YES completion:nil];
@@ -145,17 +151,65 @@
     [self presentViewController:activityVC animated:YES completion:nil];    
 }
 
+- (IBAction)addTextRecognizerDidTouched:(UILongPressGestureRecognizer *)sender
+{
+    CGPoint touchPoint = [sender locationInView:sender.view];
+    [self editTextAnnotation:nil fromPoint:touchPoint];
+}
+
+#pragma mark - Text Annotations
+
+- (void) editTextAnnotation:(JMShareTextAnnotationView *)annotation fromPoint:(CGPoint)point
+{
+    __weak typeof(self)weakSelf = self;
+    UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"resource_viewer_share_annotation_title"
+                                                                                                  message:nil
+                                                                            textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
+                                                                                textField.placeholder = JMCustomLocalizedString(@"resource_viewer_share_annotation_placeholder", nil);
+                                                                                textField.text = annotation.text;
+                                                                            } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
+                                                                                NSString *errorMessage = nil;
+                                                                                if (!text.length) {
+                                                                                    errorMessage = JMCustomLocalizedString(@"resource_viewer_share_annotation_empty_error", nil);
+                                                                                }
+                                                                                return errorMessage;
+                                                                            } textEditCompletionHandler:^(NSString * _Nullable text) {
+                                                                                __strong typeof(self) strongSelf = weakSelf;
+                                                                                if (annotation) {
+                                                                                    annotation.text = text;
+                                                                                } else {
+                                                                                    [strongSelf addTextAnnotationWithText:text fromPoint:point];
+                                                                                }
+                                                                            }];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void) addTextAnnotationWithText:(NSString *)text fromPoint:(CGPoint)point
+{
+    JMShareTextAnnotationView *annotation = [JMShareTextAnnotationView shareTextAnnotationWithText:text textColor:self.drawingColor font:self.selectedFont availableFrame:self.mainImageView.bounds];
+    [annotation addTarget:self action:@selector(annotationViewEdit:withEvent:) forControlEvents:UIControlEventTouchDownRepeat];
+    [annotation addTarget:self action:@selector(annotationViewMoved:withEvent:) forControlEvents:UIControlEventTouchDragInside];
+    
+    annotation.center = point;
+    [self.tempDrawImageView addSubview:annotation];
+}
+
+- (void)annotationViewEdit:(JMShareTextAnnotationView *)annotationView withEvent:(UIEvent *)event
+{
+    [self editTextAnnotation:annotationView fromPoint:CGPointZero];
+}
+
+- (void)annotationViewMoved:(JMShareTextAnnotationView *)annotationView withEvent:(UIEvent *)event
+{
+    CGPoint point = [[[event allTouches] anyObject] locationInView:self.view];
+    annotationView.center = point;
+}
+
 #pragma mark - Touches
 - (CGPoint)locationFromTouches:(NSSet *)touches
 {
     UITouch *touch = [touches anyObject];
     return [touch locationInView:self.view];
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [touches anyObject];
-    self.lastDrawingPoint = [touch locationInView:self.view];
 }
 
 - (void)drawLineFromPoint:(CGPoint)startPoint toPoint:(CGPoint)endPoint
@@ -173,6 +227,12 @@
     UIGraphicsEndImageContext();
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    self.lastDrawingPoint = [touch locationInView:self.view];
+}
+
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     CGPoint currentPoint = [self locationFromTouches:touches];
@@ -186,12 +246,12 @@
     CGPoint currentPoint = [self locationFromTouches:touches];
     [self drawLineFromPoint:self.lastDrawingPoint toPoint:currentPoint];
     
-    UIGraphicsBeginImageContextWithOptions(self.mainImageView.bounds.size, 0, self.mainImageView.image.scale);
-    [self.mainImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    [self.tempDrawImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    self.mainImageView.image = UIGraphicsGetImageFromCurrentImageContext();
-    self.tempDrawImageView.image = nil;
-    UIGraphicsEndImageContext();
+//    UIGraphicsBeginImageContextWithOptions(self.mainImageView.bounds.size, 0, self.mainImageView.image.scale);
+//    [self.mainImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
+//    [self.tempDrawImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
+//    self.mainImageView.image = UIGraphicsGetImageFromCurrentImageContext();
+//    self.tempDrawImageView.image = nil;
+//    UIGraphicsEndImageContext();
 }
 
 #pragma mark - JMShareSettingsViewControllerDelegate
@@ -200,7 +260,8 @@
     self.drawingColor = settingsController.drawingColor;
     self.brushWidth = settingsController.brushWidth;
     self.opacity = settingsController.opacity;
-
+    self.selectedFont = settingsController.selectedFont;
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
