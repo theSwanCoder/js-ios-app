@@ -135,6 +135,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
             heapBlock(NO, error);
         } else {
 //            JMLog(@"callback: %@", callback);
+            NSString *isFullReload = parameters[@"isFullReload"];
+            if ([isFullReload isEqualToString:@"true"]) {
+                if (self.dashboard.maximizedComponent) {
+                    [self maximizeDashletForComponent:self.dashboard.maximizedComponent];
+                }
+            }
             heapBlock(YES, nil);
         }
     }];
@@ -376,8 +382,9 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                                                    parameters:@{
                                                                            @"uri" : self.dashboard.resourceURI,
                                                                            @"is_for_6_0" : @([JMUtils isServerAmber]),
+                                                                           @"success" : @"null",
+                                                                           @"failed" : @"null",
                                                                    }];
-    runRequest.command = @"JasperMobile.Dashboard.API.runDashboard";
     [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
             heapBlock(NO, error);

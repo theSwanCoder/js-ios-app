@@ -655,6 +655,8 @@ JasperMobile.Dashboard.API = {
     selectedComponent: {}, // Model element
     isAmber: false,
     runDashboard: function(params) {
+        var success = params["success"];
+        var failed = params["failed"];
         JasperMobile.Dashboard.API.isAmber = params["is_for_6_0"];
         var successFn = function() {
 
@@ -663,17 +665,23 @@ JasperMobile.Dashboard.API = {
                 if (data.components) {
                     JasperMobile.Dashboard.API._configureComponents(data.components);
                 }
-                JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Dashboard.API.runDashboard", {
-                    "components" : data.components ? data.components : {},
-                    "params" : data.parameters
-                });
-
                 if (JasperMobile.Dashboard.API.isAmber) {
                     JasperMobile.Dashboard.API._defineComponentsClickEventAmber();
                 } else {
                     JasperMobile.Dashboard.API._defineComponentsClickEvent();
                 }
 
+                JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Dashboard.API.runDashboard", {
+                    "components" : data.components ? data.components : {},
+                    "params" : data.parameters
+                });
+
+                if (success != "null") {
+                    success({
+                        "components" : data.components ? data.components : {},
+                        "params" : data.parameters
+                    });
+                }
             }, 6000);
 
             // hide input controls dashlet if it exists
@@ -690,6 +698,9 @@ JasperMobile.Dashboard.API = {
                     "message" : error.message
                 })
             });
+            if (failed != "null") {
+                failed(error);
+            }
         };
         var dashboardStruct = {
             resource: params["uri"],
@@ -930,7 +941,8 @@ JasperMobile.Dashboard.API = {
                 var data = JasperMobile.Dashboard.API.dashboardObject.data();
                 JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Dashboard.API.refresh", {
                     "components" : data.components,
-                    "params" : data.parameters
+                    "params" : data.parameters,
+                    "isFullReload" : "false"
                 });
             })
             .fail(function(error) {
@@ -945,7 +957,22 @@ JasperMobile.Dashboard.API = {
         setTimeout(function() {
             JasperMobile.Callback.log("state: " + JasperMobile.Dashboard.API.refreshedDashboardObject.state());
             if (JasperMobile.Dashboard.API.refreshedDashboardObject.state() === "pending") {
-                JasperMobile.Dashboard.API.run({"uri" : JasperMobile.Dashboard.API.dashboardObject.properties().resource});
+                JasperMobile.Dashboard.API.runDashboard({
+                    "uri" : JasperMobile.Dashboard.API.dashboardObject.properties().resource,
+                    success: function() {
+                        JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Dashboard.API.refresh", {
+                            "isFullReload": "true"
+                        });
+                    },
+                    failed: function(error) {
+                        JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.refresh", {
+                            "error" : JSON.stringify({
+                                "code" : error.errorCode,
+                                "message" : error.message
+                            })
+                        });
+                    }
+                });
             }
         }, 20000);
     },
@@ -976,7 +1003,8 @@ JasperMobile.Dashboard.API = {
                 var data = JasperMobile.Dashboard.API.dashboardObject.data();
                 JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Dashboard.API.refreshDashlet", {
                     "components" : data.components,
-                    "params" : data.parameters
+                    "params" : data.parameters,
+                    "isFullReload" : "false"
                 });
             })
             .fail(function(error) {
@@ -991,7 +1019,22 @@ JasperMobile.Dashboard.API = {
         setTimeout(function() {
             JasperMobile.Callback.log("state: " + JasperMobile.Dashboard.API.refreshedDashboardObject.state());
             if (JasperMobile.Dashboard.API.refreshedDashboardObject.state() === "pending") {
-                JasperMobile.Dashboard.API.run({"uri" : JasperMobile.Dashboard.API.dashboardObject.properties().resource});
+                JasperMobile.Dashboard.API.runDashboard({
+                    "uri" : JasperMobile.Dashboard.API.dashboardObject.properties().resource,
+                    success: function() {
+                        JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Dashboard.API.refreshDashlet", {
+                            "isFullReload": "true"
+                        });
+                    },
+                    failed: function(error) {
+                        JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.refreshDashlet", {
+                            "error" : JSON.stringify({
+                                "code" : error.errorCode,
+                                "message" : error.message
+                            })
+                        });
+                    }
+                });
             }
         }, 20000);
     },
