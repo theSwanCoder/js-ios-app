@@ -226,7 +226,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     BOOL isInitialScaleFactorTheSame = fabs(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49;
     if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
         self.visualizeManager.viewportScaleFactor = scaleFactor;
-        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortInitialScale"
+        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortScale"
                                                                     parameters:@{
                                                                             @"scale" : @(scaleFactor)
                                                                     }];

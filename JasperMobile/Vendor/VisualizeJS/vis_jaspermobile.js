@@ -68,7 +68,7 @@ var JasperMobile = {
             var viewPortContent = 'initial-scale='+ scale + ', width=device-width, maximum-scale=2.0, user-scalable=yes';
             var viewport = document.querySelector("meta[name=viewport]");
             if (!viewport) {
-                var viewport=document.createElement('meta');
+                viewport=document.createElement('meta');
                 viewport.name = "viewport";
                 viewport.content = viewPortContent;
                 document.head.appendChild(viewport);
@@ -676,9 +676,12 @@ JasperMobile.Dashboard.API = {
 
             }, 6000);
 
-            // hide input controls dashlet
-            var filterGroup = document.querySelectorAll('[data-componentid="Filter_Group"]')[0];
-            filterGroup.style.display = "none";
+            // hide input controls dashlet if it exists
+            var filterGroupNodes = document.querySelectorAll('[data-componentid="Filter_Group"]');
+            if (filterGroupNodes.length > 0) {
+                var filterGroup = filterGroupNodes[0];
+                filterGroup.style.display = "none";
+            }
         };
         var errorFn = function(error) {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.runDashboard", {
@@ -1099,7 +1102,6 @@ JasperMobile.Dashboard.API = {
     },
     _defineComponentsClickEventAmber: function() {
         var allNodes = document.querySelector(".dashboardCanvas > div > div").childNodes;
-        var allDashlets = [];
         for (var i = 0; i < allNodes.length; i++) {
             var nodeElement = allNodes[i];
             var componentId = nodeElement.attributes["data-componentid"].value;
@@ -1108,7 +1110,7 @@ JasperMobile.Dashboard.API = {
             } else if (componentId == "Text") {
                 // JasperMobile.Callback.log("Text");
             } else {
-                // JasperMobile.Callback.log("Isn't Filter");
+                // JasperMobile.Callback.log("componentId: " + componentId);
                 (function(nodeElement, componentId) {
                     JasperMobile.Dashboard.API._configureDashletForAmber(nodeElement, componentId);
                 })(nodeElement, componentId);
@@ -1127,6 +1129,13 @@ JasperMobile.Dashboard.API = {
             overlay.style.width = "100%";
             overlay.className = "dashletOverlay";
             dashletContent.insertBefore(overlay, dashletContent.childNodes[0]);
+
+            // hide dashlet toolbar
+            // var dashletToolbarNodes = dashletContent.getElementsByClassName("dashletToolbar");
+            // if (dashletToolbarNodes.length > 0) {
+            //     var dashletToolbar = dashletToolbarNodes[0];
+            //     dashletToolbar.style.display = "none";
+            // }
 
             // add click listener
             overlay.addEventListener("click", function(event) {

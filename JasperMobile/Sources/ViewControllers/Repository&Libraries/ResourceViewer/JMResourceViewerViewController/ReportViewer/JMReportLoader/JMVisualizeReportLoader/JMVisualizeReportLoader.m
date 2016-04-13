@@ -283,7 +283,7 @@
     if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
         self.visualizeManager.viewportScaleFactor = scaleFactor;
 
-        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortInitialScale"
+        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortScale"
                                                                     parameters:@{
                                                                             @"scale" : @(scaleFactor)
                                                                     }];
