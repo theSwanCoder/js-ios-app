@@ -437,6 +437,10 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self minimizeDashlet];
     }
 
+    if ([self isContentOnTV]) {
+        [self switchFromTV];
+    }
+
     if ([JMUtils isServerVersionUpOrEqual6]) {
         [self startResourceViewing];
     } else {
