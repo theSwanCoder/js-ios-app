@@ -61,6 +61,7 @@ NSString * const kJMDashboardKey = @"dashboardKey";
 // Settings keys
 NSString * const kJMDefaultSendingCrashReport = @"jaspersoft.crashreportsending.enabled";
 NSString * const kJMUserAcceptAgreement = @"kJMUserAcceptAgreement";
+NSString * const kJMDefaultSendingAutoFillLoginData = @"jaspersoft.autofill.login.data.enabled";
 
 // Demo server parameters
 NSString * const kJMDemoServerAlias = @"Jaspersoft Mobile Demo";

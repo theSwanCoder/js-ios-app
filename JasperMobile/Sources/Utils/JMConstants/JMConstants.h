@@ -68,6 +68,7 @@ extern NSString * const kJMDashboardKey;
 // Settings keys
 extern NSString * const kJMDefaultSendingCrashReport;
 extern NSString * const kJMUserAcceptAgreement;
+extern NSString * const kJMDefaultSendingAutoFillLoginData;
 
 // Demo server parameters
 extern NSString * const kJMDemoServerAlias;

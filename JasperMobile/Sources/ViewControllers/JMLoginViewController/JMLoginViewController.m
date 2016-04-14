@@ -84,10 +84,12 @@
         self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonDisabledBackgroundColor];
         [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoDisabledButtonTextColor] forState:UIControlStateNormal];
     } else {
-        NSString *lastUserName = [JMUtils lastUserName];
-        self.userNameTextField.text = lastUserName;
-        JMServerProfile *lastServerProfile = [JMUtils lastServerProfile];
-        self.selectedServerProfile = lastServerProfile;
+        if ([JMUtils isAutofillLoginDataEnable]) {
+            NSString *lastUserName = [JMUtils lastUserName];
+            self.userNameTextField.text = lastUserName;
+            JMServerProfile *lastServerProfile = [JMUtils lastServerProfile];
+            self.selectedServerProfile = lastServerProfile;
+        }
         self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
         [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
     }

@@ -126,6 +126,19 @@ void jmDebugLog(NSString *format, ...) {
     return YES;
 }
 
++ (BOOL)isAutofillLoginDataEnable
+{
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingAutoFillLoginData]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:kJMDefaultSendingAutoFillLoginData];
+    }
+
+    id autofillLoginData = [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingAutoFillLoginData];
+    if (autofillLoginData) {
+        return [autofillLoginData boolValue];
+    }
+    return NO;
+}
+
 + (void)activateCrashReportSendingIfNeeded
 {
     if ([self crashReportsSendingEnable]) {

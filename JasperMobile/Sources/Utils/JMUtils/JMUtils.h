@@ -87,6 +87,8 @@ void jmDebugLog(NSString * __nonnull format, ...);
  */
 + (BOOL)crashReportsSendingEnable;
 
++ (BOOL)isAutofillLoginDataEnable;
+
 /**
  Update sending of crash reports
  */
