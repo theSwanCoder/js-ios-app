@@ -37,6 +37,7 @@
 @property(nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITextField *valueTextField;
 @property (nonatomic, weak) NSObject <JMScheduleCellDelegate> *delegate;
+- (void)showErrorMessage:(NSString *)message;
 @end
 
 @protocol JMScheduleCellDelegate

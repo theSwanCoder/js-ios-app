@@ -940,20 +940,32 @@
                                                         <outlet property="delegate" destination="MKQ-VM-tbH" id="JjV-Rc-j2b"/>
                                                     </connections>
                                                 </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bi1-tc-O43">
+                                                    <rect key="frame" x="8" y="49" width="564" height="0.0"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="3S9-aJ-DWe" firstAttribute="leading" secondItem="Bc3-If-IeA" secondAttribute="trailing" constant="10" id="4uq-TH-HQs"/>
+                                                <constraint firstItem="bi1-tc-O43" firstAttribute="trailing" secondItem="3S9-aJ-DWe" secondAttribute="trailing" id="KRd-Oz-h5P"/>
+                                                <constraint firstItem="bi1-tc-O43" firstAttribute="leading" secondItem="Bc3-If-IeA" secondAttribute="leading" id="ZA7-9B-LLV"/>
                                                 <constraint firstAttribute="leadingMargin" secondItem="Bc3-If-IeA" secondAttribute="leading" id="e0U-vg-ptS"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="3S9-aJ-DWe" secondAttribute="trailing" id="ffb-2s-0OJ"/>
                                                 <constraint firstItem="3S9-aJ-DWe" firstAttribute="centerY" secondItem="S6T-zm-Iq6" secondAttribute="centerY" id="tm3-4I-Ue9"/>
                                                 <constraint firstItem="3S9-aJ-DWe" firstAttribute="width" secondItem="Bc3-If-IeA" secondAttribute="width" multiplier="2" id="vLZ-jQ-N0X"/>
                                                 <constraint firstItem="Bc3-If-IeA" firstAttribute="centerY" secondItem="S6T-zm-Iq6" secondAttribute="centerY" id="vQ4-fb-Dms"/>
+                                                <constraint firstItem="bi1-tc-O43" firstAttribute="top" secondItem="3S9-aJ-DWe" secondAttribute="bottom" constant="4" id="wg9-eq-vrM"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
+                                            <outlet property="errorLabel" destination="bi1-tc-O43" id="SJD-kk-ayk"/>
+                                            <outlet property="textFieldCenterYConstraint" destination="tm3-4I-Ue9" id="rvG-Tf-pjK"/>
                                             <outlet property="titleLabel" destination="Bc3-If-IeA" id="1nq-XG-f5W"/>
+                                            <outlet property="titleLabelCenterYConstraint" destination="vQ4-fb-Dms" id="3AK-oN-NP5"/>
                                             <outlet property="valueTextField" destination="3S9-aJ-DWe" id="Efb-YH-29D"/>
                                         </connections>
                                     </tableViewCell>

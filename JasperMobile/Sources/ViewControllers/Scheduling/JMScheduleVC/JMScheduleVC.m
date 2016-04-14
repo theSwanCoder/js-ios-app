@@ -34,6 +34,7 @@
 #import "JMScheduleVCRow.h"
 #import "JMMultiSelectedItemsVC.h"
 #import "JMSelectedItem.h"
+#import "JMCancelRequestPopup.h"
 
 
 NSString *const kJMJobLabel              = @"kJMJobLabel";
@@ -697,12 +698,14 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 #pragma mark - Save
 - (IBAction)makeAction:(UIButton *)sender
 {
-    [self validateJobWithCompletion:^(BOOL success, NSError *error) {
+    [JMCancelRequestPopup presentWithMessage:@"Validation"];
+    [self validateJobWithCompletion:^(BOOL success) {
+        [JMCancelRequestPopup dismiss];
         if (success) {
             self.exitBlock(self.scheduleMetadata);
         } else {
+            // show errors
             [self.tableView reloadData];
-            [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }];
 }
@@ -718,6 +721,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     JMScheduleVCSection *section = self.sections[indexPath.section];
     JMScheduleVCRow *row = section.rows[indexPath.row];
+    row.errorMessage = nil;
 
     JSScheduleTrigger *trigger = [self currentTrigger];
 
@@ -1127,32 +1131,36 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     return toolbar;
 }
 
-- (void)validateJobWithCompletion:(void(^)(BOOL success, NSError *error))completion
+- (void)validateJobWithCompletion:(void(^)(BOOL success))completion
 {
     if (!completion) {
         return;
     }
 
-    NSString *message;
+    BOOL success = YES;
 
     if (!self.scheduleMetadata.baseOutputFilename.length) {
-        message = JMCustomLocalizedString(@"schedules_error_empty_filename", nil);
-    } else if (!self.scheduleMetadata.folderURI.length) {
-        message = JMCustomLocalizedString(@"schedules_error_empty_output_folder", nil);
-    } else if (!self.scheduleMetadata.label.length) {
-        message = JMCustomLocalizedString(@"schedules_error_empty_label", nil);
-    } else if (!self.scheduleMetadata.outputFormats.count) {
-        message = JMCustomLocalizedString(@"schedules_error_empty_format", nil);
+        success = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename", nil);
     }
 
-    if (message) {
-        NSError *error = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules_error_domain", nil)
-                                                    code:0
-                                                userInfo:@{ NSLocalizedDescriptionKey : message }];
-        completion(NO, error);
-    } else {
-        completion(YES, nil);
+    if (!self.scheduleMetadata.folderURI.length) {
+        success = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFolderURI];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_output_folder", nil);
     }
+
+    if (!self.scheduleMetadata.label.length) {
+        success = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeMain];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeLabel];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_label", nil);
+    }
+
+    completion(success);
 }
 
 - (NSString *)stringValueForRecurrenceType:(JSScheduleSimpleTriggerRecurrenceIntervalType)recurrenceType
@@ -1253,6 +1261,17 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (JMScheduleCell *)cellInSection:(JMScheduleVCSectionType)sectionType andRow:(JMScheduleVCRowType)rowType
 {
+    JMScheduleVCSection *searchSection = [self sectionWithType:sectionType];
+    JMScheduleVCRow *row = [searchSection rowWithType:rowType];
+    NSInteger cellIndex = [searchSection.rows indexOfObject:row];
+    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForRow:cellIndex
+                                                    inSection:sectionType];
+    JMScheduleCell *cell = [self.tableView cellForRowAtIndexPath:cellIndexPath];
+    return cell;
+}
+
+- (JMScheduleVCSection *)sectionWithType:(JMScheduleVCSectionType)sectionType
+{
     JMScheduleVCSection *searchSection;
     for (JMScheduleVCSection *section in self.sections) {
         if (section.type == sectionType) {
@@ -1260,12 +1279,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             break;
         }
     }
-    JMScheduleVCRow *row = [searchSection rowWithType:rowType];
-    NSInteger cellIndex = [searchSection.rows indexOfObject:row];
-    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForRow:cellIndex
-                                                    inSection:sectionType];
-    JMScheduleCell *cell = [self.tableView cellForRowAtIndexPath:cellIndexPath];
-    return cell;
+    return searchSection;
 }
 
 - (JMScheduleVCRow *)rowForCell:(UITableViewCell *)cell
@@ -1286,6 +1300,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
     scheduleCell.valueTextField.userInteractionEnabled = YES;
     scheduleCell.delegate = self;
+
+    [scheduleCell showErrorMessage:row.errorMessage];
+
     return scheduleCell;
 }
 

@@ -29,7 +29,21 @@
 #import "JMScheduleCell.h"
 
 
+@interface JMScheduleCell ()
+@property(nonatomic, weak) IBOutlet UILabel *errorLabel;
+@property(nonatomic, weak) IBOutlet NSLayoutConstraint *titleLabelCenterYConstraint;
+@property(nonatomic, weak) IBOutlet NSLayoutConstraint *textFieldCenterYConstraint;
+@end
+
 @implementation JMScheduleCell
+
+#pragma mark - Public API
+- (void)showErrorMessage:(NSString *)message
+{
+    self.errorLabel.text = message;
+    self.titleLabelCenterYConstraint.constant = (message.length == 0) ? 0 : -10;
+    self.textFieldCenterYConstraint.constant = (message.length == 0) ? 0 : -10;
+}
 
 #pragma mark - UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField
