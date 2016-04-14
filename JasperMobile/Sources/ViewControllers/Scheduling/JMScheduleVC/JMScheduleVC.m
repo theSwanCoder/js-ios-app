@@ -66,8 +66,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     if (!_datePickerForStartDate) {
         _datePickerForStartDate = [UIDatePicker new];
-        // need set timezone to 0 because of received value
-        _datePickerForStartDate.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+
+        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:[self currentTrigger].timezone];
+        _datePickerForStartDate.timeZone = timeZone;
 
         JSScheduleTrigger *trigger = [self currentTrigger];
         if (!trigger.startDate || [trigger.startDate isKindOfClass:[NSNull class]]) {
@@ -86,8 +87,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     if (!_datePickerForEndDate) {
         _datePickerForEndDate = [UIDatePicker new];
-        // need set timezone to 0 because of received value
-        _datePickerForEndDate.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+
+        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:[self currentTrigger].timezone];
+        _datePickerForEndDate.timeZone = timeZone;
 
         JSScheduleTrigger *trigger = [self currentTrigger];
         if (!trigger.endDate || [trigger.endDate isKindOfClass:[NSNull class]]) {
@@ -1087,7 +1089,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     if (!date) {
         dateString = @"";
     } else {
-        NSDateFormatter *formatter = [[JSDateFormatterFactory sharedFactory] formatterWithPattern:@"yyyy-MM-dd HH:mm"];
+        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:[self currentTrigger].timezone];
+        NSDateFormatter *formatter = [[JSDateFormatterFactory sharedFactory] formatterWithPattern:@"yyyy-MM-dd HH:mm" timeZone:timeZone];
         dateString = [formatter stringFromDate:date];
     }
     return dateString;
