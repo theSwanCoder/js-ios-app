@@ -727,29 +727,26 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         self.scheduleMetadata.folderURI = trimmedValue;
     } else if (row.type == JMScheduleVCRowTypeRepeatCount) {
         NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
-        // TODO: come up with verifying entered symbols
-//            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^?:|0|\\s|[1-9]\\d*$"
-//                                                                                   options:NSRegularExpressionCaseInsensitive
-//                                                                                     error:nil];
-//            NSArray *matches = [regex matchesInString:newValue
-//                                              options:NSMatchingReportCompletion
-//                                                range:NSMakeRange(0, newValue.length)];
-//            if (matches.count) {
-//                simpleTrigger.recurrenceInterval = @(newValue.integerValue);
-//            } else {
-//                UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
-//                                                                                              message:JMCustomLocalizedString(@"schedules_error_repeat_count_invalid_characters", nil)
-//                                                                                    cancelButtonTitle:@"dialog_button_ok"
-//                                                                              cancelCompletionHandler:nil];
-//                [self presentViewController:alertController animated:YES completion:nil];
-//            }
-
-        simpleTrigger.recurrenceInterval = @(trimmedValue.integerValue);
+        if ([self isStringContainsOnlyDigits:trimmedValue]) {
+            JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
+            simpleTrigger.recurrenceInterval = @(trimmedValue.integerValue);
+            row.errorMessage = nil;
+        } else {
+            // show error message in cell
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_repeat_count_invalid_characters", nil);
+        }
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     } else if (row.type == JMScheduleVCRowTypeNumberOfRuns) {
         NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
-        JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
-        simpleTrigger.occurrenceCount = @(trimmedValue.integerValue);
+        if ([self isStringContainsOnlyDigits:trimmedValue]) {
+            JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
+            simpleTrigger.occurrenceCount = @(trimmedValue.integerValue);
+            row.errorMessage = nil;
+        } else {
+            // show error message in cell
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_repeat_count_invalid_characters", nil);
+        }
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
@@ -1122,55 +1119,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     return toolbar;
 }
 
-- (void)validateJobWithCompletion:(void(^)(BOOL success))completion
-{
-    if (!completion) {
-        return;
-    }
-
-    BOOL success = YES;
-
-    if (!self.scheduleMetadata.baseOutputFilename.length) {
-        success = NO;
-        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
-        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename", nil);
-    }
-
-    if (!self.scheduleMetadata.folderURI.length) {
-        success = NO;
-        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
-        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFolderURI];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_output_folder", nil);
-    }
-
-    if (!self.scheduleMetadata.label.length) {
-        success = NO;
-        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeMain];
-        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeLabel];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_label", nil);
-    }
-
-    NSDate *currentDate = [NSDate date];
-    NSDate *startDate = [self currentTrigger].startDate;
-    if (startDate && [startDate compare:currentDate] == NSOrderedAscending) {
-        success = NO;
-        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleStart];
-        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeStartDate];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
-    }
-
-    NSDate *endDate = [self currentTrigger].endDate;
-    if (endDate && [endDate compare:currentDate] == NSOrderedAscending) {
-        success = NO;
-        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleEnd];
-        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeEndDate];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
-    }
-
-    completion(success);
-}
-
 - (NSString *)stringValueForRecurrenceType:(JSScheduleSimpleTriggerRecurrenceIntervalType)recurrenceType
 {
     NSString *stringValue;
@@ -1221,6 +1169,72 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     }
 
     return stringValue;
+}
+
+#pragma mark - Validation
+- (void)validateJobWithCompletion:(void(^)(BOOL success))completion
+{
+    if (!completion) {
+        return;
+    }
+
+    BOOL success = YES;
+
+    if (!self.scheduleMetadata.baseOutputFilename.length) {
+        success = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename", nil);
+    }
+
+    if (!self.scheduleMetadata.folderURI.length) {
+        success = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFolderURI];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_output_folder", nil);
+    }
+
+    if (!self.scheduleMetadata.label.length) {
+        success = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeMain];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeLabel];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_label", nil);
+    }
+
+    NSDate *currentDate = [NSDate date];
+    NSDate *startDate = [self currentTrigger].startDate;
+    if (startDate && [startDate compare:currentDate] == NSOrderedAscending) {
+        success = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleStart];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeStartDate];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+    }
+
+    NSDate *endDate = [self currentTrigger].endDate;
+    if (endDate && [endDate compare:currentDate] == NSOrderedAscending) {
+        success = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleEnd];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeEndDate];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+    }
+
+    completion(success);
+}
+
+- (BOOL)isStringContainsOnlyDigits:(NSString *)string
+{
+    BOOL isOnlyDigits = YES;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[0-9]*$"
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:nil];
+
+    NSArray *matches = [regex matchesInString:string
+                                      options:NSMatchingReportCompletion
+                                        range:NSMakeRange(0, string.length)];
+    if (!matches.count) {
+        isOnlyDigits = NO;
+    }
+    return isOnlyDigits;
 }
 
 #pragma mark - Cell Helpers
