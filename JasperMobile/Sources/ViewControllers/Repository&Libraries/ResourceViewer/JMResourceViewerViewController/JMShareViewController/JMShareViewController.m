@@ -11,13 +11,14 @@
 #import "JMShareSettingsViewController.h"
 #import "JMMainNavigationController.h"
 
+#import "UIView+Additions.h"
 #import "UIAlertController+Additions.h"
 #import "JMShareTextAnnotationView.h"
+
 
 @interface JMShareViewController () <JMShareSettingsViewControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UIImageView *mainImageView;
-@property (nonatomic, weak) IBOutlet UIImageView *tempDrawImageView;
 
 @property (nonatomic, strong) UIButton *settingsButton;
 
@@ -27,6 +28,8 @@
 @property (nonatomic, strong) UIColor *drawingColor;
 @property (nonatomic, assign) CGFloat brushWidth;
 @property (nonatomic, assign) CGFloat opacity;
+
+@property (nonatomic, assign) BOOL borders;
 
 @property (nonatomic, strong) UIFont *selectedFont;
 
@@ -39,14 +42,18 @@
     
     self.title = JMCustomLocalizedString(@"resource_viewer_share_title", nil);
     
-    UIBarButtonItem *resetItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reset_action"] style:UIBarButtonItemStylePlain target:self action:@selector(resetButtonDidTapped:)];
-    UIBarButtonItem *settingsItem = [[UIBarButtonItem alloc] initWithCustomView:self.settingsButton];
     UIBarButtonItem *shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share_action"] style:UIBarButtonItemStylePlain target:self action:@selector(shareButtonDidTapped:)];
+    
+    self.navigationItem.rightBarButtonItem = shareItem;
+    
+    UIBarButtonItem *addTextItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_text_action"] style:UIBarButtonItemStylePlain target:self action:@selector(addTextButtonDidTapped:)];
+    UIBarButtonItem *settingsItem = [[UIBarButtonItem alloc] initWithCustomView:self.settingsButton];
+    UIBarButtonItem *resetItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reset_action"] style:UIBarButtonItemStylePlain target:self action:@selector(resetButtonDidTapped:)];
 
     UIBarButtonItem *dividerItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *dividerItem1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    self.toolbarItems = @[resetItem, dividerItem, settingsItem, dividerItem1, shareItem];
+    self.toolbarItems = @[addTextItem, dividerItem, settingsItem, dividerItem1, resetItem];
     
     [self setDefaults];
 }
@@ -64,6 +71,7 @@
     self.brushWidth = 10.f;
     self.opacity = 1.f;
     self.selectedFont = [UIFont systemFontOfSize:16];
+    self.borders = YES;
 }
 
 #pragma mark - Custom Accessories
@@ -108,10 +116,17 @@
 }
 
 #pragma mark - Actions
+- (void)addTextButtonDidTapped:(id)sender
+{
+    [self editTextAnnotation:nil fromPoint:self.mainImageView.center];
+}
+
 - (void)resetButtonDidTapped:(id)sender
 {
-    self.mainImageView.image = self.imageForSharing;
-    [self.mainImageView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    @synchronized (self.mainImageView) {
+        [self.mainImageView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        self.mainImageView.layer.sublayers = nil;
+    }
 }
 
 - (void)settingsButtonDidTapped:(id)sender
@@ -121,6 +136,7 @@
     settingsController.brushWidth = self.brushWidth;
     settingsController.opacity = self.opacity;
     settingsController.selectedFont = self.selectedFont;
+    settingsController.borders = self.borders;
     settingsController.delegate = self;
 
     JMMainNavigationController *nextNC = [[JMMainNavigationController alloc] initWithRootViewController:settingsController];
@@ -130,7 +146,9 @@
 
 - (void)shareButtonDidTapped:(id)sender
 {
-    JMShareImageActivityItemProvider * imageProvider = [[JMShareImageActivityItemProvider alloc] initWithImage:self.mainImageView.image];
+    UIImage *imageForSharing = [self.mainImageView renderedImage];
+    
+    JMShareImageActivityItemProvider * imageProvider = [[JMShareImageActivityItemProvider alloc] initWithImage:imageForSharing];
 
     NSArray *objectsToShare = @[imageProvider];
     
@@ -146,7 +164,7 @@
     }
     
     activityVC.excludedActivityTypes = excludeActivities;
-    activityVC.popoverPresentationController.barButtonItem = [self.toolbarItems lastObject];
+    activityVC.popoverPresentationController.barButtonItem = self.navigationItem.rightBarButtonItem;
     
     [self presentViewController:activityVC animated:YES completion:nil];    
 }
@@ -191,7 +209,8 @@
     [annotation addTarget:self action:@selector(annotationViewMoved:withEvent:) forControlEvents:UIControlEventTouchDragInside];
     
     annotation.center = point;
-    [self.tempDrawImageView addSubview:annotation];
+    annotation.borders = self.borders;
+    [self.mainImageView addSubview:annotation];
 }
 
 - (void)annotationViewEdit:(JMShareTextAnnotationView *)annotationView withEvent:(UIEvent *)event
@@ -214,16 +233,22 @@
 
 - (void)drawLineFromPoint:(CGPoint)startPoint toPoint:(CGPoint)endPoint
 {
+    CALayer *layer = [self.mainImageView.layer.sublayers lastObject];
+    CALayer *copyLayer = [CALayer layer];
+    copyLayer.contents = layer.contents;
+    copyLayer.frame = layer.frame;
+    
     UIGraphicsBeginImageContext(self.view.bounds.size);
-    [self.tempDrawImageView.image drawInRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
-    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), self.brushWidth);
-    CGContextSetStrokeColorWithColor(UIGraphicsGetCurrentContext(), self.drawingColor.CGColor);
-    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), startPoint.x, startPoint.y);
-    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), endPoint.x, endPoint.y);
-    CGContextStrokePath(UIGraphicsGetCurrentContext());
-    self.tempDrawImageView.image = UIGraphicsGetImageFromCurrentImageContext();
-    [self.tempDrawImageView setAlpha:self.opacity];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [copyLayer renderInContext:context];
+    CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetLineWidth(context, self.brushWidth);
+    CGContextSetStrokeColorWithColor(context, self.drawingColor.CGColor);
+    CGContextMoveToPoint(context, startPoint.x, startPoint.y);
+    CGContextAddLineToPoint(context, endPoint.x, endPoint.y);
+    CGContextStrokePath(context);
+    
+    layer.contents = (__bridge id _Nullable)(UIGraphicsGetImageFromCurrentImageContext().CGImage);
     UIGraphicsEndImageContext();
 }
 
@@ -231,6 +256,10 @@
 {
     UITouch *touch = [touches anyObject];
     self.lastDrawingPoint = [touch locationInView:self.view];
+    CALayer *layer = [CALayer layer];
+    layer.frame = self.mainImageView.bounds;
+    layer.opacity = self.opacity;
+    [self.mainImageView.layer addSublayer:layer];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -245,13 +274,6 @@
 {
     CGPoint currentPoint = [self locationFromTouches:touches];
     [self drawLineFromPoint:self.lastDrawingPoint toPoint:currentPoint];
-    
-//    UIGraphicsBeginImageContextWithOptions(self.mainImageView.bounds.size, 0, self.mainImageView.image.scale);
-//    [self.mainImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
-//    [self.tempDrawImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
-//    self.mainImageView.image = UIGraphicsGetImageFromCurrentImageContext();
-//    self.tempDrawImageView.image = nil;
-//    UIGraphicsEndImageContext();
 }
 
 #pragma mark - JMShareSettingsViewControllerDelegate
@@ -261,8 +283,22 @@
     self.brushWidth = settingsController.brushWidth;
     self.opacity = settingsController.opacity;
     self.selectedFont = settingsController.selectedFont;
+    self.borders = settingsController.borders;
+    
+    for (UIView * subview in self.mainImageView.subviews) {
+        if ([subview isKindOfClass:[JMShareTextAnnotationView class]]) {
+            JMShareTextAnnotationView *annotation = (JMShareTextAnnotationView *)subview;
+            annotation.borders = self.borders;
+        }
+    }
+    
     
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
 }
 
 @end

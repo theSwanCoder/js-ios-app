@@ -27,7 +27,6 @@
 		083E3F2C1CB8012300F83357 /* JMShareImageActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 083E3F2B1CB8012300F83357 /* JMShareImageActivityItemProvider.m */; };
 		0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */; };
 		0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */; };
-		0857E48B1CBD486B00446B22 /* JMFontPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0857E48A1CBD486B00446B22 /* JMFontPickerView.m */; };
 		0857E4991CBE6F4000446B22 /* JMShareTextAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0857E4981CBE6F4000446B22 /* JMShareTextAnnotationView.m */; };
 		0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503B19F1265B00C5875E /* CoreTelephony.framework */; };
 		0871503E19F1266900C5875E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503D19F1266900C5875E /* libz.dylib */; };
@@ -306,8 +305,6 @@
 		0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseViewController.m; sourceTree = "<group>"; };
 		0854B3711BC6A53E0004E5B8 /* UIAlertController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Additions.h"; sourceTree = "<group>"; };
 		0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Additions.m"; sourceTree = "<group>"; };
-		0857E4891CBD486B00446B22 /* JMFontPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFontPickerView.h; sourceTree = "<group>"; };
-		0857E48A1CBD486B00446B22 /* JMFontPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFontPickerView.m; sourceTree = "<group>"; };
 		0857E4971CBE6F4000446B22 /* JMShareTextAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMShareTextAnnotationView.h; sourceTree = "<group>"; };
 		0857E4981CBE6F4000446B22 /* JMShareTextAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareTextAnnotationView.m; sourceTree = "<group>"; };
 		0871503B19F1265B00C5875E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -933,15 +930,6 @@
 			path = JMBaseViewController;
 			sourceTree = "<group>";
 		};
-		0857E4881CBD486B00446B22 /* JMFontPickerView */ = {
-			isa = PBXGroup;
-			children = (
-				0857E4891CBD486B00446B22 /* JMFontPickerView.h */,
-				0857E48A1CBD486B00446B22 /* JMFontPickerView.m */,
-			);
-			path = JMFontPickerView;
-			sourceTree = "<group>";
-		};
 		0857E4961CBE6F4000446B22 /* JMShareTextAnnotationView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1077,7 +1065,6 @@
 		089B14AE1AA756BD0021A915 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				0857E4881CBD486B00446B22 /* JMFontPickerView */,
 				BDE6A0831B5A891000A7FDEC /* JMTextField */,
 				089B14AF1AA756BD0021A915 /* JMMenuActionsView */,
 				089B14B21AA756BD0021A915 /* JMPopupView */,
@@ -3376,7 +3363,6 @@
 				08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */,
 				089B15CD1AA756BD0021A915 /* JMRepositoryListLoader.m in Sources */,
 				089B15CB1AA756BD0021A915 /* JMFavoritesListLoader.m in Sources */,
-				0857E48B1CBD486B00446B22 /* JMFontPickerView.m in Sources */,
 				0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */,
 				0801DFAD1AAF2CFB00DD072C /* JMConstants.m in Sources */,
 				089B15AC1AA756BD0021A915 /* JMCancelRequestPopup.m in Sources */,

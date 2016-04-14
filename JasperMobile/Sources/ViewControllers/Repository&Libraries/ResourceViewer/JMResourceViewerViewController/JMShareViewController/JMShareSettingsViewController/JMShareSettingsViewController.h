@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UIColor *drawingColor;
 @property (nonatomic, assign) CGFloat brushWidth;
 @property (nonatomic, assign) CGFloat opacity;
+@property (nonatomic, assign) BOOL borders;
 
 @property (nonatomic, strong) UIFont *selectedFont;
 

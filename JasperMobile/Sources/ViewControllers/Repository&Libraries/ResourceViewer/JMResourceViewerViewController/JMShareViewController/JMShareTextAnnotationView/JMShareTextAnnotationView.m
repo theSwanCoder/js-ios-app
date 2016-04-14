@@ -36,10 +36,6 @@
     annotation.text = text;
     [annotation addSubview:annotation.textLabel];
     
-    annotation.layer.cornerRadius = 4.f;
-    annotation.layer.borderWidth = 1.f;
-    annotation.layer.borderColor = color.CGColor;
-    
     return annotation;
 }
 
@@ -53,6 +49,15 @@
 {
     self.textLabel.text = text;
     [self updateFrame];
+}
+
+- (void)setBorders:(BOOL)borders
+{
+    _borders = borders;
+
+    self.layer.cornerRadius = 4.f;
+    self.layer.borderWidth = borders ? 1.f : 0;
+    self.layer.borderColor = self.textLabel.textColor.CGColor;
 }
 
 #pragma mark - Private API

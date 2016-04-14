@@ -7,10 +7,11 @@
 //
 
 #import "JMShareSettingsViewController.h"
-#import "JMTextField.h"
-#import "JMFontPickerView.h"
+#import "JMPopupView.h"
 
-@interface JMShareSettingsViewController ()
+#define JMShareSettingsAvailableColors @[[UIColor blackColor], [UIColor whiteColor], [UIColor grayColor], [UIColor redColor], [UIColor greenColor], [UIColor blueColor], [UIColor cyanColor], [UIColor yellowColor], [UIColor magentaColor], [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor]]
+
+@interface JMShareSettingsViewController () <JMPopupViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *brushTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *brushValueLabel;
@@ -20,29 +21,21 @@
 @property (weak, nonatomic) IBOutlet UILabel *opacityValueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *opacitySlider;
 
-@property (weak, nonatomic) IBOutlet UIImageView *colorPreviewImageView;
+@property (weak, nonatomic) IBOutlet UIButton *colorPreviewButton;
 
-@property (weak, nonatomic) IBOutlet UILabel *rgbPaletteTitleLabel;
-@property (weak, nonatomic) IBOutlet UISlider *redSlider;
-@property (weak, nonatomic) IBOutlet UILabel *redValueLabel;
-@property (weak, nonatomic) IBOutlet UISlider *greenSlider;
-@property (weak, nonatomic) IBOutlet UILabel *greenValueLabel;
-@property (weak, nonatomic) IBOutlet UISlider *blueSlider;
-@property (weak, nonatomic) IBOutlet UILabel *blueValueLabel;
+@property (weak, nonatomic) IBOutlet UILabel *fontSizeTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *fontSizeValueLabel;
+@property (weak, nonatomic) IBOutlet UISlider *fontSizeSlider;
 
-@property (weak, nonatomic) IBOutlet UILabel *fontSettingsLabel;
-@property (weak, nonatomic) IBOutlet JMTextField *fontTextField;
+@property (weak, nonatomic) IBOutlet UILabel *borderTitleLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *borderSwitch;
 
-@property (nonatomic, strong) JMFontPickerView *fontPickerView;
-
-@property (nonatomic, assign) CGFloat redComponent;
-@property (nonatomic, assign) CGFloat greenComponent;
-@property (nonatomic, assign) CGFloat blueComponent;
+@property (strong, nonatomic, readonly) NSArray *availableColors;
 
 @end
 
 @implementation JMShareSettingsViewController
-@dynamic drawingColor;
+@synthesize availableColors = _availableColors;
 
 
 - (void)viewDidLoad {
@@ -51,9 +44,8 @@
     self.title = JMCustomLocalizedString(@"resource_viewer_share_settings_title", nil);
     self.opacityTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_opacity", nil);
     self.brushTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_brush", nil);
-    self.rgbPaletteTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_rgb", nil);
-    self.fontSettingsLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_font", nil);
-
+    self.borderTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_border", nil);
+    self.fontSizeTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_font_size", nil);
 
     self.brushSlider.value = self.brushWidth;
     [self sliderValueChanged:self.brushSlider];
@@ -62,43 +54,14 @@
     [self sliderValueChanged:self.opacitySlider];
     
     self.selectedFont = self.selectedFont;
-    self.fontTextField.inputView = self.fontPickerView;
-    self.fontTextField.inputAccessoryView = [self pickerToolbar];
+    [self sliderValueChanged:self.fontSizeSlider];
+    
+    self.borderSwitch.on = self.borders;
+    
+    self.colorPreviewButton.layer.cornerRadius = 4.f;
+    self.colorPreviewButton.layer.borderWidth = 0.5f;
+    self.colorPreviewButton.layer.borderColor = [UIColor grayColor].CGColor;
 
-    int redIntValue = self.redComponent * 255.0;
-    self.redSlider.value = redIntValue;
-    [self sliderValueChanged:self.redSlider];
-
-    int greenIntValue = self.greenComponent * 255.0;
-    self.greenSlider.value = greenIntValue;
-    [self sliderValueChanged:self.greenSlider];
-
-    int blueIntValue = self.blueComponent * 255.0;
-    self.blueSlider.value = blueIntValue;
-    [self sliderValueChanged:self.blueSlider];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [self.fontTextField resignFirstResponder];
-}
-
-#pragma mark - Custom Accessors
-- (UIColor *)drawingColor
-{
-    return [UIColor colorWithRed:self.redComponent green:self.greenComponent blue:self.blueComponent alpha:1.f];
-}
-
-- (void)setDrawingColor:(UIColor *)drawingColor
-{
-    [drawingColor getRed:&_redComponent green:&_greenComponent blue:&_blueComponent alpha:nil];
-}
-
-- (void)setSelectedFont:(UIFont *)selectedFont
-{
-    _selectedFont = selectedFont;
-    self.fontTextField.text = [NSString stringWithFormat:JMCustomLocalizedString(@"resource_viewer_share_settings_selected_font", nil), self.selectedFont.fontName, (int) self.selectedFont.pointSize];
 }
 
 #pragma mark - Actions
@@ -122,67 +85,93 @@
     } else if(changedSlider == self.opacitySlider) {
         self.opacity = self.opacitySlider.value;
         self.opacityValueLabel.text = [NSString stringWithFormat:@"%d%%", (int)(self.opacity * 100)];
-    } else if(changedSlider == self.redSlider) {
-        self.redComponent = self.redSlider.value/255.0;
-        self.redValueLabel.text = [NSString stringWithFormat:@"%@: %d", JMCustomLocalizedString(@"resource_viewer_share_settings_red", nil), (int)self.redSlider.value];
-    } else if(changedSlider == self.greenSlider){
-        self.greenComponent = self.greenSlider.value/255.0;
-        self.greenValueLabel.text = [NSString stringWithFormat:@"%@: %d", JMCustomLocalizedString(@"resource_viewer_share_settings_green", nil), (int)self.greenSlider.value];
-    } else if (changedSlider == self.blueSlider){
-        self.blueComponent = self.blueSlider.value/255.0;
-        self.blueValueLabel.text = [NSString stringWithFormat:@"%@: %d", JMCustomLocalizedString(@"resource_viewer_share_settings_blue", nil), (int)self.blueSlider.value];
+    } else if(changedSlider == self.fontSizeSlider) {
+        int fontSize = round(self.fontSizeSlider.value);
+        self.selectedFont = [self.selectedFont fontWithSize:fontSize];
+        self.fontSizeValueLabel.text = [NSString stringWithFormat:@"%dpt", fontSize];
     }
     
-    UIGraphicsBeginImageContext(self.colorPreviewImageView.bounds.size);
+    [self updateColorPreview];
+}
+
+- (IBAction)borderSwitchValueChanged:(id)sender
+{
+    self.borders = self.borderSwitch.on;
+}
+
+- (IBAction)colorPreviewButtonDidTapped:(id)sender
+{
+    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, kJMPopupViewDefaultWidth, 200)];
+    pickerView.dataSource = self;
+    pickerView.delegate = self;
+    pickerView.showsSelectionIndicator = YES;
+    pickerView.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.4];
+    
+    NSInteger selectedColorIndex = [self.availableColors indexOfObject:self.drawingColor];
+    if (selectedColorIndex != NSNotFound) {
+        [pickerView selectRow:selectedColorIndex inComponent:0 animated:NO];
+    }
+    
+    JMPopupView *popup = [[JMPopupView alloc] initWithDelegate:self type:JMPopupViewType_OkCancelButtons];
+    popup.contentView = pickerView;
+    [popup show];
+}
+
+- (void) updateColorPreview
+{
+    UIGraphicsBeginImageContext(self.colorPreviewButton.bounds.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineWidth(context,self.brushWidth);
-    CGContextSetRGBStrokeColor(context, self.redComponent, self.greenComponent, self.blueComponent, self.opacity);
-    CGContextMoveToPoint(context, CGRectGetMidX(self.colorPreviewImageView.bounds), CGRectGetMidY(self.colorPreviewImageView.bounds));
-    CGContextAddLineToPoint(context, CGRectGetMidX(self.colorPreviewImageView.bounds), CGRectGetMidY(self.colorPreviewImageView.bounds));
+    CGContextSetStrokeColorWithColor(context, [self.drawingColor colorWithAlphaComponent:self.opacity].CGColor);
+    CGContextMoveToPoint(context, CGRectGetMidX(self.colorPreviewButton.bounds), CGRectGetMidY(self.colorPreviewButton.bounds));
+    CGContextAddLineToPoint(context, CGRectGetMidX(self.colorPreviewButton.bounds), CGRectGetMidY(self.colorPreviewButton.bounds));
     CGContextStrokePath(context);
-
-    self.colorPreviewImageView.image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    [self.colorPreviewButton setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext() forState:UIControlStateNormal];
     UIGraphicsEndImageContext();
 }
 
-#pragma mark - Picker
-- (JMFontPickerView *)fontPickerView
+#pragma mark - UIPickerViewDataSource
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    if (!_fontPickerView) {
-        _fontPickerView = [JMFontPickerView new];
-        _fontPickerView.currentFont = self.selectedFont;
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return self.availableColors.count;
+}
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view;
+{
+    if (!view) {
+        CGRect viewFrame = CGRectZero;
+        viewFrame.size = [pickerView rowSizeForComponent:component];
+        viewFrame.size.width -= 40;
+        view = [[UIView alloc] initWithFrame:viewFrame];
     }
-    return _fontPickerView;
+    view.backgroundColor = self.availableColors[row];
+    return view;
 }
 
-- (UIToolbar *)pickerToolbar
+- (NSArray *)availableColors
 {
-    UIToolbar *pickerToolbar = [[UIToolbar alloc] init];
-    [pickerToolbar sizeToFit];
-    
-    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    [pickerToolbar setItems:@[flexibleSpace, cancel, done]];
-    
-    return pickerToolbar;
+    if(!_availableColors) {
+        _availableColors = [JMShareSettingsAvailableColors copy];
+    }
+    return _availableColors;
 }
 
-- (void)done:(id)sender
+#pragma mark - JMPopupViewDelegate
+- (void)popupViewDidApplied:(JMPopupView *)popup
 {
-    self.selectedFont = self.fontPickerView.currentFont;
-    [self hidePicker];
-}
-
-- (void)cancel:(id)sender
-{
-    [self hidePicker];
-}
-
-- (void)hidePicker
-{
-    [self.fontTextField resignFirstResponder];
+    UIPickerView *pickerView = (UIPickerView *)popup.contentView;
+    NSInteger selectedColorIndex = [pickerView selectedRowInComponent:0];
+    if (selectedColorIndex != NSNotFound) {
+        self.drawingColor = self.availableColors[selectedColorIndex];
+        [self updateColorPreview];
+    }
 }
 
 @end

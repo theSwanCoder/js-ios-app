@@ -16,7 +16,7 @@
         en = Look at this awesome report, builded via %@!
         tags = ios,new
     [resource_viewer_share_settings_title]
-        en = Share settings
+        en = Share Settings
         tags = ios,new
     [resource_viewer_share_settings_opacity]
         en = Opacity
@@ -24,21 +24,9 @@
     [resource_viewer_share_settings_brush]
         en = Brush
         tags = ios,new
-    [resource_viewer_share_settings_rgb]
-        en = RGB color settings
+    [resource_viewer_share_settings_border]
+        en = Border For Text
         tags = ios,new
-    [resource_viewer_share_settings_red]
-        en = Red
-        tags = ios,new
-    [resource_viewer_share_settings_green]
-        en = Green
-        tags = ios,new
-    [resource_viewer_share_settings_blue]
-        en = Blue
-        tags = ios,new
-    [resource_viewer_share_settings_font]
-        en = Font Settings
-        tags = ios,new
-    [resource_viewer_share_settings_selected_font]
-        en = Font: %@ size: %dpt
+    [resource_viewer_share_settings_font_size]
+        en = Font Size
         tags = ios,new
