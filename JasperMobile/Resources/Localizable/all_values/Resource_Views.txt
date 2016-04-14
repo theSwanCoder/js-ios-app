@@ -51,5 +51,5 @@
 		zh = 没有收藏项目。
 		tags = ios
 	[resources_noresults_schedules_msg]
-		en = No job is scheduled.
+		en = No job is found.
 		tags = ios,new
