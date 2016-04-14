@@ -149,26 +149,12 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (void)updateDate:(UIDatePicker *)sender
 {
     NSDate *newDate = sender.date;
-    NSDate *currentDate = [NSDate date];
-    if ([newDate compare:currentDate] == NSOrderedAscending) {
-        return;
-    } else {
-        [self updateCurrentDateCellWithDate:newDate];
-    }
+    [self updateCurrentDateCellWithDate:newDate];
 }
 
 - (void)setStartDate:(UIBarButtonItem *)sender
 {
     NSDate *newDate = self.datePickerForStartDate.date;
-    NSDate *currentDate = [NSDate date];
-    if ([newDate compare:currentDate] == NSOrderedAscending) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
-                                                                                          message:JMCustomLocalizedString(@"schedules_error_date_past", nil)
-                                                                                cancelButtonTitle:@"dialog_button_ok"
-                                                                          cancelCompletionHandler:nil];
-        [self presentViewController:alertController animated:YES completion:nil];
-        return;
-    }
     JSScheduleTrigger *trigger = [self currentTrigger];
     trigger.startDate = newDate;
 
@@ -178,15 +164,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (void)setEndDate:(UIBarButtonItem *)sender
 {
     NSDate *newDate = self.datePickerForEndDate.date;
-    NSDate *currentDate = [NSDate date];
-    if ([newDate compare:currentDate] == NSOrderedAscending) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
-                                                                                          message:JMCustomLocalizedString(@"schedules_error_date_past", nil)
-                                                                                cancelButtonTitle:@"dialog_button_ok"
-                                                                          cancelCompletionHandler:nil];
-        [self presentViewController:alertController animated:YES completion:nil];
-        return;
-    }
     JSScheduleTrigger *trigger = [self currentTrigger];
     trigger.endDate = newDate;
 
@@ -539,7 +516,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     JMScheduleVCSection *scheduleVCSection = self.sections[indexPath.section];
     JMScheduleVCRow *row = scheduleVCSection.rows[indexPath.row];
     if (row.errorMessage.length > 0) {
-        cellHeight += 20;
+        cellHeight += 35;
     }
     return cellHeight;
 }
@@ -1169,6 +1146,23 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeMain];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeLabel];
         row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_label", nil);
+    }
+
+    NSDate *currentDate = [NSDate date];
+    NSDate *startDate = [self currentTrigger].startDate;
+    if (startDate && [startDate compare:currentDate] == NSOrderedAscending) {
+        success = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleStart];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeStartDate];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+    }
+
+    NSDate *endDate = [self currentTrigger].endDate;
+    if (endDate && [endDate compare:currentDate] == NSOrderedAscending) {
+        success = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleEnd];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeEndDate];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
     }
 
     completion(success);
