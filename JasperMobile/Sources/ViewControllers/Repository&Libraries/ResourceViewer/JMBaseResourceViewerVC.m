@@ -72,6 +72,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     [self updateIfNeeded];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    [self.popoverView dismiss:YES];
+
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+}
+
 #pragma mark - Private API
 - (void)setNeedLayoutUI:(BOOL)needLayoutUI
 {
