@@ -533,6 +533,17 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     return [[JMThemesManager sharedManager] tableViewCellTitleFont].lineHeight + 20;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat cellHeight = 60;
+    JMScheduleVCSection *scheduleVCSection = self.sections[indexPath.section];
+    JMScheduleVCRow *row = scheduleVCSection.rows[indexPath.row];
+    if (row.errorMessage.length > 0) {
+        cellHeight += 20;
+    }
+    return cellHeight;
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UILabel *titleLabel = [UILabel new];

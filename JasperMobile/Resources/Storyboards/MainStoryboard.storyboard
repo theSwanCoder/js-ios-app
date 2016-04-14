@@ -941,7 +941,7 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bi1-tc-O43">
-                                                    <rect key="frame" x="8" y="49" width="564" height="0.0"/>
+                                                    <rect key="frame" x="8" y="55" width="564" height="0.0"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -956,7 +956,7 @@
                                                 <constraint firstItem="3S9-aJ-DWe" firstAttribute="centerY" secondItem="S6T-zm-Iq6" secondAttribute="centerY" id="tm3-4I-Ue9"/>
                                                 <constraint firstItem="3S9-aJ-DWe" firstAttribute="width" secondItem="Bc3-If-IeA" secondAttribute="width" multiplier="2" id="vLZ-jQ-N0X"/>
                                                 <constraint firstItem="Bc3-If-IeA" firstAttribute="centerY" secondItem="S6T-zm-Iq6" secondAttribute="centerY" id="vQ4-fb-Dms"/>
-                                                <constraint firstItem="bi1-tc-O43" firstAttribute="top" secondItem="3S9-aJ-DWe" secondAttribute="bottom" constant="4" id="wg9-eq-vrM"/>
+                                                <constraint firstItem="bi1-tc-O43" firstAttribute="top" secondItem="3S9-aJ-DWe" secondAttribute="bottom" constant="10" id="wg9-eq-vrM"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
