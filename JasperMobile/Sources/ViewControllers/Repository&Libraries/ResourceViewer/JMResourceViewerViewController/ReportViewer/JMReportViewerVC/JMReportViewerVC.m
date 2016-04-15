@@ -122,6 +122,15 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                              selector:@selector(reportLoaderDidChangeCurrentPage:)
                                                  name:kJSReportCurrentPageDidChangeNotification
                                                object:self.report];
+
+    // Change cookies notification
+    // At the moment we need this notification for 'non' visualize reports
+    if (![JMUtils isSupportVisualize]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(cookiesDidChange)
+                                                     name:JSRestClientDidChangeCookies
+                                                   object:nil];
+    }
 }
 
 - (void)multipageNotification
@@ -138,6 +147,24 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)reportLoaderDidChangeCurrentPage:(NSNotification *)notification
 {
     self.toolbar.currentPage = self.report.currentPage;
+}
+
+- (void)cookiesDidChange
+{
+    [self.reportLoader cancel];
+
+    [self cleanWebEnvironment];
+
+    NSInteger reportCurrentPage = self.report.currentPage;
+    if (reportCurrentPage == NSNotFound) {
+        reportCurrentPage = 1;
+    }
+    [self.report restoreDefaultState];
+    [self.report updateCurrentPage:reportCurrentPage];
+
+    [self setupSubviews];
+
+    [self runReportWithPage:self.report.currentPage];
 }
 
 #pragma mark - Actions
@@ -568,9 +595,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 {
     switch (error.code) {
         case JSReportLoaderErrorTypeAuthentification:
-            [self.webEnvironment.webView removeFromSuperview];
-            self.webEnvironment = nil;
-            [[JMWebViewManager sharedInstance] removeWebEnvironmentForId:[self currentWebEnvironmentIdentifier]];
+            [self cleanWebEnvironment];
 
             NSInteger reportCurrentPage = self.report.currentPage;
             [self.report restoreDefaultState];
@@ -833,6 +858,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                              multiplier:1
                                                constant:0];
     [view addConstraint:constraint];
+}
+
+- (void)cleanWebEnvironment
+{
+    [self.webEnvironment.webView removeFromSuperview];
+    self.webEnvironment = nil;
+    [[JMWebViewManager sharedInstance] reset];
 }
 
 #pragma mark - Work with external screen
