@@ -114,6 +114,7 @@
     
     JMPopupView *popup = [[JMPopupView alloc] initWithDelegate:self type:JMPopupViewType_OkCancelButtons];
     popup.contentView = pickerView;
+    popup.isDissmissWithTapOutOfButton = NO;
     [popup show];
 }
 
