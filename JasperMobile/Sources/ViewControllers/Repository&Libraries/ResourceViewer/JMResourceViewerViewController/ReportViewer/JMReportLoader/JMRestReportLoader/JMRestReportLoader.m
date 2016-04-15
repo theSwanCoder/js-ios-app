@@ -171,7 +171,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
         if (isCreated) {
             heapBlock(YES, nil);
         } else {
-            NSString *htmlStringPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
+            NSString *htmlStringPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer_rest" ofType:@"html"];
             NSString *htmlString = [NSString stringWithContentsOfFile:htmlStringPath encoding:NSUTF8StringEncoding error:nil];
 
             // add static dependencies

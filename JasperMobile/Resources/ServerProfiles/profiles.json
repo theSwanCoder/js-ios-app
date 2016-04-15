@@ -41,6 +41,11 @@
       "mOrganization" : ""
     },
     {
+      "mAlias" : "local 6.2.1",
+      "mServerUrl" : "http://192.168.88.55:8089/jasperserver-pro-621",
+      "mOrganization" : ""
+    },
+    {
       "mAlias" : "mobile demo 2",
       "mServerUrl" : "http://mobiledemo2.jaspersoft.com/jasperserver-pro",
       "mOrganization" : ""

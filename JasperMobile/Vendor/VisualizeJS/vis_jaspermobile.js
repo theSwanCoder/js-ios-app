@@ -149,6 +149,40 @@ var JasperMobile = {
                 var element = elements[i];
                 document.body.removeChild(element);
             }
+        },
+        resetBodyTransformStyles: function() {
+            var scale = "";
+            var origin = "";
+            JasperMobile.Helper.updateTransformStyles(document.body, scale, origin);
+        },
+        setBodyTransformStyles: function(scaleValue) {
+            var scale = "scale(" + scaleValue + ")";
+            var origin = "0% 0%";
+            JasperMobile.Helper.updateTransformStyles(document.body, scale, origin);
+        },
+        updateBodyTransformStylesToFitWindow: function() {
+            var body = document.body,
+                html = document.documentElement;
+
+            var width = Math.max( body.scrollWidth, body.offsetWidth,
+                html.clientWidth, html.scrollWidth, html.offsetWidth );
+
+            var scaleValue = window.innerWidth / width;
+            JasperMobile.Helper.setBodyTransformStyles(scaleValue);
+        },
+        updateTransformStyles: function(element, scale, origin) {
+            var navigator = window.navigator.appVersion;
+            //ios 8.4 - 5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H141
+            //ios 9.3 - 5.0 (iPhone; CPU iPhone OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13E230
+            var versionString = navigator.match(/(\d{3}\.\d+.\d+)/g)[0];
+
+            if (versionString == "600.1.4") {
+                element.style.webkitTransform = scale;
+                element.style.webkitTransformOrigin = origin;
+            } else {
+                element.style.transform = scale;
+                element.style.transformOrigin = origin;
+            }
         }
     }
 };
@@ -213,7 +247,7 @@ JasperMobile.Report.REST.API = {
     injectContent: function(contentObject) {
         var content = contentObject["HTMLString"];
         var container = document.getElementById('container');
-        // container.style.pointerEvents = "none"; // disable clicks under container
+        container.style.pointerEvents = "none"; // disable clicks under container
 
         if (container == null) {
             JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Report.REST.API.injectContent", {
@@ -232,26 +266,12 @@ JasperMobile.Report.REST.API = {
             JasperMobile.Helper.cleanContent();
             JasperMobile.Report.REST.API.elasticChart = null;
             JasperMobile.Callback.log("clear content");
+            JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
         } else {
-            // setup scaling
-            var childs = document.getElementById('container').childNodes;
-            var table = undefined;
-            for (var i = 0; i < childs.length; i++) {
-                var child = childs[i];
-                // TODO: investigate other cases
-                if (child.nodeName == "TABLE") {
-                    table = child;
-                    break;
-                }
-            }
-
-            if (table != undefined) {
-                var scale = "scale(" + innerWidth / parseInt(table.style.width) + ")";
-                var origin = "0% 0%";
-                JasperMobile.Report.REST.API.updateTransformStyles(table, scale, origin);
-            }
+            JasperMobile.Helper.resetBodyTransformStyles();
+            JasperMobile.Helper.updateBodyTransformStylesToFitWindow();
+            JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
         }
-        JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
     },
     verifyEnvironmentIsReady: function() {
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.verifyEnvironmentIsReady", {
@@ -271,12 +291,15 @@ JasperMobile.Report.REST.API = {
         JasperMobile.Report.REST.API.elasticChart = null;
 
         if (isElasticChart == "true") {
+            JasperMobile.Helper.resetBodyTransformStyles();
+            JasperMobile.Helper.setBodyTransformStyles(0.5);
+
             script = scripts[0];
             functionName = script.scriptName.trim();
             chartParams = script.scriptParams;
 
-            var containerWidth = document.getElementById("container").offsetWidth;
-            var containerHeight = document.getElementById("container").offsetHeight;
+            var containerWidth = document.getElementById("container").offsetWidth / 0.5;
+            var containerHeight = document.getElementById("container").offsetHeight / 0.5;
 
             // Update chart size
             var chartDimensions = chartParams.chartDimensions;
@@ -293,6 +316,7 @@ JasperMobile.Report.REST.API = {
 
             // run script
             window[functionName](chartParams);
+
         } else {
             for(var i=0; i < scripts.length; i++) {
                 script = scripts[i];
@@ -340,7 +364,7 @@ JasperMobile.Report.REST.API = {
             var table = tableNode;
             var scale = "scale(" + innerWidth / parseInt(table.style.width) + ")";
             var origin = "50% 0%";
-            JasperMobile.Report.REST.API.updateTransformStyles(table, scale, origin);
+            JasperMobile.Helper.updateTransformStyles(table, scale, origin);
             JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.applyZoomForReport", {});
         } else {
             JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Report.REST.API.applyZoomForReport", {
@@ -351,49 +375,29 @@ JasperMobile.Report.REST.API = {
             });
         }
     },
-    updateTransformStyles: function(element, scale, origin) {
-        var navigator = window.navigator.appVersion;
-        //ios 8.4 - 5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H141
-        //ios 9.3 - 5.0 (iPhone; CPU iPhone OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13E230
-        var versionString = navigator.match(/(\d{3}\.\d+.\d+)/g)[0];
-
-        if (versionString == "600.1.4") {
-            element.style.webkitTransform = scale;
-            element.style.webkitTransformOrigin = origin;
-        } else {
-            element.style.transform = scale;
-            element.style.transformOrigin = origin;
-        }
-    },
     fitReportViewToScreen: function() {
-
-        var body = document.body,
-            html = document.documentElement;
-
-        var height = Math.min( body.scrollHeight, body.offsetHeight,
-            html.clientHeight, html.scrollHeight, html.offsetHeight );
-
-        var width = Math.min( body.scrollWidth, body.offsetWidth,
-            html.clientWidth, html.scrollWidth, html.offsetWidth );
-
+        JasperMobile.Helper.resetBodyTransformStyles();
         if (JasperMobile.Report.REST.API.elasticChart != null) {
+            JasperMobile.Helper.setBodyTransformStyles(0.5);
+
             // run script
             var functionName = JasperMobile.Report.REST.API.elasticChart.functionName;
             var chartParams = JasperMobile.Report.REST.API.elasticChart.chartParams;
+
+            var containerWidth = document.getElementById("container").offsetWidth / 0.5;
+            var containerHeight = document.getElementById("container").offsetHeight / 0.5;
+
             var chartDimensions = chartParams.chartDimensions;
-            chartDimensions.width = width;
-            chartDimensions.height = height;
+            chartDimensions.width = containerWidth;
+            chartDimensions.height = containerHeight;
 
             chartParams.chartDimensions = chartDimensions;
             window[functionName](chartParams);
+        } else {
+            JasperMobile.Helper.updateBodyTransformStylesToFitWindow();
         }
 
-        JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.fitReportViewToScreen", {
-            size: JSON.stringify({
-                "width"  : width,
-                "height" : height
-            })
-        });
+        JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.fitReportViewToScreen", {});
     }
 };
 
