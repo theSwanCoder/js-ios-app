@@ -35,12 +35,6 @@
 
 @implementation JMDashboardInfoViewController
 
-#pragma mark - Accessibility
-- (NSString *)accessibilityIdentifier
-{
-    return @"JMDashboardInfoViewAccessibilityId";
-}
-
 #pragma mark - Overloaded methods
 - (JMMenuActionsViewAction)availableAction
 {

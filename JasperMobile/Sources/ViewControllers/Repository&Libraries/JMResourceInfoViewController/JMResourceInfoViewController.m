@@ -22,9 +22,7 @@
 
 
 #import "JMResourceInfoViewController.h"
-#import "JMFavorites+Helpers.h"
 #import "PopoverView.h"
-#import "JMSavedResources+Helpers.h"
 #import "UIViewController+Additions.h"
 #import "JMResource.h"
 
@@ -33,8 +31,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 @interface JMResourceInfoViewController ()<UITableViewDataSource, UITableViewDelegate, PopoverViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) PopoverView *popoverView;
-@property (nonatomic, assign) BOOL needLayoutUI;
-@property (nonatomic) UIDocumentInteractionController *documentController;
 @end
 
 @implementation JMResourceInfoViewController
@@ -76,7 +72,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 #pragma mark - Accessibility
 - (NSString *)accessibilityIdentifier
 {
-    return @"JMResourceInfoViewAccessibilityId";
+    return [NSString stringWithFormat:@"%@AccessibilityId", NSStringFromClass(self.class)];
 }
 
 #pragma mark - Observers
@@ -84,7 +80,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetResourceProperties) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(favoriteMarkDidChanged:) name:kJMFavoritesDidChangedNotification object:nil];
 }
 
 - (void)resetResourceProperties
@@ -100,21 +95,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     self.needLayoutUI = YES;
 }
 
-- (void)favoriteMarkDidChanged:(id)notification
-{
-    self.needLayoutUI = YES;
-}
-
 #pragma mark - Actions
-- (void)favoriteButtonTapped:(id)sender
-{
-    if ([JMFavorites isResourceInFavorites:self.resource]) {
-        [JMFavorites removeFromFavorites:self.resource];
-    } else {
-        [JMFavorites addToFavorites:self.resource];
-    }
-}
-
 - (void)cancelButtonTapped:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -165,22 +146,21 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
 - (JMMenuActionsViewAction)availableAction
 {
-    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_None;
-    if (![self favoriteItemShouldDisplaySeparately]) {
-        availableAction |= [self favoriteAction];
-    }
-    if (self.resource.type == JMResourceTypeSavedResource) {
-        availableAction |= JMMenuActionsViewAction_OpenIn;
-    }
-    return availableAction;
+    return JMMenuActionsViewAction_None;
 }
 
-#pragma mark - Private API
+- (nullable UIBarButtonItem *)additionalBarButtonItem
+{
+    return nil;
+}
+
 - (void)setNeedLayoutUI:(BOOL)needLayoutUI
 {
     _needLayoutUI = needLayoutUI;
     [self updateIfNeeded];
 }
+
+#pragma mark - Private API
 
 - (void)updateIfNeeded
 {
@@ -190,56 +170,30 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     }
 }
 
-- (JMMenuActionsViewAction)favoriteAction
-{
-    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource];
-    return isResourceInFavorites ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
-}
-
 #pragma mark - Setup Navigation Items
-- (BOOL) favoriteItemShouldDisplaySeparately
-{
-    return (![JMUtils isCompactWidth] || ([JMUtils isCompactWidth] && [JMUtils isCompactHeight]));
-}
-
 - (void) showNavigationItems
 {
     BOOL selfIsModalViewController = [self.navigationController.viewControllers count] == 1;
+
+    NSMutableArray *rightBarItems = [NSMutableArray array];
     if (selfIsModalViewController) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                               target:self
                                                                                               action:@selector(cancelButtonTapped:)];
         self.navigationItem.leftBarButtonItem.tintColor = [[JMThemesManager sharedManager] barItemsColor];
-        self.navigationItem.rightBarButtonItem = [self favoriteBarButtonItem];
     } else {
-        NSMutableArray *navBarItems = [NSMutableArray array];
         JMMenuActionsViewAction availableAction = [self availableAction];
-        
-        if (availableAction && (availableAction ^ [self favoriteAction])) {
-            [navBarItems addObject:[self actionBarButtonItem]];
-        } else if (![self favoriteItemShouldDisplaySeparately]) {
-            [navBarItems addObject:[self favoriteBarButtonItem]];
+        if (availableAction) {
+            [rightBarItems addObject:[self actionBarButtonItem]];
         }
-        
-        if ([self favoriteItemShouldDisplaySeparately]) {
-            [navBarItems addObject:[self favoriteBarButtonItem]];
-        }
-        
-        self.navigationItem.rightBarButtonItems = navBarItems;
     }
-}
 
-- (UIBarButtonItem *) favoriteBarButtonItem
-{
-    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource];
-    NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
-    
-    UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
-                                                                     style:UIBarButtonItemStylePlain
-                                                                    target:self
-                                                                    action:@selector(favoriteButtonTapped:)];
-    favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
-    return favoriteItem;
+    UIBarButtonItem *additionalBarButtonItem = [self additionalBarButtonItem];
+    if (additionalBarButtonItem) {
+        [rightBarItems addObject:additionalBarButtonItem];
+    }
+
+    self.navigationItem.rightBarButtonItems = rightBarItems;
 }
 
 - (UIBarButtonItem *) actionBarButtonItem
@@ -291,32 +245,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 #pragma mark - JMMenuActionsViewDelegate
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
-    switch (action) {
-        case JMMenuActionsViewAction_MakeFavorite:
-        case JMMenuActionsViewAction_MakeUnFavorite:
-            [self favoriteButtonTapped:nil];
-            break;
-        case JMMenuActionsViewAction_OpenIn: {
-            JMSavedResources *savedResources = [JMSavedResources savedReportsFromResource:self.resource];
-            NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:savedResources];
-
-            NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-
-            self.documentController = [self setupDocumentControllerWithURL:url
-                                                             usingDelegate:nil];
-
-            BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
-            if (!canOpen) {
-                NSString *errorMessage = JMCustomLocalizedString(@"error_openIn_message", nil);
-                NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-                [JMUtils presentAlertControllerWithError:error completion:nil];
-            }
-            break;
-        }
-        default:
-            break;
-    }
-    
     [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
 }
 
@@ -334,14 +262,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         [self.popoverView dismiss:NO];
         [self showAvailableActions];
     }
-}
-
-#pragma mark - Helpers
-- (UIDocumentInteractionController *) setupDocumentControllerWithURL: (NSURL *) fileURL
-                                                       usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
-    UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
-    interactionController.delegate = interactionDelegate;
-    return interactionController;
 }
 
 @end

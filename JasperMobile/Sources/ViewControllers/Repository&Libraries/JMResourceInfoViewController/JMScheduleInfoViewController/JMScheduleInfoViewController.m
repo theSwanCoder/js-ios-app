@@ -36,24 +36,13 @@
 
 @implementation JMScheduleInfoViewController
 
-#pragma mark - View Controller LifeCycle
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.resourceProperties = [self createResourceProperties];
-}
-
-#pragma mark - Accessibility
-- (NSString *)accessibilityIdentifier
-{
-    return @"JMScheduleInfoViewAccessibilityId";
-}
-
 #pragma mark - Menu Actions
 - (JMMenuActionsViewAction)availableAction
 {
-    return (JMMenuActionsViewAction_Edit | JMMenuActionsViewAction_Delete);
+    JMMenuActionsViewAction action = [super availableAction];
+    action |= JMMenuActionsViewAction_Edit;
+    action |= JMMenuActionsViewAction_Delete;
+    return action;
 }
 
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
@@ -79,7 +68,7 @@
 }
 
 #pragma mark - Private API
-- (NSArray *)createResourceProperties
+- (NSArray *)resourceProperties
 {
     JSScheduleLookup *scheduleLookup = [self scheduleLookup];
     if (!scheduleLookup) {

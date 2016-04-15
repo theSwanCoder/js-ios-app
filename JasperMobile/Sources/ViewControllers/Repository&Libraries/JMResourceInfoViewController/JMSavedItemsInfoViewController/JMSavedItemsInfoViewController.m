@@ -35,6 +35,8 @@
 
 @interface JMSavedItemsInfoViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
+@property (nonatomic) UIDocumentInteractionController *documentController;
+
 @end
 
 @implementation JMSavedItemsInfoViewController
@@ -58,12 +60,6 @@
     return _savedReports;
 }
 
-#pragma mark - Accessibility
-- (NSString *)accessibilityIdentifier
-{
-    return @"JMRSavedItemInfoViewAccessibilityId";
-}
-
 #pragma mark - Overloaded methods
 - (void)resetResourceProperties
 {
@@ -83,7 +79,7 @@
 
 - (JMMenuActionsViewAction)availableAction
 {
-    return ([super availableAction] | JMMenuActionsViewAction_Run | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete);
+    return ([super availableAction] | JMMenuActionsViewAction_Run | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn);
 }
 
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
@@ -129,7 +125,23 @@
             [strongSelf.navigationController popViewControllerAnimated:YES];
         }];
         [self presentViewController:alertController animated:YES completion:nil];
+    } else if (action == JMMenuActionsViewAction_OpenIn){
+        JMSavedResources *savedResources = [JMSavedResources savedReportsFromResource:self.resource];
+        NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:savedResources];
+        
+        NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+        
+        self.documentController = [self setupDocumentControllerWithURL:url
+                                                         usingDelegate:nil];
+        
+        BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+        if (!canOpen) {
+            NSString *errorMessage = JMCustomLocalizedString(@"error_openIn_message", nil);
+            NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            [JMUtils presentAlertControllerWithError:error completion:nil];
+        }
     }
+
 }
 
 - (void)runReport
@@ -161,6 +173,14 @@
 - (BOOL)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer shouldCloseViewerAfterDeletingResource:(JMResource *)resourceLookup
 {
     return NO;
+}
+
+#pragma mark - Helpers
+- (UIDocumentInteractionController *) setupDocumentControllerWithURL: (NSURL *) fileURL
+                                                       usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
+    UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
+    interactionController.delegate = interactionDelegate;
+    return interactionController;
 }
 
 @end

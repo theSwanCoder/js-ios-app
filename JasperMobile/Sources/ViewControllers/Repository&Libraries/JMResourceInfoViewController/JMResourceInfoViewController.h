@@ -41,8 +41,14 @@ extern NSString * __nonnull const kJMShowResourceInfoSegue;
 @property (nonatomic, strong, nullable) NSArray *resourceProperties;
 @property (nonatomic, copy, nullable) void(^exitBlock)(void);
 
+@property (nonatomic, assign) BOOL needLayoutUI;
+
 - (void)resetResourceProperties NS_REQUIRES_SUPER;
 
+- (void)addObservers NS_REQUIRES_SUPER;
+
 - (JMMenuActionsViewAction)availableAction NS_REQUIRES_SUPER;
+
+- (nullable UIBarButtonItem *)additionalBarButtonItem;
 
 @end

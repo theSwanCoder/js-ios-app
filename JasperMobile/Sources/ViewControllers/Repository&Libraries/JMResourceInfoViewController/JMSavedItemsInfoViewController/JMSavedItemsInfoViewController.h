@@ -32,8 +32,8 @@
  */
 
 
-#import "JMResourceInfoViewController.h"
+#import "JMRepositoryResourceInfoViewController.h"
 
-@interface JMSavedItemsInfoViewController : JMResourceInfoViewController
+@interface JMSavedItemsInfoViewController : JMRepositoryResourceInfoViewController
 
 @end

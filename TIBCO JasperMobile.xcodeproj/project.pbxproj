@@ -21,6 +21,7 @@
 		0801DFBF1AAF2E7500DD072C /* JMOnboardIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */; };
 		080CC4881CAD7D0A005C3344 /* JMShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080CC4871CAD7D0A005C3344 /* JMShareViewController.m */; };
 		080CC48F1CAE970F005C3344 /* JMShareSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080CC48E1CAE970F005C3344 /* JMShareSettingsViewController.m */; };
+		08140C871CC106700038EB03 /* JMRepositoryResourceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08140C861CC106700038EB03 /* JMRepositoryResourceInfoViewController.m */; };
 		08221C421AE54DA000F94F1D /* JMCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C411AE54DA000F94F1D /* JMCoreDataManager.m */; };
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
 		08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */; };
@@ -294,6 +295,8 @@
 		080CC4871CAD7D0A005C3344 /* JMShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareViewController.m; sourceTree = "<group>"; };
 		080CC48D1CAE970F005C3344 /* JMShareSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMShareSettingsViewController.h; sourceTree = "<group>"; };
 		080CC48E1CAE970F005C3344 /* JMShareSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMShareSettingsViewController.m; sourceTree = "<group>"; };
+		08140C851CC106700038EB03 /* JMRepositoryResourceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRepositoryResourceInfoViewController.h; sourceTree = "<group>"; };
+		08140C861CC106700038EB03 /* JMRepositoryResourceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRepositoryResourceInfoViewController.m; sourceTree = "<group>"; };
 		08221C401AE54DA000F94F1D /* JMCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCoreDataManager.h; sourceTree = "<group>"; };
 		08221C411AE54DA000F94F1D /* JMCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMCoreDataManager.m; sourceTree = "<group>"; };
 		08221C911AE78CD300F94F1D /* JMMigrationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMigrationManager.h; sourceTree = "<group>"; };
@@ -889,6 +892,15 @@
 			path = JMShareSettingsViewController;
 			sourceTree = "<group>";
 		};
+		08140C841CC106700038EB03 /* JMRepositoryResourceInfoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				08140C851CC106700038EB03 /* JMRepositoryResourceInfoViewController.h */,
+				08140C861CC106700038EB03 /* JMRepositoryResourceInfoViewController.m */,
+			);
+			path = JMRepositoryResourceInfoViewController;
+			sourceTree = "<group>";
+		};
 		08221C3F1AE54DA000F94F1D /* JMCoreDataManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1274,6 +1286,7 @@
 				08DD18321B136B8A00856112 /* JMReportInfoViewController */,
 				08DD18361B136B8A00856112 /* JMSavedItemsInfoViewController */,
 				A14788D98A85E3BB55694B25 /* JMScheduleInfoViewController */,
+				08140C841CC106700038EB03 /* JMRepositoryResourceInfoViewController */,
 				089B14F81AA756BD0021A915 /* JMResourceInfoViewController.h */,
 				089B14F91AA756BD0021A915 /* JMResourceInfoViewController.m */,
 				08DD18351B136B8A00856112 /* JMResourceInfoViewController.xib */,
@@ -2706,8 +2719,8 @@
 		A14788D98A85E3BB55694B25 /* JMScheduleInfoViewController */ = {
 			isa = PBXGroup;
 			children = (
-				A1478F1B487DC5022B5356F7 /* JMScheduleInfoViewController.m */,
 				A147888303A10BC5C72C4294 /* JMScheduleInfoViewController.h */,
+				A1478F1B487DC5022B5356F7 /* JMScheduleInfoViewController.m */,
 			);
 			path = JMScheduleInfoViewController;
 			sourceTree = "<group>";
@@ -3441,6 +3454,7 @@
 				089B15A11AA756BD0021A915 /* NSObject+Additions.m in Sources */,
 				08DD182C1B135BE500856112 /* MigrateTo_v_1_9.xcmappingmodel in Sources */,
 				A1478D6B609C61DEF3A3AC92 /* JMVisualizeManager.m in Sources */,
+				08140C871CC106700038EB03 /* JMRepositoryResourceInfoViewController.m in Sources */,
 				08E2AC8B1B1E056900AC462B /* JMNumberInputControlCell.m in Sources */,
 				08E2AC901B1E056900AC462B /* JMSingleSelectTableViewController.m in Sources */,
 				08E2AC861B1E056900AC462B /* JMBooleanInputControlCell.m in Sources */,
