@@ -209,11 +209,13 @@ JasperMobile.Report = {
 
 // REST Reports
 JasperMobile.Report.REST.API = {
+    elasticChart: null,
     injectContent: function(contentObject) {
         var content = contentObject["HTMLString"];
-        var div = document.getElementById('container');
+        var container = document.getElementById('container');
+        // container.style.pointerEvents = "none"; // disable clicks under container
 
-        if (div == null) {
+        if (container == null) {
             JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Report.REST.API.injectContent", {
                 "error" : JSON.stringify({
                     "code"    : "internal.error", // TODO: need error codes?
@@ -223,11 +225,12 @@ JasperMobile.Report.REST.API = {
             return;
         }
 
-        div.innerHTML = content;
+        container.innerHTML = content;
 
         if (content == "") {
             // clean content
             JasperMobile.Helper.cleanContent();
+            JasperMobile.Report.REST.API.elasticChart = null;
             JasperMobile.Callback.log("clear content");
         } else {
             // setup scaling
@@ -265,6 +268,8 @@ JasperMobile.Report.REST.API = {
         var functionName;
         var chartParams;
 
+        JasperMobile.Report.REST.API.elasticChart = null;
+
         if (isElasticChart == "true") {
             script = scripts[0];
             functionName = script.scriptName.trim();
@@ -280,6 +285,11 @@ JasperMobile.Report.REST.API = {
 
             // set new chart size
             chartParams.chartDimensions = chartDimensions;
+
+            JasperMobile.Report.REST.API.elasticChart = {
+                "functionName" : functionName,
+                "chartParams" : chartParams
+            };
 
             // run script
             window[functionName](chartParams);
@@ -354,6 +364,36 @@ JasperMobile.Report.REST.API = {
             element.style.transform = scale;
             element.style.transformOrigin = origin;
         }
+    },
+    fitReportViewToScreen: function() {
+
+        var body = document.body,
+            html = document.documentElement;
+
+        var height = Math.min( body.scrollHeight, body.offsetHeight,
+            html.clientHeight, html.scrollHeight, html.offsetHeight );
+
+        var width = Math.min( body.scrollWidth, body.offsetWidth,
+            html.clientWidth, html.scrollWidth, html.offsetWidth );
+
+        if (JasperMobile.Report.REST.API.elasticChart != null) {
+            // run script
+            var functionName = JasperMobile.Report.REST.API.elasticChart.functionName;
+            var chartParams = JasperMobile.Report.REST.API.elasticChart.chartParams;
+            var chartDimensions = chartParams.chartDimensions;
+            chartDimensions.width = width;
+            chartDimensions.height = height;
+
+            chartParams.chartDimensions = chartDimensions;
+            window[functionName](chartParams);
+        }
+
+        JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.fitReportViewToScreen", {
+            size: JSON.stringify({
+                "width"  : width,
+                "height" : height
+            })
+        });
     }
 };
 
@@ -634,7 +674,7 @@ JasperMobile.Report.API = {
         var container = document.getElementById("container");
         container.width = width;
         container.height = height;
-        if (JasperMobile.Report.API.report.resize != undefined) {
+        if (JasperMobile.Report.API.report != null && JasperMobile.Report.API.report.resize != undefined) {
             JasperMobile.Report.API.report.resize();
         }
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.API.fitReportViewToScreen", {

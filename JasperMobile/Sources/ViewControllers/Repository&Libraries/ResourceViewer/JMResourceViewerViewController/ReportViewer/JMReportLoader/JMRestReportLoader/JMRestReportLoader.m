@@ -112,6 +112,14 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 }
 
+- (void)fitReportViewToScreen
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"JasperMobile.Report.REST.API.fitReportViewToScreen";
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:nil];
+}
+
 #pragma mark - Private API
 - (void)startLoadReportHTML
 {
