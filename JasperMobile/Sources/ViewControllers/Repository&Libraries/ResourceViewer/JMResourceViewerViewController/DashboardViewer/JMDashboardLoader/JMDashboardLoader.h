@@ -31,7 +31,6 @@
 @since 2.1
 */
 
-#import "JMJavascriptNativeBridge.h"
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;
 @class JMWebEnvironment;

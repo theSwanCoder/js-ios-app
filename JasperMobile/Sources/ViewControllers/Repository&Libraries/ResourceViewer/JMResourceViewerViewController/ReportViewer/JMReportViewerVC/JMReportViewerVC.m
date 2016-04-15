@@ -24,7 +24,6 @@
 #import "JMReportViewerVC.h"
 #import "JMReportViewerConfigurator.h"
 #import "JMJavascriptRequest.h"
-#import "JMJavascriptNativeBridge.h"
 #import "JMWebViewManager.h"
 #import "JMSavingReportViewController.h"
 #import "ALToastView.h"

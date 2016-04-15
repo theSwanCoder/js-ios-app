@@ -47,5 +47,5 @@
 - (instancetype)initWithResource:(JMResource *)resource;
 + (instancetype)dashboardWithResource:(JMResource *)resource;
 
-- (NSURLRequest *)createResourceRequest;
+- (void)updateResourceRequest;
 @end

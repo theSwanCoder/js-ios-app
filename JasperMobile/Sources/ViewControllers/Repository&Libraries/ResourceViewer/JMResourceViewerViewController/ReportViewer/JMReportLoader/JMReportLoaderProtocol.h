@@ -32,7 +32,6 @@
  */
 
 #import "JSReportLoaderProtocol.h"
-#import "JMJavascriptNativeBridge.h"
 
 @protocol JMReportLoaderDelegate;
 @class JMWebEnvironment;

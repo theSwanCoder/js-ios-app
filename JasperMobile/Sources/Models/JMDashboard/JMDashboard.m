@@ -75,6 +75,11 @@
     return dashboardRequest;
 }
 
+- (void)updateResourceRequest
+{
+    self.resourceRequest = [self createResourceRequest];
+}
+
 - (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
 {
     NSString *cookiesAsString = @"";

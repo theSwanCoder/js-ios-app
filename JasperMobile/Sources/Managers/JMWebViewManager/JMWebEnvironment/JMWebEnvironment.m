@@ -243,4 +243,10 @@
                                   completion:nil];
 }
 
+- (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge shouldLoadExternalRequest:(NSURLRequest *__nonnull)request
+{
+    // TODO: investigate cases.
+    return YES;
+}
+
 @end

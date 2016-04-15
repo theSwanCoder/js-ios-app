@@ -36,8 +36,9 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #import "JMDashboard.h"
 #import "JMWebEnvironment.h"
 #import "JMResource.h"
+#import "JMJavascriptRequest.h"
 
-@interface JMVisDashboardLoader() <JMJavascriptNativeBridgeDelegate>
+@interface JMVisDashboardLoader()
 @property (nonatomic, weak) JMDashboard *dashboard;
 @property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 @end
@@ -347,38 +348,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         __typeof(self) strongSelf = weakSelf;
         [strongSelf.delegate dashboardLoaderDidReceiveAuthRequest:self];
     }];
-}
-
-#pragma mark - JMJavascriptNativeBridgeDelegate
-- (void)javascriptNativeBridgeDidReceiveAuthRequest:(JMJavascriptNativeBridge *)bridge
-{
-//    if (self.completion) {
-//        // TODO: Need add auth error
-//        self.completion(NO, nil);
-//    }
-    [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
-}
-
-- (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge shouldLoadExternalRequest:(NSURLRequest *)request
-{
-    BOOL shouldLoad = NO;
-    // TODO: verify all cases
-
-    if (!request.URL.host) {
-        // Request for cleaning webview
-        if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
-            shouldLoad = YES;
-        }
-    }
-
-    return shouldLoad;
-}
-
-- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveOnWindowError:(NSError *__nonnull)error
-{
-    // TODO: add handle this error
-//    [self.bridge reset];
-    JMLog(@"error: %@", error);
 }
 
 #pragma mark - Handle JS callbacks

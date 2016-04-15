@@ -30,6 +30,7 @@
 #import "JMWebEnvironment.h"
 #import "JMHTMLParser.h"
 #import "JMHTMLScript.h"
+#import "JMJavascriptRequest.h"
 
 typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 

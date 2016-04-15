@@ -135,8 +135,10 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     }
 
     if ([self isLoginRequest:navigationAction.request]) {
-        // For dashboard only
-        [self.delegate javascriptNativeBridgeDidReceiveAuthRequest:self];
+        // For dashboard only (without visualize)
+        if (![JMUtils isSupportVisualize]) {
+            [self handleUnauthRequest];
+        }
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     }
@@ -308,6 +310,25 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     });
 }
 
+- (void)handleUnauthRequest
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.API.unauthorized";
+        for (JMJavascriptRequest *request in self.listenerCallbacks) {
+            if ([request.command isEqualToString:unauthorizedListenerId]) {
+                JMJavascriptRequestCompletion completion = self.listenerCallbacks[request];
+                NSError *error = [self makeErrorFromWebViewError:@{
+                        @"code" : @"authentication.error"
+                }];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completion(nil, error);
+                });
+                break;
+            }
+        }
+    });
+}
+
 - (void)didReceiveCallback:(JMJavascriptCallback *)callback
 {
 //    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
@@ -363,9 +384,10 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 - (NSError *)makeErrorFromWebViewError:(NSDictionary *)errorJSON
 {
     NSString *visualizeErrorDomain = @"Visualize Error Domain";
-    id errorCode = errorJSON[@"code"];
     NSInteger code = JMJavascriptNativeBridgeErrorTypeOther;
-    if ([errorCode isKindOfClass:[NSString class]]) {
+
+    id errorCode = errorJSON[@"code"];
+    if (errorCode && [errorCode isKindOfClass:[NSString class]]) {
         NSString *errorCodeString = errorCode;
         if ([errorCodeString isEqualToString:@"window.onerror"]) {
             code = JMJavascriptNativeBridgeErrorTypeWindow;
@@ -378,11 +400,19 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     // TODO: need add handle integer codes?
 
     NSString *errorMessage = errorJSON[@"message"];
+    NSDictionary *userInfo;
+    if (errorMessage) {
+        userInfo = @{
+                NSLocalizedDescriptionKey: errorMessage
+        };
+    } else {
+        userInfo = @{
+                NSLocalizedDescriptionKey: @"Error"
+        };
+    }
     NSError *error = [NSError errorWithDomain:visualizeErrorDomain
                                          code:code
-                                     userInfo:@{
-                                             NSLocalizedDescriptionKey: errorMessage
-                                     }];
+                                     userInfo:userInfo];
     return error;
 }
 

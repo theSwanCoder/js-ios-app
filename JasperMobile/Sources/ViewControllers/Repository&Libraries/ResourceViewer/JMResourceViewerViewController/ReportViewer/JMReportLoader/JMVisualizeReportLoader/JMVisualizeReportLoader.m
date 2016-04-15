@@ -32,8 +32,10 @@
 #import "JMWebViewManager.h"
 #import "JMWebEnvironment.h"
 #import "JMResource.h"
+#import "JMJavascriptRequest.h"
+#import "JMJavascriptNativeBridge.h"
 
-@interface JMVisualizeReportLoader() <JMJavascriptNativeBridgeDelegate>
+@interface JMVisualizeReportLoader()
 @property (nonatomic, weak, readwrite) JSReport *report;
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
 @property (nonatomic, copy) NSString *exportFormat;
@@ -426,33 +428,6 @@
             }
         }
     }];
-}
-
-#pragma mark - JMJavascriptNativeBridgeDelegate
-
-- (void)javascriptNativeBridgeDidReceiveAuthRequest:(JMJavascriptNativeBridge *)bridge
-{
-    // TODO: handle auth requests.
-}
-
-- (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge shouldLoadExternalRequest:(NSURLRequest *)request
-{
-    BOOL shouldLoad = NO;
-    // TODO: verify all cases
-
-    // Request for cleaning webview
-    if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
-        shouldLoad = YES;
-    }
-
-    return shouldLoad;
-}
-
-- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveOnWindowError:(NSError *__nonnull)error
-{
-    // TODO: add handle this error
-//    [self.bridge reset];
-    JMLog(@"error: %@", error);
 }
 
 #pragma mark - Helpers

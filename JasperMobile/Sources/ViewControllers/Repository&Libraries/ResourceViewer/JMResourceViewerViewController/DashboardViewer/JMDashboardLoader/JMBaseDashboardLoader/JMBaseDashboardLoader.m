@@ -29,8 +29,9 @@
 #import "JMBaseDashboardLoader.h"
 #import "JMDashboard.h"
 #import "JMWebEnvironment.h"
+#import "JMJavascriptRequest.h"
 
-@interface JMBaseDashboardLoader() <JMJavascriptNativeBridgeDelegate>
+@interface JMBaseDashboardLoader()
 @property (nonatomic, weak) JMDashboard *dashboard;
 @property (nonatomic) BOOL isLoadDone;
 @property (nonatomic, weak) JMWebEnvironment *webEnvironment;
@@ -61,6 +62,8 @@
 #pragma mark - Public API
 - (void)loadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
+    [self addListenersForWebEnvironmentEvents];
+
     // TODO: reimplement without request
     [self.webEnvironment loadRequest:self.dashboard.resourceRequest];
 
@@ -104,26 +107,19 @@
     [self.webEnvironment clean];
 }
 
-#pragma mark - JMJavascriptNativeBridgeProtocol
-- (void)javascriptNativeBridgeDidReceiveAuthRequest:(JMJavascriptNativeBridge *)bridge
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
-}
-
-- (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge shouldLoadExternalRequest:(NSURLRequest *)request
-{
-    BOOL shouldLoad = NO;
-    // TODO: verify all cases
-
-    if (request.URL.host) {
-        shouldLoad = YES;
-    }
-    return shouldLoad;
-}
-
-
 #pragma mark - Helpers
+- (void)addListenersForWebEnvironmentEvents
+{
+    // Authorization
+    NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.API.unauthorized";
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment addListenerWithId:unauthorizedListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(@"JasperMobile.Dashboard.API.unauthorized");
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf.delegate dashboardLoaderDidReceiveAuthRequest:self];
+    }];
+}
+
 - (void)injectJSCodeOldDashboard
 {
    CGFloat initialScale = 0.5;

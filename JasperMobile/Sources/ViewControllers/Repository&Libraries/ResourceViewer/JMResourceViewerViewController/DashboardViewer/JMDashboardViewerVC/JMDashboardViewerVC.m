@@ -45,6 +45,7 @@
 #import "UIView+Additions.h"
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
+#import "JMJavascriptNativeBridge.h"
 
 
 NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashboardViewerPrimaryWebEnvironmentIdentifier";
@@ -441,10 +442,17 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self switchFromTV];
     }
 
-    if ([JMUtils isServerVersionUpOrEqual6]) {
+    if ([JMUtils isSupportVisualize]) {
         [self startResourceViewing];
     } else {
-        [self reloadDashboard];
+        __weak typeof(self)weakSelf = self;
+        [self handleAuthErrorWithCompletion:^{
+            __strong typeof(self)strongSelf = weakSelf;
+            if ([strongSelf.dashboard respondsToSelector:@selector(updateResourceRequest)]) {
+                [strongSelf.dashboard updateResourceRequest];
+            }
+            [strongSelf startShowDashboard];
+        }];
     }
 }
 
@@ -563,8 +571,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 - (void)handleAuthErrorWithCompletion:(void(^ __nonnull)(void))completion
 {
-    [self.restClient deleteCookies];
-    [self resetSubViews];
+    [self.webEnvironment.webView removeFromSuperview];
+    [[JMWebViewManager sharedInstance] removeWebEnvironmentForId:self.webEnvironment.identifier];
+    self.webEnvironment = nil;
     
     if (self.restClient.keepSession) {
         __weak typeof(self)weakSelf = self;
@@ -572,8 +581,8 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
             __weak typeof(self)strongSelf = weakSelf;
             if (!result.error) {
                 [[JMWebViewManager sharedInstance] reset];
-                [self setupSubviews];
-                [self configViewport];
+                [strongSelf setupSubviews];
+                [strongSelf configViewport];
                 
                 completion();
             } else {

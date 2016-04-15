@@ -64,7 +64,6 @@ typedef void(^JMJavascriptRequestCompletion)(JMJavascriptCallback *__nullable ca
 
 @protocol JMJavascriptNativeBridgeDelegate <NSObject>
 @optional
-- (void)javascriptNativeBridgeDidReceiveAuthRequest:(JMJavascriptNativeBridge *__nonnull)bridge;
 - (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveOnWindowError:(NSError *__nonnull)error;
 - (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge shouldLoadExternalRequest:(NSURLRequest * __nonnull)request;
 @end
