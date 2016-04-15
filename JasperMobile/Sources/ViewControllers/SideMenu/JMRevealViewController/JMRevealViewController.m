@@ -40,4 +40,19 @@
     self.rearViewRevealOverdraw = 0.f;
 }
 
+#pragma mark - AutoRotation
+- (BOOL)shouldAutorotate
+{
+    return [self.frontViewController shouldAutorotate];
+}
+
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return [self.frontViewController supportedInterfaceOrientations];
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return [self.frontViewController preferredInterfaceOrientationForPresentation];
+}
 @end

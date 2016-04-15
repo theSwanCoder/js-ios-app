@@ -3,11 +3,20 @@
 	[resource_viewer_share_title]
 		en = Resource Sharing
 		tags = ios,new
+    [resource_viewer_share_annotation_title]
+        en = Input text, please
+        tags = ios,new
+    [resource_viewer_share_annotation_placeholder]
+        en = Annotation
+        tags = ios,new
+    [resource_viewer_share_annotation_empty_error]
+        en = Annotation text can't be empty!
+        tags = ios,new
     [resource_viewer_share_text]
         en = Look at this awesome report, builded via %@!
         tags = ios,new
     [resource_viewer_share_settings_title]
-        en = Share settings
+        en = Share Settings
         tags = ios,new
     [resource_viewer_share_settings_opacity]
         en = Opacity
@@ -15,15 +24,9 @@
     [resource_viewer_share_settings_brush]
         en = Brush
         tags = ios,new
-    [resource_viewer_share_settings_rgb]
-        en = RGB color settings
+    [resource_viewer_share_settings_border]
+        en = Border For Text
         tags = ios,new
-    [resource_viewer_share_settings_red]
-        en = Red
-        tags = ios,new
-    [resource_viewer_share_settings_green]
-        en = Green
-        tags = ios,new
-    [resource_viewer_share_settings_blue]
-        en = Blue
+    [resource_viewer_share_settings_font_size]
+        en = Font Size
         tags = ios,new
