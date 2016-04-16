@@ -571,6 +571,10 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 - (void)handleAuthErrorWithCompletion:(void(^ __nonnull)(void))completion
 {
+    if ([self isContentOnTV]) {
+        [self switchFromTV];
+    }
+
     [self.webEnvironment.webView removeFromSuperview];
     [[JMWebViewManager sharedInstance] removeWebEnvironmentForId:self.webEnvironment.identifier];
     self.webEnvironment = nil;
