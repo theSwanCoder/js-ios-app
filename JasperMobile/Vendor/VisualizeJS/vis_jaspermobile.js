@@ -247,7 +247,7 @@ JasperMobile.Report.REST.API = {
     injectContent: function(contentObject) {
         var content = contentObject["HTMLString"];
         var container = document.getElementById('container');
-        container.style.pointerEvents = "none"; // disable clicks under container
+        //container.style.pointerEvents = "none"; // disable clicks under container
 
         if (container == null) {
             JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Report.REST.API.injectContent", {
