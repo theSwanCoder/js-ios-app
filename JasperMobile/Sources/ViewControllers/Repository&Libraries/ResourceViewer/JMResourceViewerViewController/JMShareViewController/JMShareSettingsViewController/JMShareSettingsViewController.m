@@ -54,6 +54,7 @@
     [self sliderValueChanged:self.opacitySlider];
     
     self.selectedFont = self.selectedFont;
+    self.fontSizeSlider.value = self.selectedFont.pointSize;
     [self sliderValueChanged:self.fontSizeSlider];
     
     self.borderSwitch.on = self.borders;
