@@ -435,7 +435,7 @@ JasperMobile.Report.API = {
                 });
             }
         };
-        var linkOptionsEventsClick = function(event, link){
+        var linkOptionsEventsClick = function(event, link, defaultHandler){
             var type = link.type;
 
             switch (type) {
@@ -483,7 +483,9 @@ JasperMobile.Report.API = {
                     break;
                 }
                 default: {
-                    defaultHandler.call(this);
+                    if (defaultHandler != null) {
+                        defaultHandler.call(this);
+                    }
                 }
             }
         };
