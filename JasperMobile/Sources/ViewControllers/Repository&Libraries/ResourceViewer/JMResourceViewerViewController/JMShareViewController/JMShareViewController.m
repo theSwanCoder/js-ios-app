@@ -285,14 +285,6 @@
     self.selectedFont = settingsController.selectedFont;
     self.borders = settingsController.borders;
     
-    for (UIView * subview in self.mainImageView.subviews) {
-        if ([subview isKindOfClass:[JMShareTextAnnotationView class]]) {
-            JMShareTextAnnotationView *annotation = (JMShareTextAnnotationView *)subview;
-            annotation.borders = self.borders;
-        }
-    }
-    
-    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
