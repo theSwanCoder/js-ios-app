@@ -204,3 +204,6 @@
 	[schedules_error_output_folder_inexistent]
 		en = The job output folder cannot be found. It might have been deleted or moved.
 		tags = ios,new
+	[schedules_error_length]
+		en = Too long string.
+		tags = ios,new

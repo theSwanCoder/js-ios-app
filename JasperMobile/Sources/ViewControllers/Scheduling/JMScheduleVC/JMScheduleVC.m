@@ -1192,6 +1192,11 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
             row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename_invalid_characters", nil);
+        } if (self.scheduleMetadata.baseOutputFilename.length > 100) {
+            success = NO;
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
+            JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_length", nil);
         }
     }
 

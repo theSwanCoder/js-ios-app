@@ -144,6 +144,8 @@
     NSString *message = @"General error of creating a new schedule.";
     if ([errorCode isEqualToString:@"error.duplicate.report.job.output.filename"]) {
         message = JMCustomLocalizedString(@"schedules_error_duplicate_filename", nil);
+    } else if ([errorCode isEqualToString:@"error.length"]) {
+        message = JMCustomLocalizedString(@"schedules_error_length", nil);
     } else if ([errorCode isEqualToString:@"error.report.job.output.folder.inexistent"]) {
         message = JMCustomLocalizedString(@"schedules_error_output_folder_inexistent", nil);
     } else if ([errorCode isEqualToString:@"error.before.current.date"]) {
