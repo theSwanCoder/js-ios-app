@@ -220,6 +220,10 @@
     trigger.type = JSScheduleTriggerTypeCalendar;
     trigger.timezone = [self currentTimeZone];
 
+    // start date policy
+    trigger.startType = JSScheduleTriggerStartTypeImmediately;
+    trigger.startDate = nil;
+
     // end date policy
     trigger.endDate = nil;
     return trigger;
