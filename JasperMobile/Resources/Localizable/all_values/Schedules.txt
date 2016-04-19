@@ -179,6 +179,12 @@
 	[schedules_error_repeat_count_invalid_characters]
 		en = Please enter only digits.
 		tags = ios,new
+	[schedules_error_repeat_count_empty]
+		en = Specify a recurrence interval.
+		tags = ios,new
+	[schedules_error_occurrence_count_empty]
+		en = Specify the number of times to run the report.
+		tags = ios,new
 	[schedules_error_empty_output_folder]
 		en = Specify a folder.
 		tags = ios,new

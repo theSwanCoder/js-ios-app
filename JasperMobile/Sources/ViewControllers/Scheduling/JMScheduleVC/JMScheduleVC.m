@@ -201,38 +201,17 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (void)setRecurrenceCount:(UIBarButtonItem *)sender
 {
     JMScheduleCell *cell = [self recurrenceCountCell];
-    JSScheduleTrigger *trigger = [self currentTrigger];
-    NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
+    NSAssert(cell != nil, @"number of runs cell is nil");
 
-    NSString *value = cell.valueTextField.text;
-    if (value.length == 0 || !value.integerValue) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
-                                                                                          message:JMCustomLocalizedString(@"schedules_error_repeat_count_wrong", nil)
-                                                                                cancelButtonTitle:@"dialog_button_ok"
-                                                                          cancelCompletionHandler:nil];
-        [self presentViewController:alertController animated:YES completion:nil];
-        return;
-    } else {
-        [cell.valueTextField resignFirstResponder];
-    }
+    [cell.valueTextField resignFirstResponder];
 }
 
 - (void)setOccurrenceCount:(UIBarButtonItem *)sender
 {
     JMScheduleCell *cell = [self numberOfRunsCell];
-    NSAssert(cell != nil, @"number of runs cell is nil");
-    JSScheduleTrigger *trigger = [self currentTrigger];
-    NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
+    NSAssert(cell != nil, @"occurrence count cell is nil");
 
     [cell.valueTextField resignFirstResponder];
-
-    JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
-    simpleTrigger.endDate = nil;
-
-    [self setupEndPolicySection];
-    NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeScheduleEnd];
-    [self.tableView reloadSections:sectionIndecies
-                  withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)setCalendarHours:(UIBarButtonItem *)sender
@@ -1181,60 +1160,131 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         return;
     }
 
-    BOOL success = YES;
+    BOOL isValidLabel = [self validateLabel];
+    BOOL isValidOutputFileName = [self validateOutputFileName];
+    BOOL isValidOutputFolderURI = [self validateOutputFolderURI];
+    BOOL isValidRepeatCount = [self validateRepeatCount];
+    BOOL isValidNumberOfRuns = [self validateNumberOfRuns];
+    BOOL isValidStartDate = [self validateStartDate];
+    BOOL isValidEndDate = [self validateEndDate];
 
+    completion(isValidLabel
+            && isValidOutputFileName && isValidOutputFolderURI
+            && isValidRepeatCount && isValidNumberOfRuns
+            && isValidStartDate && isValidEndDate);
+}
+
+- (BOOL)validateLabel
+{
+    BOOL isValid = YES;
+    if (!self.scheduleMetadata.label.length) {
+        isValid = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeMain];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeLabel];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_label", nil);
+    }
+    return isValid;
+}
+
+- (BOOL)validateOutputFileName
+{
+    BOOL isValid = YES;
     if (!self.scheduleMetadata.baseOutputFilename.length) {
-        success = NO;
+        isValid = NO;
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
         row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename", nil);
     } else {
         NSArray *parts = [self.scheduleMetadata.baseOutputFilename componentsSeparatedByString:@" "];
         if (parts.count > 1) {
-            success = NO;
+            isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
             row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename_invalid_characters", nil);
         } if (self.scheduleMetadata.baseOutputFilename.length > 100) {
-            success = NO;
+            isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
             row.errorMessage = JMCustomLocalizedString(@"schedules_error_length", nil);
         }
     }
+    return isValid;
+}
 
+- (BOOL)validateOutputFolderURI
+{
+    BOOL isValid = YES;
     if (!self.scheduleMetadata.folderURI.length) {
-        success = NO;
+        isValid = NO;
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFolderURI];
         row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_output_folder", nil);
     }
+    return isValid;
+}
 
-    if (!self.scheduleMetadata.label.length) {
-        success = NO;
-        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeMain];
-        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeLabel];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_label", nil);
+- (BOOL)validateRepeatCount
+{
+    BOOL isValid = YES;
+    id trigger = self.scheduleMetadata.trigger;
+    if ([trigger isKindOfClass:[JSScheduleSimpleTrigger class]]) {
+        JSScheduleSimpleTrigger *simpleTrigger = trigger;
+        if (simpleTrigger.recurrenceInterval && simpleTrigger.recurrenceInterval.integerValue == 0) {
+            isValid = NO;
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
+            JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeRepeatCount];
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_repeat_count_empty", nil);
+        }
     }
+    return isValid;
+}
+
+- (BOOL)validateNumberOfRuns
+{
+    BOOL isValid = YES;
+    id trigger = self.scheduleMetadata.trigger;
+    if ([trigger isKindOfClass:[JSScheduleSimpleTrigger class]]) {
+        JSScheduleSimpleTrigger *simpleTrigger = trigger;
+        if (simpleTrigger.recurrenceInterval && simpleTrigger.occurrenceCount.integerValue == 0) {
+            isValid = NO;
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
+            JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeNumberOfRuns];
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_occurrence_count_empty", nil);
+        }
+    }
+    return isValid;
+}
+
+- (BOOL)validateStartDate
+{
+    BOOL isValid = YES;
 
     NSDate *currentDate = [NSDate date];
     NSDate *startDate = [self currentTrigger].startDate;
     if (startDate && [startDate compare:currentDate] == NSOrderedAscending) {
-        success = NO;
+        isValid = NO;
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleStart];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeStartDate];
         row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
     }
 
+    return isValid;
+}
+
+- (BOOL)validateEndDate
+{
+    BOOL isValid = YES;
+
+    NSDate *currentDate = [NSDate date];
     NSDate *endDate = [self currentTrigger].endDate;
     if (endDate && [endDate compare:currentDate] == NSOrderedAscending) {
-        success = NO;
+        isValid = NO;
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleEnd];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeEndDate];
         row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
     }
 
-    completion(success);
+    return isValid;
 }
 
 - (BOOL)isStringContainsOnlyDigits:(NSString *)string
