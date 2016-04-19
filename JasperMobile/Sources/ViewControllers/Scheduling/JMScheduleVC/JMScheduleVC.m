@@ -312,7 +312,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             @(JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek)
     ];
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_recurrenceType_alert_title", nil)
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_repeat_interval", nil)
                                                                                       message:nil
                                                                             cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
@@ -1185,6 +1185,14 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
         row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename", nil);
+    } else {
+        NSArray *parts = [self.scheduleMetadata.baseOutputFilename componentsSeparatedByString:@" "];
+        if (parts.count > 1) {
+            success = NO;
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
+            JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename_invalid_characters", nil);
+        }
     }
 
     if (!self.scheduleMetadata.folderURI.length) {
