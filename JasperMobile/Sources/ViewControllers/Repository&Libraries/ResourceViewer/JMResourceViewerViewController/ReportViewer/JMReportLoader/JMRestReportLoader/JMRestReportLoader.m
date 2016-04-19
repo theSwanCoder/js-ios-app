@@ -45,6 +45,11 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 @implementation JMRestReportLoader
 
 #pragma mark - Initializers
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 - (instancetype)initWithReport:(JSReport *)report
                     restClient:(JSRESTBase *)restClient
 {
@@ -89,24 +94,22 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 - (void)destroy
 {
-    __weak __typeof(self) weakSelf = self;
     [self verifyIsContentDivCreatedWithCompletion:^(BOOL isCreated, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
         if (isCreated) {
             JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
                                                                                      parameters:@{
                                                                                              @"HTMLString" : @""
                                                                                      }];
-            [strongSelf.webEnvironment sendJavascriptRequest:injectContentRequest
+            [self.webEnvironment sendJavascriptRequest:injectContentRequest
                                             completion:^(NSDictionary *params, NSError *error) {
                                                 JMLog(@"params: %@", params);
                                                 JMLog(@"error: %@", error);
                                                 if (error) {
-                                                    [strongSelf.webEnvironment clean];
+                                                    [self.webEnvironment clean];
                                                 }
                                             }];
         } else {
-            [strongSelf.webEnvironment clean];
+            [self.webEnvironment clean];
         }
     }];
 
