@@ -113,6 +113,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     self.menuItems = nil;
     [self setSelectedItemIndex:[[self class] defaultItemIndex]];
     [self updateServerInfo];
+    [self.tableView setContentOffset:CGPointZero];
 }
 
 #pragma mark - Utils
