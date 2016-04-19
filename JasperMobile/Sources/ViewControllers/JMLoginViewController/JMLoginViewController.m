@@ -160,7 +160,11 @@
 
 - (IBAction)tryDemoButtonTapped:(id)sender
 {
+#ifdef __RELEASE__
     [self loginWithServerProfile:[JMServerProfile demoServerProfile] userName:kJMDemoServerUsername password:kJMDemoServerPassword];
+#else
+    [self loginWithServerProfile:[JMServerProfile demoServerProfile] userName:kJMDevDemoServerUsername password:kJMDevDemoServerPassword];
+#endif
 }
 
 #pragma mark - UITextFieldDelegate

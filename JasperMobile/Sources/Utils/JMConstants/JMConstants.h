@@ -77,6 +77,9 @@ extern NSString * const kJMDemoServerOrganization;
 extern NSString * const kJMDemoServerUsername;
 extern NSString * const kJMDemoServerPassword;
 
+extern NSString * const kJMDevDemoServerUsername;
+extern NSString * const kJMDevDemoServerPassword;
+
 // Emails for feedbacks
 extern NSString * const kFeedbackPrimaryEmail;
 extern NSString * const kFeedbackSecondaryEmail;
