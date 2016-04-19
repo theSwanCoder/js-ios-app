@@ -200,8 +200,8 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 - (void)verifyIsContentDivCreatedWithCompletion:(JMRestReportLoaderCompletion __nonnull)completion
 {
-    [self.webEnvironment verifyJasperMobileReadyWithCompletion:^(BOOL isWebViewLoaded) {
-        completion(isWebViewLoaded, nil);
+    [self.webEnvironment verifyEnvironmentReadyWithCompletion:^(BOOL isEnvironmentReady) {
+        completion(isEnvironmentReady, nil);
     }];
 }
 
@@ -209,6 +209,10 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 - (void)renderReportWithCompletion:(JMRestReportLoaderCompletion __nonnull)completion
 {
+    if (!self.report) {
+        return;
+    }
+
     void(^heapBlock)(BOOL, NSError *) = [completion copy];
 
     [self.restClient reportComponentForReportWithExecutionId:self.report.requestId

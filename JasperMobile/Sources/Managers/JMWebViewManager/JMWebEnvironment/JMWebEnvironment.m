@@ -31,8 +31,6 @@
 
 @interface JMWebEnvironment() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, strong) JMJavascriptNativeBridge * __nonnull bridge;
-@property (nonatomic, strong) NSNumber *visualizeLoadStatus;
-@property (nonatomic, strong) NSNumber *jasperMobileLoadStatus;
 @end
 
 @implementation JMWebEnvironment
@@ -123,12 +121,19 @@
 
 - (void)verifyEnvironmentReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
 {
-    [self isWebViewLoadedVisualize:self.webView completion:completion];
-}
-
-- (void)verifyJasperMobileReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
-{
-    [self isWebViewLoadedJasperMobile:self.webView completion:completion];
+    if ([JMUtils isSupportVisualize]) {
+        [self isWebViewLoadedVisualize:self.webView completion:completion];
+    } else {
+        [self isWebViewLoadedJasperMobile:self.webView completion:^(BOOL isWebViewLoaded) {
+            if (isWebViewLoaded) {
+                [self isWebViewLoadedContentDiv:self.webView completion:^(BOOL isContantDivLoaded) {
+                    completion(isContantDivLoaded);
+                }];
+            } else {
+                completion(NO);
+            }
+        }];
+    }
 }
 
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
@@ -180,8 +185,6 @@
 
     NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
     [self.webView loadRequest:clearingRequest];
-    self.visualizeLoadStatus = nil;
-    self.jasperMobileLoadStatus = nil;
 }
 
 #pragma mark - Helpers
@@ -239,36 +242,41 @@
 
 - (void)isWebViewLoadedVisualize:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
 {
-    if (!self.visualizeLoadStatus || !self.visualizeLoadStatus.boolValue) {
-        NSString *jsCommand = @"typeof(visualize)";
-        [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
-            BOOL isFunction = [result isEqualToString:@"function"];
-            BOOL isLoaded = !error && isFunction;
-            self.visualizeLoadStatus = @(isLoaded);
-            if (!self.isCancel) {
-                completion(isLoaded);
-            }
-        }];
-    } else {
-        completion(YES);
-    }
+    NSString *jsCommand = @"typeof(visualize)";
+    [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
+        BOOL isFunction = [result isEqualToString:@"function"];
+        BOOL isLoaded = !error && isFunction;
+        if (!self.isCancel) {
+            completion(isLoaded);
+        }
+    }];
 }
 
 - (void)isWebViewLoadedJasperMobile:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
 {
-    if (!self.jasperMobileLoadStatus || !self.jasperMobileLoadStatus.boolValue) {
-        NSString *jsCommand = @"typeof(JasperMobile)";
-        [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
-            BOOL isObject = [result isEqualToString:@"object"];
-            BOOL isLoaded = !error && isObject;
-            self.jasperMobileLoadStatus = @(isLoaded);
-            if (!self.isCancel) {
-                completion(isLoaded);
-            }
-        }];
-    } else {
-        completion(YES);
-    }
+    NSString *jsCommand = @"typeof(JasperMobile)";
+    [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
+        BOOL isObject = [result isEqualToString:@"object"];
+        BOOL isLoaded = !error && isObject;
+        if (!self.isCancel) {
+            completion(isLoaded);
+        }
+    }];
+}
+
+- (void)isWebViewLoadedContentDiv:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isContantDivLoaded))completion
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.isContainerLoaded"
+                                                                parameters:nil];
+    [self.bridge sendJavascriptRequest:request
+                            completion:^(JMJavascriptCallback *callback, NSError *error) {
+                                if (error) {
+                                    completion(NO);
+                                } else {
+                                    NSString *isContainerLoaded = callback.parameters[@"isContainerLoaded"];
+                                    completion([isContainerLoaded isEqualToString:@"true"]);
+                                }
+                            }];
 }
 
 #pragma mark - JMJavascriptNativeBridgeDelegate

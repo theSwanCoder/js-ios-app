@@ -44,8 +44,6 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 - (instancetype __nullable)initWithId:(NSString *__nonnull)identifier;
 + (instancetype __nullable)webEnvironmentWithId:(NSString *__nonnull)identifier;
 - (void)verifyEnvironmentReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion;
-- (void)verifyJasperMobileReadyWithCompletion:(void (^ __nonnull)(BOOL isWebViewLoaded))completion;
-
 - (void)loadHTML:(NSString * __nonnull)HTMLString
          baseURL:(NSURL * __nullable)baseURL
       completion:(JMWebEnvironmentRequestBooleanCompletion __nullable)completion;

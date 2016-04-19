@@ -183,6 +183,14 @@ var JasperMobile = {
                 element.style.transform = scale;
                 element.style.transformOrigin = origin;
             }
+        },
+        isContainerLoaded: function() {
+            var container = document.getElementById("container");
+            var isContainContainer = (container != null);
+            console.log("isContainContainer: " + isContainContainer);
+            JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Helper.isContainerLoaded", {
+                "isContainerLoaded" : isContainContainer ? "true" : "false"
+            });
         }
     }
 };
