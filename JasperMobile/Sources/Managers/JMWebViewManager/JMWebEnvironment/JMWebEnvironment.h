@@ -40,6 +40,7 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 @interface JMWebEnvironment : NSObject
 @property (nonatomic, strong) WKWebView * __nonnull webView;
 @property (nonatomic, copy) NSString * __nonnull identifier;
+@property (nonatomic, assign, getter=isCancel) BOOL cancel;
 - (instancetype __nullable)initWithId:(NSString *__nonnull)identifier;
 + (instancetype __nullable)webEnvironmentWithId:(NSString *__nonnull)identifier;
 - (void)verifyEnvironmentReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion;

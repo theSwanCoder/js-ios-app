@@ -72,6 +72,7 @@
     if (self) {
         _visualizeManager = [JMVisualizeManager new];
         _webEnvironment = webEnvironment;
+        _webEnvironment.cancel = NO;
     }
     return self;
 }
@@ -153,11 +154,15 @@
 
 - (void)cancel
 {
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Report.API.cancel";
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.cancel"
+                                                                parameters:nil];
+    __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
         if (parameters) {
             JMLog(@"canceling report was finished");
+            [strongSelf.webEnvironment removeAllListeners];
+            strongSelf.webEnvironment.cancel = YES;
         } else {
             JMLog(@"error: %@", error);
         }
@@ -262,6 +267,7 @@
 
 - (void)destroy
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.destroyReport"
                                                                 parameters:nil];
     __typeof(self) weakSelf = self;
@@ -269,6 +275,7 @@
         __typeof(self) strongSelf = weakSelf;
         strongSelf.report.isReportAlreadyLoaded = NO;
         [strongSelf.webEnvironment removeAllListeners];
+        strongSelf.webEnvironment.cancel = YES;
 
         if (parameters) {
             JMLog(@"callback: %@", parameters);
@@ -306,6 +313,10 @@
 - (void)freshLoadReportWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock)completion
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    if (!self.report) {
+        return;
+    }
+
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
     // need for clean running, but not selecting page
@@ -343,6 +354,10 @@
 
 - (void)selectPageWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock)completion
 {
+    if (!self.report) {
+        return;
+    }
+
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.selectPage"

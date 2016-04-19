@@ -31,6 +31,8 @@
 
 @interface JMWebEnvironment() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, strong) JMJavascriptNativeBridge * __nonnull bridge;
+@property (nonatomic, strong) NSNumber *visualizeLoadStatus;
+@property (nonatomic, strong) NSNumber *jasperMobileLoadStatus;
 @end
 
 @implementation JMWebEnvironment
@@ -49,6 +51,7 @@
         _webView = [self createWebView];
         _bridge = [JMJavascriptNativeBridge bridgeWithWebView:_webView];
         _bridge.delegate = self;
+        _cancel = NO;
     }
     return self;
 }
@@ -65,30 +68,36 @@
 {
     JMJavascriptRequestCompletion javascriptRequestCompletion;
 
-    if (completion) {
-        javascriptRequestCompletion = ^(JMJavascriptCallback *callback, NSError *error) {
-            if (error) {
-                completion(NO, error);
-            } else {
-                completion(YES, nil);
-            }
-        };
-    }
+    if (!self.isCancel) {
+        if (completion) {
+            javascriptRequestCompletion = ^(JMJavascriptCallback *callback, NSError *error) {
+                if (!self.isCancel) {
+                    if (error) {
+                        completion(NO, error);
+                    } else {
+                        completion(YES, nil);
+                    }
+                }
+            };
+        }
 
-    [self.bridge startLoadHTMLString:HTMLString
-                             baseURL:baseURL
-                          completion:javascriptRequestCompletion];
+        [self.bridge startLoadHTMLString:HTMLString
+                                 baseURL:baseURL
+                              completion:javascriptRequestCompletion];
+    }
 }
 
 - (void)loadRequest:(NSURLRequest * __nonnull)request
 {
-    if ([request.URL isFileURL]) {
-        // TODO: detect format of file for request
-        [self loadLocalFileFromURL:request.URL
-                        fileFormat:nil
-                           baseURL:nil];
-    } else {
-        [self.webView loadRequest:request];
+    if (!self.isCancel) {
+        if ([request.URL isFileURL]) {
+            // TODO: detect format of file for request
+            [self loadLocalFileFromURL:request.URL
+                            fileFormat:nil
+                               baseURL:nil];
+        } else {
+            [self.webView loadRequest:request];
+        }
     }
 }
 
@@ -125,24 +134,34 @@
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
 {
-    if (completion) {
-        [self.bridge sendJavascriptRequest:request
-                                completion:^(JMJavascriptCallback *callback, NSError *error) {
-                                    completion(callback.parameters, error);
-                                }];
-    } else {
-        [self.bridge sendJavascriptRequest:request
-                                completion:nil];
+    if (!self.isCancel) {
+        if (completion) {
+            [self.bridge sendJavascriptRequest:request
+                                    completion:^(JMJavascriptCallback *callback, NSError *error) {
+                                        if (!self.isCancel) {
+                                            completion(callback.parameters, error);
+                                        }
+                                    }];
+        } else {
+            [self.bridge sendJavascriptRequest:request
+                                    completion:nil];
+        }
     }
 }
 
 - (void)addListenerWithId:(NSString *)listenerId
                  callback:(JMWebEnvironmentRequestParametersCompletion)callback
 {
-    [self.bridge addListenerWithId:listenerId
-                          callback:^(JMJavascriptCallback *jsCallback, NSError *error) {
-                              callback(jsCallback.parameters, error);
-                          }];
+    if (!self.isCancel) {
+        __weak __typeof(self) weakSelf = self;
+        [self.bridge addListenerWithId:listenerId
+                              callback:^(JMJavascriptCallback *jsCallback, NSError *error) {
+                                  __typeof(self) strongSelf = weakSelf;
+                                  if (!strongSelf.isCancel) {
+                                      callback(jsCallback.parameters, error);
+                                  }
+                              }];
+    }
 }
 
 - (void)removeAllListeners
@@ -157,11 +176,12 @@
 
 - (void)clean
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self.bridge removeAllListeners];
 
     NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
     [self.webView loadRequest:clearingRequest];
+    self.visualizeLoadStatus = nil;
+    self.jasperMobileLoadStatus = nil;
 }
 
 #pragma mark - Helpers
@@ -219,28 +239,46 @@
 
 - (void)isWebViewLoadedVisualize:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
 {
-    NSString *jsCommand = @"typeof(visualize)";
-    [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
-        BOOL isFunction = [result isEqualToString:@"function"];
-        completion(!error && isFunction);
-    }];
+    if (!self.visualizeLoadStatus || !self.visualizeLoadStatus.boolValue) {
+        NSString *jsCommand = @"typeof(visualize)";
+        [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
+            BOOL isFunction = [result isEqualToString:@"function"];
+            BOOL isLoaded = !error && isFunction;
+            self.visualizeLoadStatus = @(isLoaded);
+            if (!self.isCancel) {
+                completion(isLoaded);
+            }
+        }];
+    } else {
+        completion(YES);
+    }
 }
 
 - (void)isWebViewLoadedJasperMobile:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
 {
-    NSString *jsCommand = @"typeof(JasperMobile)";
-    [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
-        BOOL isObject = [result isEqualToString:@"object"];
-        completion(!error && isObject);
-    }];
+    if (!self.jasperMobileLoadStatus || !self.jasperMobileLoadStatus.boolValue) {
+        NSString *jsCommand = @"typeof(JasperMobile)";
+        [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
+            BOOL isObject = [result isEqualToString:@"object"];
+            BOOL isLoaded = !error && isObject;
+            self.jasperMobileLoadStatus = @(isLoaded);
+            if (!self.isCancel) {
+                completion(isLoaded);
+            }
+        }];
+    } else {
+        completion(YES);
+    }
 }
 
 #pragma mark - JMJavascriptNativeBridgeDelegate
 - (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveOnWindowError:(NSError *__nonnull)error
 {
+#ifndef __RELEASE__
     // TODO: move to loader layer
     [JMUtils presentAlertControllerWithError:error
                                   completion:nil];
+#endif
 }
 
 - (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge shouldLoadExternalRequest:(NSURLRequest *__nonnull)request
