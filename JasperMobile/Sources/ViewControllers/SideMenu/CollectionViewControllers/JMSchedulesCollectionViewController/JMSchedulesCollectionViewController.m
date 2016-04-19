@@ -89,6 +89,8 @@
                     [[JMScheduleManager sharedManager] updateSchedule:scheduleMetadata
                                                            completion:^(JSScheduleMetadata *updatedScheduleMetadata, NSError *error) {
                                                                if (updatedScheduleMetadata) {
+                                                                   [strongSelf.resourceListLoader setNeedsUpdate];
+                                                                   [strongSelf.resourceListLoader updateIfNeeded];
                                                                    [self.navigationController popViewControllerAnimated:YES];
                                                                    [ALToastView toastInView:self.navigationController.view
                                                                                    withText:JMCustomLocalizedString(@"Schedule was updated successfully.", nil)];
