@@ -876,7 +876,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                                                                                   rows:@[
                                                                                           [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeStartImmediately],
                                                                                           [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeStartDate hidden:YES],
-                                                                                          [JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeTimeZone],
+                                                                                          //[JMScheduleVCRow rowWithRowType:JMScheduleVCRowTypeTimeZone],
                                                                                   ]];
     return scheduleSection;
 }
