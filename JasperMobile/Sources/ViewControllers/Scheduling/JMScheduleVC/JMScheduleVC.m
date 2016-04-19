@@ -741,12 +741,15 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         if ([self isStringContainsOnlyDigits:trimmedValue]) {
             JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
             simpleTrigger.occurrenceCount = @(trimmedValue.integerValue);
+            simpleTrigger.endDate = nil;
             row.errorMessage = nil;
         } else {
             // show error message in cell
             row.errorMessage = JMCustomLocalizedString(@"schedules_error_repeat_count_invalid_characters", nil);
         }
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeScheduleEnd];
+        [self.tableView reloadSections:sectionIndecies
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
