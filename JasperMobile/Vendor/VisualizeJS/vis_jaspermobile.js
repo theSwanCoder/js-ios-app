@@ -273,9 +273,11 @@ JasperMobile.Report.REST.API = {
             // clean content
             JasperMobile.Helper.cleanContent();
             JasperMobile.Report.REST.API.elasticChart = null;
+            container.style.zoom = "";
             JasperMobile.Callback.log("clear content");
             JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
         } else {
+            container.style.zoom = 2;
             JasperMobile.Helper.resetBodyTransformStyles();
             JasperMobile.Helper.updateBodyTransformStylesToFitWindow();
             JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
@@ -299,6 +301,8 @@ JasperMobile.Report.REST.API = {
         JasperMobile.Report.REST.API.elasticChart = null;
 
         if (isElasticChart == "true") {
+            var container = document.getElementById('container');
+
             JasperMobile.Helper.resetBodyTransformStyles();
             JasperMobile.Helper.setBodyTransformStyles(0.5);
 
@@ -306,8 +310,8 @@ JasperMobile.Report.REST.API = {
             functionName = script.scriptName.trim();
             chartParams = script.scriptParams;
 
-            var containerWidth = document.getElementById("container").offsetWidth / 0.5;
-            var containerHeight = document.getElementById("container").offsetHeight / 0.5;
+            var containerWidth = container.offsetWidth / 0.5;
+            var containerHeight = container.offsetHeight / 0.5;
 
             // Update chart size
             var chartDimensions = chartParams.chartDimensions;

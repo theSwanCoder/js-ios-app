@@ -123,3 +123,6 @@
 		ja = コンテンツリソース
 		zh = 内容资源
 		tags = ios
+	[resources_type_schedule]
+		en = Schedule
+		tags = ios,new

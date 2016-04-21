@@ -218,13 +218,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     JMScheduleCell *cell = [self calendarHoursCell];
     NSAssert(cell != nil, @"celendar hours cell is nil");
-    JSScheduleTrigger *trigger = [self currentTrigger];
-    NSAssert(trigger.type == JSScheduleTriggerTypeCalendar, @"Should be calendar trigger");
 
-    JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) trigger;
-    // TODO: verify ranges (example 0 or 1-17)
-    NSString *value = cell.valueTextField.text;
-    calendarTrigger.hours = value;
     [cell.valueTextField resignFirstResponder];
 }
 
@@ -232,13 +226,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     JMScheduleCell *cell = [self calendarMinutesCell];
     NSAssert(cell != nil, @"celendar minutes cell is nil");
-    JSScheduleTrigger *trigger = [self currentTrigger];
-    NSAssert(trigger.type == JSScheduleTriggerTypeCalendar, @"Should be calendar trigger");
 
-    JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) trigger;
-    // TODO: verify ranges (example 0 or 1-17)
-    NSString *value = cell.valueTextField.text;
-    calendarTrigger.minutes = value;
     [cell.valueTextField resignFirstResponder];
 }
 
@@ -729,6 +717,14 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeScheduleEnd];
         [self.tableView reloadSections:sectionIndecies
                       withRowAnimation:UITableViewRowAnimationAutomatic];
+    } else if (row.type == JMScheduleVCRowTypeCalendarHours) {
+        NSAssert(trigger.type == JSScheduleTriggerTypeCalendar, @"Should be simple trigger");
+        JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *)trigger;
+        calendarTrigger.hours = trimmedValue;
+    } else if (row.type == JMScheduleVCRowTypeCalendarMinutes) {
+        NSAssert(trigger.type == JSScheduleTriggerTypeCalendar, @"Should be simple trigger");
+        JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *)trigger;
+        calendarTrigger.minutes = trimmedValue;
     }
 }
 
@@ -1167,11 +1163,17 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     BOOL isValidNumberOfRuns = [self validateNumberOfRuns];
     BOOL isValidStartDate = [self validateStartDate];
     BOOL isValidEndDate = [self validateEndDate];
+    BOOL isValidCalendarHours = [self validateHoursForCalendarTrigger];
+    BOOL isValidCalendarMinutes = [self validateMinutesForCalendarTrigger];
+    BOOL isValidCalendarDays = [self validateWeekdaysForCalendarTrigger];
+    BOOL isValidCalendarMonths = [self validateMonthsForCalendarTrigger];
 
     completion(isValidLabel
             && isValidOutputFileName && isValidOutputFolderURI
             && isValidRepeatCount && isValidNumberOfRuns
-            && isValidStartDate && isValidEndDate);
+            && isValidStartDate && isValidEndDate
+            && isValidCalendarHours && isValidCalendarMinutes
+            && isValidCalendarDays && isValidCalendarMonths);
 }
 
 - (BOOL)validateLabel
@@ -1245,9 +1247,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     id trigger = self.scheduleMetadata.trigger;
     if ([trigger isKindOfClass:[JSScheduleSimpleTrigger class]]) {
         JSScheduleSimpleTrigger *simpleTrigger = trigger;
-        if (simpleTrigger.recurrenceInterval && simpleTrigger.occurrenceCount.integerValue == 0) {
+        if (simpleTrigger.occurrenceCount && simpleTrigger.occurrenceCount.integerValue == 0) {
             isValid = NO;
-            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleEnd];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeNumberOfRuns];
             row.errorMessage = JMCustomLocalizedString(@"schedules_error_occurrence_count_empty", nil);
         }
@@ -1284,6 +1286,76 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
     }
 
+    return isValid;
+}
+
+- (BOOL)validateHoursForCalendarTrigger
+{
+    BOOL isValid = YES;
+
+    id trigger = self.scheduleMetadata.trigger;
+    if ([trigger isKindOfClass:[JSScheduleCalendarTrigger class]]) {
+        JSScheduleCalendarTrigger *calendarTrigger = trigger;
+        // TODO: verify ranges (example 0 or '1-17' )
+        if (!calendarTrigger.hours || calendarTrigger.hours.length == 0 || calendarTrigger.hours.integerValue < 0 || calendarTrigger.hours.integerValue > 23) {
+            isValid = NO;
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
+            JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeCalendarHours];
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_wrong_hours", nil);
+        }
+    }
+
+    return isValid;
+}
+
+- (BOOL)validateMinutesForCalendarTrigger
+{
+    BOOL isValid = YES;
+
+    id trigger = self.scheduleMetadata.trigger;
+    if ([trigger isKindOfClass:[JSScheduleCalendarTrigger class]]) {
+        JSScheduleCalendarTrigger *calendarTrigger = trigger;
+        // TODO: verify ranges (example '0' or '0, 15, 30, 45')
+        if (!calendarTrigger.minutes || calendarTrigger.minutes.length == 0 || calendarTrigger.minutes.integerValue < 0 || calendarTrigger.minutes.integerValue > 59) {
+            isValid = NO;
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
+            JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeCalendarMinutes];
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_wrong_minutes", nil);
+        }
+    }
+
+    return isValid;
+}
+
+- (BOOL)validateWeekdaysForCalendarTrigger
+{
+    BOOL isValid = YES;
+    id trigger = self.scheduleMetadata.trigger;
+    if ([trigger isKindOfClass:[JSScheduleCalendarTrigger class]]) {
+        JSScheduleCalendarTrigger *calendarTrigger = trigger;
+        if (calendarTrigger.daysType == JSScheduleCalendarTriggerDaysTypeWeek && calendarTrigger.weekDays.count == 0) {
+            isValid = NO;
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
+            JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeCalendarSelectedDays];
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_weekdays", nil);
+        }
+    }
+    return isValid;
+}
+
+- (BOOL)validateMonthsForCalendarTrigger
+{
+    BOOL isValid = YES;
+    id trigger = self.scheduleMetadata.trigger;
+    if ([trigger isKindOfClass:[JSScheduleCalendarTrigger class]]) {
+        JSScheduleCalendarTrigger *calendarTrigger = trigger;
+        if (calendarTrigger.months.count == 0) {
+            isValid = NO;
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
+            JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeCalendarSelectedMonths];
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_months", nil);
+        }
+    }
     return isValid;
 }
 

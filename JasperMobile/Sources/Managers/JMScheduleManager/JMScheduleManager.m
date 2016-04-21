@@ -85,7 +85,11 @@
     [self.restClient updateSchedule:schedule
                          completion:^(JSOperationResult *result) {
                              if (result.error) {
-                                 completion(nil, result.error);
+                                 if (result.error.code == 1007) {
+                                     [self handleErrorsWithData:result.body completion:completion];
+                                 } else {
+                                     completion(nil, result.error);
+                                 }
                              } else {
                                  completion(result.objects.firstObject, nil);
                              }
@@ -134,8 +138,15 @@
 
 - (NSString *)errorMessageFromData:(NSDictionary *)data
 {
-    NSString *errorCode = data[@"errorCode"];
-    NSString *errorMessage = [self messageFromErrorCode:errorCode];
+    JMLog(@"data: %@", data);
+    NSString *errorMessage;
+    NSString *defaultMessage = data[@"defaultMessage"];
+    if (defaultMessage) {
+        errorMessage = defaultMessage;
+    } else {
+        NSString *errorCode = data[@"errorCode"];
+        errorMessage = [self messageFromErrorCode:errorCode];
+    }
     return errorMessage;
 }
 
@@ -146,6 +157,8 @@
         message = JMCustomLocalizedString(@"schedules_error_duplicate_filename", nil);
     } else if ([errorCode isEqualToString:@"error.length"]) {
         message = JMCustomLocalizedString(@"schedules_error_length", nil);
+    } else if ([errorCode isEqualToString:@"error.invalid.chars"]) {
+        message = JMCustomLocalizedString(@"schedules_error_general_invalid_chars", nil);
     } else if ([errorCode isEqualToString:@"error.report.job.output.folder.inexistent"]) {
         message = JMCustomLocalizedString(@"schedules_error_output_folder_inexistent", nil);
     } else if ([errorCode isEqualToString:@"error.before.current.date"]) {
