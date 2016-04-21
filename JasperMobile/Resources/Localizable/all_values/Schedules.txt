@@ -191,6 +191,12 @@
 	[schedules_error_empty_label]
 		en = Specify a name for the scheduled job.
 		tags = ios,new
+	[schedules_error_wrong_hours]
+		en = Specify the hour(s) when the job should run.
+		tags = ios,new
+	[schedules_error_wrong_minutes]
+		en = Specify the minute(s) when the job should run.
+		tags = ios,new
 	[schedules_error_empty_format]
 		en = Select output formats for the job.
 		de = Ausgabe-Dateiformat wurde nicht ausgewählt.
