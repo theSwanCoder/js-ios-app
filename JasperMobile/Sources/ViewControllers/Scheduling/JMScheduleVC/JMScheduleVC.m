@@ -1245,9 +1245,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     id trigger = self.scheduleMetadata.trigger;
     if ([trigger isKindOfClass:[JSScheduleSimpleTrigger class]]) {
         JSScheduleSimpleTrigger *simpleTrigger = trigger;
-        if (simpleTrigger.recurrenceInterval && simpleTrigger.occurrenceCount.integerValue == 0) {
+        if (simpleTrigger.occurrenceCount && simpleTrigger.occurrenceCount.integerValue == 0) {
             isValid = NO;
-            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleEnd];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeNumberOfRuns];
             row.errorMessage = JMCustomLocalizedString(@"schedules_error_occurrence_count_empty", nil);
         }
