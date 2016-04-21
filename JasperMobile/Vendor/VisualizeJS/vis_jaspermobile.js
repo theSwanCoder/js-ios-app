@@ -276,6 +276,7 @@ JasperMobile.Report.REST.API = {
             JasperMobile.Callback.log("clear content");
             JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
         } else {
+            container.style.zoom = 2;
             JasperMobile.Helper.resetBodyTransformStyles();
             JasperMobile.Helper.updateBodyTransformStylesToFitWindow();
             JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.injectContent", {});
