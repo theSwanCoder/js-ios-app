@@ -1165,12 +1165,15 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     BOOL isValidEndDate = [self validateEndDate];
     BOOL isValidCalendarHours = [self validateHoursForCalendarTrigger];
     BOOL isValidCalendarMinutes = [self validateMinutesForCalendarTrigger];
+    BOOL isValidCalendarDays = [self validateWeekdaysForCalendarTrigger];
+    BOOL isValidCalendarMonths = [self validateMonthsForCalendarTrigger];
 
     completion(isValidLabel
             && isValidOutputFileName && isValidOutputFolderURI
             && isValidRepeatCount && isValidNumberOfRuns
             && isValidStartDate && isValidEndDate
-            && isValidCalendarHours && isValidCalendarMinutes);
+            && isValidCalendarHours && isValidCalendarMinutes
+            && isValidCalendarDays && isValidCalendarMonths);
 }
 
 - (BOOL)validateLabel
@@ -1321,6 +1324,38 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         }
     }
 
+    return isValid;
+}
+
+- (BOOL)validateWeekdaysForCalendarTrigger
+{
+    BOOL isValid = YES;
+    id trigger = self.scheduleMetadata.trigger;
+    if ([trigger isKindOfClass:[JSScheduleCalendarTrigger class]]) {
+        JSScheduleCalendarTrigger *calendarTrigger = trigger;
+        if (calendarTrigger.daysType == JSScheduleCalendarTriggerDaysTypeWeek && calendarTrigger.weekDays.count == 0) {
+            isValid = NO;
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
+            JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeCalendarSelectedDays];
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_weekdays", nil);
+        }
+    }
+    return isValid;
+}
+
+- (BOOL)validateMonthsForCalendarTrigger
+{
+    BOOL isValid = YES;
+    id trigger = self.scheduleMetadata.trigger;
+    if ([trigger isKindOfClass:[JSScheduleCalendarTrigger class]]) {
+        JSScheduleCalendarTrigger *calendarTrigger = trigger;
+        if (calendarTrigger.months.count == 0) {
+            isValid = NO;
+            JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
+            JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeCalendarSelectedMonths];
+            row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_months", nil);
+        }
+    }
     return isValid;
 }
 

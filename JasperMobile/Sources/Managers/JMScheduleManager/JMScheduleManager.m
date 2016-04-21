@@ -157,6 +157,8 @@
         message = JMCustomLocalizedString(@"schedules_error_duplicate_filename", nil);
     } else if ([errorCode isEqualToString:@"error.length"]) {
         message = JMCustomLocalizedString(@"schedules_error_length", nil);
+    } else if ([errorCode isEqualToString:@"error.invalid.chars"]) {
+        message = JMCustomLocalizedString(@"schedules_error_general_invalid_chars", nil);
     } else if ([errorCode isEqualToString:@"error.report.job.output.folder.inexistent"]) {
         message = JMCustomLocalizedString(@"schedules_error_output_folder_inexistent", nil);
     } else if ([errorCode isEqualToString:@"error.before.current.date"]) {
