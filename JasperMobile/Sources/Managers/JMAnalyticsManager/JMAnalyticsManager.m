@@ -84,6 +84,28 @@
 #endif
 }
 
+- (void)sendAnalyticsEventForScreenName:(NSString *)screenName
+{
+    // Google Analitycs
+#ifndef __RELEASE__
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+
+    GAIDictionaryBuilder *builder = [[GAIDictionaryBuilder createScreenView] set:screenName
+                                                                          forKey:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]];
+    [builder set:screenName
+          forKey:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]];
+
+    [builder set:@"start" forKey:kGAISessionControl];
+
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
+           value:self.restClient.serverInfo.version];
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
+           value:self.restClient.serverInfo.edition];
+
+    [tracker send:[builder build]];
+#endif
+}
+
 - (void)sendAnalyticsEventAboutLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
 {
 #ifndef __RELEASE__
@@ -123,7 +145,7 @@
     // Google Analytics
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createScreenView];
-    [builder set:@"start" forKey:kGAISessionControl];
+    [builder set:@"end" forKey:kGAISessionControl];
     [tracker send:[builder build]];
     self.sendThumbnailEvent = YES;
 }

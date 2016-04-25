@@ -34,6 +34,7 @@
 @interface JMAnalyticsManager : NSObject
 + (instancetype __nullable)sharedManager;
 - (void)sendAnalyticsEventWithInfo:(NSDictionary *__nonnull)eventInfo;
+- (void)sendAnalyticsEventForScreenName:(NSString *)screenName;
 - (void)sendAnalyticsEventAboutLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
 - (void)sendAnalyticsEventAboutLogout;
 - (void)sendThumbnailEventIfNeed;

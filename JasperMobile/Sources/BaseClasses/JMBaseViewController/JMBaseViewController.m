@@ -27,6 +27,7 @@
 //
 
 #import "JMBaseViewController.h"
+#import "JMAnalyticsManager.h"
 
 @interface JMBaseViewController()
 @property (nonatomic, strong) UIWindow *externalWindow;
@@ -40,23 +41,10 @@
 }
 
 #pragma mark - UIViewController LifeCycle
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    // Google Analitycs
-#ifndef __RELEASE__
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
-           value:self.restClient.serverInfo.version];
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
-           value:self.restClient.serverInfo.edition];
-    self.screenName = NSStringFromClass(self.class);
-#endif
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
+    [[JMAnalyticsManager sharedManager] sendAnalyticsEventForScreenName:NSStringFromClass(self.class)];
+
     [super viewDidAppear:animated];
 
     [self setupScreenConnectionNotifications];
