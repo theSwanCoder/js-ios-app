@@ -451,7 +451,9 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isDemoAccount
 {
-    BOOL isDemoServer = [self.restClient.serverProfile.serverUrl isEqualToString:kJMDemoServerUrl];
+    NSURL *demoURL = [NSURL URLWithString:kJMDemoServerUrl];
+    NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+    BOOL isDemoServer = [serverURL.host isEqualToString:demoURL.host];
     BOOL isDemoUser = [self.restClient.serverProfile.username isEqualToString:kJMDemoServerUsername];
     BOOL isDemoOrganization = [self.restClient.serverProfile.organization isEqualToString:kJMDemoServerOrganization];
     BOOL isDemoAccount = isDemoServer && isDemoUser && isDemoOrganization;

@@ -27,7 +27,7 @@
 
 #import "JMAnalyticsManager.h"
 @interface JMAnalyticsManager()
-@property (nonatomic, assign, getter=isSendThumbnailEvent) BOOL sendThumbnailEvent;
+@property (nonatomic, assign, getter=isNeedSendThumbnailEvent) BOOL needSendThumbnailEvent;
 @end
 
 @implementation JMAnalyticsManager
@@ -47,7 +47,7 @@
 {
     self = [super init];
     if (self) {
-        _sendThumbnailEvent = YES;
+        _needSendThumbnailEvent = YES;
     }
     return self;
 }
@@ -55,7 +55,6 @@
 #pragma mark - Public API
 - (void)sendAnalyticsEventWithInfo:(NSDictionary *)eventInfo
 {
-#ifndef __RELEASE__
     NSString *version = self.restClient.serverInfo.version;
     NSString *edition = self.restClient.serverInfo.edition;
     if ([JMUtils isDemoAccount]) {
@@ -74,41 +73,18 @@
     GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:eventInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
                                                                            action:eventInfo[kJMAnalyticsActionKey]                   // Event action (required)
                                                                             label:eventInfo[kJMAnalyticsLabelKey]                    // Event label
-                                                                            value:nil];                                              // Event value
+                                                                            value:nil];
+    // Event value
     [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
            value:version];
     [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
            value:edition];
 
     [tracker send:[builder build]];
-#endif
-}
-
-- (void)sendAnalyticsEventForScreenName:(NSString *)screenName
-{
-    // Google Analitycs
-#ifndef __RELEASE__
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
-    GAIDictionaryBuilder *builder = [[GAIDictionaryBuilder createScreenView] set:screenName
-                                                                          forKey:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]];
-    [builder set:screenName
-          forKey:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]];
-
-    [builder set:@"start" forKey:kGAISessionControl];
-
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
-           value:self.restClient.serverInfo.version];
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
-           value:self.restClient.serverInfo.edition];
-
-    [tracker send:[builder build]];
-#endif
 }
 
 - (void)sendAnalyticsEventAboutLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
 {
-#ifndef __RELEASE__
     NSString *version = self.restClient.serverInfo.version;
     NSString *edition = self.restClient.serverInfo.edition;
     if ([JMUtils isDemoAccount]) {
@@ -136,29 +112,32 @@
     [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
            value:edition];
 
-    [tracker send:[builder build]];
+#ifndef __RELEASE__
+    // try track real profile count (not just users).
+    NSString *combinedString = [NSString stringWithFormat:@"%@+%@+%@", self.restClient.serverProfile.username, self.restClient.serverProfile.organization, self.restClient.serverProfile.serverUrl];
+    NSData *combinedStringData = [combinedString dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *uuid = [combinedStringData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+    [tracker set:kGAIUserId
+           value:uuid];
 #endif
+
+    [tracker send:[builder build]];
 }
 
 - (void)sendAnalyticsEventAboutLogout
 {
-    // Google Analytics
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createScreenView];
-    [builder set:@"end" forKey:kGAISessionControl];
-    [tracker send:[builder build]];
-    self.sendThumbnailEvent = YES;
+    self.needSendThumbnailEvent = YES;
 }
 
 - (void)sendThumbnailEventIfNeed
 {
-    if (self.isSendThumbnailEvent) {
+    if (self.isNeedSendThumbnailEvent) {
         [self sendAnalyticsEventWithInfo:@{
                 kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryOther,
                 kJMAnalyticsActionKey   : kJMAnalyticsEventActionViewed,
                 kJMAnalyticsLabelKey    : kJMAnalyticsLabelThumbnail
         }];
-        self.sendThumbnailEvent = NO;
+        self.needSendThumbnailEvent = NO;
     }
 }
 
