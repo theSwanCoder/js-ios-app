@@ -42,6 +42,8 @@
     if (isTestProfileExists) {
         [self trySelectNewTestServerProfile];
     } else {
+        [self removeAllServerProfiles];
+        
         [self tryOpenNewServerProfilePage];
         
         [self givenThatNewProfilePageOnScreen];
@@ -49,6 +51,40 @@
         
         [self givenThatServerProfilesPageOnScreen];
         [self trySelectNewTestServerProfile];
+    }
+}
+
+- (void)removeAllServerProfiles
+{
+    [self givenThatServerProfilesPageOnScreen];
+
+    NSInteger cellsCount = self.application.collectionViews.cells.count;
+    
+    while(cellsCount--) {
+        [self removeFirstServerProfile];
+    }
+}
+
+- (void)removeFirstServerProfile
+{
+    XCUIElement *profile = [self.application.collectionViews.cells elementBoundByIndex:0];
+    if (profile) {
+        [profile pressForDuration:1.0];
+        [profile pressForDuration:1.1];
+        XCUIElement *menu = self.application.menuItems[@"Delete"];
+        if (menu) {
+            [menu tap];
+            XCUIElement *deleteButton = self.application.alerts[@"Confirmation"].collectionViews.buttons[@"Delete"];
+            if (deleteButton) {
+                [deleteButton tap];
+            } else {
+                XCTFail(@"Delete button doesn't exist.");
+            }
+        } else {
+            XCTFail(@"Delete menu item doesn't exist.");
+        }
+    } else {
+        XCTFail(@"Server profile cell doesn't exist.");
     }
 }
 
@@ -262,8 +298,8 @@
 
 - (void)givenThatLibraryPageOnScreen
 {
-    [self verifyIntroPageIsOnScreen];
     [self verifyRateAlertIsShown];
+    [self verifyIntroPageIsOnScreen];
     
     // Verify Library Page
     [self verifyThatCurrentPageIsLibrary];
