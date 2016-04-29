@@ -317,6 +317,7 @@
 
 - (void)verifyIntroPageIsOnScreen
 {
+    sleep(5);
     XCUIElement *skipIntroButton = self.application.buttons[@"Skip Intro"];
     if (skipIntroButton.exists) {
         [skipIntroButton tap];
@@ -325,6 +326,7 @@
 
 - (void)verifyRateAlertIsShown
 {
+    sleep(5);
     XCUIElement *rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
     if (rateAlert.exists) {
         XCUIElement *rateAppLateButton = rateAlert.collectionViews.buttons[@"No, thanks"];
