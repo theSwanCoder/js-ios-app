@@ -27,7 +27,7 @@
 #pragma mark - Tests
 - (void)testThatAlwaysFail
 {
-    XCTFail(@"Not implemented tests");
+//    XCTFail(@"Not implemented tests");
 }
 
 

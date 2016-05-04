@@ -223,7 +223,7 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 #pragma mark - Verifies
 - (void)verifyThatReportInfoPageOnScreen
 {
-    XCUIElement *reportInfoPageElement = self.application.otherElements[@"JMReportInfoViewAccessibilityId"];
+    XCUIElement *reportInfoPageElement = self.application.otherElements[@"JMReportInfoViewControllerAccessibilityId"];
     NSPredicate *cellsCountPredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
     [self expectationForPredicate:cellsCountPredicate
               evaluatedWithObject:reportInfoPageElement
@@ -233,7 +233,7 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 
 - (void)verifyThatReportInfoPageContainsFullReportInfo
 {
-    XCUIElement *reportInfoPageElement = self.application.otherElements[@"JMReportInfoViewAccessibilityId"];
+    XCUIElement *reportInfoPageElement = self.application.otherElements[@"JMReportInfoViewControllerAccessibilityId"];
     XCUIElement *nameLabel = reportInfoPageElement.staticTexts[@"Name"];
     if (!nameLabel.exists) {
         XCTFail(@"Name Label isn't visible.");

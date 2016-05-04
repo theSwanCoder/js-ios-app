@@ -488,7 +488,7 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 
 - (void)verifyThatReportInfoPageOnScreen
 {
-    XCUIElement *reportInfoPageElement = self.application.otherElements[@"JMReportInfoViewAccessibilityId"];
+    XCUIElement *reportInfoPageElement = self.application.otherElements[@"JMReportInfoViewControllerAccessibilityId"];
     NSPredicate *cellsCountPredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
     [self expectationForPredicate:cellsCountPredicate
               evaluatedWithObject:reportInfoPageElement

@@ -24,7 +24,7 @@
 
 - (void)testThatListOfServerProfilesVisible
 {
-    
+//    XCTFail(@"Not implemented tests");
 }
 
 - (void)tearDown {
