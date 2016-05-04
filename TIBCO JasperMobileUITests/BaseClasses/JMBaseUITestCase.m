@@ -32,32 +32,26 @@
 #pragma mark - Setup Helpers
 - (void)selectTestProfile
 {
-    [self givenThatLoginPageOnScreen];
     [self tryOpenServerProfilesPage];
     
     [self givenThatServerProfilesPageOnScreen];
     
     XCUIElement *testProfile = self.application.collectionViews.staticTexts[@"Test Profile"];
     BOOL isTestProfileExists = testProfile.exists;
-    if (isTestProfileExists) {
-        [self trySelectNewTestServerProfile];
-    } else {
+    if (!isTestProfileExists) {
         [self removeAllServerProfiles];
         
         [self tryOpenNewServerProfilePage];
-        
         [self givenThatNewProfilePageOnScreen];
         [self tryCreateNewTestServerProfile];
         
         [self givenThatServerProfilesPageOnScreen];
-        [self trySelectNewTestServerProfile];
     }
+    [self trySelectNewTestServerProfile];
 }
 
 - (void)removeAllServerProfiles
 {
-    [self givenThatServerProfilesPageOnScreen];
-
     NSInteger cellsCount = self.application.collectionViews.cells.count;
     
     while(cellsCount--) {
@@ -312,7 +306,7 @@
     [self expectationForPredicate:cellsCountPredicate
               evaluatedWithObject:self.application
                           handler:nil];
-    [self waitForExpectationsWithTimeout:10 handler:nil];
+    [self waitForExpectationsWithTimeout:20 handler:nil];
 }
 
 - (void)verifyIntroPageIsOnScreen
