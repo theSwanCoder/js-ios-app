@@ -15,12 +15,15 @@
     [super setUp];
 
     XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-    if (loginPageView.exists) {
-        [self loginWithTestProfile];
+    if (!loginPageView.exists) {
+        [self logout];
     }
+    [self loginWithTestProfile];
 }
 
 - (void)tearDown {
+    [self logout];
+    
     [super tearDown];
 }
 

@@ -448,7 +448,7 @@
     [self expectationForPredicate:predicate
               evaluatedWithObject:loadingPopup
                           handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
+    [self waitForExpectationsWithTimeout:30 handler:nil];
 }
 
 - (void)verifyThatLoadingPopupNotVisible

@@ -17,12 +17,15 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     [super setUp];
     
     XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-    if (loginPageView.exists) {
-        [self loginWithTestProfile];
+    if (!loginPageView.exists) {
+        [self logout];
     }
+    [self loginWithTestProfile];
 }
 
 - (void)tearDown {
+    [self logout];
+    
     [super tearDown];
 }
 
@@ -53,18 +56,20 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     [self verifyThatLoadingPopupVisible];
     [self verifyThatLoadingPopupNotVisible];
     
-    [self verifyThatReportFiltersPageOnScreen];
-    
-    // Run report
-    XCUIElement *runReportButton = self.application.buttons[@"Run Report"];
-    if (runReportButton.exists) {
-        [runReportButton tap];
-    } else {
-        XCTFail(@"'Run Report' button isn't visible");
+    if ([self verifyIfReportFiltersPageOnScreen]) {
+//        [self verifyThatReportFiltersPageOnScreen];
+        
+        // Run report
+        XCUIElement *runReportButton = self.application.buttons[@"Run Report"];
+        if (runReportButton.exists) {
+            [runReportButton tap];
+        } else {
+            XCTFail(@"'Run Report' button isn't visible");
+        }
+        
+        [self verifyThatLoadingPopupVisible];
+        [self verifyThatLoadingPopupNotVisible];
     }
-    
-    [self verifyThatLoadingPopupVisible];
-    [self verifyThatLoadingPopupNotVisible];
     
     [self verifyThatReportPageOnScreenWithReportName:reportInfoLabel];
 }
@@ -120,16 +125,30 @@ NSInteger static kJMRunReportTestCellIndex = 0;
             XCUIElement *menuActionsButton = navBar.buttons[@"Share"];
             if (menuActionsButton.exists) {
                 [menuActionsButton tap];
-                
                 XCUIElement *menuActionsView = self.application.otherElements[@"JMMenuActionsViewAccessibilityId"];
-                if (menuActionsView) {
+                if (menuActionsView.exists) {
+                    //Remove From Favorites
+                    XCUIElement *removeFromFavoriteButton = menuActionsView.staticTexts[@"Remove From Favorites"];
+                    if (removeFromFavoriteButton.exists) {
+                        [removeFromFavoriteButton tap];
+                        if (menuActionsButton.exists) {
+                            [menuActionsButton tap];
+                        }
+                    }
                     XCUIElement *markAsFavoriteButton = menuActionsView.staticTexts[@"Mark as Favorite"];
-                    if (markAsFavoriteButton) {
+                    if (markAsFavoriteButton.exists) {
                         [markAsFavoriteButton tap];
                         
                         // Verify that report is mark as favorite
                         // TODO: verify in 'Favorite' section
-                        
+
+                        NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
+                        for (XCUIElement *button in allButtons) {
+                            if ([button.label isEqualToString:@"Back"]) {
+                                [button tap];
+                                break;
+                            }
+                        }
                         
                     } else {
                         XCTFail(@"'Refresh' button isn't visible");
@@ -179,6 +198,14 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                         
                         [self verifyThatLoadingPopupVisible];
                         [self verifyThatLoadingPopupNotVisible];
+
+                        NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
+                        for (XCUIElement *button in allButtons) {
+                            if ([button.label isEqualToString:@"Back"]) {
+                                [button tap];
+                                break;
+                            }
+                        }
                     } else {
                         XCTFail(@"'Refresh' button isn't visible");
                     }
@@ -230,6 +257,15 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                         XCUIElement *editValuesFilters = self.application.otherElements[@"JMInputControlsViewControllerAccessibilityIdentifier"];
                         if (editValuesFilters) {
                             XCTAssertTrue(@"User can see edit values page");
+
+                            NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
+                            for (XCUIElement *button in allButtons) {
+                                if ([button.label isEqualToString:@"Back"]) {
+                                    [button tap];
+                                    break;
+                                }
+                            }
+
                         } else {
                             XCTFail(@"User can't see edit values page");
                         }
@@ -287,6 +323,15 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                         XCUIElement *saveReportPage = self.application.otherElements[@"JMSaveReportViewControllerAccessibilityIdentifier"];
                         if (saveReportPage) {
                             XCTAssertTrue(@"User can see 'save report' page");
+
+                            NSArray *allButtons = saveReportPage.buttons.allElementsBoundByAccessibilityElement;
+                            for (XCUIElement *button in allButtons) {
+                                if ([button.label isEqualToString:@"Back"]) {
+                                    [button tap];
+                                    break;
+                                }
+                            }
+
                         } else {
                             XCTFail(@"User can't see 'save report' page");
                         }
@@ -347,6 +392,15 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                                   evaluatedWithObject:printNavBar
                                               handler:nil];
                         [self waitForExpectationsWithTimeout:5 handler:nil];
+
+                        NSArray *allButtons = printNavBar.buttons.allElementsBoundByAccessibilityElement;
+                        for (XCUIElement *button in allButtons) {
+                            if ([button.label isEqualToString:@"Back"]) {
+                                [button tap];
+                                break;
+                            }
+                        }
+
                     } else {
                         XCTFail(@"'Refresh' button isn't visible");
                     }
@@ -397,6 +451,15 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                         
                         // verify that 'info' page is on the screen
                         [self verifyThatReportInfoPageOnScreen];
+
+                        NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
+                        for (XCUIElement *button in allButtons) {
+                            if ([button.label isEqualToString:@"Back"]) {
+                                [button tap];
+                                break;
+                            }
+                        }
+
                     } else {
                         XCTFail(@"'Refresh' button isn't visible");
                     }
@@ -466,6 +529,14 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 }
 
 #pragma mark - Verifies
+- (BOOL)verifyIfReportFiltersPageOnScreen
+{
+    BOOL isFilterPage = NO;
+    XCUIElement *filtersNavBar = [self.application.navigationBars elementMatchingType:XCUIElementTypeAny identifier:@"Filters"];
+    isFilterPage = filtersNavBar.exists;
+    return isFilterPage;
+}
+
 - (void)verifyThatReportFiltersPageOnScreen
 {
     XCUIElement *filtersNavBar = [self.application.navigationBars elementMatchingType:XCUIElementTypeAny identifier:@"Filters"];
@@ -494,6 +565,14 @@ NSInteger static kJMRunReportTestCellIndex = 0;
               evaluatedWithObject:reportInfoPageElement
                           handler:nil];
     [self waitForExpectationsWithTimeout:5 handler:nil];
+
+    NSArray *allButtons = reportInfoPageElement.buttons.allElementsBoundByAccessibilityElement;
+    for (XCUIElement *button in allButtons) {
+        if ([button.label isEqualToString:@"Back"]) {
+            [button tap];
+            break;
+        }
+    }
 }
 
 @end
