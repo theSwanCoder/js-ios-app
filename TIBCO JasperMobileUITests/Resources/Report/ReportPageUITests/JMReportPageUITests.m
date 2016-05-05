@@ -39,6 +39,17 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     XCUIElement *testCell = [self testCell];
     if (testCell) {
         [self runTestReport];
+        
+        XCUIElement *navBar = [self.application.navigationBars elementBoundByIndex:0];
+        if (navBar.exists) {
+            NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
+            for (XCUIElement *button in allButtons) {
+                if ([button.label isEqualToString:@"Back"]) {
+                    [button tap];
+                    break;
+                }
+            }
+        }
     } else {
         XCTFail(@"'Test Cell' isn't visible");
     }
@@ -191,9 +202,9 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                 [menuActionsButton tap];
                 
                 XCUIElement *menuActionsView = self.application.otherElements[@"JMMenuActionsViewAccessibilityId"];
-                if (menuActionsView) {
+                if (menuActionsView.exists) {
                     XCUIElement *refreshButton = menuActionsView.staticTexts[@"Refresh"];
-                    if (refreshButton) {
+                    if (refreshButton.exists) {
                         [refreshButton tap];
                         
                         [self verifyThatLoadingPopupVisible];
@@ -256,9 +267,19 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                         // verify that 'edit values' page is on the screen
                         XCUIElement *editValuesFilters = self.application.otherElements[@"JMInputControlsViewControllerAccessibilityIdentifier"];
                         if (editValuesFilters) {
-                            XCTAssertTrue(@"User can see edit values page");
-
+                           
+                            // back from edit values page
                             NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
+                            NSLog(@"allButtons: %@", allButtons);
+                            for (XCUIElement *button in allButtons) {
+                                if ([button.label isEqualToString:@"Back"]) {
+                                    [button tap];
+                                    break;
+                                }
+                            }
+                            
+                            // back from report view page
+                            NSLog(@"allButtons: %@", allButtons);
                             for (XCUIElement *button in allButtons) {
                                 if ([button.label isEqualToString:@"Back"]) {
                                     [button tap];
@@ -322,9 +343,19 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                         // verify that 'save report' page is on the screen
                         XCUIElement *saveReportPage = self.application.otherElements[@"JMSaveReportViewControllerAccessibilityIdentifier"];
                         if (saveReportPage) {
-                            XCTAssertTrue(@"User can see 'save report' page");
-
-                            NSArray *allButtons = saveReportPage.buttons.allElementsBoundByAccessibilityElement;
+                            
+                            // back from save report page
+                            NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
+                            NSLog(@"allButtons: %@", allButtons);
+                            for (XCUIElement *button in allButtons) {
+                                if ([button.label isEqualToString:@"Back"]) {
+                                    [button tap];
+                                    break;
+                                }
+                            }
+                            
+                            // back from report view page
+                            NSLog(@"allButtons: %@", allButtons);
                             for (XCUIElement *button in allButtons) {
                                 if ([button.label isEqualToString:@"Back"]) {
                                     [button tap];
@@ -393,7 +424,12 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                                               handler:nil];
                         [self waitForExpectationsWithTimeout:5 handler:nil];
 
-                        NSArray *allButtons = printNavBar.buttons.allElementsBoundByAccessibilityElement;
+                        XCUIElement *cancelButton = printNavBar.buttons[@"Cancel"];
+                        if (cancelButton.exists) {
+                            [cancelButton tap];
+                        }
+                        
+                        NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
                         for (XCUIElement *button in allButtons) {
                             if ([button.label isEqualToString:@"Back"]) {
                                 [button tap];
