@@ -14,10 +14,10 @@
 - (void)setUp {
     [super setUp];
     
-    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-    if (loginPageView.exists) {
-        [self loginWithTestProfile];
-    }
+//    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
+//    if (loginPageView.exists) {
+//        [self loginWithTestProfile];
+//    }
 }
 
 - (void)tearDown {

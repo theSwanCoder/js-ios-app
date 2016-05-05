@@ -13,13 +13,13 @@
 - (void)setUp {
     [super setUp];
     
-    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-    if (loginPageView.exists) {
-        [self loginWithTestProfile];
-    } else {
-        [self logout];
-        [self loginWithTestProfile];
-    }
+//    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
+//    if (loginPageView.exists) {
+//        [self loginWithTestProfile];
+//    } else {
+//        [self logout];
+//        [self loginWithTestProfile];
+//    }
 }
 
 - (void)testThatListOfServerProfilesVisible
@@ -28,7 +28,7 @@
 }
 
 - (void)tearDown {
-    [self logout];
+//    [self logout];
     
     [super tearDown];
 }
