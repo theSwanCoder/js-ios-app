@@ -276,7 +276,7 @@
     [self expectationForPredicate:predicate
               evaluatedWithObject:serverProfilesPageView
                           handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
+    [self waitForExpectationsWithTimeout:20 handler:nil];
 }
 
 - (void)givenThatNewProfilePageOnScreen
