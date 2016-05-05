@@ -8,6 +8,6 @@
 
 #import "JMBaseUITestCase.h"
 
-@interface JMRecentlyViewedPageUITests : JMBaseUITestCase
+@interface JMRecentlyViewedPageUITests : XCTestCase
 
 @end
