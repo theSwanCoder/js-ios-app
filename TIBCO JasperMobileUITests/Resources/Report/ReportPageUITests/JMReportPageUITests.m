@@ -12,23 +12,6 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 
 @implementation JMReportPageUITests
 
-#pragma mark - Setup
-- (void)setUp {
-    [super setUp];
-    
-    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-    if (!loginPageView.exists) {
-        [self logout];
-    }
-    [self loginWithTestProfile];
-}
-
-- (void)tearDown {
-    [self logout];
-    
-    [super tearDown];
-}
-
 #pragma mark - Tests - Main
 // User should see the report
 - (void)testThatReportCanBeRun

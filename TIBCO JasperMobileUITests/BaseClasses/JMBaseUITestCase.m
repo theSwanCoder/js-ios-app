@@ -21,9 +21,16 @@
     
     self.application = [[XCUIApplication alloc] init];
     [self.application launch];
+    
+    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
+    if (!loginPageView.exists) {
+        [self logout];
+    }
+    [self loginWithTestProfile];
 }
 
 - (void)tearDown {
+    [self logout];
     self.application = nil;
     
     [super tearDown];

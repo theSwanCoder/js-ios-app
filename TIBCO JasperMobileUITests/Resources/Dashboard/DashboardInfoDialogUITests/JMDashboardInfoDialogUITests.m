@@ -10,20 +10,6 @@
 
 @implementation JMDashboardInfoDialogUITests
 
-#pragma mark - Setup
-- (void)setUp {
-    [super setUp];
-    
-//    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-//    if (loginPageView.exists) {
-//        [self loginWithTestProfile];
-//    }
-}
-
-- (void)tearDown {
-    [super tearDown];
-}
-
 #pragma mark - Tests
 - (void)testThatAlwaysFail
 {

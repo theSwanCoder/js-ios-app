@@ -11,22 +11,6 @@
 
 @implementation JMLibraryPageUITests
 
-- (void)setUp {
-    [super setUp];
-
-    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-    if (!loginPageView.exists) {
-        [self logout];
-    }
-    [self loginWithTestProfile];
-}
-
-- (void)tearDown {
-    [self logout];
-    
-    [super tearDown];
-}
-
 #pragma mark - Test 'Main' features
 
 - (void)testThatLibraryPageHasTitleLibrary

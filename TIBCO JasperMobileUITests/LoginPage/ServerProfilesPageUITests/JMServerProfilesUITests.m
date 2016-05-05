@@ -10,27 +10,9 @@
 
 @implementation JMServerProfilesUITests
 
-- (void)setUp {
-    [super setUp];
-    
-//    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-//    if (loginPageView.exists) {
-//        [self loginWithTestProfile];
-//    } else {
-//        [self logout];
-//        [self loginWithTestProfile];
-//    }
-}
-
 - (void)testThatListOfServerProfilesVisible
 {
 //    XCTFail(@"Not implemented tests");
-}
-
-- (void)tearDown {
-//    [self logout];
-    
-    [super tearDown];
 }
 
 @end
