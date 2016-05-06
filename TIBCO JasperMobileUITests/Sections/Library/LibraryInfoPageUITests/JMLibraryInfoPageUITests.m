@@ -119,6 +119,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 #pragma mark - Helpers - Menu
 - (void)givenThatReportNotMarkAsFavorite:(NSString *)reportLabel
 {
+    [self tryOpenFavoritePage];
+    
     if ( [self isReportMarkAsFavorite:reportLabel] ) {
         // unmark
         [self givenThatReportInfoPageOnScreen];
@@ -132,15 +134,11 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 
 - (BOOL)isReportMarkAsFavorite:(NSString *)reportLabel
 {
-    [self tryOpenFavoritePage];
-    [self givenThatCellsAreVisible];
-    
     BOOL isTestReportMarkAsFavorite = NO;
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.label == %@", reportLabel];
     XCUIElementQuery *query = [self.application.cells.staticTexts matchingPredicate:predicate];
-    XCUIElement *markedCell = [query elementBoundByIndex:0];
-    if (markedCell.exists) {
+    if (query.count > 0) {
         isTestReportMarkAsFavorite = YES;
     }
     
