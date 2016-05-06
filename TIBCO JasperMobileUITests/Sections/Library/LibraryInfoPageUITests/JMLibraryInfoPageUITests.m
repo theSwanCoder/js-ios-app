@@ -23,74 +23,74 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     [self tryBackToPreviousPage];
 }
 
-//- (void)testThatReportInfoPageHasTitleAsReportLabel
-//{
-//    [self givenThatLibraryPageOnScreen];
-//    [self givenThatCellsAreVisible];
-//    
-//    // get label of first report
-//    XCUIElement *testCell = [self testCell];
-//    XCUIElement *reportNameLabel = testCell.staticTexts[@"JMResourceCellResourceNameLabelAccessibilityId"];
-//    NSString *reportInfoLabel = reportNameLabel.label;
-//    
-//    [self givenThatReportInfoPageOnScreen];
-//    
-//    // verify that title is equal of the label
-//    XCUIElement *reportInfoNavBar = self.application.navigationBars[reportInfoLabel];
-//    if (!reportInfoNavBar.exists) {
-//        XCTFail(@"'Info Page' has wrong title");
-//    }
-//    
-//    [self tryBackToPreviousPage];
-//}
-//
-//- (void)testThatReportInfoPageHasFullReportInfo
-//{
-//    [self givenThatLibraryPageOnScreen];
-//    [self givenThatCellsAreVisible];
-//    [self givenThatReportInfoPageOnScreen];
-//    
-//    [self verifyThatReportInfoPageContainsFullReportInfo];
-//    
-//    [self tryBackToPreviousPage];
-//}
+- (void)testThatReportInfoPageHasTitleAsReportLabel
+{
+    [self givenThatLibraryPageOnScreen];
+    [self givenThatCellsAreVisible];
+    
+    // get label of first report
+    XCUIElement *testCell = [self testCell];
+    XCUIElement *reportNameLabel = testCell.staticTexts[@"JMResourceCellResourceNameLabelAccessibilityId"];
+    NSString *reportInfoLabel = reportNameLabel.label;
+    
+    [self givenThatReportInfoPageOnScreen];
+    
+    // verify that title is equal of the label
+    XCUIElement *reportInfoNavBar = self.application.navigationBars[reportInfoLabel];
+    if (!reportInfoNavBar.exists) {
+        XCTFail(@"'Info Page' has wrong title");
+    }
+    
+    [self tryBackToPreviousPage];
+}
+
+- (void)testThatReportInfoPageHasFullReportInfo
+{
+    [self givenThatLibraryPageOnScreen];
+    [self givenThatCellsAreVisible];
+    [self givenThatReportInfoPageOnScreen];
+    
+    [self verifyThatReportInfoPageContainsFullReportInfo];
+    
+    [self tryBackToPreviousPage];
+}
 
 #pragma mark - Tests - Menu
-//- (void)testThatReportCanBeMarkAsFavorite
-//{
-//    // Pre
-//    [self givenThatLibraryPageOnScreen];
-//    [self givenThatCellsAreVisible];
-//    
-//    // get label of first report
-//    XCUIElement *testCell = [self testCell];
-//    XCUIElement *reportNameLabel = testCell.staticTexts[@"JMResourceCellResourceNameLabelAccessibilityId"];
-//    NSString *reportInfoLabel = reportNameLabel.label;
-//    
-//    [self givenThatReportNotMarkAsFavorite:reportInfoLabel];
-//
-//    
-//    // Test
-//    [self givenThatCellsAreVisible];
-//    [self givenThatReportInfoPageOnScreen];
-//    [self tryMarkTestReportAsFavorite];
-//    
-//    // verify report is favorite
-//    [self tryBackToPreviousPage];
-//    [self givenThatLibraryPageOnScreen];
-//    if (![self isReportMarkAsFavorite:reportInfoLabel]) {
-//        XCTFail(@"Test report isn't marked as favorite.");
-//    }
-//    [self tryOpenLibraryPage];
-//    
-//    // Clean Up
-//    [self givenThatLibraryPageOnScreen];
-//    [self givenThatCellsAreVisible];
-//    [self givenThatReportInfoPageOnScreen];
-//    [self tryUnMarkTestReportAsFavorite];
-//    
-//    [self tryBackToPreviousPage];
-//}
+- (void)testThatReportCanBeMarkAsFavorite
+{
+    // Pre
+    [self givenThatLibraryPageOnScreen];
+    [self givenThatCellsAreVisible];
+    
+    // get label of first report
+    XCUIElement *testCell = [self testCell];
+    XCUIElement *reportNameLabel = testCell.staticTexts[@"JMResourceCellResourceNameLabelAccessibilityId"];
+    NSString *reportInfoLabel = reportNameLabel.label;
+    
+    [self givenThatReportNotMarkAsFavorite:reportInfoLabel];
+
+    
+    // Test
+    [self givenThatCellsAreVisible];
+    [self givenThatReportInfoPageOnScreen];
+    [self tryMarkTestReportAsFavorite];
+    
+    // verify report is favorite
+    [self tryBackToPreviousPage];
+    [self givenThatLibraryPageOnScreen];
+    if (![self isReportMarkAsFavorite:reportInfoLabel]) {
+        XCTFail(@"Test report isn't marked as favorite.");
+    }
+    [self tryOpenLibraryPage];
+    
+    // Clean Up
+    [self givenThatLibraryPageOnScreen];
+    [self givenThatCellsAreVisible];
+    [self givenThatReportInfoPageOnScreen];
+    [self tryUnMarkTestReportAsFavorite];
+    
+    [self tryBackToPreviousPage];
+}
 
 #pragma mark - Helpers
 - (void)givenThatReportInfoPageOnScreen
