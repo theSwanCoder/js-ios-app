@@ -39,6 +39,7 @@
 #pragma mark - Setup Helpers
 - (void)selectTestProfile
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self tryOpenServerProfilesPage];
     
     [self givenThatServerProfilesPageOnScreen];
@@ -111,7 +112,10 @@
 #pragma mark - Helpers Test Profile
 - (void)tryOpenServerProfilesPage
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *serverProfileTextField = self.application.textFields[@"JMLoginPageServerProfileTextFieldAccessibilityId"];
+    NSLog(@"serverProfileTextField: %@", serverProfileTextField);
+    NSLog(@"serverProfileTextField exist: %@", serverProfileTextField.exists ? @"YES" : @"NO");
     if (serverProfileTextField.exists) {
         [serverProfileTextField tap];
     } else {
