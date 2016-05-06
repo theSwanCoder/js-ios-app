@@ -47,7 +47,8 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     
     [testCell tap];
     
-    [self verifyThatLoadingPopupVisible];
+//    [self verifyThatLoadingPopupVisible];
+    sleep(2);
     [self verifyThatLoadingPopupNotVisible];
     
     if ([self verifyIfReportFiltersPageOnScreen]) {
@@ -61,7 +62,8 @@ NSInteger static kJMRunReportTestCellIndex = 0;
             XCTFail(@"'Run Report' button isn't visible");
         }
         
-        [self verifyThatLoadingPopupVisible];
+//        [self verifyThatLoadingPopupVisible];
+        sleep(2);
         [self verifyThatLoadingPopupNotVisible];
     }
     
@@ -190,7 +192,8 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                     if (refreshButton.exists) {
                         [refreshButton tap];
                         
-                        [self verifyThatLoadingPopupVisible];
+//                        [self verifyThatLoadingPopupVisible];
+                        sleep(2);
                         [self verifyThatLoadingPopupNotVisible];
 
                         NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
@@ -262,6 +265,7 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                             }
                             
                             // back from report view page
+                            allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
                             NSLog(@"allButtons: %@", allButtons);
                             for (XCUIElement *button in allButtons) {
                                 if ([button.label isEqualToString:@"Back"]) {
@@ -338,6 +342,7 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                             }
                             
                             // back from report view page
+                            allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
                             NSLog(@"allButtons: %@", allButtons);
                             for (XCUIElement *button in allButtons) {
                                 if ([button.label isEqualToString:@"Back"]) {
@@ -397,7 +402,7 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                     if (printButton) {
                         [printButton tap];
                         
-                        [self verifyThatLoadingPopupVisible];
+                        sleep(2);
                         [self verifyThatLoadingPopupNotVisible];
                         // verify that 'print report' page is on the screen
                         XCUIElement *printNavBar = self.application.navigationBars[@"Printer Options"];
@@ -470,7 +475,7 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                         
                         // verify that 'info' page is on the screen
                         [self verifyThatReportInfoPageOnScreen];
-
+                        
                         NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
                         for (XCUIElement *button in allButtons) {
                             if ([button.label isEqualToString:@"Back"]) {
@@ -585,12 +590,10 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                           handler:nil];
     [self waitForExpectationsWithTimeout:5 handler:nil];
 
-    NSArray *allButtons = reportInfoPageElement.buttons.allElementsBoundByAccessibilityElement;
-    for (XCUIElement *button in allButtons) {
-        if ([button.label isEqualToString:@"Back"]) {
-            [button tap];
-            break;
-        }
+    XCUIElement *navBar = [self.application.navigationBars elementBoundByIndex:0];
+    XCUIElement *cancelButton = navBar.buttons[@"Cancel"];
+    if (cancelButton.exists) {
+        [cancelButton tap];
     }
 }
 

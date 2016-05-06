@@ -19,6 +19,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     [self givenThatCellsAreVisible];
     
     [self givenThatReportInfoPageOnScreen];
+    
+    [self tryBackToPreviousPage];
 }
 
 - (void)testThatReportInfoPageHasTitleAsReportLabel
@@ -38,6 +40,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     if (!reportInfoNavBar.exists) {
         XCTFail(@"'Info Page' has wrong title");
     }
+    
+    [self tryBackToPreviousPage];
 }
 
 - (void)testThatReportInfoPageHasFullReportInfo
@@ -47,6 +51,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     [self givenThatReportInfoPageOnScreen];
     
     [self verifyThatReportInfoPageContainsFullReportInfo];
+    
+    [self tryBackToPreviousPage];
 }
 
 #pragma mark - Tests - Menu
@@ -82,6 +88,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     [self givenThatCellsAreVisible];
     [self givenThatReportInfoPageOnScreen];
     [self tryUnMarkTestReportAsFavorite];
+    
+    [self tryBackToPreviousPage];
 }
 
 #pragma mark - Helpers
