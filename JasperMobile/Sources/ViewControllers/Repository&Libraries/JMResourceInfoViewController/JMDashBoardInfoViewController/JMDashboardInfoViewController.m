@@ -52,7 +52,7 @@
 - (void)runDashboard
 {
     id nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resource resourceViewerVCIdentifier]];
-    if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
+    if ([nextVC respondsToSelector:@selector(setResource:)]) {
         [nextVC setResource:self.resource];
     }
     
