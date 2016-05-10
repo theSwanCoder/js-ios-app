@@ -65,7 +65,7 @@ NSString * const kJMDefaultSendingAutoFillLoginData = @"jaspersoft.autofill.logi
 
 // Demo server parameters
 NSString * const kJMDemoServerAlias = @"Jaspersoft Mobile Demo";
-NSString * const kJMDemoServerUrl = @"https://mobiledemo2.jaspersoft.com/jasperserver-pro";
+NSString * const kJMDemoServerUrl = @"https://mobiledemo.jaspersoft.com/jasperserver-pro";
 NSString * const kJMDemoServerOrganization = @"organization_1";
 NSString * const kJMDemoServerUsername = @"phoneuser";
 NSString * const kJMDemoServerPassword = @"phoneuser";
