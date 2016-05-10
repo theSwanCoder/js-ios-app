@@ -113,10 +113,17 @@ static const NSInteger kSplashViewTag = 100;
 
         if (isSessionRestored) {
             loginCompletionBlock();
-            // TODO: remove reseting of session's 'environment'
-            SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
-            JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-            [menuViewController openCurrentSection];
+
+            JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+            if (activeServerProfile && activeServerProfile.askPassword.boolValue) {
+                [JMUtils showLoginViewForRestoreSessionWithCompletion:loginCompletionBlock];
+            } else {
+                // TODO: remove reseting of session's 'environment'
+                SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
+                JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
+                [menuViewController openCurrentSection];
+            }
+
         } else {
             [JMUtils showLoginViewAnimated:NO
                                 completion:nil
