@@ -362,7 +362,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     JMMultiSelectedItemsVC *multiValuesVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMMultiSelectedItemsVC"];
     multiValuesVC.title = @"Select months";
 
-    JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) self.scheduleMetadata.trigger;
+    JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) [self currentTrigger];
     NSAssert(calendarTrigger.type == JSScheduleTriggerTypeCalendar, @"should be calendar trigger");
 
     NSMutableArray *availableItems = [NSMutableArray new];
@@ -402,7 +402,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     JMMultiSelectedItemsVC *multiValuesVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMMultiSelectedItemsVC"];
     multiValuesVC.title = @"Select days";
 
-    JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) self.scheduleMetadata.trigger;
+    JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) [self currentTrigger];
     NSAssert(calendarTrigger.type == JSScheduleTriggerTypeCalendar, @"should be calendar trigger");
 
     NSMutableArray *availableItems = [NSMutableArray new];
@@ -693,7 +693,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     } else if (row.type == JMScheduleVCRowTypeOutputFolderURI) {
         self.scheduleMetadata.folderURI = trimmedValue;
     } else if (row.type == JMScheduleVCRowTypeRepeatCount) {
-        NSAssert(trigger.type == JSScheduleTriggerTypeSimple, @"Should be simple trigger");
+        NSAssert([trigger class] == [JSScheduleSimpleTrigger class], @"Should be simple trigger");
         if ([self isStringContainsOnlyDigits:trimmedValue]) {
             JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
             simpleTrigger.recurrenceInterval = @(trimmedValue.integerValue);
@@ -1228,7 +1228,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (BOOL)validateRepeatCount
 {
     BOOL isValid = YES;
-    id trigger = self.scheduleMetadata.trigger;
+    id trigger = [self currentTrigger];
     if ([trigger isKindOfClass:[JSScheduleSimpleTrigger class]]) {
         JSScheduleSimpleTrigger *simpleTrigger = trigger;
         if (simpleTrigger.recurrenceInterval && simpleTrigger.recurrenceInterval.integerValue == 0) {
@@ -1244,7 +1244,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (BOOL)validateNumberOfRuns
 {
     BOOL isValid = YES;
-    id trigger = self.scheduleMetadata.trigger;
+    id trigger = [self currentTrigger];
     if ([trigger isKindOfClass:[JSScheduleSimpleTrigger class]]) {
         JSScheduleSimpleTrigger *simpleTrigger = trigger;
         if (simpleTrigger.occurrenceCount && simpleTrigger.occurrenceCount.integerValue == 0) {
@@ -1293,7 +1293,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     BOOL isValid = YES;
 
-    id trigger = self.scheduleMetadata.trigger;
+    id trigger = [self currentTrigger];
     if ([trigger isKindOfClass:[JSScheduleCalendarTrigger class]]) {
         JSScheduleCalendarTrigger *calendarTrigger = trigger;
         // TODO: verify ranges (example 0 or '1-17' )
@@ -1312,7 +1312,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     BOOL isValid = YES;
 
-    id trigger = self.scheduleMetadata.trigger;
+    id trigger = [self currentTrigger];
     if ([trigger isKindOfClass:[JSScheduleCalendarTrigger class]]) {
         JSScheduleCalendarTrigger *calendarTrigger = trigger;
         // TODO: verify ranges (example '0' or '0, 15, 30, 45')
@@ -1330,7 +1330,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (BOOL)validateWeekdaysForCalendarTrigger
 {
     BOOL isValid = YES;
-    id trigger = self.scheduleMetadata.trigger;
+    id trigger = [self currentTrigger];
     if ([trigger isKindOfClass:[JSScheduleCalendarTrigger class]]) {
         JSScheduleCalendarTrigger *calendarTrigger = trigger;
         if (calendarTrigger.daysType == JSScheduleCalendarTriggerDaysTypeWeek && calendarTrigger.weekDays.count == 0) {
@@ -1346,7 +1346,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (BOOL)validateMonthsForCalendarTrigger
 {
     BOOL isValid = YES;
-    id trigger = self.scheduleMetadata.trigger;
+    id trigger = [self currentTrigger];
     if ([trigger isKindOfClass:[JSScheduleCalendarTrigger class]]) {
         JSScheduleCalendarTrigger *calendarTrigger = trigger;
         if (calendarTrigger.months.count == 0) {
@@ -1501,6 +1501,17 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     }
 
     switch (trigger.type) {
+        case JSScheduleTriggerTypeNone: {
+            JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
+            if (type == JMScheduleVCRowTypeRepeatType) {
+                propertyValue = [self stringValueForTriggerType:JSScheduleTriggerTypeNone];
+            } else if (type == JMScheduleVCRowTypeRepeatCount) {
+                propertyValue = simpleTrigger.recurrenceInterval.stringValue;
+            } else if (type == JMScheduleVCRowTypeRepeatTimeInterval) {
+                propertyValue = [self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit];
+            }
+            break;
+        }
         case JSScheduleTriggerTypeSimple: {
             JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
             if (type == JMScheduleVCRowTypeRepeatType) {
@@ -1544,12 +1555,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                     }
                 }
                 propertyValue = months;
-            }
-            break;
-        }
-        case JSScheduleTriggerTypeNone: {
-            if (type == JMScheduleVCRowTypeRepeatType) {
-                propertyValue = [self stringValueForTriggerType:JSScheduleTriggerTypeNone];
             }
             break;
         }
