@@ -91,12 +91,12 @@
 		zh = 无缝集成
 		tags = ios
 	[intro_model_thirdScreen_description]
-		en = View and interact with your TIBCO JasperReports\nServer v%_1f or greater environment.
-		de = Nutzen Sie die Arbeitsumgebung Ihres TIBCO\nJasperReports Servers v%_1f oder höher.
-		fr = Affichez et interagissez avec votre TIBCO JasperReports\nServer v%_1f ou environnement ultérieur.
-		es = Vea el entorno de TIBCO JasperReports\nServer v%_1f o posterior e interactúe con él.
-		it = Visualizza e interagisci con il tuo ambiente\nTIBCO JasperReports Server v%_1f o versioni successive.
-		pt = Exiba e interaja com o ambiente do\nTIBCO JasperReports Server v%_1f ou superior.
-		ja = TIBCO JasperReports Server v%_1f 以降の環境を\n表示して連携します。
-		zh = 查看并与您的 TIBCO JasperReports Server v%_1f 或更大的环境交互。
+		en = View and interact with your TIBCO JasperReports\nServer v%.1f or greater environment.
+		de = Nutzen Sie die Arbeitsumgebung Ihres TIBCO\nJasperReports Servers v%.1f oder höher.
+		fr = Affichez et interagissez avec votre TIBCO JasperReports\nServer v%.1f ou environnement ultérieur.
+		es = Vea el entorno de TIBCO JasperReports\nServer v%.1f o posterior e interactúe con él.
+		it = Visualizza e interagisci con il tuo ambiente\nTIBCO JasperReports Server v%.1f o versioni successive.
+		pt = Exiba e interaja com o ambiente do\nTIBCO JasperReports Server v%.1f ou superior.
+		ja = TIBCO JasperReports Server v%.1f 以降の環境を\n表示して連携します。
+		zh = 查看并与您的 TIBCO JasperReports Server v%.1f 或更大的环境交互。
 		tags = ios
