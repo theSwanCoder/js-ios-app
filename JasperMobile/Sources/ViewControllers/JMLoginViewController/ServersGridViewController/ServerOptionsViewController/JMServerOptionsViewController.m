@@ -165,11 +165,15 @@
 #pragma mark - Helpers
 - (void)saveServerOptions
 {
+    // save in DB current profile with updated properties
     [self.serverOptions saveChanges];
 
-    if ([self.delegate respondsToSelector:@selector(serverProfileDidChanged:)]) {
-        [self.delegate serverProfileDidChanged:self.serverProfile];
+    // update current active server profile
+    if (self.restClient) {
+        self.restClient.serverProfile.alias = self.serverOptions.serverProfile.alias;
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:JMServerProfileDidChangeNotification
+                                                        object:nil];
 }
 
 - (void)showSecurityHTTPAlert

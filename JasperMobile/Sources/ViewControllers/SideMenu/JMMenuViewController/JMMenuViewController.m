@@ -77,6 +77,11 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
                                              selector:@selector(exportedResouceDidLoad:)
                                                  name:kJMExportedResourceDidLoadNotification
                                                object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(serverProfileDidChange:)
+                                                 name:JMServerProfileDidChangeNotification
+                                               object:nil];
 }
 
 #pragma mark - UIViewController LifeCycle
@@ -421,6 +426,11 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         JMMenuItem *savedItem = [self menuItemWithType:JMSectionTypeSavedItems];
         savedItem.showNotes = YES;
     }
+}
+
+- (void)serverProfileDidChange:(NSNotification *)notification
+{
+    [self updateServerInfo];
 }
 
 @end
