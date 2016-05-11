@@ -61,7 +61,7 @@ TIBCO JasperMobile iOS app includes third party software subject to the associat
   Alternative approaches: Need investigate another libraries
   
 
-- JaspersoftSDK-v2.4 - https://github.com/Jaspersoft/js-ios-sdk
+- JaspersoftSDK-v2.5 - https://github.com/Jaspersoft/js-ios-sdk
   Licence (Apache): https://github.com/Jaspersoft/js-ios-sdk/blob/master/LICENSE.txt
   Reason: Using it for connect to JRS instance and working with it.
   Cost of not using: Application wouldn't work.
