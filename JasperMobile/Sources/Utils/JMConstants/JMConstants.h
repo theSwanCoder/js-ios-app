@@ -46,10 +46,7 @@ extern NSString * const kJMFavoritesDidChangedNotification;
 extern NSString * const kJMSavedResourcesDidChangedNotification;
 extern NSString * const kJMExportedResourceDidLoadNotification;
 extern NSString * const kJMExportedResourceDidCancelNotification;
-
-// Local Notifications
-extern NSString * const kJMLocalNotificationKey;
-extern NSString * const kJMExportResourceLocalNotification;
+extern NSString * const JMServerProfileDidChangeNotification;
 
 // Shared keys for dictionary
 extern NSString * const kJMTitleKey;

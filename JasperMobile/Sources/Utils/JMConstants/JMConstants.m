@@ -39,10 +39,7 @@ NSString * const kJMFavoritesDidChangedNotification = @"JMFavoritesDidChangedNot
 NSString * const kJMSavedResourcesDidChangedNotification = @"JMSavedResourcesDidChangedNotification";
 NSString * const kJMExportedResourceDidLoadNotification = @"kJMExportedResourceDidLoadNotification";
 NSString * const kJMExportedResourceDidCancelNotification = @"kJMExportedResourceDidCancelNotification";
-
-// Local Notifications
-NSString * const kJMLocalNotificationKey = @"kJMLocalNotificationKey";
-NSString * const kJMExportResourceLocalNotification = @"kJMExportResourceLocalNotification";
+NSString * const JMServerProfileDidChangeNotification = @"JMServerProfileDidChangeNotification";
 
 // Shared keys for NSDictionary
 NSString * const kJMTitleKey = @"title";
