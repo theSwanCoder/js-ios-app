@@ -34,6 +34,7 @@
 		en = Filters
 		de = Filter
 		es = Filtros
+		fr = Filtres
 		tags = ios,new
 	[action_title_delete]
 		en = Delete
@@ -179,4 +180,5 @@
 		en = Share
 		de = Teilen
 		es = Compartir
+		fr = Partager
 		tags = ios,new

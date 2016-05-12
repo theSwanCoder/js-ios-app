@@ -54,4 +54,5 @@
 		en = No job is found.
 		de = Keinen Job gefunden.
 		es = No hay trabajos.
+		fr = Aucune tâche trouvée.
 		tags = ios,new
