@@ -52,4 +52,5 @@
 		tags = ios
 	[resources_noresults_schedules_msg]
 		en = No job is found.
+		de = Keinen Job gefunden.
 		tags = ios,new

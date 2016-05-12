@@ -22,15 +22,19 @@
 		tags = ios
 	[resource_schedule_owner_title]
 		en = Owner
+		de = Eigentümer
 		tags = ios,new
 	[resource_schedule_state_title]
 		en = State
+		de = Zustand
 		tags = ios,new
 	[resource_schedule_previousFireTime_title]
 		en = Previous Fire Time
+		de = Vorherige Auslieferungszeit
 		tags = ios,new
 	[resource_schedule_nextFireTime_title]
 		en = Next Fire Time
+		de = Nächste Auslieferungszeit
 		tags = ios,new
 
 [[New Job]]
@@ -46,6 +50,7 @@
 		tags = ios
 	[schedules_new_job_description]
 		en = Description
+		de = Beschreibung
 		tags = ios,new
 	[schedules_new_job_button_create]
 		en = Create Schedule
@@ -98,9 +103,11 @@
 		tags = ios
 	[schedules_new_job_end_date]
 		en = End Date
+		de = Enddatum
 		tags = ios,new
 	[schedules_new_job_start_immediately]
 		en = Start immediately
+		de = Sofort starten
 		tags = ios,new
 	[schedules_new_job_output_format]
 		en = Output Format
@@ -114,42 +121,55 @@
 		tags = ios
 	[schedules_new_job_repeat_type]
 		en = Recurrence Type
+		de = Wiederholungsart
 		tags = ios,new
 	[schedules_new_job_repeat_count]
 		en = Count
+		de = Zählung
 		tags = ios,new
 	[schedules_new_job_repeat_interval]
 		en = Interval
+		de = Intervall
 		tags = ios,new
 	[schedules_new_job_run_indefinitely]
 		en = Run Indefinitely
+		de = Auf unbestimmte Zeit durchführen
 		tags = ios,new
 	[schedules_new_job_number_of_runs]
 		en = Number of Runs
+		de = Anzahl der Durchläufe
 		tags = ios,new
 	[schedules_new_job_repeat_type_alert_title]
 		en = Recurrence Type
+		de = Wiederholungsart
 		tags = ios,new
 	[schedules_job_calendar_every_month]
 		en = Every Month
+		de = Jeden Monat
 		tags = ios,new
 	[schedules_job_calendar_selected_months]
 		en = Selected Months
+		de = Ausgewählte Monate
 		tags = ios,new
 	[schedules_job_calendar_every_day]
 		en = Every Day
+		de = Jeden Tag
 		tags = ios,new
 	[schedules_job_calendar_selected_days]
 		en = Selected Days
+		de = Ausgewählte Tage
 		tags = ios,new
 	[schedules_job_calendar_dates_in_month]
 		en = Dates In Month
+		de = Termine in Monaten
 		tags = ios,new
 	[schedules_job_calendar_hours]
 		en = Hours
+		de = Stunden
 		tags = ios,new
 	[schedules_job_calendar_minutes]
 		en = Minutes
+		de = Minuten
 		tags = ios,new
 
 [[Schedule Errors]]
@@ -175,9 +195,11 @@
 		tags = ios
 	[schedules_error_empty_filename_invalid_characters]
 		en = The base output name contains invalid characters. You might have mistyped it.
+		de = Der Basisausgabename enthält ungültige Zeichen. Sie könnten sich vertippt haben.
 		tags = ios,new
 	[schedules_error_repeat_count_invalid_characters]
 		en = Please enter only digits.
+		de = Bitte geben Sie nur Ziffern ein.
 		tags = ios,new
 	[schedules_error_repeat_count_empty]
 		en = Specify a recurrence interval.
@@ -187,9 +209,11 @@
 		tags = ios,new
 	[schedules_error_empty_output_folder]
 		en = Specify a folder.
+		de = Geben Sie einen Ordner an.
 		tags = ios,new
 	[schedules_error_empty_label]
 		en = Specify a name for the scheduled job.
+		de = Geben Sie einen Namen für den geplanten Auftrag an.
 		tags = ios,new
 	[schedules_error_wrong_hours]
 		en = Specify the hour(s) when the job should run.
@@ -218,13 +242,17 @@
 		tags = ios
 	[schedules_error_date_past]
 		en = The date is in the past. It should be in the future.
+		de = Das Datum liegt in der Vergangenheit. Es sollte in der Zukunft liegen.
 		tags = ios,new
 	[schedules_error_duplicate_filename]
 		en = There is a scheduled job of the same output file name. Please try different name.
+		de = Es gibt einen geplanten Auftrag mit dem gleichen Ausgabedateinamen. Bitte versuchen Sie es mit einem anderen Namen.
 		tags = ios,new
 	[schedules_error_output_folder_inexistent]
 		en = The job output folder cannot be found. It might have been deleted or moved.
+		de = Der Job-Ausgabeordner kann nicht gefunden werden. Er könnte gelöscht oder verschoben worden sein.
 		tags = ios,new
 	[schedules_error_length]
 		en = Too long string.
+		de = Zu lange Zeichenfolge.
 		tags = ios,new

@@ -2,31 +2,41 @@
 [[Resource viewer share]]
 	[resource_viewer_share_title]
 		en = Resource Sharing
+		de = Gemeinsame Nutzung von Ressourcen
 		tags = ios,new
     [resource_viewer_share_annotation_title]
         en = Input text, please
+        de = Bitte Text eingeben
         tags = ios,new
     [resource_viewer_share_annotation_placeholder]
         en = Annotation
+        de = Anmerkung
         tags = ios,new
     [resource_viewer_share_annotation_empty_error]
         en = Annotation text can't be empty!
+        de = Der Anmerkungstext darf nicht leer bleiben!
         tags = ios,new
     [resource_viewer_share_text]
         en = Look at this awesome report, builded via %@!
+        de = Schauen Sie sich diesen umwerfenden Bericht an, der mit %@ aufgesetzt wurde!
         tags = ios,new
     [resource_viewer_share_settings_title]
         en = Share Settings
+        de = Einstellungen teilen
         tags = ios,new
     [resource_viewer_share_settings_opacity]
         en = Opacity
+        de = Opazität
         tags = ios,new
     [resource_viewer_share_settings_brush]
         en = Brush
+        de = Pinsel
         tags = ios,new
     [resource_viewer_share_settings_border]
         en = Border For Text
+        de = Textrahmen
         tags = ios,new
     [resource_viewer_share_settings_font_size]
         en = Font Size
+        de = Schriftgröße
         tags = ios,new

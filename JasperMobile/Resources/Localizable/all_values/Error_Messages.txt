@@ -112,7 +112,7 @@
 		tags = ios, unused
 	[error_openIn_message]
 		en = There is no application to open this resource.
-		de = Es gibt keine Anwendung zum Öffnen dieses Bereichs.
+		de = Es gibt keine Anwendung zum Öffnen dieser Ressouce.
 		es = No hay una aplicación para abrir este recurso.
 		fr = Il n\'y a aucune application pour ouvrir cette ressource.
 		it = Nessuna applicazione esistente per aprire questa risorsa.

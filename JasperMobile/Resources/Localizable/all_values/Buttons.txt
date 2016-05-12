@@ -2,6 +2,7 @@
 [[Buttons]]
 	[dialog_button_applyUpdate]
 		en = Run Dashboard
+		de = Bedieneroberfläche ausführen
 		tags = ios,new
 	[dialog_button_ok]
 		en = OK

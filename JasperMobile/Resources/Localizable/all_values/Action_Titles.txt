@@ -32,6 +32,7 @@
 		tags = ios
 	[action_title_edit_filters]
 		en = Filters
+		de = Filter
 		tags = ios,new
 	[action_title_delete]
 		en = Delete
@@ -175,4 +176,5 @@
 		tags = ios
 	[action_title_share]
 		en = Share
+		de = Teilen
 		tags = ios,new
