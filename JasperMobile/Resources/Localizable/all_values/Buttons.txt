@@ -5,6 +5,7 @@
 		de = Bedieneroberfläche ausführen
 		es = Ejecutar el Panel
 		fr = Tableau de bord d\'exécution
+		it = Esegui pannello
 		tags = ios,new
 	[dialog_button_ok]
 		en = OK
