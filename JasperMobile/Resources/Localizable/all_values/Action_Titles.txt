@@ -36,6 +36,7 @@
 		es = Filtros
 		fr = Filtres
 		it = Filtri
+		ja = フィルター
 		tags = ios,new
 	[action_title_delete]
 		en = Delete
@@ -183,4 +184,5 @@
 		es = Compartir
 		fr = Partager
 		it = Condividi
+		ja = 共有する
 		tags = ios,new

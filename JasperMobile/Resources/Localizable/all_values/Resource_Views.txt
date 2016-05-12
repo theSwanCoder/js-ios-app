@@ -56,4 +56,5 @@
 		es = No hay trabajos.
 		fr = Aucune tâche trouvée.
 		it = Nessun lavoro trovato.
+		ja = タスクは何もありません。
 		tags = ios,new
