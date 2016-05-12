@@ -7,6 +7,7 @@
 		fr = Partage de ressources
 		it = Condivisione risorsa
 		ja = リソースの共有
+		pt = Compartilhamento de recursos
 		tags = ios,new
     [resource_viewer_share_annotation_title]
         en = Input text, please
@@ -15,6 +16,7 @@
         fr = Veuillez saisir un texte
         it = Immettere testo
         ja = テキストを入力してください
+        pt = Texto de entrada
         tags = ios,new
     [resource_viewer_share_annotation_placeholder]
         en = Annotation
@@ -23,6 +25,7 @@
         fr = Annotation
         it = Annotazione
         ja = コメント
+        pt = Anotação
         tags = ios,new
     [resource_viewer_share_annotation_empty_error]
         en = Annotation text can't be empty!
@@ -31,6 +34,7 @@
         fr = Le champ Annotation ne peut pas être vide !
         it = Il campo per l\'annotazione del testo non può restare vuoto!
         ja = コメント欄を空欄にする事はできません！
+        pt = O campo de texto da anotação não pode ficar em branco!
         tags = ios,new
     [resource_viewer_share_text]
         en = Look at this awesome report, builded via %@!
@@ -39,6 +43,7 @@
         fr = Consultez ce rapport impressionnant, créé via %@!
         it = Guarda questo fantastico rapporto, creato con %@!
         ja = %@で作成した素晴らしいレポートをご覧下さい！
+        pt = Beja este relatório incrível, elaborado com o %@!
         tags = ios,new
     [resource_viewer_share_settings_title]
         en = Share Settings
@@ -47,6 +52,7 @@
         fr = Paramètres de partage
         it = Condividi impostazioni
         ja = 共有設定
+        pt = Compartilhar Configurações
         tags = ios,new
     [resource_viewer_share_settings_opacity]
         en = Opacity
@@ -55,6 +61,7 @@
         fr = Opacité
         it = Opacità
         ja = 不透明度
+        pt = Opacidade
         tags = ios,new
     [resource_viewer_share_settings_brush]
         en = Brush
@@ -63,6 +70,7 @@
         fr = Pinceau
         it = Pennello
         ja = ブラシ
+        pt = Pincel
         tags = ios,new
     [resource_viewer_share_settings_border]
         en = Border For Text
@@ -71,6 +79,7 @@
         fr = Bordure de texte
         it = Bordo per testo
         ja = テキストのボーダー
+        pt = Borda do texto
         tags = ios,new
     [resource_viewer_share_settings_font_size]
         en = Font Size
@@ -79,4 +88,5 @@
         fr = Taille de la police
         it = Dimensioni font
         ja = フォントサイズ
+        pt = Tamanho da fonte
         tags = ios,new

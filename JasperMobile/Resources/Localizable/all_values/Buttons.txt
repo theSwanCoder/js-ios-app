@@ -7,6 +7,7 @@
 		fr = Tableau de bord d\'exécution
 		it = Esegui pannello
 		ja = ダッシュボードを実行する
+		pt = Executar Painel de Controle
 		tags = ios,new
 	[dialog_button_ok]
 		en = OK

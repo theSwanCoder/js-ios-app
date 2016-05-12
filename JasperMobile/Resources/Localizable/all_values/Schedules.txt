@@ -27,6 +27,7 @@
 		fr = Propriétaire
 		it = Proprietario
 		ja = オーナー
+		pt = Proprietário
 		tags = ios,new
 	[resource_schedule_state_title]
 		en = State
@@ -35,6 +36,7 @@
 		fr = État
 		it = Stato
 		ja = 状態
+		pt = Estado
 		tags = ios,new
 	[resource_schedule_previousFireTime_title]
 		en = Previous Fire Time
@@ -43,6 +45,7 @@
 		fr = Date de lancement précédente
 		it = Ora fuoco precedente
 		ja = Fire Time履歴
+		pt = Horário de disparo anterior
 		tags = ios,new
 	[resource_schedule_nextFireTime_title]
 		en = Next Fire Time
@@ -51,6 +54,7 @@
 		fr = Prochaine date de lancement
 		it = Ora fuoco successiva
 		ja = 次のFire Time
+		pt = Próximo horário de disparo
 		tags = ios,new
 
 [[New Job]]
@@ -71,6 +75,7 @@
 		fr = Description
 		it = Descrizione
 		ja = 詳細
+		pt = Descrição
 		tags = ios,new
 	[schedules_new_job_button_create]
 		en = Create Schedule
@@ -128,6 +133,7 @@
 		fr = Date de fin
 		it = Data fine
 		ja = 終了日
+		pt = Data final
 		tags = ios,new
 	[schedules_new_job_start_immediately]
 		en = Start immediately
@@ -136,6 +142,7 @@
 		fr = Commencer immédiatement
 		it = Inizia subito
 		ja = すぐに開始する
+		pt = Começar imediatamente
 		tags = ios,new
 	[schedules_new_job_output_format]
 		en = Output Format
@@ -154,6 +161,7 @@
 		fr = Type de Récurrence
 		it = Tipo di ricorrenza
 		ja = 定期的
+		pt = Tipo de recorrência
 		tags = ios,new
 	[schedules_new_job_repeat_count]
 		en = Count
@@ -162,6 +170,7 @@
 		fr = Compte
 		it = Conta
 		ja = 回数
+		pt = Contagem
 		tags = ios,new
 	[schedules_new_job_repeat_interval]
 		en = Interval
@@ -170,6 +179,7 @@
 		fr = Intervalle
 		it = Intervallo
 		ja = 間隔
+		pt = Intervalo
 		tags = ios,new
 	[schedules_new_job_run_indefinitely]
 		en = Run Indefinitely
@@ -178,6 +188,7 @@
 		fr = Exécuter indéfiniment
 		it = Esegui indefinitivamente
 		ja = 無期限で実行する
+		pt = Executar Indefinidamente
 		tags = ios,new
 	[schedules_new_job_number_of_runs]
 		en = Number of Runs
@@ -186,6 +197,7 @@
 		fr = Nombre d\'exécutions
 		it = Numero di esecuzioni
 		ja = 実行回数
+		pt = Número de Execuções
 		tags = ios,new
 	[schedules_new_job_repeat_type_alert_title]
 		en = Recurrence Type
@@ -194,6 +206,7 @@
 		fr = Type de Récurrence
 		it = Tipo ricorrenza
 		ja = 定期的
+		pt = Tipo de Recorrência
 		tags = ios,new
 	[schedules_job_calendar_every_month]
 		en = Every Month
@@ -202,6 +215,7 @@
 		fr = Chaque mois
 		it = Ogni mese
 		ja = 毎月
+		pt = Todo Mês
 		tags = ios,new
 	[schedules_job_calendar_selected_months]
 		en = Selected Months
@@ -210,6 +224,7 @@
 		fr = Mois sélectionnés
 		it = Mesi selezionati
 		ja = 選択した月
+		pt = Meses Selecionados
 		tags = ios,new
 	[schedules_job_calendar_every_day]
 		en = Every Day
@@ -218,6 +233,7 @@
 		fr = Tous les jours
 		it = Ogni giorno
 		ja = 毎日
+		pt = Todo Dia
 		tags = ios,new
 	[schedules_job_calendar_selected_days]
 		en = Selected Days
@@ -226,6 +242,7 @@
 		fr = Jours sélectionnés
 		it = Giorni selezionati
 		ja = 選択した日
+		pt = Dias Selecionados
 		tags = ios,new
 	[schedules_job_calendar_dates_in_month]
 		en = Dates In Month
@@ -234,6 +251,7 @@
 		fr = Dates du mois
 		it = Date in mesi
 		ja = 月の日付
+		pt = Datas no Mês
 		tags = ios,new
 	[schedules_job_calendar_hours]
 		en = Hours
@@ -242,6 +260,7 @@
 		fr = Heures
 		it = Ore
 		ja = 時
+		pt = Horas
 		tags = ios,new
 	[schedules_job_calendar_minutes]
 		en = Minutes
@@ -250,6 +269,7 @@
 		fr = Minutes
 		it = Minuti
 		ja = 分
+		pt = Minutos
 		tags = ios,new
 
 [[Schedule Errors]]
@@ -280,6 +300,7 @@
 		fr = Le nom de sortie de base contient des caractères non valides. Vous pourriez l’avoir mal orthographié.
 		it = Il nome di uscita base contiene caratteri non validi. È possibile che ci siano errori nella digitazione.
 		ja = ベースとなる出力名に無効な文字が含まれています。入力ミスしている可能性がありますのでご確認ください。
+		pt = O nome de saída-base contém caracteres inválidos. Você pode ter digitado incorretamente.
 		tags = ios,new
 	[schedules_error_repeat_count_invalid_characters]
 		en = Please enter only digits.
@@ -288,6 +309,7 @@
 		fr = Merci de n\'entrer que des chiffres.
 		it = Inserire soltanto cifre.
 		ja = 数字のみ入力してください。
+		pt = Use somente números.
 		tags = ios,new
 	[schedules_error_repeat_count_empty]
 		en = Specify a recurrence interval.
@@ -302,6 +324,7 @@
 		fr = Spécifiez un dossier.
 		it = Specificare una cartella.
 		ja = フォルダを指定してください。
+		pt = Especifique uma pasta.
 		tags = ios,new
 	[schedules_error_empty_label]
 		en = Specify a name for the scheduled job.
@@ -310,6 +333,7 @@
 		fr = Indiquez un nom pour la tâche planifiée.
 		it = Specificare un nome per il lavoro pianificato.
 		ja = スケジュールされたタスクの名称を指定してください。
+		pt = Especifique um nome para a tarefa agendada.
 		tags = ios,new
 	[schedules_error_wrong_hours]
 		en = Specify the hour(s) when the job should run.
@@ -343,6 +367,7 @@
 		fr = La date est déjà passée. Elle devrait être dans le futur.
 		it = La data è nel passato. Dovrebbe essere nel futuro.
 		ja = 終了日が過去の日付となっています。未来の日付を設定してください。
+		pt = A data está no passado e deve ser uma data futura.
 		tags = ios,new
 	[schedules_error_duplicate_filename]
 		en = There is a scheduled job of the same output file name. Please try different name.
@@ -351,6 +376,7 @@
 		fr = Il existe déjà une tâche planifiée avec le même nom de fichier de sortie. Veuillez essayer un nom différent.
 		it = Esiste un lavoro pianificato con lo stesso nome del file salvato. Usare un nome diverso.
 		ja = スケジュール化されたタスクに、既に同じ出力ファイル名が割り当てられています。他の名称をお試し下さい。
+		pt = Há uma tarefa agendada com o mesmo nome de arquivo de saída. Use um nome diferente.
 		tags = ios,new
 	[schedules_error_output_folder_inexistent]
 		en = The job output folder cannot be found. It might have been deleted or moved.
@@ -359,6 +385,7 @@
 		fr = Le dossier de sortie de la tâche est introuvable. Il a pu être supprimé ou déplacé.
 		it = Impossibile trovare la cartella del lavoro salvato. È possibile che sia stata eliminata o spostata.
 		ja = タスク出力フォルダが見つかりません。移動もしくは削除されている可能性があります。
+		pt = Pasta de gravação de tarefas não encontrada. A pasta pode ter sido excluída ou movida.
 		tags = ios,new
 	[schedules_error_length]
 		en = Too long string.
@@ -367,4 +394,5 @@
 		fr = Chaîne de caractères trop longue.
 		it = Stringa troppo lunga.
 		ja = 文字列が長過ぎます。
+		pt = Sequência de caracteres muito longa.
 		tags = ios,new
