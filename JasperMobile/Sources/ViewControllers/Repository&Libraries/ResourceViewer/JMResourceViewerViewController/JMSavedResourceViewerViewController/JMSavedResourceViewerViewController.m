@@ -53,6 +53,18 @@
     return _savedReports;
 }
 
+- (UIView *)resourceView
+{
+    UIView *resourceView;
+    if (self.imageView) {
+        resourceView = self.imageView;
+    } else {
+        JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
+        resourceView = webEnvironment.webView;
+    }
+    return resourceView;
+}
+
 #pragma mark - Overrided methods
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
