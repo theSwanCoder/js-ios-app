@@ -53,4 +53,5 @@
 	[resources_noresults_schedules_msg]
 		en = No job is found.
 		de = Keinen Job gefunden.
+		es = No hay trabajos.
 		tags = ios,new

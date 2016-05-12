@@ -3,6 +3,7 @@
 	[dialog_button_applyUpdate]
 		en = Run Dashboard
 		de = Bedieneroberfläche ausführen
+		es = Ejecutar el Panel
 		tags = ios,new
 	[dialog_button_ok]
 		en = OK

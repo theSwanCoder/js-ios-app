@@ -3,40 +3,50 @@
 	[resource_viewer_share_title]
 		en = Resource Sharing
 		de = Gemeinsame Nutzung von Ressourcen
+		es = Compartir recursos
 		tags = ios,new
     [resource_viewer_share_annotation_title]
         en = Input text, please
         de = Bitte Text eingeben
+        es = Escriba el texto, por favor
         tags = ios,new
     [resource_viewer_share_annotation_placeholder]
         en = Annotation
         de = Anmerkung
+        es = Anotación
         tags = ios,new
     [resource_viewer_share_annotation_empty_error]
         en = Annotation text can't be empty!
         de = Der Anmerkungstext darf nicht leer bleiben!
+        es = ¡El texto de la anotación no puede estar en blanco!
         tags = ios,new
     [resource_viewer_share_text]
         en = Look at this awesome report, builded via %@!
         de = Schauen Sie sich diesen umwerfenden Bericht an, der mit %@ aufgesetzt wurde!
+        es = ¡Vea este asombroso informe, construido con %@!
         tags = ios,new
     [resource_viewer_share_settings_title]
         en = Share Settings
         de = Einstellungen teilen
+        es = Ajustes de compartir
         tags = ios,new
     [resource_viewer_share_settings_opacity]
         en = Opacity
         de = Opazität
+        es = Opacidad
         tags = ios,new
     [resource_viewer_share_settings_brush]
         en = Brush
         de = Pinsel
+        es = Pincel
         tags = ios,new
     [resource_viewer_share_settings_border]
         en = Border For Text
         de = Textrahmen
+        es = Borde del texto
         tags = ios,new
     [resource_viewer_share_settings_font_size]
         en = Font Size
         de = Schriftgröße
+        es = Tamaño de fuente
         tags = ios,new

@@ -23,18 +23,22 @@
 	[resource_schedule_owner_title]
 		en = Owner
 		de = Eigentümer
+		es = Propietario
 		tags = ios,new
 	[resource_schedule_state_title]
 		en = State
 		de = Zustand
+		es = Estado
 		tags = ios,new
 	[resource_schedule_previousFireTime_title]
 		en = Previous Fire Time
 		de = Vorherige Auslieferungszeit
+		es = Hora de incendio anterior
 		tags = ios,new
 	[resource_schedule_nextFireTime_title]
 		en = Next Fire Time
 		de = Nächste Auslieferungszeit
+		es = Siguiente hora de incendio
 		tags = ios,new
 
 [[New Job]]
@@ -51,6 +55,7 @@
 	[schedules_new_job_description]
 		en = Description
 		de = Beschreibung
+		es = Descripción
 		tags = ios,new
 	[schedules_new_job_button_create]
 		en = Create Schedule
@@ -104,10 +109,12 @@
 	[schedules_new_job_end_date]
 		en = End Date
 		de = Enddatum
+		es = Fecha de finalización
 		tags = ios,new
 	[schedules_new_job_start_immediately]
 		en = Start immediately
 		de = Sofort starten
+		es = Comenzar inmediatamente
 		tags = ios,new
 	[schedules_new_job_output_format]
 		en = Output Format
@@ -122,54 +129,67 @@
 	[schedules_new_job_repeat_type]
 		en = Recurrence Type
 		de = Wiederholungsart
+		es = Tipo de periodicidad
 		tags = ios,new
 	[schedules_new_job_repeat_count]
 		en = Count
 		de = Zählung
+		es = Cuenta
 		tags = ios,new
 	[schedules_new_job_repeat_interval]
 		en = Interval
 		de = Intervall
+		es = Intervalo
 		tags = ios,new
 	[schedules_new_job_run_indefinitely]
 		en = Run Indefinitely
 		de = Auf unbestimmte Zeit durchführen
+		es = Ejecutar indefinidamente
 		tags = ios,new
 	[schedules_new_job_number_of_runs]
 		en = Number of Runs
 		de = Anzahl der Durchläufe
+		es = Número de ejecuciones
 		tags = ios,new
 	[schedules_new_job_repeat_type_alert_title]
 		en = Recurrence Type
 		de = Wiederholungsart
+		es = Tipo de periodicidad
 		tags = ios,new
 	[schedules_job_calendar_every_month]
 		en = Every Month
 		de = Jeden Monat
+		es = Todos los meses
 		tags = ios,new
 	[schedules_job_calendar_selected_months]
 		en = Selected Months
 		de = Ausgewählte Monate
+		es = Los meses seleccionados
 		tags = ios,new
 	[schedules_job_calendar_every_day]
 		en = Every Day
 		de = Jeden Tag
+		es = Todos los días
 		tags = ios,new
 	[schedules_job_calendar_selected_days]
 		en = Selected Days
 		de = Ausgewählte Tage
+		es = Días seleccionados
 		tags = ios,new
 	[schedules_job_calendar_dates_in_month]
 		en = Dates In Month
 		de = Termine in Monaten
+		es = Días en el mes
 		tags = ios,new
 	[schedules_job_calendar_hours]
 		en = Hours
 		de = Stunden
+		es = Horas
 		tags = ios,new
 	[schedules_job_calendar_minutes]
 		en = Minutes
 		de = Minuten
+		es = Minutos
 		tags = ios,new
 
 [[Schedule Errors]]
@@ -196,10 +216,12 @@
 	[schedules_error_empty_filename_invalid_characters]
 		en = The base output name contains invalid characters. You might have mistyped it.
 		de = Der Basisausgabename enthält ungültige Zeichen. Sie könnten sich vertippt haben.
+		es = El nombre base de salida contiene caracteres inválidos. Pudo haberlo escrito mal.
 		tags = ios,new
 	[schedules_error_repeat_count_invalid_characters]
 		en = Please enter only digits.
 		de = Bitte geben Sie nur Ziffern ein.
+		es = Por favor escriba solo dígitos.
 		tags = ios,new
 	[schedules_error_repeat_count_empty]
 		en = Specify a recurrence interval.
@@ -210,10 +232,12 @@
 	[schedules_error_empty_output_folder]
 		en = Specify a folder.
 		de = Geben Sie einen Ordner an.
+		es = Especifique una carpeta.
 		tags = ios,new
 	[schedules_error_empty_label]
 		en = Specify a name for the scheduled job.
 		de = Geben Sie einen Namen für den geplanten Auftrag an.
+		es = Especifique un nombre para el trabajo programado.
 		tags = ios,new
 	[schedules_error_wrong_hours]
 		en = Specify the hour(s) when the job should run.
@@ -243,16 +267,20 @@
 	[schedules_error_date_past]
 		en = The date is in the past. It should be in the future.
 		de = Das Datum liegt in der Vergangenheit. Es sollte in der Zukunft liegen.
+		es = La fecha está en el pasado. Debe estar en el futuro.
 		tags = ios,new
 	[schedules_error_duplicate_filename]
 		en = There is a scheduled job of the same output file name. Please try different name.
 		de = Es gibt einen geplanten Auftrag mit dem gleichen Ausgabedateinamen. Bitte versuchen Sie es mit einem anderen Namen.
+		es = Hay un trabajo programado con el mismo archivo de salida. Por favor intente con otro nombre.
 		tags = ios,new
 	[schedules_error_output_folder_inexistent]
 		en = The job output folder cannot be found. It might have been deleted or moved.
 		de = Der Job-Ausgabeordner kann nicht gefunden werden. Er könnte gelöscht oder verschoben worden sein.
+		es = No se encontró la carpeta de salida del trabajo. Puede haber sido movida o eliminada.
 		tags = ios,new
 	[schedules_error_length]
 		en = Too long string.
 		de = Zu lange Zeichenfolge.
+		es = Cadena demasiado larga.
 		tags = ios,new
