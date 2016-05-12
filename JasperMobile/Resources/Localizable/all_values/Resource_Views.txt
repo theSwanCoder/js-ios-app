@@ -58,4 +58,5 @@
 		it = Nessun lavoro trovato.
 		ja = タスクは何もありません。
 		pt = Nenhum trabalho foi encontrado.
-		tags = ios,new
+		zh = 没有找到任务。
+		tags = ios

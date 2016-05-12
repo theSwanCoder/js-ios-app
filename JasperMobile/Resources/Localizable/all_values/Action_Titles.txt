@@ -38,7 +38,8 @@
 		it = Filtri
 		ja = フィルター
 		pt = Filtros
-		tags = ios,new
+		zh = 筛选
+		tags = ios
 	[action_title_delete]
 		en = Delete
 		de = Löschen
@@ -187,4 +188,5 @@
 		it = Condividi
 		ja = 共有する
 		pt = Compartilhar
-		tags = ios,new
+		zh = 分享
+		tags = ios

@@ -8,7 +8,8 @@
 		it = Esegui pannello
 		ja = ダッシュボードを実行する
 		pt = Executar Painel de Controle
-		tags = ios,new
+		zh = 运行仪表板
+		tags = ios
 	[dialog_button_ok]
 		en = OK
 		de = OK

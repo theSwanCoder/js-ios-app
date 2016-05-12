@@ -118,4 +118,5 @@
 		it = Nessuna applicazione esistente per aprire questa risorsa.
 		ja = このリソースを開くためのアプリケーションがありません。
 		pt = Não há um aplicativo para executar este recurso
-		tags = ios,new
+		zh = 没有可打开该资源的应用程序。
+		tags = ios

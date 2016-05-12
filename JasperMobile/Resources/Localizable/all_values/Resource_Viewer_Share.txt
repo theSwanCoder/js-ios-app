@@ -8,7 +8,8 @@
 		it = Condivisione risorsa
 		ja = リソースの共有
 		pt = Compartilhamento de recursos
-		tags = ios,new
+		zh = 资源共享
+		tags = ios
     [resource_viewer_share_annotation_title]
         en = Input text, please
         de = Bitte Text eingeben
@@ -17,7 +18,8 @@
         it = Immettere testo
         ja = テキストを入力してください
         pt = Texto de entrada
-        tags = ios,new
+        zh = 请输入文本
+        tags = ios
     [resource_viewer_share_annotation_placeholder]
         en = Annotation
         de = Anmerkung
@@ -26,7 +28,8 @@
         it = Annotazione
         ja = コメント
         pt = Anotação
-        tags = ios,new
+        zh = 注释
+        tags = ios
     [resource_viewer_share_annotation_empty_error]
         en = Annotation text can't be empty!
         de = Der Anmerkungstext darf nicht leer bleiben!
@@ -35,7 +38,8 @@
         it = Il campo per l\'annotazione del testo non può restare vuoto!
         ja = コメント欄を空欄にする事はできません！
         pt = O campo de texto da anotação não pode ficar em branco!
-        tags = ios,new
+        zh = 注释文本不能为空！
+        tags = ios
     [resource_viewer_share_text]
         en = Look at this awesome report, builded via %@!
         de = Schauen Sie sich diesen umwerfenden Bericht an, der mit %@ aufgesetzt wurde!
@@ -44,7 +48,8 @@
         it = Guarda questo fantastico rapporto, creato con %@!
         ja = %@で作成した素晴らしいレポートをご覧下さい！
         pt = Beja este relatório incrível, elaborado com o %@!
-        tags = ios,new
+        zh = 看看这份使用%@制作的出色报告！
+        tags = ios
     [resource_viewer_share_settings_title]
         en = Share Settings
         de = Einstellungen teilen
@@ -53,7 +58,8 @@
         it = Condividi impostazioni
         ja = 共有設定
         pt = Compartilhar Configurações
-        tags = ios,new
+        zh = 分享设置
+        tags = ios
     [resource_viewer_share_settings_opacity]
         en = Opacity
         de = Opazität
@@ -62,7 +68,8 @@
         it = Opacità
         ja = 不透明度
         pt = Opacidade
-        tags = ios,new
+        zh = 不透明度
+        tags = ios
     [resource_viewer_share_settings_brush]
         en = Brush
         de = Pinsel
@@ -71,7 +78,8 @@
         it = Pennello
         ja = ブラシ
         pt = Pincel
-        tags = ios,new
+        zh = 笔刷
+        tags = ios
     [resource_viewer_share_settings_border]
         en = Border For Text
         de = Textrahmen
@@ -80,7 +88,8 @@
         it = Bordo per testo
         ja = テキストのボーダー
         pt = Borda do texto
-        tags = ios,new
+        zh = 文本边框
+        tags = ios
     [resource_viewer_share_settings_font_size]
         en = Font Size
         de = Schriftgröße
@@ -89,4 +98,5 @@
         it = Dimensioni font
         ja = フォントサイズ
         pt = Tamanho da fonte
-        tags = ios,new
+        zh = 字体大小
+        tags = ios

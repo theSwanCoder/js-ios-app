@@ -28,7 +28,8 @@
 		it = Proprietario
 		ja = オーナー
 		pt = Proprietário
-		tags = ios,new
+		zh = 所有者
+		tags = ios
 	[resource_schedule_state_title]
 		en = State
 		de = Zustand
@@ -37,7 +38,8 @@
 		it = Stato
 		ja = 状態
 		pt = Estado
-		tags = ios,new
+		zh = 状态
+		tags = ios
 	[resource_schedule_previousFireTime_title]
 		en = Previous Fire Time
 		de = Vorherige Auslieferungszeit
@@ -46,7 +48,8 @@
 		it = Ora fuoco precedente
 		ja = Fire Time履歴
 		pt = Horário de disparo anterior
-		tags = ios,new
+		zh = 上次火时间
+		tags = ios
 	[resource_schedule_nextFireTime_title]
 		en = Next Fire Time
 		de = Nächste Auslieferungszeit
@@ -55,7 +58,8 @@
 		it = Ora fuoco successiva
 		ja = 次のFire Time
 		pt = Próximo horário de disparo
-		tags = ios,new
+		zh = 下次火时间
+		tags = ios
 
 [[New Job]]
 	[schedules_new_job_label]
@@ -76,7 +80,8 @@
 		it = Descrizione
 		ja = 詳細
 		pt = Descrição
-		tags = ios,new
+		zh = 描述
+		tags = ios
 	[schedules_new_job_button_create]
 		en = Create Schedule
 		de = Auftrag erstellen
@@ -134,7 +139,8 @@
 		it = Data fine
 		ja = 終了日
 		pt = Data final
-		tags = ios,new
+		zh = 结束日期
+		tags = ios
 	[schedules_new_job_start_immediately]
 		en = Start immediately
 		de = Sofort starten
@@ -143,7 +149,8 @@
 		it = Inizia subito
 		ja = すぐに開始する
 		pt = Começar imediatamente
-		tags = ios,new
+		zh = 立即开始
+		tags = ios
 	[schedules_new_job_output_format]
 		en = Output Format
 		de = Ausgabeformat
@@ -162,7 +169,8 @@
 		it = Tipo di ricorrenza
 		ja = 定期的
 		pt = Tipo de recorrência
-		tags = ios,new
+		zh = 循环类型
+		tags = ios
 	[schedules_new_job_repeat_count]
 		en = Count
 		de = Zählung
@@ -171,7 +179,8 @@
 		it = Conta
 		ja = 回数
 		pt = Contagem
-		tags = ios,new
+		zh = 计数
+		tags = ios
 	[schedules_new_job_repeat_interval]
 		en = Interval
 		de = Intervall
@@ -180,7 +189,8 @@
 		it = Intervallo
 		ja = 間隔
 		pt = Intervalo
-		tags = ios,new
+		zh = 间隔
+		tags = ios
 	[schedules_new_job_run_indefinitely]
 		en = Run Indefinitely
 		de = Auf unbestimmte Zeit durchführen
@@ -189,7 +199,8 @@
 		it = Esegui indefinitivamente
 		ja = 無期限で実行する
 		pt = Executar Indefinidamente
-		tags = ios,new
+		zh = 无限期运行
+		tags = ios
 	[schedules_new_job_number_of_runs]
 		en = Number of Runs
 		de = Anzahl der Durchläufe
@@ -198,7 +209,8 @@
 		it = Numero di esecuzioni
 		ja = 実行回数
 		pt = Número de Execuções
-		tags = ios,new
+		zh = 运行次数
+		tags = ios
 	[schedules_new_job_repeat_type_alert_title]
 		en = Recurrence Type
 		de = Wiederholungsart
@@ -207,7 +219,8 @@
 		it = Tipo ricorrenza
 		ja = 定期的
 		pt = Tipo de Recorrência
-		tags = ios,new
+		zh = 循环类型
+		tags = ios
 	[schedules_job_calendar_every_month]
 		en = Every Month
 		de = Jeden Monat
@@ -216,7 +229,8 @@
 		it = Ogni mese
 		ja = 毎月
 		pt = Todo Mês
-		tags = ios,new
+		zh = 每月
+		tags = ios
 	[schedules_job_calendar_selected_months]
 		en = Selected Months
 		de = Ausgewählte Monate
@@ -225,7 +239,8 @@
 		it = Mesi selezionati
 		ja = 選択した月
 		pt = Meses Selecionados
-		tags = ios,new
+		zh = 所选月份
+		tags = ios
 	[schedules_job_calendar_every_day]
 		en = Every Day
 		de = Jeden Tag
@@ -234,7 +249,8 @@
 		it = Ogni giorno
 		ja = 毎日
 		pt = Todo Dia
-		tags = ios,new
+		zh = 每天
+		tags = ios
 	[schedules_job_calendar_selected_days]
 		en = Selected Days
 		de = Ausgewählte Tage
@@ -243,7 +259,8 @@
 		it = Giorni selezionati
 		ja = 選択した日
 		pt = Dias Selecionados
-		tags = ios,new
+		zh = 所选天数
+		tags = ios
 	[schedules_job_calendar_dates_in_month]
 		en = Dates In Month
 		de = Termine in Monaten
@@ -252,7 +269,8 @@
 		it = Date in mesi
 		ja = 月の日付
 		pt = Datas no Mês
-		tags = ios,new
+		zh = 月份日期
+		tags = ios
 	[schedules_job_calendar_hours]
 		en = Hours
 		de = Stunden
@@ -261,7 +279,8 @@
 		it = Ore
 		ja = 時
 		pt = Horas
-		tags = ios,new
+		zh = 小时
+		tags = ios
 	[schedules_job_calendar_minutes]
 		en = Minutes
 		de = Minuten
@@ -270,7 +289,8 @@
 		it = Minuti
 		ja = 分
 		pt = Minutos
-		tags = ios,new
+		zh = 分钟
+		tags = ios
 
 [[Schedule Errors]]
 	[schedules_error_domain]
@@ -301,7 +321,8 @@
 		it = Il nome di uscita base contiene caratteri non validi. È possibile che ci siano errori nella digitazione.
 		ja = ベースとなる出力名に無効な文字が含まれています。入力ミスしている可能性がありますのでご確認ください。
 		pt = O nome de saída-base contém caracteres inválidos. Você pode ter digitado incorretamente.
-		tags = ios,new
+		zh = 基数输出名称包含无效字符。您可能输错了。
+		tags = ios
 	[schedules_error_repeat_count_invalid_characters]
 		en = Please enter only digits.
 		de = Bitte geben Sie nur Ziffern ein.
@@ -310,7 +331,8 @@
 		it = Inserire soltanto cifre.
 		ja = 数字のみ入力してください。
 		pt = Use somente números.
-		tags = ios,new
+		zh = 请只输入数字。
+		tags = ios
 	[schedules_error_repeat_count_empty]
 		en = Specify a recurrence interval.
 		tags = ios,new
@@ -325,7 +347,8 @@
 		it = Specificare una cartella.
 		ja = フォルダを指定してください。
 		pt = Especifique uma pasta.
-		tags = ios,new
+		zh = 指定一个文件夹。
+		tags = ios
 	[schedules_error_empty_label]
 		en = Specify a name for the scheduled job.
 		de = Geben Sie einen Namen für den geplanten Auftrag an.
@@ -334,7 +357,8 @@
 		it = Specificare un nome per il lavoro pianificato.
 		ja = スケジュールされたタスクの名称を指定してください。
 		pt = Especifique um nome para a tarefa agendada.
-		tags = ios,new
+		zh = 为已安排任务指定一个名称。
+		tags = ios
 	[schedules_error_wrong_hours]
 		en = Specify the hour(s) when the job should run.
 		tags = ios,new
@@ -368,7 +392,8 @@
 		it = La data è nel passato. Dovrebbe essere nel futuro.
 		ja = 終了日が過去の日付となっています。未来の日付を設定してください。
 		pt = A data está no passado e deve ser uma data futura.
-		tags = ios,new
+		zh = 日期已过。它应该是未来日期。
+		tags = ios
 	[schedules_error_duplicate_filename]
 		en = There is a scheduled job of the same output file name. Please try different name.
 		de = Es gibt einen geplanten Auftrag mit dem gleichen Ausgabedateinamen. Bitte versuchen Sie es mit einem anderen Namen.
@@ -377,7 +402,8 @@
 		it = Esiste un lavoro pianificato con lo stesso nome del file salvato. Usare un nome diverso.
 		ja = スケジュール化されたタスクに、既に同じ出力ファイル名が割り当てられています。他の名称をお試し下さい。
 		pt = Há uma tarefa agendada com o mesmo nome de arquivo de saída. Use um nome diferente.
-		tags = ios,new
+		zh = 已有相同输出文件名的已安排任务。请尝试不同的名称。
+		tags = ios
 	[schedules_error_output_folder_inexistent]
 		en = The job output folder cannot be found. It might have been deleted or moved.
 		de = Der Job-Ausgabeordner kann nicht gefunden werden. Er könnte gelöscht oder verschoben worden sein.
@@ -386,7 +412,8 @@
 		it = Impossibile trovare la cartella del lavoro salvato. È possibile che sia stata eliminata o spostata.
 		ja = タスク出力フォルダが見つかりません。移動もしくは削除されている可能性があります。
 		pt = Pasta de gravação de tarefas não encontrada. A pasta pode ter sido excluída ou movida.
-		tags = ios,new
+		zh = 无法找到任务输出文件夹。它可能已被删除或移动。
+		tags = ios
 	[schedules_error_length]
 		en = Too long string.
 		de = Zu lange Zeichenfolge.
@@ -395,4 +422,5 @@
 		it = Stringa troppo lunga.
 		ja = 文字列が長過ぎます。
 		pt = Sequência de caracteres muito longa.
-		tags = ios,new
+		zh = 字符串太长。
+		tags = ios
