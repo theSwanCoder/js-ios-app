@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 @interface JMVisDashboardLoader()
 @property (nonatomic, weak) JMDashboard *dashboard;
 @property (nonatomic, weak) JMWebEnvironment *webEnvironment;
+@property (nonatomic, assign, getter=isCancelLoad) BOOL cancelLoad;
 @end
 
 @implementation JMVisDashboardLoader
@@ -75,6 +76,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - Public API
 - (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     [self addListenersForVisualizeEvents];
 
     JMDashboardLoaderCompletion heapBlock = [completion copy];
@@ -111,6 +116,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     JMDashboardLoaderCompletion heapBlock = [completion copy];
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.refresh"
@@ -127,6 +136,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion) completion
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     JMDashboardLoaderCompletion heapBlock = [completion copy];
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.refreshDashlet"
@@ -149,6 +162,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion) completion
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     JMDashboardLoaderCompletion heapBlock = [completion copy];
 
     JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.getDashboardParameters"
@@ -165,6 +182,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)applyParameters:(NSDictionary *)parameters
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     // TODO: replace received parameter for dictionary
     JMLog(@"%@", NSStringFromSelector(_cmd));
     JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.applyParams"
@@ -180,6 +201,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)cancel
 {
+    self.cancelLoad = YES;
     [self cancelDashboard];
 }
 
@@ -190,6 +212,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)maximizeDashletForComponent:(JSDashboardComponent *__nullable)component
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.maximizeDashlet"
                                                                 parameters:@{
                                                                         @"identifier" : component != nil ? component.identifier : @"null"
@@ -206,6 +232,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)minimizeDashletForComponent:(JSDashboardComponent *__nullable)component
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.minimizeDashlet"
                                                                 parameters:@{
                                                                         @"identifier" : component != nil ? component.identifier : @"null"
@@ -275,6 +305,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - Helpers
 - (void)startLoadHTMLWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     JMLog(@"visuzalise.js did start load");
     JMDashboardLoaderCompletion heapBlock = [completion copy];
     __weak __typeof(self) weakSelf = self;
@@ -317,6 +351,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     NSString *dashletDidMaximizeFailedListenerId = @"JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed";
     [self.webEnvironment addListenerWithId:dashletDidMaximizeFailedListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(@"JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed");
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.isCancelLoad) {
+            return;
+        }
+
         [JMUtils presentAlertControllerWithError:error
                                       completion:nil];
     }];
@@ -353,6 +392,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - Handle JS callbacks
 - (void)handleDOMContentLoadedWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     JMDashboardLoaderCompletion heapBlock = [completion copy];
     // run
     JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.runDashboard"
@@ -373,6 +416,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     JMLog(@"parameters: %@", parameters);
     NSString *title;
     if ([JMUtils isServerAmber]) {
@@ -391,6 +438,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleOnReportExecution:(NSDictionary *)parameters
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     NSString *resourceURI = parameters[@"data"][@"resource"];
     NSDictionary *params = parameters[@"data"][@"params"];
 
@@ -431,6 +482,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleOnAdHocExecution:(NSDictionary *)parameters
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     if (self.dashboard.maximizedComponent.dashletHyperlinkTarget == JSDashletHyperlinksTargetTypeBlank) {
         NSDictionary *params = parameters[@"link"][@"parameters"];
         NSString *urlString;
@@ -453,6 +508,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleOnReferenceClick:(NSDictionary *)parameters
 {
+    if (self.isCancelLoad) {
+        return;
+    }
+
     NSString *URLString = parameters[@"location"];
     if (URLString) {
         [self.delegate dashboardLoader:self

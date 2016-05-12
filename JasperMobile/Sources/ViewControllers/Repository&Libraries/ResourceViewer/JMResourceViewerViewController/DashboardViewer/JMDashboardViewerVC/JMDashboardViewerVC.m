@@ -271,6 +271,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     if (self.resource.type != JMResourceTypeLegacyDashboard && [JMUtils isSupportVisualize]) {
         [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                    cancelBlock:^(void) {
+                                       [self.dashboardLoader cancel];
                                        [super cancelResourceViewingAndExit:YES];
                                    }];
 
@@ -281,7 +282,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
             if (error) {
                 if (error.code == JSSessionExpiredErrorCode) {
-                    __weak typeof(self)weakSelf = self;
+                    __weak typeof(self)weakSelf = strongSelf;
                     [strongSelf handleAuthErrorWithCompletion:^(void) {
                         __weak typeof(self)strongSelf = weakSelf;
                         [strongSelf startResourceViewing];
