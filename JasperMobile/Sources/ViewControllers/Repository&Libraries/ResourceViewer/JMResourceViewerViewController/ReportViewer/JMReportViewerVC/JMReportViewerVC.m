@@ -190,6 +190,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     BOOL isReportReady = self.report.countOfPages != NSNotFound;
     if (isReportReady && self.report.isReportEmpty) {
         [self showEmptyReportMessage];
+    } else {
+        [self hideEmptyReportMessage];
     }
 }
 
@@ -221,7 +223,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                             webEnvironment:self.webEnvironment];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 
-    [super setupSubviews];
+    [self.view insertSubview:[self resourceView] belowSubview:self.emptyReportMessageLabel];
+    [self setupResourceViewLayout];
 }
 
 - (void)updateToobarAppearence
@@ -802,15 +805,15 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)showEmptyReportMessage
 {
-    [self hideReportView];
     self.emptyReportMessageLabel.hidden = NO;
     [self.navigationController setToolbarHidden:YES animated:YES];
 }
 
 - (void)hideEmptyReportMessage
 {
-    [self showReportView];
     self.emptyReportMessageLabel.hidden = YES;
+    [self.navigationController setToolbarHidden:!self.report.isMultiPageReport
+                                       animated:YES];
 }
 
 - (BOOL)isReportReady
