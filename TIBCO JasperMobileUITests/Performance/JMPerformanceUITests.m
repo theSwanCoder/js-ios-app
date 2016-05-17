@@ -12,6 +12,21 @@ NSInteger static kJMRunReportTestCellIndex = 1;
 
 @implementation JMPerformanceUITests
 
+#pragma mark - Performance Login
+- (void)testLogin
+{
+    [self givenThatLibraryPageOnScreen];
+    [self logout];
+    
+    [self measureBlock:^{
+        [self loginWithTestProfile];
+        
+        [self givenThatLibraryPageOnScreen];
+        [self logout];
+    }];
+}
+
+#pragma mark - Performance Run Report
 - (void)testRunReport
 {
     [self givenThatLibraryPageOnScreen];
