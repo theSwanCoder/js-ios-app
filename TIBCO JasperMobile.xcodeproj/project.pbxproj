@@ -190,6 +190,7 @@
 		93F26A1F1C9BF9310069CD5D /* testPage.html in Resources */ = {isa = PBXBuildFile; fileRef = 93F26A1E1C9BF9310069CD5D /* testPage.html */; };
 		93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FD91BD7975E00355A30 /* Fabric.framework */; };
 		93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FDA1BD7975E00355A30 /* Crashlytics.framework */; };
+		93F854161CEA006A00B2F481 /* JMPerformanceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F854151CEA006A00B2F481 /* JMPerformanceUITests.m */; };
 		A1478005B3B1C5EA078F8199 /* JMResource.m in Sources */ = {isa = PBXBuildFile; fileRef = A147881459C78743FA3F43DB /* JMResource.m */; };
 		A14781F70628D2FE3607A35B /* resource_viewer.html in Resources */ = {isa = PBXBuildFile; fileRef = A14786368BF66101195146EB /* resource_viewer.html */; };
 		A1478208EF52280BF30EDEEE /* JMExternalWindowControlsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A147875D25959A63159192C8 /* JMExternalWindowControlsVC.xib */; };
@@ -603,6 +604,8 @@
 		93F26A1E1C9BF9310069CD5D /* testPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = testPage.html; sourceTree = "<group>"; };
 		93F54FD91BD7975E00355A30 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		93F54FDA1BD7975E00355A30 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		93F854141CEA006A00B2F481 /* JMPerformanceUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPerformanceUITests.h; sourceTree = "<group>"; };
+		93F854151CEA006A00B2F481 /* JMPerformanceUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPerformanceUITests.m; sourceTree = "<group>"; };
 		9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.adhoc.xcconfig; path = "Pods/Target Support Files/Pods/Pods.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A1478004BA83FE92F7423390 /* Saved_Reports_Viewer_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Saved_Reports_Viewer_View.txt; sourceTree = "<group>"; };
 		A147806D6CC4CAC23BF4488F /* JMJavascriptCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptCallback.m; sourceTree = "<group>"; };
@@ -2370,6 +2373,7 @@
 		93DC8C3A1C6CCEEE000DEADF /* TIBCO JasperMobileUITests */ = {
 			isa = PBXGroup;
 			children = (
+				93F854131CE9FA5C00B2F481 /* Performance */,
 				933CAF491C776A8E00EF6F84 /* AppMenu */,
 				933CAF4B1C776A8E00EF6F84 /* LoginPage */,
 				933CAF501C776A8E00EF6F84 /* Resources */,
@@ -2388,6 +2392,15 @@
 				931CB0351C9ED48000563008 /* testJSON */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		93F854131CE9FA5C00B2F481 /* Performance */ = {
+			isa = PBXGroup;
+			children = (
+				93F854141CEA006A00B2F481 /* JMPerformanceUITests.h */,
+				93F854151CEA006A00B2F481 /* JMPerformanceUITests.m */,
+			);
+			path = Performance;
 			sourceTree = "<group>";
 		};
 		A14780210DEDD7D0C186C25A /* JMSelectedItem */ = {
@@ -3342,6 +3355,7 @@
 				933CAFBB1C77709E00EF6F84 /* JMRecentlyViewedInfoPageUITests.m in Sources */,
 				93732E2D1C75F2050065B972 /* JMBaseUITestCase.m in Sources */,
 				933CAFA31C776F9700EF6F84 /* JMFiltersPageUITests.m in Sources */,
+				93F854161CEA006A00B2F481 /* JMPerformanceUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
