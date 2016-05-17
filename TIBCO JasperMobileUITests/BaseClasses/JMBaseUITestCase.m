@@ -23,14 +23,19 @@
     [self.application launch];
     
     XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-    if (!loginPageView.exists) {
+    BOOL isLoginPageOnScreen = loginPageView.exists;
+    if (!isLoginPageOnScreen) {
         [self logout];
     }
     [self loginWithTestProfile];
 }
 
 - (void)tearDown {
-    [self logout];
+    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
+    BOOL isLoginPageOnScreen = loginPageView.exists;
+    if (!isLoginPageOnScreen) {
+        [self logout];
+    }
     self.application = nil;
     
     [super tearDown];
@@ -104,8 +109,6 @@
 
 - (void)logout
 {
-    [self givenThatLibraryPageOnScreen];
-    
     [self tryOpenPageWithName:@"Log Out"];
 }
 
@@ -322,7 +325,7 @@
 
 - (void)verifyIntroPageIsOnScreen
 {
-    sleep(5);
+    sleep(2);
     XCUIElement *skipIntroButton = self.application.buttons[@"Skip Intro"];
     if (skipIntroButton.exists) {
         [skipIntroButton tap];
@@ -331,7 +334,7 @@
 
 - (void)verifyRateAlertIsShown
 {
-    sleep(5);
+    sleep(2);
     XCUIElement *rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
     if (rateAlert.exists) {
         XCUIElement *rateAppLateButton = rateAlert.collectionViews.buttons[@"No, thanks"];
