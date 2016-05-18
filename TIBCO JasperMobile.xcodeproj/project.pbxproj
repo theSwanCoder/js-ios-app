@@ -140,6 +140,9 @@
 		08F2D1701CB268C500C6E4EF /* Resource_Viewer_Share.txt in Resources */ = {isa = PBXBuildFile; fileRef = 08F2D16F1CB268C500C6E4EF /* Resource_Viewer_Share.txt */; };
 		7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */; };
 		93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */; };
+		930E18DC1CEC98C600CE5E10 /* JMPerformanceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E18DB1CEC98C600CE5E10 /* JMPerformanceUITests.m */; };
+		930E18DD1CEC9A7100CE5E10 /* JMBaseUITestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */; };
+		930E18DE1CEC9A7B00CE5E10 /* JMUITestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C4E3111C737DB300A19D64 /* JMUITestConstants.m */; };
 		931CB0361C9ED48000563008 /* testJSON in Resources */ = {isa = PBXBuildFile; fileRef = 931CB0351C9ED48000563008 /* testJSON */; };
 		9331B2C61C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */; };
 		9331B2C71C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */; };
@@ -190,7 +193,6 @@
 		93F26A1F1C9BF9310069CD5D /* testPage.html in Resources */ = {isa = PBXBuildFile; fileRef = 93F26A1E1C9BF9310069CD5D /* testPage.html */; };
 		93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FD91BD7975E00355A30 /* Fabric.framework */; };
 		93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FDA1BD7975E00355A30 /* Crashlytics.framework */; };
-		93F854161CEA006A00B2F481 /* JMPerformanceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F854151CEA006A00B2F481 /* JMPerformanceUITests.m */; };
 		A1478005B3B1C5EA078F8199 /* JMResource.m in Sources */ = {isa = PBXBuildFile; fileRef = A147881459C78743FA3F43DB /* JMResource.m */; };
 		A14781F70628D2FE3607A35B /* resource_viewer.html in Resources */ = {isa = PBXBuildFile; fileRef = A14786368BF66101195146EB /* resource_viewer.html */; };
 		A1478208EF52280BF30EDEEE /* JMExternalWindowControlsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A147875D25959A63159192C8 /* JMExternalWindowControlsVC.xib */; };
@@ -252,6 +254,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		930E18D31CEC988C00CE5E10 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F55CC327174CFFCE00CEB39E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F55CC32E174CFFCE00CEB39E;
+			remoteInfo = "TIBCO JasperMobile";
+		};
 		9356EC9D1A30752900ACE2C6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F55CC327174CFFCE00CEB39E /* Project object */;
@@ -520,6 +529,10 @@
 		93047D591AB6F5750047C982 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		93047D5A1AB6F5750047C982 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
 		93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		930E18CE1CEC988C00CE5E10 /* TIBCO JasperMobile Performance UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TIBCO JasperMobile Performance UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		930E18D21CEC988C00CE5E10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		930E18DA1CEC98C600CE5E10 /* JMPerformanceUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPerformanceUITests.h; sourceTree = "<group>"; };
+		930E18DB1CEC98C600CE5E10 /* JMPerformanceUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPerformanceUITests.m; sourceTree = "<group>"; };
 		931CB0351C9ED48000563008 /* testJSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = testJSON; sourceTree = "<group>"; };
 		9331B2C31C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowDashboardControlsTableViewCell.h; sourceTree = "<group>"; };
 		9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowDashboardControlsTableViewCell.m; sourceTree = "<group>"; };
@@ -604,8 +617,6 @@
 		93F26A1E1C9BF9310069CD5D /* testPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = testPage.html; sourceTree = "<group>"; };
 		93F54FD91BD7975E00355A30 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		93F54FDA1BD7975E00355A30 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		93F854141CEA006A00B2F481 /* JMPerformanceUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPerformanceUITests.h; sourceTree = "<group>"; };
-		93F854151CEA006A00B2F481 /* JMPerformanceUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPerformanceUITests.m; sourceTree = "<group>"; };
 		9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.adhoc.xcconfig; path = "Pods/Target Support Files/Pods/Pods.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A1478004BA83FE92F7423390 /* Saved_Reports_Viewer_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Saved_Reports_Viewer_View.txt; sourceTree = "<group>"; };
 		A147806D6CC4CAC23BF4488F /* JMJavascriptCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptCallback.m; sourceTree = "<group>"; };
@@ -747,6 +758,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		930E18CB1CEC988C00CE5E10 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9356EC941A30752800ACE2C6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1901,6 +1919,24 @@
 			path = Library;
 			sourceTree = "<group>";
 		};
+		930E18CF1CEC988C00CE5E10 /* TIBCO JasperMobile Performance UITests */ = {
+			isa = PBXGroup;
+			children = (
+				930E18D91CEC98C600CE5E10 /* Performance */,
+				930E18D21CEC988C00CE5E10 /* Info.plist */,
+			);
+			path = "TIBCO JasperMobile Performance UITests";
+			sourceTree = "<group>";
+		};
+		930E18D91CEC98C600CE5E10 /* Performance */ = {
+			isa = PBXGroup;
+			children = (
+				930E18DA1CEC98C600CE5E10 /* JMPerformanceUITests.h */,
+				930E18DB1CEC98C600CE5E10 /* JMPerformanceUITests.m */,
+			);
+			path = Performance;
+			sourceTree = "<group>";
+		};
 		9331B2C01C2FC6F10057233B /* JMExtraWindowDashboardControlsTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -2373,7 +2409,6 @@
 		93DC8C3A1C6CCEEE000DEADF /* TIBCO JasperMobileUITests */ = {
 			isa = PBXGroup;
 			children = (
-				93F854131CE9FA5C00B2F481 /* Performance */,
 				933CAF491C776A8E00EF6F84 /* AppMenu */,
 				933CAF4B1C776A8E00EF6F84 /* LoginPage */,
 				933CAF501C776A8E00EF6F84 /* Resources */,
@@ -2392,15 +2427,6 @@
 				931CB0351C9ED48000563008 /* testJSON */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		93F854131CE9FA5C00B2F481 /* Performance */ = {
-			isa = PBXGroup;
-			children = (
-				93F854141CEA006A00B2F481 /* JMPerformanceUITests.h */,
-				93F854151CEA006A00B2F481 /* JMPerformanceUITests.m */,
-			);
-			path = Performance;
 			sourceTree = "<group>";
 		};
 		A14780210DEDD7D0C186C25A /* JMSelectedItem */ = {
@@ -3001,6 +3027,7 @@
 				08E62C8419922BA40081CA83 /* Resources */,
 				9356EC981A30752900ACE2C6 /* TIBCO JasperMobile Tests */,
 				93DC8C3A1C6CCEEE000DEADF /* TIBCO JasperMobileUITests */,
+				930E18CF1CEC988C00CE5E10 /* TIBCO JasperMobile Performance UITests */,
 				F55CC331174CFFCE00CEB39E /* Frameworks */,
 				F55CC330174CFFCE00CEB39E /* Products */,
 				F5663A141752F9D0007978BE /* Vendor */,
@@ -3014,6 +3041,7 @@
 				F55CC32F174CFFCE00CEB39E /* TIBCO JasperMobile.app */,
 				9356EC971A30752800ACE2C6 /* TIBCO JasperMobile Tests.xctest */,
 				93DC8C391C6CCEEE000DEADF /* TIBCO JasperMobileUITests.xctest */,
+				930E18CE1CEC988C00CE5E10 /* TIBCO JasperMobile Performance UITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3060,6 +3088,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		930E18CD1CEC988C00CE5E10 /* TIBCO JasperMobile Performance UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 930E18D81CEC988C00CE5E10 /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile Performance UITests" */;
+			buildPhases = (
+				930E18CA1CEC988C00CE5E10 /* Sources */,
+				930E18CB1CEC988C00CE5E10 /* Frameworks */,
+				930E18CC1CEC988C00CE5E10 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				930E18D41CEC988C00CE5E10 /* PBXTargetDependency */,
+			);
+			name = "TIBCO JasperMobile Performance UITests";
+			productName = "TIBCO JasperMobile Performance UITests";
+			productReference = 930E18CE1CEC988C00CE5E10 /* TIBCO JasperMobile Performance UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		9356EC961A30752800ACE2C6 /* TIBCO JasperMobile Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9356EC9F1A30752900ACE2C6 /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile Tests" */;
@@ -3130,6 +3176,10 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "TIBCO JasperMobile";
 				TargetAttributes = {
+					930E18CD1CEC988C00CE5E10 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = F55CC32E174CFFCE00CEB39E;
+					};
 					9356EC961A30752800ACE2C6 = {
 						CreatedOnToolsVersion = 6.1;
 						TestTargetID = F55CC32E174CFFCE00CEB39E;
@@ -3170,11 +3220,19 @@
 				F55CC32E174CFFCE00CEB39E /* TIBCO JasperMobile */,
 				9356EC961A30752800ACE2C6 /* TIBCO JasperMobile Tests */,
 				93DC8C381C6CCEEE000DEADF /* TIBCO JasperMobileUITests */,
+				930E18CD1CEC988C00CE5E10 /* TIBCO JasperMobile Performance UITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		930E18CC1CEC988C00CE5E10 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9356EC951A30752800ACE2C6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3312,6 +3370,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		930E18CA1CEC988C00CE5E10 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				930E18DE1CEC9A7B00CE5E10 /* JMUITestConstants.m in Sources */,
+				930E18DD1CEC9A7100CE5E10 /* JMBaseUITestCase.m in Sources */,
+				930E18DC1CEC98C600CE5E10 /* JMPerformanceUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9356EC931A30752800ACE2C6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3355,7 +3423,6 @@
 				933CAFBB1C77709E00EF6F84 /* JMRecentlyViewedInfoPageUITests.m in Sources */,
 				93732E2D1C75F2050065B972 /* JMBaseUITestCase.m in Sources */,
 				933CAFA31C776F9700EF6F84 /* JMFiltersPageUITests.m in Sources */,
-				93F854161CEA006A00B2F481 /* JMPerformanceUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3520,6 +3587,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		930E18D41CEC988C00CE5E10 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F55CC32E174CFFCE00CEB39E /* TIBCO JasperMobile */;
+			targetProxy = 930E18D31CEC988C00CE5E10 /* PBXContainerItemProxy */;
+		};
 		9356EC9E1A30752900ACE2C6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F55CC32E174CFFCE00CEB39E /* TIBCO JasperMobile */;
@@ -3728,6 +3800,101 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TIBCO JasperMobile.app/TIBCO JasperMobile";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/Pods\"/**";
+				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
+			};
+			name = Adhoc;
+		};
+		930E18D51CEC988C00CE5E10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "TIBCO JasperMobile Performance UITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jaspersoft.mobile.TIBCO-JasperMobile-Performance-UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "TIBCO JasperMobile";
+				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
+			};
+			name = Debug;
+		};
+		930E18D61CEC988C00CE5E10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "TIBCO JasperMobile Performance UITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jaspersoft.mobile.TIBCO-JasperMobile-Performance-UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "TIBCO JasperMobile";
+				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
+			};
+			name = Release;
+		};
+		930E18D71CEC988C00CE5E10 /* Adhoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "TIBCO JasperMobile Performance UITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jaspersoft.mobile.TIBCO-JasperMobile-Performance-UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "TIBCO JasperMobile";
 				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
 			name = Adhoc;
@@ -4087,6 +4254,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		930E18D81CEC988C00CE5E10 /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile Performance UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				930E18D51CEC988C00CE5E10 /* Debug */,
+				930E18D61CEC988C00CE5E10 /* Release */,
+				930E18D71CEC988C00CE5E10 /* Adhoc */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		9356EC9F1A30752900ACE2C6 /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
