@@ -545,7 +545,7 @@ JasperMobile.Report.API = {
         if (JasperMobile.Report.API.report) {
             JasperMobile.Report.API.report.cancel()
                 .done(function () {
-                    JasperMobile.Callback.log("success cancel");
+                    JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.API.cancel", {});
                 })
                 .fail(function (error) {
                     JasperMobile.Callback.log("failed cancel with error: " + error);

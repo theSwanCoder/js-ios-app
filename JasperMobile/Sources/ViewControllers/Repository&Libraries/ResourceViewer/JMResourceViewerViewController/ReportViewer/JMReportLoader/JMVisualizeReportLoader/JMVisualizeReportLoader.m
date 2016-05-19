@@ -41,6 +41,7 @@
 @property (nonatomic, copy) NSString *exportFormat;
 @property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 //@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
+@property (nonatomic, assign, getter=isCancelLoading) BOOL cancelLoading;
 @end
 
 @implementation JMVisualizeReportLoader
@@ -61,7 +62,7 @@
 
 - (void)dealloc
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 }
 
 - (id<JMReportLoaderProtocol>)initWithReport:(nonnull JSReport *)report
@@ -150,23 +151,6 @@
         [self selectPageWithPageNumber:pageNumber
                             completion:completionBlock];
     }
-}
-
-- (void)cancel
-{
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.cancel"
-                                                                parameters:nil];
-    __typeof(self) weakSelf = self;
-    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (parameters) {
-            JMLog(@"canceling report was finished");
-            [strongSelf.webEnvironment removeAllListeners];
-            strongSelf.webEnvironment.cancel = YES;
-        } else {
-            JMLog(@"error: %@", error);
-        }
-    }];
 }
 
 - (void)applyReportParametersWithCompletion:(JSReportLoaderCompletionBlock)completion
@@ -265,20 +249,43 @@
                             }];
 }
 
+- (void)cancel
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    self.cancelLoading = YES;
+
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.cancel"
+                                                                parameters:nil];
+    __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (parameters) {
+            JMLog(@"canceling report was finished");
+        } else {
+            JMLog(@"error: %@", error);
+        }
+    }];
+
+    self.webEnvironment.cancel = YES;
+    [self.webEnvironment removeAllListeners];
+}
+
 - (void)destroy
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    if (self.isCancelLoading) {
+        return;
+    }
+
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.destroyReport"
                                                                 parameters:nil];
     __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
-        strongSelf.report.isReportAlreadyLoaded = NO;
-        [strongSelf.webEnvironment removeAllListeners];
-        strongSelf.webEnvironment.cancel = YES;
-
         if (parameters) {
             JMLog(@"callback: %@", parameters);
+            strongSelf.report.isReportAlreadyLoaded = NO;
+            [strongSelf.webEnvironment removeAllListeners];
         } else {
             JMLog(@"error: %@", error);
         }
@@ -312,7 +319,7 @@
 #pragma mark - Private
 - (void)freshLoadReportWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock)completion
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     if (!self.report) {
         return;
     }
