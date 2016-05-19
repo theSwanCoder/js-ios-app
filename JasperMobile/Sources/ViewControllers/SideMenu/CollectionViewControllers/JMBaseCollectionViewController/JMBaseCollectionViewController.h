@@ -52,6 +52,7 @@ extern NSString * const kJMRepresentationTypeDidChangeNotification;
 @property (nonatomic, strong) NSString *representationTypeKey;
 @property (nonatomic, copy) void(^actionBlock)(JMResource *);
 
+- (BOOL)needShowSearchBar;
 - (NSString *)noResultText;
 - (void)actionForResource:(JMResource *)resource;
 - (JMMenuActionsViewAction)availableAction;

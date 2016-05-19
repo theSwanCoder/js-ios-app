@@ -51,6 +51,11 @@
 }
 
 #pragma mark - Overloaded methods
+- (BOOL)needShowSearchBar
+{
+    return [JMUtils isSupportSearchInSchedules];
+}
+
 - (NSString *)defaultRepresentationTypeKey
 {
     NSString * keyString = @"RepresentationTypeKey";

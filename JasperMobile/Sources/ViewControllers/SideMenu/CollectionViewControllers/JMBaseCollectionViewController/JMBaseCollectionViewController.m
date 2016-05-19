@@ -107,6 +107,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     self.shouldShowButtonForChangingViewPresentation = YES;
     self.shouldShowRightNavigationItems = YES;
     self.isScrollToTop = NO;
+
+    [self makeSearchBarVisible:[self needShowSearchBar]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -148,6 +150,24 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
     [self showNavigationItemsForTraitCollection:newCollection];
+}
+
+#pragma mark - Setup
+- (BOOL)needShowSearchBar
+{
+    return YES;
+}
+
+- (void)makeSearchBarVisible:(BOOL)visible
+{
+    JMBaseCollectionView *baseCollectionView = [self collectionView];
+    baseCollectionView.searchBarPlaceholderTopConstraint.constant = visible ? 0 : (- CGRectGetHeight(baseCollectionView.searchBarPlaceholder.frame));
+}
+
+- (JMBaseCollectionView *)collectionView
+{
+    JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
+    return baseCollectionView;
 }
 
 #pragma mark - Custom accessors
