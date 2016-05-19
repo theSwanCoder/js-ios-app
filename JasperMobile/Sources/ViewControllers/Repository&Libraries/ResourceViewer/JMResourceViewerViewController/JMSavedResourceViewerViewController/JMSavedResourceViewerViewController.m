@@ -263,7 +263,7 @@
                                                                                                        [strongSelf moveResourceFromPath:strongSelf.savedResourceURL.path
                                                                                                                                  toPath:fileURL.path];
                                                                                                        strongSelf.savedResourceURL = fileURL;
-                                                                                                       NSString *baseURLString = [NSString stringWithFormat:@"%@/fileview/fileview/public/Samples/Reports/", self.restClient.serverProfile.serverUrl];
+                                                                                                       NSString *baseURLString = [NSString stringWithFormat:@"%@/fileview/fileview/%@", self.restClient.serverProfile.serverUrl, resource.uri];
                                                                                                        [strongSelf showResourceWithURL:fileURL
                                                                                                                         resourceFormat:resource.fileFormat
                                                                                                                                baseURL:[NSURL URLWithString:baseURLString]];
