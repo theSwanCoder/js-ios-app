@@ -190,7 +190,11 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         shouldFitImage = ((resourceImage.size.height > self.resourceImage.frame.size.height) || (resourceImage.size.width > self.resourceImage.frame.size.width));
     }
     self.resourceImage.contentMode = shouldFitImage ? UIViewContentModeScaleAspectFit : UIViewContentModeCenter;
-    self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
+    if (self.resource.type == JMResourceTypeLegacyDashboard) {
+        self.resourceImage.backgroundColor = [UIColor grayColor];
+    } else {
+        self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
+    }
     self.resourceImage.image = resourceImage;
     [self layoutIfNeeded];
     self.imageWidthConstraint.constant = [JMUtils isCompactWidth] ? 100: 115;
