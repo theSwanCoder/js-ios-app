@@ -241,27 +241,34 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
             return allOptions;
         }
         case JMResourcesListLoaderOptionType_Filter:{
-            NSMutableArray *allOptions = [@[
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_reportUnit", nil)
-                                                      value:@[kJS_WS_TYPE_REPORT_UNIT]],
-            ] mutableCopy];
-
+            NSArray *allOptions;
             if ([JMUtils isServerProEdition]) {
+                // reports
+                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT];
+                JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_reportUnit", nil)
+                                                                                               value:reportsValues];
+                // dashboards
+                NSArray *dashboardsValues = @[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY];
                 JMResourceLoaderOption *dashboardFilterOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_dashboard", nil)
-                                                                                                  value:@[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY]];
-                [allOptions addObject:dashboardFilterOption];
+                                                                                                  value:dashboardsValues];
+                // all
+                NSArray *allValues = reportsValues;
+                allValues = [allValues arrayByAddingObjectsFromArray:dashboardsValues];
+                JMResourceLoaderOption *allItemsFilterOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_all", nil)
+                                                                                           value:allValues];
+                allOptions = @[
+                        allItemsFilterOption,
+                        reportFilterOption,
+                        dashboardFilterOption
+                ];
+            } else {
+                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT];
+                JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_reportUnit", nil)
+                                                                                               value:reportsValues];
+                allOptions = @[
+                        reportFilterOption
+                ];
             }
-            if (allOptions.count > 1) {
-                NSMutableArray *allAvailableItems = [NSMutableArray array];
-                for (JMResourceLoaderOption *option in allOptions) {
-                    [allAvailableItems addObjectsFromArray:option.value];
-                }
-                JMResourceLoaderOption *allItemsOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_all", nil)
-                                                                                           value:allAvailableItems];
-                [allOptions insertObject:allItemsOption
-                                 atIndex:0];
-            }
-
             return allOptions;
         }
     }
@@ -280,8 +287,10 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
             break;
         }
         case JMResourcesListLoaderOptionType_Filter:
-            if ([self listItemsWithOption:optionType].count > self.filterBySelectedIndex) {
+            if ([JMUtils isServerProEdition]) {
                 return [[self listItemsWithOption:optionType][self.filterBySelectedIndex] value];
+            } else {
+                return [[self listItemsWithOption:optionType].firstObject value];
             }
             break;
     }
