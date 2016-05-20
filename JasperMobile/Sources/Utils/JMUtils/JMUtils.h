@@ -170,6 +170,8 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (JMServerProfile *__nullable)activeServerProfile;
 
++ (float)minSupportedServerVersion;
+
 + (BOOL)isCompactWidth;
 
 + (BOOL)isCompactHeight;

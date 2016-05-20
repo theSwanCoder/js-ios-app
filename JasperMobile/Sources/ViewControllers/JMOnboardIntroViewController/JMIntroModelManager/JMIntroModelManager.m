@@ -58,7 +58,7 @@
                                                               description:JMCustomLocalizedString(@"intro_model_secondScreen_description", nil)
                                                                     image:nil];
 
-    description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro_model_thirdScreen_description", nil), [JSUtils minSupportedServerVersion]];
+    description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro_model_thirdScreen_description", nil), [JMUtils minSupportedServerVersion]];
     JMIntroModel *seemlessIntegrationPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro_model_thirdScreen_title", nil)
                                                                     description:description
                                                                           image:nil];
