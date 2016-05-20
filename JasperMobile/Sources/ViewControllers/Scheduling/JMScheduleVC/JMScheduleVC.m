@@ -55,7 +55,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 @property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) UITableViewCell *tappedCell;
-@property (assign, nonatomic) CGPoint originalTableViewContentOffset;
 @property (strong, nonatomic) JSScheduleTrigger *originTrigger;
 @end
 
@@ -118,24 +117,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                           forState:UIControlStateNormal];
 
     [self setupLeftBarButtonItems];
-    self.originalTableViewContentOffset = CGPointZero;
 
     // TODO: need make this copy?
     self.originTrigger = self.scheduleMetadata.trigger;
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-
-    [self addKeyboardObservers];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-
-    [self removeKeyboardObservers];
 }
 
 #pragma mark - Setups
@@ -668,6 +652,11 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     }];
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.view endEditing:YES];
+}
+
 #pragma mark - JMNewScheduleCellDelegate
 - (void)scheduleCellDidStartChangeValue:(JMScheduleCell *)cell
 {
@@ -727,6 +716,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *)trigger;
         calendarTrigger.minutes = trimmedValue;
     }
+    self.tappedCell = nil;
 }
 
 #pragma mark - JMNewScheduleBoolenCellDelegate
@@ -1005,55 +995,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             [section showRowWithType:JMScheduleVCRowTypeEndDate];
             break;
         }
-    }
-}
-
-#pragma mark - Keyboard Observers
-- (void)addKeyboardObservers
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidShow:)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidHide:)
-                                                 name:UIKeyboardDidHideNotification
-                                               object:nil];
-}
-
-- (void)removeKeyboardObservers
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardDidShowNotification
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardDidHideNotification
-                                                  object:nil];
-}
-
-- (void)keyboardDidShow:(NSNotification *)notification
-{
-    CGRect keyboardRect = ((NSValue *)notification.userInfo[UIKeyboardFrameEndUserInfoKey]).CGRectValue;
-
-    if (!self.tappedCell) {
-        return;
-    }
-    CGRect cellFrame = self.tappedCell.frame;
-    CGFloat cellYPositionInVisibleFrame = CGRectGetMaxY(cellFrame) - self.tableView.contentOffset.y;
-    CGFloat visibleFrameHeightWithKeyboard = CGRectGetHeight(self.tableView.frame) - CGRectGetHeight(keyboardRect);
-    if (cellYPositionInVisibleFrame > visibleFrameHeightWithKeyboard) {
-        CGPoint offset = CGPointMake(0, self.tableView.contentOffset.y + (cellYPositionInVisibleFrame - visibleFrameHeightWithKeyboard));
-        [self.tableView setContentOffset:offset animated:YES];
-    }
-    self.originalTableViewContentOffset = self.tableView.contentOffset;
-}
-
-- (void)keyboardDidHide:(NSNotification *)notification
-{
-    CGFloat diff = ceilf(self.originalTableViewContentOffset.y - self.tableView.contentOffset.y);
-    if (abs((int) diff) > 0) {
-        [self.tableView setContentOffset:self.originalTableViewContentOffset animated:YES];
-        self.tappedCell = nil;
     }
 }
 

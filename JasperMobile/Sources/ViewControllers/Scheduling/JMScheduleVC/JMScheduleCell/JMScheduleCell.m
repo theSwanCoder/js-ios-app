@@ -53,14 +53,17 @@
     }
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+- (void)textFieldDidEndEditing:(UITextField *)textField
 {
     if ([self.delegate respondsToSelector:@selector(scheduleCellDidEndChangeValue:)]) {
         [self.delegate scheduleCellDidEndChangeValue:self];
     }
+}
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     [textField resignFirstResponder];
-    return YES;
+    return NO;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

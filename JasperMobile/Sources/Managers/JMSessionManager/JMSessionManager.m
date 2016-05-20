@@ -85,7 +85,7 @@ static JMSessionManager *_sharedManager = nil;
     if (changedProfile == currentProfile) {
         // update current active server profile
         self.restClient.serverProfile.alias = changedProfile.alias;
-        self.restClient.keepSession = changedProfile.keepSession;
+        self.restClient.keepSession = [changedProfile.keepSession boolValue];
         [self saveActiveSessionIfNeeded:nil];
     }
 }

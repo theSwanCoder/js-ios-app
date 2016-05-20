@@ -31,11 +31,13 @@
 @since 2.3
 */
 
+#import "JMEditabledViewController.h"
+
 @class JMScheduleManager;
 
 typedef void(^JMScheduleCompletionBlock)(JSScheduleMetadata *__nullable);
 
-@interface JMScheduleVC : JMBaseViewController
+@interface JMScheduleVC : JMEditabledViewController
 @property (nonatomic, strong) JSScheduleMetadata *__nonnull scheduleMetadata;
 @property (nonatomic, strong) NSString *__nullable backButtonTitle;
 @property (nonatomic, copy) JMScheduleCompletionBlock __nonnull exitBlock;
