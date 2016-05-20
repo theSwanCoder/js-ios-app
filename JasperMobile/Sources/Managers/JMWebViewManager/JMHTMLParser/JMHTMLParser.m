@@ -147,7 +147,7 @@
 
     if ([scriptString containsString:@"src="]) {
         script.type = JMHTMLScriptTypeLink;
-        NSString *pattern = @"<script src=[\"|'](\\s*.*)[\"|']></script>";
+        NSString *pattern = @"src=[\"|'](\\s*.*)[\"|']></script>";
 
         NSString *value = [self parseString:scriptString withPattern:pattern];
         if (value) {
@@ -186,7 +186,7 @@
         }
     } else {
         script.type = JMHTMLScriptTypeSource;
-        NSString *pattern = @"<script>((\\s*\\S*)*)</script>";
+        NSString *pattern = @">((\\s*\\S*)*)</script>";
         NSString *value = [self parseString:scriptString withPattern:pattern];
         if (value) {
             script.value = value;

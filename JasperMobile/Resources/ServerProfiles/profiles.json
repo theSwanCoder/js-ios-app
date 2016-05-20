@@ -6,6 +6,21 @@
       "mOrganization" : ""
     },
     {
+      "mAlias" : "PRO CE",
+      "mServerUrl" : "http://build-master.jaspersoft.com:6080/jrs-ce-trunk-ce",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "csrf",
+      "mServerUrl" : "http://build-master.jaspersoft.com:8480/jrs-pro-feature-csrf-protection",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "mobile demo",
+      "mServerUrl" : "http://mobiledemo.jaspersoft.com/jasperserver-pro",
+      "mOrganization" : ""
+    },
+    {
       "mAlias" : "local 5.5",
       "mServerUrl" : "http://192.168.88.55:8087/jasperserver-pro-55",
       "mOrganization" : ""
@@ -43,31 +58,6 @@
     {
       "mAlias" : "local 6.2.1",
       "mServerUrl" : "http://192.168.88.55:8089/jasperserver-pro-621",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "mobile demo 2",
-      "mServerUrl" : "http://mobiledemo2.jaspersoft.com/jasperserver-pro",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "mobile demo 5.5",
-      "mServerUrl" : "http://mobiledemo.jaspersoft.com/jasperserver-pro",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "csrf",
-      "mServerUrl" : "http://build-master.jaspersoft.com:8480/jrs-pro-feature-csrf-protection",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "csrf - Misha",
-      "mServerUrl" : "http://192.168.88.13:8082/jasperserver-pro-csrf",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "temp 6.2.1",
-      "mServerUrl" : "http://infra-platforms-phase2-2632-akoptel.pfa.jaspersoft.com:8080/jasperserver-pro",
       "mOrganization" : ""
     }
   ]

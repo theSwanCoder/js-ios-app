@@ -280,21 +280,23 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                         NSMutableArray *renderHighchartScripts = [NSMutableArray new];
                                         NSMutableArray *otherSources = [NSMutableArray new];
                                         for (JMHTMLScript *script in scripts) {
-                                            switch(script.type) {
-                                                case JMHTMLScriptTypeLink: {
-                                                    [links addObject:script.value];
-                                                    break;
-                                                }
-                                                case JMHTMLScriptTypeRenderHighchart: {
-                                                    [renderHighchartScripts addObject:script.value];
-                                                    break;
-                                                }
-                                                case JMHTMLScriptTypeSource: {
-                                                    [otherSources addObject:script.value];
-                                                    break;
-                                                }
-                                                case JMHTMLScriptTypeOther: {
-                                                    break;
+                                            if (script.value) {
+                                                switch(script.type) {
+                                                    case JMHTMLScriptTypeLink: {
+                                                        [links addObject:script.value];
+                                                        break;
+                                                    }
+                                                    case JMHTMLScriptTypeRenderHighchart: {
+                                                        [renderHighchartScripts addObject:script.value];
+                                                        break;
+                                                    }
+                                                    case JMHTMLScriptTypeSource: {
+                                                        [otherSources addObject:script.value];
+                                                        break;
+                                                    }
+                                                    case JMHTMLScriptTypeOther: {
+                                                        break;
+                                                    }
                                                 }
                                             }
                                         }

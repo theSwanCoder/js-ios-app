@@ -35,6 +35,9 @@
 #import "JMMenuViewController.h"
 #import "SWRevealViewController.h"
 #import "JMAnalyticsManager.h"
+#import "AFAutoPurgingImageCache.h"
+#import "AFImageDownloader.h"
+#import "UIKit+AFNetworking.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -155,6 +158,11 @@ static JMSessionManager *_sharedManager = nil;
     // Clear webView
     [[JMWebViewManager sharedInstance] reset];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
+
+    // Clearing of Images Cache
+    AFImageDownloader *downloader = [UIImageView sharedImageDownloader];
+    id <AFImageRequestCache> imageCache = downloader.imageCache;
+    [imageCache removeAllImages];
 
     [[JMAnalyticsManager sharedManager] sendAnalyticsEventAboutLogout];
 }

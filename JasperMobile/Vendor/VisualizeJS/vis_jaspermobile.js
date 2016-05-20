@@ -713,6 +713,7 @@ JasperMobile.Dashboard.API = {
     selectedDashlet: {}, // DOM element
     selectedComponent: {}, // Model element
     isAmber: false,
+    activeLinks: [],
     runDashboard: function(params) {
         var success = params["success"];
         var failed = params["failed"];
@@ -771,6 +772,18 @@ JasperMobile.Dashboard.API = {
                     click: function(event, link, defaultHandler) {
                         var type = link.type;
                         JasperMobile.Callback.log("link type: " + type);
+                        var contains = false;
+                        for (var i = 0; i < JasperMobile.Dashboard.API.activeLinks.length; ++i) {
+                            var currentLink = JasperMobile.Dashboard.API.activeLinks[i];
+                            if (currentLink.id == link.id) {
+                                contains = true;
+                                break;
+                            }
+                        }
+                        if (contains) {
+                            return;
+                        }
+                        JasperMobile.Dashboard.API.activeLinks.push(link);
                         switch (type) {
                             case "ReportExecution": {
                                 var data = {

@@ -471,4 +471,9 @@ void jmDebugLog(NSString *format, ...) {
     return activeServerProfile;
 }
 
++ (float)minSupportedServerVersion
+{
+    return kJS_SERVER_VERSION_CODE_AMBER_6_0_0;
+}
+
 @end
