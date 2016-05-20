@@ -53,6 +53,7 @@ static JMSessionManager *_sharedManager = nil;
     dispatch_once(&onceToken, ^{
         _sharedManager = [JMSessionManager new];
         [[NSNotificationCenter defaultCenter] addObserver:_sharedManager selector:@selector(saveActiveSessionIfNeeded:) name:kJSSessionDidAuthorized object:_sharedManager.restClient];
+        [[NSNotificationCenter defaultCenter] addObserver:_sharedManager selector:@selector(serverProfileDidChanged:) name:JMServerProfileDidChangeNotification object:nil];
     });
     
     return _sharedManager;
@@ -73,6 +74,17 @@ static JMSessionManager *_sharedManager = nil;
             completionBlock(result.error);
         }
     }];
+}
+
+- (void) serverProfileDidChanged:(NSNotification *)notification {
+    JMServerProfile *changedProfile = notification.object;
+    JMServerProfile *currentProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    if (changedProfile == currentProfile) {
+        // update current active server profile
+        self.restClient.serverProfile.alias = changedProfile.alias;
+        self.restClient.keepSession = changedProfile.keepSession;
+        [self saveActiveSessionIfNeeded:nil];
+    }
 }
 
 - (void) saveActiveSessionIfNeeded:(id)notification {

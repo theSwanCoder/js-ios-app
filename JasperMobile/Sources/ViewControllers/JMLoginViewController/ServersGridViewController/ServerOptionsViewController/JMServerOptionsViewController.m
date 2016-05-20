@@ -167,20 +167,15 @@
 {
     // save in DB current profile with updated properties
     [self.serverOptions saveChanges];
-
-    // update current active server profile
-    if (self.restClient) {
-        self.restClient.serverProfile.alias = self.serverOptions.serverProfile.alias;
-    }
     [[NSNotificationCenter defaultCenter] postNotificationName:JMServerProfileDidChangeNotification
-                                                        object:nil];
+                                                        object:self.serverOptions.serverProfile];
 }
 
 - (void)showSecurityHTTPAlert
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_attention"
                                                                                       message:@"secutiry_http_message"
-                                                                            cancelButtonTitle:@"ok"
+                                                                            cancelButtonTitle:@"dialog_button_ok"
                                                                       cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
                                                                           [self saveServerOptions];
                                                                           [self cancel];

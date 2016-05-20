@@ -256,9 +256,7 @@
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.cancel"
                                                                 parameters:nil];
-    __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
         if (parameters) {
             JMLog(@"canceling report was finished");
         } else {

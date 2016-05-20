@@ -655,6 +655,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 #pragma mark - Save
 - (IBAction)makeAction:(UIButton *)sender
 {
+    [self.view endEditing:YES];
     [JMCancelRequestPopup presentWithMessage:@"Validation"];
     [self validateJobWithCompletion:^(BOOL success) {
         [JMCancelRequestPopup dismiss];

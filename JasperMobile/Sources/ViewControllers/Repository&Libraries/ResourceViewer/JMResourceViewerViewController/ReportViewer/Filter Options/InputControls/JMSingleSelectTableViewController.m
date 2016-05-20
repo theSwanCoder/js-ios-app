@@ -67,6 +67,9 @@
 {
     [super viewWillDisappear:animated];
     JMLog(@"\nPrevious Selection :%@\nNew Selection: %@", self.previousSelectedValues, self.selectedValues);
+    
+TODO: // Should reimplement this logic - it does not correct update cell!!!
+    
     if (![self.previousSelectedValues isEqualToSet:[NSSet setWithArray:self.selectedValues]]) {
         [self.cell updateWithParameters:self.selectedValues];
     }

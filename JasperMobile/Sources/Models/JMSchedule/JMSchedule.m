@@ -35,7 +35,6 @@
     self = [super initWithResourceLookup:resourceLookup];
     if (self) {
         _scheduleLookup = scheduleLookup;
-        self.resourceLookup = resourceLookup;
     }
     return self;
 }
