@@ -302,8 +302,20 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                             }
                                                                             
                                                                             if ([visibleInputControls count]) {
-                                                                                [strongSelf.report generateReportOptionsWithInputControls:visibleInputControls];
-                                                                                
+                                                                                // setup report options
+                                                                                if (self.isChildReport && self.initialReportParameters) {
+                                                                                    // generate 'none' report option
+                                                                                    [strongSelf.report generateReportOptionsWithInputControls:visibleInputControls];
+
+                                                                                    // make report option with visible input controls as active report option
+                                                                                    JSReportOption *reportOptionWithInitParams = [JSReportOption defaultReportOption];
+                                                                                    reportOptionWithInitParams.inputControls = [[NSArray alloc] initWithArray:visibleInputControls copyItems:YES];
+                                                                                    strongSelf.report.activeReportOption = reportOptionWithInitParams;
+                                                                                } else {
+                                                                                    // generate 'none' report option
+                                                                                    [strongSelf.report generateReportOptionsWithInputControls:visibleInputControls];
+                                                                                }
+
                                                                                 // get report options
                                                                                 __weak typeof(self) weakSelf = strongSelf;
                                                                                 [strongSelf.restClient reportOptionsForReportURI:strongSelf.report.reportURI completion:^(JSOperationResult * _Nullable result) {
