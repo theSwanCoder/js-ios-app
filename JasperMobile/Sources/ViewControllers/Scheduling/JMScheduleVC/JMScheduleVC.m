@@ -616,14 +616,14 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         case JMScheduleVCRowTypeCalendarHours: {
             cell = [self scheduleCellForIndexPath:indexPath row:row];
             JMScheduleCell *scheduleCell = (JMScheduleCell *) cell;
-            scheduleCell.valueTextField.keyboardType = UIKeyboardTypeNumberPad;
+            scheduleCell.valueTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             scheduleCell.valueTextField.inputAccessoryView = [self toolbarForCellWithAction:@selector(setCalendarHours:)];
             break;
         }
         case JMScheduleVCRowTypeCalendarMinutes: {
             cell = [self scheduleCellForIndexPath:indexPath row:row];
             JMScheduleCell *scheduleCell = (JMScheduleCell *) cell;
-            scheduleCell.valueTextField.keyboardType = UIKeyboardTypeNumberPad;
+            scheduleCell.valueTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             scheduleCell.valueTextField.inputAccessoryView = [self toolbarForCellWithAction:@selector(setCalendarMinutes:)];
             break;
         }
@@ -710,9 +710,13 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     } else if (row.type == JMScheduleVCRowTypeCalendarHours) {
         NSAssert(trigger.type == JSScheduleTriggerTypeCalendar, @"Should be simple trigger");
         JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *)trigger;
-        calendarTrigger.hours = trimmedValue;
+
+        NSString *stringWithoutSpaces = [trimmedValue stringByReplacingOccurrencesOfString:@" " withString:@""];
+        calendarTrigger.hours = stringWithoutSpaces;
     } else if (row.type == JMScheduleVCRowTypeCalendarMinutes) {
         NSAssert(trigger.type == JSScheduleTriggerTypeCalendar, @"Should be simple trigger");
+
+        NSString *stringWithoutSpaces = [trimmedValue stringByReplacingOccurrencesOfString:@" " withString:@""];
         JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *)trigger;
         calendarTrigger.minutes = trimmedValue;
     }
