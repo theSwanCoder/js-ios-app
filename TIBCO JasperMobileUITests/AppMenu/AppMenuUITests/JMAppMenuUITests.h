@@ -8,6 +8,6 @@
 
 #import "JMBaseUITestCase.h"
 
-@interface JMAppMenuUITests : XCTestCase
+@interface JMAppMenuUITests : JMBaseUITestCase
 
 @end
