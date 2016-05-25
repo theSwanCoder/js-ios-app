@@ -684,9 +684,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         case JMResourcesListLoaderOptionType_Filter: {
             NSUInteger selectedIndex = [popup selectedIndex];
             if (selectedIndex != self.resourceListLoader.filterBySelectedIndex) {
-                 self.resourceListLoader.filterBySelectedIndex = selectedIndex;
-                [self.resourceListLoader setNeedsUpdate];
-                [self.resourceListLoader updateIfNeeded];
+                self.resourceListLoader.filterBySelectedIndex = selectedIndex;
                 self.isScrollToTop = YES;
             }
             break;
@@ -695,8 +693,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             NSUInteger selectedIndex = [popup selectedIndex];
             if (selectedIndex != self.resourceListLoader.sortBySelectedIndex) {
                 self.resourceListLoader.sortBySelectedIndex = selectedIndex;
-                [self.resourceListLoader setNeedsUpdate];
-                [self.resourceListLoader updateIfNeeded];
                 self.isScrollToTop = YES;
             }
             break;
