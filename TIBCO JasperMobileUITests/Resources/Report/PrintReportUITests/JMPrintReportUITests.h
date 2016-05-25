@@ -8,6 +8,6 @@
 
 #import "JMBaseUITestCase.h"
 
-@interface JMPrintReportUITests : JMBaseUITestCase
+@interface JMPrintReportUITests : XCTestCase
 
 @end
