@@ -229,7 +229,20 @@
     XCUIElement *usernameTextField = self.application.textFields[@"JMLoginPageUserNameTextFieldAccessibilityId"];
     if (usernameTextField.exists) {
         [usernameTextField tap];
-        [usernameTextField typeText:kJMTestProfileCredentialsUsername];
+        
+        NSString *oldValueString = usernameTextField.value;
+        if (![oldValueString isEqualToString:kJMTestProfileCredentialsUsername]) {
+            if (oldValueString.length > 0) {
+                XCUIElement *deleteSymbolButton = self.application.keys[@"delete"];
+                if (deleteSymbolButton.exists) {
+                    for (int i = 0; i < oldValueString.length; ++i) {
+                        [deleteSymbolButton tap];
+                    }
+                }
+            }            
+            [usernameTextField typeText:kJMTestProfileCredentialsUsername];
+        }
+        
     } else {
         XCTFail(@"User name text field doesn't exist");
     }
