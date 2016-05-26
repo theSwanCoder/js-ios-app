@@ -41,6 +41,12 @@
     [super tearDown];
 }
 
+#pragma mark - Custom Accessors
+- (XCUIApplication *)application
+{
+    return [XCUIApplication new];
+}
+
 #pragma mark - Setup Helpers
 - (void)selectTestProfile
 {
