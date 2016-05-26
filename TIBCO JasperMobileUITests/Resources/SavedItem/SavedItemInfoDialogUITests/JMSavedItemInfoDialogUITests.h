@@ -8,6 +8,6 @@
 
 #import "JMBaseUITestCase.h"
 
-@interface JMSavedItemInfoDialogUITests : XCTestCase
+@interface JMSavedItemInfoDialogUITests : JMBaseUITestCase
 
 @end
