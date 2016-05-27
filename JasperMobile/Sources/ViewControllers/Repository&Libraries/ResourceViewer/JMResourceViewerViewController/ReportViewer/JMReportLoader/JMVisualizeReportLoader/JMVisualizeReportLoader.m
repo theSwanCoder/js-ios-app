@@ -205,6 +205,18 @@
             [strongSelf.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
                 __typeof(self) strongSelf = weakSelf;
                 if (parameters) {
+                    if (parameters[@"pages"]) {
+                        NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
+                        [strongSelf.report updateCountOfPages:countOfPages];
+                    } else {
+#ifndef __RELEASE__
+                        NSError *absentPagesError = [NSError errorWithDomain:@"Visualize Error" code:0 userInfo:@{
+                                NSLocalizedDescriptionKey : @"Absent of pages after applying report parameters"
+                        }];
+                        [JMUtils presentAlertControllerWithError:absentPagesError
+                                                      completion:nil];
+#endif
+                    }
                     if (heapBlock) {
                         heapBlock(YES, nil);
                     }
