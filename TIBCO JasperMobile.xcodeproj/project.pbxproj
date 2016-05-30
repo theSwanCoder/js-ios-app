@@ -183,6 +183,7 @@
 		938E1F991C1EEF6C009E1B79 /* vis_jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = A1478BF95DE687CDEB03D288 /* vis_jaspermobile.js */; };
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
 		939917321BC67737006CC2A7 /* old_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = A14785AF90B597E785B4A30A /* old_dashboard.js */; };
+		93A8B5C61CFBF77800B313FC /* JMSavedItemsPageUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A8B5C51CFBF77800B313FC /* JMSavedItemsPageUITests.m */; };
 		93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C4E3111C737DB300A19D64 /* JMUITestConstants.m */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
@@ -601,6 +602,8 @@
 		93826C7D1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMExternalWindowDashboardControlsVC.xib; sourceTree = "<group>"; };
 		9397F97B1AAACADF006B89C6 /* JMReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReport.h; sourceTree = "<group>"; };
 		9397F97C1AAACADF006B89C6 /* JMReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReport.m; sourceTree = "<group>"; };
+		93A8B5C41CFBF77800B313FC /* JMSavedItemsPageUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedItemsPageUITests.h; sourceTree = "<group>"; };
+		93A8B5C51CFBF77800B313FC /* JMSavedItemsPageUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedItemsPageUITests.m; sourceTree = "<group>"; };
 		93C4E3101C737DB300A19D64 /* JMUITestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMUITestConstants.h; sourceTree = "<group>"; };
 		93C4E3111C737DB300A19D64 /* JMUITestConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUITestConstants.m; sourceTree = "<group>"; };
 		93D8C6431AAC7E9200117306 /* JMWebViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebViewManager.h; sourceTree = "<group>"; };
@@ -2091,6 +2094,7 @@
 		933CAF5E1C776A8E00EF6F84 /* SavedItem */ = {
 			isa = PBXGroup;
 			children = (
+				93A8B5C31CFBF74200B313FC /* SavedItemsPageUITests */,
 				933CAF5F1C776A8E00EF6F84 /* SavedItemInfoDialogUITests */,
 				933CAF601C776A8E00EF6F84 /* SavedItemPageUITests */,
 			);
@@ -2340,6 +2344,15 @@
 				9397F97C1AAACADF006B89C6 /* JMReport.m */,
 			);
 			path = JMReport;
+			sourceTree = "<group>";
+		};
+		93A8B5C31CFBF74200B313FC /* SavedItemsPageUITests */ = {
+			isa = PBXGroup;
+			children = (
+				93A8B5C41CFBF77800B313FC /* JMSavedItemsPageUITests.h */,
+				93A8B5C51CFBF77800B313FC /* JMSavedItemsPageUITests.m */,
+			);
+			path = SavedItemsPageUITests;
 			sourceTree = "<group>";
 		};
 		93C4E30A1C7374A000A19D64 /* Helpers */ = {
@@ -3406,6 +3419,7 @@
 				933CAF9A1C776F3500EF6F84 /* JMDashboardPageUITests.m in Sources */,
 				933CAFC41C7770E600EF6F84 /* JMRepositoryPageUITests.m in Sources */,
 				933CAFB81C77706800EF6F84 /* JMFavoritePageUITests.m in Sources */,
+				93A8B5C61CFBF77800B313FC /* JMSavedItemsPageUITests.m in Sources */,
 				933CAF7A1C776A8E00EF6F84 /* JMLibraryPageUITests.m in Sources */,
 				933CAFAF1C77700900EF6F84 /* JMSavedItemInfoDialogUITests.m in Sources */,
 				933CAFC11C7770D000EF6F84 /* JMRepositoryInfoPageUITests.m in Sources */,
@@ -4262,6 +4276,7 @@
 				930E18D71CEC988C00CE5E10 /* Adhoc */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9356EC9F1A30752900ACE2C6 /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile Tests" */ = {
 			isa = XCConfigurationList;
