@@ -92,7 +92,7 @@
 		pt = Criar tarefa
 		zh = 创建工作
 		tags = ios
-	[schedules_new_job_output_file_name]
+	[schedules_new_job_baseOutputFilename]
 		en = Output File Name
 		de = Bezeichnung der Ausgabedatei
 		es = Nombre del archivo de salida
@@ -101,7 +101,7 @@
 		pt = Nome do arquivo de saída
 		zh = 输出文件名
 		tags = ios
-	[schedules_new_job_output_file_path]
+	[schedules_new_job_folderURI]
 		en = Repository Output Folder
 		de = Ausgabeverzeichnispfad
 		es = Ruta de la carpeta de salida
@@ -111,17 +111,17 @@
 		pt = Diretório da pasta de saída
 		zh = 输出文件夹路径
 		tags = ios
-	[schedules_new_job_format]
-		en = Format
-		de = Format
-		es = Formato
-		fr = Format
-		it = Formato
-		ja = 形式
-		pt = Formato
-		zh = 格式
-		tags = ios
-	[schedules_new_job_start_date]
+	[schedules_new_job_outputFormat]
+        en = Output Format
+        de = Ausgabeformat
+        es = Formato de salida
+        fr = Format de sortie
+        it = Formato di stampa
+        ja = 出力形式
+        pt = Formato de saída
+        zh = 输出格式
+        tags = ios
+	[schedules_new_job_startDate]
 		en = Run at:
 		de = Anfangsdatum:
 		es = Fecha de inicio:
@@ -131,7 +131,7 @@
 		pt = Data de início
 		zh = 开始日期
 		tags = ios
-	[schedules_new_job_end_date]
+	[schedules_new_job_endDate]
 		en = End Date
 		de = Enddatum
 		es = Fecha de finalización
@@ -141,7 +141,7 @@
 		pt = Data final
 		zh = 结束日期
 		tags = ios
-	[schedules_new_job_start_immediately]
+	[schedules_new_job_startType]
 		en = Start immediately
 		de = Sofort starten
 		es = Comenzar inmediatamente
@@ -150,16 +150,6 @@
 		ja = すぐに開始する
 		pt = Começar imediatamente
 		zh = 立即开始
-		tags = ios
-	[schedules_new_job_output_format]
-		en = Output Format
-		de = Ausgabeformat
-		es = Formato de salida
-		fr = Format de sortie
-		it = Formato di stampa
-		ja = 出力形式
-		pt = Formato de saída
-		zh = 输出格式
 		tags = ios
 	[schedules_new_job_repeat_type]
 		en = Recurrence Type
@@ -181,7 +171,7 @@
 		pt = Contagem
 		zh = 计数
 		tags = ios
-	[schedules_new_job_repeat_interval]
+	[schedules_new_job_recurrenceIntervalUnit]
 		en = Interval
 		de = Intervall
 		es = Intervalo
@@ -201,7 +191,7 @@
 		pt = Executar Indefinidamente
 		zh = 无限期运行
 		tags = ios
-	[schedules_new_job_number_of_runs]
+	[schedules_new_job_occurrenceCount]
 		en = Number of Runs
 		de = Anzahl der Durchläufe
 		es = Número de ejecuciones
@@ -231,7 +221,7 @@
 		pt = Todo Mês
 		zh = 每月
 		tags = ios
-	[schedules_job_calendar_selected_months]
+	[schedules_new_job_months]
 		en = Selected Months
 		de = Ausgewählte Monate
 		es = Los meses seleccionados
@@ -251,7 +241,7 @@
 		pt = Todo Dia
 		zh = 每天
 		tags = ios
-	[schedules_job_calendar_selected_days]
+	[schedules_new_job_weekDays]
 		en = Selected Days
 		de = Ausgewählte Tage
 		es = Días seleccionados
@@ -261,7 +251,7 @@
 		pt = Dias Selecionados
 		zh = 所选天数
 		tags = ios
-	[schedules_job_calendar_dates_in_month]
+	[schedules_new_job_monthDays]
 		en = Dates In Month
 		de = Termine in Monaten
 		es = Días en el mes
@@ -271,7 +261,7 @@
 		pt = Datas no Mês
 		zh = 月份日期
 		tags = ios
-	[schedules_job_calendar_hours]
+	[schedules_new_job_hours]
 		en = Hours
 		de = Stunden
 		es = Horas
@@ -281,7 +271,7 @@
 		pt = Horas
 		zh = 小时
 		tags = ios
-	[schedules_job_calendar_minutes]
+	[schedules_new_job_minutes]
 		en = Minutes
 		de = Minuten
 		es = Minutos
@@ -291,6 +281,15 @@
 		pt = Minutos
 		zh = 分钟
 		tags = ios
+
+
+[[Schedule Notifications]]
+    [schedules_created_success]
+        en = Schedule was created successfully.
+        tags = ios,new
+    [schedules_updated_success]
+        en = Schedule was updated successfully.
+        tags = ios,new
 
 [[Schedule Errors]]
 	[schedules_error_domain]
@@ -424,3 +423,6 @@
 		pt = Sequência de caracteres muito longa.
 		zh = 字符串太长。
 		tags = ios
+    [schedules_error_notwriteable_output_folder]
+        en = You do not have permission to schedule report to the folder. Log in as a permitted user if you can.
+        tags = ios,new

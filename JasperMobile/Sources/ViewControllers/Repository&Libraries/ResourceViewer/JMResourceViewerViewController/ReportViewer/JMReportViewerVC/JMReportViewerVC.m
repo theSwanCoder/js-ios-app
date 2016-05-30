@@ -32,7 +32,6 @@
 #import "JMExternalWindowControlsVC.h"
 #import "JMScheduleVC.h"
 #import "JMWebEnvironment.h"
-#import "JMScheduleManager.h"
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
 
@@ -760,6 +759,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                     [viewControllers removeLastObject];
                 }
                 [strongSelf.navigationController popToViewController:[viewControllers lastObject] animated:YES];
+            } else {
+                [strongSelf.navigationController popViewControllerAnimated:YES];
             }
         }
     };
@@ -939,24 +940,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Scheduling
 - (void)scheduleReport {
     JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
-    newJobVC.scheduleMetadata = [[JMScheduleManager sharedManager] createNewScheduleMetadataWithResourceLookup:self.resource];
-    newJobVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata){
-        if (scheduleMetadata) {
-            [[JMScheduleManager sharedManager] createScheduleWithData:scheduleMetadata
-                                                           completion:^(JSScheduleMetadata *newScheduleMetadata, NSError *error) {
-                                                               if (newScheduleMetadata) {
-                                                                   [self.navigationController popViewControllerAnimated:YES];
-                                                                   [ALToastView toastInView:self.navigationController.view
-                                                                                   withText:JMCustomLocalizedString(@"Schedule was created successfully.", nil)];
-                                                               } else {
-                                                                   [JMUtils presentAlertControllerWithError:error
-                                                                                                 completion:nil];
-                                                               }
-                                                           }];
-        } else {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    };
+    [newJobVC createNewScheduleMetadataWithResourceLookup:self.resource];
     [self.navigationController pushViewController:newJobVC animated:YES];
 }
 

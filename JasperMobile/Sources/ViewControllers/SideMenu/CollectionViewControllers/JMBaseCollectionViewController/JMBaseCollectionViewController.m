@@ -43,7 +43,6 @@
 #import "JMExportManager.h"
 #import "JMResource.h"
 #import "JMSchedule.h"
-#import "ALToastView.h"
 
 CGFloat const kJMBaseCollectionViewGridWidth = 310;
 

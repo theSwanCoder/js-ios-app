@@ -72,6 +72,7 @@ static NSInteger _cancelRequestPopupCounter = 0;
         popup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:[self class]];
     }
     popup.progressLabel.text = JMCustomLocalizedString(message, nil);
+    popup.cancelButton.hidden = NO;
     [popup.cancelButton setTitle:JMCustomLocalizedString(@"dialog_button_cancel", nil) forState:UIControlStateNormal];
     popup.cancelBlock = cancelBlock;
 }

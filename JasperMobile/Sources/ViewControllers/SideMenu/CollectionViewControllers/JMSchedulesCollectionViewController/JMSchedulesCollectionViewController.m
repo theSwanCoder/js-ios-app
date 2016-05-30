@@ -88,25 +88,10 @@
         [strongSelf stopShowLoader];
         if (metadata) {
             JMScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
-            newScheduleVC.scheduleMetadata = metadata;
+            [newScheduleVC updateScheduleMetadata:metadata];
             newScheduleVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata) {
-                if (scheduleMetadata) {
-                    [[JMScheduleManager sharedManager] updateSchedule:scheduleMetadata
-                                                           completion:^(JSScheduleMetadata *updatedScheduleMetadata, NSError *error) {
-                                                               if (updatedScheduleMetadata) {
-                                                                   [strongSelf.resourceListLoader setNeedsUpdate];
-                                                                   [strongSelf.resourceListLoader updateIfNeeded];
-                                                                   [self.navigationController popViewControllerAnimated:YES];
-                                                                   [ALToastView toastInView:self.navigationController.view
-                                                                                   withText:JMCustomLocalizedString(@"Schedule was updated successfully.", nil)];
-                                                               } else {
-                                                                   [JMUtils presentAlertControllerWithError:error
-                                                                                                 completion:nil];
-                                                               }
-                                                           }];
-                } else {
-                    [self.navigationController popViewControllerAnimated:YES];
-                }
+                [strongSelf.resourceListLoader setNeedsUpdate];
+                [strongSelf.resourceListLoader updateIfNeeded];
             };
             [self.navigationController pushViewController:newScheduleVC animated:YES];
         } else {
@@ -160,36 +145,20 @@
 - (void)scheduleReportWithResource:(JMResource *)resource
 {
     JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
-    newJobVC.scheduleMetadata = [[JMScheduleManager sharedManager] createNewScheduleMetadataWithResourceLookup:resource];
+    [newJobVC createNewScheduleMetadataWithResourceLookup:resource];
     newJobVC.backButtonTitle = self.title;
     __weak __typeof(self) weakSelf = self;
     newJobVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata){
         __typeof(self) strongSelf = weakSelf;
-        if (scheduleMetadata) {
-            __weak __typeof(self) weakSelf = strongSelf;
-            [[JMScheduleManager sharedManager] createScheduleWithData:scheduleMetadata
-                                                           completion:^(JSScheduleMetadata *newScheduleMetadata, NSError *error) {
-                                                               __typeof(self) strongSelf = weakSelf;
-                                                               if (newScheduleMetadata) {
-                                                                   [strongSelf.navigationController
-                                                                           popToViewController:strongSelf
-                                                                                      animated:YES];
-                                                                   [strongSelf.resourceListLoader setNeedsUpdate];
-                                                                   [strongSelf.resourceListLoader updateIfNeeded];
-                                                                   [ALToastView toastInView:strongSelf.navigationController.view
-                                                                                   withText:JMCustomLocalizedString(@"Schedule was created successfully.", nil)];
-                                                               } else {
-                                                                   [JMUtils presentAlertControllerWithError:error
-                                                                                                 completion:nil];
-                                                               }
-                                                           }];
-        } else {
-            [strongSelf.navigationController
-                    popToViewController:strongSelf
-                               animated:YES];
-        }
+        [strongSelf.resourceListLoader setNeedsUpdate];
+        [strongSelf.resourceListLoader updateIfNeeded];
     };
-    [self.navigationController pushViewController:newJobVC animated:YES];
+    [UIView beginAnimations:nil context:nil];
+    NSMutableArray *controllers = [self.navigationController.viewControllers mutableCopy];
+    [controllers removeLastObject];
+    [controllers addObject:newJobVC];
+    self.navigationController.viewControllers = controllers;
+    [UIView commitAnimations];
 }
 
 

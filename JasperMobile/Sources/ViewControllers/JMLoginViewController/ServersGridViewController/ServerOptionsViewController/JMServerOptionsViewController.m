@@ -26,8 +26,6 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMServerOptions.h"
 
-#import "ALToastView.h"
-
 #import "JMServerOptionCell.h"
 
 #import "JMCancelRequestPopup.h"

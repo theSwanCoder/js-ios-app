@@ -35,7 +35,8 @@
 #import "JMMultiSelectedItemsVC.h"
 #import "JMSelectedItem.h"
 #import "JMCancelRequestPopup.h"
-
+#import "ALToastView.h"
+#import "JMResource.h"
 
 NSString *const kJMJobLabel              = @"kJMJobLabel";
 NSString *const kJMJobDescription        = @"kJMJobDescription";
@@ -49,6 +50,9 @@ NSString *const kJMJobRepeatCount        = @"kJMJobRepeatCount";
 NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 @interface JMScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMScheduleCellDelegate, JMScheduleBoolenCellDelegate>
+@property (nonatomic, strong, readwrite) JSScheduleMetadata *scheduleMetadata;
+@property (assign, nonatomic) BOOL isNewScheduleMetadata;
+
 @property (strong, nonatomic) UIDatePicker *datePickerForStartDate;
 @property (strong, nonatomic) UIDatePicker *datePickerForEndDate;
 @property (nonatomic, strong) NSArray <JMScheduleVCSection *> *sections;
@@ -116,19 +120,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     [self.createJobButton setTitle:@"Apply"
                           forState:UIControlStateNormal];
 
-    [self setupLeftBarButtonItems];
-
     // TODO: need make this copy?
     self.originTrigger = self.scheduleMetadata.trigger;
-}
-
-#pragma mark - Setups
-- (void)setupLeftBarButtonItems
-{
-    UIBarButtonItem *backItem = [self backButtonWithTitle:self.backButtonTitle
-                                                   target:self
-                                                   action:@selector(backButtonTapped:)];
-    self.navigationItem.leftBarButtonItem = backItem;
 }
 
 #pragma mark - Actions
@@ -229,7 +222,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             kJS_CONTENT_TYPE_XLS
     ];
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_output_format", nil)
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_outputFormat", nil)
                                                                                       message:nil
                                                                             cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
@@ -263,7 +256,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             @(JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek)
     ];
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_repeat_interval", nil)
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_recurrenceIntervalUnit", nil)
                                                                                       message:nil
                                                                             cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
@@ -419,11 +412,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                       withRowAnimation:UITableViewRowAnimationAutomatic];
     };
     [self.navigationController pushViewController:multiValuesVC animated:YES];
-}
-
-- (void)backButtonTapped:(UIBarButtonItem *)sender
-{
-    self.exitBlock(nil);
 }
 
 #pragma mark - UITableViewDelegate
@@ -640,16 +628,42 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (IBAction)makeAction:(UIButton *)sender
 {
     [self.view endEditing:YES];
-    [JMCancelRequestPopup presentWithMessage:@"Validation"];
-    [self validateJobWithCompletion:^(BOOL success) {
-        [JMCancelRequestPopup dismiss];
-        if (success) {
-            self.exitBlock(self.scheduleMetadata);
+
+    [JMCancelRequestPopup presentWithMessage:@"status_validation"];
+    BOOL isJobValid = [self validateJob];
+    [self.tableView reloadData];
+    [JMCancelRequestPopup dismiss];
+
+    if (isJobValid) {
+        __weak typeof(self) weakSelf = self;
+        [JMCancelRequestPopup presentWithMessage:@"status_validation" cancelBlock:^{
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf.restClient cancelAllRequests];
+        }];
+        
+        JMScheduleCompletion completion = ^(JSScheduleMetadata *newScheduleMetadata, NSError *error) {
+            [JMCancelRequestPopup dismiss];
+            __strong typeof(self) strongSelf = weakSelf;
+            if (newScheduleMetadata) {
+                strongSelf.exitBlock(newScheduleMetadata);
+                
+                [strongSelf.navigationController popViewControllerAnimated:YES];
+                NSString *toastMessageKey = self.isNewScheduleMetadata ? @"schedules_created_success" : @"schedules_updated_success";
+                [ALToastView toastInView:self.navigationController.view
+                                withText:JMCustomLocalizedString(toastMessageKey, nil)];
+            } else {
+                [JMUtils presentAlertControllerWithError:error completion:nil];
+            }
+        };
+        
+        if (self.isNewScheduleMetadata) {
+            [[JMScheduleManager sharedManager] createScheduleWithData:self.scheduleMetadata
+                                                           completion:completion];
         } else {
-            // show errors
-            [self.tableView reloadData];
+            [[JMScheduleManager sharedManager] updateSchedule:self.scheduleMetadata
+                                                   completion:completion];
         }
-    }];
+    }
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -718,7 +732,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
         NSString *stringWithoutSpaces = [trimmedValue stringByReplacingOccurrencesOfString:@" " withString:@""];
         JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *)trigger;
-        calendarTrigger.minutes = trimmedValue;
+        calendarTrigger.minutes = stringWithoutSpaces;
     }
     self.tappedCell = nil;
 }
@@ -805,6 +819,18 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 }
 
 #pragma mark - Setup
+- (void)createNewScheduleMetadataWithResourceLookup:(nonnull JMResource *)resource
+{
+    self.scheduleMetadata = [[JMScheduleManager sharedManager] createNewScheduleMetadataWithResourceLookup:resource];
+    self.isNewScheduleMetadata = YES;
+}
+
+- (void)updateScheduleMetadata:(nonnull JSScheduleMetadata *)metaData
+{
+    self.scheduleMetadata = metaData;
+    self.isNewScheduleMetadata = NO;
+}
+
 - (void)createSections
 {
     self.sections = @[
@@ -1096,12 +1122,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 }
 
 #pragma mark - Validation
-- (void)validateJobWithCompletion:(void(^)(BOOL success))completion
+- (BOOL)validateJob
 {
-    if (!completion) {
-        return;
-    }
-
     BOOL isValidLabel = [self validateLabel];
     BOOL isValidOutputFileName = [self validateOutputFileName];
     BOOL isValidOutputFolderURI = [self validateOutputFolderURI];
@@ -1114,7 +1136,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     BOOL isValidCalendarDays = [self validateWeekdaysForCalendarTrigger];
     BOOL isValidCalendarMonths = [self validateMonthsForCalendarTrigger];
 
-    completion(isValidLabel
+    return (isValidLabel
             && isValidOutputFileName && isValidOutputFolderURI
             && isValidRepeatCount && isValidNumberOfRuns
             && isValidStartDate && isValidEndDate
@@ -1130,6 +1152,12 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeMain];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeLabel];
         row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_label", nil);
+    }
+    if (self.scheduleMetadata.label.length > 100) {
+        isValid = NO;
+        JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeMain];
+        JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeLabel];
+        row.errorMessage = JMCustomLocalizedString(@"schedules_error_length", nil);
     }
     return isValid;
 }
@@ -1149,7 +1177,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
             row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename_invalid_characters", nil);
-        } if (self.scheduleMetadata.baseOutputFilename.length > 100) {
+        }
+        if (self.scheduleMetadata.baseOutputFilename.length > 100) {
             isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
@@ -1478,9 +1507,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             if (type == JMScheduleVCRowTypeRepeatType) {
                 propertyValue = [self stringValueForTriggerType:JSScheduleTriggerTypeCalendar];
             } else if (type == JMScheduleVCRowTypeCalendarHours) {
-                propertyValue = calendarTrigger.hours;
+                propertyValue = [calendarTrigger.hours stringByReplacingOccurrencesOfString:@"," withString:@", "];
             } else if (type == JMScheduleVCRowTypeCalendarMinutes) {
-                propertyValue = calendarTrigger.minutes;
+                propertyValue = [calendarTrigger.minutes stringByReplacingOccurrencesOfString:@"," withString:@", "];
             } else if (type == JMScheduleVCRowTypeCalendarSelectedDays) {
                 NSString *weekDays = @"";
                 for (NSNumber *weekDayNumber in calendarTrigger.weekDays) {

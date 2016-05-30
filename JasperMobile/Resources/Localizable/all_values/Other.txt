@@ -30,3 +30,6 @@
 		ja = 戻る
 		zh = 后退
 		tags = ios
+    [status_validation]
+        en = Validation...
+        tags = ios,new

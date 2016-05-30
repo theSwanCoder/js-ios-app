@@ -29,7 +29,6 @@
 #import "JMAppUpdater.h"
 #import "UIView+Additions.h"
 #import <MessageUI/MessageUI.h>
-#import "ALToastView.h"
 #import "JMOnboardIntroViewController.h"
 #import "JMEULAViewController.h"
 #import "UIColor+RGBComponent.h"

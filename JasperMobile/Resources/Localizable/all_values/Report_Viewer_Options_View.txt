@@ -156,7 +156,7 @@
 		es = ¿Realmente desea quitar %@?
 		fr = Souhaitez-vous vraiment retirer \n%@ ?
 		it = Si desidera rimuovere davvero\n%@?
-		ja = 本当に次の項目を削除しますか\n%s？
+		ja = 本当に次の項目を削除しますか\n%@？
 		pt = Deseja realmente remover\n%@?
-		zh = 您确定要移除\n%s?
+		zh = 您确定要移除\n%@?
 		tags = ios

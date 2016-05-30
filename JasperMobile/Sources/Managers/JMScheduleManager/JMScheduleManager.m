@@ -64,7 +64,7 @@
                                  completion:^(JSOperationResult *result) {
                                      NSError *error = result.error;
                                      if (error) {
-                                         if (error.code == 1007) {
+                                         if (error.code == JSClientErrorCode) {
                                              [self handleErrorsWithData:result.body completion:completion];
                                          } else {
                                             completion(nil, result.error);
@@ -85,7 +85,7 @@
     [self.restClient updateSchedule:schedule
                          completion:^(JSOperationResult *result) {
                              if (result.error) {
-                                 if (result.error.code == 1007) {
+                                 if (result.error.code == JSClientErrorCode) {
                                      [self handleErrorsWithData:result.body completion:completion];
                                  } else {
                                      completion(nil, result.error);
@@ -123,9 +123,15 @@
             NSString *fullMessage = @"";
             for (NSDictionary *errorJSON in errors) {
                 NSString *message = [self errorMessageFromData:errorJSON];
-                fullMessage = [fullMessage stringByAppendingFormat:@"\n%@\n", message];
+                if (message.length) {
+                    fullMessage = [fullMessage stringByAppendingFormat:@"\n%@\n", message];
+                }
             }
             // TODO: enhance error
+            if (fullMessage.length == 0) {
+                fullMessage = @"General error of creating a new schedule.";
+
+            }
             NSError *createScheduledJobError = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules_error_domain", nil)
                                                                           code:0
                                                                       userInfo:@{NSLocalizedDescriptionKey: fullMessage}];
@@ -140,19 +146,51 @@
 {
     JMLog(@"data: %@", data);
     NSString *errorMessage;
+    NSString *field = [[data[@"field"] componentsSeparatedByString:@"."] lastObject];
+    
     NSString *defaultMessage = data[@"defaultMessage"];
+
     if (defaultMessage) {
         errorMessage = defaultMessage;
+        id argument = data[@"errorArguments"];
+        if (argument) {
+            if ([argument isKindOfClass:[NSArray class]]) {
+                argument = [argument lastObject];
+            }
+            NSString *argumentString = [NSString stringWithFormat:@"%@", argument];
+            NSRange startRange = [defaultMessage rangeOfString:@"{"];
+            NSRange endRange = [defaultMessage rangeOfString:@"}"];
+            
+            if (startRange.location != NSNotFound && endRange.location != NSNotFound && endRange.location > startRange.location ) {
+                NSRange replacingStringRange = NSMakeRange(startRange.location, endRange.location - startRange.location + 1);
+                NSString *replacingString = [defaultMessage substringWithRange:replacingStringRange];
+                errorMessage = [defaultMessage stringByReplacingOccurrencesOfString:replacingString withString:argumentString];
+            }
+        }
     } else {
         NSString *errorCode = data[@"errorCode"];
         errorMessage = [self messageFromErrorCode:errorCode];
+    }
+    
+    if (errorMessage.length && field.length) {
+        NSString *fieldLocalizedKey = [NSString stringWithFormat:@"schedules_new_job_%@", field];
+        NSString *localizedField = JMCustomLocalizedString(fieldLocalizedKey, nil);
+        if (localizedField.length == 0 || [localizedField isEqualToString:fieldLocalizedKey]) {
+            NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:@"([a-z])([A-Z])" options:0 error:NULL];
+            NSString *dividedFieldName = [regexp stringByReplacingMatchesInString:field options:0 range:NSMakeRange(0, field.length) withTemplate:@"$1 $2"];
+            field = [dividedFieldName capitalizedString];
+        } else {
+            field = localizedField;
+        }
+        
+        errorMessage = [field stringByAppendingFormat:@" - %@", errorMessage];
     }
     return errorMessage;
 }
 
 - (NSString *)messageFromErrorCode:(NSString *)errorCode
 {
-    NSString *message = @"General error of creating a new schedule.";
+    NSString *message;
     if ([errorCode isEqualToString:@"error.duplicate.report.job.output.filename"]) {
         message = JMCustomLocalizedString(@"schedules_error_duplicate_filename", nil);
     } else if ([errorCode isEqualToString:@"error.length"]) {
@@ -163,6 +201,8 @@
         message = JMCustomLocalizedString(@"schedules_error_output_folder_inexistent", nil);
     } else if ([errorCode isEqualToString:@"error.before.current.date"]) {
         message = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+    } else if ([errorCode isEqualToString:@"error.report.job.output.folder.notwriteable"]) {
+        message = JMCustomLocalizedString(@"schedules_error_notwriteable_output_folder", nil);
     }
     return message;
 }
