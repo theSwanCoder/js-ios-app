@@ -184,6 +184,7 @@
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
 		939917321BC67737006CC2A7 /* old_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = A14785AF90B597E785B4A30A /* old_dashboard.js */; };
 		93A8B5C61CFBF77800B313FC /* JMSavedItemsPageUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A8B5C51CFBF77800B313FC /* JMSavedItemsPageUITests.m */; };
+		93A8B5CA1CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A8B5C91CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m */; };
 		93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C4E3111C737DB300A19D64 /* JMUITestConstants.m */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
@@ -604,6 +605,8 @@
 		9397F97C1AAACADF006B89C6 /* JMReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReport.m; sourceTree = "<group>"; };
 		93A8B5C41CFBF77800B313FC /* JMSavedItemsPageUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedItemsPageUITests.h; sourceTree = "<group>"; };
 		93A8B5C51CFBF77800B313FC /* JMSavedItemsPageUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedItemsPageUITests.m; sourceTree = "<group>"; };
+		93A8B5C81CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedItemInfoScreenUITests.h; sourceTree = "<group>"; };
+		93A8B5C91CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedItemInfoScreenUITests.m; sourceTree = "<group>"; };
 		93C4E3101C737DB300A19D64 /* JMUITestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMUITestConstants.h; sourceTree = "<group>"; };
 		93C4E3111C737DB300A19D64 /* JMUITestConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUITestConstants.m; sourceTree = "<group>"; };
 		93D8C6431AAC7E9200117306 /* JMWebViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebViewManager.h; sourceTree = "<group>"; };
@@ -2094,6 +2097,7 @@
 		933CAF5E1C776A8E00EF6F84 /* SavedItem */ = {
 			isa = PBXGroup;
 			children = (
+				93A8B5C71CFBFD0A00B313FC /* SavedItemInfoScreenUITests */,
 				93A8B5C31CFBF74200B313FC /* SavedItemsPageUITests */,
 				933CAF5F1C776A8E00EF6F84 /* SavedItemInfoDialogUITests */,
 				933CAF601C776A8E00EF6F84 /* SavedItemPageUITests */,
@@ -2353,6 +2357,15 @@
 				93A8B5C51CFBF77800B313FC /* JMSavedItemsPageUITests.m */,
 			);
 			path = SavedItemsPageUITests;
+			sourceTree = "<group>";
+		};
+		93A8B5C71CFBFD0A00B313FC /* SavedItemInfoScreenUITests */ = {
+			isa = PBXGroup;
+			children = (
+				93A8B5C81CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.h */,
+				93A8B5C91CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m */,
+			);
+			path = SavedItemInfoScreenUITests;
 			sourceTree = "<group>";
 		};
 		93C4E30A1C7374A000A19D64 /* Helpers */ = {
@@ -3430,6 +3443,7 @@
 				933CAF8D1C776DD300EF6F84 /* JMLoginPageUITests.m in Sources */,
 				933CAF781C776A8E00EF6F84 /* JMLibraryPageUITests+Helpers.m in Sources */,
 				933CAFB51C77705100EF6F84 /* JMFavoriteInfoPageUITests.m in Sources */,
+				93A8B5CA1CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m in Sources */,
 				933CAF901C776E1600EF6F84 /* JMAppMenuUITests.m in Sources */,
 				933CAF7F1C776ACE00EF6F84 /* JMServerProfilesUITests.m in Sources */,
 				933CAF891C776D3C00EF6F84 /* JMLibraryInfoPageUITests.m in Sources */,
