@@ -185,6 +185,7 @@
 		939917321BC67737006CC2A7 /* old_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = A14785AF90B597E785B4A30A /* old_dashboard.js */; };
 		93A8B5C61CFBF77800B313FC /* JMSavedItemsPageUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A8B5C51CFBF77800B313FC /* JMSavedItemsPageUITests.m */; };
 		93A8B5CA1CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A8B5C91CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m */; };
+		93A8B5CE1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A8B5CD1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.m */; };
 		93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C4E3111C737DB300A19D64 /* JMUITestConstants.m */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
@@ -607,6 +608,8 @@
 		93A8B5C51CFBF77800B313FC /* JMSavedItemsPageUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedItemsPageUITests.m; sourceTree = "<group>"; };
 		93A8B5C81CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedItemInfoScreenUITests.h; sourceTree = "<group>"; };
 		93A8B5C91CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedItemInfoScreenUITests.m; sourceTree = "<group>"; };
+		93A8B5CC1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardPrintDialogUITests.h; sourceTree = "<group>"; };
+		93A8B5CD1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardPrintDialogUITests.m; sourceTree = "<group>"; };
 		93C4E3101C737DB300A19D64 /* JMUITestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMUITestConstants.h; sourceTree = "<group>"; };
 		93C4E3111C737DB300A19D64 /* JMUITestConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUITestConstants.m; sourceTree = "<group>"; };
 		93D8C6431AAC7E9200117306 /* JMWebViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebViewManager.h; sourceTree = "<group>"; };
@@ -1993,6 +1996,7 @@
 		933CAF511C776A8E00EF6F84 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				93A8B5CB1CFC00BA00B313FC /* DashboardPrintDialogUITests */,
 				933CAF521C776A8E00EF6F84 /* DashboardInfoDialogUITests */,
 				933CAF531C776A8E00EF6F84 /* DashboardPageUITests */,
 				933CAF541C776A8E00EF6F84 /* DashletPageUITests */,
@@ -2366,6 +2370,15 @@
 				93A8B5C91CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m */,
 			);
 			path = SavedItemInfoScreenUITests;
+			sourceTree = "<group>";
+		};
+		93A8B5CB1CFC00BA00B313FC /* DashboardPrintDialogUITests */ = {
+			isa = PBXGroup;
+			children = (
+				93A8B5CC1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.h */,
+				93A8B5CD1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.m */,
+			);
+			path = DashboardPrintDialogUITests;
 			sourceTree = "<group>";
 		};
 		93C4E30A1C7374A000A19D64 /* Helpers */ = {
@@ -3451,6 +3464,7 @@
 				933CAFBB1C77709E00EF6F84 /* JMRecentlyViewedInfoPageUITests.m in Sources */,
 				93732E2D1C75F2050065B972 /* JMBaseUITestCase.m in Sources */,
 				933CAFA31C776F9700EF6F84 /* JMFiltersPageUITests.m in Sources */,
+				93A8B5CE1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
