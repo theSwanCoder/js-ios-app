@@ -115,4 +115,10 @@
     return !profile;
 }
 
+- (BOOL) isActiveServerProfile
+{
+    JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    return (self == activeProfile);
+}
+
 @end

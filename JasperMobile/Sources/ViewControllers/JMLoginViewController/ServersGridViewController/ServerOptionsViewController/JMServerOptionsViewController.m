@@ -137,7 +137,7 @@
     [self.view endEditing:YES];
     if ([self.serverOptions isValidData]) {
         // verify https scheme
-        NSString *scheme = [NSURL URLWithString:self.serverProfile.serverUrl].scheme;
+        NSString *scheme = [self.serverOptions urlSchemeForServerProfile];
         BOOL isHTTPSScheme = [scheme isEqualToString:@"https"];
         if (isHTTPSScheme) {
             [self saveServerOptions];
@@ -165,8 +165,6 @@
 {
     // save in DB current profile with updated properties
     [self.serverOptions saveChanges];
-    [[NSNotificationCenter defaultCenter] postNotificationName:JMServerProfileDidChangeNotification
-                                                        object:self.serverOptions.serverProfile];
 }
 
 - (void)showSecurityHTTPAlert

@@ -34,6 +34,7 @@
 
 #import <Foundation/Foundation.h>
 #import "JSRESTBase.h"
+#import "JMServerProfile+Helpers.h"
 
 @class JSProfile;
 
@@ -48,6 +49,8 @@
 - (void)restoreLastSessionWithCompletion:(void (^)(BOOL isSessionRestored))completion;
 
 - (void) logout;
+
+- (void) updateSessionServerProfileWith:(JMServerProfile *)changedServerProfile;
 
 - (NSPredicate *)predicateForCurrentServerProfile;
 

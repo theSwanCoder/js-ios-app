@@ -72,4 +72,6 @@
  */
 - (BOOL) isValidNameForServerProfile:(NSString *)name;
 
+- (BOOL) isActiveServerProfile;
+
 @end

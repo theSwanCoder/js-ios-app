@@ -49,9 +49,25 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
 
 - (void)saveChanges
 {
+    BOOL isActiveServerProfile = [self.serverProfile isActiveServerProfile];
+    
+    self.serverProfile.alias = [self.optionsArray[0] optionValue];
+    self.serverProfile.serverUrl = [self.optionsArray[1] optionValue];
+    self.serverProfile.organization = [self.optionsArray[2] optionValue];
+    self.serverProfile.askPassword  = [self.optionsArray[3] optionValue];
+    self.serverProfile.keepSession  = [self.optionsArray[4] optionValue];
+
+    
     if ([[JMCoreDataManager sharedInstance].managedObjectContext hasChanges]) {
         NSError *error = nil;
         [[JMCoreDataManager sharedInstance] save:&error];
+        
+        if (!error) {
+            if (isActiveServerProfile) {
+                // update current active server profile
+                [[JMSessionManager sharedManager] updateSessionServerProfileWith:self.serverProfile];
+            }
+        }
     }
 }
 
@@ -60,9 +76,7 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
     JMServerOption *serverOption = self.optionsArray[0];
     if (serverOption.optionValue && [[serverOption.optionValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
         // Check if alias is unique
-        if ([self.serverProfile isValidNameForServerProfile:serverOption.optionValue]) {
-            self.serverProfile.alias = serverOption.optionValue;
-        } else {
+        if (![self.serverProfile isValidNameForServerProfile:serverOption.optionValue]) {
             serverOption.errorString = JMCustomLocalizedString(@"servers_name_errmsg_exists", nil);
         }
     } else {
@@ -74,16 +88,11 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
         NSURL *url = [NSURL URLWithString:serverOption.optionValue];
         if (!url || !url.scheme || !url.host) {
             serverOption.errorString = JMCustomLocalizedString(@"servers_url_errmsg", nil);;
-        } else {
-            self.serverProfile.serverUrl = serverOption.optionValue;
         }
     } else {
         serverOption.errorString = JMCustomLocalizedString(@"servers_url_errmsg", nil);
     }
     
-    self.serverProfile.organization = [self.optionsArray[2] optionValue];
-    self.serverProfile.askPassword  = [self.optionsArray[3] optionValue];
-    self.serverProfile.keepSession  = [self.optionsArray[4] optionValue];
     for (JMServerOption *option in self.optionsArray) {
         if (option.errorString) {
             return NO;
@@ -92,6 +101,17 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
     
     return YES;
 }
+
+- (NSString *)urlSchemeForServerProfile
+{
+    if ([self isValidData]) {
+        NSString *urlString = [self.optionsArray[1] optionValue];
+        NSString *scheme = [NSURL URLWithString:urlString].scheme;
+        return scheme;
+    }
+    return nil;
+}
+
 
 - (void)discardChanges
 {

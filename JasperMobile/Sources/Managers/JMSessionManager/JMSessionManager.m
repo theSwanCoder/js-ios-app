@@ -27,7 +27,6 @@
 //
 
 #import "JMSessionManager.h"
-#import "JMServerProfile+Helpers.h"
 #import "JMCancelRequestPopup.h"
 #import "JMWebViewManager.h"
 #import "JMExportManager.h"
@@ -56,7 +55,6 @@ static JMSessionManager *_sharedManager = nil;
     dispatch_once(&onceToken, ^{
         _sharedManager = [JMSessionManager new];
         [[NSNotificationCenter defaultCenter] addObserver:_sharedManager selector:@selector(saveActiveSessionIfNeeded:) name:kJSSessionDidAuthorized object:_sharedManager.restClient];
-        [[NSNotificationCenter defaultCenter] addObserver:_sharedManager selector:@selector(serverProfileDidChanged:) name:JMServerProfileDidChangeNotification object:nil];
     });
     
     return _sharedManager;
@@ -79,15 +77,14 @@ static JMSessionManager *_sharedManager = nil;
     }];
 }
 
-- (void) serverProfileDidChanged:(NSNotification *)notification {
-    JMServerProfile *changedProfile = notification.object;
-    JMServerProfile *currentProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-    if (changedProfile == currentProfile) {
-        // update current active server profile
-        self.restClient.serverProfile.alias = changedProfile.alias;
-        self.restClient.keepSession = [changedProfile.keepSession boolValue];
-        [self saveActiveSessionIfNeeded:nil];
-    }
+- (void) updateSessionServerProfileWith:(JMServerProfile *)changedServerProfile {
+    // update current active server profile
+    self.restClient.serverProfile.alias = changedServerProfile.alias;
+    self.restClient.keepSession = [changedServerProfile.keepSession boolValue];
+    [self saveActiveSessionIfNeeded:nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:JMServerProfileDidChangeNotification
+                                                        object:changedServerProfile];
 }
 
 - (void) saveActiveSessionIfNeeded:(id)notification {
