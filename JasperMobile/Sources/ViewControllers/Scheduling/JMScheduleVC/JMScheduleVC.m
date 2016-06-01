@@ -645,7 +645,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             [JMCancelRequestPopup dismiss];
             __strong typeof(self) strongSelf = weakSelf;
             if (newScheduleMetadata) {
-                strongSelf.exitBlock(newScheduleMetadata);
+                if (strongSelf.exitBlock) {
+                    strongSelf.exitBlock(newScheduleMetadata);
+                }
                 
                 [strongSelf.navigationController popViewControllerAnimated:YES];
                 NSString *toastMessageKey = self.isNewScheduleMetadata ? @"schedules_created_success" : @"schedules_updated_success";
