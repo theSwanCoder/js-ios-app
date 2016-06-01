@@ -73,7 +73,7 @@
     if (!scheduleLookup) {
         return nil;
     }
-    NSArray *resourceProperties = @[
+    NSMutableArray *resourceProperties = [@[
             @{
                     kJMTitleKey : @"type",
                     kJMValueKey : [self.resource localizedResourceType] ?: @"-"
@@ -101,12 +101,17 @@
             @{
                     kJMTitleKey : @"schedule_previousFireTime",
                     kJMValueKey : [self dateStringFromDate:scheduleLookup.state.previousFireTime] ?: @"-"
-            },
-            @{
-                    kJMTitleKey : @"schedule_nextFireTime",
-                    kJMValueKey : [self dateStringFromDate:scheduleLookup.state.nextFireTime] ?: @"-"
             }
-    ];
+    ] mutableCopy];
+    NSString *nextFireTime = @"-";
+    if (![[scheduleLookup.state.value lowercaseString] isEqualToString:@"paused"]) {
+        nextFireTime = [self dateStringFromDate:scheduleLookup.state.nextFireTime] ?: @"-";;
+    }
+    [resourceProperties addObject: @{
+                                     kJMTitleKey : @"schedule_nextFireTime",
+                                     kJMValueKey : nextFireTime
+                                     }];
+
     return resourceProperties;
 }
 
