@@ -145,12 +145,8 @@ static JMSessionManager *_sharedManager = nil;
 
 - (void) reset
 {
-    [[JMExportManager sharedInstance] cancelAll];
-    
     [self.restClient cancelAllRequests];
     [self.restClient deleteCookies];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMSavedSessionKey];
-    self.restClient = nil;
     
     // Clear webView
     [[JMWebViewManager sharedInstance] reset];
@@ -160,7 +156,12 @@ static JMSessionManager *_sharedManager = nil;
 - (void) logout
 {
     [self reset];
-    
+
+    [[JMExportManager sharedInstance] cancelAll];
+
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMSavedSessionKey];
+    self.restClient = nil;
+
     // Clearing of Images Cache
     AFImageDownloader *downloader = [UIImageView sharedImageDownloader];
     id <AFImageRequestCache> imageCache = downloader.imageCache;
