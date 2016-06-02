@@ -143,7 +143,7 @@ static JMSessionManager *_sharedManager = nil;
     }
 }
 
-- (void) logout
+- (void) reset
 {
     [[JMExportManager sharedInstance] cancelAll];
     
@@ -155,7 +155,12 @@ static JMSessionManager *_sharedManager = nil;
     // Clear webView
     [[JMWebViewManager sharedInstance] reset];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
+}
 
+- (void) logout
+{
+    [self reset];
+    
     // Clearing of Images Cache
     AFImageDownloader *downloader = [UIImageView sharedImageDownloader];
     id <AFImageRequestCache> imageCache = downloader.imageCache;

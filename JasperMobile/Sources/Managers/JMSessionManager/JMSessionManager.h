@@ -48,6 +48,8 @@
 
 - (void)restoreLastSessionWithCompletion:(void (^)(BOOL isSessionRestored))completion;
 
+- (void) reset;
+
 - (void) logout;
 
 - (void) updateSessionServerProfileWith:(JMServerProfile *)changedServerProfile;

@@ -188,6 +188,8 @@ void jmDebugLog(NSString *format, ...) {
 {
     if (!restoreSession && self.restClient) {
         [[JMSessionManager sharedManager] logout];
+    } else {
+        [[JMSessionManager sharedManager] reset];
     }
 
     SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
