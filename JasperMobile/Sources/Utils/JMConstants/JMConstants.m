@@ -39,10 +39,7 @@ NSString * const kJMFavoritesDidChangedNotification = @"JMFavoritesDidChangedNot
 NSString * const kJMSavedResourcesDidChangedNotification = @"JMSavedResourcesDidChangedNotification";
 NSString * const kJMExportedResourceDidLoadNotification = @"kJMExportedResourceDidLoadNotification";
 NSString * const kJMExportedResourceDidCancelNotification = @"kJMExportedResourceDidCancelNotification";
-
-// Local Notifications
-NSString * const kJMLocalNotificationKey = @"kJMLocalNotificationKey";
-NSString * const kJMExportResourceLocalNotification = @"kJMExportResourceLocalNotification";
+NSString * const JMServerProfileDidChangeNotification = @"JMServerProfileDidChangeNotification";
 
 // Shared keys for NSDictionary
 NSString * const kJMTitleKey = @"title";
@@ -59,17 +56,17 @@ NSString * const kJMReportKey = @"reportKey";
 NSString * const kJMDashboardKey = @"dashboardKey";
 
 // Settings keys
-NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
 NSString * const kJMDefaultSendingCrashReport = @"jaspersoft.crashreportsending.enabled";
-NSString * const kJMDefaultUseVisualize = @"jaspersoft.use.visualize";
 NSString * const kJMUserAcceptAgreement = @"kJMUserAcceptAgreement";
+NSString * const kJMDefaultSendingAutoFillLoginData = @"jaspersoft.autofill.login.data.enabled";
 
 // Demo server parameters
 NSString * const kJMDemoServerAlias = @"Jaspersoft Mobile Demo";
-NSString * const kJMDemoServerUrl = @"https://mobiledemo2.jaspersoft.com/jasperserver-pro";
+NSString * const kJMDemoServerUrl = @"https://mobiledemo.jaspersoft.com/jasperserver-pro";
 NSString * const kJMDemoServerOrganization = @"organization_1";
 NSString * const kJMDemoServerUsername = @"phoneuser";
 NSString * const kJMDemoServerPassword = @"phoneuser";
+
 
 // Emails for feedbacks
 NSString * const kFeedbackPrimaryEmail = @"js-dev-mobile@tibco.com";
@@ -82,6 +79,9 @@ NSString * const kJMReportsDirectory = @"reports";
 // Saved Items ws types
 NSString * const kJMSavedReportUnit = @"savedReportUnit";
 NSString * const kJMTempExportedReportUnit = @"kJMTempExportedReportUnit";
+
+// Schedules Items
+NSString * const kJMScheduleUnit = @"kJMScheduleUnit";
 
 // Name of the main report file (outputResource)
 NSString * const kJMReportFilename = @"report";
@@ -122,18 +122,27 @@ NSString * const kJMAnalyticsAuthenticationEventLabelSuccess      = @"Success";
 NSString * const kJMAnalyticsAuthenticationEventLabelFailure      = @"Failure";
 
 // Analytics - Resource
-NSString * const kJMAnalyticsResourceEventCategoryTitle           = @"Resource";
-NSString * const kJMAnalyticsResourceEventActionOpenTitle         = @"Open";
-NSString * const kJMAnalyticsResourceEventActionPrintTitle        = @"Print";
-NSString * const kJMAnalyticsResourceEventActionExportTitle       = @"Export";
-NSString * const kJMAnalyticsResourceEventLabelReportREST         = @"Report (REST)";
-NSString * const kJMAnalyticsResourceEventLabelReportVisualize    = @"Report (Visualize)";
-NSString * const kJMAnalyticsResourceEventLabelDashboardFlow      = @"Dashboard (Flow)";
-NSString * const kJMAnalyticsResourceEventLabelDashboardVisualize = @"Dashboard (Visualize)";
-NSString * const kJMAnalyticsResourceEventLabelSavedResource      = @"Saved Resource";
+NSString * const kJMAnalyticsEventCategoryResource           = @"Resource";
+NSString * const kJMAnalyticsEventCategoryOther              = @"Other";
+
+NSString * const kJMAnalyticsEventActionOpen         = @"Open";
+NSString * const kJMAnalyticsEventActionPrint        = @"Print";
+NSString * const kJMAnalyticsEventActionExport       = @"Export";
+NSString * const kJMAnalyticsEventActionViewed       = @"Viewed";
+
+NSString * const kJMAnalyticsResourceLabelReportREST         = @"Report (REST)";
+NSString * const kJMAnalyticsResourceLabelReportVisualize    = @"Report (Visualize)";
+NSString * const kJMAnalyticsResourceLabelDashboardFlow      = @"Dashboard (Flow)";
+NSString * const kJMAnalyticsResourceLabelDashboardVisualize = @"Dashboard (Visualize)";
+NSString * const kJMAnalyticsResourceLabelSavedResource      = @"Saved Resource";
+NSString * const kJMAnalyticsLabelThumbnail          = @"Thumbnail";
 
 // Analytics - Repository
 NSString * const kJMAnalyticsRepositoryEventCategoryTitle     = @"Repository";
 NSString * const kJMAnalyticsRepositoryEventActionOpen        = @"Open";
 NSUInteger  const kJMAnalyticsCustomDimensionServerVersionIndex = 1;
 NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex = 2;
+
+// Login VC
+NSString *const JMLoginVCLastUserNameKey           = @"JMLoginVCLastUserNameKey";
+NSString *const JMLoginVCLastServerProfileAliasKey = @"JMLoginVCLastServerProfileAliasKey";

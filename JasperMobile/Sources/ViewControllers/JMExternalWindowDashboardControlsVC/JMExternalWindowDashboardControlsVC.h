@@ -26,7 +26,6 @@
 //  TIBCO JasperMobile
 //
 
-@class JMDashlet;
 @protocol JMExternalWindowDashboardControlsVCDelegate;
 
 /**
@@ -35,13 +34,14 @@
 */
 
 @interface JMExternalWindowDashboardControlsVC : UIViewController
-@property (nonatomic, copy) NSArray <JMDashlet *>* components;
+@property (nonatomic, copy) NSArray <JSDashboardComponent *>* components;
 @property (nonatomic, weak) NSObject <JMExternalWindowDashboardControlsVCDelegate> *delegate;
+- (void)markComponentAsMinimized:(JSDashboardComponent *)component;
 @end
 
 
 @protocol JMExternalWindowDashboardControlsVCDelegate
 @optional
-- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JMDashlet *)dashlet;
-- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JMDashlet *)dashlet;
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JSDashboardComponent *)dashlet;
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JSDashboardComponent *)dashlet;
 @end

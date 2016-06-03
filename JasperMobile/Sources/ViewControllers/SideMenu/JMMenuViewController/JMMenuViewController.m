@@ -38,6 +38,8 @@
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
+#import "JMServerOptionsViewController.h"
+#import "JMAnalyticsManager.h"
 
 typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonStateNormal,
@@ -58,7 +60,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
 @implementation JMMenuViewController
 + (NSInteger)defaultItemIndex {
-    return JMResourceTypeLibrary;
+    return JMSectionTypeLibrary;
 }
 
 #pragma mark - LifeCycle
@@ -74,6 +76,11 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(exportedResouceDidLoad:)
                                                  name:kJMExportedResourceDidLoadNotification
+                                               object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(serverProfileDidChange:)
+                                                 name:JMServerProfileDidChangeNotification
                                                object:nil];
 }
 
@@ -111,6 +118,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     self.menuItems = nil;
     [self setSelectedItemIndex:[[self class] defaultItemIndex]];
     [self updateServerInfo];
+    [self.tableView setContentOffset:CGPointZero];
 }
 
 #pragma mark - Utils
@@ -173,11 +181,32 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuItem *item = self.menuItems[itemIndex];
     item.showNotes = NO;
 
-    if (item.resourceType == JMResourceTypeLogout) {
+    if (item.sectionType == JMSectionTypeLogout) {
         [[JMSessionManager sharedManager] logout];
         [JMUtils showLoginViewAnimated:YES completion:nil];
         self.menuItems = nil;
-    } else if (item.resourceType == JMResourceTypeAbout) {
+    } else if (item.sectionType == JMSectionTypeSettings) {
+        [self closeMenu];
+
+        JMServerOptionsViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+        settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"dialog_button_cancel", nil)
+                                                                                        style:UIBarButtonItemStyleDone
+                                                                                       target:settingsVC
+                                                                                       action:@selector(cancel)];
+        settingsVC.serverProfile = [JMUtils activeServerProfile];
+        __weak __typeof(settingsVC) weakSettingVC = settingsVC;
+        settingsVC.exitBlock = ^{
+            __typeof(settingsVC) strongSettingVC = weakSettingVC;
+            [strongSettingVC dismissViewControllerAnimated:YES completion:nil];
+        };
+        JMMainNavigationController *navController = [[JMMainNavigationController alloc] initWithRootViewController:settingsVC];
+        navController.modalPresentationStyle = UIModalPresentationFormSheet;
+
+        [self.revealViewController.frontViewController presentViewController:navController
+                                                                    animated:YES
+                                                                  completion:nil];
+
+    } else if (item.sectionType == JMSectionTypeAbout) {
         [self closeMenu];
 
         JMMainNavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
@@ -186,7 +215,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         [self.revealViewController.frontViewController presentViewController:navController
                                                                     animated:YES
                                                                   completion:nil];
-    } else if (item.resourceType == JMResourceTypeFeedback) {
+    } else if (item.sectionType == JMSectionTypeFeedback) {
         [self showFeedback];
     } else {
         if (!currentSelectedItem || currentSelectedItem != item) {
@@ -198,10 +227,10 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             id nextVC;
             if([item vcIdentifierForSelectedItem]) {
                 // Analytics
-                [JMUtils logEventWithInfo:@{
-                        kJMAnalyticsCategoryKey      : kJMAnalyticsRepositoryEventCategoryTitle,
-                        kJMAnalyticsActionKey        : kJMAnalyticsRepositoryEventActionOpen,
-                        kJMAnalyticsLabelKey         : [item nameForAnalytics]
+                [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                        kJMAnalyticsCategoryKey : kJMAnalyticsRepositoryEventCategoryTitle,
+                        kJMAnalyticsActionKey : kJMAnalyticsRepositoryEventActionOpen,
+                        kJMAnalyticsLabelKey : [item nameForAnalytics]
                 }];
 
                 nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
@@ -260,19 +289,20 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 - (NSArray *)createMenuItems
 {
     NSMutableArray *menuItems = [@[
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeLibrary],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeScheduling],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeAbout],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeFeedback],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeLibrary],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeRepository],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeSavedItems],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeFavorites],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeScheduling],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeAbout],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeSettings],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeFeedback],
+            [JMMenuItem menuItemWithSectionType:JMSectionTypeLogout]
     ] mutableCopy];
 
     if ([JMUtils isServerProEdition]) {
-        NSUInteger indexOfRepository = [menuItems indexOfObject:[JMMenuItem menuItemWithResourceType:JMResourceTypeRepository]];
-        [menuItems insertObject:[JMMenuItem menuItemWithResourceType:JMResourceTypeRecentViews] atIndex:indexOfRepository + 1];
+        NSUInteger indexOfRepository = [menuItems indexOfObject:[JMMenuItem menuItemWithSectionType:JMSectionTypeRepository]];
+        [menuItems insertObject:[JMMenuItem menuItemWithSectionType:JMSectionTypeRecentViews] atIndex:indexOfRepository + 1];
     }
 
     return [menuItems copy];
@@ -330,9 +360,9 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     }
 }
 
-- (JMMenuItem *)menuItemWithType:(JMResourceType)resourceType
+- (JMMenuItem *)menuItemWithType:(JMSectionType)sectionType
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"resourceType == %@", @(resourceType)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sectionType == %@", @(sectionType)];
     return [self.menuItems filteredArrayUsingPredicate:predicate].firstObject;
 }
 
@@ -356,8 +386,8 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
         [self presentViewController:mc animated:YES completion:NULL];
     } else {
-        NSString *errorMessage = JMCustomLocalizedString(@"settings.feedback.errorShowClient", nil);
-        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        NSString *errorMessage = JMCustomLocalizedString(@"settings_feedback_errorShowClient", nil);
+        NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         [JMUtils presentAlertControllerWithError:error completion:nil];
     }
 #endif
@@ -391,11 +421,16 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 #pragma mark - Notifications
 - (void)exportedResouceDidLoad:(NSNotification *)notification
 {
-    if (self.selectedItem.resourceType != JMResourceTypeSavedItems) {
+    if (self.selectedItem.sectionType != JMSectionTypeSavedItems) {
         [self showNoteInMenuButton];
-        JMMenuItem *savedItem = [self menuItemWithType:JMResourceTypeSavedItems];
+        JMMenuItem *savedItem = [self menuItemWithType:JMSectionTypeSavedItems];
         savedItem.showNotes = YES;
     }
+}
+
+- (void)serverProfileDidChange:(NSNotification *)notification
+{
+    [self updateServerInfo];
 }
 
 @end

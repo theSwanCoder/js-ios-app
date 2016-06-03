@@ -1,0 +1,102 @@
+
+[[Resource viewer share]]
+	[resource_viewer_share_title]
+		en = Resource Sharing
+		de = Gemeinsame Nutzung von Ressourcen
+		es = Compartir recursos
+		fr = Partage de ressources
+		it = Condivisione risorsa
+		ja = リソースの共有
+		pt = Compartilhamento de recursos
+		zh = 资源共享
+		tags = ios
+    [resource_viewer_share_annotation_title]
+        en = Input text, please
+        de = Bitte Text eingeben
+        es = Escriba el texto, por favor
+        fr = Veuillez saisir un texte
+        it = Immettere testo
+        ja = テキストを入力してください
+        pt = Texto de entrada
+        zh = 请输入文本
+        tags = ios
+    [resource_viewer_share_annotation_placeholder]
+        en = Annotation
+        de = Anmerkung
+        es = Anotación
+        fr = Annotation
+        it = Annotazione
+        ja = コメント
+        pt = Anotação
+        zh = 注释
+        tags = ios
+    [resource_viewer_share_annotation_empty_error]
+        en = Annotation text can't be empty!
+        de = Der Anmerkungstext darf nicht leer bleiben!
+        es = ¡El texto de la anotación no puede estar en blanco!
+        fr = Le champ Annotation ne peut pas être vide !
+        it = Il campo per l\'annotazione del testo non può restare vuoto!
+        ja = コメント欄を空欄にする事はできません！
+        pt = O campo de texto da anotação não pode ficar em branco!
+        zh = 注释文本不能为空！
+        tags = ios
+    [resource_viewer_share_text]
+        en = Look at this awesome report, builded via %@!
+        de = Schauen Sie sich diesen umwerfenden Bericht an, der mit %@ aufgesetzt wurde!
+        es = ¡Vea este asombroso informe, construido con %@!
+        fr = Consultez ce rapport impressionnant, créé via %@!
+        it = Guarda questo fantastico rapporto, creato con %@!
+        ja = %@で作成した素晴らしいレポートをご覧下さい！
+        pt = Beja este relatório incrível, elaborado com o %@!
+        zh = 看看这份使用%@制作的出色报告！
+        tags = ios
+    [resource_viewer_share_settings_title]
+        en = Share Settings
+        de = Einstellungen teilen
+        es = Ajustes de compartir
+        fr = Paramètres de partage
+        it = Condividi impostazioni
+        ja = 共有設定
+        pt = Compartilhar Configurações
+        zh = 分享设置
+        tags = ios
+    [resource_viewer_share_settings_opacity]
+        en = Opacity
+        de = Opazität
+        es = Opacidad
+        fr = Opacité
+        it = Opacità
+        ja = 不透明度
+        pt = Opacidade
+        zh = 不透明度
+        tags = ios
+    [resource_viewer_share_settings_brush]
+        en = Brush
+        de = Pinsel
+        es = Pincel
+        fr = Pinceau
+        it = Pennello
+        ja = ブラシ
+        pt = Pincel
+        zh = 笔刷
+        tags = ios
+    [resource_viewer_share_settings_border]
+        en = Border For Text
+        de = Textrahmen
+        es = Borde del texto
+        fr = Bordure de texte
+        it = Bordo per testo
+        ja = テキストのボーダー
+        pt = Borda do texto
+        zh = 文本边框
+        tags = ios
+    [resource_viewer_share_settings_font_size]
+        en = Font Size
+        de = Schriftgröße
+        es = Tamaño de fuente
+        fr = Taille de la police
+        it = Dimensioni font
+        ja = フォントサイズ
+        pt = Tamanho da fonte
+        zh = 字体大小
+        tags = ios

@@ -102,7 +102,7 @@
 
 + (JMExportResource *)exportResourceWithName:(NSString *)reportName format:(NSString *)reportFormat;
 {
-    NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"label == %@", reportName];
+    NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"resourceLookup.label == %@", reportName];
     NSPredicate *predicateFormat = [NSPredicate predicateWithFormat:@"format == %@", reportFormat];
     NSPredicate *predicateAll = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:@[predicateName, predicateFormat]];
     

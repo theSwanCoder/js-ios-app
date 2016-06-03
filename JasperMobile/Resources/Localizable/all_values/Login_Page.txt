@@ -1,0 +1,72 @@
+
+[[Login Page]]
+	[login_username_label]
+		en = Username
+		de = Benutzername
+		fr = Nom d’utilisateur
+		es = Nombre de usuario
+		it = Nome utente
+		pt = Nome do usuário
+		ja = ユーザー名
+		zh = 用户名
+		tags = ios
+	[login_username_errmsg_empty]
+		en = Specify a valid username.
+		de = Geben Sie einen gültigen Benutzernamen an.
+		fr = Spécifiez un nom d’utilisateur valide.
+		es = Especifique un nombre de usuario válido.
+		it = Specificare un nome utente valido.
+		pt = Especificar um nome de usuário válido.
+		ja = 有効なユーザー名を指定してください。
+		zh = 指定一个有效的用户名。
+		tags = ios
+	[login_password_label]
+		en = Password
+		de = Passwort
+		fr = Mot de passe
+		es = Contraseña
+		it = Password
+		pt = Senha
+		ja = パスワード
+		zh = 密码
+		tags = ios
+	[login_password_errmsg_empty]
+		en = Specify a valid password.
+		de = Geben Sie ein gültiges Passwort an.
+		fr = Spécifiez un mot de passe valide.
+		es = Especifique una contraseña válida.
+		it = Indicare una password valida.
+		pt = Especifique uma senha válida.
+		ja = 有効なパスワードを指定してください。
+		zh = 指定一个有效的密码。
+		tags = ios
+	[login_server_profile_errmsg_empty]
+		en = Select a server profile.
+		de = Wählen Sie ein Serverprofil aus.
+		fr = Sélectionnez un profil de serveur.
+		es = Seleccione un perfil del servidor.
+		it = Selezionare un profilo server.
+		pt = Selecione um perfil do servidor.
+		ja = サーバー プロファイルを選択してください。
+		zh = 选择一个服务器配置文件。
+		tags = ios
+	[login_button_login]
+		en = Login
+		de = Anmelden
+		fr = Connexion
+		es = Inicio de sesión
+		it = Accesso
+		pt = Login
+		ja = ログイン
+		zh = 登录
+		tags = ios
+	[login_button_try_demo]
+		en = Try Demo
+		de = Demo ausprobieren
+		fr = Essayer la démo
+		es = Probar demostración
+		it = Prova demo
+		pt = Demonstração de teste
+		ja = デモの実行
+		zh = 尝试演示
+		tags = ios

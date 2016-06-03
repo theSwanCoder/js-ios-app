@@ -24,11 +24,16 @@
 #import "JMResourceViewerViewController.h"
 #import "JMWebViewManager.h"
 #import "ALToastView.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMMainNavigationController.h"
+#import "JMWebEnvironment.h"
+#import "UIView+Additions.h"
+#import "JMResource.h"
+#import "JMShareViewController.h"
+#import "JMAnalyticsManager.h"
+
+NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewerWebEnvironmentIdentifier";
 
 @interface JMResourceViewerViewController () <UIPrintInteractionControllerDelegate>
-@property (nonatomic, weak, readwrite) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) UINavigationController *printNavController;
 @property (nonatomic, assign) CGSize printSettingsPreferredContentSize;
 @property (nonatomic, assign) NSInteger lowMemoryWarningsCount;
@@ -69,11 +74,11 @@
 {
     [super viewWillDisappear:animated];
 
-    if (self.webView.loading) {
-        [self stopShowLoadingIndicators];
-        // old dashboards don't load empty page
-        //[self.webView stopLoading];
-    }
+//    if (self.webView.loading) {
+//        [self stopShowLoadingIndicators];
+//        // old dashboards don't load empty page
+//        //[self.webView stopLoading];
+//    }
 }
 
 - (void)viewWillLayoutSubviews
@@ -87,54 +92,59 @@
     [super viewWillLayoutSubviews];
 }
 
+#pragma mark - Custom Accessors
+- (UIView *)resourceView
+{
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
+    return webEnvironment.webView;
+}
+
 #pragma mark - Setups
 - (void)setupSubviews
 {
-    UIWebView *webView = [[JMWebViewManager sharedInstance] webView];
-    webView.delegate = self;
-    [self.view insertSubview:webView belowSubview:self.activityIndicator];
-    self.webView = webView;
-
-    [self setupWebViewLayout];
+    [self.view addSubview:[self resourceView]];
+    [self setupResourceViewLayout];
 }
 
-- (void)setupWebViewLayout
+- (void)setupResourceViewLayout
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
+    UIView *resourceView = [self resourceView];
+    resourceView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[resourceView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": self.webView}]];
+                                                                        views:@{@"resourceView": resourceView}]];
 
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[resourceView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": self.webView}]];
+                                                                        views:@{@"resourceView": resourceView}]];
 }
 
 - (void)resetSubViews
 {
-    [self.webView stopLoading];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
+    [webEnvironment clean];
 }
 
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
     [self resetSubViews];
     [self.view endEditing:YES];
-    self.webView.delegate = nil;
+//    self.webView.navigationDelegate = nil;
 
     [super cancelResourceViewingAndExit:exit];
 }
 
 #pragma mark - Overriden methods
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)availableAction
 {
-    JMMenuActionsViewAction availableActions = [super availableActionForResource:resource];
-    BOOL isSaveReport = [self.resourceLookup isSavedReport];
-    BOOL isFile = [self.resourceLookup isFile];
+    JMMenuActionsViewAction availableActions = [super availableAction];
+    availableActions |= JMMenuActionsViewAction_Share;
+
+    BOOL isSaveReport = self.resource.type == JMResourceTypeSavedResource;
+    BOOL isFile = self.resource.type == JMResourceTypeFile;
     if ( !(isSaveReport || isFile) ) {
         availableActions |= JMMenuActionsViewAction_Print;
     }
@@ -146,6 +156,8 @@
     [super actionsView:view didSelectAction:action];
     if (action == JMMenuActionsViewAction_Print) {
         [self printResource];
+    } else if (action == JMMenuActionsViewAction_Share) {
+        [self shareResource];
     }
 }
 
@@ -153,17 +165,17 @@
 - (void)printResource
 {
     // Analytics
-    NSString *label = kJMAnalyticsResourceEventLabelSavedResource;
-    if ([self.resourceLookup isReport]) {
-        label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
-    } else if ([self.resourceLookup isDashboard]) {
-        label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+    NSString *label = kJMAnalyticsResourceLabelSavedResource;
+    if (self.resource.type == JMResourceTypeReport) {
+        label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceLabelReportVisualize : kJMAnalyticsResourceLabelReportREST;
+    } else if (self.resource.type == JMResourceTypeDashboard) {
+        label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceLabelDashboardVisualize : kJMAnalyticsResourceLabelDashboardFlow;
     }
-    [JMUtils logEventWithInfo:@{
-                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
-                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionPrintTitle,
-                        kJMAnalyticsLabelKey         : label
-                }];
+    [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+            kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
+            kJMAnalyticsActionKey   : kJMAnalyticsEventActionPrint,
+            kJMAnalyticsLabelKey    : label
+    }];
 }
 
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion
@@ -205,6 +217,13 @@
     }
 }
 
+- (void)shareResource
+{
+    JMShareViewController *shareViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMShareViewController"];
+    shareViewController.imageForSharing = [self.resourceView renderedImage];
+    [self.navigationController pushViewController:shareViewController animated:YES];
+}
+
 #pragma mark - UIPrintInteractionControllerDelegate
 - (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController
 {
@@ -225,61 +244,57 @@
     }];
 }
 
-#pragma mark - UIWebViewDelegate
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+#pragma mark - WebViewDelegate
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
     NSString *serverHost = [NSURL URLWithString:self.restClient.serverProfile.serverUrl].host;
-    NSString *requestHost = request.URL.host;
+    NSString *requestHost = navigationAction.request.URL.host;
     BOOL isParentHost = [requestHost isEqualToString:serverHost];
-    BOOL isLinkClicked = navigationType == UIWebViewNavigationTypeLinkClicked;
+    BOOL isLinkClicked = navigationAction.navigationType == UIWebViewNavigationTypeLinkClicked;
 
     if (!isParentHost && isLinkClicked) {
-        if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
-                                                                                              message:@"resource.viewer.open.link"
-                                                                                    cancelButtonTitle:@"dialog.button.cancel"
+        if ([[UIApplication sharedApplication] canOpenURL:navigationAction.request.URL]) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_attention"
+                                                                                              message:@"resource_viewer_open_link"
+                                                                                    cancelButtonTitle:@"dialog_button_cancel"
                                                                               cancelCompletionHandler:nil];
-            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                [[UIApplication sharedApplication] openURL:request.URL];
+            [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
             }];
             [self presentViewController:alertController animated:YES completion:nil];
         } else {
             [ALToastView toastInView:webView
-                            withText:JMCustomLocalizedString(@"resource.viewer.can't.open.link", nil)];
+                            withText:JMCustomLocalizedString(@"resource_viewer_can_not_open_link", nil)];
         }
-        return NO;
+        decisionHandler(WKNavigationActionPolicyCancel);
     }
-    return YES;
+    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView
+
+- (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation
 {
     [self startShowLoadingIndicators];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
     [self stopShowLoadingIndicators];
-    if (self.resourceRequest) {
-        self.isResourceLoaded = YES;
-    }
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
 {
     [self stopShowLoadingIndicators];
-    self.isResourceLoaded = NO;
 }
 
 #pragma mark - Helpers
 - (void)handleLowMemory
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self.webView stopLoading];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    [self resetSubViews];
 
-    NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
-    NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    NSString *errorMessage = JMCustomLocalizedString(@"resource_viewer_memory_warning", nil);
+    NSError *error = [NSError errorWithDomain:@"dialod_title_attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
     __weak typeof(self) weakSelf = self;
     [JMUtils presentAlertControllerWithError:error completion:^{
         __strong typeof(self) strongSelf = weakSelf;

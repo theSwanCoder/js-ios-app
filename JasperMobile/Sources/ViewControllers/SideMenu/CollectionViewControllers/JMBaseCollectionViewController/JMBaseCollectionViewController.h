@@ -46,9 +46,14 @@ extern NSString * const kJMRepresentationTypeDidChangeNotification;
 @property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
 @property (nonatomic, assign) BOOL needReloadData;
 @property (nonatomic, assign) BOOL needLayoutUI;
+@property (nonatomic, assign) BOOL shouldShowButtonForChangingViewPresentation;
+@property (nonatomic, assign) BOOL shouldShowRightNavigationItems;
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
 @property (nonatomic, strong) NSString *representationTypeKey;
+@property (nonatomic, copy) void(^actionBlock)(JMResource *);
 
+- (BOOL)needShowSearchBar;
 - (NSString *)noResultText;
+- (void)actionForResource:(JMResource *)resource;
 - (JMMenuActionsViewAction)availableAction;
 @end

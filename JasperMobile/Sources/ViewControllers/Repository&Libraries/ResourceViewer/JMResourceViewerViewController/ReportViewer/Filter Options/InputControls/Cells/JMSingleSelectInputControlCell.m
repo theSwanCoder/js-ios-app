@@ -57,7 +57,7 @@
     self.inputControlDescriptor.state = state;
     NSMutableArray *selectedValues = [NSMutableArray array];
     for (JSInputControlOption *option in state.options) {
-        if (option.selected.boolValue) {
+        if (option.selected) {
             [selectedValues addObject:option];
         }
     }

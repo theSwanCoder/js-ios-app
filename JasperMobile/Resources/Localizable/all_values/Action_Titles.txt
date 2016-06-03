@@ -1,0 +1,192 @@
+
+[[Action titles]]
+	[action_title_refresh]
+		en = Refresh
+		de = Aktualisieren
+		fr = Actualiser
+		es = Actualizar
+		it = Aggiorna
+		pt = Atualizar
+		ja = 更新
+		zh = 刷新
+		tags = ios
+	[action_title_save]
+		en = Save
+		de = Speichern
+		fr = Enregistrer
+		es = Guardar
+		it = Salva
+		pt = Salvar
+		ja = 保存
+		zh = 保存
+		tags = ios
+	[action_title_edit]
+		en = Edit Values
+		de = Werte bearbeiten
+		es = Editar valores
+		fr = Modifier les valeurs
+		it = Modifica valori
+		ja = 値を編集する
+		pt = Editar valores
+		zh = 编辑值
+		tags = ios
+	[action_title_edit_filters]
+		en = Filters
+		de = Filter
+		es = Filtros
+		fr = Filtres
+		it = Filtri
+		ja = フィルター
+		pt = Filtros
+		zh = 筛选
+		tags = ios
+	[action_title_delete]
+		en = Delete
+		de = Löschen
+		fr = Supprimer
+		es = Eliminar
+		it = Elimina
+		pt = Excluir
+		ja = 削除
+		zh = 删除
+		tags = ios
+	[action_title_rename]
+		en = Rename
+		de = Umbenennen
+		fr = Renommer
+		es = Cambiar nombre
+		it = Rinomina
+		pt = Renomear
+		ja = 名前の変更
+		zh = 重命名
+		tags = ios
+	[action_title_markasfavorite]
+		en = Mark as Favorite
+		de = Als Favorit kennzeichnen
+		fr = Marquer en tant que favori
+		es = Marcar como favorito
+		it = Contrassegna come preferito
+		pt = Marcar como favorito
+		ja = お気に入りとしてマーク
+		zh = 标记为收藏项
+		tags = ios
+	[action_title_markasunfavorite]
+		en = Remove From Favorites
+		de = Aus Favoriten entfernen
+		fr = Supprimer des favoris
+		es = Quitar de Favoritos
+		it = Rimuovi dai preferiti
+		pt = Remover dos favoritos
+		ja = お気に入りから削除
+		zh = 从收藏夹中删除
+		tags = ios
+	[action_title_info]
+		en = Info
+		de = Info
+		fr = Infos
+		es = Información
+		it = Informazioni
+		pt = Informações
+		ja = お知らせ
+		zh = 信息
+		tags = ios
+	[action_title_filter]
+		en = Filter by
+		de = Filtern nach
+		fr = Filtrer par
+		es = Filtrar por
+		it = Filtra per
+		pt = Filtro
+		ja = フィルタ基準
+		zh = 过滤方式
+		tags = ios
+	[action_title_sort]
+		en = Sort by
+		de = Sortieren nach
+		fr = Trier par
+		es = Ordenar por
+		it = Ordina per
+		pt = Classificar como
+		ja = ソート基準
+		zh = 排序方式
+		tags = ios
+	[action_title_selectall]
+		en = Select All
+		de = Alle auswählen
+		fr = Sélectionner tout
+		es = Seleccionar todo
+		it = Seleziona tutto
+		pt = Selecionar todos
+		ja = すべて選択
+		zh = 全选
+		tags = ios
+	[action_title_clearselections]
+		en = Clear selections
+		de = Auswahlen aufheben
+		fr = Effacer les sélections
+		es = Borrar selecciones
+		it = Cancella selezioni
+		pt = Limpar seleções
+		ja = 選択のクリア
+		zh = 清除选定内容
+		tags = ios
+	[action_title_run]
+		en = Run
+		de = Ausführen
+		fr = Exécuter
+		es = Ejecutar
+		it = Esegui
+		pt = Executar
+		ja = 実行
+		zh = 运行
+		tags = ios
+	[action_title_print]
+		en = Print
+		de = Drucken
+		fr = Imprimer
+		es = Imprimir
+		it = Stampa
+		pt = Imprimir
+		ja = 印刷
+		zh = 打印
+		tags = ios
+	[action_title_openIn]
+		en = Open with...
+		de = Öffnen mit ...
+		es = Abrir con...
+		fr = Ouvrir avec...
+		it = Apri con...
+		ja = 次の項目で開く...
+		pt = Abrir com...
+		zh = 以下列方式打开：
+		tags = ios
+	[action_title_accept]
+		en = Accept
+		de = Akzeptieren
+		es = Aceptar
+		fr = Accepter
+		it = Accetta
+		ja = 受け入れる
+		pt = Aceitar
+		zh = 接受
+		tags = ios
+	[action_title_schedule]
+		en = Schedule
+		de = Zeitplan
+		es = Programación
+		fr = Programme
+		it = Programma
+		ja = スケジュール
+		pt = Cronograma
+		zh = 时间规划表
+		tags = ios
+	[action_title_share]
+		en = Share
+		de = Teilen
+		es = Compartir
+		fr = Partager
+		it = Condividi
+		ja = 共有する
+		pt = Compartilhar
+		zh = 分享
+		tags = ios

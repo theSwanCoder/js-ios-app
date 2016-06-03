@@ -58,21 +58,6 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
-- (void)testThatLoaderCleanedUpOldResourcesfBeforeStartLoadingProcess
-{
-    // add object as resource
-    [self.resourceLoader addResourcesWithResource:[TestResource new]];
-    
-    // verify resource is saved by loader
-    XCTAssertEqual(self.resourceLoader.resourceCount, 1, @"Count of resources should be equal 1");
-    
-    [self.resourceLoader setNeedsUpdate];
-    [self.resourceLoader updateIfNeeded];
-    
-    // verify loader is cleaned
-    XCTAssertEqual(self.resourceLoader.resourceCount, 0, @"Count of resources should be equal 0");
-}
-
 - (void)testThatLoaderCanEndLoadingProcess
 {
     self.completionExpectation = [self expectationWithDescription:@"End loading process"];
@@ -84,34 +69,6 @@
 }
 
 #pragma mark - Test helper methods
-- (void)testThatLoaderCanAddOneResource
-{
-    // verify loader doesn't containt resources
-    XCTAssertEqual(self.resourceLoader.resourceCount, 0, @"Count of resources should be equal 0");
-    
-    // add one resource
-    TestResource *resource = [TestResource new];
-    [self.resourceLoader addResourcesWithResource:resource];
-    
-    // verify loader contains one resource
-    XCTAssertEqual(self.resourceLoader.resourceCount, 1, @"Count of resources should be equal 1");
-}
-
-- (void)testThatLoaderCanAddSeveralResources
-{
-    // verify loader doesn't containt resources
-    XCTAssertEqual(self.resourceLoader.resourceCount, 0, @"Count of resources should be equal 0");
-    
-    // add resources
-    NSArray *resources = @[
-                           [TestResource new],
-                           [TestResource new]
-                           ];
-    [self.resourceLoader addResourcesWithResources:resources];
-    
-    // verify loader contains one resource
-    XCTAssertEqual(self.resourceLoader.resourceCount, resources.count, @"Count of resources should be equal 2");
-}
 
 #pragma mark - Test search
 // TODO: how we can test search??? it's server feature

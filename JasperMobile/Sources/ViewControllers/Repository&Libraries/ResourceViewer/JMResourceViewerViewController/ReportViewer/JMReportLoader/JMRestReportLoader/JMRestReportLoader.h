@@ -36,5 +36,5 @@
 #import "JMReportLoaderProtocol.h"
 
 @interface JMRestReportLoader : JSReportLoader <JMReportLoaderProtocol>
-
+@property (nonatomic, weak) id<JMReportLoaderDelegate> delegate;
 @end

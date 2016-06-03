@@ -35,14 +35,20 @@
 #import "JMMenuActionsView.h"
 #import "JMBaseResourceViewerVC.h"
 
-extern NSString * const kJMShowResourceInfoSegue;
+extern NSString * __nonnull const kJMShowResourceInfoSegue;
 
 @interface JMResourceInfoViewController : JMBaseViewController <JMResourceClientHolder, JMMenuActionsViewDelegate, JMBaseResourceViewerVCDelegate>
+@property (nonatomic, strong, nullable) NSArray *resourceProperties;
+@property (nonatomic, copy, nullable) void(^exitBlock)(void);
 
-- (NSArray *)resourceProperties;
+@property (nonatomic, assign) BOOL needLayoutUI;
 
 - (void)resetResourceProperties NS_REQUIRES_SUPER;
 
+- (void)addObservers NS_REQUIRES_SUPER;
+
 - (JMMenuActionsViewAction)availableAction NS_REQUIRES_SUPER;
+
+- (nullable UIBarButtonItem *)additionalBarButtonItem;
 
 @end

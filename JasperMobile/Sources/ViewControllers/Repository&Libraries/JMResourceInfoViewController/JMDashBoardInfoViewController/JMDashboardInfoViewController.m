@@ -27,7 +27,7 @@
 //
 
 #import "JMDashboardInfoViewController.h"
-#import "JSResourceLookup+Helpers.h"
+#import "JMResource.h"
 
 @interface JMDashboardInfoViewController ()
 
@@ -51,9 +51,9 @@
 
 - (void)runDashboard
 {
-    id nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
-    if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
-        [nextVC setResourceLookup:self.resourceLookup];
+    id nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resource resourceViewerVCIdentifier]];
+    if ([nextVC respondsToSelector:@selector(setResource:)]) {
+        [nextVC setResource:self.resource];
     }
     
     if (nextVC) {

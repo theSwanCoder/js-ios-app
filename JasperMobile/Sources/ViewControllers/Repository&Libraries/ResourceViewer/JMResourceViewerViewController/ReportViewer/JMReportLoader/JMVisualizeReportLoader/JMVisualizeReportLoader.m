@@ -28,186 +28,278 @@
 #import "JMReportLoaderProtocol.h"
 #import "JMReportViewerVC.h"
 #import "JMVisualizeReportLoader.h"
-#import "JMJavascriptNativeBridge.h"
-#import "JMJavascriptRequest.h"
 #import "JMVisualizeManager.h"
-#import "JMJavascriptCallback.h"
 #import "JMWebViewManager.h"
+#import "JMWebEnvironment.h"
+#import "JMResource.h"
+#import "JMJavascriptRequest.h"
+#import "JMJavascriptNativeBridge.h"
 
-#import "JSReportParameter.h"
-#import "JSRESTBase+JSRESTReport.h"
-
-
-
-typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
-    JMReportViewerAlertViewTypeEmptyReport,
-    JMReportViewerAlertViewTypeErrorLoad
-};
-
-@interface JMVisualizeReportLoader() <JMJavascriptNativeBridgeDelegate>
-@property (nonatomic, weak, readwrite) JMReport *report;
-
+@interface JMVisualizeReportLoader()
+@property (nonatomic, weak, readwrite) JSReport *report;
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
-
-@property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
 @property (nonatomic, copy) NSString *exportFormat;
+@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
+//@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
+@property (nonatomic, assign, getter=isCancelLoading) BOOL cancelLoading;
 @end
 
 @implementation JMVisualizeReportLoader
-@synthesize bridge = _bridge, delegate = _delegate;
 
 #pragma mark - Lifecycle
-- (instancetype)initWithReport:(JMReport *)report restClient:(nonnull JSRESTBase *)restClient
+- (instancetype)initWithReport:(JSReport *)report restClient:(JSRESTBase *)restClient
 {
     self = [super init];
     if (self) {
         _report = report;
-        _visualizeManager = [JMVisualizeManager new];
     }
     return self;
 }
 
-+ (instancetype)loaderWithReport:(JMReport *)report restClient:(nonnull JSRESTBase *)restClient
-{
++ (instancetype)loaderWithReport:(JSReport *)report restClient:(JSRESTBase *)restClient {
     return [[self alloc] initWithReport:report restClient:restClient];
 }
 
-#pragma mark - Custom accessors
--(void)setReportLoadCompletion:(void (^)(BOOL, NSError *))reportLoadCompletion
+- (void)dealloc
 {
-    if (_reportLoadCompletion != reportLoadCompletion) {
-        _reportLoadCompletion = [reportLoadCompletion copy];
-    }
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 }
 
-- (void)setBridge:(JMJavascriptNativeBridge *)bridge
+- (id<JMReportLoaderProtocol>)initWithReport:(nonnull JSReport *)report
+                                  restClient:(nonnull JSRESTBase *)restClient
+                              webEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    _bridge = bridge;
-    _bridge.delegate = self;
+    self = [self initWithReport:report restClient:restClient];
+    if (self) {
+        _visualizeManager = [JMVisualizeManager new];
+        _webEnvironment = webEnvironment;
+        _webEnvironment.cancel = NO;
+    }
+    return self;
+}
+
++ (id<JMReportLoaderProtocol>)loaderWithReport:(nonnull JSReport *)report
+                                    restClient:(nonnull JSRESTBase *)restClient
+                                webEnvironment:(JMWebEnvironment *)webEnvironment
+{
+    return [[self alloc] initWithReport:report
+                             restClient:restClient
+                         webEnvironment:webEnvironment];
 }
 
 #pragma mark - Public API
-- (void)runReportWithPage:(NSInteger)page completion:(void(^)(BOOL success, NSError *error))completionBlock
+- (void)runReportWithPage:(NSInteger)page completion:(JSReportLoaderCompletionBlock)completionBlock
 {
-    self.isReportInLoadingProcess = YES;
-    self.report.isReportAlreadyLoaded = NO;
-    [self.report updateCountOfPages:NSNotFound];
-    [self.report updateCurrentPage:page];
+    [self addListenersForVisualizeEvents];
 
-    if ([[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView]) {
-        [self fetchPageNumber:page withCompletion:completionBlock];
+    JSReportLoaderCompletionBlock heapBlock = [completionBlock copy];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment verifyEnvironmentReadyWithCompletion:^(BOOL isWebViewLoaded) {
+        __typeof(self) strongSelf = weakSelf;
+        strongSelf.isReportInLoadingProcess = YES;
+        if (isWebViewLoaded) {
+            [strongSelf fetchPageNumber:page
+                         withCompletion:heapBlock];
+        } else {
+            __weak __typeof(self) weakSelf = strongSelf;
+            [strongSelf startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
+                __typeof(self) strongSelf = weakSelf;
+                if (success) {
+                    __weak __typeof(self) weakSelf = strongSelf;
+                    [strongSelf.webEnvironment loadHTML:strongSelf.report.HTMLString
+                                                baseURL:[NSURL URLWithString:strongSelf.report.baseURLString]
+                                             completion:^(BOOL isSuccess, NSError *error) {
+                                                 __typeof(self) strongSelf = weakSelf;
+                                                 if (isSuccess) {
+                                                     // load vis into web environment
+                                                     JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+                                                                                                                              parameters:@{
+                                                                                                                                      @"scriptURL" : strongSelf.visualizeManager.visualizePath,
+                                                                                                                              }];
+                                                     [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
+                                                                                     completion:^(NSDictionary *params, NSError *error) {
+                                                                                         if (error) {
+                                                                                             JMLog(@"error: %@", error);
+                                                                                         } else {
+                                                                                             [strongSelf freshLoadReportWithPageNumber:page
+                                                                                                                            completion:completionBlock];
+                                                                                         }
+                                                                                     }];
+                                                 } else {
+                                                     if (heapBlock) {
+                                                         NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                                                         heapBlock(NO, vizError);
+                                                     }
+                                                 }
+                                             }];
+                } else {
+                    if (heapBlock) {
+                        heapBlock(NO, error);
+                    }
+                }
+            }];
+        }
+    }];
+}
+
+- (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(JSReportLoaderCompletionBlock)completionBlock
+{
+    if (!self.report.isReportAlreadyLoaded) {
+        [self freshLoadReportWithPageNumber:pageNumber
+                                 completion:completionBlock];
     } else {
-        self.reportLoadCompletion = completionBlock;
-
-        [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
-            if (success) {
-                [self.bridge startLoadHTMLString:self.report.HTMLString
-                                         baseURL:[NSURL URLWithString:self.report.baseURLString]];
-            } else {
-                NSLog(@"Error loading HTML%@", error.localizedDescription);
-            }
-        }];
+        [self selectPageWithPageNumber:pageNumber
+                            completion:completionBlock];
     }
 }
 
-- (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(void(^)(BOOL success, NSError *error))completionBlock
+- (void)applyReportParametersWithCompletion:(JSReportLoaderCompletionBlock)completion
 {
-    self.reportLoadCompletion = completionBlock;
+    JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
-    if (!self.report.isReportAlreadyLoaded) {
-        NSString *parametersAsString = [self createParametersAsString];
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"MobileReport.run(%@);";
-        request.parametersAsString = [NSString stringWithFormat:@"{'uri': '%@', 'params': %@, 'pages' : '%@'}", self.report.reportURI, parametersAsString, @(pageNumber)];
-        [self.bridge sendRequest:request];
-    } else {
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"MobileReport.selectPage(%@);";
-        request.parametersAsString = @(pageNumber).stringValue;
-        [self.bridge sendRequest:request];
-    }
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment verifyEnvironmentReadyWithCompletion:^(BOOL isWebViewLoaded) {
+        __typeof(self) strongSelf = weakSelf;
+        if (!isWebViewLoaded) {
+            strongSelf.isReportInLoadingProcess = YES;
+            [strongSelf startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
+                    if (success) {
+                        __weak __typeof(self) weakSelf = strongSelf;
+                        [strongSelf.webEnvironment loadHTML:strongSelf.report.HTMLString
+                                                    baseURL:[NSURL URLWithString:strongSelf.report.baseURLString]
+                                                 completion:^(BOOL isSuccess, NSError *error) {
+                                                     __typeof(self) strongSelf = weakSelf;
+                                                     if (isSuccess) {
+                                                         // load vis into web environment
+                                                         JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
+                                                                                                                                  parameters:@{
+                                                                                                                                          @"scriptURL" : strongSelf.visualizeManager.visualizePath,
+                                                                                                                                  }];
+                                                         [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
+                                                                                               completion:^(NSDictionary *params, NSError *error) {
+                                                                                                   if (error) {
+                                                                                                       JMLog(@"error: %@", error);
+                                                                                                   } else {
+                                                                                                       [strongSelf freshLoadReportWithPageNumber:strongSelf.report.currentPage
+                                                                                                                                      completion:completion];
+                                                                                                   }
+                                                                                               }];
+                                                     } else {
+                                                         NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                                                         heapBlock(NO, vizError);
+                                                     }
+                                                 }];
+                    } else {
+                        if (heapBlock) {
+                            heapBlock(NO, error);
+                        }
+                    }
+                }];
+        } else {
+            [strongSelf.report updateCurrentPage:1];
+            [strongSelf.report updateCountOfPages:NSNotFound];
+
+            JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.applyReportParams"
+                                                                        parameters:[self runParameters]];
+            __weak __typeof(self) weakSelf = strongSelf;
+            [strongSelf.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+                __typeof(self) strongSelf = weakSelf;
+                if (parameters) {
+                    if (parameters[@"pages"]) {
+                        NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
+                        [strongSelf.report updateCountOfPages:countOfPages];
+                    } else {
+#ifndef __RELEASE__
+                        NSError *absentPagesError = [NSError errorWithDomain:@"Visualize Error" code:0 userInfo:@{
+                                NSLocalizedDescriptionKey : @"Absent of pages after applying report parameters"
+                        }];
+                        [JMUtils presentAlertControllerWithError:absentPagesError
+                                                      completion:nil];
+#endif
+                    }
+                    if (heapBlock) {
+                        heapBlock(YES, nil);
+                    }
+                } else {
+                    if (heapBlock) {
+                        NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                        heapBlock(NO, vizError);
+                    }
+                }
+            }];
+        }
+    }];
+}
+
+- (void)refreshReportWithCompletion:(JSReportLoaderCompletionBlock)completion
+{
+    JSReportLoaderCompletionBlock heapBlock = [completion copy];
+
+    // need for clean running, but not selecting page
+    self.report.isReportAlreadyLoaded = NO;
+    [self.report updateCountOfPages:NSNotFound];
+
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"JasperMobile.Report.API.refresh";
+
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request
+                            completion:^(NSDictionary *parameters, NSError *error) {
+                                __typeof(self) strongSelf = weakSelf;
+                                if (parameters) {
+                                    strongSelf.report.isReportAlreadyLoaded = YES;
+                                    [strongSelf.report updateCurrentPage:1];
+                                    if (heapBlock) {
+                                        heapBlock(YES, nil);
+                                    }
+                                } else {
+                                    if (heapBlock) {
+                                        NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                                        heapBlock(NO, vizError);
+                                    }
+                                }
+                            }];
 }
 
 - (void)cancel
 {
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileReport.cancel();";
-    [self.bridge sendRequest:request];
-}
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    self.cancelLoading = YES;
 
-- (void)applyReportParametersWithCompletion:(void(^)(BOOL success, NSError *error))completion
-{
-    if ([[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView]) {
-        self.isReportInLoadingProcess = YES;
-        self.report.isReportAlreadyLoaded = NO;
-        
-        self.reportLoadCompletion = completion;
-        [self.report updateCurrentPage:1];
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.cancel"
+                                                                parameters:nil];
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        if (parameters) {
+            JMLog(@"canceling report was finished");
+        } else {
+            JMLog(@"error: %@", error);
+        }
+    }];
 
-        [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
-                if (success) {
-                    [self.bridge startLoadHTMLString:self.report.HTMLString
-                                             baseURL:[NSURL URLWithString:self.report.baseURLString]];
-                } else {
-                    NSLog(@"Error loading HTML%@", error.localizedDescription);
-                }
-            }];
-    } else if (!self.report.isReportAlreadyLoaded) {
-        self.isReportInLoadingProcess = YES;
-        self.report.isReportAlreadyLoaded = NO;
-        [self.report updateCountOfPages:NSNotFound];
-
-        [self fetchPageNumber:1 withCompletion:completion];
-    } else {
-        self.reportLoadCompletion = completion;
-        [self.report updateCurrentPage:1];
-        [self.report updateCountOfPages:NSNotFound];
-
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"MobileReport.applyReportParams(%@);";
-        request.parametersAsString = [self createParametersAsString];
-        [self.bridge sendRequest:request];
-    }
-}
-
-- (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion
-{
-    self.reportLoadCompletion = completion;
-    [self.report updateCurrentPage:1];
-    [self.report updateCountOfPages:NSNotFound];
-
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileReport.refresh(%@);";
-    request.parametersAsString = @"";
-    [self.bridge sendRequest:request];
-}
-
-- (void)exportReportWithFormat:(NSString *)exportFormat
-{
-    self.exportFormat = exportFormat;
-
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileReport.exportReport(%@);";
-    request.parametersAsString = [NSString stringWithFormat:@"'%@'", exportFormat];
-    [self.bridge sendRequest:request];
+    self.webEnvironment.cancel = YES;
+    [self.webEnvironment removeAllListeners];
 }
 
 - (void)destroy
 {
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileReport.destroyReport(%@);";
-    request.parametersAsString = @"";
-    [self.bridge sendRequest:request];
+    if (self.isCancelLoading) {
+        return;
+    }
 
-    self.report.isReportAlreadyLoaded = NO;
-}
-
-- (void)authenticate
-{
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileReport.authorize(%@);";
-    request.parametersAsString = [NSString stringWithFormat:@"{'username': '%@', 'password': '%@', 'organization': '%@'}", self.restClient.serverProfile.username, self.restClient.serverProfile.password, self.restClient.serverProfile.organization];
-    [self.bridge sendRequest:request];
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.destroyReport"
+                                                                parameters:nil];
+    __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (parameters) {
+            JMLog(@"callback: %@", parameters);
+            strongSelf.report.isReportAlreadyLoaded = NO;
+            [strongSelf.webEnvironment removeAllListeners];
+        } else {
+            JMLog(@"error: %@", error);
+        }
+    }];
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
@@ -217,22 +309,106 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
         self.visualizeManager.viewportScaleFactor = scaleFactor;
 
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"JasperMobile.Helper.updateViewPortInitialScale(%@);";
-        request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
-        [self.bridge sendRequest:request];
+        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortScale"
+                                                                    parameters:@{
+                                                                            @"scale" : @(scaleFactor)
+                                                                    }];
+        [self.webEnvironment sendJavascriptRequest:request
+                                        completion:nil];
     }
 }
 
+- (void)fitReportViewToScreen
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"JasperMobile.Report.API.fitReportViewToScreen";
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:nil];
+}
+
 #pragma mark - Private
+- (void)freshLoadReportWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock)completion
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    if (!self.report) {
+        return;
+    }
+
+    JSReportLoaderCompletionBlock heapBlock = [completion copy];
+
+    // need for clean running, but not selecting page
+    self.report.isReportAlreadyLoaded = NO;
+    [self.report updateCountOfPages:NSNotFound];
+    [self.report updateCurrentPage:pageNumber];
+
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.runReport"
+                                                                parameters: @{
+                                                                        @"uri"        : self.report.reportURI,
+                                                                        @"params"     : [self runParameters],
+                                                                        @"pages"      : @(pageNumber),
+                                                                        @"is_for_6_0" : @([JMUtils isServerAmber]),
+                                                                }];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:^(NSDictionary *parameters, NSError *error) {
+                                __typeof(self) strongSelf = weakSelf;
+                                if (parameters) {
+                                    strongSelf.report.isReportAlreadyLoaded = YES;
+                                    strongSelf.isReportInLoadingProcess = NO;
+                                    if (heapBlock) {
+                                        heapBlock(YES, nil);
+                                    }
+                                } else {
+                                    JMLog(@"have error");
+                                    if (heapBlock) {
+                                        JMLog(@"send the error to viewer");
+                                        NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                                        heapBlock(NO, vizError);
+                                    }
+                                }
+                            }];
+}
+
+- (void)selectPageWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock)completion
+{
+    if (!self.report) {
+        return;
+    }
+
+    JSReportLoaderCompletionBlock heapBlock = [completion copy];
+
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.selectPage"
+                                                                parameters:@{
+                                                                        @"pageNumber" : @(pageNumber)
+                                                                }];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request
+                            completion:^(NSDictionary *parameters, NSError *error) {
+                                __typeof(self) strongSelf = weakSelf;
+                                if (parameters) {
+                                    [strongSelf.report updateCurrentPage:pageNumber];
+                                    if (heapBlock) {
+                                        heapBlock(YES, nil);
+                                    }
+                                } else {
+                                    if (heapBlock) {
+                                        NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                                        heapBlock(NO, vizError);
+                                    }
+                                }
+                            }];
+}
+
 - (void)startLoadHTMLWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
     JMLog(@"visuzalise.js did start load");
     [self.visualizeManager loadVisualizeJSWithCompletion:^(BOOL success, NSError *error){
         if (success) {
             JMLog(@"visuzalise.js did end load");
+
             NSString *baseURLString = self.restClient.serverProfile.serverUrl;
-            [self.report updateHTMLString:[self.visualizeManager htmlStringForReport] baseURLSring:baseURLString];
+            [self.report updateHTMLString:self.visualizeManager.htmlString
+                             baseURLSring:baseURLString];
 
             if (completion) {
                 completion(YES, nil);
@@ -240,10 +416,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         } else {
             // TODO: handle this error
             JMLog(@"Error loading visualize.js");
-            // TODO: add error code
-//            NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
-//                                                 code:0
-//                                             userInfo:nil];
             if (completion) {
                 completion(NO, error);
             }
@@ -251,283 +423,132 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     }];
 }
 
-#pragma mark - JMJavascriptNativeBridgeDelegate
-- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge didReceiveCallback:(JMJavascriptCallback *)callback
+- (void)addListenersForVisualizeEvents
 {
-    if ([callback.type isEqualToString:@"DOMContentLoaded"]) {
-        [self handleDOMContentLoaded];
-    } else if ([callback.type isEqualToString:@"runReport"]) {
-        [self handleRunReportWithParameters:callback.parameters];
-    } else if ([callback.type isEqualToString:@"handleReferenceClick"]) {
-        [self handleReferenceClickWithParameters:callback.parameters];
-    } else if ([callback.type isEqualToString:@"reportDidObtaineMultipageState"]) {
-        [self handleEventObtaineMultipageStateWithParameters:callback.parameters];
-    } else if ([callback.type isEqualToString:@"reportRunDidCompleted"]) {
-        [self handleEventReportRunDidCompletedWithParameters:callback.parameters];
-    } else if([callback.type isEqualToString:@"reportDidEndRenderSuccessful"]) {
-        [self handleReportEndRenderSuccessfull];
-    } else if([callback.type isEqualToString:@"reportDidEndRenderFailured"]) {
-        [self handleReportEndRenderFailedWithParameters:callback.parameters];
-    } else if ([callback.type isEqualToString:@"exportPath"]) {
-        [self handleExportParameters:callback.parameters];
-    } else if ([callback.type isEqualToString:@"reportDidDidEndRefreshSuccessful"]) {
-        [self handleRefreshDidEndSuccessful];
-    } else if ([callback.type isEqualToString:@"reportDidEndRefreshFailured"]) {
-        [self handleRefreshDidEndFailedWithParameters:callback.parameters];
-    } else if ([callback.type isEqualToString:@"reportOnPageChange"]) {
-        [self handleReportOnPageChangeWithParameters:callback.parameters];
-    } else if ([callback.type isEqualToString:@"logging"]) {
-        JMLog(@"visualize log: %@", callback.parameters[@"parameters"][@"message"]);
-    } else if ([callback.type isEqualToString:@"onWindowError"]) {
-        [self handleOnWinwowErrorWithMessage:callback.parameters[@"error"]];
-    } else if ([callback.type isEqualToString:@"onPageLoadError"]) {
-        [self handleOnPageLoadErrorWithParameters:callback.parameters];
-    } else {
-        JMLog(@"response parameters: %@", callback.parameters);
-    }
-}
-
-- (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
-{
-    // TODO: handle auth requests.
-}
-
-- (BOOL)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge shouldLoadExternalRequest:(NSURLRequest *)request
-{
-    BOOL shouldLoad = NO;
-    // TODO: verify all cases
-
-    // Request for cleaning webview
-    if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
-        shouldLoad = YES;
-    }
-
-    return shouldLoad;
+    NSString *reportCompletedListenerId = @"JasperMobile.Report.API.run.reportCompleted";
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment addListenerWithId:reportCompletedListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(@"JasperMobile.Report.API.run.reportCompleted");
+        __typeof(self) strongSelf = weakSelf;
+        // TODO: move into separate method
+        NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
+        [strongSelf.report updateCountOfPages:countOfPages];
+    }];
+    NSString *changePagesStateListenerId = @"JasperMobile.Report.API.run.changePagesState";
+    [self.webEnvironment addListenerWithId:changePagesStateListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(@"JasperMobile.Report.API.run.changePagesState");
+    }];
+    NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.ReportExecution";
+    [self.webEnvironment addListenerWithId:reportExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.ReportExecution");
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf handleRunReportWithParameters:parameters];
+    }];
+    NSString *localPageLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.LocalPage";
+    [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.LocalPage");
+    }];
+    NSString *referenceLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.Reference";
+    [self.webEnvironment addListenerWithId:referenceLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.Reference");
+        __typeof(self) strongSelf = weakSelf;
+        NSString *locationString = parameters[@"location"];
+        if (locationString) {
+            NSURL *locationURL = [NSURL URLWithString:locationString];
+            if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReference:)]) {
+                [strongSelf.delegate reportLoader:strongSelf didReceiveOnClickEventForReference:locationURL];
+            }
+        }
+    }];
 }
 
 #pragma mark - Helpers
-- (NSString *)createParametersAsString
+- (NSDictionary *)runParameters
 {
-    NSMutableString *parametersAsString = [@"{" mutableCopy];
+    NSMutableDictionary *runParams = [@{} mutableCopy];
     for (JSReportParameter *parameter in self.report.reportParameters) {
-        NSArray *values = parameter.value;
-        NSString *stringValues = @"";
-        for (NSString *value in values) {
-            stringValues = [stringValues stringByAppendingFormat:@"\"%@\",", value];
-        }
-        [parametersAsString appendFormat:@"\"%@\":[%@],", parameter.name, stringValues];
+        runParams[parameter.name] = parameter.value;
     }
-    [parametersAsString appendString:@"}"];
-    return [parametersAsString copy];
+    return runParams;
+}
+
+#pragma mark - Hyperlinks handlers
+- (void)handleRunReportWithParameters:(NSDictionary *)parameters
+{
+    NSDictionary *params = parameters[@"data"];
+    if (!params) {
+        return;
+    }
+
+    NSString *reportPath = params[@"resource"];;
+    if (reportPath) {
+        [self.restClient resourceLookupForURI:reportPath resourceType:kJS_WS_TYPE_REPORT_UNIT modelClass:[JSResourceLookup class] completionBlock:^(JSOperationResult *result) {
+            NSError *error = result.error;
+            if (error) {
+                NSString *errorString = error.localizedDescription;
+                JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
+                if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
+                    errorType = JSReportLoaderErrorTypeAuthentification;
+                }
+                if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventWithError:)]) {
+                    [self.delegate reportLoader:self didReceiveOnClickEventWithError:[self createErrorWithType:errorType errorMessage:errorString]];
+                }
+            } else {
+                JSResourceLookup *resourceLookup = [result.objects firstObject];
+                if (resourceLookup) {
+                    resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
+
+                    NSMutableArray *reportParameters = [NSMutableArray array];
+                    NSDictionary *rawParameters = params[@"params"];
+                    for (NSString *key in rawParameters) {
+                        JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:key
+                                                                                               value:rawParameters[key]];
+                        [reportParameters addObject:reportParameter];
+                    }
+
+                    JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
+                    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResource:withParameters:)]) {
+                        [self.delegate reportLoader:self didReceiveOnClickEventForResource:resource withParameters:[reportParameters copy]];
+                    }
+                }
+            }
+        }];
+    }
 }
 
 - (NSError *)createErrorWithType:(JSReportLoaderErrorType)errorType errorMessage:(NSString *)errorMessage
 {
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report.viewer.visualize.render.error", nil) };
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report_viewer_visualize_render_error", nil) };
     NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
                                          code:errorType
                                      userInfo:userInfo];
     return error;
 }
 
-#pragma mark - DOM listeners
-- (void)handleDOMContentLoaded
+#pragma mark - Errors handling
+- (NSError *)loaderErrorFromBridgeError:(NSError *)error
 {
-//    [self authenticate];
-    [self fetchPageNumber:self.report.currentPage withCompletion:self.reportLoadCompletion];
-}
-
-#pragma mark - Run report
-- (void)handleReportEndRenderSuccessfull
-{
-    JMLog(@"report rendering end");
-
-    self.report.isReportAlreadyLoaded = YES;
-
-    if (self.reportLoadCompletion) {
-        self.reportLoadCompletion(YES, nil);
-    }
-}
-
-- (void)handleReportEndRenderFailedWithParameters:(NSDictionary *)parameters
-{
-    if (self.reportLoadCompletion) {
-        NSString *errorCode = parameters[@"parameters"][@"code"];
-        NSString *message = parameters[@"parameters"][@"message"];
-        JSReportLoaderErrorType code = JSReportLoaderErrorTypeUndefined;
-        if ([errorCode isEqualToString:@"authentication.error"]) {
-            code = JSReportLoaderErrorTypeAuthentification;
+    JSReportLoaderErrorType errorCode = JSReportLoaderErrorTypeUndefined;
+    switch(error.code) {
+        case JMJavascriptNativeBridgeErrorAuthError: {
+            errorCode = JSReportLoaderErrorTypeAuthentification;
+            break;
         }
-
-        NSError *error = [self createErrorWithType:code
-                                      errorMessage:message];
-
-        self.reportLoadCompletion(NO, error);
-    }
-}
-
-- (void)handleEventReportRunDidCompletedWithParameters:(NSDictionary *)parameters
-{
-    NSInteger countOfPages = 0;
-    if (parameters[@"parameters"]) {
-        countOfPages = ((NSNumber *)parameters[@"parameters"][@"pages"]).integerValue;
-    } else {
-        countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
-    }
-    [self.report updateCountOfPages:countOfPages];
-    self.report.isReportAlreadyLoaded = YES;
-
-    if (self.reportLoadCompletion) {
-        self.reportLoadCompletion(YES, nil);
-        self.reportLoadCompletion = nil;
-    }
-}
-
-- (void)handleReportOnPageChangeWithParameters:(NSDictionary *)parameters
-{
-    NSInteger currentPage = 0;
-    if (parameters[@"parameters"]) {
-        currentPage = ((NSNumber *)parameters[@"parameters"][@"page"]).integerValue;
-    } else {
-        currentPage = ((NSNumber *)parameters[@"page"]).integerValue;
-    }
-    [self.report updateCurrentPage:currentPage];
-}
-
-#pragma mark - Multipage
-- (void)handleEventObtaineMultipageStateWithParameters:(NSDictionary *)parameters
-{
-    BOOL isMultiPage =((NSNumber *)parameters[@"isMultiPage"]).boolValue;
-    [self.report updateIsMultiPageReport:isMultiPage];
-}
-
-#pragma mark - Handle refresh
-- (void)handleRefreshDidEndSuccessful
-{
-    self.report.isReportAlreadyLoaded = YES;
-
-    if (self.reportLoadCompletion) {
-        self.reportLoadCompletion(YES, nil);
-    }
-}
-
-- (void)handleRefreshDidEndFailedWithParameters:(NSDictionary *)parameters
-{
-    if (self.reportLoadCompletion) {
-        // TODO: add error
-        self.reportLoadCompletion(NO, nil);
-    }
-}
-
-#pragma mark - Export report
-- (void)handleExportParameters:(NSDictionary *)parameters
-{
-    NSString *outputResourcesPath = @"";
-    if (parameters[@"parameters"]) {
-        outputResourcesPath = parameters[@"parameters"][@"link"];
-    } else {
-        outputResourcesPath = parameters[@"link"];
-    }
-    if (outputResourcesPath) {
-        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOutputResourcePath:fullReportName:)]) {
-            NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", self.report.resourceLookup.label, self.exportFormat];
-            [self.delegate reportLoader:self didReceiveOutputResourcePath:outputResourcesPath fullReportName:fullReportName];
+        case JMJavascriptNativeBridgeErrorTypeOther: {
+            errorCode = JSReportLoaderErrorTypeUndefined;
+            break;
         }
-    }
-}
-
-#pragma mark - Hyperlinks handlers
-- (void)handleReferenceClickWithParameters:(NSDictionary *)parameters
-{
-    NSString *locationString = parameters[@"location"];
-    if (locationString) {
-        NSURL *locationURL = [NSURL URLWithString:locationString];
-        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReference:)]) {
-            [self.delegate reportLoader:self didReceiveOnClickEventForReference:locationURL];
+        case JMJavascriptNativeBridgeErrorTypeWindow: {
+            errorCode = JSReportLoaderErrorTypeUndefined;
+            break;
         }
+        default:
+            break;
     }
-}
-
-- (void)handleRunReportWithParameters:(NSDictionary *)parameters
-{
-    NSDictionary *json;
-    NSError *jsonError;
-    if (parameters[@"parameters"]) {
-        json = parameters[@"parameters"][@"data"];
-    } else {
-        NSString *params = parameters[@"data"];
-        if (!params) {
-            return;
-        }
-        NSData *jsonData = [params dataUsingEncoding:NSUTF8StringEncoding];
-        json = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&jsonError];
-    }
-
-    NSString *reportPath;
-    if (json) {
-        reportPath = json[@"resource"];
-
-        if (reportPath) {
-            [self.restClient resourceLookupForURI:reportPath resourceType:kJS_WS_TYPE_REPORT_UNIT modelClass:[JSResourceLookup class] completionBlock:^(JSOperationResult *result) {
-                NSError *error = result.error;
-                if (error) {
-                    NSString *errorString = error.localizedDescription;
-                    JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
-                    if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
-                        errorType = JSReportLoaderErrorTypeAuthentification;
-                    }
-                    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventWithError:)]) {
-                        [self.delegate reportLoader:self didReceiveOnClickEventWithError:[self createErrorWithType:errorType errorMessage:errorString]];
-                    }
-                } else {
-                    JSResourceLookup *resourceLookup = [result.objects firstObject];
-                    if (resourceLookup) {
-                        resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
-
-                        NSMutableArray *reportParameters = [NSMutableArray array];
-                        NSDictionary *rawParameters = json[@"params"];
-                        for (NSString *key in rawParameters) {
-                            JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:key
-                                                                                                   value:rawParameters[key]];
-                            [reportParameters addObject:reportParameter];
-                        }
-
-                        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResourceLookup:withParameters:)]) {
-                            [self.delegate reportLoader:self didReceiveOnClickEventForResourceLookup:resourceLookup withParameters:[reportParameters copy]];
-                        }
-                    }
-                }
-            }];
-        }
-
-    } else {
-        JMLog(@"parse json with error: %@", jsonError.localizedDescription);
-    }
-}
-
-#pragma mark - Error handlers
-- (void)handleOnWinwowErrorWithMessage:(NSString *)message
-{
-    if (self.reportLoadCompletion) {
-        self.reportLoadCompletion(NO, [self createErrorWithType:JSReportLoaderErrorTypeUndefined
-                                                   errorMessage:message]);
-        self.reportLoadCompletion = nil;
-    }
-}
-
-- (void)handleOnPageLoadErrorWithParameters:(NSDictionary *)parameters
-{
-    NSDictionary *params = parameters[@"parameters"];
-    NSString *errorCode = params[@"message"][@"errorCode"];
-    NSString *message = params[@"message"][@"message"];
-
-    if ([errorCode isEqualToString:@"authentication.error"]) {
-        if (self.reportLoadCompletion) {
-            self.reportLoadCompletion(NO, [self createErrorWithType:JSReportLoaderErrorTypeAuthentification
-                                                       errorMessage:message]);
-            self.reportLoadCompletion = nil;
-        }
-    }
+    NSError *loaderError = [NSError errorWithDomain:error.domain
+                                               code:errorCode
+                                           userInfo:error.userInfo];
+    return loaderError;
 }
 
 @end

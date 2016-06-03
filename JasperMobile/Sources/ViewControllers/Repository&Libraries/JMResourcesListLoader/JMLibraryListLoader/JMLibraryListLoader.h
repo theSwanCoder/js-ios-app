@@ -33,6 +33,18 @@
 
 #import "JMResourcesListLoader.h"
 
+typedef NS_ENUM(NSInteger, JMLibraryListLoaderFilterIndex) {
+    JMLibraryListLoaderFilterIndexByAll       = 0,
+    JMLibraryListLoaderFilterIndexByReport    = 1,
+    JMLibraryListLoaderFilterIndexByDashboard = 2,
+};
+
+typedef NS_ENUM(NSInteger, JMLibraryListLoaderSortIndex) {
+    JMLibraryListLoaderSortIndexByName         = 0,
+    JMLibraryListLoaderSortIndexByCreationDate = 1,
+    JMLibraryListLoaderSortIndexByModifiedDate = 2,
+};
+
 @interface JMLibraryListLoader : JMResourcesListLoader
 
 @end

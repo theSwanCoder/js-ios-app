@@ -1,0 +1,62 @@
+
+[[About]]
+	[application_info]
+		en = Management tool and report viewer for TIBCO JasperReports Server %.1f and greater.\n\n%@\n\nFor more information visit:\n\n%@
+		de = Managementtool und Berichts-Viewer für TIBCO JasperReports Server %.1f und höher.\n\n%@\n\nWeitere Informationen erhalten Sie unter:\n\n%@
+		fr = Outil de gestion et visionneuse de rapports pour TIBCO JasperReports Server %.1f et versions ultérieures.\n\n%@\n\nPour plus d'informations, consultez la page :\n\n%@
+		es = Herramienta de administración y visor de informes de TIBCO JasperReports Server %.1f y posterior.\n\n%@\n\nPara obtener más información, visite:\n\n%@
+		it = Strumento di gestione e visualizzatore report per server TIBCO JasperReports %.1f e versioni successive.\n\n%@\n\nPer ulteriori informazioni visitare la pagina:\n\n%@
+		pt = Ferramenta de gerenciamento e visualizador de relatório para o TIBCO JasperReports Server %.1f e posterior.\n\n%@\n\nFor more information visit:\n\n%@
+		ja = TIBCO JasperReports Server %.1f 以降向けの管理ツール/レポートビューア。\n\n%@\n\n詳細は以下の URL をご覧ください。\n\n%@
+		zh = TIBCO JasperReports Server %.1f 及更高版本的管理工具和报告查看程序。\n\n%@\n\n有关更多信息，请访问: \n\n%@
+		tags = ios
+	[about_copyright]
+		en = © 2005-%zd TIBCO Software, Inc.
+		de = © 2005-%zd TIBCO Software, Inc.
+		es = © 2005-%zd TIBCO Software, Inc.
+		fr = © 2005-%zd TIBCO Software, Inc.
+		it = © 2005-%zd TIBCO Software, Inc.
+		ja = © 2005-%zd TIBCO Software, Inc.
+		pt = © 2005-%zd TIBCO Software, Inc.
+		zh = © 2005-%zd TIBCO Software, Inc.
+		tags = ios
+	[about_comminity_title]
+		en = Jaspersoft Community
+		de = Jaspersoft Community
+		es = Jaspersoft Community
+		fr = Communauté Jaspersoft
+		it = Communauté Jaspersoft
+		ja = Jaspersoft コミュニティ
+		pt = Comunidade Jaspersoft
+		zh = Jaspersoft社区
+		tags = ios
+	[about_whats_new_title]
+		en = What's New
+		de = Was gibt es Neues
+		es = Lo nuevo
+		fr = Nouveautés
+		it = Cosa c\'è di nuovo
+		ja = 新着情報
+		pt = Novidades
+		zh = 新内容
+		tags = ios
+	[about_privacy_policy_title]
+		en = Privacy Policy
+		de = Datenschutzerklärung
+		es = Política de Privacidad
+		fr = Politique de confidentialité
+		it = Informativa sulla privacy
+		ja = 個人情報保護方針
+		pt = Política de Privacidade
+		zh = 隐私政策
+		tags = ios
+	[about_eula_title]
+		en = End user license agreement
+		de = Endnutzer-Lizenzvereinbarung
+		es = Acuerdo de licencia de usuario final
+		fr = Contrat de licence d\'utilisateur final
+		it = Contratto di licenza per l\'utente
+		ja = エンドユーザーライセンス契約
+		pt = Contrato de licença de usuário final
+		zh = 终止用户许可协议
+		tags = ios

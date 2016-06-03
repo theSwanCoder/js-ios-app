@@ -26,8 +26,6 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMServerOptions.h"
 
-#import "ALToastView.h"
-
 #import "JMServerOptionCell.h"
 
 #import "JMCancelRequestPopup.h"
@@ -52,10 +50,10 @@
     if (self.serverOptions.isExistingServerProfile) {
         self.title = self.serverProfile.alias;
     } else {
-        self.title = JMCustomLocalizedString(@"servers.title.new", nil);
+        self.title = JMCustomLocalizedString(@"servers_title_new", nil);
     }
 
-    [self.saveButton setTitle:JMCustomLocalizedString(@"dialog.button.save", nil) forState:UIControlStateNormal];
+    [self.saveButton setTitle:JMCustomLocalizedString(@"dialog_button_save", nil) forState:UIControlStateNormal];
     [self.saveButton setTitleColor:[[JMThemesManager sharedManager] serverProfileSaveButtonTextColor] forState:UIControlStateNormal];
     self.saveButton.backgroundColor = [[JMThemesManager sharedManager] serverProfileSaveButtonBackgroundColor];
     
@@ -89,6 +87,13 @@
 {
     self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:serverProfile];
     [self.tableView reloadData];
+}
+
+- (void)cancel
+{
+    if (self.exitBlock) {
+        self.exitBlock();
+    }
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
@@ -132,11 +137,11 @@
     [self.view endEditing:YES];
     if ([self.serverOptions isValidData]) {
         // verify https scheme
-        NSString *scheme = [NSURL URLWithString:self.serverProfile.serverUrl].scheme;
+        NSString *scheme = [self.serverOptions urlSchemeForServerProfile];
         BOOL isHTTPSScheme = [scheme isEqualToString:@"https"];
         if (isHTTPSScheme) {
             [self saveServerOptions];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self cancel];
         } else {
             // show alert
             [self showSecurityHTTPAlert];
@@ -158,21 +163,18 @@
 #pragma mark - Helpers
 - (void)saveServerOptions
 {
+    // save in DB current profile with updated properties
     [self.serverOptions saveChanges];
-
-    if ([self.delegate respondsToSelector:@selector(serverProfileDidChanged:)]) {
-        [self.delegate serverProfileDidChanged:self.serverProfile];
-    }
 }
 
 - (void)showSecurityHTTPAlert
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
-                                                                                      message:@"secutiry.http.message"
-                                                                            cancelButtonTitle:@"ok"
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_attention"
+                                                                                      message:@"secutiry_http_message"
+                                                                            cancelButtonTitle:@"dialog_button_ok"
                                                                       cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
                                                                           [self saveServerOptions];
-                                                                          [self.navigationController popViewControllerAnimated:YES];
+                                                                          [self cancel];
                                                                       }];
     [self presentViewController:alertController
                        animated:YES

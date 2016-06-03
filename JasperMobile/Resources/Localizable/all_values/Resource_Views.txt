@@ -1,0 +1,62 @@
+
+[[Resource views]]
+	[resources_loading_msg]
+		en = Loading.\nPlease wait...
+		de = Laden.\nBitte warten...
+		fr = Chargement en cours.\nVeuillez patienter...
+		es = Cargando.\nEspere...
+		it = Caricamento in corso.\nAttendere...
+		pt = Carregando.\nAguarde...
+		ja = 読み込み中です。\nお待ちください...
+		zh = 正在加载。\n请稍候...
+		tags = ios
+	[resources_noresults_msg]
+		en = No Results.
+		de = Keine Ergebnisse.
+		fr = Aucun résultat.
+		es = No hay resultados.
+		it = Nessun risultato.
+		pt = Nenhum resultado.
+		ja = 結果はありません。
+		zh = 无结果。
+		tags = ios
+	[resources_search_placeholder]
+		en = Search resources
+		de = Ressourcen durchsuchen
+		fr = Rechercher des ressources
+		es = Buscar recursos
+		it = Cerca risorse
+		pt = Resultados da busca
+		ja = リソースの検索
+		zh = 搜索资源
+		tags = ios
+	[resources_noresults_saveditems_msg]
+		en = No Saved Items.
+		de = Keine gespeicherten Elemente.
+		fr = Aucun élément enregistré.
+		es = No hay elementos guardados.
+		it = Nessun elemento salvato.
+		pt = Itens não gravados
+		ja = 保存されたアイテムはありません。
+		zh = 没有已保存项目。
+		tags = ios
+	[resources_noresults_favorites_msg]
+		en = No Favorited Items.
+		de = Es sind keine favorisierten Elemente vorhanden.
+		fr = Il n'y a pas d'éléments favoris.
+		es = No hay elementos favoritos.
+		it = Nessun elemento salvato tra i Preferiti.
+		pt = Não existem itens favoritos
+		ja = お気に入りのアイテムはありません。
+		zh = 没有收藏项目。
+		tags = ios
+	[resources_noresults_schedules_msg]
+		en = No job is found.
+		de = Keinen Job gefunden.
+		es = No hay trabajos.
+		fr = Aucune tâche trouvée.
+		it = Nessun lavoro trovato.
+		ja = タスクは何もありません。
+		pt = Nenhum trabalho foi encontrado.
+		zh = 没有找到任务。
+		tags = ios

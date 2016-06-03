@@ -41,33 +41,35 @@
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 }
 
-- (instancetype)initWithResource:(JSResourceLookup *)resource name:(NSString *)name format:(NSString *)format
+- (instancetype)initWithResource:(JMResource *)resource name:(NSString *)name format:(NSString *)format
 {
     self = [super init];
     if (self) {
         self.name = name;
-        _exportResource = [self exportResourceLookupForResource:resource format:format];
+        _exportResource = [self exportResourceFromResource:resource
+                                                    format:format];
     }
     return self;
 }
 
-+ (instancetype)taskWithResource:(JSResourceLookup *)resource name:(NSString *)name format:(NSString *)format
++ (instancetype)taskWithResource:(JMResource *)resource name:(NSString *)name format:(NSString *)format
 {
     return [[self alloc] initWithResource:resource name:name format:format];
 }
 
-- (JMExportResource *)exportResourceLookupForResource:(JSResourceLookup *)resource format:(NSString *)format
+- (JMExportResource *)exportResourceFromResource:(JMResource *)resource format:(NSString *)format
 {
-    JMExportResource *exportResource = [JMExportResource new];
-    
-    exportResource.label = self.name;
-    exportResource.uri = [self resourceURIForResourceWithFormat:format];
-    exportResource.resourceDescription = resource.resourceDescription;
-    exportResource.resourceType = [self resourceTypeForResource];
-    exportResource.version = [NSNumber numberWithInteger:1];
-    exportResource.permissionMask = [NSNumber numberWithInteger:JSPermissionMask_Administration];
-    exportResource.creationDate = [NSDate date];
-    exportResource.updateDate = [NSDate date];
+    JSResourceLookup *resourceLookup = [JSResourceLookup new];
+    resourceLookup.label = self.name;
+    resourceLookup.uri = [self resourceURIForResourceWithFormat:format];
+    resourceLookup.resourceDescription = resource.resourceLookup.resourceDescription;
+    resourceLookup.resourceType = [self resourceTypeForResource];
+    resourceLookup.version = @1;
+    resourceLookup.permissionMask = @(JSPermissionMask_Administration);
+    resourceLookup.creationDate = [NSDate date];
+    resourceLookup.updateDate = [NSDate date];
+
+    JMExportResource *exportResource = [JMExportResource resourceWithResourceLookup:resourceLookup];
     exportResource.format = format;
 
     return exportResource;

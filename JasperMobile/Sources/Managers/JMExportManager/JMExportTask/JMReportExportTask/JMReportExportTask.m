@@ -43,7 +43,8 @@
 
 - (instancetype)initWithReport:(JSReport *)report name:(NSString *)name format:(NSString *)format pages:(JSReportPagesRange *)pagesRange
 {
-    self = [super initWithResource:report.resourceLookup name:name format:format];
+    JMResource *resource = [JMResource resourceWithResourceLookup:report.resourceLookup];
+    self = [super initWithResource:resource name:name format:format];
     if(self) {
         _pagesRange = pagesRange;
         _reportSaver = [[JSReportSaver alloc] initWithReport:report restClient:self.restClient];
@@ -116,7 +117,7 @@
         
         UILocalNotification* notification = [UILocalNotification new];
         notification.fireDate = [NSDate date];
-        notification.alertBody = self.exportResource.label;
+        notification.alertBody = self.exportResource.resourceLookup.label;
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
 }

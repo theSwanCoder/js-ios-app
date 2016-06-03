@@ -26,17 +26,16 @@
 //  TIBCO JasperMobile
 //
 
+@class JMWebEnvironment;
+
 /**
  @author Aleksandr Dakhno odahno@tibco.com
  @since 2.0
  */
 
 @interface JMWebViewManager : NSObject
-+ (instancetype)sharedInstance;
-- (UIWebView *)webView;
-- (UIWebView *)webViewAsSecondary:(BOOL)asSecondary;
-- (BOOL)isWebViewLoadedVisualize:(UIWebView *)webView;
-- (void)resetZoom;
++ (instancetype __nonnull)sharedInstance;
+- (JMWebEnvironment * __nullable)webEnvironmentForId:(NSString * __nonnull)identifier;
+- (void)removeWebEnvironmentForId:(NSString *__nonnull)identifier;
 - (void)reset;
-- (void)resetChildWebView;
 @end

@@ -26,9 +26,9 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMResourceInfoViewController.h"
 #import "JMUtils.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMMainNavigationController.h"
 #import "UIViewController+Additions.h"
+#import "JMResource.h"
 
 NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
 NSString * const kJMShowMultiPageReportSegue = @"ShowMultiPageReport";
@@ -42,14 +42,14 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 @implementation JMBaseResourceViewerVC
 
-@synthesize resourceLookup = _resourceLookup;
+@synthesize resource = _resource;
 
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.title = self.resourceLookup.label;
+    self.title = self.resource.resourceLookup.label;
 
     [self setupSubviews];
     [self setupNavigationItems];
@@ -70,6 +70,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 {
     [super viewWillAppear:animated];
     [self updateIfNeeded];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    [self.popoverView dismiss:YES];
+
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
 #pragma mark - Private API
@@ -102,16 +109,8 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id destinationViewController = segue.destinationViewController;
-    if ([destinationViewController respondsToSelector:@selector(setResourceLookup:)]) {
-        [destinationViewController setResourceLookup:self.resourceLookup];
-    }
-}
-
-#pragma mark - Custom Accessors
-- (void)setResourceRequest:(NSURLRequest *)resourceRequest
-{
-    if (resourceRequest != _resourceRequest) {
-        _resourceRequest = resourceRequest;
+    if ([destinationViewController respondsToSelector:@selector(setResource:)]) {
+        [destinationViewController setResource:self.resource];
     }
 }
 
@@ -149,7 +148,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)setupRightBarButtonItems
 {
     NSMutableArray *navBarItems = [NSMutableArray array];
-    JMMenuActionsViewAction availableAction = [self availableActionForResource:self.resourceLookup];
+    JMMenuActionsViewAction availableAction = [self availableAction];
     
     if (availableAction && (availableAction ^ [self favoriteAction])) {
         [navBarItems addObject:[self actionBarButtonItem]];
@@ -188,8 +187,8 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 {
     JMMenuActionsView *actionsView = [JMMenuActionsView new];
     actionsView.delegate = self;
-    [actionsView setAvailableActions:[self availableActionForResource:self.resourceLookup]
-                     disabledActions:[self disabledActionForResource:self.resourceLookup]];
+    [actionsView setAvailableActions:[self availableAction]
+                     disabledActions:[self disabledAction]];
     CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), -10);
 
     self.popoverView = [PopoverView showPopoverAtPoint:point
@@ -201,17 +200,17 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)favoriteButtonTapped:(id)sender
 {
-    if ([JMFavorites isResourceInFavorites:self.resourceLookup]) {
-        [JMFavorites removeFromFavorites:self.resourceLookup];
+    if ([JMFavorites isResourceInFavorites:self.resource]) {
+        [JMFavorites removeFromFavorites:self.resource];
     } else {
-        [JMFavorites addToFavorites:self.resourceLookup];
+        [JMFavorites addToFavorites:self.resource];
     }
 }
 
 - (void)showInfoPage
 {
-    JMResourceInfoViewController *vc = (JMResourceInfoViewController *) [NSClassFromString([self.resourceLookup infoVCIdentifier]) new];
-    vc.resourceLookup = self.resourceLookup;
+    JMResourceInfoViewController *vc = (JMResourceInfoViewController *) [NSClassFromString([self.resource infoVCIdentifier]) new];
+    vc.resource = self.resource;
     JMMainNavigationController *nextNC = [[JMMainNavigationController alloc] initWithRootViewController:vc];
 
     nextNC.modalPresentationStyle = UIModalPresentationFormSheet;
@@ -263,7 +262,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (UIBarButtonItem *) favoriteBarButtonItem
 {
-    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource];
     NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
     
     UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
@@ -282,7 +281,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     self.navigationItem.rightBarButtonItems = rightItems;
 }
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)availableAction
 {
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info;
     if (![self favoriteItemShouldDisplaySeparately]) {
@@ -293,11 +292,11 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (JMMenuActionsViewAction)favoriteAction
 {
-    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource];
     return isResourceInFavorites ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
 }
 
-- (JMMenuActionsViewAction)disabledActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)disabledAction
 {
     JMMenuActionsViewAction disabledAction = JMMenuActionsViewAction_None;
     return disabledAction;

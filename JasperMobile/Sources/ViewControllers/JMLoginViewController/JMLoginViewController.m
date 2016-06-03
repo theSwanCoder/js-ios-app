@@ -34,6 +34,7 @@
 #import "JMCancelRequestPopup.h"
 #import "JasperMobileAppDelegate.h"
 #import "JMMenuViewController.h"
+#import "JMAnalyticsManager.h"
 
 @interface JMLoginViewController () <UITextFieldDelegate, JMServersGridViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
@@ -61,9 +62,9 @@
 
     UIColor *placeholderColor = [[JMThemesManager sharedManager] loginViewTextFieldsTextColor];
     NSDictionary *attributes = @{NSForegroundColorAttributeName:[placeholderColor colorWithAlphaComponent: 0.5f]};
-    self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.username.label", nil) attributes:attributes];
-    self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.password.label", nil) attributes:attributes];
-    self.serverProfileTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"settings.item.server", nil) attributes:attributes];
+    self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login_username_label", nil) attributes:attributes];
+    self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login_password_label", nil) attributes:attributes];
+    self.serverProfileTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"settings_item_server", nil) attributes:attributes];
 
     // setup "Login" button
     self.loginButton.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -71,21 +72,12 @@
 
     self.loginButton.backgroundColor = [[JMThemesManager sharedManager] loginViewLoginButtonBackgroundColor];
     [self.loginButton setTitleColor:[[JMThemesManager sharedManager] loginViewLoginButtonTextColor] forState:UIControlStateNormal];
-    [self.loginButton setTitle:JMCustomLocalizedString(@"login.button.login", nil) forState:UIControlStateNormal];
+    [self.loginButton setTitle:JMCustomLocalizedString(@"login_button_login", nil) forState:UIControlStateNormal];
     
-    [self.tryDemoButton setTitle:JMCustomLocalizedString(@"login.button.try.demo", nil) forState:UIControlStateNormal];
+    self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
+    [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
 
-    if (self.showForRestoreSession) {
-        // setup previous session
-        self.userNameTextField.text = self.restClient.serverProfile.username;
-        self.selectedServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-        self.tryDemoButton.enabled = NO;
-        self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonDisabledBackgroundColor];
-        [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoDisabledButtonTextColor] forState:UIControlStateNormal];
-    } else {
-        self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
-        [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
-    }
+    [self updateControlsForRestoration];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -114,7 +106,43 @@
     }
 }
 
+- (void) updateControlsForRestoration
+{
+    if (self.showForRestoreSession) {
+        // setup previous session
+        self.userNameTextField.text = self.restClient.serverProfile.username;
+        self.selectedServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    } else {
+        if ([JMUtils isAutofillLoginDataEnable]) {
+            NSString *lastUserName = [JMUtils lastUserName];
+            JMServerProfile *lastServerProfile = [JMUtils lastServerProfile];
+
+            self.userNameTextField.text = lastUserName;
+            self.selectedServerProfile = lastServerProfile;
+        } else {
+            self.userNameTextField.text = nil;
+            self.selectedServerProfile = nil;
+        }
+    }
+    
+    NSString *tryDemoButtonTitle = self.showForRestoreSession ? JMCustomLocalizedString(@"dialog_button_cancel", nil) : JMCustomLocalizedString(@"login_button_try_demo", nil);
+    SEL tryDemoButtonAction = self.showForRestoreSession ? @selector(cancelButtonTapped:) : @selector(tryDemoButtonTapped:);
+    
+    [self.tryDemoButton setTitle:tryDemoButtonTitle forState:UIControlStateNormal];
+    [self.tryDemoButton removeTarget:self action:nil forControlEvents:UIControlEventTouchUpInside];
+    [self.tryDemoButton addTarget:self action:tryDemoButtonAction forControlEvents:UIControlEventTouchUpInside];
+}
+
 #pragma mark - Properties
+- (void)setShowForRestoreSession:(BOOL)showForRestoreSession
+{
+    if (showForRestoreSession != _showForRestoreSession) {
+        _showForRestoreSession = showForRestoreSession;
+        
+        [self updateControlsForRestoration];
+    }
+}
+
 - (void)setSelectedServerProfile:(JMServerProfile *)selectedServerProfile
 {
     _selectedServerProfile = selectedServerProfile;
@@ -126,31 +154,42 @@
 {
     NSMutableString *errorMessage = [NSMutableString string];
     if (![self.userNameTextField.text length]) {
-        [errorMessage appendString:JMCustomLocalizedString(@"login.username.errmsg.empty", nil)];
+        [errorMessage appendString:JMCustomLocalizedString(@"login_username_errmsg_empty", nil)];
     }
     if (![self.passwordTextField.text length]) {
         if ([errorMessage length]) {
             [errorMessage appendString:@"\n"];
         }
-        [errorMessage appendString:JMCustomLocalizedString(@"login.password.errmsg.empty", nil)];
+        [errorMessage appendString:JMCustomLocalizedString(@"login_password_errmsg_empty", nil)];
     }
     if (!self.selectedServerProfile) {
         if ([errorMessage length]) {
             [errorMessage appendString:@"\n"];
         }
-        [errorMessage appendString:JMCustomLocalizedString(@"login.server.profile.errmsg.empty", nil)];
+        [errorMessage appendString:JMCustomLocalizedString(@"login_server_profile_errmsg_empty", nil)];
     }
     
     if ([errorMessage length]) {
-        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:0 userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:0 userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         [JMUtils presentAlertControllerWithError:error completion:nil];
     } else {
-
+        [JMUtils saveLastUserName:self.userNameTextField.text];
+        [JMUtils saveLastServerProfile:self.selectedServerProfile];
         [self loginWithServerProfile:self.selectedServerProfile userName:self.userNameTextField.text password:self.passwordTextField.text];
     }
 }
 
-- (IBAction)tryDemoButtonTapped:(id)sender
+- (void)cancelButtonTapped:(id)sender
+{
+    [[JMSessionManager sharedManager] logout];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:JMLoginVCLastUserNameKey];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:JMLoginVCLastServerProfileAliasKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    self.showForRestoreSession = NO;
+}
+
+- (void)tryDemoButtonTapped:(id)sender
 {
     [self loginWithServerProfile:[JMServerProfile demoServerProfile] userName:kJMDemoServerUsername password:kJMDemoServerPassword];
 }
@@ -211,33 +250,33 @@
                                                          password:password];
 
     __weak typeof(self)weakSelf = self;
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^(void) {
+    [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:^(void) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf.restClient cancelAllRequests];
     }];
     
-    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:^(BOOL success) {
+    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:^(NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [JMCancelRequestPopup dismiss];
         // Analytics
-        [JMUtils logLoginSuccess:success
-                    additionInfo:@{
-                                   kJMAnalyticsCategoryKey      : kJMAnalyticsAuthenticationEventCategoryTitle,
-                                   kJMAnalyticsActionKey        : kJMAnalyticsAuthenticationEventActionLoginTitle,
-                                   kJMAnalyticsLabelKey         : kJMAnalyticsAuthenticationEventLabelSuccess
-                                   }];
+        [[JMAnalyticsManager sharedManager] sendAnalyticsEventAboutLoginSuccess:!error
+                                                                   additionInfo:@{
+                                                                           kJMAnalyticsCategoryKey : kJMAnalyticsAuthenticationEventCategoryTitle,
+                                                                           kJMAnalyticsActionKey   : kJMAnalyticsAuthenticationEventActionLoginTitle,
+                                                                           kJMAnalyticsLabelKey    : kJMAnalyticsAuthenticationEventLabelSuccess
+                                        }];
         
-        if (success) {
-            strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-
+        if (!error) {
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
             if (strongSelf.completion) {
                 strongSelf.completion();
             }
         } else {
-            NSString *errorTitle = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
-            NSString *errorMessage = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
-            NSError *error = [NSError errorWithDomain:errorTitle code:JSInvalidCredentialsErrorCode userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            if ([error.domain isEqualToString:JSAuthErrorDomain]) {
+                NSString *errorTitle = JMCustomLocalizedString(@"error_authenication_dialog_title", nil);
+                NSString *errorMessage = JMCustomLocalizedString(@"error_authenication_dialog_msg", nil);
+                error = [NSError errorWithDomain:errorTitle code:JSInvalidCredentialsErrorCode userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            }
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }];

@@ -61,7 +61,7 @@ TIBCO JasperMobile iOS app includes third party software subject to the associat
   Alternative approaches: Need investigate another libraries
   
 
-- JaspersoftSDK-v2.1 - https://github.com/Jaspersoft/js-ios-sdk
+- JaspersoftSDK-v2.5 - https://github.com/Jaspersoft/js-ios-sdk
   Licence (Apache): https://github.com/Jaspersoft/js-ios-sdk/blob/master/LICENSE.txt
   Reason: Using it for connect to JRS instance and working with it.
   Cost of not using: Application wouldn't work.
@@ -92,17 +92,5 @@ TIBCO JasperMobile iOS app includes third party software subject to the associat
 
 This software is built using the Jaspersoft Mobile SDK for iOS, which depends on 
 third party software, subject to the associated copyrights, as follows:
-- RestKit v0.24.0 - https://github.com/RestKit/RestKit/blob/development/LICENSE
-  Licence (Apache): https://github.com/Jaspersoft/js-ios-sdk/blob/master/LICENSE.txt
-  Reason: Using it for working with JRS instance via REST API, for serialisation and deserialisation data.
-  Cost of not using: Application wouldn't connect to JRS instance.
-  Alternative approaches: Need investigate another libraries, reinventing our own wheel
-
-- ServerReachability v0.0.2 - https://github.com/ogubariev/ServerReachability
-  Licence (MIT): https://github.com/ogubariev/ServerReachability/blob/master/LICENSE
-  Reason: Using it for checking connection to server with port.
-  Cost of not using: Unable to check connection to server.
-  Alternative approaches: There is no any alternatives
-
-
-
+- AFNetworking v3.0.4 (MIT) - https://github.com/AFNetworking/AFNetworking
+- EasyMapping v0.16.1 (MIT) - https://github.com/lucasmedeirosleite/EasyMapping

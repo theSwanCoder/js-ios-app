@@ -28,13 +28,11 @@
 
 #import "JMDashboardViewerVC.h"
 #import "JMDashboardViewerConfigurator.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMDashboardLoader.h"
 #import "JMReportViewerVC.h"
 #import "JMDashboard.h"
 #import "JMWebViewManager.h"
 #import "JMExternalWindowDashboardControlsVC.h"
-#import "JMDashlet.h"
 #import "JMDashboardParameter.h"
 #import "JSResourceDashboardUnit.h"
 #import "JSDashboardResource.h"
@@ -42,6 +40,15 @@
 #import "JMDashboardInputControlsVC.h"
 #import "JSRESTBase+JSRESTDashboard.h"
 #import "JSDashboardComponent.h"
+#import "JMWebEnvironment.h"
+
+#import "UIView+Additions.h"
+#import "JMResource.h"
+#import "JMAnalyticsManager.h"
+#import "JMJavascriptNativeBridge.h"
+
+
+NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashboardViewerPrimaryWebEnvironmentIdentifier";
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -50,10 +57,13 @@
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
 @property (nonatomic) JMExternalWindowDashboardControlsVC *controlsViewController;
+@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 @end
 
 
 @implementation JMDashboardViewerVC
+
+#pragma mark - UIViewController LifeCycle
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -67,7 +77,7 @@
 {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
 
-    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+    if (![self isContentOnTV] && [self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
         CGFloat initialScaleViewport = 0.75;
         BOOL isCompactWidth = newCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
         if (isCompactWidth) {
@@ -81,34 +91,7 @@
 - (void)printResource
 {
     [super printResource];
-
-    [self imageFromWebViewWithCompletion:^(UIImage *image) {
-        if (image) {
-            [self printItem:image
-                   withName:self.dashboard.resourceLookup.label
-                 completion:nil];
-        }
-    }];
-}
-
-- (void)imageFromWebViewWithCompletion:(void(^)(UIImage *image))completion
-{
-    [JMCancelRequestPopup presentWithMessage:@"status.loading"];
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        // Screenshot rendering from webView
-        UIGraphicsBeginImageContextWithOptions(self.webView.bounds.size, self.webView.opaque, 0.0);
-        [self.webView.layer renderInContext:UIGraphicsGetCurrentContext()];
-
-        UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [JMCancelRequestPopup dismiss];
-            if (completion) {
-                completion(viewImage);
-            }
-        });
-    });
+    [self printItem:[self.resourceView renderedImage] withName:self.dashboard.resource.resourceLookup.label completion:nil];
 }
 
 #pragma mark - Custom Accessors
@@ -116,14 +99,31 @@
 - (JMDashboard *)dashboard
 {
     if (!_dashboard) {
-        _dashboard = [self.resourceLookup dashboardModel];
+        _dashboard = [self.resource modelOfResource];
     }
     return _dashboard;
 }
 
-- (UIWebView *)webView
+- (UIView *)resourceView
 {
-    return self.configurator.webView;
+    return self.webEnvironment.webView;
+}
+
+- (void)setupSubviews
+{
+    self.webEnvironment = [self primaryWebEnvironment];
+    self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard
+                                                                  webEnvironment:self.webEnvironment];
+
+    [self.configurator updateReportLoaderDelegateWithObject:self];
+
+    [super setupSubviews];
+}
+
+- (JMWebEnvironment *)primaryWebEnvironment
+{
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMDashboardViewerPrimaryWebEnvironmentIdentifier]              ;
+    return webEnvironment;
 }
 
 - (id<JMDashboardLoader>)dashboardLoader
@@ -134,35 +134,19 @@
 #pragma mark - Setups
 - (void)configViewport
 {
-    CGFloat initialScaleViewport = 0.75;
-    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-    if (isCompactWidth) {
-        initialScaleViewport = 0.25;
-    }
-
-    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
-}
-
-- (void)setupSubviews
-{
-    self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard];
-
-    id dashboardView = [self.configurator webViewAsSecondary:NO];
-    [self.view addSubview:dashboardView];
-
-    [self setupWebViewLayout];
-
-    [self.configurator updateReportLoaderDelegateWithObject:self];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.webEnvironment resetZoom];
+    });
 }
 
 - (void)setupLeftBarButtonItems
 {
     if ([self isDashletShown]) {
-        self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
-                                                                   target:self
-                                                                   action:@selector(minimizeDashlet)];
+        if (!self.navigationItem.leftBarButtonItem) {
+            self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
+                                                                       target:self
+                                                                       action:@selector(minimizeDashlet)];
+        }
     } else {
         [super setupLeftBarButtonItems];
     }
@@ -179,7 +163,10 @@
 - (void)resetSubViews
 {
     [self.dashboardLoader destroy];
-    [[JMWebViewManager sharedInstance] resetZoom];
+    [self.webEnvironment resetZoom];
+    [self.webEnvironment.webView removeFromSuperview];
+
+    self.webEnvironment = nil;
 }
 
 
@@ -187,7 +174,6 @@
 {
     if ([self isContentOnTV]) {
         [self switchFromTV];
-        [self hideExternalWindowWithCompletion:nil];
         [super cancelResourceViewingAndExit:exit];
     } else {
         [super cancelResourceViewingAndExit:exit];
@@ -197,20 +183,25 @@
 #pragma mark - Actions
 - (void)minimizeDashlet
 {
-    [[self webView].scrollView setZoomScale:0.1 animated:YES];
+    [self.webEnvironment resetZoom];
+
+    if ([self isContentOnTV]) {
+        [self.controlsViewController markComponentAsMinimized:self.dashboard.maximizedComponent];
+    }
+
     [self.dashboardLoader minimizeDashlet];
     self.navigationItem.leftBarButtonItem = self.leftButtonItem;
     self.navigationItem.rightBarButtonItems = self.rightButtonItems;
-    self.navigationItem.title = [self resourceLookup].label;
+    self.navigationItem.title = self.resource.resourceLookup.label;
     self.leftButtonItem = nil;
+
 }
 
 - (void)reloadDashboard
 {
-    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                cancelBlock:^(void) {
                                    [self.dashboardLoader cancel];
-                                   [super cancelResourceViewingAndExit:YES];
                                }];
     __weak typeof(self)weakSelf = self;
     [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
@@ -218,19 +209,23 @@
         [strongSelf stopShowLoader];
 
         if (!success) {
-            JMLog(@"error of refreshing dashboard: %@", error);
-            if (error.code == JSSessionExpiredErrorCode) {
+            if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
                 __weak typeof(self)weakSelf = strongSelf;
                 [strongSelf handleAuthErrorWithCompletion:^(void) {
                     __weak typeof(self)strongSelf = weakSelf;
                     [strongSelf startShowDashboard];
                 }];
+            } else if (error.code == JMJavascriptNativeBridgeErrorTypeUnexpected) {
+                JMLog(@"reload dashboard");
+                JMLog(@"error: %@", error.localizedDescription);
             } else {
+                JMLog(@"error of refreshing dashboard: %@", error);
                 [JMUtils presentAlertControllerWithError:error
-                                              completion:nil];
+                                              completion:^{
+                                                  [strongSelf cancelResourceViewingAndExit:YES];
+                                              }];
             }
         }
-
     }];
 }
 
@@ -238,19 +233,25 @@
 {
     if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
 
-        __weak typeof(self)weakSelf = self;
-        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)];
+        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
+                             cancelBlock:^(void) {
+                                 [self.dashboardLoader cancel];
+                             }];
 
+        __weak typeof(self)weakSelf = self;
         [self.dashboardLoader reloadMaximizedDashletWithCompletion:^(BOOL success, NSError *error){
             __weak typeof(self)strongSelf = weakSelf;
             [strongSelf stopShowLoader];
             if (!success) {
-                if (error.code == JSSessionExpiredErrorCode) {
+                if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
                     __weak typeof(self)weakSelf = strongSelf;
                     [strongSelf handleAuthErrorWithCompletion:^(void) {
                         __weak typeof(self)strongSelf = weakSelf;
                         [strongSelf startShowDashboard];
                     }];
+                } else if (error.code == JMJavascriptNativeBridgeErrorTypeUnexpected) {
+                    JMLog(@"reload dashlet");
+                    JMLog(@"error: %@", error.localizedDescription);
                 } else {
                     [JMUtils presentAlertControllerWithError:error
                                                   completion:nil];
@@ -267,9 +268,10 @@
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-    if ([JMUtils isServerAmber2OrHigher] && ![self.resourceLookup isLegacyDashboard]) {
-        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+    if (self.resource.type != JMResourceTypeLegacyDashboard && [JMUtils isSupportVisualize]) {
+        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                    cancelBlock:^(void) {
+                                       [self.dashboardLoader cancel];
                                        [super cancelResourceViewingAndExit:YES];
                                    }];
 
@@ -280,14 +282,16 @@
 
             if (error) {
                 if (error.code == JSSessionExpiredErrorCode) {
-                    __weak typeof(self)weakSelf = self;
+                    __weak typeof(self)weakSelf = strongSelf;
                     [strongSelf handleAuthErrorWithCompletion:^(void) {
                         __weak typeof(self)strongSelf = weakSelf;
                         [strongSelf startResourceViewing];
                     }];
                 } else {
                     [JMUtils presentAlertControllerWithError:error
-                                                  completion:nil];
+                                                  completion:^{
+                                                      [strongSelf cancelResourceViewingAndExit:YES];
+                                                  }];
                 }
             } else {
                 strongSelf.dashboard.components = components;
@@ -302,7 +306,7 @@
 
 - (void)startShowDashboard
 {
-    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
                                cancelBlock:^(void) {
                                    [self.dashboardLoader cancel];
                                    [super cancelResourceViewingAndExit:YES];
@@ -315,23 +319,26 @@
 
         if (success) {
             // Analytics
-            NSString *label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
-            [JMUtils logEventWithInfo:@{
-                    kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
-                    kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
-                    kJMAnalyticsLabelKey         : label
+            NSString *label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceLabelDashboardVisualize : kJMAnalyticsResourceLabelDashboardFlow;
+            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                    kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
+                    kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
+                    kJMAnalyticsLabelKey    : label
             }];
 
             if ([strongSelf isContentOnTV]) {
-                strongSelf.controlsViewController.components = strongSelf.dashboard.dashlets;
+                strongSelf.controlsViewController.components = strongSelf.dashboard.components;
             }
         } else {
-            if (error.code == JSSessionExpiredErrorCode) {
+            if (error.code == JMJavascriptNativeBridgeErrorAuthError) {
                 __weak typeof(self)weakSelf = strongSelf;
                 [strongSelf handleAuthErrorWithCompletion:^(void) {
                     __weak typeof(self)strongSelf = weakSelf;
                     [strongSelf startShowDashboard];
                 }];
+            } else if (error.code == JMJavascriptNativeBridgeErrorTypeUnexpected) {
+                JMLog(@"show dashboard");
+                JMLog(@"error: %@", error.localizedDescription);
             } else {
                 [JMUtils presentAlertControllerWithError:error
                                               completion:nil];
@@ -340,15 +347,12 @@
     }];
 }
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)availableAction
 {
-    JMMenuActionsViewAction menuActions = [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
+    JMMenuActionsViewAction menuActions = [super availableAction] | JMMenuActionsViewAction_Refresh;
 
-    // TODO: enable in next releases
-    if ([JMUtils isServerAmber2OrHigher]) {
-        if ([self isExternalScreenAvailable]) {
-            menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
-        }
+    if ([self isExternalScreenAvailable]) {
+        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
     }
 
     if ([self isInputControlsAvailable]) {
@@ -380,9 +384,6 @@
         }
         case JMMenuActionsViewAction_HideExternalDisplay: {
             [self switchFromTV];
-            [self hideExternalWindowWithCompletion:^(void) {
-                [self configViewport];
-            }];
             break;
         }
         case JMMenuActionsViewAction_EditFilters: {
@@ -396,7 +397,7 @@
 #pragma mark - JMDashboardLoaderDelegate
 - (void)dashboardLoader:(id <JMDashboardLoader>)loader didStartMaximazeDashletWithTitle:(NSString *)title
 {
-    [[self webView].scrollView setZoomScale:0.1 animated:YES];
+    [self.webEnvironment resetZoom];
 
     self.navigationItem.rightBarButtonItems = nil;
     if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
@@ -415,30 +416,15 @@
 }
 
 - (void)dashboardLoader:(id <JMDashboardLoader>)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
-         resourceLookup:(JSResourceLookup *)resourceLookup
+         resource:(JMResource *)resource
              parameters:(NSArray *)parameters
 {
     if (hyperlinkType == JMHyperlinkTypeReportExecution) {
-        NSString *reportURI = resourceLookup.uri;
-        __weak typeof(self)weakSelf = self;
-        [self loadInputControlsWithReportURI:reportURI completion:^(NSArray *inputControls, NSError *error) {
-            __strong typeof(self)strongSelf = weakSelf;
-            if (error) {
-                __weak typeof(self) weakSelf = strongSelf;
-                [JMUtils presentAlertControllerWithError:error completion:^{
-                    __strong typeof(self) strongSelf = weakSelf;
-                    [strongSelf cancelResourceViewingAndExit:YES];
-                }];
-            } else {
-                JMReportViewerVC *reportViewController = (JMReportViewerVC *) [strongSelf.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-                reportViewController.resourceLookup = resourceLookup;
-                [reportViewController.report generateReportOptionsWithInputControls:inputControls];
-                [reportViewController.report updateReportParameters:parameters];
-                reportViewController.isChildReport = YES;
-
-                [strongSelf.navigationController pushViewController:reportViewController animated:YES];
-            }
-        }];
+        JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+        reportViewController.resource = resource;
+        reportViewController.initialReportParameters = parameters;
+        reportViewController.isChildReport = YES;
+        [self.navigationController pushViewController:reportViewController animated:YES];
     } else if (hyperlinkType == JMHyperlinkTypeReference) {
         NSURL *URL = parameters.firstObject;
         if (URL) {
@@ -453,11 +439,21 @@
         [self minimizeDashlet];
     }
 
-    [self.restClient deleteCookies];
-    if ([JMUtils isServerAmber2OrHigher]) {
+    if ([self isContentOnTV]) {
+        [self switchFromTV];
+    }
+
+    if ([JMUtils isSupportVisualize]) {
         [self startResourceViewing];
     } else {
-        [self reloadDashboard];
+        __weak typeof(self)weakSelf = self;
+        [self handleAuthErrorWithCompletion:^{
+            __strong typeof(self)strongSelf = weakSelf;
+            if ([strongSelf.dashboard respondsToSelector:@selector(updateResourceRequest)]) {
+                [strongSelf.dashboard updateResourceRequest];
+            }
+            [strongSelf startShowDashboard];
+        }];
     }
 }
 
@@ -466,7 +462,6 @@
 {
     __weak typeof(self)weakSelf = self;
     [self.restClient inputControlsForReport:reportURI
-                                        ids:nil
                              selectedValues:nil
                             completionBlock:^(JSOperationResult *result) {
                                 __strong typeof(self)strongSelf = weakSelf;
@@ -526,61 +521,46 @@
                                                   // Get components
                                                   NSArray <JSDashboardComponent *> *components = result.objects;
 
-                                                  NSMutableArray <JSDashboardComponent *> *inputControlComponents = [NSMutableArray array];
+                                                  NSMutableArray <JSParameter *> *parameters = [NSMutableArray array];
                                                   for (JSDashboardComponent *component in components) {
                                                       if ([component.type isEqualToString:@"inputControl"]) {
-                                                          [inputControlComponents addObject:component];
-                                                      }
-                                                  }
-
-                                                  // Form URLs for getting input controls
-                                                  NSMutableDictionary <NSString *, NSArray *> *inputControlsURLs = [NSMutableDictionary dictionary];
-                                                  for (JSDashboardComponent *component in inputControlComponents) {
-                                                      if (inputControlsURLs[component.ownerResourceURI]) {
-                                                          NSMutableArray *params = [inputControlsURLs[component.ownerResourceURI] mutableCopy];
-                                                          [params addObject:component.ownerResourceParameterName];
-                                                          inputControlsURLs[component.ownerResourceURI] = [params copy];
-                                                      } else {
-                                                          inputControlsURLs[component.ownerResourceURI] = @[component.ownerResourceParameterName];
-                                                      }
-                                                  }
-
-                                                  JMLog(@"inputControlsURLs: %@", inputControlsURLs);
-                                                  // Get input controls
-                                                  NSMutableArray *inputControls = [NSMutableArray array];
-                                                  for (NSString *inputControlURI in inputControlsURLs.allKeys) {
-                                                      NSString *URI = inputControlURI;
-                                                      if ([inputControlURI hasPrefix:@"/temp"]) {
-                                                          NSString *dashboardFilesURI = [NSString stringWithFormat:@"%@_files", strongSelf.dashboard.resourceURI];
-                                                          URI = [inputControlURI stringByReplacingOccurrencesOfString:@"/temp" withString:dashboardFilesURI];
-                                                      }
-                                                      [strongSelf.restClient inputControlsForDashboardWithURI:URI
-                                                                                                    ids:inputControlsURLs[inputControlURI]
-                                                                                         selectedValues:nil
-                                                                                                  async:NO
-                                                                                        completionBlock:^(JSOperationResult *_Nullable result) {
-
-                                                                                            if (result.error) {
-                                                                                                JMLog(@"error: %@", result.error);
-                                                                                            } else {
-                                                                                                [inputControls addObjectsFromArray:result.objects];
-                                                                                            }
-                                                                                        }];
-                                                  }
-
-                                                  // Callback
-
-                                                  if (inputControls.count > 0) {
-                                                      NSMutableArray *visibleInputControls = [NSMutableArray array];
-                                                      for (JSInputControlDescriptor *inputControl in inputControls) {
-                                                          if (inputControl.visible.boolValue) {
-                                                              [visibleInputControls addObject:inputControl];
+                                                          NSString *URI = component.ownerResourceURI;
+                                                          if ([URI hasPrefix:@"/temp"]) {
+                                                              NSString *dashboardFilesURI = [NSString stringWithFormat:@"%@_files", strongSelf.dashboard.resourceURI];
+                                                              URI = [URI stringByReplacingOccurrencesOfString:@"/temp" withString:dashboardFilesURI];
                                                           }
+                                                          NSPredicate *filterPredicate = [NSPredicate predicateWithFormat:@"SELF.name == %@", URI];
+                                                          JSParameter *parameter = [[parameters filteredArrayUsingPredicate:filterPredicate] lastObject];
+                                                          if (!parameter) {
+                                                              parameter = [JSParameter parameterWithName:URI value:[NSMutableArray array]];
+                                                              [parameters addObject:parameter];
+                                                          }
+                                                          [parameter.value addObject:component.ownerResourceParameterName];
                                                       }
-                                                      completion(components, visibleInputControls, nil);
-                                                  } else {
-                                                      completion(components, @[], nil);
                                                   }
+
+                                                  JMLog(@"inputControlsURLs: %@", parameters);
+                                                  // Get input controls
+                                                  [strongSelf.restClient inputControlsForDashboardWithParameters:parameters
+                                                                                                 completionBlock:^(JSOperationResult * _Nullable result) {
+                                                                                                     if (result.error) {
+                                                                                                         JMLog(@"error: %@", result.error);
+                                                                                                     } else {
+                                                                                                         NSArray *inputControls = result.objects;
+                                                                                                         // Callback
+                                                                                                         if (inputControls.count > 0) {
+                                                                                                             NSMutableArray *visibleInputControls = [NSMutableArray array];
+                                                                                                             for (JSInputControlDescriptor *inputControl in inputControls) {
+                                                                                                                 if (inputControl.visible.boolValue) {
+                                                                                                                     [visibleInputControls addObject:inputControl];
+                                                                                                                 }
+                                                                                                             }
+                                                                                                             completion(components, visibleInputControls, nil);
+                                                                                                         } else {
+                                                                                                             completion(components, @[], nil);
+                                                                                                         }
+                                                                                                     }
+                                                                                                 }];
                                               }
                                           }];
 }
@@ -590,35 +570,47 @@
     return self.dashboard.inputControls.count > 0;
 }
 
-- (void)handleAuthErrorWithCompletion:(void(^)(void))completion
+- (void)handleAuthErrorWithCompletion:(void(^ __nonnull)(void))completion
 {
-    [self.restClient deleteCookies];
-    [self resetSubViews];
+    if ([self isContentOnTV]) {
+        [self switchFromTV];
+    }
 
-    __weak typeof(self)weakSelf = self;
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-        __weak typeof(self)strongSelf = weakSelf;
-        if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-            if (completion) {
+    [self.webEnvironment.webView removeFromSuperview];
+    [[JMWebViewManager sharedInstance] removeWebEnvironmentForId:self.webEnvironment.identifier];
+    self.webEnvironment = nil;
+    
+    if (self.restClient.keepSession) {
+        __weak typeof(self)weakSelf = self;
+        [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
+            __weak typeof(self)strongSelf = weakSelf;
+            if (!result.error) {
+                [[JMWebViewManager sharedInstance] reset];
+                [strongSelf setupSubviews];
+                [strongSelf configViewport];
+                
                 completion();
+            } else {
+                __weak typeof(self)weakSelf = strongSelf;
+                [JMUtils showLoginViewAnimated:YES completion:^{
+                    __weak typeof(self)strongSelf = weakSelf;
+                    [strongSelf cancelResourceViewingAndExit:YES];
+                }];
             }
-        } else {
-            __weak typeof(self)weakSelf = strongSelf;
-            [JMUtils showLoginViewAnimated:YES completion:^{
-                __weak typeof(self)strongSelf = weakSelf;
-                [strongSelf cancelResourceViewingAndExit:YES];
-            }];
-        }
-    }];
+        }];
+    } else {
+        __weak typeof(self)weakSelf = self;
+        [JMUtils showLoginViewAnimated:YES completion:^{
+            __weak typeof(self)strongSelf = weakSelf;
+            [strongSelf cancelResourceViewingAndExit:YES];
+        }];
+    }
 }
 
 #pragma mark - Work with external screen
 - (UIView *)viewToShowOnExternalWindow
 {
-    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
-    }
-    UIView *dashboardView = self.configurator.webView;
+    UIView *dashboardView = self.webEnvironment.webView;
     dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
     return dashboardView;
 }
@@ -626,7 +618,7 @@
 - (void)addControlsForExternalWindow
 {
     self.controlsViewController = [JMExternalWindowDashboardControlsVC new];
-    self.controlsViewController.components = self.dashboard.dashlets;
+    self.controlsViewController.components = self.dashboard.components;
     [self.view addSubview:self.controlsViewController.view];
 
     self.controlsViewController.delegate = self;
@@ -647,18 +639,22 @@
 
 - (void)switchFromTV
 {
-    [self.view addSubview:self.webView];
-    [self setupWebViewLayout];
+    [super setupSubviews];
 
     [self.controlsViewController.view removeFromSuperview];
     self.controlsViewController = nil;
+
+    [self hideExternalWindowWithCompletion:^(void) {
+        [self configViewport];
+        [self.webEnvironment.webView.scrollView setZoomScale:0.1 animated:YES];
+    }];
 }
 
 #pragma mark - JMExternalWindowDashboardControlsVCDelegate
-- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JMDashlet *)dashlet
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JSDashboardComponent *)component
 {
-    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
-        [self.dashboardLoader maximizeDashlet:dashlet];
+    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashletForComponent:)]) {
+        [self.dashboardLoader maximizeDashletForComponent:component];
 
         // TODO: move to separate method
         self.navigationItem.rightBarButtonItems = nil;
@@ -671,19 +667,22 @@
         }
 
         self.leftButtonItem = self.navigationItem.leftBarButtonItem;
-        self.navigationItem.title = dashlet.name;
+        self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
+                                                                   target:self
+                                                                   action:@selector(minimizeDashlet)];
+        self.navigationItem.title = component.name;
     }
 }
 
-- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JMDashlet *)dashlet
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JSDashboardComponent *)component
 {
-    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
-        [self.dashboardLoader minimizeDashlet:dashlet];
+    if ([self.dashboardLoader respondsToSelector:@selector(minimizeDashletForComponent:)]) {
+        [self.dashboardLoader minimizeDashletForComponent:component];
 
         // TODO: move to separate method
         self.navigationItem.leftBarButtonItem = self.leftButtonItem;
         self.navigationItem.rightBarButtonItems = self.rightButtonItems;
-        self.navigationItem.title = [self resourceLookup].label;
+        self.navigationItem.title = self.resource.resourceLookup.label;
         self.leftButtonItem = nil;
     }
 }
@@ -695,35 +694,24 @@
     inputControlsViewController.dashboard = self.dashboard;
 
     __weak __typeof(self) weakSelf = self;
-    inputControlsViewController.exitBlock = ^(NSArray *changedInputControls) {
-        __typeof(self) strongSelf = weakSelf;
-        JMLog(@"changed input controls: %@", changedInputControls);
-
-        NSString *parametersAsString = @"{";
-        for (JSInputControlDescriptor *inputControlDescriptor in changedInputControls) {
-
-            NSString *inputControlID = inputControlDescriptor.uuid;
-
-            NSString *componentID;
-
-            for (JSDashboardComponent *component in strongSelf.dashboard.components) {
-                if ([component.ownerResourceParameterName isEqualToString:inputControlID]) {
-                    componentID = component.identifier;
+    inputControlsViewController.exitBlock = ^(BOOL inputControlsDidChanged) {
+        if (inputControlsDidChanged) {
+            __typeof(self) strongSelf = weakSelf;
+            NSMutableDictionary *parameters = [@{} mutableCopy];
+            for (JSInputControlDescriptor *inputControlDescriptor in strongSelf.dashboard.inputControls) {
+                NSString *componentID;
+                for (JSDashboardComponent *component in strongSelf.dashboard.components) {
+                    if ([component.ownerResourceParameterName isEqualToString:inputControlDescriptor.uuid]) {
+                        componentID = component.identifier;
+                    }
+                }
+                NSArray *values = [inputControlDescriptor selectedValues];
+                if (componentID) {
+                    parameters[componentID] = values;                    
                 }
             }
-
-            NSArray *values = [inputControlDescriptor selectedValues];
-            NSString *valuesAsString = @"";
-            for (NSString *value in values) {
-                valuesAsString = [valuesAsString stringByAppendingFormat:@"\"%@\",", value];
-            }
-
-            parametersAsString = [parametersAsString stringByAppendingFormat:@"\"%@\":[%@], ", componentID, valuesAsString];
+            [strongSelf.dashboardLoader applyParameters:parameters];
         }
-        parametersAsString = [parametersAsString stringByAppendingString:@"}"];
-        JMLog(@"parametersAsString: %@", parametersAsString);
-
-        [strongSelf.dashboardLoader applyParameters:parametersAsString];
     };
 
     [self.navigationController pushViewController:inputControlsViewController animated:YES];

@@ -22,37 +22,48 @@
 
 
 #import "JMReportViewerVC.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMReportViewerConfigurator.h"
 #import "JMJavascriptRequest.h"
-#import "JMJavascriptNativeBridge.h"
 #import "JMWebViewManager.h"
-#import "JMSaveReportViewController.h"
+#import "JMSavingReportViewController.h"
 #import "ALToastView.h"
 #import "JMInputControlsViewController.h"
 #import "JMReportViewerToolBar.h"
 #import "JMExternalWindowControlsVC.h"
-#import "JMNewScheduleVC.h"
+#import "JMScheduleVC.h"
+#import "JMWebEnvironment.h"
+#import "JMResource.h"
+#import "JMAnalyticsManager.h"
 
-@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMExternalWindowControlViewControllerDelegate>
+NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierViz    = @"kJMReportViewerPrimaryWebEnvironmentIdentifierViz";
+NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMReportViewerPrimaryWebEnvironmentIdentifierREST";
+NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierViz  = @"kJMReportViewerSecondaryWebEnvironmentIdentifierViz";
+NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMReportViewerSecondaryWebEnvironmentIdentifierREST";
+
+@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, copy) void(^exportCompletion)(NSString *resourcePath);
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
-@property (nonatomic, strong) NSArray *initialReportParameters;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
+@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 @end
 
 @implementation JMReportViewerVC
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
-    JMLog(@"horizontal size class: %@", @(newCollection.horizontalSizeClass));
-    JMLog(@"vertical size class: %@", @(newCollection.verticalSizeClass));
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:nil completion:^(id <UIViewControllerTransitionCoordinatorContext> context) {
+        if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {
+            [self.reportLoader fitReportViewToScreen];
+        }
+    }];
+
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
 #pragma mark - Lifecycle
@@ -67,13 +78,6 @@
     [self configureReport];
 
     [self addObservers];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    [self configViewport];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -94,7 +98,7 @@
 {
     [super prepareForSegue:segue sender:sender];
     if ([segue.identifier isEqualToString:kJMSaveReportViewControllerSegue]) {
-        JMSaveReportViewController *destinationViewController = segue.destinationViewController;
+        JMSavingReportViewController *destinationViewController = segue.destinationViewController;
         destinationViewController.report = self.report;
         destinationViewController.delegate = self;
     }
@@ -117,6 +121,15 @@
                                              selector:@selector(reportLoaderDidChangeCurrentPage:)
                                                  name:kJSReportCurrentPageDidChangeNotification
                                                object:self.report];
+
+    // Change cookies notification
+    // At the moment we need this notification for 'non' visualize reports
+    if (![JMUtils isSupportVisualize]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(cookiesDidChange)
+                                                     name:JSRestClientDidChangeCookies
+                                                   object:nil];
+    }
 }
 
 - (void)multipageNotification
@@ -135,18 +148,31 @@
     self.toolbar.currentPage = self.report.currentPage;
 }
 
+- (void)cookiesDidChange
+{
+    [self.reportLoader cancel];
+
+    [self cleanWebEnvironment];
+
+    NSInteger reportCurrentPage = self.report.currentPage;
+    if (reportCurrentPage == NSNotFound) {
+        reportCurrentPage = 1;
+    }
+    [self.report restoreDefaultState];
+    [self.report updateCurrentPage:reportCurrentPage];
+
+    [self setupSubviews];
+
+    [self runReportWithPage:self.report.currentPage];
+}
+
 #pragma mark - Actions
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
-    if (self.isChildReport) {
-        [self closeChildReport];
-    } else {
+    if (!self.isChildReport) {
         [self stopShowLoader];
 
-        if (![self.restClient isRequestPoolEmpty]) {
-            [self.restClient cancelAllRequests];
-        }
-        [self.reportLoader cancel];
+        [self.restClient cancelAllRequests];
         if (self.exitBlock) {
             self.exitBlock();
         }
@@ -154,9 +180,8 @@
         if ([self isContentOnTV]) {
             [self hideExternalWindowWithCompletion:nil];
         }
-
-        [super cancelResourceViewingAndExit:exit];
     }
+    [super cancelResourceViewingAndExit:exit];
 }
 
 - (void)handleReportLoaderDidChangeCountOfPages
@@ -164,13 +189,9 @@
     BOOL isReportReady = self.report.countOfPages != NSNotFound;
     if (isReportReady && self.report.isReportEmpty) {
         [self showEmptyReportMessage];
+    } else {
+        [self hideEmptyReportMessage];
     }
-}
-
-- (void)closeChildReport
-{
-    [[JMWebViewManager sharedInstance] resetChildWebView];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Notifications
@@ -180,14 +201,6 @@
 }
 
 #pragma mark - Setups
-- (void)setupLeftBarButtonItems
-{
-    if (self.isChildReport) {
-        self.navigationItem.leftBarButtonItem = [self backBarButtonItemWithTarget:self action:@selector(closeChildReport)];
-    } else {
-        [super setupLeftBarButtonItems];
-    }
-}
 
 - (void)configViewport
 {
@@ -195,37 +208,23 @@
     if ([self isContentOnTV]) {
         return;
     }
+}
 
-    CGFloat initialScaleViewport = 0.75;
-    if ([JMUtils isSupportVisualize]) {
-        BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-        if (isCompactWidth) {
-            initialScaleViewport = 0.25;
-        }
-    } else {
-        initialScaleViewport = 2;
-        if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
-            initialScaleViewport = 1;
-        }
-    }
-
-    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
+- (UIView *)resourceView
+{
+    return self.webEnvironment.webView;
 }
 
 - (void)setupSubviews
 {
-    self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
-
-    UIWebView *webView = [self.configurator webViewAsSecondary:self.isChildReport];
-    [self.view insertSubview:webView belowSubview:self.activityIndicator];
-    [self setupWebViewLayout];
+    self.webEnvironment = [self currentWebEnvironment];
+    self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report
+                                                            webEnvironment:self.webEnvironment];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 
-    [self hideReportView];
+    [self.view insertSubview:[self resourceView] belowSubview:self.emptyReportMessageLabel];
+    [self setupResourceViewLayout];
 }
-
 
 - (void)updateToobarAppearence
 {
@@ -273,9 +272,9 @@
         [strongSelf handleError:error];
     };
 
-    NSString *reportURI = self.resourceLookup.uri;
+    NSString *reportURI = self.resource.resourceLookup.uri;
 
-    [self startShowLoaderWithMessage:@"status.loading"];
+    [self startShowLoaderWithMessage:@"status_loading"];
     [self.restClient resourceLookupForURI:reportURI resourceType:kJS_WS_TYPE_REPORT_UNIT
                                modelClass:[JSResourceReportUnit class]
                           completionBlock:^(JSOperationResult *result) {
@@ -287,52 +286,69 @@
                                   if (reportUnit) {
                                       // get report input controls
                                       __weak typeof(self) weakSelf = strongSelf;
-                                      [strongSelf.restClient inputControlsForReport:reportURI ids:nil selectedValues:nil completionBlock:^(JSOperationResult * _Nullable result) {
-                                          __strong typeof(self) strongSelf = weakSelf;
-                                          if (result.error) {
-                                              errorHandlingBlock(result.error, @"Report Input Controls Loading Error");
-                                          } else {
-                                              NSMutableArray *visibleInputControls = [NSMutableArray array];
-                                              for (JSInputControlDescriptor *inputControl in result.objects) {
-                                                  if (inputControl.visible.boolValue) {
-                                                      [visibleInputControls addObject:inputControl];
-                                                  }
-                                              }
+                                      [strongSelf.restClient inputControlsForReport:reportURI
+                                                                     selectedValues:strongSelf.initialReportParameters
+                                                                    completionBlock:^(JSOperationResult * _Nullable result) {
+                                                                        __strong typeof(self) strongSelf = weakSelf;
+                                                                        if (result.error) {
+                                                                            errorHandlingBlock(result.error, @"Report Input Controls Loading Error");
+                                                                        } else {
+                                                                            NSMutableArray *visibleInputControls = [NSMutableArray array];
+                                                                            for (JSInputControlDescriptor *inputControl in result.objects) {
+                                                                                if (inputControl.visible.boolValue) {
+                                                                                    [visibleInputControls addObject:inputControl];
+                                                                                }
+                                                                            }
+                                                                            
+                                                                            if ([visibleInputControls count]) {
+                                                                                // setup report options
+                                                                                if (self.isChildReport && self.initialReportParameters) {
+                                                                                    // generate 'none' report option
+                                                                                    [strongSelf.report generateReportOptionsWithInputControls:visibleInputControls];
 
-                                              if ([visibleInputControls count]) {
-                                                  [strongSelf.report generateReportOptionsWithInputControls:visibleInputControls];
+                                                                                    // make report option with visible input controls as active report option
+                                                                                    JSReportOption *reportOptionWithInitParams = [JSReportOption defaultReportOption];
+                                                                                    reportOptionWithInitParams.inputControls = [[NSArray alloc] initWithArray:visibleInputControls copyItems:YES];
+                                                                                    strongSelf.report.activeReportOption = reportOptionWithInitParams;
+                                                                                } else {
+                                                                                    // generate 'none' report option
+                                                                                    [strongSelf.report generateReportOptionsWithInputControls:visibleInputControls];
+                                                                                }
 
-                                                  // get report options
-                                                  __weak typeof(self) weakSelf = strongSelf;
-                                                  [strongSelf.restClient reportOptionsForReportURI:strongSelf.report.reportURI completion:^(JSOperationResult * _Nullable result) {
-                                                      __strong typeof(self) strongSelf = weakSelf;
-                                                      if (result.error && result.error.code == JSSessionExpiredErrorCode) {
-                                                          errorHandlingBlock(result.error, @"Report Options Loading Error");
-                                                      } else {
-                                                          [strongSelf stopShowLoader];
-                                                          strongSelf.isReportAlreadyConfigured = YES;
-                                                          NSMutableArray *reportOptions = [NSMutableArray array];
-                                                          for (id reportOption in result.objects) {
-                                                              if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
-                                                                  [reportOptions addObject:reportOption];
-                                                              }
-                                                          }
-
-                                                          [strongSelf.report addReportOptions:reportOptions];
-
-                                                          if ([reportOptions count] || (reportUnit.alwaysPromptControls && [visibleInputControls count])) {
-                                                              [strongSelf showInputControlsViewControllerWithBackButton:YES];
-                                                          } else  {
-                                                              [strongSelf startLoadReportWithPage:1];
-                                                          }
-                                                      }
-                                                  }];
-                                              } else {
-                                                  [strongSelf stopShowLoader];
-                                                  [strongSelf startLoadReportWithPage:1];
-                                              }
-                                          }
-                                      }];
+                                                                                // get report options
+                                                                                __weak typeof(self) weakSelf = strongSelf;
+                                                                                [strongSelf.restClient reportOptionsForReportURI:strongSelf.report.reportURI completion:^(JSOperationResult * _Nullable result) {
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    if (result.error && result.error.code == JSSessionExpiredErrorCode) {
+                                                                                        errorHandlingBlock(result.error, @"Report Options Loading Error");
+                                                                                    } else {
+                                                                                        [strongSelf stopShowLoader];
+                                                                                        strongSelf.isReportAlreadyConfigured = YES;
+                                                                                        NSMutableArray *reportOptions = [NSMutableArray array];
+                                                                                        for (id reportOption in result.objects) {
+                                                                                            if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
+                                                                                                [reportOptions addObject:reportOption];
+                                                                                            }
+                                                                                        }
+                                                                                        
+                                                                                        [strongSelf.report addReportOptions:reportOptions];
+                                                                                        
+                                                                                        if ([reportOptions count] || (reportUnit.alwaysPromptControls && [visibleInputControls count])) {
+                                                                                            [strongSelf showInputControlsViewControllerWithBackButton:YES];
+                                                                                        } else  {
+                                                                                            if (strongSelf.initialReportParameters) {
+                                                                                                [strongSelf.report updateReportParameters:strongSelf.initialReportParameters];
+                                                                                            }
+                                                                                            [strongSelf startLoadReportWithPage:1];
+                                                                                        }
+                                                                                    }
+                                                                                }];
+                                                                            } else {
+                                                                                [strongSelf stopShowLoader];
+                                                                                [strongSelf startLoadReportWithPage:1];
+                                                                            }
+                                                                        }
+                                                                    }];
                                   } else {
                                       NSDictionary *userInfo = @{NSURLErrorFailingURLErrorKey : @"Report Unit Loading Error"};
                                       NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:JSClientErrorCode userInfo:userInfo];
@@ -375,7 +391,7 @@
 - (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
 {
     JSReportSaver *reportSaver = [[JSReportSaver alloc] initWithReport:self.report restClient:self.restClient];
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
+    [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:^{
         [reportSaver cancelSavingReport];
     }];
     
@@ -415,9 +431,29 @@
 }
 
 #pragma mark - Custom accessors
-- (UIWebView *)webView
+- (JMWebEnvironment *)currentWebEnvironment
 {
-    return self.configurator.webView;
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:[self currentWebEnvironmentIdentifier]];
+    return webEnvironment;
+}
+
+- (NSString *)currentWebEnvironmentIdentifier
+{
+    NSString *webEnvironmentIdentifier;
+    if (self.isChildReport) {
+        if ([JMUtils isSupportVisualize]) {
+            webEnvironmentIdentifier = kJMReportViewerSecondaryWebEnvironmentIdentifierViz;
+        } else {
+            webEnvironmentIdentifier = kJMReportViewerSecondaryWebEnvironmentIdentifierREST;
+        }
+    } else {
+        if ([JMUtils isSupportVisualize]) {
+            webEnvironmentIdentifier = kJMReportViewerPrimaryWebEnvironmentIdentifierViz;
+        } else {
+            webEnvironmentIdentifier = kJMReportViewerPrimaryWebEnvironmentIdentifierREST;
+        }
+    }
+    return webEnvironmentIdentifier;
 }
 
 - (id<JMReportLoaderProtocol>)reportLoader
@@ -428,7 +464,7 @@
 - (JMReport *)report
 {
     if (!_report) {
-        _report = [self.resourceLookup reportModel];
+        _report = [self.resource modelOfResource];
     }
     return _report;
 }
@@ -450,7 +486,7 @@
 - (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage
 {
     toolbar.enable = NO;
-    [[self webView].scrollView setZoomScale:0.1 animated:YES];
+    [self.webEnvironment resetZoom];
 
     __weak typeof(self)weakSelf = self;
     void(^changePageCompletion)(BOOL, NSError*) = ^(BOOL success, NSError *error) {
@@ -459,32 +495,12 @@
         if (success) {
             toolbar.enable = YES;
             [strongSelf.report updateCurrentPage:toPage];
-            if (![JMUtils isSupportVisualize]) {
-                // fix an issue in webview after zooming and changing page (black areas)
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    if ([strongSelf isContentOnTV]) {
-                        if ([strongSelf.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-                            [strongSelf.reportLoader updateViewportScaleFactorWithValue:3];
-                        }
-                    } else {
-                        JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
-                        runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
-                        [((JMJavascriptNativeBridge *)[strongSelf reportLoader].bridge) sendRequest:runRequest];
-                    }
-                });
-            }
-
-            if ([strongSelf isContentOnTV]) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [strongSelf.controlsViewController updateInterface];
-                });
-            }
         } else {
             [strongSelf handleError:error];
         }
     };
     if ([self.reportLoader respondsToSelector:@selector(shouldDisplayLoadingView)] && [self.reportLoader shouldDisplayLoadingView]) {
-        [self startShowLoaderWithMessage:@"status.loading"];
+        [self startShowLoaderWithMessage:@"status_loading"];
     }
     [self.reportLoader fetchPageNumber:toPage withCompletion:changePageCompletion];
 }
@@ -498,7 +514,7 @@
     self.toolbar.enable = NO;
 
     __weak typeof(self)weakSelf = self;
-    [self startShowLoaderWithMessage:@"status.loading"];
+    [self startShowLoaderWithMessage:@"status_loading"];
     [self.reportLoader runReportWithPage:page completion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf stopShowLoader];
@@ -506,20 +522,14 @@
 
         if (success) {
             // Analytics
-            NSString *label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
-            [JMUtils logEventWithInfo:@{
-                                kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
-                                kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
-                                kJMAnalyticsLabelKey         : label
-                        }];
+            NSString *label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceLabelReportVisualize : kJMAnalyticsResourceLabelReportREST;
+            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                    kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
+                    kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
+                    kJMAnalyticsLabelKey    : label
+            }];
 
             [strongSelf showReportView];
-
-            if ([strongSelf isContentOnTV]) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [strongSelf.controlsViewController updateInterface];
-                });
-            }
         } else {
             [strongSelf handleError:error];
         }
@@ -528,34 +538,40 @@
 
 - (void)updateReportWithNewActiveReportOption:(JSReportOption *)newActiveOption
 {
-    NSString *currentReportURI = self.report.reportURI;
+    NSString *currentReportURI = self.report.activeReportOption.uri;
+    NSString *reportOptionURI = newActiveOption.uri;
+
+    BOOL isURIChanged = YES;
+    if (currentReportURI == nil && reportOptionURI == nil) {
+        isURIChanged = NO;
+    } else if (currentReportURI != nil && reportOptionURI == nil) {
+        isURIChanged = YES;
+    } else if (currentReportURI == nil && reportOptionURI != nil) {
+        isURIChanged = YES;
+    } else if ([currentReportURI isEqualToString:reportOptionURI]) {
+        isURIChanged = NO;
+    }
+
     self.report.activeReportOption = newActiveOption;
-    
-    BOOL uriDidChanged = (!currentReportURI && newActiveOption.uri) || ![currentReportURI isEqualToString:newActiveOption.uri];
-    
-    if (self.report.isReportAlreadyLoaded && !uriDidChanged) {
+    if (self.report.isReportAlreadyLoaded && !isURIChanged) {
         [self hideEmptyReportMessage];
         [self hideToolbar];
         [self hideReportView];
-        
+
         __weak typeof(self)weakSelf = self;
-        [self startShowLoaderWithMessage:@"status.loading"];
+        [self startShowLoaderWithMessage:@"status_loading"];
         [self.reportLoader applyReportParametersWithCompletion:^(BOOL success, NSError *error) {
             __strong typeof(self)strongSelf = weakSelf;
             [strongSelf stopShowLoader];
-            
+
             if (success) {
                 [strongSelf showReportView];
-                if ([strongSelf isContentOnTV]) {
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [strongSelf.controlsViewController updateInterface];
-                    });
-                }
             } else {
                 [strongSelf handleError:error];
             }
         }];
     } else {
+        self.report.isReportAlreadyLoaded = NO;
         [self runReportWithPage:1];
     }
 }
@@ -575,7 +591,7 @@
     [self hideReportView];
     
     __weak typeof(self)weakSelf = self;
-    [self startShowLoaderWithMessage:@"status.loading"];
+    [self startShowLoaderWithMessage:@"status_loading"];
     
     [self.reportLoader refreshReportWithCompletion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
@@ -593,9 +609,8 @@
 {
     switch (error.code) {
         case JSReportLoaderErrorTypeAuthentification:
-            [self.restClient deleteCookies];
-            [self resetSubViews];
-            
+            [self cleanWebEnvironment];
+
             NSInteger reportCurrentPage = self.report.currentPage;
             [self.report restoreDefaultState];
             [self.report updateCurrentPage:reportCurrentPage];
@@ -603,13 +618,16 @@
         case JSSessionExpiredErrorCode:
             if (self.restClient.keepSession) {
                 __weak typeof(self)weakSelf = self;
-                [self startShowLoaderWithMessage:@"status.loading"];
-                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                [self startShowLoaderWithMessage:@"status_loading"];
+                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
                     __strong typeof(self)strongSelf = weakSelf;
+
+                    [strongSelf setupSubviews];
+
                     [strongSelf stopShowLoader];
-                    if (isSessionAuthorized) {
+                    if (!result.error) {
                         // TODO: Need add restoring for current page
-                        [strongSelf runReportWithPage:self.report.currentPage];
+                        [strongSelf runReportWithPage:strongSelf.report.currentPage];
                     } else {
                         [JMUtils showLoginViewAnimated:YES completion:^{
                             [strongSelf cancelResourceViewingAndExit:YES];
@@ -625,6 +643,12 @@
         case JSReportLoaderErrorTypeEmtpyReport:
             [self showEmptyReportMessage];
             break;
+        case JSInvalidCredentialsErrorCode: {
+            [JMUtils showLoginViewAnimated:YES completion:^{
+                [self cancelResourceViewingAndExit:YES];
+            }];
+            break;
+        }
         default: {
             __weak typeof(self) weakSelf = self;
             [JMUtils presentAlertControllerWithError:error completion:^{
@@ -637,10 +661,10 @@
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
-- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventForResource:(JMResource *)resource withParameters:(NSArray *)reportParameters
 {
-    JMReportViewerVC *reportViewController = (JMReportViewerVC *) [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-    reportViewController.resourceLookup = resourceLookup;
+    JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+    reportViewController.resource = resource;
     reportViewController.initialReportParameters = reportParameters;
     reportViewController.isChildReport = YES;
     [self.navigationController pushViewController:reportViewController animated:YES];
@@ -656,23 +680,14 @@
     [[UIApplication sharedApplication] openURL:urlReference];
 }
 
-- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName
-{
-    // sample
-    // [self.reportLoader exportReportWithFormat:@"pdf"];
-    // html format currently vis.js doesn't support
-    // here we can receive link on file.
-    if (self.exportCompletion) {
-        self.exportCompletion(resourcePath);
-        self.exportCompletion = nil;
-    }
-}
-
-#pragma mark - UIWebView helpers
+#pragma mark - WebView helpers
 - (void)resetSubViews
 {
     [self.reportLoader destroy];
-    [[JMWebViewManager sharedInstance] resetZoom];
+    [self.webEnvironment resetZoom];
+    [self.webEnvironment.webView removeFromSuperview];
+
+    self.webEnvironment = nil;
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -698,6 +713,9 @@
         case JMMenuActionsViewAction_ShowExternalDisplay: {
             [self showExternalWindowWithCompletion:^(BOOL success) {
                 if (success) {
+                    if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {
+                        [self.reportLoader fitReportViewToScreen];
+                    }
                     [self addControlsForExternalWindow];
                 } else {
                     // TODO: add handling this situation
@@ -708,9 +726,6 @@
         }
         case JMMenuActionsViewAction_HideExternalDisplay: {
             [self switchFromTV];
-            [self hideExternalWindowWithCompletion:^(void) {
-                [self configViewport];
-            }];
             break;
         }
         default:
@@ -722,7 +737,7 @@
 - (void)reportDidSavedSuccessfully
 {
     [ALToastView toastInView:self.navigationController.view
-                    withText:JMCustomLocalizedString(@"report.viewer.save.addedToQueue", nil)];
+                    withText:JMCustomLocalizedString(@"report_viewer_save_addedToQueue", nil)];
 }
 
 #pragma mark - Input Controls
@@ -734,7 +749,20 @@
     __weak typeof(self) weakSelf = self;
     inputControlsViewController.completionBlock = ^(JSReportOption *reportOption) {
         __strong typeof(self) strongSelf = weakSelf;
-        [strongSelf updateReportWithNewActiveReportOption:reportOption];
+        if (reportOption) {
+            [strongSelf updateReportWithNewActiveReportOption:reportOption];
+            [strongSelf.navigationController popViewControllerAnimated:YES];
+        } else {
+            if (!strongSelf.report.isReportAlreadyLoaded) {
+                NSMutableArray *viewControllers = [strongSelf.navigationController.viewControllers mutableCopy];
+                while (![[viewControllers lastObject] isKindOfClass:NSClassFromString(@"JMBaseCollectionViewController")]) {
+                    [viewControllers removeLastObject];
+                }
+                [strongSelf.navigationController popToViewController:[viewControllers lastObject] animated:YES];
+            } else {
+                [strongSelf.navigationController popViewControllerAnimated:YES];
+            }
+        }
     };
 
     if (isShowBackButton) {
@@ -757,16 +785,16 @@
 - (void)startShowLoaderWithMessage:(NSString *)message
 {
     __weak typeof(self) weakSelf = self;
-    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
+    [self startShowLoaderWithMessage:@"status_loading" cancelBlock:^(void) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf.reportLoader cancel];
         [strongSelf cancelResourceViewingAndExit:YES];
     }];
 }
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)availableAction
 {
-    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule;
+    JMMenuActionsViewAction availableAction = [super availableAction] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule;
     if (self.report.isReportWithInputControls) {
         availableAction |= JMMenuActionsViewAction_Edit;
     }
@@ -779,9 +807,9 @@
     return availableAction;
 }
 
-- (JMMenuActionsViewAction)disabledActionForResource:(JSResourceLookup *)resource
+- (JMMenuActionsViewAction)disabledAction
 {
-    JMMenuActionsViewAction disabledAction = [super disabledActionForResource:resource];
+    JMMenuActionsViewAction disabledAction = [super disabledAction];
     if (![self isReportReady] || self.report.isReportEmpty) {
         disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ShowExternalDisplay;
     }
@@ -797,6 +825,8 @@
 - (void)hideEmptyReportMessage
 {
     self.emptyReportMessageLabel.hidden = YES;
+    [self.navigationController setToolbarHidden:!self.report.isMultiPageReport
+                                       animated:YES];
 }
 
 - (BOOL)isReportReady
@@ -817,12 +847,12 @@
 
 - (void)hideReportView
 {
-    self.webView.hidden = YES;
+    [self resourceView].hidden = YES;
 }
 
 - (void)showReportView
 {
-    self.webView.hidden = NO;
+    [self resourceView].hidden = NO;
 }
 
 - (void)layoutEmptyReportLabelInView:(UIView *)view {
@@ -846,20 +876,18 @@
     [view addConstraint:constraint];
 }
 
+- (void)cleanWebEnvironment
+{
+    [self.webEnvironment.webView removeFromSuperview];
+    self.webEnvironment = nil;
+    [[JMWebViewManager sharedInstance] reset];
+}
+
 #pragma mark - Work with external screen
 - (UIView *)viewToShowOnExternalWindow
 {
-    CGFloat initialScaleViewport = 0.75;
-    if (![JMUtils isSupportVisualize]) {
-        initialScaleViewport = 3;
-    }
-
-    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
-
     UIView *view = [UIView new];
-    UIView *reportView = self.webView;
+    UIView *reportView = [self resourceView];
 
     [view addSubview:reportView];
 
@@ -883,8 +911,7 @@
 
 - (void)addControlsForExternalWindow
 {
-    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentWebView:self.webView];
-    self.controlsViewController.delegate = self;
+    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentView:[self resourceView]];
 
     CGRect controlViewFrame = self.view.frame;
     controlViewFrame.origin.y = 0;
@@ -897,30 +924,23 @@
 {
     [self.controlsViewController.view removeFromSuperview];
 
-    [self.view addSubview:self.webView];
-    [self setupWebViewLayout];
+    [super setupSubviews];
 
     [self.view addSubview:self.emptyReportMessageLabel];
     [self layoutEmptyReportLabelInView:self.view];
-}
 
-#pragma mark - JMExternalWindowControlViewControllerDelegate
-- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController
-{
-    [self switchFromTV];
-    [self hideExternalWindowWithCompletion:^(void) {
-        [self configViewport];
+    [self hideExternalWindowWithCompletion:^{
+        if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {
+            [self.reportLoader fitReportViewToScreen];
+        }
     }];
 }
 
 
 #pragma mark - Scheduling
 - (void)scheduleReport {
-    JMNewScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
-    newJobVC.resourceLookup = self.resourceLookup;
-    newJobVC.exitBlock = ^() {
-
-    };
+    JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+    [newJobVC createNewScheduleMetadataWithResourceLookup:self.resource];
     [self.navigationController pushViewController:newJobVC animated:YES];
 }
 

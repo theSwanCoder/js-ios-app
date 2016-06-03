@@ -28,6 +28,7 @@
 
 #import "JMLibraryCollectionViewController.h"
 #import "SWRevealViewController.h"
+#import "JMLibraryListLoader.h"
 
 @interface JMLibraryCollectionViewController()
 @end
@@ -35,11 +36,16 @@
 @implementation JMLibraryCollectionViewController
 
 #pragma mark -LifeCycle
+-(void)awakeFromNib {
+    [super awakeFromNib];
+    self.filterByIndex = JMLibraryListLoaderFilterIndexByAll;
+    self.sortByIndex = JMLibraryListLoaderSortIndexByName;
+}
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"menuitem.library.label", nil);
+    self.title = JMCustomLocalizedString(@"menuitem_library_label", nil);
 }
 
 #pragma mark - Overloaded methods
@@ -53,6 +59,16 @@
 - (Class)resourceLoaderClass
 {
     return NSClassFromString(@"JMLibraryListLoader");
+}
+
+- (NSInteger)defaultFilterByIndex
+{
+    return self.filterByIndex;
+}
+
+- (NSInteger)defaultSortByIndex
+{
+    return self.sortByIndex;
 }
 
 @end

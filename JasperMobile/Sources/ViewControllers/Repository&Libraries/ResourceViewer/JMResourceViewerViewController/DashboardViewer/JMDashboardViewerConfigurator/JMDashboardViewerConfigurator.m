@@ -29,16 +29,15 @@
 #import "JMDashboardViewerConfigurator.h"
 #import "JMDashboardLoader.h"
 #import "JMBaseDashboardLoader.h"
-#import "JMJavascriptNativeBridge.h"
 #import "JMVisDashboardLoader.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMWebViewManager.h"
 #import "JMVisualizeManager.h"
 #import "JMDashboard.h"
+#import "JMWebEnvironment.h"
+#import "JMResource.h"
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, weak) JMDashboard *dashboard;
-@property (nonatomic, strong) id<JMDashboardLoader> dashboardLoader;
 @end
 
 @implementation JMDashboardViewerConfigurator
@@ -49,52 +48,29 @@
 }
 
 #pragma mark - Initializers
-- (instancetype)initWithDashboard:(JMDashboard *)dashboard
+- (instancetype)initWithDashboard:(JMDashboard *)dashboard webEnvironment:(JMWebEnvironment *)webEnvironment
 {
     self = [super init];
     if (self) {
         _dashboard = dashboard;
+        if ([JMUtils isSupportVisualize] && self.dashboard.resource.type == JMResourceTypeDashboard) {
+            _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard
+                                                          webEnvironment:webEnvironment];
+            ((JMVisDashboardLoader *)_dashboardLoader).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
+        } else {
+            _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard
+                                                           webEnvironment:webEnvironment];
+        }
     }
     return self;
 }
 
-+ (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard
++ (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard webEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    return [[self alloc] initWithDashboard:dashboard];
+    return [[self alloc] initWithDashboard:dashboard webEnvironment:webEnvironment];
 }
 
 #pragma mark - Public API
-- (id)webViewAsSecondary:(BOOL)asSecondary
-{
-    if (!_webView) {
-        _webView = [[JMWebViewManager sharedInstance] webViewAsSecondary:asSecondary];
-    }
-    return _webView;
-}
-
-- (id <JMDashboardLoader>)dashboardLoader
-{
-    if (!_dashboardLoader) {
-        if ([JMUtils isServerAmber2OrHigher]) {
-            if ([self.dashboard.resourceLookup isNewDashboard]) {
-                _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard];
-                JMVisualizeManager *visualizeManager = [JMVisualizeManager new];
-                visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
-                ((JMVisDashboardLoader *)_dashboardLoader).visualizeManager = visualizeManager;
-            } else {
-                _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard];
-            }
-        } else {
-            _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard];
-        }
-        JMJavascriptNativeBridge *bridge = [JMJavascriptNativeBridge new];
-        _dashboardLoader.bridge = bridge;
-        bridge.webView = self.webView;
-    }
-    return _dashboardLoader;
-}
-
-
 - (void)updateReportLoaderDelegateWithObject:(id <JMDashboardLoaderDelegate>)delegate
 {
     [self dashboardLoader].delegate = delegate;

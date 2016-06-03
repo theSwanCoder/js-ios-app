@@ -45,6 +45,7 @@
 - (id)initWithServerProfile:(JMServerProfile *)serverProfile;
 
 - (BOOL)isValidData;
+- (NSString *)urlSchemeForServerProfile;
 - (void) saveChanges;
 - (void) discardChanges;
 

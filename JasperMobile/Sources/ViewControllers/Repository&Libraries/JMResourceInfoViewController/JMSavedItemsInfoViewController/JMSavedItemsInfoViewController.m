@@ -27,14 +27,16 @@
 //
 
 #import "JMSavedItemsInfoViewController.h"
-#import "JSResourceLookup+Helpers.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMSavedResourceViewerViewController.h"
 #import "JMFavorites.h"
 #import "JMFavorites+Helpers.h"
+#import "JMResource.h"
 
 @interface JMSavedItemsInfoViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
+@property (nonatomic) UIDocumentInteractionController *documentController;
+
 @end
 
 @implementation JMSavedItemsInfoViewController
@@ -53,7 +55,7 @@
 - (JMSavedResources *)savedReports
 {
     if (!_savedReports) {
-        _savedReports = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+        _savedReports = [JMSavedResources savedReportsFromResource:self.resource];
     }
     return _savedReports;
 }
@@ -61,7 +63,7 @@
 #pragma mark - Overloaded methods
 - (void)resetResourceProperties
 {
-    self.resourceLookup = [self.savedReports wrapperFromSavedReports];
+    self.resource = [self.savedReports wrapperFromSavedReports];
     [super resetResourceProperties];
 }
 
@@ -77,7 +79,7 @@
 
 - (JMMenuActionsViewAction)availableAction
 {
-    return ([super availableAction] | JMMenuActionsViewAction_Run | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete);
+    return ([super availableAction] | JMMenuActionsViewAction_Run | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn);
 }
 
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
@@ -87,19 +89,19 @@
         [self runReport];
     }else if (action == JMMenuActionsViewAction_Rename) {
         __weak typeof(self) weakSelf = self;
-        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"savedreport.viewer.modify.title"
+        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"savedreport_viewer_modify_title"
                                                                                                       message:nil
                                                                                 textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
                                                                                     __strong typeof (self) strongSelf = weakSelf;
-                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
-                                                                                    textField.text = [strongSelf.resourceLookup.label copy];
+                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport_viewer_modify_reportname", nil);
+                                                                                    textField.text = [strongSelf.resource.resourceLookup.label copy];
                                                                                 } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                     NSString *errorMessage = nil;
                                                                                     __strong typeof (self) strongSelf = weakSelf;
                                                                                     if (strongSelf) {
                                                                                         [JMUtils validateReportName:text errorMessage:&errorMessage];
                                                                                         if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
-                                                                                            errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
+                                                                                            errorMessage = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_notunique", nil);
                                                                                         }
                                                                                     }
                                                                                     return errorMessage;
@@ -111,25 +113,41 @@
                                                                                 }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if(action == JMMenuActionsViewAction_Delete) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
-                                                                                          message:@"savedreport.viewer.delete.confirmation.message"
-                                                                                cancelButtonTitle:@"dialog.button.cancel"
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
+                                                                                          message:@"savedreport_viewer_delete_confirmation_message"
+                                                                                cancelButtonTitle:@"dialog_button_cancel"
                                                                           cancelCompletionHandler:nil];
         
         __weak typeof(self) weakSelf = self;
-        [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
             __strong typeof(self) strongSelf = weakSelf;
             [strongSelf.savedReports removeReport];
             [strongSelf.navigationController popViewControllerAnimated:YES];
         }];
         [self presentViewController:alertController animated:YES completion:nil];
+    } else if (action == JMMenuActionsViewAction_OpenIn){
+        JMSavedResources *savedResources = [JMSavedResources savedReportsFromResource:self.resource];
+        NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:savedResources];
+        
+        NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+        
+        self.documentController = [self setupDocumentControllerWithURL:url
+                                                         usingDelegate:nil];
+        
+        BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+        if (!canOpen) {
+            NSString *errorMessage = JMCustomLocalizedString(@"error_openIn_message", nil);
+            NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            [JMUtils presentAlertControllerWithError:error completion:nil];
+        }
     }
+
 }
 
 - (void)runReport
 {
-    JMSavedResourceViewerViewController *nextVC = (JMSavedResourceViewerViewController *) [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
-    nextVC.resourceLookup = self.resourceLookup;
+    JMSavedResourceViewerViewController *nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resource resourceViewerVCIdentifier]];
+    [nextVC setResource:self.resource];
     nextVC.delegate = self;
     
     if (nextVC) {
@@ -145,16 +163,24 @@
 }
 
 #pragma mark - JMBaseResourceViewerVCDelegate
-- (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JSResourceLookup *)resourceLookup
+- (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JMResource *)resourceLookup
 {
     NSArray *viewControllers = self.navigationController.viewControllers;
     UIViewController *previousViewController = viewControllers[[viewControllers indexOfObject:self] - 1];
     [self.navigationController popToViewController:previousViewController animated:YES];
 }
 
-- (BOOL)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer shouldCloseViewerAfterDeletingResource:(JSResourceLookup *)resourceLookup
+- (BOOL)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer shouldCloseViewerAfterDeletingResource:(JMResource *)resourceLookup
 {
     return NO;
+}
+
+#pragma mark - Helpers
+- (UIDocumentInteractionController *) setupDocumentControllerWithURL: (NSURL *) fileURL
+                                                       usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
+    UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
+    interactionController.delegate = interactionDelegate;
+    return interactionController;
 }
 
 @end

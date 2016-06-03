@@ -1,0 +1,112 @@
+
+[[Settings view]]
+	[settings_title]
+		en = Settings
+		de = Einstellungen
+		fr = Paramètres
+		es = Configuración
+		it = Impostazioni
+		pt = Configurações
+		ja = 設定
+		zh = 设置
+		tags = ios
+	[settings_item_connection_timeout]
+		en = Connection timeout (in seconds)
+		de = Verbindungstimeout (in Sekunden)
+		fr = Expiration de la connexion (en secondes)
+		es = Tiempo de espera de la conexión (en segundos)
+		it = Timeout della connessione (in secondi)
+		pt = Tempo limite da conexão (em segundos)
+		ja = 接続タイムアウト (秒)
+		zh = 连接超时(秒)
+		tags = ios,unused
+	[settings_item_server]
+		en = Server
+		de = Server
+		fr = Serveur
+		es = Servidor
+		it = Server
+		pt = Servidor
+		ja = サーバー
+		zh = 服务器
+		tags = ios
+	[settings_item_intro]
+		en = Show intro
+		de = Einführung anzeigen
+		fr = Afficher l’intro
+		es = Mostrar introducción
+		it = Mostra intro
+		pt = Mostrar a introdução
+		ja = イントロの表示
+		zh = 显示简介
+		tags = ios,unused
+	[settings_crashtracking_title]
+		en = Send crash reports
+		de = Absturzberichte senden
+		fr = Envoyer les rapports de panne
+		es = Enviar informes de bloqueo
+		it = Invia report di crash
+		pt = Enviar relatórios de falha
+		ja = クラッシュ レポートの送信
+		zh = 发送崩溃报表
+		tags = ios,unused
+	[settings_crashtracking_alert_title]
+		en = Note
+		de = Hinweis
+		fr = Remarque
+		es = Nota
+		it = Nota
+		pt = Obs.
+		ja = 注意
+		zh = 注
+		tags = ios,unused
+	[settings_crashtracking_alert_message]
+		en = Restart the app after changing this setting.
+		de = Starten Sie die App nach Änderung dieser Einstellung neu.
+		fr = Redémarrez l’application après avoir modifié ce paramètre.
+		es = Reinicie la aplicación tras modificar este parámetro.
+		it = Dopo aver modificato l'impostazione, riavviare l'app.
+		pt = Reiniciar o aplicativo após alterar essas configurações.
+		ja = この設定を変更したら、アプリを再起動してください。
+		zh = 在更改此设置后重新启动应用程序。
+		tags = ios,unused
+	[settings_privacy_policy_title]
+		en = Privacy Policy
+		de = Datenschutzrichtlinie
+		fr = Charte de confidentialité"
+		es = Política de privacidad
+		it = Informativa sulla privacy
+		pt = Política de privacidade
+		ja = プライバシー ポリシー
+		zh = 隐私政策
+		tags = ios
+	[settings_feedback]
+		en = Feedback by email
+		de = Feedback per E-Mail
+		fr = Commentaires par e-mail
+		es = Comentarios por correo electrónico
+		it = Commento tramite e-mail
+		pt = Enviar feedback por e-mail
+		ja = メールによるフィードバック
+		zh = 通过电子邮件发送反馈
+		tags = ios
+	[settings_feedback_errorShowClient]
+		en = An email address is required.
+		de = Es muss eine E-Mail-Adresse angegeben werden.
+		fr = Une adresse e-mail est requise.
+		es = Se debe especificar una dirección de correo electrónico.
+		it = Fornire un indirizzo e-mail.
+		pt = Um endereço de e-mail é obrigatório
+		ja = メール アドレスは必須です。
+		zh = 电子邮件地址为必填字段。
+		tags = ios
+	[settings_save_message]
+		en = Saving Settings...
+		de = Einstellungen speichern...
+		fr = Enregistrement des paramètres...
+		es = Guardando configuración...
+		it = Salvataggio impostazioni in corso...
+		pt = Salvando configurações...
+		ja = 設定を保存しています...
+		zh = 正在保存设置...
+		tags = ios,unused

@@ -27,13 +27,16 @@
 //
 
 #import "JMSessionManager.h"
-#import "JMServerProfile+Helpers.h"
 #import "JMCancelRequestPopup.h"
 #import "JMWebViewManager.h"
 #import "JMExportManager.h"
 
 #import "JMMenuViewController.h"
 #import "SWRevealViewController.h"
+#import "JMAnalyticsManager.h"
+#import "AFAutoPurgingImageCache.h"
+#import "AFImageDownloader.h"
+#import "UIKit+AFNetworking.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -51,31 +54,40 @@ static JMSessionManager *_sharedManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedManager = [JMSessionManager new];
+        [[NSNotificationCenter defaultCenter] addObserver:_sharedManager selector:@selector(saveActiveSessionIfNeeded:) name:kJSSessionDidAuthorized object:_sharedManager.restClient];
     });
     
     return _sharedManager;
 }
 
-- (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(BOOL success))completionBlock
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(NSError *error))completionBlock
 {
     self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile keepLogged:keepLogged];
-    [self setDefaults];
     [self.restClient deleteCookies];
 
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-            if (completionBlock) {
-                BOOL isServerInfoExists = self.restClient.serverInfo != nil;
-                if (isServerInfoExists && isSessionAuthorized) {
-                    [self saveActiveSessionIfNeeded];
-                    completionBlock(YES);
-                } else {
-                    completionBlock(NO);
-                }
-            }
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult * _Nullable result) {
+        if (completionBlock) {
+            completionBlock(result.error);
+        }
     }];
 }
 
-- (void) saveActiveSessionIfNeeded {
+- (void) updateSessionServerProfileWith:(JMServerProfile *)changedServerProfile {
+    // update current active server profile
+    self.restClient.serverProfile.alias = changedServerProfile.alias;
+    self.restClient.keepSession = [changedServerProfile.keepSession boolValue];
+    [self saveActiveSessionIfNeeded:nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:JMServerProfileDidChangeNotification
+                                                        object:changedServerProfile];
+}
+
+- (void) saveActiveSessionIfNeeded:(id)notification {
     if (self.restClient && self.restClient.keepSession) {
         NSData *archivedSession = [NSKeyedArchiver archivedDataWithRootObject:self.restClient];
         [[NSUserDefaults standardUserDefaults] setObject:archivedSession forKey:kJMSavedSessionKey];
@@ -86,7 +98,13 @@ static JMSessionManager *_sharedManager = nil;
 
 - (void) restoreLastSessionWithCompletion:(void(^)(BOOL isSessionRestored))completion
 {
-
+    if (self.restClient && [self.restClient.cookies count]) {
+        if (completion) {
+            completion(YES);
+        }
+        return;
+    }
+    
     if (!self.restClient) { // try restore restClient
         NSData *savedSession = [[NSUserDefaults standardUserDefaults] objectForKey:kJMSavedSessionKey];
         if (savedSession) {
@@ -98,20 +116,15 @@ static JMSessionManager *_sharedManager = nil;
     }
 
     if (self.restClient && self.restClient.keepSession) { // try restore session
-        [self.restClient resetReachabilityStatus];
 
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
 
             JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
-                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult * _Nullable result) {
                     dispatch_async(dispatch_get_main_queue(), ^(void){
-                        BOOL isRestoredSession = (isSessionAuthorized && self.restClient.serverInfo);
-                        if (isRestoredSession) {
-                            [self setDefaults];
-                        }
                         if (completion) {
-                            completion(isRestoredSession);
+                            completion(!result.error);
                         }
                     });
                 }];
@@ -130,18 +143,31 @@ static JMSessionManager *_sharedManager = nil;
     }
 }
 
-- (void) logout
+- (void) reset
 {
-    [[JMExportManager sharedInstance] cancelAll];
-    
     [self.restClient cancelAllRequests];
     [self.restClient deleteCookies];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMSavedSessionKey];
-    self.restClient = nil;
     
     // Clear webView
     [[JMWebViewManager sharedInstance] reset];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
+}
+
+- (void) logout
+{
+    [self reset];
+
+    [[JMExportManager sharedInstance] cancelAll];
+
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMSavedSessionKey];
+    self.restClient = nil;
+
+    // Clearing of Images Cache
+    AFImageDownloader *downloader = [UIImageView sharedImageDownloader];
+    id <AFImageRequestCache> imageCache = downloader.imageCache;
+    [imageCache removeAllImages];
+
+    [[JMAnalyticsManager sharedManager] sendAnalyticsEventAboutLogout];
 }
 
 - (NSPredicate *)predicateForCurrentServerProfile
@@ -160,11 +186,6 @@ static JMSessionManager *_sharedManager = nil;
     [predicates addObject:[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:nilServerProfilepredicates]];
     
     return [[NSCompoundPredicate alloc] initWithType:NSOrPredicateType subpredicates:predicates];
-}
-
-- (void)setDefaults
-{
-    self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
 }
 
 @end

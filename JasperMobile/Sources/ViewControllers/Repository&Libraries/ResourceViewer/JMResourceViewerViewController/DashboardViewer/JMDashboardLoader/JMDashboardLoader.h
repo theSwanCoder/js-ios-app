@@ -31,12 +31,12 @@
 @since 2.1
 */
 
-@protocol JMJavascriptNativeBridgeProtocol;
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;
-@class JMDashlet;
+@class JMWebEnvironment;
+@class JMResource;
 
-typedef void(^JMDashboardLoaderCompletion)(BOOL success, NSError *error);
+typedef void(^JMDashboardLoaderCompletion)(BOOL success, NSError * __nullable error);
 
 typedef NS_ENUM(NSInteger, JMDashboardLoaderErrorType) {
     JMDashboardLoaderErrorTypeUndefined,
@@ -55,31 +55,30 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 };
 
 @protocol JMDashboardLoader <NSObject>
-@property (nonatomic, strong) id<JMJavascriptNativeBridgeProtocol>bridge;
-@property (nonatomic, weak) id<JMDashboardLoaderDelegate> delegate;
+@property (nonatomic, weak, nullable) id<JMDashboardLoaderDelegate> delegate;
 
-- (instancetype)initWithDashboard:(JMDashboard *)dashboard;
-+ (instancetype)loaderWithDashboard:(JMDashboard *)dashboard;
+- (id<JMDashboardLoader> __nullable)initWithDashboard:(JMDashboard *__nonnull)dashboard webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
++ (id<JMDashboardLoader> __nullable)loaderWithDashboard:(JMDashboard *__nonnull)dashboard webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
 
 @optional
-- (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion;
-- (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion;
-- (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion) completion;
-- (void)applyParameters:(NSString *)parametersAsString;
-- (void)maximizeDashlet:(JMDashlet *)dashlet;
-- (void)minimizeDashlet:(JMDashlet *)dashlet;
+- (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)applyParameters:(NSDictionary *__nonnull)parameters;
+- (void)maximizeDashletForComponent:(JSDashboardComponent *__nullable)component;
+- (void)minimizeDashletForComponent:(JSDashboardComponent *__nullable)component;
 - (void)minimizeDashlet;
 - (void)cancel;
 - (void)destroy;
-- (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion) completion;
+- (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end
 
 
 @protocol JMDashboardLoaderDelegate <NSObject>
-- (void)dashboardLoader:(id<JMDashboardLoader>)loader didStartMaximazeDashletWithTitle:(NSString *)title;
-- (void)dashboardLoader:(id<JMDashboardLoader>)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
-         resourceLookup:(JSResourceLookup *)resourceLookup
-             parameters:(NSArray *)parameters;
-- (void)dashboardLoaderDidReceiveAuthRequest:(id<JMDashboardLoader>)loader;
+- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didStartMaximazeDashletWithTitle:(NSString * __nonnull)title;
+- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
+               resource:(JMResource * __nullable)resource
+             parameters:(NSArray * __nullable)parameters;
+- (void)dashboardLoaderDidReceiveAuthRequest:(id<JMDashboardLoader> __nonnull)loader;
 @end

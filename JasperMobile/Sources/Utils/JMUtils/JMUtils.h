@@ -87,6 +87,8 @@ void jmDebugLog(NSString * __nonnull format, ...);
  */
 + (BOOL)crashReportsSendingEnable;
 
++ (BOOL)isAutofillLoginDataEnable;
+
 /**
  Update sending of crash reports
  */
@@ -105,6 +107,14 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock __nonnull)loginCompletion;
 
++ (NSString *__nullable)lastUserName;
+
++ (void)saveLastUserName:(NSString *__nullable)userName;
+
++ (JMServerProfile *__nullable)lastServerProfile;
+
++ (void)saveLastServerProfile:(JMServerProfile *__nullable)serverProfile;
+
 + (void)askUserAgreementWithCompletion:(void (^ __nonnull)(BOOL isAgree))completion;
 
 + (BOOL)isUserAcceptAgreement;
@@ -114,13 +124,6 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (void)presentAlertControllerWithError:(NSError *__nonnull)error completion:(void (^__nullable)(void))completion;
 
 /**
- Returns YES if User want to use Visualize for watching reports and dashboards
-
- @return YES if User want to use Visualize for watching reports and dashboards
- */
-+ (BOOL)shouldUseVisualize;
-
-/**
  Returns YES if JRS instance has version equal 6.0 or upper
 
  @return YES if JRS instance has version equal 6.0 or upper
@@ -128,14 +131,12 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (BOOL)isServerVersionUpOrEqual6;
 
 /**
- Returns YES if JRS instance has version equal 6.1
+@return YES if JRS instance has version equal 6.0 or 6.0.1
+*/
++ (BOOL)isServerAmber;
 
- @return YES if JRS instance has version equal 6.1
- */
 
-+ (BOOL)isServerAmber2;
-
-+ (BOOL)isServerAmber2OrHigher;
++ (BOOL)isSupportNewRESTFlow;
 
 /**
  Returns YES if visualize is supported on current JRS instance
@@ -143,6 +144,8 @@ void jmDebugLog(NSString * __nonnull format, ...);
  @return YES if visualize is supported on current JRS instance
  */
 + (BOOL)isSupportVisualize;
+
++ (BOOL)isSupportSearchInSchedules;
 
 /**
  Returns YES if JRS instance has Pro Edition
@@ -164,8 +167,10 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (UIViewController *__nonnull)launchScreenViewController;
 
 + (BOOL)isDemoAccount;
-+ (void)logEventWithInfo:(NSDictionary *__nonnull)eventInfo;
-+ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
+
++ (JMServerProfile *__nullable)activeServerProfile;
+
++ (float)minSupportedServerVersion;
 
 + (BOOL)isCompactWidth;
 

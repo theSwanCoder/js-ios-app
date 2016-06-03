@@ -31,6 +31,7 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMFavorites+Helpers.h"
+#import "JMResource.h"
 
 // Old constants used in previous versions of application
 static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated.versions";
@@ -137,11 +138,15 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
             NSString *reportExtension = [report substringFromIndex:reportExtensionRange.location];
             NSString *reportName = [report stringByReplacingOccurrencesOfString:reportExtension withString:@""];
             
-            JSResourceLookup *resource = [JSResourceLookup new];
-            resource.resourceType = kJS_WS_TYPE_REPORT_UNIT;
-            resource.version = @(0);
+            JSResourceLookup *resourceLookup = [JSResourceLookup new];
+            resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
+            resourceLookup.version = @(0);
+            JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
             NSURL *reportSourcesURL = [NSURL fileURLWithPath:[reportsDirectory stringByAppendingPathComponent:report] isDirectory:YES];
-            [JMSavedResources addReport:resource withName:reportName format:[reportExtension stringByReplacingOccurrencesOfString:@"." withString:@""] sourcesURL:reportSourcesURL];
+            [JMSavedResources addReport:resource
+                               withName:reportName
+                                 format:[reportExtension stringByReplacingOccurrencesOfString:@"." withString:@""]
+                             sourcesURL:reportSourcesURL];
         }
     }
 
@@ -152,20 +157,20 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
 + (void)showErrors
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"error.upgrade.data.title"
-                                                                                      message:@"error.upgrade.data.msg"
-                                                                            cancelButtonTitle:@"dialog.button.cancel"
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"error_upgrade_data_title"
+                                                                                      message:@"error_upgrade_data_msg"
+                                                                            cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                                           abort();
                                                                       }];
     
     __weak typeof(self) weakSelf = self;
-    [alertController addActionWithLocalizedTitle:@"dialog.button.retry" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    [alertController addActionWithLocalizedTitle:@"dialog_button_retry" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         __strong typeof(self) strongSelf = weakSelf;
         [strongSelf update];
     }];
     
-    [alertController addActionWithLocalizedTitle:@"dialog.button.applyUpdate" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    [alertController addActionWithLocalizedTitle:@"dialog_button_applyUpdate" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMResetApplicationNotification object:nil];
     }];
     

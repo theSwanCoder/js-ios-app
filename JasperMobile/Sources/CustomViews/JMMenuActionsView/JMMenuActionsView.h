@@ -33,9 +33,6 @@
 
 #import "JMMenuAction.h"
 
-static inline JMMenuActionsViewAction JMMenuActionsViewActionFirst() { return JMMenuActionsViewAction_MakeFavorite; }
-static inline JMMenuActionsViewAction JMMenuActionsViewActionLast() { return JMMenuActionsViewAction_Info; }
-
 @class JMMenuActionsView;
 
 @protocol JMMenuActionsViewDelegate <NSObject>

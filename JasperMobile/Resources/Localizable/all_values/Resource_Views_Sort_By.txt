@@ -1,0 +1,52 @@
+
+[[Resource views: Sort by]]
+	[resources_sortby_title]
+		en = Sort Options
+		de = Sortieroptionen
+		fr = Options de tri
+		es = Opciones de ordenación
+		it = Opzioni di ordinamento
+		pt = Opções de classificação
+		ja = ソート オプション
+		zh = 排序选项
+		tags = ios
+	[resources_sortby_name]
+		en = Name
+		de = Name
+		fr = Nom
+		es = Nombre
+		it = Nome
+		pt = Nome
+		ja = 名前
+		zh = 名称
+		tags = ios
+	[resources_sortby_creationDate]
+		en = Creation Date
+		de = Datum
+		fr = Date
+		es = Fecha
+		it = Data
+		pt = Data
+		ja = 日付
+		zh = 日期
+		tags = ios
+	[resources_sortby_modifiedDate]
+		en = Modified Date
+		de = Änderungsdatum
+		fr = Date de modification
+		es = Fecha de modificación
+		it = Data modifica
+		pt = Data Modificada
+		ja = 変更日
+		zh = 修改日期
+		tags = ios
+	[resources_sortby_accessTime]
+		en = Access Time
+		de = Zugriffszeit
+		fr = Heure d'accès
+		es = Hora de acceso
+		it = Ora di accesso
+		pt = Hora do Acesso
+		ja = アクセス時間
+		zh = 访问时间
+		tags = ios

@@ -29,7 +29,6 @@
 #import "JMVisualizeManager.h"
 
 @interface JMVisualizeManager()
-@property (nonatomic, strong) NSString *visualizePath;
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
 @end
 
@@ -71,58 +70,18 @@
     [self.downloadTask resume];
 }
 
-- (NSString *)htmlStringForReport
+- (NSString *)htmlString
 {
-    BOOL isAmberServer = [self isAmberServer];
-
-    NSString *htmlString;
-    if (isAmberServer) {
-        htmlString = [self htmlStringForAmberServer];
+    NSString *htmlFileName;
+    if ([JMUtils isSupportVisualize]) {
+        htmlFileName = @"resource_viewer";
     } else {
-        htmlString = [self htmlStringForDashboard];
+        htmlFileName = @"resource_viewer_rest";
     }
-
-    return htmlString;
-}
-
-- (NSString *)htmlStringForAmberServer
-{
-    NSString *htmlName = @"report";
-
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:htmlName ofType:@"html"];
+    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:htmlFileName ofType:@"html"];
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-
-    // Initial Scale for ViewPort
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(self.viewportScaleFactor).stringValue];
-
-    // Visualize
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
-
-    // JasperMobile
-    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"report-ios-mobilejs-sdk" ofType:@"js"];
-    NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
-
-    return htmlString;
-}
-
-- (NSString *)htmlStringForDashboard
-{
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"dashboard" ofType:@"html"];
-    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(self.viewportScaleFactor).stringValue];
-
-    // Visualize
-    NSString *visualizeURLString = self.visualizePath;
-    visualizeURLString = [visualizeURLString stringByAppendingString:@"&_showInputControls=true&_opt=true"];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:visualizeURLString];
-
-    // JasperMobile
-    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"vis_jaspermobile" ofType:@"js"];
-    NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
-
+    // If need we can add some dependencies like scripts, styles and so on.
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"STATIC_DEPENDENCIES" withString:@""];
     return htmlString;
 }
 

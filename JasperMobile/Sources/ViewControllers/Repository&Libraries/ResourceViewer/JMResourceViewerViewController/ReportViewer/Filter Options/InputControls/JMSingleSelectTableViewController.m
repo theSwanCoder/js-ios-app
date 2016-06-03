@@ -42,8 +42,8 @@
     [super viewDidLoad];
     
     self.title = self.cell.inputControlDescriptor.label;
-    self.titleLabel.text = JMCustomLocalizedString(@"report.viewer.options.singleselect.titlelabel.title", nil);
-    self.noResultLabel.text = JMCustomLocalizedString(@"resources.noresults.msg", nil);
+    self.titleLabel.text = JMCustomLocalizedString(@"report_viewer_options_singleselect_titlelabel_title", nil);
+    self.noResultLabel.text = JMCustomLocalizedString(@"resources_noresults_msg", nil);
 
     self.titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     self.noResultLabel.textColor = [[JMThemesManager sharedManager] reportOptionsNoResultLabelTextColor];
@@ -60,13 +60,16 @@
     
     self.icSearchBar.tintColor = [UIColor darkGrayColor];
     [self.icSearchBar setBackgroundImage:[UIImage new]];
-    self.icSearchBar.placeholder = JMCustomLocalizedString(@"report.viewer.options.search.value.placeholder", nil);
+    self.icSearchBar.placeholder = JMCustomLocalizedString(@"report_viewer_options_search_value_placeholder", nil);
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     JMLog(@"\nPrevious Selection :%@\nNew Selection: %@", self.previousSelectedValues, self.selectedValues);
+    
+TODO: // Should reimplement this logic - it does not correct update cell!!!
+    
     if (![self.previousSelectedValues isEqualToSet:[NSSet setWithArray:self.selectedValues]]) {
         [self.cell updateWithParameters:self.selectedValues];
     }
@@ -118,7 +121,7 @@
     
     JSInputControlOption *option = self.listOfValues[indexPath.row];
     cell.textLabel.text = option.label;
-    cell.accessoryType = option.selected.boolValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    cell.accessoryType = option.selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 
     return cell;
 }
@@ -131,8 +134,8 @@
     JSInputControlOption *previousSelectedOption = [self.previousSelectedValues anyObject];
 
     if (previousSelectedOption != selectedOption) {
-        selectedOption.selected = [JSUtils stringFromBOOL:YES];
-        previousSelectedOption.selected = [JSUtils stringFromBOOL:NO];
+        selectedOption.selected = YES;
+        previousSelectedOption.selected = NO;
     }
 
     [self.navigationController popViewControllerAnimated:YES];
@@ -142,7 +145,7 @@
 #pragma mark - UISearchBarDelegate
 - (NSPredicate *)selectedValuesPredicate
 {
-    return [NSPredicate predicateWithFormat:@"SELF.selected LIKE[cd] %@", [JSUtils stringFromBOOL:YES]];
+    return [NSPredicate predicateWithFormat:@"SELF.selected == YES"];
 }
     
 - (NSPredicate *)filteredPredicateWithText:(NSString *)text

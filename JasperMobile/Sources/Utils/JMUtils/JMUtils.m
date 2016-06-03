@@ -65,11 +65,11 @@ void jmDebugLog(NSString *format, ...) {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
     reportName = [reportName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (reportName.length < kJMNameMin) {
-        *errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.empty", nil);
+        *errorMessage = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_empty", nil);
     } else if (reportName.length > kJMNameMax) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.maxlength", nil), kJMNameMax];
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_maxlength", nil), kJMNameMax];
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.characters", nil), kJMInvalidCharacters];
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_characters", nil), kJMInvalidCharacters];
     }
     return [*errorMessage length] == 0;
 }
@@ -126,6 +126,19 @@ void jmDebugLog(NSString *format, ...) {
     return YES;
 }
 
++ (BOOL)isAutofillLoginDataEnable
+{
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingAutoFillLoginData]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:kJMDefaultSendingAutoFillLoginData];
+    }
+
+    id autofillLoginData = [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingAutoFillLoginData];
+    if (autofillLoginData) {
+        return [autofillLoginData boolValue];
+    }
+    return NO;
+}
+
 + (void)activateCrashReportSendingIfNeeded
 {
     if ([self crashReportsSendingEnable]) {
@@ -173,23 +186,32 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)showLoginViewWithRestoreSession:(BOOL)restoreSession animated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion
 {
-    if (!restoreSession) {
+    if (!restoreSession && self.restClient) {
         [[JMSessionManager sharedManager] logout];
+    } else {
+        [[JMSessionManager sharedManager] reset];
     }
 
     SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
     JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
 
-    BOOL isPresentedByNavVC = [revealViewController.presentedViewController isKindOfClass:[UINavigationController class]];
-    BOOL isLoginVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMLoginViewController class]];
-    BOOL isServersVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMServersGridViewController class]];
-    BOOL isNewServerVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMServerOptionsViewController class]];
-    if (isPresentedByNavVC && (isLoginVC || isServersVC || isNewServerVC)) {
+    UIViewController *presentedVC = revealViewController.presentedViewController;
+
+    BOOL isPresentedByNavVC = [presentedVC isKindOfClass:[UINavigationController class]];
+    if (isPresentedByNavVC) {
         // if a nav view controller was loaded previously
-        return;
+        UINavigationController *navController = (UINavigationController *) presentedVC;
+        BOOL isLoginVC     = [navController.topViewController isKindOfClass:[JMLoginViewController class]];
+        BOOL isServersVC   = [navController.topViewController isKindOfClass:[JMServersGridViewController class]];
+        BOOL isNewServerVC = [navController.topViewController isKindOfClass:[JMServerOptionsViewController class]];
+        if (isLoginVC || isServersVC || isNewServerVC) {
+            return;
+        }
     }
 
-    UINavigationController *loginNavController = (UINavigationController *) [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
+    [presentedVC dismissViewControllerAnimated:NO completion:nil];
+
+    UINavigationController *loginNavController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
     JMLoginViewController *loginViewController = (JMLoginViewController *)loginNavController.topViewController;
     loginViewController.showForRestoreSession = restoreSession;
     loginViewController.completion = ^(void){
@@ -201,6 +223,40 @@ void jmDebugLog(NSString *format, ...) {
     };
 
     [revealViewController presentViewController:loginNavController animated:animated completion:completion];
+}
+
++ (NSString *)lastUserName
+{
+    NSString *lastUserName;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastUserNameKey]) {
+        lastUserName = [[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastUserNameKey];
+    }
+    return lastUserName;
+}
+
++ (void)saveLastUserName:(NSString *)userName
+{
+    [[NSUserDefaults standardUserDefaults] setObject:userName
+                                              forKey:JMLoginVCLastUserNameKey];
+}
+
++ (JMServerProfile *)lastServerProfile
+{
+    JMServerProfile *lastServerProfile;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastServerProfileAliasKey]) {
+        NSString *lastServerProfileAliase = [[NSUserDefaults standardUserDefaults] objectForKey:JMLoginVCLastServerProfileAliasKey];
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"alias = %@", lastServerProfileAliase];
+        NSArray *serverProfiles = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
+        lastServerProfile = serverProfiles.firstObject;
+    }
+    return lastServerProfile;
+}
+
++ (void)saveLastServerProfile:(JMServerProfile *)serverProfile
+{
+    [[NSUserDefaults standardUserDefaults] setObject:serverProfile.alias
+                                              forKey:JMLoginVCLastServerProfileAliasKey];
 }
 
 #pragma mark - EULA
@@ -272,11 +328,11 @@ void jmDebugLog(NSString *format, ...) {
 //        title = @"error.readingresponse.dialog.msg";
 //    }
     if (error.code == JSInvalidCredentialsErrorCode) {
-        title = @"error.authenication.dialog.title";
-        message = @"error.authenication.dialog.msg";
+        title = @"error_authenication_dialog_title";
+        message = @"error_authenication_dialog_msg";
     }
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonTitle:@"dialog.button.ok" cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonTitle:@"dialog_button_ok" cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         if (completion) {
             completion();
         }
@@ -291,22 +347,19 @@ void jmDebugLog(NSString *format, ...) {
 
 #pragma mark - Helpers
 
-+ (BOOL)shouldUseVisualize
++ (BOOL)isSupportNewRESTFlow
 {
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize]) {
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultUseVisualize];
-    }
-
-    id useVisualizeSettings = [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize];
-    if (useVisualizeSettings) {
-        return [useVisualizeSettings boolValue];
-    }
-    return YES;
+    return [self isServerVersionUpOrEqual6];
 }
 
 + (BOOL)isSupportVisualize
 {
-    return [self shouldUseVisualize] && [self isServerVersionUpOrEqual6] && [self isServerProEdition];
+    return [self isServerVersionUpOrEqual6] && [self isServerProEdition];
+}
+
++ (BOOL)isSupportSearchInSchedules
+{
+    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_JADE_6_2_0;
 }
 
 + (BOOL)isServerVersionUpOrEqual6
@@ -314,14 +367,14 @@ void jmDebugLog(NSString *format, ...) {
     return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_0_0;
 }
 
-+ (BOOL)isServerAmber2
++ (BOOL)isServerAmber
 {
-    return self.restClient.serverProfile.serverInfo.versionAsFloat == kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
-}
-
-+ (BOOL)isServerAmber2OrHigher
-{
-    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
+    BOOL isAmberServer = NO;
+    CGFloat versionNumber = self.restClient.serverProfile.serverInfo.versionAsFloat;
+    if (versionNumber >= 6.0 && versionNumber < 6.1f) {
+        isAmberServer = YES;
+    }
+    return isAmberServer;
 }
 
 + (BOOL)isServerProEdition
@@ -405,75 +458,24 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isDemoAccount
 {
-    BOOL isDemoServer = [self.restClient.serverProfile.serverUrl isEqualToString:kJMDemoServerUrl];
+    NSURL *demoURL = [NSURL URLWithString:kJMDemoServerUrl];
+    NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+    BOOL isDemoServer = [serverURL.host isEqualToString:demoURL.host];
     BOOL isDemoUser = [self.restClient.serverProfile.username isEqualToString:kJMDemoServerUsername];
     BOOL isDemoOrganization = [self.restClient.serverProfile.organization isEqualToString:kJMDemoServerOrganization];
     BOOL isDemoAccount = isDemoServer && isDemoUser && isDemoOrganization;
     return isDemoAccount;
 }
 
-#pragma mark - Analytics
-+ (void)logEventWithInfo:(NSDictionary *)eventInfo
++ (JMServerProfile * __nullable)activeServerProfile
 {
-#ifndef __RELEASE__
-    NSString *version = self.restClient.serverInfo.version;
-    NSString *edition = self.restClient.serverInfo.edition;
-    if ([JMUtils isDemoAccount]) {
-        version = [version stringByAppendingString:@"(Demo)"];
-    }
-    
-    // Crashlytics - Answers
-    NSMutableDictionary *extendedEventInfo = [eventInfo mutableCopy];
-    extendedEventInfo[kJMAnalyticsServerVersionKey] = version;
-    extendedEventInfo[kJMAnalyticsServerEditionKey] = edition;
-    [Answers logCustomEventWithName:eventInfo[kJMAnalyticsCategoryKey]
-                   customAttributes:extendedEventInfo];
-
-    // Google Analytics
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:eventInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
-                                                                           action:eventInfo[kJMAnalyticsActionKey]                   // Event action (required)
-                                                                            label:eventInfo[kJMAnalyticsLabelKey]                    // Event label
-                                                                            value:nil];                                              // Event value
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
-           value:version];
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
-           value:edition];
-
-    [tracker send:[builder build]];
-#endif
+    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    return activeServerProfile;
 }
 
-+ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
++ (float)minSupportedServerVersion
 {
-#ifndef __RELEASE__
-    NSString *version = self.restClient.serverInfo.version;
-    NSString *edition = self.restClient.serverInfo.edition;
-    if ([JMUtils isDemoAccount]) {
-        version = [version stringByAppendingString:@"(Demo)"];
-    }
-
-    // Crashlytics - Answers
-    NSMutableDictionary *extendedEventInfo = [additionInfo mutableCopy];
-    extendedEventInfo[kJMAnalyticsServerVersionKey] = version;
-    extendedEventInfo[kJMAnalyticsServerEditionKey] = edition;
-    [Answers logLoginWithMethod:@"Digits"
-                        success:@(success)
-               customAttributes:extendedEventInfo];
-    
-    // Google Analytics
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:additionInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
-                                                                           action:additionInfo[kJMAnalyticsActionKey]                   // Event action (required)
-                                                                            label:additionInfo[kJMAnalyticsLabelKey]                    // Event label
-                                                                            value:nil];                                                 // Event value
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
-           value:version];
-    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
-           value:edition];
-
-    [tracker send:[builder build]];
-#endif
+    return kJS_SERVER_VERSION_CODE_AMBER_6_0_0;
 }
 
 @end

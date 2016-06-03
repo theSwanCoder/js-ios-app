@@ -31,21 +31,23 @@
  @since 1.9
  */
 
-#import <Foundation/Foundation.h>
 #import "JMResourceClientHolder.h"
 
 extern NSString * const kJMResourceListLoaderOptionItemTitleKey;
 extern NSString * const kJMResourceListLoaderOptionItemValueKey;
 
-typedef NS_ENUM(NSInteger, JMResourcesListLoaderOption) {
-    JMResourcesListLoaderOption_Filter = 0,
-    JMResourcesListLoaderOption_Sort
+typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
+    JMResourcesListLoaderOptionType_Filter,
+    JMResourcesListLoaderOptionType_Sort
 };
 
 @class JMResourcesListLoader;
+@class JMResource;
+@class JMResourceLoaderOption;
+
 @protocol JMResourcesListLoaderDelegate <NSObject>
 - (void)resourceListLoaderDidStartLoad:(JMResourcesListLoader *)listLoader;
-- (void)resourceListLoaderDidEndLoad:(JMResourcesListLoader *)listLoader withResources:(NSArray *)resources;
+- (void)resourceListLoaderDidEndLoad:(JMResourcesListLoader *)listLoader withResources:(NSArray <JMResource *>*)resources;
 - (void)resourceListLoaderDidFailed:(JMResourcesListLoader *)listLoader withError:(NSError *)error;
 @end
 
@@ -58,8 +60,8 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOption) {
 // Params for loading request.
 @property (nonatomic, strong) NSString *searchQuery;
 @property (nonatomic, assign) BOOL      loadRecursively;
-@property (nonatomic, readonly) BOOL hasNextPage;
-@property (nonatomic, readonly) NSInteger offset;
+@property (nonatomic, assign) BOOL hasNextPage;
+@property (nonatomic, assign) NSInteger offset;
 @property (nonatomic, strong) NSString *accessType;
 @property (nonatomic, assign) NSInteger filterBySelectedIndex;
 @property (nonatomic, assign) NSInteger sortBySelectedIndex;
@@ -74,18 +76,18 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOption) {
 
 // helpers
 - (NSUInteger)resourceCount;
-- (void)addResourcesWithResource:(id)resource;
-- (void)addResourcesWithResources:(NSArray *)resources;
-- (id)resourceAtIndex:(NSInteger)index;
+- (void)addResourcesWithResource:(JMResource *)resource;
+- (void)addResourcesWithResources:(NSArray <JMResource *>*)resources;
+- (JMResource *)resourceAtIndex:(NSInteger)index;
 
 // search
 - (void)searchWithQuery:(NSString *)query;
 - (void)clearSearchResults;
 
 //
-- (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option;
-- (id)parameterForQueryWithOption:(JMResourcesListLoaderOption)option;
-- (NSString *)titleForPopupWithOption:(JMResourcesListLoaderOption)option;
+- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)option;
+- (id)parameterForQueryWithOptionType:(JMResourcesListLoaderOptionType)optionType;
+- (NSString *)titleForPopupWithOptionType:(JMResourcesListLoaderOptionType)optionType;
 
 - (void)finishLoadingWithError:(NSError *)error;
 @end

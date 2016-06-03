@@ -20,30 +20,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
 //  JMDashboardViewerConfigurator.h
 //  TIBCO JasperMobile
 //
-
-@protocol JMDashboardLoader;
-@protocol JMDashboardLoaderDelegate;
-@class JMDashboard;
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.1
 */
 
+@protocol JMDashboardLoader;
+@protocol JMDashboardLoaderDelegate;
+@class JMDashboard;
+@class JMWebEnvironment;
 
 @interface JMDashboardViewerConfigurator : NSObject
+@property (nonatomic, strong) id<JMDashboardLoader> dashboardLoader;
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
-@property (nonatomic, weak) id webView;
 
-- (instancetype)initWithDashboard:(JMDashboard *)dashboard;
-+ (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard;
-
-- (id)webViewAsSecondary:(BOOL)asSecondary;
-- (id<JMDashboardLoader>)dashboardLoader;
+- (instancetype)initWithDashboard:(JMDashboard *)dashboard webEnvironment:(JMWebEnvironment *)webEnvironment;
++ (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard webEnvironment:(JMWebEnvironment *)webEnvironment;
 - (void)updateReportLoaderDelegateWithObject:(id <JMDashboardLoaderDelegate>)delegate;
 @end

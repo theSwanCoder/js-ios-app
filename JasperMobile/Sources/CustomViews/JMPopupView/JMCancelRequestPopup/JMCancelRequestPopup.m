@@ -48,6 +48,10 @@ static NSInteger _cancelRequestPopupCounter = 0;
     self = [super initWithDelegate:delegate type:type];
     if (self) {
         self.isDissmissWithTapOutOfButton = NO;
+        
+        // Accessibility
+        self.isAccessibilityElement = NO;
+        self.accessibilityIdentifier = @"JMCancelRequestPopupAccessibilityId";
     }
     return self;
 }
@@ -68,7 +72,8 @@ static NSInteger _cancelRequestPopupCounter = 0;
         popup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:[self class]];
     }
     popup.progressLabel.text = JMCustomLocalizedString(message, nil);
-    [popup.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
+    popup.cancelButton.hidden = NO;
+    [popup.cancelButton setTitle:JMCustomLocalizedString(@"dialog_button_cancel", nil) forState:UIControlStateNormal];
     popup.cancelBlock = cancelBlock;
 }
 

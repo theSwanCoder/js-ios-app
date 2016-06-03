@@ -28,13 +28,13 @@
 
 #import "JMExternalWindowControlsVC.h"
 
+CGFloat const kJMExternalWindowControlsScrollStep = 10;
+CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;
+
 @interface JMExternalWindowControlsVC () <UIScrollViewDelegate>
-@property (weak, nonatomic) UIWebView *contentWebView;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageViewHightConstraint;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, assign) CGFloat contentViewProportions;
-@property (nonatomic, assign) CGSize originalWebViewSize;
+@property (weak, nonatomic) UIView *contentView;
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic) CGFloat defaultZoomScale;
 @end
 
 @implementation JMExternalWindowControlsVC
@@ -45,10 +45,10 @@
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 }
 
-- (instancetype)initWithContentWebView:(UIWebView *)contentView
+- (instancetype)initWithContentView:(UIView *)contentView
 {
     if (self = [super init]) {
-        _contentWebView = contentView;
+        _contentView = contentView;
     }
     return self;
 }
@@ -59,98 +59,249 @@
 {
     [super viewDidAppear:animated];
 
-    [self updateInterface];
+    WKWebView *contentView = (WKWebView *) self.contentView;
+    self.defaultZoomScale = contentView.scrollView.zoomScale;
 }
 
-- (void)viewDidLayoutSubviews
+#pragma mark - Actions Up
+- (IBAction)upActionBegin:(id)sender
 {
-
-    [self layoutControlView];
-
-    [super viewDidLayoutSubviews];
+    [self startUpAction];
 }
 
-#pragma mark - Public API
-- (void)updateInterface
+- (IBAction)upActionEnd:(id)sender
 {
-    [self starShowingProgress];
-    [self createContentScreenshotWithCompletion:^(UIImage *screenshotImage) {
-        [self endShowingProgress];
-
-        [self setupControlViewWithImage:screenshotImage];
-    }];
+    [self stopAction];
+    [self upAction];
 }
 
-#pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+#pragma mark - Actions Down
+- (IBAction)downActionBegin:(id)sender
 {
-    CGPoint contentOffset = scrollView.contentOffset;
-    contentOffset.y *= self.contentViewProportions;
-    self.contentWebView.scrollView.contentOffset = contentOffset;
+    [self startDownAction];
 }
 
-
-#pragma mark - Helpers
-- (void)createContentScreenshotWithCompletion:(void(^)(UIImage *screenshotImage))completion
+- (IBAction)downActionEnd:(id)sender
 {
-    if (!completion) {
+    [self stopAction];
+    [self downAction];
+}
+
+#pragma mark - Actions Right
+- (IBAction)rightActionEnd:(id)sender
+{
+    [self stopAction];
+    [self rightAction];
+}
+
+- (IBAction)rightActionBegin:(id)sender
+{
+    [self startRightAction];
+}
+
+#pragma mark - Actions Left
+- (IBAction)leftActionEnd:(id)sender
+{
+    [self stopAction];
+    [self leftAction];
+}
+
+- (IBAction)leftActionBegin:(id)sender
+{
+    [self startLeftAction];
+}
+
+#pragma mark - Actions Zoom
+- (IBAction)zoomUpActionBegin:(id)sender
+{
+    [self startZoomUpAction];
+}
+
+- (IBAction)zoomUpActionEnd:(id)sender
+{
+    [self stopAction];
+    [self zoomUpAction];
+}
+
+- (IBAction)zoomDownActionBegin:(id)sender
+{
+    [self startZoomDownAction];
+}
+
+- (IBAction)zoomDownActionEnd:(id)sender
+{
+    [self stopAction];
+    [self zoomDownAction];
+}
+
+#pragma mark - Action Helpers Up
+- (void)startUpAction
+{
+    if (self.timer) {
         return;
     }
-
-    self.originalWebViewSize = self.contentWebView.frame.size;
-    CGSize contentSize = self.contentWebView.scrollView.contentSize;
-    self.contentWebView.frame = CGRectMake(0, 0, contentSize.width, contentSize.height);
-
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-
-        UIGraphicsBeginImageContextWithOptions(contentSize, NO, 0);
-        [self.contentWebView.scrollView.layer renderInContext:UIGraphicsGetCurrentContext()];
-
-        UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            CGRect conentWebViewFrame = CGRectMake(0, 0, self.originalWebViewSize.width, self.originalWebViewSize.height);
-            self.contentWebView.frame = conentWebViewFrame;
-
-            completion(viewImage);
-        });
-    });
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:kJMExternalWindowControlsScrollTimeInterval
+                                                  target:self
+                                                selector:@selector(upAction)
+                                                userInfo:nil
+                                                 repeats:YES];
 }
 
-- (void)setupControlViewWithImage:(UIImage *)image
+- (void)upAction
 {
-    self.imageView.image = image;
+    WKWebView *contentView = (WKWebView *) self.contentView;
+    UIScrollView *scrollView = contentView.scrollView;
+    CGSize contentViewSize = scrollView.frame.size;
+
+    CGPoint upPoint = scrollView.contentOffset;
+    upPoint.y -= kJMExternalWindowControlsScrollStep;
+    CGFloat zoomFactor = scrollView.zoomScale / self.defaultZoomScale;
+    if (upPoint.y < -contentViewSize.height * 0.1 * zoomFactor) {
+        return;
+    }
+    scrollView.contentOffset = upPoint;
 }
 
-- (void)layoutControlView
+#pragma mark - Action Helpers Down
+- (void)startDownAction
 {
-    CGFloat contentWidth = self.contentWebView.scrollView.contentSize.width;
-    CGFloat contentHeight = self.contentWebView.scrollView.contentSize.height;
-
-    CGFloat k = contentWidth / contentHeight;
-
-    // Calculate control scroll view size
-    CGFloat controlViewContentWidth = self.scrollView.contentSize.width;
-    CGFloat controlViewContentHeight = self.scrollView.contentSize.width / k;
-    CGSize controlViewSize = CGSizeMake(controlViewContentWidth, controlViewContentHeight);
-    self.scrollView.contentSize = controlViewSize;
-
-    self.imageViewHightConstraint.constant = controlViewContentHeight;
-    self.contentViewProportions = contentHeight / controlViewContentHeight;
+    if (self.timer) {
+        return;
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:kJMExternalWindowControlsScrollTimeInterval
+                                                  target:self
+                                                selector:@selector(downAction)
+                                                userInfo:nil
+                                                 repeats:YES];
 }
 
-#pragma mark - Progress indicators
-- (void)starShowingProgress
+- (void)downAction
 {
-    [self.activityIndicator startAnimating];
-    self.imageView.hidden = YES;
+    WKWebView *contentView = (WKWebView *) self.contentView;
+    UIScrollView *scrollView = contentView.scrollView;
+    CGSize contentViewSize = scrollView.frame.size;
+
+    CGPoint upPoint = scrollView.contentOffset;
+    upPoint.y += kJMExternalWindowControlsScrollStep;
+    CGFloat zoomFactor = scrollView.zoomScale / self.defaultZoomScale;
+    if (upPoint.y > contentViewSize.height * 1.1 * zoomFactor) {
+        return;
+    }
+    scrollView.contentOffset = upPoint;
 }
 
-- (void)endShowingProgress
+#pragma mark - Action Helpers Left
+- (void)startLeftAction
 {
-    [self.activityIndicator stopAnimating];
-    self.imageView.hidden = NO;
+    if (self.timer) {
+        return;
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:kJMExternalWindowControlsScrollTimeInterval
+                                                  target:self
+                                                selector:@selector(leftAction)
+                                                userInfo:nil
+                                                 repeats:YES];
+}
+
+- (void)leftAction
+{
+    WKWebView *contentView = (WKWebView *) self.contentView;
+    UIScrollView *scrollView = contentView.scrollView;
+    CGSize contentViewSize = scrollView.frame.size;
+
+    CGPoint upPoint = scrollView.contentOffset;
+    upPoint.x -= kJMExternalWindowControlsScrollStep;
+    CGFloat zoomFactor = scrollView.zoomScale / self.defaultZoomScale;
+    if (upPoint.x < -contentViewSize.width * 0.1 * zoomFactor) {
+        return;
+    }
+    scrollView.contentOffset = upPoint;
+}
+
+#pragma mark - Action Helpers Right
+- (void)startRightAction
+{
+    if (self.timer) {
+        return;
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:kJMExternalWindowControlsScrollTimeInterval
+                                                  target:self
+                                                selector:@selector(rightAction)
+                                                userInfo:nil
+                                                 repeats:YES];
+}
+
+- (void)rightAction
+{
+    WKWebView *webView = (WKWebView *) self.contentView;
+    UIScrollView *scrollView = webView.scrollView;
+    CGSize scrollViewSize = scrollView.frame.size;
+    CGSize contentViewSize = scrollView.contentSize;
+
+    CGPoint upPoint = scrollView.contentOffset;
+    upPoint.x += kJMExternalWindowControlsScrollStep;
+    if (upPoint.x > contentViewSize.width * 0.1 + (contentViewSize.width -  scrollViewSize.width) ) {
+        return;
+    }
+    scrollView.contentOffset = upPoint;
+}
+
+#pragma mark - Action Helpers Zoom Up
+- (void)startZoomUpAction
+{
+    if (self.timer) {
+        return;
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:kJMExternalWindowControlsScrollTimeInterval
+                                                  target:self
+                                                selector:@selector(zoomUpAction)
+                                                userInfo:nil
+                                                 repeats:YES];
+}
+
+- (void)zoomUpAction
+{
+    WKWebView *contentView = (WKWebView *) self.contentView;
+    CGFloat zoomScale = contentView.scrollView.zoomScale;
+    zoomScale += 0.1;
+    if (zoomScale >= 2 * self.defaultZoomScale) {
+        return;
+    }
+    [contentView.scrollView setZoomScale:zoomScale
+                                animated:YES];
+}
+
+#pragma mark - Action Helpers Zoom Down
+- (void)startZoomDownAction
+{
+    if (self.timer) {
+        return;
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:kJMExternalWindowControlsScrollTimeInterval
+                                                  target:self
+                                                selector:@selector(zoomDownAction)
+                                                userInfo:nil
+                                                 repeats:YES];
+}
+
+- (void)zoomDownAction
+{
+    WKWebView *contentView = (WKWebView *) self.contentView;
+    CGFloat zoomScale = contentView.scrollView.zoomScale;
+    zoomScale -= 0.1;
+    if (zoomScale <= self.defaultZoomScale) {
+        return;
+    }
+    [contentView.scrollView setZoomScale:zoomScale
+                                animated:YES];
+}
+
+- (void)stopAction
+{
+    if (self.timer) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
 }
 
 @end

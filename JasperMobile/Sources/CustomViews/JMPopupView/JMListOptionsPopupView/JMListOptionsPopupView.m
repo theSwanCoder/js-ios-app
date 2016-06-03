@@ -23,26 +23,27 @@
 
 #import "JMListOptionsPopupView.h"
 #import "JMResourcesListLoader.h"
-
+#import "JMResourceLoaderOption.h"
 
 #define kJMList
 
 @interface JMListOptionsPopupView () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, weak) IBOutlet UILabel *listOptionsTitleLabel;
 @property (nonatomic, weak) IBOutlet UITableView *listOptionsTableView;
-@property (nonatomic, strong) NSArray *items;
+@property (nonatomic, strong) NSArray <JMResourceLoaderOption *> *options;
 @end
 
 
 @implementation JMListOptionsPopupView
 @synthesize selectedIndex = _selectedIndex;
 
-- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type items:(NSArray *)items{
+- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type options:(NSArray <JMResourceLoaderOption *>*)options
+{
     self = [super initWithDelegate:delegate type:type];
     if (self) {
         UIView *nibView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] lastObject];
 
-        self.items = items;
+        self.options = options;
         [self.listOptionsTableView reloadData];
         
         CGRect neededRect = nibView.frame;
@@ -78,7 +79,7 @@
 #pragma mark - UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.items.count;
+    return self.options.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -92,7 +93,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    cell.textLabel.text = [self.items[indexPath.row] objectForKey:kJMResourceListLoaderOptionItemTitleKey];
+    cell.textLabel.text = [self.options[indexPath.row] title];
     cell.accessoryType = indexPath.row == self.selectedIndex ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     return cell;
 }

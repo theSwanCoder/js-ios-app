@@ -37,7 +37,8 @@
 #import "UIImage+Additions.h"
 #import "JMExportManager.h"
 
-static NSString * const kGAITrackingID = @"UA-57445224-1";
+static NSString * const kGAITrackingID      = @"UA-57445224-1";
+static NSString * const kGAITrackingDebugID = @"UA-76950527-1";
 static const NSInteger kSplashViewTag = 100;
 
 @implementation JasperMobileAppDelegate
@@ -78,9 +79,14 @@ static const NSInteger kSplashViewTag = 100;
     // Google Analytics
     [GAI sharedInstance].trackUncaughtExceptions = YES;
     [GAI sharedInstance].dispatchInterval = 20;
-    //[[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelError];
+
+#ifndef __RELEASE__
+    [[GAI sharedInstance] trackerWithTrackingId:kGAITrackingDebugID];
+#else
     [[GAI sharedInstance] trackerWithTrackingId:kGAITrackingID];
-    
+#endif
+
     SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
     revealViewController.frontViewController = [JMUtils launchScreenViewController];
     return YES;
@@ -107,10 +113,17 @@ static const NSInteger kSplashViewTag = 100;
 
         if (isSessionRestored) {
             loginCompletionBlock();
-            // TODO: remove reseting of session's 'environment'
-            SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
-            JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-            [menuViewController openCurrentSection];
+
+            JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+            if (activeServerProfile && activeServerProfile.askPassword.boolValue) {
+                [JMUtils showLoginViewForRestoreSessionWithCompletion:loginCompletionBlock];
+            } else {
+                // TODO: remove reseting of session's 'environment'
+                SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
+                JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
+                [menuViewController openCurrentSection];
+            }
+
         } else {
             [JMUtils showLoginViewAnimated:NO
                                 completion:nil

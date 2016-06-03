@@ -42,11 +42,12 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @interface JMBaseCollectionView : UIView
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UINavigationBar *searchBarPlaceholder;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchBarPlaceholderTopConstraint;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UILabel *activityViewTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *noResultsViewTitleLabel;
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 
 - (void)setupWithNoResultText:(NSString *)noResult;

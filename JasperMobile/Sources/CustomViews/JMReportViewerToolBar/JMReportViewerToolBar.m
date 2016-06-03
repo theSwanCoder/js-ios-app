@@ -80,7 +80,7 @@
 
 - (void) updatePages
 {
-    NSString *keyString = JMCustomLocalizedString(@"report.viewer.pagecount", nil);
+    NSString *keyString = JMCustomLocalizedString(@"report_viewer_pagecount", nil);
     self.pageCountLabel.text = [NSString stringWithFormat:keyString, self.countOfPages];
     self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
     
@@ -150,7 +150,7 @@
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    [pickerToolbar setItems:@[flexibleSpace, cancel, done]];
+    [pickerToolbar setItems:@[cancel, flexibleSpace, done]];
 
     return pickerToolbar;
 }

@@ -28,13 +28,22 @@
 
 #import "JMWebViewManager.h"
 #import "JMUtils.h"
+#import "JMWebEnvironment.h"
 
 @interface JMWebViewManager()
-@property (nonatomic, strong, readwrite) UIWebView *primaryWebView;
-@property (nonatomic, strong, readwrite) UIWebView *secondaryWebView;
+//@property (nonatomic, strong, readwrite) WKWebView *primaryWebView;
+//@property (nonatomic, strong, readwrite) WKWebView *secondaryWebView;
+@property (nonatomic, strong) NSMutableArray *webEnvironments;
 @end
 
 @implementation JMWebViewManager
+
+#pragma mark - Handle Memory Warnings
+- (void)handleMemoryWarnings
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    self.webEnvironments = [NSMutableArray array];
+}
 
 #pragma mark - Lifecycle
 - (void)dealloc
@@ -51,93 +60,69 @@
     return sharedMyManager;
 }
 
-#pragma mark - Public API
-- (UIWebView *)webView
+- (instancetype)init
 {
-    return [self webViewAsSecondary:NO];
+    self = [super init];
+    if (self) {
+        _webEnvironments = [NSMutableArray array];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleMemoryWarnings)
+                                                     name:UIApplicationDidReceiveMemoryWarningNotification
+                                                   object:nil];
+    }
+    return self;
 }
 
-- (UIWebView *)webViewAsSecondary:(BOOL)asSecondary
+#pragma mark - Public API
+- (JMWebEnvironment *)webEnvironmentForId:(NSString *)identifier
 {
-    UIWebView *webView;
-    if (asSecondary) {
-        webView = self.secondaryWebView;
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+//    JMLog(@"identifier: %@", identifier);
+    JMWebEnvironment *webEnvironment;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
+    NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
+
+    if ( filtredWebEnvironments.count == 0 ) {
+        webEnvironment = [self createNewWebEnvironmentWithId:identifier];
+        [self.webEnvironments addObject:webEnvironment];
+    } else if ( filtredWebEnvironments.count > 1 ) {
+        return nil;
     } else {
-        webView = self.primaryWebView;
+        webEnvironment = [filtredWebEnvironments firstObject];
     }
 
-    webView.scrollView.zoomScale = 1;
-    webView.scrollView.minimumZoomScale = 1;
-    webView.scrollView.maximumZoomScale = 2;
-
-    return webView;
+    return webEnvironment;
 }
 
-- (BOOL)isWebViewLoadedVisualize:(UIWebView *)webView
+- (void)removeWebEnvironmentForId:(NSString *)identifier
 {
-    NSString *jsCommand = @"typeof(visualize)";
-    NSString *result = [webView stringByEvaluatingJavaScriptFromString:jsCommand];
-    BOOL isWebViewLoadedVisualize = [result isEqualToString:@"function"];
-    return isWebViewLoadedVisualize;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
+    NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
+
+    if ( filtredWebEnvironments.count == 0 ) {
+        return;
+    } else if ( filtredWebEnvironments.count > 1 ) {
+        // TODO: need error?
+    } else {
+        JMWebEnvironment *webEnvironment = filtredWebEnvironments.firstObject;
+        [self.webEnvironments removeObject:webEnvironment];
+    }
+}
+
+- (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier
+{
+    JMWebEnvironment *webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier];
+    return webEnvironment;
 }
 
 - (void)reset
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    _primaryWebView.delegate = nil;
-    _primaryWebView = nil;
+    // TODO: need reset?
+//    [self.webEnvironments makeObjectsPerformSelector:@selector(reset)];
 
-    [self resetChildWebView];
-}
-
-- (void)resetChildWebView
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    _secondaryWebView.delegate = nil;
-    _secondaryWebView = nil;
-}
-
-- (void)resetZoom
-{
-    [_primaryWebView.scrollView setZoomScale:0.1
-                                        animated:YES];
-    [_secondaryWebView.scrollView setZoomScale:0.1
-                                          animated:YES];
-}
-
-#pragma mark - Private API
-
-- (UIWebView *)primaryWebView
-{
-    if (!_primaryWebView) {
-        _primaryWebView = [self createWebView];
-    }
-    return _primaryWebView;
-}
-
-- (UIWebView *)secondaryWebView
-{
-    if (!_secondaryWebView) {
-        _secondaryWebView = [self createWebView];
-    }
-    return _secondaryWebView;
-}
-
-- (UIWebView *)createWebView
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    webView.scrollView.bounces = NO;
-    webView.scalesPageToFit = YES;
-    webView.dataDetectorTypes = UIDataDetectorTypeNone;
-    webView.suppressesIncrementalRendering = YES;
-
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
-    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-    [webView loadHTMLString:htmlString
-                    baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
-
-    return webView;
+    self.webEnvironments = [NSMutableArray array];
 }
 
 @end

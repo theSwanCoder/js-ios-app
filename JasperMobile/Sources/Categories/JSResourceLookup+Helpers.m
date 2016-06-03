@@ -97,19 +97,19 @@
 - (NSString *)localizedResourceType
 {
     if ([self.resourceType isEqualToString:kJMSavedReportUnit]) {
-        return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
+        return JMCustomLocalizedString(@"resources_type_saved_reportUnit", nil);
     } else if ([self.resourceType isEqualToString:kJMTempExportedReportUnit]) {
-        return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
+        return JMCustomLocalizedString(@"resources_type_saved_reportUnit", nil);
     } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_REPORT_UNIT]) {
-        return JMCustomLocalizedString(@"resources.type.reportUnit", nil);
+        return JMCustomLocalizedString(@"resources_type_reportUnit", nil);
     } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD]) {
-        return JMCustomLocalizedString(@"resources.type.dashboard", nil);
+        return JMCustomLocalizedString(@"resources_type_dashboard", nil);
     } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD_LEGACY]) {
-        return JMCustomLocalizedString(@"resources.type.dashboard.legacy", nil);
+        return JMCustomLocalizedString(@"resources_type_dashboard_legacy", nil);
     } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_FOLDER]) {
-        return JMCustomLocalizedString(@"resources.type.folder", nil);
+        return JMCustomLocalizedString(@"resources_type_folder", nil);
     } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_FILE]) {
-        return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
+        return JMCustomLocalizedString(@"resources_type_saved_reportUnit", nil);
     }
     return nil;
 }

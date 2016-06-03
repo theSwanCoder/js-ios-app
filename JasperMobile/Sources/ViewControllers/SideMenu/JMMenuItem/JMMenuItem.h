@@ -31,22 +31,22 @@
  @since 2.0
  */
 
-typedef NS_ENUM(NSInteger, JMResourceType){
-    JMResourceTypeLibrary,
-    JMResourceTypeRepository,
-    JMResourceTypeRecentViews,
-    JMResourceTypeSavedItems,
-    JMResourceTypeFavorites,
-    JMResourceTypeScheduling,
-    JMResourceTypeAbout,
-    JMResourceTypeFeedback,
-    JMResourceTypeLogout,
-    
-    JMResourceTypeNone
+typedef NS_ENUM(NSInteger, JMSectionType){
+    JMSectionTypeLibrary,
+    JMSectionTypeRepository,
+    JMSectionTypeRecentViews,
+    JMSectionTypeSavedItems,
+    JMSectionTypeFavorites,
+    JMSectionTypeScheduling,
+    JMSectionTypeAbout,
+    JMSectionTypeFeedback,
+    JMSectionTypeSettings,
+    JMSectionTypeLogout,
+    JMSectionTypeNone
 };
 
 @interface JMMenuItem : NSObject
-@property (nonatomic, readonly) JMResourceType resourceType;
+@property (nonatomic, readonly) JMSectionType sectionType;
 @property (nonatomic, readonly) NSString *itemTitle;
 @property (nonatomic, readonly) UIImage  *itemIcon;
 @property (nonatomic, readonly) UIImage  *selectedItemIcon;
@@ -54,8 +54,8 @@ typedef NS_ENUM(NSInteger, JMResourceType){
 @property (assign, nonatomic) BOOL selected;
 @property (assign, nonatomic) BOOL showNotes;
 
-- (instancetype)initWithResourceType:(JMResourceType)resourceType;
-+ (instancetype)menuItemWithResourceType:(JMResourceType)resourceType;
+- (instancetype)initWithSectionType:(JMSectionType)sectionType;
++ (instancetype)menuItemWithSectionType:(JMSectionType)sectionType;
 
 - (NSString *) vcIdentifierForSelectedItem;
 - (NSString *) nameForAnalytics;

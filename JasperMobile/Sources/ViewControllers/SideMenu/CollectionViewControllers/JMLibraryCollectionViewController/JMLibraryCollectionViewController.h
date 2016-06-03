@@ -35,4 +35,6 @@
 #import "JMBaseCollectionViewController.h"
 
 @interface JMLibraryCollectionViewController : JMBaseCollectionViewController
+@property (nonatomic, assign) NSInteger filterByIndex;
+@property (nonatomic, assign) NSInteger sortByIndex;
 @end
