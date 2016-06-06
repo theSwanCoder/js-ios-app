@@ -419,6 +419,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
          resource:(JMResource *)resource
              parameters:(NSArray *)parameters
 {
+    NSLog(@"Parameters = %@", parameters);
     if (hyperlinkType == JMHyperlinkTypeReportExecution) {
         JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
         reportViewController.resource = resource;
@@ -427,7 +428,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self.navigationController pushViewController:reportViewController animated:YES];
     } else if (hyperlinkType == JMHyperlinkTypeReference) {
         NSURL *URL = parameters.firstObject;
-        if (URL) {
+        if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
             [[UIApplication sharedApplication] openURL:URL];
         }
     }

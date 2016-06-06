@@ -43,6 +43,7 @@
 #import "JMExportManager.h"
 #import "JMResource.h"
 #import "JMSchedule.h"
+#import "JMWebViewManager.h"
 
 CGFloat const kJMBaseCollectionViewGridWidth = 310;
 
@@ -477,7 +478,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
 {
     JMResource *resource = [self loadedResourceForIndexPath:indexPath];
-    id nextVC = nil;
+    __block id nextVC = nil;
 
     if (resource.type == JMResourceTypeFolder) {
         // TODO: replace identifier with constant
@@ -498,18 +499,43 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 //        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:cell.resourceLookup];
 //        [[JMExportManager sharedInstance] cancelTaskForSavedResource:savedReport];
     } else {
-        NSString *resourceViewerVCIdentifier = [resource resourceViewerVCIdentifier];
-        if (resourceViewerVCIdentifier) {
-            nextVC = [self.storyboard instantiateViewControllerWithIdentifier:resourceViewerVCIdentifier];
-            if ([nextVC respondsToSelector:@selector(setResource:)]) {
-                [nextVC setResource:resource];
+        void (^configureNextVCBlock)(void) = ^{
+            NSString *resourceViewerVCIdentifier = [resource resourceViewerVCIdentifier];
+            if (resourceViewerVCIdentifier) {
+                nextVC = [self.storyboard instantiateViewControllerWithIdentifier:resourceViewerVCIdentifier];
+                if ([nextVC respondsToSelector:@selector(setResource:)]) {
+                    [nextVC setResource:resource];
+                }
+                // Customizing report viewer view controller
+                if (resource.type == JMResourceTypeReport) {
+                    JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
+                    JMReport *report = (JMReport *)[nextVC report];
+                    report.thumbnailImage = cell.thumbnailImage;
+                }
             }
-            // Customizing report viewer view controller
-            if (resource.type == JMResourceTypeReport) {
-                JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
-                JMReport *report = (JMReport *)[nextVC report];
-                report.thumbnailImage = cell.thumbnailImage;
-            }
+        };
+        
+        if (resource.type == JMResourceTypeLegacyDashboard || (resource.type == JMResourceTypeDashboard && ![JMUtils isServerVersionUpOrEqual6])) {
+            [JMUtils showNetworkActivityIndicator];
+            [JMCancelRequestPopup presentWithMessage:@"status_loading"
+                                         cancelBlock:nil];
+            [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
+                [JMCancelRequestPopup dismiss];
+                [JMUtils hideNetworkActivityIndicator];
+                
+                if (!result.error) {
+                    [[JMWebViewManager sharedInstance] reset];
+                    configureNextVCBlock();
+                    if (nextVC) {
+                        [self.navigationController pushViewController:nextVC animated:YES];
+                    }
+                } else {
+                    [JMUtils showLoginViewAnimated:YES completion:nil];
+                }
+            }];
+            
+        } else {
+            configureNextVCBlock();
         }
     }
 

@@ -494,12 +494,17 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                 NSString *fullPlaceholder = [NSString stringWithFormat:@"$P{%@}", key];
                 urlString = [self.dashboard.maximizedComponent.dashletHyperlinkUrl stringByReplacingOccurrencesOfString:fullPlaceholder
                                                                                                              withString:params[key]];
+                
+                NSMutableArray *urlComponents = [[urlString componentsSeparatedByString:@"?"] mutableCopy];
+                [urlComponents replaceObjectAtIndex:1 withObject:[[urlComponents lastObject] hostEncodedString]];
+                urlString = [urlComponents componentsJoinedByString:@"?"];
                 break;
             }
         }
         if (urlString) {
+            
             [self.delegate dashboardLoader:self
-               didReceiveHyperlinkWithType:JMHyperlinkTypeReference
+               didReceiveHyperlinkWithType:JMHyperlinkTypeAdHocExecution
                                   resource:nil
                                 parameters:@[[NSURL URLWithString:urlString]]];
         }
