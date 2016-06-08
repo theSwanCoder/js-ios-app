@@ -34,8 +34,6 @@
 #import "JMWebViewManager.h"
 #import "JMExternalWindowDashboardControlsVC.h"
 #import "JMDashboardParameter.h"
-#import "JSResourceDashboardUnit.h"
-#import "JSDashboardResource.h"
 #import "JMInputControlsViewController.h"
 #import "JMDashboardInputControlsVC.h"
 #import "JSRESTBase+JSRESTDashboard.h"
