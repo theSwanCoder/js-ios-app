@@ -90,6 +90,9 @@
 		ja = 自動的にセッションを延長する
 		zh = 自动扩展会话
 		tags = ios
+	[servers_useVisualize_label]
+		en = Use Visualize
+		tags = ios,new
 	[servers_title_new]
 		en = New Server Profile
 		de = Neues Serverprofil

@@ -56,7 +56,9 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
     self.serverProfile.organization = [self.optionsArray[2] optionValue];
     self.serverProfile.askPassword  = [self.optionsArray[3] optionValue];
     self.serverProfile.keepSession  = [self.optionsArray[4] optionValue];
-
+#ifndef  __RELEASE__
+    self.serverProfile.useVisualize  = [self.optionsArray[5] optionValue];
+#endif
     
     if ([[JMCoreDataManager sharedInstance].managedObjectContext hasChanges]) {
         NSError *error = nil;
@@ -134,7 +136,16 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
                                             @{@"title" : [self localizedString:@"servers_orgid_label" mandatory:NO],      @"value" : self.serverProfile.organization   ? : @"", @"cellIdentifier" : kJMTextCellIdentifier, @"editable" : @(self.editable)},
                                             @{@"title" : [self localizedString:@"servers_askpassword_label" mandatory:NO], @"value" : self.serverProfile.askPassword  ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier, @"editable" : @(YES)},
                                             @{@"title" : [self localizedString:@"servers_keepSession_label" mandatory:NO], @"value" : self.serverProfile.keepSession  ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier, @"editable" : @(YES)}]];
-    
+
+#ifndef  __RELEASE__
+    [optionsSourceArray addObject:@{
+            @"title" : [self localizedString:@"servers_useVisualize_label" mandatory:NO],
+            @"value" : self.serverProfile.useVisualize  ? : @(0),
+            @"cellIdentifier" : kJMBooleanCellIdentifier,
+            @"editable" : @(YES)
+    }];
+#endif
+
     for (NSDictionary *optionData in optionsSourceArray) {
         JMServerOption *option = [[JMServerOption alloc] init];
         option.titleString      = optionData[@"title"];

@@ -40,6 +40,7 @@
 @property (nonatomic, strong) NSString * alias;
 @property (nonatomic, strong) NSNumber * askPassword;
 @property (nonatomic, strong) NSNumber * keepSession;
+@property (nonatomic, strong) NSNumber * useVisualize;
 @property (nonatomic, strong) NSString * organization;
 @property (nonatomic, strong) NSString * serverUrl;
 @property (nonatomic, strong) NSSet *favorites;
