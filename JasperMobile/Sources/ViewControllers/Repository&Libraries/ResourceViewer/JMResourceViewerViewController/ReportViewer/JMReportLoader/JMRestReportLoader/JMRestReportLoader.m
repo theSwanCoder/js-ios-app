@@ -98,7 +98,8 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
         if (isCreated) {
             JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
                                                                                      parameters:@{
-                                                                                             @"HTMLString" : @""
+                                                                                             @"HTMLString" : @"",
+                                                                                             @"transformationScale" : @"0.0"
                                                                                      }];
             [self.webEnvironment sendJavascriptRequest:injectContentRequest
                                             completion:^(NSDictionary *params, NSError *error) {
@@ -212,9 +213,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
         NSURL *url = [NSURL URLWithString:dependencyURLString];
         NSURLSessionDataTask *downloadTask = [session dataTaskWithURL:url
                                                     completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                                        JMLog(@"downloaded url: %@", url);
                                                         if (--dependenciesCount == 0) {
-                                                            JMLog(@"all operations are finished");
                                                             if (completion) {
                                                                 completion();
                                                             }
@@ -293,7 +292,8 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
     void(^heapBlock)(BOOL, NSError *) = [completion copy];
 
     NSDictionary *params = @{
-            @"HTMLString" : HTMLString
+            @"HTMLString" : HTMLString,
+            @"transformationScale" : [JMUtils isIphone] ? @"0.25" : @"0.5"
     };
     JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
                                                                              parameters:params];
@@ -351,7 +351,6 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                                 }
                                             }
                                             [dependencies addObjectsFromArray:links];
-                                            JMLog(@"Dependencies: %@", dependencies);
                                             __weak __typeof(self) weakSelf = strongSelf;
                                             [strongSelf cacheDependencies:dependencies completion:^{
                                                 __typeof(self) strongSelf = weakSelf;

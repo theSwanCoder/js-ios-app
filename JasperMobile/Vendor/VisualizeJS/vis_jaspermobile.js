@@ -252,7 +252,9 @@ JasperMobile.Report = {
 // REST Reports
 JasperMobile.Report.REST.API = {
     elasticChart: null,
-    injectContent: function(contentObject) {
+    transformationScale: 0.0,
+    injectContent: function(contentObject, transformationScale) {
+        JasperMobile.Report.REST.API.transformationScale = contentObject["transformationScale"];
         var content = contentObject["HTMLString"];
         var container = document.getElementById('container');
         //container.style.pointerEvents = "none"; // disable clicks under container
@@ -304,14 +306,14 @@ JasperMobile.Report.REST.API = {
             var container = document.getElementById('container');
 
             JasperMobile.Helper.resetBodyTransformStyles();
-            JasperMobile.Helper.setBodyTransformStyles(0.5);
+            JasperMobile.Helper.setBodyTransformStyles(JasperMobile.Report.REST.API.transformationScale);
 
             script = scripts[0];
             functionName = script.scriptName.trim();
             chartParams = script.scriptParams;
 
-            var containerWidth = container.offsetWidth / 0.5;
-            var containerHeight = container.offsetHeight / 0.5;
+            var containerWidth = container.offsetWidth / JasperMobile.Report.REST.API.transformationScale ;
+            var containerHeight = container.offsetHeight /JasperMobile.Report.REST.API.transformationScale ;
 
             // Update chart size
             var chartDimensions = chartParams.chartDimensions;
@@ -390,14 +392,14 @@ JasperMobile.Report.REST.API = {
     fitReportViewToScreen: function() {
         JasperMobile.Helper.resetBodyTransformStyles();
         if (JasperMobile.Report.REST.API.elasticChart != null) {
-            JasperMobile.Helper.setBodyTransformStyles(0.5);
+            JasperMobile.Helper.setBodyTransformStyles(JasperMobile.Report.REST.API.transformationScale );
 
             // run script
             var functionName = JasperMobile.Report.REST.API.elasticChart.functionName;
             var chartParams = JasperMobile.Report.REST.API.elasticChart.chartParams;
 
-            var containerWidth = document.getElementById("container").offsetWidth / 0.5;
-            var containerHeight = document.getElementById("container").offsetHeight / 0.5;
+            var containerWidth = document.getElementById("container").offsetWidth / JasperMobile.Report.REST.API.transformationScale ;
+            var containerHeight = document.getElementById("container").offsetHeight / JasperMobile.Report.REST.API.transformationScale ;
 
             var chartDimensions = chartParams.chartDimensions;
             chartDimensions.width = containerWidth;
