@@ -482,10 +482,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleOnAdHocExecution:(NSDictionary *)parameters
 {
-    if (self.isCancelLoad) {
-        return;
-    }
-
     if (self.dashboard.maximizedComponent.dashletHyperlinkTarget == JSDashletHyperlinksTargetTypeBlank) {
         NSDictionary *params = parameters[@"link"][@"parameters"];
         NSString *urlString;
@@ -498,11 +494,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                 NSMutableArray *urlComponents = [[urlString componentsSeparatedByString:@"?"] mutableCopy];
                 [urlComponents replaceObjectAtIndex:1 withObject:[[urlComponents lastObject] hostEncodedString]];
                 urlString = [urlComponents componentsJoinedByString:@"?"];
-                break;
             }
         }
         if (urlString) {
-            
+
             [self.delegate dashboardLoader:self
                didReceiveHyperlinkWithType:JMHyperlinkTypeAdHocExecution
                                   resource:nil

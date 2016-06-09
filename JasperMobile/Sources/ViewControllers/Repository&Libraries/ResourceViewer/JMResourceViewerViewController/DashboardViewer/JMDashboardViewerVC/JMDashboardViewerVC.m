@@ -424,7 +424,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         reportViewController.initialReportParameters = parameters;
         reportViewController.isChildReport = YES;
         [self.navigationController pushViewController:reportViewController animated:YES];
-    } else if (hyperlinkType == JMHyperlinkTypeReference) {
+    } else if (hyperlinkType == JMHyperlinkTypeReference || hyperlinkType == JMHyperlinkTypeAdHocExecution) {
         NSURL *URL = parameters.firstObject;
         if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
             [[UIApplication sharedApplication] openURL:URL];

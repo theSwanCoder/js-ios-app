@@ -772,18 +772,28 @@ JasperMobile.Dashboard.API = {
                     click: function(event, link, defaultHandler) {
                         var type = link.type;
                         JasperMobile.Callback.log("link type: " + type);
-                        var contains = false;
-                        for (var i = 0; i < JasperMobile.Dashboard.API.activeLinks.length; ++i) {
-                            var currentLink = JasperMobile.Dashboard.API.activeLinks[i];
-                            if (currentLink.id == link.id) {
-                                contains = true;
-                                break;
+                        JasperMobile.Dashboard.API.defaultHandler = defaultHandler;
+                        if (JasperMobile.Dashboard.API.isAmber) {
+                            // There are cases when the same event goes several times
+                            // It looks like a vis bug.
+                            var contains = false;
+                            for (var i = 0; i < JasperMobile.Dashboard.API.activeLinks.length; ++i) {
+                                var currentLink = JasperMobile.Dashboard.API.activeLinks[i];
+                                if (currentLink.id == link.id) {
+                                    contains = true;
+                                    break;
+                                }
                             }
+                            if (contains) {
+                                return;
+                            }
+                            // save the link temporary to prevent handling it several times
+                            JasperMobile.Dashboard.API.activeLinks.push(link);
+                            // remove all links after some timeout
+                            setTimeout(function() {
+                                JasperMobile.Dashboard.API.activeLinks = [];
+                            },3000);
                         }
-                        if (contains) {
-                            return;
-                        }
-                        JasperMobile.Dashboard.API.activeLinks.push(link);
                         switch (type) {
                             case "ReportExecution": {
                                 var data = {
@@ -812,10 +822,13 @@ JasperMobile.Dashboard.API = {
                                 break;
                             }
                             case "AdHocExecution": {
-                                // defaultHandler.call();
-                                JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution", {
-                                    "link" : link
-                                });
+                                if (defaultHandler == undefined) {
+                                    JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution", {
+                                        "link" : link
+                                    });
+                                } else {
+                                    defaultHandler.call();
+                                }
                                 break;
                             }
                             default: {
