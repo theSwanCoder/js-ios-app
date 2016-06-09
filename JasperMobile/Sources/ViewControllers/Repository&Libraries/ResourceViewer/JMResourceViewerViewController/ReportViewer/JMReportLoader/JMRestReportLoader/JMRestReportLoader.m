@@ -201,6 +201,36 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
     }];
 }
 
+- (void)cacheDependencies:(NSArray <NSString *>*)dependencies completion:(void(^)(void))completion
+{
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
+
+    __block NSInteger dependenciesCount = dependencies.count;
+    for (NSString *dependencyURLString in dependencies) {
+
+        NSURL *url = [NSURL URLWithString:dependencyURLString];
+        NSURLSessionDataTask *downloadTask = [session dataTaskWithURL:url
+                                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                        JMLog(@"downloaded url: %@", url);
+                                                        if (--dependenciesCount == 0) {
+                                                            JMLog(@"all operations are finished");
+                                                            if (completion) {
+                                                                completion();
+                                                            }
+                                                        }
+                                                        if (data) {
+                                                            // cache
+                                                            NSCachedURLResponse *cachedURLResponse = [[NSCachedURLResponse alloc] initWithResponse:response
+                                                                                                                                              data:data];
+                                                            [[NSURLCache sharedURLCache] storeCachedResponse:cachedURLResponse
+                                                                                                  forRequest:[NSURLRequest requestWithURL:url]];
+                                                        }
+                                                    }];
+        [downloadTask resume];
+    }
+}
+
 - (void)verifyIsContentDivCreatedWithCompletion:(JMRestReportLoaderCompletion __nonnull)completion
 {
     [self.webEnvironment verifyEnvironmentReadyWithCompletion:^(BOOL isEnvironmentReady) {
@@ -304,39 +334,62 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                         if (links.count == 0) { // report without chart scripts
                                             heapBlock(YES, nil);
                                         } else {
+                                            NSMutableArray *dependencies = [NSMutableArray new];
+                                            NSDictionary *renderScript = renderHighchartScripts.firstObject;
+                                            if (renderScript) {
+                                                NSDictionary *scriptParams = renderScript[@"scriptParams"];
+                                                if (scriptParams) {
+                                                    NSDictionary *requirejsConfig = scriptParams[@"requirejsConfig"];
+                                                    if (requirejsConfig) {
+                                                        NSDictionary *paths = requirejsConfig[@"paths"];
+                                                        if (paths) {
+                                                            for (NSString *serviceName in paths) {
+                                                                [dependencies addObject:paths[serviceName]];
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            [dependencies addObjectsFromArray:links];
+                                            JMLog(@"Dependencies: %@", dependencies);
                                             __weak __typeof(self) weakSelf = strongSelf;
-                                            [strongSelf loadDependenciesFromLinks:links
-                                                                 completion:^(BOOL success, NSError *error) {
-                                                                     __typeof(self) strongSelf = weakSelf;
-                                                                     if (success) {
-                                                                         if (otherSources.count) {
-                                                                             __weak __typeof(self) weakSelf = strongSelf;
-                                                                             [strongSelf executeOtherScripts:otherSources
-                                                                                            completion:^(BOOL success, NSError *error) {
-                                                                                                __typeof(self) strongSelf = weakSelf;
-                                                                                                if (success) {
-                                                                                                    if (renderHighchartScripts.count) {
-                                                                                                        [strongSelf renderHighchartsWithScripts:renderHighchartScripts
-                                                                                                                           isElasticChart:strongSelf.report.isElasticChart
-                                                                                                                               completion:heapBlock];
-                                                                                                    } else {
-                                                                                                        heapBlock(YES, nil);
-                                                                                                    }
-                                                                                                } else {
-                                                                                                    heapBlock(NO, error);
-                                                                                                }
-                                                                                            }];
-                                                                         } else if (renderHighchartScripts.count) {
-                                                                             [strongSelf renderHighchartsWithScripts:renderHighchartScripts
-                                                                                                isElasticChart:strongSelf.report.isElasticChart
-                                                                                                    completion:heapBlock];
-                                                                         } else {
-                                                                             heapBlock(YES, nil);
-                                                                         }
-                                                                     } else {
-                                                                         heapBlock(NO, error);
-                                                                     }
-                                                                 }];
+                                            [strongSelf cacheDependencies:dependencies completion:^{
+                                                __typeof(self) strongSelf = weakSelf;
+
+                                                __weak __typeof(self) weakSelf = strongSelf;
+                                                [strongSelf loadDependenciesFromLinks:links
+                                                                           completion:^(BOOL success, NSError *error) {
+                                                                               __typeof(self) strongSelf = weakSelf;
+                                                                               if (success) {
+                                                                                   if (otherSources.count) {
+                                                                                       __weak __typeof(self) weakSelf = strongSelf;
+                                                                                       [strongSelf executeOtherScripts:otherSources
+                                                                                                            completion:^(BOOL success, NSError *error) {
+                                                                                                                __typeof(self) strongSelf = weakSelf;
+                                                                                                                if (success) {
+                                                                                                                    if (renderHighchartScripts.count) {
+                                                                                                                        [strongSelf renderHighchartsWithScripts:renderHighchartScripts
+                                                                                                                                                 isElasticChart:strongSelf.report.isElasticChart
+                                                                                                                                                     completion:heapBlock];
+                                                                                                                    } else {
+                                                                                                                        heapBlock(YES, nil);
+                                                                                                                    }
+                                                                                                                } else {
+                                                                                                                    heapBlock(NO, error);
+                                                                                                                }
+                                                                                                            }];
+                                                                                   } else if (renderHighchartScripts.count) {
+                                                                                       [strongSelf renderHighchartsWithScripts:renderHighchartScripts
+                                                                                                                isElasticChart:strongSelf.report.isElasticChart
+                                                                                                                    completion:heapBlock];
+                                                                                   } else {
+                                                                                       heapBlock(YES, nil);
+                                                                                   }
+                                                                               } else {
+                                                                                   heapBlock(NO, error);
+                                                                               }
+                                                                           }];
+                                            }];
                                         }
                                     }];
 }
