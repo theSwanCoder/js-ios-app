@@ -27,10 +27,7 @@ var JasperMobile = {
             }
         },
         createCallback: function(params) {
-            var callback = "http://jaspermobile.callback/json&&" + JSON.stringify(params);
-            this.Queue.add(function() {
-                window.location.href = callback;
-            })
+            window.webkit.messageHandlers.JMJavascriptNativeBridge.postMessage(params);
         },
         onScriptLoaded : function() {
             this.createCallback(

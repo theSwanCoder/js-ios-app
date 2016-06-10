@@ -30,7 +30,7 @@
 
 NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
-@interface JMJavascriptNativeBridge() <WKNavigationDelegate>
+@interface JMJavascriptNativeBridge() <WKNavigationDelegate, WKScriptMessageHandler>
 @property (nonatomic, weak, readwrite) WKWebView *webView;
 @property (nonatomic, strong) NSMutableDictionary <JMJavascriptRequest *, JMJavascriptRequestCompletion>*requestCompletions;
 @property (nonatomic, strong) NSMutableDictionary <JMJavascriptRequest *, JMJavascriptRequestCompletion>*listenerCallbacks ;
@@ -48,6 +48,8 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         _listenerCallbacks = [NSMutableDictionary dictionary];
         _webView = webView;
         _webView.navigationDelegate = self;
+        [_webView.configuration.userContentController addScriptMessageHandler:self
+                                                                         name:@"JMJavascriptNativeBridge"];
     }
     return self;
 }
@@ -162,17 +164,10 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         return;
     }
 
-    NSString *requestURLString = navigationAction.request.URL.absoluteString;
+    NSLog(@"request from webView: %@", navigationAction.request);
+    NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
 
-    if ([requestURLString rangeOfString:kJMJavascriptNativeBridgeCallbackURL].length) {
-        [self handleCallbackWithRequestURLString:requestURLString];
-        decisionHandler(WKNavigationActionPolicyCancel);
-    } else {
-        NSLog(@"request from webView: %@", navigationAction.request);
-        NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
-
-        decisionHandler(WKNavigationActionPolicyAllow);
-    }
+    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
@@ -192,34 +187,20 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                    }];
 }
 
-#pragma mark - Helpers
-- (NSDictionary *)parseCommand:(NSString *)command
+#pragma mark - WKScriptMessageHandler
+- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
 {
-    NSString *decodedCommand = [command stringByRemovingPercentEncoding];
-    NSArray *components = [decodedCommand componentsSeparatedByString:@"&&"];
-    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+//    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    id parameters = message.body;
+//    JMLog(@"parameters: %@", parameters);
 
-    NSString *parameters = components[1];
-//    JMLog(@"origin parameters: %@", parameters);
-    parameters = [parameters stringByReplacingOccurrencesOfString:@"///\"" withString:@"'"];
-    parameters = [parameters stringByReplacingOccurrencesOfString:@"/\"" withString:@"\""];
-    parameters = [parameters stringByReplacingOccurrencesOfString:@"\"{" withString:@"{"];
-    parameters = [parameters stringByReplacingOccurrencesOfString:@"}\"" withString:@"}"];
-//    JMLog(@"sanitized parameters: %@", parameters);
-    NSData *parametersAsData = [parameters dataUsingEncoding:NSUTF8StringEncoding];
-    NSError *error;
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:parametersAsData
-                                                         options:NSJSONReadingMutableContainers
-                                                           error:&error];
-    if (json) {
-        result[@"callback.type"] = json[@"command"];
-        result[@"parameters"] = json[@"parameters"];
-    } else {
-        result = nil;
+    // At the moment from the webview we can receive only a dictionary
+    if ([parameters isKindOfClass:[NSDictionary class]]) {
+        [self handleCallbackWithRequestParams:parameters];
     }
-
-    return result;
 }
+
+#pragma mark - Helpers
 
 - (BOOL)isLoginRequest:(NSURLRequest *)request
 {
@@ -287,46 +268,31 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 }
 
 #pragma mark - Callbacks
-- (void)handleCallbackWithRequestURLString:(NSString *)requestURLString
+- (void)handleCallbackWithRequestParams:(NSDictionary*)parameters
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSString *callback = [NSString stringWithFormat:@"http://%@/", kJMJavascriptNativeBridgeCallbackURL];
-        NSRange callbackRange = [requestURLString rangeOfString:callback];
-        NSRange commandRange = NSMakeRange(callbackRange.length, requestURLString.length - callbackRange.length);
-        NSString *command = [requestURLString substringWithRange:commandRange];
-
-        NSDictionary *parameters = [self parseCommand:command];
-
-//        JMLog(@"parameters: %@", parameters);
-
-        if (parameters) {
-            JMJavascriptCallback *response = [JMJavascriptCallback new];
-            response.type = parameters[@"callback.type"];
-            response.parameters = parameters[@"parameters"];
-            [self didReceiveCallback:response];
-        } else {
-            // TODO: add general errors handling
-        }
-    });
+    if (parameters) {
+        JMJavascriptCallback *response = [JMJavascriptCallback new];
+        response.type = parameters[@"command"];
+        response.parameters = parameters[@"parameters"];
+        [self didReceiveCallback:response];
+    } else {
+        // TODO: add general errors handling
+    }
 }
 
 - (void)handleUnauthRequest
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.API.unauthorized";
-        for (JMJavascriptRequest *request in self.listenerCallbacks) {
-            if ([request.command isEqualToString:unauthorizedListenerId]) {
-                JMJavascriptRequestCompletion completion = self.listenerCallbacks[request];
-                NSError *error = [self makeErrorFromWebViewError:@{
-                        @"code" : @"authentication.error"
-                }];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completion(nil, error);
-                });
-                break;
-            }
+    NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.API.unauthorized";
+    for (JMJavascriptRequest *request in self.listenerCallbacks) {
+        if ([request.command isEqualToString:unauthorizedListenerId]) {
+            JMJavascriptRequestCompletion completion = self.listenerCallbacks[request];
+            NSError *error = [self makeErrorFromWebViewError:@{
+                    @"code" : @"authentication.error"
+            }];
+            completion(nil, error);
+            break;
         }
-    });
+    }
 }
 
 - (void)didReceiveCallback:(JMJavascriptCallback *)callback
@@ -346,13 +312,9 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                 if (callback.parameters[@"error"]) {
                     NSDictionary *errorJSON = callback.parameters[@"error"];
                     NSError *error = [self makeErrorFromWebViewError:errorJSON];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        completion(nil, error);
-                    });
+                    completion(nil, error);
                 } else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        completion(callback, nil);
-                    });
+                    completion(callback, nil);
                 }
                 isRequestCompletionFound = YES;
                 break;
@@ -366,13 +328,9 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                     if (callback.parameters[@"error"]) {
                         NSDictionary *errorJSON = callback.parameters[@"error"];
                         NSError *error = [self makeErrorFromWebViewError:errorJSON];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            completion(nil, error);
-                        });
+                        completion(nil, error);
                     } else {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            completion(callback, nil);
-                        });
+                        completion(callback, nil);
                     }
                     break;
                 }
