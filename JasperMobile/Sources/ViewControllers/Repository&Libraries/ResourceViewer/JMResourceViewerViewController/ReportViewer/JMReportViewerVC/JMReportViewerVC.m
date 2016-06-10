@@ -153,6 +153,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     [self.reportLoader cancel];
 
     [self cleanWebEnvironment];
+    [self.webEnvironment addCookies];
 
     NSInteger reportCurrentPage = self.report.currentPage;
     if (reportCurrentPage == NSNotFound) {
@@ -160,8 +161,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     }
     [self.report restoreDefaultState];
     [self.report updateCurrentPage:reportCurrentPage];
-
-    [self setupSubviews];
 
     [self runReportWithPage:self.report.currentPage];
 }
@@ -622,7 +621,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
                     __strong typeof(self)strongSelf = weakSelf;
 
-                    [strongSelf setupSubviews];
+                    [strongSelf.webEnvironment addCookies];
 
                     [strongSelf stopShowLoader];
                     if (!result.error) {
@@ -878,9 +877,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)cleanWebEnvironment
 {
-    [self.webEnvironment.webView removeFromSuperview];
-    self.webEnvironment = nil;
-    [[JMWebViewManager sharedInstance] reset];
+#if __IPHONE_9_0
+        [self.webEnvironment removeCookies];
+#else
+        [self.webEnvironment.webView removeFromSuperview];
+        self.webEnvironment = nil;
+        [[JMWebViewManager sharedInstance] reset];
+#endif
 }
 
 #pragma mark - Work with external screen

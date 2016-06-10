@@ -85,6 +85,34 @@
     }
 }
 
+- (void)removeCookies
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+#if __IPHONE_9_0
+    NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeCookies]];
+    WKWebsiteDataStore *websiteDataStore = self.webView.configuration.websiteDataStore;
+    [websiteDataStore fetchDataRecordsOfTypes:dataTypes
+                                                       completionHandler:^(NSArray<WKWebsiteDataRecord *> *array) {
+                                                           [websiteDataStore removeDataOfTypes:dataTypes
+                                                                                forDataRecords:array
+                                                                             completionHandler:^{
+                                                                                 JMLog(@"cookies removed successfully");
+                                                                             }];
+                                                       }];
+#endif
+}
+
+- (void)addCookies
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    NSString *cookiesAsString = [self cookiesAsStringFromCookies:self.restClient.cookies];
+    [self.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
+        JMLog(@"setting cookies");
+        JMLog(@"error: %@", error);
+        JMLog(@"o: %@", o);
+    }];
+}
+
 - (void)loadRequest:(NSURLRequest * __nonnull)request
 {
     if (!self.isCancel) {
