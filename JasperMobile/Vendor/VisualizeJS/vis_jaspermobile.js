@@ -258,10 +258,10 @@ JasperMobile.Report.REST.API = {
 
         if (container == null) {
             JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Report.REST.API.injectContent", {
-                "error" : JSON.stringify({
+                "error" : {
                     "code"    : "internal.error", // TODO: need error codes?
                     "message" : "No container"
-                })
+                }
             });
             return;
         }
@@ -379,10 +379,10 @@ JasperMobile.Report.REST.API = {
             JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.REST.API.applyZoomForReport", {});
         } else {
             JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Report.REST.API.applyZoomForReport", {
-                "error" : JSON.stringify({
+                "error" : {
                     "code"    : "internal.error", // TODO: need error codes?
                     "message" : "No table with class 'jrPage'."
-                })
+                }
             });
         }
     },
@@ -426,10 +426,10 @@ JasperMobile.Report.API = {
         };
         var errorFn = function(error) {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.runReport", {
-                "error" : JSON.stringify({
+                "error" : {
                     "code" : error.errorCode,
                     "message" : error.message
-                })
+                }
             });
         };
         var events = {
@@ -551,10 +551,10 @@ JasperMobile.Report.API = {
                 });
         } else {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.cancel", {
-                "error": JSON.stringify({
+                "error": {
                     "code" : "visualize.error",
                     "message" : "JasperMobile.Report.API.report == nil"
-                })
+                }
             });
         }
     },
@@ -568,18 +568,18 @@ JasperMobile.Report.API = {
                         });
                 }).fail( function(error) {
                     JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.refresh", {
-                        "error": JSON.stringify({
+                        "error": {
                             "code" : error.errorCode,
                             "message" : error.message
-                        })
+                        }
                     });
                 });
         } else {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.refresh", {
-                "error": JSON.stringify({
+                "error": {
                     "code" : "visualize.error",
                     "message" : "JasperMobile.Report.API.report == nil"
-                })
+                }
             });
         }
     },
@@ -593,18 +593,18 @@ JasperMobile.Report.API = {
                 })
                 .fail(function (error) {
                     JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.applyReportParams", {
-                        "error": JSON.stringify({
+                        "error": {
                             "code" : error.errorCode,
                             "message" : error.message
-                        })
+                        }
                     });
                 });
         } else {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.applyReportParams", {
-                "error": JSON.stringify({
+                "error": {
                     "code" : "visualize.error",
                     "message" : "JasperMobile.Report.API.report == nil"
-                })
+                }
             });
         }
     },
@@ -619,18 +619,18 @@ JasperMobile.Report.API = {
                 })
                 .fail(function (error) {
                     JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.selectPage", {
-                        "error": JSON.stringify({
+                        "error": {
                             "code" : error.errorCode,
                             "message" : error.message
-                        })
+                        }
                     });
                 });
         } else {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.selectPage", {
-                "error": JSON.stringify({
+                "error": {
                     "code" : "visualize.error",
                     "message" : "JasperMobile.Report.API.report == nil"
-                })
+                }
             });
         }
     },
@@ -645,10 +645,10 @@ JasperMobile.Report.API = {
             });
         } else {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.exportReport", {
-                "error": JSON.stringify({
+                "error": {
                     "code" : "visualize.error",
                     "message" : "JasperMobile.Report.API.report == nil"
-                })
+                }
             });
         }
     },
@@ -660,18 +660,18 @@ JasperMobile.Report.API = {
                 })
                 .fail(function(error) {
                     JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.destroyReport", {
-                        "error" : JSON.stringify({
+                        "error" : {
                             "code" : error.errorCode,
                             "message" : error.message
-                        })
+                        }
                     });
                 });
         } else {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Report.API.destroyReport", {
-                "error": JSON.stringify({
+                "error": {
                     "code" : "visualize.error",
                     "message" : "JasperMobile.Report.API.report == nil"
-                })
+                }
             });
         }
     },
@@ -695,10 +695,10 @@ JasperMobile.Report.API = {
             JasperMobile.Report.API.report.resize();
         }
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.API.fitReportViewToScreen", {
-            size: JSON.stringify({
+            size: {
                 "width"  : width,
                 "height" : height
-            })
+            }
         });
     }
 };
@@ -754,10 +754,10 @@ JasperMobile.Dashboard.API = {
         };
         var errorFn = function(error) {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.runDashboard", {
-                "error" : JSON.stringify({
+                "error" : {
                     "code" : error.errorCode,
                     "message" : error.message
-                })
+                }
             });
             if (failed != "null") {
                 failed(error);
@@ -890,10 +890,10 @@ JasperMobile.Dashboard.API = {
                 }).fail(function(error) {
                     JasperMobile.Callback.log("failed refresh with error: " + error);
                     JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.minimizeDashlet", {
-                        "error" : JSON.stringify({
+                        "error" : {
                             "code" : error.errorCode,
                             "message" : error.message
-                        })
+                        }
                     });
                 });
             }
@@ -921,10 +921,10 @@ JasperMobile.Dashboard.API = {
                     // TODO: need add callbacks?
                 }, function(error) {
                     JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.minimizeDashlet", {
-                        "error" : JSON.stringify({
+                        "error" : {
                             "code" : error.errorCode,
                             "message" : error.message
-                        })
+                        }
                     });
                 });
             }
@@ -940,18 +940,18 @@ JasperMobile.Dashboard.API = {
                 // TODO: need add callbacks?
             } else {
                 JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
-                    "error" : JSON.stringify({
+                    "error" : {
                         "code" : "maximize.button.error",
                         "message" : "Component is not ready"
-                    })
+                    }
                 });
             }
         } else {
             JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
-                "error" : JSON.stringify({
+                "error" : {
                     "code" : "maximize.button.error",
                     "message" : "Component is not ready"
-                })
+                }
             });
         }
     },
@@ -971,10 +971,10 @@ JasperMobile.Dashboard.API = {
                 }).fail(function(error) {
                     JasperMobile.Callback.log("failed refresh with error: " + error);
                     JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.maximizeDashlet", {
-                        "error" : JSON.stringify({
+                        "error" : {
                             "code" : error.errorCode,
                             "message" : error.message
-                        })
+                        }
                     });
                 });
             }
@@ -987,10 +987,10 @@ JasperMobile.Dashboard.API = {
         if (maximizeButton != null) {
             if (maximizeButton.disabled) {
                 JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
-                    "error" : JSON.stringify({
+                    "error" : {
                         "code" : "maximize.button.error",
                         "message" : "Component is not ready"
-                    })
+                    }
                 });
             } else {
                 maximizeButton.click();
@@ -1035,10 +1035,10 @@ JasperMobile.Dashboard.API = {
             .fail(function(error) {
                 JasperMobile.Callback.log("failed refresh with error: " + error);
                 JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.refresh", {
-                    "error" : JSON.stringify({
+                    "error" : {
                         "code" : error.errorCode,
                         "message" : error.message
-                    })
+                    }
                 });
             });
         setTimeout(function() {
@@ -1076,10 +1076,10 @@ JasperMobile.Dashboard.API = {
             .fail(function(error) {
                 JasperMobile.Callback.log("failed cancel with error: " + error);
                 JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.cancel", {
-                    "error" : JSON.stringify({
+                    "error" : {
                         "code" : error.errorCode,
                         "message" : error.message
-                    })
+                    }
                 });
             });
     },
@@ -1099,10 +1099,10 @@ JasperMobile.Dashboard.API = {
             .fail(function(error) {
                 JasperMobile.Callback.log("failed refresh dashlet with error: " + error);
                 JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.refreshDashlet", {
-                    "error" : JSON.stringify({
+                    "error" : {
                         "code" : error.errorCode,
                         "message" : error.message
-                    })
+                    }
                 });
             });
         setTimeout(function() {
@@ -1141,10 +1141,10 @@ JasperMobile.Dashboard.API = {
             .fail(function(error) {
                 JasperMobile.Callback.log("failed apply");
                 JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.applyParams", {
-                    "error" : JSON.stringify({
+                    "error" : {
                         "code" : error.errorCode,
                         "message" : error.message
-                    })
+                    }
                 });
             });
     },
@@ -1156,18 +1156,18 @@ JasperMobile.Dashboard.API = {
                 })
                 .fail(function(error) {
                     JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.destroy", {
-                        "error" : JSON.stringify({
+                        "error" : {
                             "code" : error.errorCode,
                             "message" : error.message
-                        })
+                        }
                     });
                 });
         } else {
             JasperMobile.Callback.Callbacks.failedCompleted("JasperMobile.Dashboard.API.destroy", {
-                "error": JSON.stringify({
+                "error": {
                     "code" : "visualize.error",
                     "message" : "JasperMobile.Dashboard.API.dashboardObject == nil"
-                })
+                }
             });
         }
     },
@@ -1222,10 +1222,10 @@ JasperMobile.Dashboard.API = {
                         });
                     }, function(error) {
                         JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
-                            "error" : JSON.stringify({
+                            "error" : {
                                 "code" : error.errorCode,
                                 "message" : error.message
-                            }),
+                            },
                             "component" : component
                         });
                     });
@@ -1281,19 +1281,19 @@ JasperMobile.Dashboard.API = {
                     });
                 } else {
                     JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
-                        "error" : JSON.stringify({
+                        "error" : {
                             "code" : "maximize.button.error",
                             "message" : "Component is not ready"
-                        })
+                        }
                     });
                 }
             });
         } else {
             JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
-                "error" : JSON.stringify({
+                "error" : {
                     "code" : "maximize.button.error",
                     "message" : "Component is not ready"
-                })
+                }
             });
         }
     },
@@ -1341,11 +1341,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 window.onerror = function myErrorHandler(message, source, lineno, colno, error) {
     JasperMobile.Callback.Callbacks.failedCallback("JasperMobile.Events.Window.OnError", {
-        "error" : JSON.stringify({
+        "error" : {
             "code" : "window.onerror",
             "message" : message + " " + source + " " + lineno + " " + colno + " " + error,
             "source" : source
-        })
+        }
     });
     return false;
 };
