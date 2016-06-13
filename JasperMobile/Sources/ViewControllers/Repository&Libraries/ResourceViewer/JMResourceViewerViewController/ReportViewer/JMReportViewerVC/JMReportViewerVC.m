@@ -877,13 +877,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)cleanWebEnvironment
 {
-#if __IPHONE_9_0
+    if ([JMUtils isSystemVersion9]) {
         [self.webEnvironment removeCookies];
-#else
+    } else {
         [self.webEnvironment.webView removeFromSuperview];
         self.webEnvironment = nil;
         [[JMWebViewManager sharedInstance] reset];
-#endif
+    }
 }
 
 #pragma mark - Work with external screen

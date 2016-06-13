@@ -584,14 +584,14 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
             __weak typeof(self)strongSelf = weakSelf;
             if (!result.error) {
-#if __IPHONE_9_0
-                [self.webEnvironment removeCookies];
-                [self.webEnvironment addCookies];
-#else
-                [[JMWebViewManager sharedInstance] reset];
-                [strongSelf setupSubviews];
-                [strongSelf configViewport];
-#endif
+                if ([JMUtils isSystemVersion9]) {
+                    [self.webEnvironment removeCookies];
+                    [self.webEnvironment addCookies];
+                } else {
+                    [[JMWebViewManager sharedInstance] reset];
+                    [strongSelf setupSubviews];
+                    [strongSelf configViewport];
+                }
                 completion();
             } else {
                 __weak typeof(self)weakSelf = strongSelf;
