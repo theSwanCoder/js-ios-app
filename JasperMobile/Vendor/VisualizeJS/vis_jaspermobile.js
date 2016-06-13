@@ -501,10 +501,9 @@ JasperMobile.Report.API = {
                         resource: link.parameters._report,
                         params: JasperMobile.Helper.collectReportParams(link)
                     };
-                    var dataString = JSON.stringify(data);
                     JasperMobile.Callback.log("Event: linkOption - ReportExecution");
                     JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.API.run.linkOptions.events.ReportExecution", {
-                        "data" : dataString
+                        "data" : data
                     });
                     break;
                 }
@@ -845,9 +844,8 @@ JasperMobile.Dashboard.API = {
                                     resource: link.parameters._report,
                                     params: JasperMobile.Helper.collectReportParams(link)
                                 };
-                                var dataString = JSON.stringify(data);
                                 JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Dashboard.API.run.linkOptions.events.ReportExecution", {
-                                    "data" : dataString
+                                    "data" : data
                                 });
                                 break;
                             }
