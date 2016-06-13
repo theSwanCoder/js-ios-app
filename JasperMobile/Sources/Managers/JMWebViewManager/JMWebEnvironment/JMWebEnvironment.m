@@ -88,18 +88,18 @@
 - (void)removeCookies
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-#if __IPHONE_9_0
-    NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeCookies]];
-    WKWebsiteDataStore *websiteDataStore = self.webView.configuration.websiteDataStore;
-    [websiteDataStore fetchDataRecordsOfTypes:dataTypes
-                                                       completionHandler:^(NSArray<WKWebsiteDataRecord *> *array) {
-                                                           [websiteDataStore removeDataOfTypes:dataTypes
-                                                                                forDataRecords:array
-                                                                             completionHandler:^{
-                                                                                 JMLog(@"cookies removed successfully");
-                                                                             }];
-                                                       }];
-#endif
+    if ([JMUtils isSystemVersion9]) {
+        NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeCookies]];
+        WKWebsiteDataStore *websiteDataStore = self.webView.configuration.websiteDataStore;
+        [websiteDataStore fetchDataRecordsOfTypes:dataTypes
+                                completionHandler:^(NSArray<WKWebsiteDataRecord *> *array) {
+                                    [websiteDataStore removeDataOfTypes:dataTypes
+                                                         forDataRecords:array
+                                                      completionHandler:^{
+                                                          JMLog(@"cookies removed successfully");
+                                                      }];
+                                }];
+    }
 }
 
 - (void)addCookies
