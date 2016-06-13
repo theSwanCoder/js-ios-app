@@ -267,6 +267,9 @@
                                         }];
         
         if (!error) {
+#ifndef  __RELEASE__
+            serverProfile.useVisualize = @([JMUtils isSupportVisualize]);
+#endif
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
             if (strongSelf.completion) {
                 strongSelf.completion();

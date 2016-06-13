@@ -138,12 +138,14 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
                                             @{@"title" : [self localizedString:@"servers_keepSession_label" mandatory:NO], @"value" : self.serverProfile.keepSession  ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier, @"editable" : @(YES)}]];
 
 #ifndef  __RELEASE__
-    [optionsSourceArray addObject:@{
-            @"title" : [self localizedString:@"servers_useVisualize_label" mandatory:NO],
-            @"value" : self.serverProfile.useVisualize  ? : @(0),
-            @"cellIdentifier" : kJMBooleanCellIdentifier,
-            @"editable" : @(YES)
-    }];
+    if ([JMUtils isSupportVisualize]) {
+        [optionsSourceArray addObject:@{
+                @"title" : [self localizedString:@"servers_useVisualize_label" mandatory:NO],
+                @"value" : self.serverProfile.useVisualize  ? : @(0),
+                @"cellIdentifier" : kJMBooleanCellIdentifier,
+                @"editable" : @(YES)
+        }];
+    }
 #endif
 
     for (NSDictionary *optionData in optionsSourceArray) {
