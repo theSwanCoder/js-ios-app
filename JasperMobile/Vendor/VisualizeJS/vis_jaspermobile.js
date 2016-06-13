@@ -80,8 +80,14 @@ var JasperMobile = {
                 var scriptTag = document.createElement('script');
                 scriptTag.type = "text/javascript";
                 scriptTag.src = scriptURL;
+                scriptTag.async = true;
                 scriptTag.onload = function() {
                     success();
+                };
+                var systemOnError = scriptTag.onError;
+                scriptTag.onError = function (err) {
+                    error(err);
+                    systemOnError(err);
                 };
                 document.head.appendChild(scriptTag);
             } else {
@@ -339,6 +345,46 @@ JasperMobile.Report.REST.API = {
         JasperMobile.Callback.Callbacks.successCompleted("JasperMobile.Report.REST.API.renderHighcharts", {});
     },
     executeScripts: function(parameters) {
+
+        // intercept require js
+
+        requirejs.onError = function (err) {
+            if (err.requireType === 'timeout') {
+                JasperMobile.Callback.log("require error: " + err);
+            } else {
+                throw err;
+            }
+        };
+
+        requirejs.reallyLoad = requirejs.load;
+        requirejs.load = function (context, moduleName, url) {
+
+            // TODO: try load sources of scripts from native code
+            // TODO: to eval the script
+            // TODO: and to fire success here
+
+            JasperMobile.Callback.log("require try load url: " + url);
+
+            var node = document.createElement('script');
+            node.type = 'text/javascript';
+            node.charset = 'utf-8';
+            node.async = true;
+
+            node.setAttribute('data-requirecontext', context.contextName);
+            node.setAttribute('data-requiremodule', moduleName);
+
+            node.addEventListener('load', context.onScriptLoad, false);
+            node.addEventListener('error', context.onScriptError, false);
+            node.src = url;
+
+            document.head.appendChild(node);
+            return node;
+
+            //requirejs.reallyLoad(context, moduleName, url);
+        };
+
+        // execute report's scripts
+
         var scripts = parameters["scripts"];
         for (var i = 0; i < scripts.length; i++) {
             var script = scripts[i];
@@ -1337,6 +1383,13 @@ JasperMobile.Dashboard.API = {
 // Start Point
 document.addEventListener("DOMContentLoaded", function(event) {
     JasperMobile.Callback.onScriptLoaded();
+
+    // intercepting network calls
+    XMLHttpRequest.prototype.reallySend = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function(body) {
+        JasperMobile.Callback.log("send body: " + body);
+        this.reallySend(body);
+    };
 });
 
 window.onerror = function myErrorHandler(message, source, lineno, colno, error) {
