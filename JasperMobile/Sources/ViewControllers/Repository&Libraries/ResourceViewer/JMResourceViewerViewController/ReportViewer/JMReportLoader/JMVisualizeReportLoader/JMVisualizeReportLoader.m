@@ -455,7 +455,7 @@
         [strongSelf.report updateCurrentPage:locationString.integerValue];
     }];
     NSString *localAnchorLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.LocalAnchor";
-    [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
+    [self.webEnvironment addListenerWithId:localAnchorLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(@"JasperMobile.Report.API.run.linkOptions.events.LocalAnchor");
     }];
     NSString *referenceLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.Reference";
