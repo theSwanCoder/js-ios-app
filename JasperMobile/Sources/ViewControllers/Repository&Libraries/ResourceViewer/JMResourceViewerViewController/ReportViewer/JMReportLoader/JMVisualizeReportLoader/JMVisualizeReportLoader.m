@@ -437,6 +437,9 @@
     NSString *changePagesStateListenerId = @"JasperMobile.Report.API.run.changePagesState";
     [self.webEnvironment addListenerWithId:changePagesStateListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(@"JasperMobile.Report.API.run.changePagesState");
+        __typeof(self) strongSelf = weakSelf;
+        NSString *locationString = parameters[@"page"];
+        [strongSelf.report updateCurrentPage:locationString.integerValue];
     }];
     NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.ReportExecution";
     [self.webEnvironment addListenerWithId:reportExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
@@ -447,6 +450,13 @@
     NSString *localPageLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.LocalPage";
     [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(@"JasperMobile.Report.API.run.linkOptions.events.LocalPage");
+        __typeof(self) strongSelf = weakSelf;
+        NSString *locationString = parameters[@"page"];
+        [strongSelf.report updateCurrentPage:locationString.integerValue];
+    }];
+    NSString *localAnchorLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.LocalAnchor";
+    [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.LocalAnchor");
     }];
     NSString *referenceLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.Reference";
     [self.webEnvironment addListenerWithId:referenceLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
@@ -480,7 +490,7 @@
         return;
     }
 
-    NSString *reportPath = params[@"resource"];;
+    NSString *reportPath = params[@"resource"];
     if (reportPath) {
         [self.restClient resourceLookupForURI:reportPath resourceType:kJS_WS_TYPE_REPORT_UNIT modelClass:[JSResourceLookup class] completionBlock:^(JSOperationResult *result) {
             NSError *error = result.error;

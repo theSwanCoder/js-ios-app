@@ -508,18 +508,23 @@ JasperMobile.Report.API = {
                     break;
                 }
                 case "LocalAnchor": {
-                    report
+                    JasperMobile.Report.API.report
                         .pages({
                             anchor: link.anchor
                         })
                         .run()
+                        .done(function(){
+                            JasperMobile.Callback.Callbacks.successCallback("JasperMobile.Report.API.run.linkOptions.events.LocalAnchor", {
+                                "page" : link.pages
+                            });
+                        })
                         .fail(function(error) {
                             JasperMobile.Callback.log(error);
                         });
                     break;
                 }
                 case "LocalPage": {
-                    report.pages(link.pages)
+                    JasperMobile.Report.API.report.pages(link.pages)
                         .run()
                         .fail(function(error) {
                             JasperMobile.Callback.log(error);
