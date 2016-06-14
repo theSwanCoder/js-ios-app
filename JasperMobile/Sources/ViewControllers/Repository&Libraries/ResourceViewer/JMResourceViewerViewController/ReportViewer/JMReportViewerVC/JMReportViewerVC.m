@@ -227,6 +227,11 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     return self.webEnvironment.webView;
 }
 
+- (void)setupSubviews
+{
+    // setup subviews after getting report info
+}
+
 - (void)setupWebEnvironment
 {
     self.webEnvironment = [self currentWebEnvironment];
