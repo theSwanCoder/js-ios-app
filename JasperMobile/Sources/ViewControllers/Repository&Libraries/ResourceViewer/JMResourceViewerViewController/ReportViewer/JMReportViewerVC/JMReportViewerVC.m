@@ -649,14 +649,18 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                         // TODO: Need add restoring for current page
                         [strongSelf runReportWithPage:strongSelf.report.currentPage];
                     } else {
+                        __weak typeof(self)weakSelf = strongSelf;
                         [JMUtils showLoginViewAnimated:YES completion:^{
+                            __strong typeof(self)strongSelf = weakSelf;
                             [strongSelf cancelResourceViewingAndExit:YES];
                         }];
                     }
                 }];
             } else {
+                __weak typeof(self)weakSelf = self;
                 [JMUtils showLoginViewAnimated:YES completion:^{
-                    [self cancelResourceViewingAndExit:YES];
+                    __strong typeof(self)strongSelf = weakSelf;
+                    [strongSelf cancelResourceViewingAndExit:YES];
                 }];
             }
             break;
