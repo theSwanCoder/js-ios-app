@@ -227,7 +227,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     return self.webEnvironment.webView;
 }
 
-- (void)setupSubviews
+- (void)setupWebEnvironment
 {
     self.webEnvironment = [self currentWebEnvironment];
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report
@@ -305,6 +305,14 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                         if (result.error) {
                                                                             errorHandlingBlock(result.error, @"Report Input Controls Loading Error");
                                                                         } else {
+                                                                            // Web Environment requires valid cookies for working,
+                                                                            // in this point we should have valid cookies
+                                                                            // only one case remains - when cookies was changed and the webEvnironment has old cookies
+                                                                            // but this case will handle correctly because the webEvironment raise auth error
+                                                                            if (!self.webEnvironment) {
+                                                                                [strongSelf setupWebEnvironment];
+                                                                            }
+
                                                                             NSMutableArray *visibleInputControls = [NSMutableArray array];
                                                                             for (JSInputControlDescriptor *inputControl in result.objects) {
                                                                                 if (inputControl.visible.boolValue) {
