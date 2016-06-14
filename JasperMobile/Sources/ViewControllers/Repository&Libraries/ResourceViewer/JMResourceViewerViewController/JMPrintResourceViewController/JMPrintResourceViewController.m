@@ -490,8 +490,8 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 
     CGFloat viewWidth = CGRectGetWidth(self.view.bounds);
 
-    if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back.button.title", nil)]) {
-        return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back.button.title", nil)];
+    if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back_button_title", nil)]) {
+        return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back_button_title", nil)];
     }
     return backButtonTitle;
 }
