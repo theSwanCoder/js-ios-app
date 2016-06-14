@@ -718,7 +718,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         self.navigationItem.leftBarButtonItem = backButton;
     } else {
         // TODO: open in safari view controller
-        [[UIApplication sharedApplication] openURL:urlReference];
+        if (urlReference && [[UIApplication sharedApplication] canOpenURL:urlReference]) {
+            [[UIApplication sharedApplication] openURL:urlReference];
+        }
     }
 }
 
