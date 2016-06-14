@@ -49,6 +49,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
 @property (nonatomic, weak) JMWebEnvironment *webEnvironment;
+@property (nonatomic, weak) UIBarButtonItem *currentBackButton;
 @end
 
 @implementation JMReportViewerVC
@@ -191,6 +192,18 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     } else {
         [self hideEmptyReportMessage];
     }
+}
+
+- (void)backActionInWebView
+{
+    [self startShowLoaderWithMessage:@"status_loading"];
+    __weak typeof(self) weakSelf = self;
+    [self.reportLoader runReportWithPage:self.report.currentPage
+                              completion:^(BOOL success, NSError *error) {
+                                  typeof(self) strongSelf = weakSelf;
+                                  [strongSelf stopShowLoader];
+                                  strongSelf.navigationItem.leftBarButtonItem = strongSelf.currentBackButton;
+                              }];
 }
 
 #pragma mark - Notifications
@@ -676,7 +689,20 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 -(void)reportLoader:(id<JMReportLoaderProtocol>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
 {
-    [[UIApplication sharedApplication] openURL:urlReference];
+    NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+    if ([urlReference.host isEqualToString:serverURL.host]) {
+        NSURLRequest *request = [NSURLRequest requestWithURL:urlReference];
+        [self.webEnvironment.webView loadRequest:request];
+
+        UIBarButtonItem *backButton = [self backButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
+                                                         target:self
+                                                         action:@selector(backActionInWebView)];
+        self.currentBackButton = self.navigationItem.leftBarButtonItem;
+        self.navigationItem.leftBarButtonItem = backButton;
+    } else {
+        // TODO: open in safari view controller
+        [[UIApplication sharedApplication] openURL:urlReference];
+    }
 }
 
 #pragma mark - WebView helpers
