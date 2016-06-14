@@ -56,6 +56,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
 @property (nonatomic) JMExternalWindowDashboardControlsVC *controlsViewController;
 @property (nonatomic, weak) JMWebEnvironment *webEnvironment;
+@property (nonatomic, weak) UIBarButtonItem *currentBackButton;
 @end
 
 
@@ -268,6 +269,17 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     }
 }
 
+- (void)backActionInWebView
+{
+    [self startShowLoaderWithMessage:@"status_loading"];
+    __weak typeof(self) weakSelf = self;
+    [self.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
+        typeof(self) strongSelf = weakSelf;
+        [strongSelf stopShowLoader];
+        strongSelf.navigationItem.leftBarButtonItem = strongSelf.currentBackButton;
+    }];
+}
+
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
@@ -419,16 +431,60 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
              parameters:(NSArray *)parameters
 {
     NSLog(@"Parameters = %@", parameters);
-    if (hyperlinkType == JMHyperlinkTypeReportExecution) {
-        JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
-        reportViewController.resource = resource;
-        reportViewController.initialReportParameters = parameters;
-        reportViewController.isChildReport = YES;
-        [self.navigationController pushViewController:reportViewController animated:YES];
-    } else if (hyperlinkType == JMHyperlinkTypeReference || hyperlinkType == JMHyperlinkTypeAdHocExecution) {
-        NSURL *URL = parameters.firstObject;
-        if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
-            [[UIApplication sharedApplication] openURL:URL];
+
+    switch (hyperlinkType) {
+        case JMHyperlinkTypeLocalPage: {
+            break;
+        }
+        case JMHyperlinkTypeLocalAnchor: {
+            break;
+        }
+        case JMHyperlinkTypeRemotePage: {
+            break;
+        }
+        case JMHyperlinkTypeRemoteAnchor: {
+            break;
+        }
+        case JMHyperlinkTypeReference: {
+            NSURL *URL = parameters.firstObject;
+
+            NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+            if ([URL.host isEqualToString:serverURL.host]) {
+                NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+                [self.webEnvironment.webView loadRequest:request];
+
+                UIBarButtonItem *backButton = [self backButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
+                                                                 target:self
+                                                                 action:@selector(backActionInWebView)];
+                self.currentBackButton = self.navigationItem.leftBarButtonItem;
+                self.navigationItem.leftBarButtonItem = backButton;
+            } else {
+                // TODO: open in safari view controller
+                if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
+                    [[UIApplication sharedApplication] openURL:URL];
+                }
+            }
+            break;
+        }
+        case JMHyperlinkTypeReportExecution: {
+
+            JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+            reportViewController.resource = resource;
+            reportViewController.initialReportParameters = parameters;
+            reportViewController.isChildReport = YES;
+            [self.navigationController pushViewController:reportViewController animated:YES];
+
+            break;
+        }
+        case JMHyperlinkTypeAdHocExecution: {
+            // This case appears for JRS 6.0 - 6.0.1
+            // For JRS > 6.1 - in javascript wrapper will be a visualize handler
+            NSURL *URL = parameters.firstObject;
+            // TODO: open in safari view controller
+            if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
+                [[UIApplication sharedApplication] openURL:URL];
+            }
+            break;
         }
     }
 }
