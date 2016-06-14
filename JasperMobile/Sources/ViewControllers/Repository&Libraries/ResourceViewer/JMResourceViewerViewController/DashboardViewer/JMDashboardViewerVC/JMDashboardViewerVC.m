@@ -109,6 +109,11 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 - (void)setupSubviews
 {
+    // setup subviews after getting dashboard info
+}
+
+- (void)setupWebEnvironment
+{
     self.webEnvironment = [self primaryWebEnvironment];
     self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard
                                                                   webEnvironment:self.webEnvironment];
@@ -276,21 +281,16 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         __weak __typeof(self) weakSelf = self;
         [self fetchDashboardMetaDataWithCompletion:^(NSArray *components, NSArray *inputControls, NSError *error) {
             __typeof(self) strongSelf = weakSelf;
+            // Web Environment need valid cookies for working
+            // in this point we should have valid cookies
+            [strongSelf setupWebEnvironment];
             [strongSelf stopShowLoader];
 
             if (error) {
-                if (error.code == JSSessionExpiredErrorCode) {
-                    __weak typeof(self)weakSelf = strongSelf;
-                    [strongSelf handleAuthErrorWithCompletion:^(void) {
-                        __weak typeof(self)strongSelf = weakSelf;
-                        [strongSelf startResourceViewing];
-                    }];
-                } else {
-                    [JMUtils presentAlertControllerWithError:error
-                                                  completion:^{
-                                                      [strongSelf cancelResourceViewingAndExit:YES];
-                                                  }];
-                }
+                [JMUtils presentAlertControllerWithError:error
+                                              completion:^{
+                                                  [strongSelf cancelResourceViewingAndExit:YES];
+                                              }];
             } else {
                 strongSelf.dashboard.components = components;
                 strongSelf.dashboard.inputControls = inputControls;
@@ -298,6 +298,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
             }
         }];
     } else {
+        [self setupWebEnvironment];
         [self startShowDashboard];
     }
 }
@@ -456,47 +457,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     }
 }
 
-#pragma mark - Report Options (Input Controls)
-- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *inputControls, NSError *error))completion
-{
-    __weak typeof(self)weakSelf = self;
-    [self.restClient inputControlsForReport:reportURI
-                             selectedValues:nil
-                            completionBlock:^(JSOperationResult *result) {
-                                __strong typeof(self)strongSelf = weakSelf;
-                                if (result.error) {
-                                    if (result.error.code == JSSessionExpiredErrorCode) {
-                                        [JMUtils showLoginViewAnimated:YES completion:^{
-                                            [strongSelf cancelResourceViewingAndExit:YES];
-                                        }];
-                                    } else {
-                                        if (completion) {
-                                            completion(nil, result.error);
-                                        }
-                                    }
-                                } else {
-
-                                    NSMutableArray *invisibleInputControls = [NSMutableArray array];
-                                    for (JSInputControlDescriptor *inputControl in result.objects) {
-                                        if (!inputControl.visible.boolValue) {
-                                            [invisibleInputControls addObject:inputControl];
-                                        }
-                                    }
-
-                                    if (result.objects.count - invisibleInputControls.count == 0) {
-                                        completion(nil, nil);
-                                    } else {
-                                        NSMutableArray *inputControls = [result.objects mutableCopy];
-                                        if (invisibleInputControls.count) {
-                                            [inputControls removeObjectsInArray:invisibleInputControls];
-                                        }
-                                        completion([inputControls copy], nil);
-                                    }
-                                }
-
-                            }];
-}
-
 #pragma mark - Helpers
 - (BOOL)isDashletShown
 {
@@ -574,22 +534,19 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     if ([self isContentOnTV]) {
         [self switchFromTV];
     }
-
-    [self.webEnvironment.webView removeFromSuperview];
-    [[JMWebViewManager sharedInstance] removeWebEnvironmentForId:self.webEnvironment.identifier];
-    self.webEnvironment = nil;
     
+    [self.webEnvironment removeCookies];
+
     if (self.restClient.keepSession) {
         __weak typeof(self)weakSelf = self;
         [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
             __weak typeof(self)strongSelf = weakSelf;
             if (!result.error) {
                 if ([JMUtils isSystemVersion9]) {
-                    [self.webEnvironment removeCookies];
-                    [self.webEnvironment addCookies];
+                    [strongSelf.webEnvironment addCookies];
                 } else {
                     [[JMWebViewManager sharedInstance] reset];
-                    [strongSelf setupSubviews];
+                    [strongSelf setupWebEnvironment];
                     [strongSelf configViewport];
                 }
                 completion();
