@@ -102,12 +102,6 @@
         NSString *baseURL = self.restClient.serverProfile.serverUrl;
         baseURL = [baseURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
         NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js?baseUrl=%@", self.restClient.serverProfile.serverUrl, baseURL];
-
-        BOOL isNeedNonOptimizedVisualize = [self isAmberServer];
-        if (isNeedNonOptimizedVisualize) {
-            visualizePath = [visualizePath stringByAppendingString:@"&_opt=false"];
-        }
-
         _visualizePath = visualizePath;
     }
     return _visualizePath;

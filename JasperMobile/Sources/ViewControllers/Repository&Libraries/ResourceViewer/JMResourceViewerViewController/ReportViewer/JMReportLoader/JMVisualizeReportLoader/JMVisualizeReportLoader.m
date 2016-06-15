@@ -294,7 +294,7 @@
                                                                                                                 parameters:@{
                                                                                                                         @"scriptURLs" : @[
                                                                                                                                 strongSelf.visualizeManager.visualizePath,
-                                                                                                                                @"https://code.jquery.com/jquery-2.1.4.min.js"
+                                                                                                                                @"https://code.jquery.com/jquery.min.js"
                                                                                                                         ]
                                                                                                                 }];
                                        [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
