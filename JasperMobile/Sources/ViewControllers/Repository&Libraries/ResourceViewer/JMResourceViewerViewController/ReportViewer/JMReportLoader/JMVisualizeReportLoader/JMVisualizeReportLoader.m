@@ -102,40 +102,13 @@
                          withCompletion:heapBlock];
         } else {
             __weak __typeof(self) weakSelf = strongSelf;
-            [strongSelf startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
+            [strongSelf prepearingWebEnvironmentWithCompletion:^(BOOL success, NSError *error) {
                 __typeof(self) strongSelf = weakSelf;
-                if (success) {
-                    __weak __typeof(self) weakSelf = strongSelf;
-                    [strongSelf.webEnvironment loadHTML:strongSelf.report.HTMLString
-                                                baseURL:[NSURL URLWithString:strongSelf.report.baseURLString]
-                                             completion:^(BOOL isSuccess, NSError *error) {
-                                                 __typeof(self) strongSelf = weakSelf;
-                                                 if (isSuccess) {
-                                                     // load vis into web environment
-                                                     JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
-                                                                                                                              parameters:@{
-                                                                                                                                      @"scriptURL" : strongSelf.visualizeManager.visualizePath,
-                                                                                                                              }];
-                                                     [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
-                                                                                     completion:^(NSDictionary *params, NSError *error) {
-                                                                                         if (error) {
-                                                                                             JMLog(@"error: %@", error);
-                                                                                         } else {
-                                                                                             [strongSelf freshLoadReportWithPageNumber:page
-                                                                                                                            completion:completionBlock];
-                                                                                         }
-                                                                                     }];
-                                                 } else {
-                                                     if (heapBlock) {
-                                                         NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
-                                                         heapBlock(NO, vizError);
-                                                     }
-                                                 }
-                                             }];
+                if (error) {
+                    JMLog(@"error: %@", error);
                 } else {
-                    if (heapBlock) {
-                        heapBlock(NO, error);
-                    }
+                    [strongSelf freshLoadReportWithPageNumber:page
+                                                   completion:completionBlock];
                 }
             }];
         }
@@ -161,46 +134,22 @@
     [self.webEnvironment verifyEnvironmentReadyWithCompletion:^(BOOL isWebViewLoaded) {
         __typeof(self) strongSelf = weakSelf;
         if (!isWebViewLoaded) {
-            strongSelf.isReportInLoadingProcess = YES;
-            [strongSelf startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
-                    if (success) {
-                        __weak __typeof(self) weakSelf = strongSelf;
-                        [strongSelf.webEnvironment loadHTML:strongSelf.report.HTMLString
-                                                    baseURL:[NSURL URLWithString:strongSelf.report.baseURLString]
-                                                 completion:^(BOOL isSuccess, NSError *error) {
-                                                     __typeof(self) strongSelf = weakSelf;
-                                                     if (isSuccess) {
-                                                         // load vis into web environment
-                                                         JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
-                                                                                                                                  parameters:@{
-                                                                                                                                          @"scriptURL" : strongSelf.visualizeManager.visualizePath,
-                                                                                                                                  }];
-                                                         [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
-                                                                                               completion:^(NSDictionary *params, NSError *error) {
-                                                                                                   if (error) {
-                                                                                                       JMLog(@"error: %@", error);
-                                                                                                   } else {
-                                                                                                       [strongSelf freshLoadReportWithPageNumber:strongSelf.report.currentPage
-                                                                                                                                      completion:completion];
-                                                                                                   }
-                                                                                               }];
-                                                     } else {
-                                                         NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
-                                                         heapBlock(NO, vizError);
-                                                     }
-                                                 }];
-                    } else {
-                        if (heapBlock) {
-                            heapBlock(NO, error);
-                        }
-                    }
-                }];
+            __weak __typeof(self) weakSelf = strongSelf;
+            [self prepearingWebEnvironmentWithCompletion:^(BOOL success, NSError *error) {
+                __typeof(self) strongSelf = weakSelf;
+                if (error) {
+                    JMLog(@"error: %@", error);
+                } else {
+                    [strongSelf freshLoadReportWithPageNumber:strongSelf.report.currentPage
+                                                   completion:completion];
+                }
+            }];
         } else {
             [strongSelf.report updateCurrentPage:1];
             [strongSelf.report updateCountOfPages:NSNotFound];
 
             JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.applyReportParams"
-                                                                        parameters:[self runParameters]];
+                                                                        parameters:[strongSelf runParameters]];
             __weak __typeof(self) weakSelf = strongSelf;
             [strongSelf.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
                 __typeof(self) strongSelf = weakSelf;
@@ -327,6 +276,44 @@
 }
 
 #pragma mark - Private
+- (void)prepearingWebEnvironmentWithCompletion:(JSReportLoaderCompletionBlock)completion
+{
+    JSReportLoaderCompletionBlock heapBlock = [completion copy];
+
+    self.isReportInLoadingProcess = YES;
+    [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
+        if (success) {
+            __weak __typeof(self) weakSelf = self;
+            [self.webEnvironment loadHTML:self.report.HTMLString
+                                  baseURL:[NSURL URLWithString:self.report.baseURLString]
+                               completion:^(BOOL isSuccess, NSError *error) {
+                                   __typeof(self) strongSelf = weakSelf;
+                                   if (isSuccess) {
+                                       // load vis into web environment
+                                       JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
+                                                                                                                parameters:@{
+                                                                                                                        @"scriptURLs" : @[
+                                                                                                                                strongSelf.visualizeManager.visualizePath,
+                                                                                                                                @"https://code.jquery.com/jquery-2.1.4.min.js"
+                                                                                                                        ]
+                                                                                                                }];
+                                       [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
+                                                                             completion:^(NSDictionary *params, NSError *error) {
+                                                                                 heapBlock(error == nil, error);
+                                                                             }];
+                                   } else {
+                                       NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                                       heapBlock(NO, vizError);
+                                   }
+                               }];
+        } else {
+            if (heapBlock) {
+                heapBlock(NO, error);
+            }
+        }
+    }];
+}
+
 - (void)freshLoadReportWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
