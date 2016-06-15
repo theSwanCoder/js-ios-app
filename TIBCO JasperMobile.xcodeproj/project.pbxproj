@@ -197,6 +197,14 @@
 		93CA63C41D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478B3040B5E554EBAD617D /* Localizable.strings */; };
 		93CA63C51D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A147869D5A4968747665F846 /* Localizable.strings */; };
 		93CA63C71D11763600265DE4 /* JMLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFA81AAF2CFB00DD072C /* JMLocalization.m */; };
+		93CA63C81D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14780F9AC66CD181A7D4662 /* Localizable.strings */; };
+		93CA63C91D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478DEB63BFB19C76EE0F51 /* Localizable.strings */; };
+		93CA63CA1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14785095AFB6CA6381BA957 /* Localizable.strings */; };
+		93CA63CB1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14782938D2027B3C7755AAB /* Localizable.strings */; };
+		93CA63CC1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478D318630E8E65F67373A /* Localizable.strings */; };
+		93CA63CD1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478507E7AB10737467AF01 /* Localizable.strings */; };
+		93CA63CE1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478B3040B5E554EBAD617D /* Localizable.strings */; };
+		93CA63CF1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A147869D5A4968747665F846 /* Localizable.strings */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
 		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
@@ -3303,6 +3311,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93CA63C81D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63C91D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CA1D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CB1D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CC1D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CD1D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CE1D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CF1D11923C00265DE4 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
