@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "JMUITestConstants.h"
+#import "JMLocalization.h"
 
 @interface JMBaseUITestCase : XCTestCase
 @property(nonatomic, strong) XCUIApplication *application;

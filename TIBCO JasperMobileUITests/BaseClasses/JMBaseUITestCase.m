@@ -191,7 +191,9 @@
     // Confirm if need http end point
     XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
     if (securityWarningAlert.exists) {
-        XCUIElement *securityWarningAlertOkButton = securityWarningAlert.collectionViews.buttons[@"ok"];
+        NSString *okButtonTitle = JMCustomLocalizedStringForTests(@"dialog_button_ok", NSStringFromClass(self.class));
+        NSLog(@"okButtonTitle: %@", okButtonTitle);
+        XCUIElement *securityWarningAlertOkButton = securityWarningAlert.collectionViews.buttons[okButtonTitle];
         if (securityWarningAlertOkButton.exists) {
             [securityWarningAlertOkButton tap];
         } else {
