@@ -196,6 +196,7 @@
 		93CA63C31D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478507E7AB10737467AF01 /* Localizable.strings */; };
 		93CA63C41D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478B3040B5E554EBAD617D /* Localizable.strings */; };
 		93CA63C51D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A147869D5A4968747665F846 /* Localizable.strings */; };
+		93CA63C71D11763600265DE4 /* JMLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFA81AAF2CFB00DD072C /* JMLocalization.m */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
 		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
@@ -3453,6 +3454,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93CA63C71D11763600265DE4 /* JMLocalization.m in Sources */,
 				933CAFBE1C7770B600EF6F84 /* JMRecentlyViewedPageUITests.m in Sources */,
 				933CAFA91C776FCB00EF6F84 /* JMReportInfoDialogUITests.m in Sources */,
 				933CAFAC1C776FEC00EF6F84 /* JMSaveReportPageUITests.m in Sources */,
