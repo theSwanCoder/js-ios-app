@@ -150,7 +150,9 @@ JasperMobile.Callback = {
         }
     },
     createCallback: function(params) {
-        window.webkit.messageHandlers.JMJavascriptNativeBridge.postMessage(params);
+        this.Queue.add(function() {
+            window.webkit.messageHandlers.JMJavascriptNativeBridge.postMessage(params);
+        });
     },
     log : function(message) {
         //console.log("Log: " + message);
