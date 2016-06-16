@@ -148,7 +148,7 @@
             [strongSelf.report updateCurrentPage:1];
             [strongSelf.report updateCountOfPages:NSNotFound];
 
-            JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.applyReportParams"
+            JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.applyReportParams"
                                                                         parameters:[strongSelf runParameters]];
             __weak __typeof(self) weakSelf = strongSelf;
             [strongSelf.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
@@ -189,7 +189,7 @@
     [self.report updateCountOfPages:NSNotFound];
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Report.API.refresh";
+    request.command = @"JasperMobile.Report.VIS.API.refresh";
 
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
@@ -215,7 +215,7 @@
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.cancelLoading = YES;
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.cancel"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.cancel"
                                                                 parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (parameters) {
@@ -236,7 +236,7 @@
     }
 
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.destroyReport"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.destroyReport"
                                                                 parameters:nil];
     __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
@@ -270,7 +270,7 @@
 - (void)fitReportViewToScreen
 {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Report.API.fitReportViewToScreen";
+    request.command = @"JasperMobile.Report.VIS.API.fitReportViewToScreen";
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:nil];
 }
@@ -328,7 +328,7 @@
     [self.report updateCountOfPages:NSNotFound];
     [self.report updateCurrentPage:pageNumber];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.runReport"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.runReport"
                                                                 parameters: @{
                                                                         @"uri"        : self.report.reportURI,
                                                                         @"params"     : [self runParameters],
@@ -364,7 +364,7 @@
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.API.selectPage"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.selectPage"
                                                                 parameters:@{
                                                                         @"pageNumber" : @(pageNumber)
                                                                 }];
@@ -412,42 +412,42 @@
 
 - (void)addListenersForVisualizeEvents
 {
-    NSString *reportCompletedListenerId = @"JasperMobile.Report.API.run.reportCompleted";
+    NSString *reportCompletedListenerId = @"JasperMobile.Report.VIS.API.run.reportCompleted";
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment addListenerWithId:reportCompletedListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.API.run.reportCompleted");
+        JMLog(@"JasperMobile.Report.VIS.API.run.reportCompleted");
         __typeof(self) strongSelf = weakSelf;
         // TODO: move into separate method
         NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
         [strongSelf.report updateCountOfPages:countOfPages];
     }];
-    NSString *changePagesStateListenerId = @"JasperMobile.Report.API.run.changePagesState";
+    NSString *changePagesStateListenerId = @"JasperMobile.Report.VIS.API.run.changePagesState";
     [self.webEnvironment addListenerWithId:changePagesStateListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.API.run.changePagesState");
+        JMLog(@"JasperMobile.Report.VIS.API.run.changePagesState");
         __typeof(self) strongSelf = weakSelf;
         NSString *locationString = parameters[@"page"];
         [strongSelf.report updateCurrentPage:locationString.integerValue];
     }];
-    NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.ReportExecution";
+    NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.Report.VIS.API.run.linkOptions.events.ReportExecution";
     [self.webEnvironment addListenerWithId:reportExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.ReportExecution");
+        JMLog(@"JasperMobile.Report.VIS.API.run.linkOptions.events.ReportExecution");
         __typeof(self) strongSelf = weakSelf;
         [strongSelf handleRunReportWithParameters:parameters];
     }];
-    NSString *localPageLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.LocalPage";
+    NSString *localPageLinkOptionListenerId = @"JasperMobile.Report.VIS.API.run.linkOptions.events.LocalPage";
     [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.LocalPage");
+        JMLog(@"JasperMobile.Report.VIS.API.run.linkOptions.events.LocalPage");
         __typeof(self) strongSelf = weakSelf;
         NSString *locationString = parameters[@"page"];
         [strongSelf.report updateCurrentPage:locationString.integerValue];
     }];
-    NSString *localAnchorLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.LocalAnchor";
+    NSString *localAnchorLinkOptionListenerId = @"JasperMobile.Report.VIS.API.run.linkOptions.events.LocalAnchor";
     [self.webEnvironment addListenerWithId:localAnchorLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.LocalAnchor");
+        JMLog(@"JasperMobile.Report.VIS.API.run.linkOptions.events.LocalAnchor");
     }];
-    NSString *referenceLinkOptionListenerId = @"JasperMobile.Report.API.run.linkOptions.events.Reference";
+    NSString *referenceLinkOptionListenerId = @"JasperMobile.Report.VIS.API.run.linkOptions.events.Reference";
     [self.webEnvironment addListenerWithId:referenceLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.Reference");
+        JMLog(@"JasperMobile.Report.VIS.API.run.linkOptions.events.Reference");
         __typeof(self) strongSelf = weakSelf;
         NSString *locationString = parameters[@"location"];
         if (locationString) {
