@@ -27,6 +27,7 @@
 //
 
 #import "JMReport.h"
+#import "JMReportBookmark.h"
 
 @implementation JMReport
 

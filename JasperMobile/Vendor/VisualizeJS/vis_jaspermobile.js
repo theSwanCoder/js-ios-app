@@ -428,6 +428,12 @@ JasperMobile.Report.VIS.API = {
                 JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.run.changePagesState", {
                     "page" : page
                 });
+            },
+            bookmarksReady : function (bookmarks) {
+                JasperMobile.Callback.log("Event: bookmarksReady");
+                JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.bookmarksReady", {
+                    "bookmarks" : bookmarks
+                });
             }
         };
         var linkOptionsEventsClick = function(event, link, defaultHandler){

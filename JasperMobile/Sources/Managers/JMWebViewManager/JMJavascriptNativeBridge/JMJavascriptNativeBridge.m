@@ -281,7 +281,12 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
             response.type = JMJavascriptCallbackTypeListener;
         }
         response.command = parameters[@"command"];
-        response.parameters = parameters[@"parameters"];
+        id params = parameters[@"parameters"];
+        // TODO: investigate other cases
+        if (![params isKindOfClass:[NSDictionary class]]) {
+            params = nil;
+        }
+        response.parameters = params;
         [self didReceiveResponse:response];
     } else {
         // TODO: add general errors handling
@@ -306,7 +311,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 - (void)didReceiveResponse:(JMJavascriptResponse *)response
 {
 //    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-//    JMLog(@"%@", callback);
+//    JMLog(@"%@", response);
     switch(response.type) {
         case JMJavascriptCallbackTypeLog: {
             JMLog(@"Bridge Message: %@", response.parameters[@"message"]);
@@ -316,7 +321,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
             for (JMJavascriptRequest *request in self.listenerCallbacks) {
                 if ([request.command isEqualToString:response.command]) {
                     JMJavascriptRequestCompletion completion = self.listenerCallbacks[request];
-                    if ([response.parameters isKindOfClass:[NSDictionary class]] && response.parameters[@"error"]) {
+                    if (response.parameters && response.parameters[@"error"]) {
                         NSDictionary *errorJSON = response.parameters[@"error"];
                         NSError *error = [self makeErrorFromWebViewError:errorJSON];
                         completion(nil, error);
@@ -331,12 +336,10 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         case JMJavascriptCallbackTypeCallback: {
             JMJavascriptRequest *foundRequest;
             for (JMJavascriptRequest *request in self.requestCompletions) {
-//            JMLog(@"request.command: %@", request.command);
-//            JMLog(@"callback.command: %@", callback.command);
                 if ([request.command isEqualToString:response.command]) {
                     foundRequest = request;
                     JMJavascriptRequestCompletion completion = self.requestCompletions[request];
-                    if ([response.parameters isKindOfClass:[NSDictionary class]] && response.parameters[@"error"]) {
+                    if (response.parameters && response.parameters[@"error"]) {
                         NSDictionary *errorJSON = response.parameters[@"error"];
                         NSError *error = [self makeErrorFromWebViewError:errorJSON];
                         completion(nil, error);

@@ -34,8 +34,9 @@
 
 #import "JSReport.h"
 
+@class JMReportBookmark;
+
 @interface JMReport : JSReport
 @property (nonatomic, strong) UIImage *thumbnailImage;
-
-
+@property (nonatomic, strong) NSArray <JMReportBookmark *>* bookmarks; // @since 2.6
 @end
