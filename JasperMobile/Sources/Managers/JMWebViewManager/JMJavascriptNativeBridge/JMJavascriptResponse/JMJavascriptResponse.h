@@ -22,19 +22,23 @@
 
 
 //
-//  JMJavascriptCallback.m
+//  JMJavascriptResponse.h
 //  TIBCO JasperMobile
 //
 
-#import "JMJavascriptCallback.h"
+/**
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.1
+*/
 
+typedef NS_ENUM(NSInteger, JMJavascriptResponseType) {
+    JMJavascriptCallbackTypeLog,
+    JMJavascriptCallbackTypeListener,
+    JMJavascriptCallbackTypeCallback
+};
 
-@implementation JMJavascriptCallback
-
-- (NSString *)description
-{
-    NSString *description = [NSString stringWithFormat:@"\nJMJavascriptCallback: %@\ntype: %@\nparams:%@", [super description], self.type, self.parameters];
-    return description;
-}
-
+@interface JMJavascriptResponse : NSObject
+@property (nonatomic, assign) JMJavascriptResponseType type;
+@property (nonatomic, copy) NSString *command;
+@property (nonatomic, copy) NSDictionary *parameters;
 @end

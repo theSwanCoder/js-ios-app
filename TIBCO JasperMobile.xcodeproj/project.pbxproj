@@ -217,7 +217,7 @@
 		A147868F7C53F429A32FC687 /* JMSchedulesCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A14784808066FBB816827E92 /* JMSchedulesCollectionViewController.m */; };
 		A14786B338581A88A709488F /* JMMultiSelectedItemsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A14786A52719B5573D359D68 /* JMMultiSelectedItemsVC.m */; };
 		A14786CAF514A7439077E943 /* JMSelectedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478B0A8AF6716FBED84C6F /* JMSelectedItem.m */; };
-		A14787748E391A1967D72E74 /* JMJavascriptCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A147806D6CC4CAC23BF4488F /* JMJavascriptCallback.m */; };
+		A14787748E391A1967D72E74 /* JMJavascriptResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = A147806D6CC4CAC23BF4488F /* JMJavascriptResponse.m */; };
 		A14787F66450947BD9F35A1E /* JMSavedResources+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478C290748B548CC6FEF89 /* JMSavedResources+Helpers.m */; };
 		A14788CFC02FE10C3B77213E /* JMFavorites+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A14783B4F80FE846BE43F22C /* JMFavorites+Helpers.m */; };
 		A1478929F3B48A50E30FC24F /* JMScheduleVCRow.m in Sources */ = {isa = PBXBuildFile; fileRef = A147889561B62823DCE4E2E9 /* JMScheduleVCRow.m */; };
@@ -629,7 +629,7 @@
 		93F54FDA1BD7975E00355A30 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.adhoc.xcconfig; path = "Pods/Target Support Files/Pods/Pods.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A1478004BA83FE92F7423390 /* Saved_Reports_Viewer_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Saved_Reports_Viewer_View.txt; sourceTree = "<group>"; };
-		A147806D6CC4CAC23BF4488F /* JMJavascriptCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptCallback.m; sourceTree = "<group>"; };
+		A147806D6CC4CAC23BF4488F /* JMJavascriptResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptResponse.m; sourceTree = "<group>"; };
 		A14780AC179AEE75F176117E /* Schedules.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Schedules.txt; sourceTree = "<group>"; };
 		A14781236AC9524AE2DDCA14 /* JMWebEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMWebEnvironment.m; sourceTree = "<group>"; };
 		A14781434FC5B3E2E32F77C8 /* Buttons.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Buttons.txt; sourceTree = "<group>"; };
@@ -690,7 +690,7 @@
 		A147892DC843D1F525D4DCB5 /* ja */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ja; path = Localizable.strings; sourceTree = "<group>"; };
 		A1478935CB12E39D40C6D7BF /* JMDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardLoader.h; sourceTree = "<group>"; };
 		A14789652CAAA6F45433A045 /* JMDashboardParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardParameter.h; sourceTree = "<group>"; };
-		A14789685FD53B2348D1DB66 /* JMJavascriptCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptCallback.h; sourceTree = "<group>"; };
+		A14789685FD53B2348D1DB66 /* JMJavascriptResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptResponse.h; sourceTree = "<group>"; };
 		A147899A50231E138A3AE445 /* JMFavorites+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMFavorites+Helpers.h"; sourceTree = "<group>"; };
 		A14789ABBB4628995F7040B6 /* JMJavascriptRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptRequest.m; sourceTree = "<group>"; };
 		A14789E4E464A269362693AA /* Dashboard_Viewer.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Dashboard_Viewer.txt; sourceTree = "<group>"; };
@@ -2495,13 +2495,13 @@
 			path = JMNewScheduleBooleanCell;
 			sourceTree = "<group>";
 		};
-		A14781782D709F809D87F650 /* JMJavascriptCallback */ = {
+		A14781782D709F809D87F650 /* JMJavascriptResponse */ = {
 			isa = PBXGroup;
 			children = (
-				A14789685FD53B2348D1DB66 /* JMJavascriptCallback.h */,
-				A147806D6CC4CAC23BF4488F /* JMJavascriptCallback.m */,
+				A14789685FD53B2348D1DB66 /* JMJavascriptResponse.h */,
+				A147806D6CC4CAC23BF4488F /* JMJavascriptResponse.m */,
 			);
-			path = JMJavascriptCallback;
+			path = JMJavascriptResponse;
 			sourceTree = "<group>";
 		};
 		A14781C6ECD42368E2A71CD1 /* JMAnalyticsManager */ = {
@@ -2620,7 +2620,7 @@
 			isa = PBXGroup;
 			children = (
 				A1478E4A78EBEA7E469DF795 /* JMJavascriptRequest */,
-				A14781782D709F809D87F650 /* JMJavascriptCallback */,
+				A14781782D709F809D87F650 /* JMJavascriptResponse */,
 				A147852FE2376CA352A4FB2A /* JMJavascriptNativeBridge.h */,
 				A14786A5622B2E985A799F21 /* JMJavascriptNativeBridge.m */,
 			);
@@ -3605,7 +3605,7 @@
 				A147862ACF2E0D9C1DAB389F /* JMScheduleBoolenCell.m in Sources */,
 				A147822581385266BCDCA6FB /* JMScheduleVCSection.m in Sources */,
 				A147845B677EC917000192AB /* JMJavascriptRequest.m in Sources */,
-				A14787748E391A1967D72E74 /* JMJavascriptCallback.m in Sources */,
+				A14787748E391A1967D72E74 /* JMJavascriptResponse.m in Sources */,
 				A14785CEE1595A4C5D894C11 /* JMJavascriptNativeBridge.m in Sources */,
 				A1478E2F53F91CD7BCDACB1E /* JMWebEnvironment.m in Sources */,
 				A147868F7C53F429A32FC687 /* JMSchedulesCollectionViewController.m in Sources */,
@@ -4250,8 +4250,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
@@ -4284,7 +4284,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaspersoft.mobile;
 				PRODUCT_NAME = "TIBCO JasperMobile";
-				PROVISIONING_PROFILE = "085f4a2b-8712-4080-bce1-3afb27684d3a";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";

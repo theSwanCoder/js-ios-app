@@ -68,7 +68,7 @@
 
     if (!self.isCancel) {
         if (completion) {
-            javascriptRequestCompletion = ^(JMJavascriptCallback *callback, NSError *error) {
+            javascriptRequestCompletion = ^(JMJavascriptResponse *callback, NSError *error) {
                 if (!self.isCancel) {
                     if (error) {
                         completion(NO, error);
@@ -170,7 +170,7 @@
     if (!self.isCancel) {
         if (completion) {
             [self.bridge sendJavascriptRequest:request
-                                    completion:^(JMJavascriptCallback *callback, NSError *error) {
+                                    completion:^(JMJavascriptResponse *callback, NSError *error) {
                                         if (!self.isCancel) {
                                             completion(callback.parameters, error);
                                         }
@@ -188,7 +188,7 @@
     if (!self.isCancel) {
         __weak __typeof(self) weakSelf = self;
         [self.bridge addListenerWithId:listenerId
-                              callback:^(JMJavascriptCallback *jsCallback, NSError *error) {
+                              callback:^(JMJavascriptResponse *jsCallback, NSError *error) {
                                   __typeof(self) strongSelf = weakSelf;
                                   if (!strongSelf.isCancel) {
                                       callback(jsCallback.parameters, error);
@@ -297,7 +297,7 @@
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.isContainerLoaded"
                                                                 parameters:nil];
     [self.bridge sendJavascriptRequest:request
-                            completion:^(JMJavascriptCallback *callback, NSError *error) {
+                            completion:^(JMJavascriptResponse *callback, NSError *error) {
                                 if (error) {
                                     completion(NO);
                                 } else {

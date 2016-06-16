@@ -22,16 +22,19 @@
 
 
 //
-//  JMJavascriptCallback.h
+//  JMJavascriptResponse.m
 //  TIBCO JasperMobile
 //
 
-/**
-@author Aleksandr Dakhno odahno@tibco.com
-@since 2.1
-*/
+#import "JMJavascriptResponse.h"
 
-@interface JMJavascriptCallback : NSObject
-@property (nonatomic, copy) NSString *type;
-@property (nonatomic, copy) NSDictionary *parameters;
+
+@implementation JMJavascriptResponse
+
+- (NSString *)description
+{
+    NSString *description = [NSString stringWithFormat:@"\nJMJavascriptCallback: %@\ntype: %@\nparams:%@", [super description], @(self.type), self.parameters];
+    return description;
+}
+
 @end

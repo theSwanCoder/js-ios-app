@@ -73,7 +73,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"DOMContentLoaded";
     JMJavascriptRequestCompletion heapBlock = [completion copy];
-    JMJavascriptRequestCompletion completionWithCookies = ^(JMJavascriptCallback *callback, NSError *error) {
+    JMJavascriptRequestCompletion completionWithCookies = ^(JMJavascriptResponse *callback, NSError *error) {
         JMLog(@"Callback: DOMContentLoaded");
         if (heapBlock) {
             heapBlock(callback, error);
@@ -178,7 +178,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     NSString *listenerId = @"JasperMobile.Events.Window.OnError";
    __weak __typeof(self) weakSelf = self;
     [self addListenerWithId:listenerId
-                   callback:^(JMJavascriptCallback *callback, NSError *error) {
+                   callback:^(JMJavascriptResponse *callback, NSError *error) {
                        __typeof(self) strongSelf = weakSelf;
                        if ([strongSelf.delegate respondsToSelector:@selector(javascriptNativeBridge:didReceiveOnWindowError:)]) {
                            [strongSelf.delegate javascriptNativeBridge:strongSelf
@@ -271,10 +271,18 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 - (void)handleCallbackWithRequestParams:(NSDictionary*)parameters
 {
     if (parameters) {
-        JMJavascriptCallback *response = [JMJavascriptCallback new];
-        response.type = parameters[@"command"];
+        JMJavascriptResponse *response = [JMJavascriptResponse new];
+        NSString *type = parameters[@"type"];
+        if ([type isEqualToString:@"logging"]) {
+            response.type = JMJavascriptCallbackTypeLog;
+        } else if ([type isEqualToString:@"callback"]) {
+            response.type = JMJavascriptCallbackTypeCallback;
+        } else if ([type isEqualToString:@"listener"]) {
+            response.type = JMJavascriptCallbackTypeListener;
+        }
+        response.command = parameters[@"command"];
         response.parameters = parameters[@"parameters"];
-        [self didReceiveCallback:response];
+        [self didReceiveResponse:response];
     } else {
         // TODO: add general errors handling
     }
@@ -295,46 +303,53 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     }
 }
 
-- (void)didReceiveCallback:(JMJavascriptCallback *)callback
+- (void)didReceiveResponse:(JMJavascriptResponse *)response
 {
 //    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if([callback.type isEqualToString:@"logging"]) {
-        JMLog(@"Bridge Message: %@", callback.parameters[@"message"]);
-    } else {
-//        JMLog(@"%@", callback);
-        BOOL isRequestCompletionFound = NO;
-        for (JMJavascriptRequest *request in self.requestCompletions) {
-//            JMLog(@"request.command: %@", request.command);
-//            JMLog(@"callback.type: %@", callback.type);
-            if ([request.command isEqualToString:callback.type]) {
-                JMJavascriptRequestCompletion completion = self.requestCompletions[request];
-                [self.requestCompletions removeObjectForKey:request];
-                if (callback.parameters[@"error"]) {
-                    NSDictionary *errorJSON = callback.parameters[@"error"];
-                    NSError *error = [self makeErrorFromWebViewError:errorJSON];
-                    completion(nil, error);
-                } else {
-                    completion(callback, nil);
-                }
-                isRequestCompletionFound = YES;
-                break;
-            }
+//    JMLog(@"%@", callback);
+    switch(response.type) {
+        case JMJavascriptCallbackTypeLog: {
+            JMLog(@"Bridge Message: %@", response.parameters[@"message"]);
+            break;
         }
-
-        if (!isRequestCompletionFound) {
+        case JMJavascriptCallbackTypeListener: {
             for (JMJavascriptRequest *request in self.listenerCallbacks) {
-                if ([request.command isEqualToString:callback.type]) {
+                if ([request.command isEqualToString:response.command]) {
                     JMJavascriptRequestCompletion completion = self.listenerCallbacks[request];
-                    if (callback.parameters[@"error"]) {
-                        NSDictionary *errorJSON = callback.parameters[@"error"];
+                    if ([response.parameters isKindOfClass:[NSDictionary class]] && response.parameters[@"error"]) {
+                        NSDictionary *errorJSON = response.parameters[@"error"];
                         NSError *error = [self makeErrorFromWebViewError:errorJSON];
                         completion(nil, error);
                     } else {
-                        completion(callback, nil);
+                        completion(response, nil);
                     }
                     break;
                 }
             }
+            break;
+        }
+        case JMJavascriptCallbackTypeCallback: {
+            JMJavascriptRequest *foundRequest;
+            for (JMJavascriptRequest *request in self.requestCompletions) {
+//            JMLog(@"request.command: %@", request.command);
+//            JMLog(@"callback.command: %@", callback.command);
+                if ([request.command isEqualToString:response.command]) {
+                    foundRequest = request;
+                    JMJavascriptRequestCompletion completion = self.requestCompletions[request];
+                    if ([response.parameters isKindOfClass:[NSDictionary class]] && response.parameters[@"error"]) {
+                        NSDictionary *errorJSON = response.parameters[@"error"];
+                        NSError *error = [self makeErrorFromWebViewError:errorJSON];
+                        completion(nil, error);
+                    } else {
+                        completion(response, nil);
+                    }
+                    break;
+                }
+            }
+            if (foundRequest) {
+                [self.requestCompletions removeObjectForKey:foundRequest];
+            }
+            break;
         }
     }
 }
