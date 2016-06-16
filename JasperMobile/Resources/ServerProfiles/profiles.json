@@ -36,6 +36,11 @@
       "mOrganization" : ""
     },
     {
+      "mAlias" : "local 6.0",
+      "mServerUrl" : "http://192.168.88.55:8083/jasperserver-pro-60",
+      "mOrganization" : ""
+    },
+    {
       "mAlias" : "local 6.0.1",
       "mServerUrl" : "http://192.168.88.55:8084/jasperserver-pro-601",
       "mOrganization" : ""
