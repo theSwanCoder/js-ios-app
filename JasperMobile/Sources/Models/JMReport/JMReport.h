@@ -37,6 +37,7 @@
 @class JMReportPart;
 
 extern NSString * __nonnull const JMReportBookmarksDidUpdateNotification;
+extern NSString * __nonnull const JMReportPartsDidUpdateNotification;
 
 @interface JMReport : JSReport
 @property (nonatomic, strong) UIImage * __nullable thumbnailImage;

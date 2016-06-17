@@ -476,9 +476,7 @@
             // TODO: handle error
         } else {
             if (parameters[@"parts"]) {
-                JMLog(@"parts: %@", parameters[@"parts"]);
                 NSArray *parts = [strongSelf mapReportPartsFromParams:parameters[@"parts"]];
-                JMLog(@"parts: %@", parts);
                 strongSelf.report.parts = parts;
             } else {
                 // empty array;

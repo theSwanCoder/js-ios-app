@@ -31,9 +31,11 @@
 #import "JMReportPart.h"
 
 NSString * __nonnull const JMReportBookmarksDidUpdateNotification = @"JMReportBookmarksDidUpdateNotification";
+NSString * __nonnull const JMReportPartsDidUpdateNotification = @"JMReportPartsDidUpdateNotification";
 
 @implementation JMReport
 
+#pragma mark - Custom Accessors
 - (void)setBookmarks:(NSArray<JMReportBookmark *> *)bookmarks
 {
     JMReportBookmark *selectedBookmark = [self findSelectedBookmark];
@@ -50,6 +52,13 @@ NSString * __nonnull const JMReportBookmarksDidUpdateNotification = @"JMReportBo
 
     _bookmarks = bookmarks;
     [[NSNotificationCenter defaultCenter] postNotificationName:JMReportBookmarksDidUpdateNotification
+                                                        object:self];
+}
+
+- (void)setParts:(NSArray<JMReportPart *> *)parts
+{
+    _parts = parts;
+    [[NSNotificationCenter defaultCenter] postNotificationName:JMReportPartsDidUpdateNotification
                                                         object:self];
 }
 

@@ -130,6 +130,11 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                  name:JMReportBookmarksDidUpdateNotification
                                                object:self.report];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportDidUpdateParts)
+                                                 name:JMReportPartsDidUpdateNotification
+                                               object:self.report];
+
     // Change cookies notification
     // At the moment we need this notification for 'non' visualize reports
     if (![JMUtils isSupportVisualize]) {
@@ -189,6 +194,11 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         [rightNavItems addObject:bookmarkItem];
         self.navigationItem.rightBarButtonItems = rightNavItems;
     }
+}
+
+- (void)reportDidUpdateParts
+{
+    JMLog(@"parts: %@", self.report.parts);
 }
 
 #pragma mark - Actions
