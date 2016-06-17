@@ -127,32 +127,8 @@ var JasperMobile = {
 
 // Callbacks
 JasperMobile.Callback = {
-    Queue : {
-        queue : [],
-        dispatchTimeInterval : null,
-        startExecute : function() {
-            if (!this.dispatchTimeInterval) {
-                this.dispatchTimeInterval = window.setInterval(JasperMobile.Callback.Queue.execute, 200);
-            }
-        },
-        execute: function() {
-            if(JasperMobile.Callback.Queue.queue.length > 0) {
-                var callback = JasperMobile.Callback.Queue.queue.shift();
-                callback();
-            } else {
-                window.clearInterval(JasperMobile.Callback.Queue.dispatchTimeInterval);
-                JasperMobile.Callback.Queue.dispatchTimeInterval = null;
-            }
-        },
-        add : function(callback) {
-            this.queue.push(callback);
-            this.startExecute();
-        }
-    },
     createCallback: function(params) {
-        this.Queue.add(function() {
-            window.webkit.messageHandlers.JMJavascriptNativeBridge.postMessage(params);
-        });
+        window.webkit.messageHandlers.JMJavascriptNativeBridge.postMessage(params);
     },
     log : function(message) {
         //console.log("Log: " + message);
@@ -417,11 +393,16 @@ JasperMobile.Report.VIS.API = {
             });
         };
         var events = {
-            reportCompleted: function(status) {
-                JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.run.reportCompleted", {
-                    "status" : status,
-                    "pages" : JasperMobile.Report.VIS.API.report.data().totalPages,
-                });
+            reportCompleted: function(status, error) {
+                JasperMobile.Callback.log("Event: reportCompleted");
+                if (status == "ready") {
+                    JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.run.reportCompleted", {
+                        "status" : status,
+                        "pages" : JasperMobile.Report.VIS.API.report.data().totalPages
+                    });
+                } else if (status == "failed") {
+                    JasperMobile.Callback.log("Event: reportCompleted with error: " + JSON.stringify(error));
+                }
             },
             changePagesState: function(page) {
                 JasperMobile.Callback.log("Event: changePagesState");
@@ -434,6 +415,9 @@ JasperMobile.Report.VIS.API = {
                 JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.bookmarksReady", {
                     "bookmarks" : bookmarks
                 });
+            },
+            pageFinal : function(html) {
+                JasperMobile.Callback.log("Event: changePagesState");
             }
         };
         var linkOptionsEventsClick = function(event, link, defaultHandler){
