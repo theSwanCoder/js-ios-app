@@ -33,10 +33,11 @@
  */
 
 #import "JSReport.h"
-
 @class JMReportBookmark;
 
+extern NSString * __nonnull const JMReportBookmarksDidUpdateNotification;
+
 @interface JMReport : JSReport
-@property (nonatomic, strong) UIImage *thumbnailImage;
-@property (nonatomic, strong) NSArray <JMReportBookmark *>* bookmarks; // @since 2.6
+@property (nonatomic, strong) UIImage * __nullable thumbnailImage;
+@property (nonatomic, strong) NSArray <JMReportBookmark *>* __nullable bookmarks; // @since 2.6
 @end

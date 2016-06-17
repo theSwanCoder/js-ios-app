@@ -87,6 +87,8 @@
             return @"action_title_schedule";
         case JMMenuActionsViewAction_Share:
             return @"action_title_share";
+        case JMMenuActionsViewAction_Bookmarks:
+            return @"action_title_bookmarks";
         case JMMenuActionsViewAction_ShowExternalDisplay:
             return @"action_title_showExternalDisplay";
         case JMMenuActionsViewAction_HideExternalDisplay:
@@ -135,6 +137,8 @@
             return @"schedule_action";
         case JMMenuActionsViewAction_Share:
             return @"share_action";
+        case JMMenuActionsViewAction_Bookmarks:
+            return @"bookmarks_action";
         case JMMenuActionsViewAction_ShowExternalDisplay:
             return @"tv_action";
         case JMMenuActionsViewAction_HideExternalDisplay:

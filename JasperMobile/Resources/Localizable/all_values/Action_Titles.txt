@@ -190,3 +190,6 @@
 		pt = Compartilhar
 		zh = 分享
 		tags = ios
+	[action_title_bookmarks]
+		en = Bookmarks
+		tags = ios,new

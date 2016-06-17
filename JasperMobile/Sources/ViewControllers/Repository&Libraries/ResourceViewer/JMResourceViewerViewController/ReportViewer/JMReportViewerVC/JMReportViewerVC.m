@@ -34,6 +34,8 @@
 #import "JMWebEnvironment.h"
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
+#import "JMBookmarksVC.h"
+#import "JMReportBookmark.h"
 
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierViz    = @"kJMReportViewerPrimaryWebEnvironmentIdentifierViz";
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMReportViewerPrimaryWebEnvironmentIdentifierREST";
@@ -123,6 +125,11 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                  name:kJSReportCurrentPageDidChangeNotification
                                                object:self.report];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportDidUpdateBookmarks)
+                                                 name:JMReportBookmarksDidUpdateNotification
+                                               object:self.report];
+
     // Change cookies notification
     // At the moment we need this notification for 'non' visualize reports
     if (![JMUtils isSupportVisualize]) {
@@ -164,6 +171,19 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     [self.report updateCurrentPage:reportCurrentPage];
 
     [self runReportWithPage:self.report.currentPage];
+}
+
+- (void)reportDidUpdateBookmarks
+{
+    if ([self reportHasBookmarks]) {
+        NSMutableArray *rightNavItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+        UIBarButtonItem *bookmarkItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bookmarks_item"]
+                                                                         style:UIBarButtonItemStyleDone
+                                                                        target:self
+                                                                        action:@selector(showBookmarks)];
+        [rightNavItems addObject:bookmarkItem];
+        self.navigationItem.rightBarButtonItems = rightNavItems;
+    }
 }
 
 #pragma mark - Actions
@@ -754,6 +774,10 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
             [self scheduleReport];
             break;
         }
+        case JMMenuActionsViewAction_Bookmarks: {
+            [self showBookmarks];
+            break;
+        }
         case JMMenuActionsViewAction_ShowExternalDisplay: {
             [self showExternalWindowWithCompletion:^(BOOL success) {
                 if (success) {
@@ -990,6 +1014,29 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
     [newJobVC createNewScheduleMetadataWithResourceLookup:self.resource];
     [self.navigationController pushViewController:newJobVC animated:YES];
+}
+
+#pragma mark - Bookmarks
+- (BOOL)reportHasBookmarks
+{
+    return self.report.bookmarks != nil;
+}
+
+- (void)showBookmarks
+{
+    JMBookmarksVC *bookmarksVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMBookmarksVC"];
+    bookmarksVC.bookmarks = self.report.bookmarks;
+    __weak __typeof(self) weekSelf = self;
+    bookmarksVC.exitBlock = ^(JMReportBookmark *selectedBookmark) {
+        __typeof(self) strongSelf = weekSelf;
+        [strongSelf viewBookmark:selectedBookmark];
+    };
+    [self.navigationController pushViewController:bookmarksVC animated:YES];
+}
+
+- (void)viewBookmark:(JMReportBookmark *__nonnull)bookmark
+{
+    JMLog(@"show bookmark: %@", bookmark.anchor);
 }
 
 @end

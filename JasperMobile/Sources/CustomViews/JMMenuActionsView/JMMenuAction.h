@@ -53,8 +53,9 @@ typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
     JMMenuActionsViewAction_OpenIn          = 1 << 15,
     JMMenuActionsViewAction_Schedule        = 1 << 16,
     JMMenuActionsViewAction_Share           = 1 << 17,
-    JMMenuActionsViewAction_ShowExternalDisplay = 1 << 18,
-    JMMenuActionsViewAction_HideExternalDisplay = 1 << 19
+    JMMenuActionsViewAction_Bookmarks       = 1 << 18,
+    JMMenuActionsViewAction_ShowExternalDisplay = 1 << 19,
+    JMMenuActionsViewAction_HideExternalDisplay = 1 << 20
 };
 
 @interface JMMenuAction : NSObject

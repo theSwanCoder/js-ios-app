@@ -37,7 +37,7 @@
 #import "JMReportBookmark.h"
 
 @interface JMVisualizeReportLoader()
-@property (nonatomic, weak, readwrite) JSReport *report;
+@property (nonatomic, weak, readwrite) JMReport *report;
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
 @property (nonatomic, copy) NSString *exportFormat;
 @property (nonatomic, weak) JMWebEnvironment *webEnvironment;
@@ -52,7 +52,8 @@
 {
     self = [super init];
     if (self) {
-        _report = report;
+        _report = (JMReport *)report;
+        _report.bookmarks = nil;
     }
     return self;
 }
@@ -467,6 +468,7 @@
             if (parameters[@"bookmarks"]) {
                 NSArray *bookmarks = [strongSelf mapBookmarksFromParams:parameters[@"bookmarks"]];
                 JMLog(@"bookmarks: %@", bookmarks);
+                strongSelf.report.bookmarks = bookmarks;
             } else {
                 // empty array;
             }

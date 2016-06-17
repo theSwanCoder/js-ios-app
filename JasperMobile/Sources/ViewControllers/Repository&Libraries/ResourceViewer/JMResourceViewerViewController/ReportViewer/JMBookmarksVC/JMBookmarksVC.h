@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,22 +22,19 @@
 
 
 //
-//  JMReport.h
+//  JMBookmarksVC.h
 //  TIBCO JasperMobile
 //
 
-#import "JMReport.h"
-#import "JMReportBookmark.h"
 
-NSString * __nonnull const JMReportBookmarksDidUpdateNotification = @"JMReportBookmarksDidUpdateNotification";
+/**
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.6
+*/
 
-@implementation JMReport
+@class JMReportBookmark;
 
-- (void)setBookmarks:(NSArray<JMReportBookmark *> *)bookmarks
-{
-    _bookmarks = bookmarks;
-    [[NSNotificationCenter defaultCenter] postNotificationName:JMReportBookmarksDidUpdateNotification
-                                                        object:self];
-}
-
+@interface JMBookmarksVC : JMBaseViewController
+@property (nonatomic, copy) NSArray <JMReportBookmark *>* __nonnull bookmarks;
+@property (nonatomic, copy) void(^__nonnull exitBlock)(JMReportBookmark * __nonnull selectedBookmark);
 @end

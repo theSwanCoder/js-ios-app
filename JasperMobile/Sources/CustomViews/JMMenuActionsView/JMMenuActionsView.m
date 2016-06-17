@@ -147,6 +147,9 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
                         @(JMMenuActionsViewAction_Share)            : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Share
                                                                                                available:NO
                                                                                                  enabled:YES],
+                        @(JMMenuActionsViewAction_Bookmarks)            : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Bookmarks
+                                                                                               available:NO
+                                                                                                 enabled:YES],
                         @(JMMenuActionsViewAction_ShowExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ShowExternalDisplay
                                                                                                   available:NO
                                                                                                     enabled:YES],
