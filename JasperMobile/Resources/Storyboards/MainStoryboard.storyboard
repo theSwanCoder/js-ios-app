@@ -2685,7 +2685,7 @@ your business wherever you are.</string>
                         <outlet property="emptyReportMessageLabel" destination="XON-xy-195" id="qYd-k5-to1"/>
                         <segue destination="Udh-pd-kGH" kind="show" identifier="ShowReportOptions" id="oVm-x8-oKE"/>
                         <segue destination="r1t-0l-AbT" kind="show" identifier="SaveReportViewControllerSegue" id="y8h-Nv-5bi"/>
-                        <segue destination="mZ5-qt-wbc" kind="show" id="ts6-X2-xMi"/>
+                        <segue destination="mZ5-qt-wbc" kind="show" identifier="showBookmarks" id="ts6-X2-xMi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ofm-F6-HRL" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -213,6 +213,29 @@
                             }];
 }
 
+- (void)navigateToBookmark:(JMReportBookmark *__nonnull)bookmark withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion
+{
+    NSAssert(completion != nil, @"Completion is nil");
+
+    JSReportLoaderCompletionBlock heapBlock = [completion copy];
+
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.navigateToBookmark"
+                                                                parameters:@{
+                                                                        @"anchor" : bookmark.anchor
+                                                                }];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:^(NSDictionary *parameters, NSError *error) {
+                                        __typeof(self) strongSelf = weakSelf;
+                                        if (error) {
+                                            NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                                            heapBlock(NO, vizError);
+                                        } else {
+                                            heapBlock(YES, nil);
+                                        }
+                                    }];
+}
+
 - (void)cancel
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
@@ -460,14 +483,12 @@
     NSString *bookmarsReadyListenerId = @"JasperMobile.Report.VIS.API.bookmarksReady";
     [self.webEnvironment addListenerWithId:bookmarsReadyListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(bookmarsReadyListenerId);
-        JMLog(@"params: %@", parameters);
         __typeof(self) strongSelf = weakSelf;
         if (error) {
             // TODO: handle error
         } else {
             if (parameters[@"bookmarks"]) {
                 NSArray *bookmarks = [strongSelf mapBookmarksFromParams:parameters[@"bookmarks"]];
-                JMLog(@"bookmarks: %@", bookmarks);
                 strongSelf.report.bookmarks = bookmarks;
             } else {
                 // empty array;

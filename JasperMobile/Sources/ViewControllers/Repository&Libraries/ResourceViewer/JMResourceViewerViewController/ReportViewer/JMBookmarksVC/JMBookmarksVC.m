@@ -57,8 +57,17 @@ static NSString *const kJMBookmarkTableViewCellId = @"JMBookmarkTableViewCell";
     JMBookmarkTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kJMBookmarkTableViewCellId forIndexPath:indexPath];
     JMReportBookmark *bookmark = self.bookmarks[indexPath.row];
     cell.anchorLabel.text = bookmark.anchor;
-    cell.pageLabel.text = [NSString stringWithFormat:@"Page: %@", bookmark.page.stringValue];;
+    cell.pageLabel.text = [NSString stringWithFormat:@"Page: %@", bookmark.page.stringValue];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    JMReportBookmark *bookmark = self.bookmarks[indexPath.row];
+    if (bookmark.isSelected) {
+        JMLog(@"bookmark selected");
+        [cell setSelected:YES animated:YES];
+    }
 }
 
 #pragma mark - UITableViewDelegate

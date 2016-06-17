@@ -177,6 +177,11 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 {
     if ([self reportHasBookmarks]) {
         NSMutableArray *rightNavItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+        for (UIBarButtonItem *item in rightNavItems) {
+            if (item.action == @selector(showBookmarks)) {
+                return;
+            }
+        }
         UIBarButtonItem *bookmarkItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bookmarks_item"]
                                                                          style:UIBarButtonItemStyleDone
                                                                         target:self
@@ -1029,14 +1034,25 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     __weak __typeof(self) weekSelf = self;
     bookmarksVC.exitBlock = ^(JMReportBookmark *selectedBookmark) {
         __typeof(self) strongSelf = weekSelf;
-        [strongSelf viewBookmark:selectedBookmark];
+        JMReportBookmark *existingSelectedBookmark = [self.report findSelectedBookmark];
+        if (existingSelectedBookmark && [existingSelectedBookmark isEqual:selectedBookmark]) {
+            return;
+        }
+        [strongSelf.report markBookmarkAsSelected:selectedBookmark];
+        JMLog(@"bookmark was selected: %@", selectedBookmark.isSelected ? @"YES" : @"NO");
+        [strongSelf navigateToBookmark:selectedBookmark];
     };
     [self.navigationController pushViewController:bookmarksVC animated:YES];
 }
 
-- (void)viewBookmark:(JMReportBookmark *__nonnull)bookmark
+- (void)navigateToBookmark:(JMReportBookmark *__nonnull)bookmark
 {
-    JMLog(@"show bookmark: %@", bookmark.anchor);
+    if ([self.reportLoader respondsToSelector:@selector(navigateToBookmark:withCompletion:)]) {
+        [self startShowLoaderWithMessage:@"status_loading"];
+        [self.reportLoader navigateToBookmark:bookmark withCompletion:^(BOOL success, NSError *error) {
+            [self stopShowLoader];
+        }];
+    }
 }
 
 @end

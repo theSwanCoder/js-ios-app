@@ -57,7 +57,9 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
     self.serverProfile.askPassword  = [self.optionsArray[3] optionValue];
     self.serverProfile.keepSession  = [self.optionsArray[4] optionValue];
 #ifndef  __RELEASE__
-    self.serverProfile.useVisualize  = [self.optionsArray[5] optionValue];
+    if (self.optionsArray.count == 6) {
+        self.serverProfile.useVisualize  = [self.optionsArray[5] optionValue];        
+    }
 #endif
     
     if ([[JMCoreDataManager sharedInstance].managedObjectContext hasChanges]) {

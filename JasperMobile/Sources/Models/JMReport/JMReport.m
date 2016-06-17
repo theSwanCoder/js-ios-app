@@ -35,9 +35,43 @@ NSString * __nonnull const JMReportBookmarksDidUpdateNotification = @"JMReportBo
 
 - (void)setBookmarks:(NSArray<JMReportBookmark *> *)bookmarks
 {
+    JMReportBookmark *selectedBookmark = [self findSelectedBookmark];
+
+    if (selectedBookmark) {
+        // select bookmark in new array
+        for (JMReportBookmark *bookmark in bookmarks) {
+            if ([bookmark.anchor isEqualToString:selectedBookmark.anchor]) {
+                bookmark.selected = YES;
+                break;
+            }
+        }
+    }
+
     _bookmarks = bookmarks;
     [[NSNotificationCenter defaultCenter] postNotificationName:JMReportBookmarksDidUpdateNotification
                                                         object:self];
+}
+
+#pragma mark - Public API
+- (JMReportBookmark *)findSelectedBookmark
+{
+    // find selected bookmark if there is
+    JMReportBookmark *selectedBookmark;
+    for (JMReportBookmark *bookmark in self.bookmarks) {
+        if (bookmark.isSelected) {
+            selectedBookmark = bookmark;
+            break;
+        }
+    }
+    return selectedBookmark;
+}
+
+- (void)markBookmarkAsSelected:(JMReportBookmark *)selectedBookmark
+{
+    for (JMReportBookmark *bookmark in self.bookmarks) {
+        bookmark.selected = NO;
+    }
+    selectedBookmark.selected = YES;
 }
 
 @end

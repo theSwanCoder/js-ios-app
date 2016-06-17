@@ -34,6 +34,7 @@
 @interface JMReportBookmark : NSObject
 @property (nonatomic, copy) NSString *anchor;
 @property (nonatomic, strong) NSNumber *page;
+@property (nonatomic, assign, getter=isSelected) BOOL selected;
 // There is also key 'bookmarks' which is
 // "bookmarks": {
 //               "type": "array",

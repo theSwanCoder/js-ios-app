@@ -39,5 +39,7 @@ extern NSString * __nonnull const JMReportBookmarksDidUpdateNotification;
 
 @interface JMReport : JSReport
 @property (nonatomic, strong) UIImage * __nullable thumbnailImage;
-@property (nonatomic, strong) NSArray <JMReportBookmark *>* __nullable bookmarks; // @since 2.6
+@property (nonatomic, strong) NSArray <JMReportBookmark *>* __nullable bookmarks; /** @since 2.6 */
+- (JMReportBookmark *__nullable)findSelectedBookmark;
+- (void)markBookmarkAsSelected:(JMReportBookmark *__nonnull)selectedBookmark;
 @end

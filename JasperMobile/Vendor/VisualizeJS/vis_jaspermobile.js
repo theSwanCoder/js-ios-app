@@ -628,6 +628,36 @@ JasperMobile.Report.VIS.API = {
             });
         }
     },
+    navigateToBookmark: function(parameters) {
+        var bookmarkAnchor = parameters["anchor"];
+        if (JasperMobile.Report.VIS.API.report) {
+            JasperMobile.Report.VIS.API.report
+                .pages({
+                    anchor : bookmarkAnchor
+                })
+                .run()
+                .done(function(reportData) {
+                    JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.navigateToBookmark", {
+                        "page": parseInt(JasperMobile.Report.VIS.API.report.pages())
+                    });
+                })
+                .fail(function (error) {
+                    JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.navigateToBookmark", {
+                        "error": {
+                            "code" : error.errorCode,
+                            "message" : error.message
+                        }
+                    });
+                });
+        } else {
+            JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.selectPage", {
+                "error": {
+                    "code" : "visualize.error",
+                    "message" : "JasperMobile.Report.VIS.API.report == nil"
+                }
+            });
+        }
+    },
     exportReport: function(format) {
         if (JasperMobile.Report.VIS.API.report) {
             JasperMobile.Report.VIS.API.report.export({
