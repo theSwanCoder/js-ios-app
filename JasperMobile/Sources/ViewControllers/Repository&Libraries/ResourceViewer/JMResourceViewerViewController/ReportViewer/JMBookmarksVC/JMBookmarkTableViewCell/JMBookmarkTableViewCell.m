@@ -30,4 +30,12 @@
 
 
 @implementation JMBookmarkTableViewCell
+
+- (IBAction)showBookmarksButtonDidTap:(UIButton *)button
+{
+    if ([self.delegate respondsToSelector:@selector(bookmarkCellDidTapShowBookmarksButton:)]) {
+        [self.delegate bookmarkCellDidTapShowBookmarksButton:self];
+    }
+}
+
 @end

@@ -32,7 +32,7 @@
 
 static NSString *const kJMBookmarkTableViewCellId = @"JMBookmarkTableViewCell";
 
-@interface JMBookmarksVC() <UITableViewDelegate, UITableViewDataSource>
+@interface JMBookmarksVC() <UITableViewDelegate, UITableViewDataSource, JMBookmarkTableViewCellDelegate>
 @property(nonatomic, weak) IBOutlet UITableView *tableView;
 @end
 
@@ -58,6 +58,8 @@ static NSString *const kJMBookmarkTableViewCellId = @"JMBookmarkTableViewCell";
     JMReportBookmark *bookmark = self.bookmarks[indexPath.row];
     cell.anchorLabel.text = bookmark.anchor;
     cell.pageLabel.text = [NSString stringWithFormat:@"Page: %@", bookmark.page.stringValue];
+    cell.showBookmarksButton.hidden = (bookmark.bookmarks == nil);
+    cell.delegate = self;
     return cell;
 }
 
@@ -76,7 +78,19 @@ static NSString *const kJMBookmarkTableViewCellId = @"JMBookmarkTableViewCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     JMReportBookmark *bookmark = self.bookmarks[indexPath.row];
     self.exitBlock(bookmark);
-    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - JMBookmarkTableViewCellDelegate
+- (void)bookmarkCellDidTapShowBookmarksButton:(JMBookmarkTableViewCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    JMReportBookmark *bookmark = self.bookmarks[indexPath.row];
+    NSAssert(bookmark.bookmarks != nil, @"sholdn't to call if there isn't bookmarks");
+
+    JMBookmarksVC *bookmarksVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMBookmarksVC"];
+    bookmarksVC.bookmarks = bookmark.bookmarks;
+    bookmarksVC.exitBlock = self.exitBlock;
+    [self.navigationController pushViewController:bookmarksVC animated:YES];
 }
 
 @end

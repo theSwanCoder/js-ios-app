@@ -561,18 +561,30 @@
 }
 
 #pragma mark - Bookmarks Handler
-- (NSArray *)mapBookmarksFromParams:(NSDictionary *__nonnull)params
+- (NSArray *)mapBookmarksFromParams:(NSArray *__nonnull)params
 {
     NSAssert(params != nil, @"parameters is nil");
 
     NSMutableArray *bookmarks = [NSMutableArray new];
-    for (NSDictionary *bookmarkData in params) {
-        NSString *anchor = bookmarkData[@"anchor"];
-        NSNumber *page = bookmarkData[@"page"];
-        // TODO: how handle empty fields?
-        JMReportBookmark *bookmark = [JMReportBookmark bookmarkWithAnchor:anchor page:page];
-        [bookmarks addObject:bookmark];
+
+    if ([params isKindOfClass:[NSArray class]]) {
+        for (NSDictionary *bookmarkData in params) {
+            // TODO: how handle empty fields?
+            NSString *anchor = bookmarkData[@"anchor"];
+            NSNumber *page = bookmarkData[@"page"];
+            NSArray *nestedBookmarks;
+            NSArray *nestedBoomarksDataArray = bookmarkData[@"bookmarks"];
+            if ([nestedBoomarksDataArray isKindOfClass:[NSArray class]]) {
+                nestedBookmarks = [self mapBookmarksFromParams:nestedBoomarksDataArray];
+            }
+            JMReportBookmark *bookmark = [JMReportBookmark bookmarkWithAnchor:anchor page:page];
+            bookmark.bookmarks = nestedBookmarks;
+            [bookmarks addObject:bookmark];
+        }
+    } else {
+        // TODO: investigate other cases
     }
+
     return bookmarks;
 }
 

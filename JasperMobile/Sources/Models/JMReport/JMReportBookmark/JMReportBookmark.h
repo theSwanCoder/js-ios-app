@@ -35,14 +35,7 @@
 @property (nonatomic, copy) NSString *anchor;
 @property (nonatomic, strong) NSNumber *page;
 @property (nonatomic, assign, getter=isSelected) BOOL selected;
-// There is also key 'bookmarks' which is
-// "bookmarks": {
-//               "type": "array",
-//               "items": {
-//                         "$ref": "#/definitions/bookmark"
-//                }
-//              }
-// Section "Report Data" in http://wiki.jaspersoft.com/display/7X/Report
+@property (nonatomic, copy) NSArray <JMReportBookmark *> *bookmarks;
 - (instancetype)initWithAnchor:(NSString *)anchor page:(NSNumber *)page;
 + (instancetype)bookmarkWithAnchor:(NSString *)anchor page:(NSNumber *)page;
 @end

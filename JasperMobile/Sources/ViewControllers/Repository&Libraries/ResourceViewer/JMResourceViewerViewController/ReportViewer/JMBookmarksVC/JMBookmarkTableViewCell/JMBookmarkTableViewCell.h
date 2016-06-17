@@ -31,8 +31,16 @@
 @since 2.6
 */
 
+@protocol JMBookmarkTableViewCellDelegate;
 
 @interface JMBookmarkTableViewCell : UITableViewCell
 @property (nonatomic, weak) IBOutlet UILabel *anchorLabel;
 @property (nonatomic, weak) IBOutlet UILabel *pageLabel;
+@property (nonatomic, weak) IBOutlet UIButton *showBookmarksButton;
+@property (nonatomic, weak) NSObject <JMBookmarkTableViewCellDelegate> *delegate;
+@end
+
+@protocol JMBookmarkTableViewCellDelegate
+@optional
+- (void)bookmarkCellDidTapShowBookmarksButton:(JMBookmarkTableViewCell *)cell;
 @end

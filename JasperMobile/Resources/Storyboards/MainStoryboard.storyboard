@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -2721,30 +2722,45 @@ your business wherever you are.</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XNR-vc-kE9">
-                                                    <rect key="frame" x="8" y="3" width="584" height="21"/>
+                                                    <rect key="frame" x="8" y="3" width="547" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GKP-c5-XWZ">
-                                                    <rect key="frame" x="8" y="21" width="584" height="17"/>
+                                                    <rect key="frame" x="8" y="21" width="547" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XGm-BW-XuW">
+                                                    <rect key="frame" x="565" y="8" width="27" height="27"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="XGm-BW-XuW" secondAttribute="height" multiplier="1:1" id="Lsd-ly-Cer"/>
+                                                    </constraints>
+                                                    <state key="normal" image="accessory_arrow"/>
+                                                    <connections>
+                                                        <action selector="showBookmarksButtonDidTap:" destination="i7L-Pv-u87" eventType="touchUpInside" id="scs-k0-sh6"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="GKP-c5-XWZ" secondAttribute="trailing" id="Dab-vl-p6K"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="XNR-vc-kE9" secondAttribute="trailing" id="Hq5-QI-Ufp"/>
+                                                <constraint firstItem="XGm-BW-XuW" firstAttribute="centerY" secondItem="hy4-Cs-E73" secondAttribute="centerY" id="BIn-e9-lFQ"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="XGm-BW-XuW" secondAttribute="trailing" id="FiB-ad-WrL"/>
                                                 <constraint firstItem="GKP-c5-XWZ" firstAttribute="leading" secondItem="hy4-Cs-E73" secondAttribute="leadingMargin" id="Hwu-S0-KQF"/>
                                                 <constraint firstAttribute="leadingMargin" secondItem="XNR-vc-kE9" secondAttribute="leading" id="LDM-vO-1wL"/>
                                                 <constraint firstItem="GKP-c5-XWZ" firstAttribute="centerY" secondItem="hy4-Cs-E73" secondAttribute="centerY" constant="8" id="V30-KH-BSK"/>
                                                 <constraint firstItem="XNR-vc-kE9" firstAttribute="centerY" secondItem="hy4-Cs-E73" secondAttribute="centerY" constant="-8" id="jTQ-fs-PLc"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="XGm-BW-XuW" secondAttribute="bottom" id="mS1-zX-JsT"/>
+                                                <constraint firstItem="XGm-BW-XuW" firstAttribute="top" secondItem="hy4-Cs-E73" secondAttribute="topMargin" id="q1D-A4-0by"/>
+                                                <constraint firstItem="XGm-BW-XuW" firstAttribute="leading" secondItem="GKP-c5-XWZ" secondAttribute="trailing" constant="10" id="rbm-Vw-wDi"/>
+                                                <constraint firstItem="XGm-BW-XuW" firstAttribute="leading" secondItem="XNR-vc-kE9" secondAttribute="trailing" constant="10" id="roN-4R-GYe"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="anchorLabel" destination="XNR-vc-kE9" id="gJ9-Vm-UrO"/>
                                             <outlet property="pageLabel" destination="GKP-c5-XWZ" id="X1M-GH-7q0"/>
+                                            <outlet property="showBookmarksButton" destination="XGm-BW-XuW" id="DRp-Xb-Ufd"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -3390,6 +3406,7 @@ your business wherever you are.</string>
         </scene>
     </scenes>
     <resources>
+        <image name="accessory_arrow" width="17" height="17"/>
         <image name="apply_item" width="20" height="20"/>
         <image name="arrow_up" width="21" height="12"/>
         <image name="checked_checkbox" width="36" height="36"/>

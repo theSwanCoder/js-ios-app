@@ -1034,6 +1034,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     __weak __typeof(self) weekSelf = self;
     bookmarksVC.exitBlock = ^(JMReportBookmark *selectedBookmark) {
         __typeof(self) strongSelf = weekSelf;
+        [strongSelf.navigationController popToViewController:strongSelf animated:YES];
         JMReportBookmark *existingSelectedBookmark = [self.report findSelectedBookmark];
         if (existingSelectedBookmark && [existingSelectedBookmark isEqual:selectedBookmark]) {
             return;
