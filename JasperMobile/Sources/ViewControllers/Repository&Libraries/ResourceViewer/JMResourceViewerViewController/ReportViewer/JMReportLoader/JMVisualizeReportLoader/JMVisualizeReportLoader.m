@@ -35,6 +35,7 @@
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMReportBookmark.h"
+#import "JMReportPart.h"
 
 @interface JMVisualizeReportLoader()
 @property (nonatomic, weak, readwrite) JMReport *report;
@@ -434,53 +435,25 @@
 
 - (void)addListenersForVisualizeEvents
 {
-    NSString *reportCompletedListenerId = @"JasperMobile.Report.VIS.API.run.reportCompleted";
+    // Life Cycle
+
+    NSString *reportCompletedListenerId = @"JasperMobile.Report.Event.reportCompleted";
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment addListenerWithId:reportCompletedListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.VIS.API.run.reportCompleted");
+        JMLog(reportCompletedListenerId);
         __typeof(self) strongSelf = weakSelf;
         // TODO: move into separate method
         NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
         [strongSelf.report updateCountOfPages:countOfPages];
     }];
-    NSString *changePagesStateListenerId = @"JasperMobile.Report.VIS.API.run.changePagesState";
+    NSString *changePagesStateListenerId = @"JasperMobile.Report.Event.changePagesState";
     [self.webEnvironment addListenerWithId:changePagesStateListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.VIS.API.run.changePagesState");
+        JMLog(changePagesStateListenerId);
         __typeof(self) strongSelf = weakSelf;
         NSString *locationString = parameters[@"page"];
         [strongSelf.report updateCurrentPage:locationString.integerValue];
     }];
-    NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.Report.VIS.API.run.linkOptions.events.ReportExecution";
-    [self.webEnvironment addListenerWithId:reportExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.VIS.API.run.linkOptions.events.ReportExecution");
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf handleRunReportWithParameters:parameters];
-    }];
-    NSString *localPageLinkOptionListenerId = @"JasperMobile.Report.VIS.API.run.linkOptions.events.LocalPage";
-    [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.VIS.API.run.linkOptions.events.LocalPage");
-        __typeof(self) strongSelf = weakSelf;
-        NSString *locationString = parameters[@"page"];
-        [strongSelf.report updateCurrentPage:locationString.integerValue];
-    }];
-    NSString *localAnchorLinkOptionListenerId = @"JasperMobile.Report.VIS.API.run.linkOptions.events.LocalAnchor";
-    [self.webEnvironment addListenerWithId:localAnchorLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.VIS.API.run.linkOptions.events.LocalAnchor");
-    }];
-    NSString *referenceLinkOptionListenerId = @"JasperMobile.Report.VIS.API.run.linkOptions.events.Reference";
-    [self.webEnvironment addListenerWithId:referenceLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.VIS.API.run.linkOptions.events.Reference");
-        __typeof(self) strongSelf = weakSelf;
-        NSString *locationString = parameters[@"location"];
-        if (locationString) {
-            NSURL *locationURL = [NSURL URLWithString:locationString];
-            if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReference:)]) {
-                [strongSelf.delegate reportLoader:strongSelf didReceiveOnClickEventForReference:locationURL];
-            }
-        }
-    }];
-
-    NSString *bookmarsReadyListenerId = @"JasperMobile.Report.VIS.API.bookmarksReady";
+    NSString *bookmarsReadyListenerId = @"JasperMobile.Report.Event.bookmarksReady";
     [self.webEnvironment addListenerWithId:bookmarsReadyListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(bookmarsReadyListenerId);
         __typeof(self) strongSelf = weakSelf;
@@ -492,6 +465,55 @@
                 strongSelf.report.bookmarks = bookmarks;
             } else {
                 // empty array;
+            }
+        }
+    }];
+    NSString *partsReadyListenerId = @"JasperMobile.Report.Event.reportPartsReady";
+    [self.webEnvironment addListenerWithId:partsReadyListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(partsReadyListenerId);
+        __typeof(self) strongSelf = weakSelf;
+        if (error) {
+            // TODO: handle error
+        } else {
+            if (parameters[@"parts"]) {
+                JMLog(@"parts: %@", parameters[@"parts"]);
+                NSArray *parts = [strongSelf mapReportPartsFromParams:parameters[@"parts"]];
+                JMLog(@"parts: %@", parts);
+                strongSelf.report.parts = parts;
+            } else {
+                // empty array;
+            }
+        }
+    }];
+
+    // Hyperlinks
+
+    NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.Report.VIS.API.Event.Link.ReportExecution";
+    [self.webEnvironment addListenerWithId:reportExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(reportExecutionLinkOptionListenerId);
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf handleRunReportWithParameters:parameters];
+    }];
+    NSString *localPageLinkOptionListenerId = @"JasperMobile.Report.VIS.API.Event.Link.LocalPage";
+    [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(localPageLinkOptionListenerId);
+        __typeof(self) strongSelf = weakSelf;
+        NSString *locationString = parameters[@"page"];
+        [strongSelf.report updateCurrentPage:locationString.integerValue];
+    }];
+    NSString *localAnchorLinkOptionListenerId = @"JasperMobile.Report.VIS.API.Event.Link.LocalAnchor";
+    [self.webEnvironment addListenerWithId:localAnchorLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(localAnchorLinkOptionListenerId);
+    }];
+    NSString *referenceLinkOptionListenerId = @"JasperMobile.Report.VIS.API.Event.Link.Reference";
+    [self.webEnvironment addListenerWithId:referenceLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(referenceLinkOptionListenerId);
+        __typeof(self) strongSelf = weakSelf;
+        NSString *locationString = parameters[@"location"];
+        if (locationString) {
+            NSURL *locationURL = [NSURL URLWithString:locationString];
+            if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReference:)]) {
+                [strongSelf.delegate reportLoader:strongSelf didReceiveOnClickEventForReference:locationURL];
             }
         }
     }];
@@ -564,28 +586,44 @@
 - (NSArray *)mapBookmarksFromParams:(NSArray *__nonnull)params
 {
     NSAssert(params != nil, @"parameters is nil");
+    NSAssert([params isKindOfClass:[NSArray class]], @"Parameters should be NSArray class");
 
     NSMutableArray *bookmarks = [NSMutableArray new];
 
-    if ([params isKindOfClass:[NSArray class]]) {
-        for (NSDictionary *bookmarkData in params) {
-            // TODO: how handle empty fields?
-            NSString *anchor = bookmarkData[@"anchor"];
-            NSNumber *page = bookmarkData[@"page"];
-            NSArray *nestedBookmarks;
-            NSArray *nestedBoomarksDataArray = bookmarkData[@"bookmarks"];
-            if ([nestedBoomarksDataArray isKindOfClass:[NSArray class]]) {
-                nestedBookmarks = [self mapBookmarksFromParams:nestedBoomarksDataArray];
-            }
-            JMReportBookmark *bookmark = [JMReportBookmark bookmarkWithAnchor:anchor page:page];
-            bookmark.bookmarks = nestedBookmarks;
-            [bookmarks addObject:bookmark];
+    for (NSDictionary *bookmarkData in params) {
+        // TODO: how handle empty fields?
+        NSString *anchor = bookmarkData[@"anchor"];
+        NSNumber *page = bookmarkData[@"page"];
+        NSArray *nestedBookmarks;
+        NSArray *nestedBoomarksDataArray = bookmarkData[@"bookmarks"];
+        if ([nestedBoomarksDataArray isKindOfClass:[NSArray class]]) {
+            nestedBookmarks = [self mapBookmarksFromParams:nestedBoomarksDataArray];
         }
-    } else {
-        // TODO: investigate other cases
+        JMReportBookmark *bookmark = [JMReportBookmark bookmarkWithAnchor:anchor page:page];
+        bookmark.bookmarks = nestedBookmarks;
+        [bookmarks addObject:bookmark];
     }
 
     return bookmarks;
+}
+
+#pragma mark - Handle Report Parts (Workbooks)
+- (NSArray *)mapReportPartsFromParams:(NSArray *__nonnull)params
+{
+    NSAssert(params != nil, @"parameters is nil");
+    NSAssert([params isKindOfClass:[NSArray class]], @"Parameters should be NSArray class");
+
+    NSMutableArray *parts = [NSMutableArray new];
+
+    for (NSDictionary *reportPartData in params) {
+        // TODO: how handle empty fields?
+        NSString *name = reportPartData[@"name"];
+        NSNumber *page = reportPartData[@"page"];
+        JMReportPart *part = [[JMReportPart alloc] initWithName:name page:page];
+        [parts addObject:part];
+    }
+
+    return parts;
 }
 
 #pragma mark - Errors handling

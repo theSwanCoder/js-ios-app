@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,26 +22,19 @@
 
 
 //
-//  JMReport.h
+//  JMReportPart.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
- @author Alexey Gubarev ogubarie@tibco.com
- @since 2.0
+ @since 2.6
  */
 
-#import "JSReport.h"
-@class JMReportBookmark;
-@class JMReportPart;
 
-extern NSString * __nonnull const JMReportBookmarksDidUpdateNotification;
-
-@interface JMReport : JSReport
-@property (nonatomic, strong) UIImage * __nullable thumbnailImage;
-@property (nonatomic, strong) NSArray <JMReportBookmark *>* __nullable bookmarks; /** @since 2.6 */
-@property (nonatomic, strong) NSArray <JMReportPart *>* __nullable parts; /** @since 2.6 */
-- (JMReportBookmark *__nullable)findSelectedBookmark; /** @since 2.6 */
-- (void)markBookmarkAsSelected:(JMReportBookmark *__nonnull)selectedBookmark; /** @since 2.6 */
+@interface JMReportPart : NSObject
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, strong) NSNumber *page;
+- (instancetype)initWithName:(NSString *)name page:(NSNumber *)page;
++ (instancetype)reportPartWithName:(NSString *)name page:(NSNumber *)page;
 @end

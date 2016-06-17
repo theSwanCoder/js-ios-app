@@ -28,6 +28,7 @@
 
 #import "JMReport.h"
 #import "JMReportBookmark.h"
+#import "JMReportPart.h"
 
 NSString * __nonnull const JMReportBookmarksDidUpdateNotification = @"JMReportBookmarksDidUpdateNotification";
 

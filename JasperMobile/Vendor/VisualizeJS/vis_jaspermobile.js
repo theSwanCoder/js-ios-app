@@ -396,7 +396,7 @@ JasperMobile.Report.VIS.API = {
             reportCompleted: function(status, error) {
                 JasperMobile.Callback.log("Event: reportCompleted");
                 if (status == "ready") {
-                    JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.run.reportCompleted", {
+                    JasperMobile.Callback.listener("JasperMobile.Report.Event.reportCompleted", {
                         "status" : status,
                         "pages" : JasperMobile.Report.VIS.API.report.data().totalPages
                     });
@@ -406,14 +406,20 @@ JasperMobile.Report.VIS.API = {
             },
             changePagesState: function(page) {
                 JasperMobile.Callback.log("Event: changePagesState");
-                JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.run.changePagesState", {
+                JasperMobile.Callback.listener("JasperMobile.Report.Event.changePagesState", {
                     "page" : page
                 });
             },
             bookmarksReady : function (bookmarks) {
                 JasperMobile.Callback.log("Event: bookmarksReady");
-                JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.bookmarksReady", {
+                JasperMobile.Callback.listener("JasperMobile.Report.Event.bookmarksReady", {
                     "bookmarks" : bookmarks
+                });
+            },
+            reportPartsReady : function(parts) {
+                JasperMobile.Callback.log("Event: reportPartsReady");
+                JasperMobile.Callback.listener("JasperMobile.Report.Event.reportPartsReady", {
+                    "parts" : parts
                 });
             },
             pageFinal : function(html) {
@@ -430,7 +436,7 @@ JasperMobile.Report.VIS.API = {
                         params: JasperMobile.Helper.collectReportParams(link)
                     };
                     JasperMobile.Callback.log("Event: linkOption - ReportExecution");
-                    JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.run.linkOptions.events.ReportExecution", {
+                    JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.Event.Link.ReportExecution", {
                         "data" : data
                     });
                     break;
@@ -442,7 +448,7 @@ JasperMobile.Report.VIS.API = {
                         })
                         .run()
                         .done(function(){
-                            JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.run.linkOptions.events.LocalAnchor", {
+                            JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.Event.Link.LocalAnchor", {
                                 "page" : link.pages
                             });
                         })
@@ -458,7 +464,7 @@ JasperMobile.Report.VIS.API = {
                             JasperMobile.Callback.log(error);
                         })
                         .done(function() {
-                            JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.run.linkOptions.events.LocalPage", {
+                            JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.Event.Link.LocalPage", {
                                 "page" : link.pages
                             });
                         });
@@ -466,7 +472,7 @@ JasperMobile.Report.VIS.API = {
                 }
                 case "Reference": {
                     var href = link.href;
-                    JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.run.linkOptions.events.Reference", {
+                    JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.Event.Link.Reference", {
                         "location" : href
                     });
                     break;
