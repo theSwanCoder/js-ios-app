@@ -208,17 +208,26 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)setupRightBarButtonItems
 {
-    NSMutableArray *navBarItems = [NSMutableArray array];
-    JMMenuActionsViewAction availableAction = [self availableAction];
-    
-    if (availableAction && (availableAction ^ [self favoriteAction])) {
+    NSMutableArray *navBarItems;
+    if (self.navigationItem.rightBarButtonItems.count > 0) {
+        navBarItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+    } else {
+        navBarItems = [NSMutableArray array];
         [navBarItems addObject:[self actionBarButtonItem]];
-    } else if (![self favoriteItemShouldDisplaySeparately]) {
-        [navBarItems addObject:[self favoriteBarButtonItem]];
     }
+
+    JMMenuActionsViewAction availableAction = [self availableAction];
     
     if ([self favoriteItemShouldDisplaySeparately]) {
         [navBarItems addObject:[self favoriteBarButtonItem]];
+    } else {
+        // remove favorite item
+        for (UIBarButtonItem *item in navBarItems) {
+            if (item.action == @selector(favoriteButtonTapped:)) {
+                [navBarItems removeObject:item];
+                break;
+            }
+        }
     }
     
     self.navigationItem.rightBarButtonItems = [navBarItems copy];
