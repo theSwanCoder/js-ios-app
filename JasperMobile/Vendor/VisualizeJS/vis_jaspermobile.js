@@ -640,7 +640,35 @@ JasperMobile.Report.VIS.API = {
                     });
                 });
         } else {
-            JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.selectPage", {
+            JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.navigateToBookmark", {
+                "error": {
+                    "code" : "visualize.error",
+                    "message" : "JasperMobile.Report.VIS.API.report == nil"
+                }
+            });
+        }
+    },
+    navigateToPage: function(parameters) {
+        var page = parameters["page"];
+        if (JasperMobile.Report.VIS.API.report) {
+            JasperMobile.Report.VIS.API.report
+                .pages(page)
+                .run()
+                .done(function(reportData) {
+                    JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.navigateToPage", {
+                        "page": parseInt(JasperMobile.Report.VIS.API.report.pages())
+                    });
+                })
+                .fail(function (error) {
+                    JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.navigateToPage", {
+                        "error": {
+                            "code" : error.errorCode,
+                            "message" : error.message
+                        }
+                    });
+                });
+        } else {
+            JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.navigateToPage", {
                 "error": {
                     "code" : "visualize.error",
                     "message" : "JasperMobile.Report.VIS.API.report == nil"

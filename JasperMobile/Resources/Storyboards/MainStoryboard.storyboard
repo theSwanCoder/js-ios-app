@@ -1518,21 +1518,9 @@ your business wherever you are.</string>
                     <view key="view" contentMode="scaleToFill" id="pDH-le-xKQ">
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="L0s-M7-TL7">
-                                <rect key="frame" x="290" y="258" width="20" height="20"/>
-                            </activityIndicatorView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="centerY" secondItem="L0s-M7-TL7" secondAttribute="centerY" id="4t6-7l-nch"/>
-                            <constraint firstAttribute="centerX" secondItem="L0s-M7-TL7" secondAttribute="centerX" id="fMB-1a-yLc"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="sFs-pQ-4LS"/>
-                    <connections>
-                        <outlet property="activityIndicator" destination="L0s-M7-TL7" id="4Vg-Ut-V8F"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AZ1-ow-pjK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -2656,14 +2644,8 @@ your business wherever you are.</string>
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="hwp-Zp-LYf">
-                                <rect key="frame" x="290" y="258" width="20" height="20"/>
-                            </activityIndicatorView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report is empty!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XON-xy-195">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report is empty!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XON-xy-195">
                                 <rect key="frame" x="30" y="258" width="540" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="iGX-j1-k8w"/>
-                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -2672,17 +2654,14 @@ your business wherever you are.</string>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerY" secondItem="XON-xy-195" secondAttribute="centerY" id="3RZ-pj-KFI"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="XON-xy-195" secondAttribute="trailing" constant="10" id="EdF-nI-aMk"/>
-                            <constraint firstAttribute="centerY" secondItem="hwp-Zp-LYf" secondAttribute="centerY" id="WOJ-E0-dsH"/>
-                            <constraint firstAttribute="centerX" secondItem="hwp-Zp-LYf" secondAttribute="centerX" id="Zpv-Pp-0CI"/>
-                            <constraint firstItem="XON-xy-195" firstAttribute="leading" secondItem="4yE-ST-XvN" secondAttribute="leadingMargin" constant="10" id="d1C-uU-JAf"/>
+                            <constraint firstItem="XON-xy-195" firstAttribute="centerX" secondItem="4yE-ST-XvN" secondAttribute="centerX" id="IhY-ZB-PdU"/>
+                            <constraint firstItem="XON-xy-195" firstAttribute="width" secondItem="4yE-ST-XvN" secondAttribute="width" multiplier="0.9" id="iYt-Nf-0eo"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="M31-Dc-8pu"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="activityIndicator" destination="hwp-Zp-LYf" id="tWs-7H-8WU"/>
                         <outlet property="emptyReportMessageLabel" destination="XON-xy-195" id="qYd-k5-to1"/>
                         <segue destination="Udh-pd-kGH" kind="show" identifier="ShowReportOptions" id="oVm-x8-oKE"/>
                         <segue destination="r1t-0l-AbT" kind="show" identifier="SaveReportViewControllerSegue" id="y8h-Nv-5bi"/>
@@ -2892,22 +2871,12 @@ your business wherever you are.</string>
                     <view key="view" contentMode="scaleToFill" id="5Co-hZ-58r">
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="x36-el-R23">
-                                <rect key="frame" x="290" y="258" width="20" height="20"/>
-                            </activityIndicatorView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="centerX" secondItem="x36-el-R23" secondAttribute="centerX" id="Phs-t7-kVL"/>
-                            <constraint firstAttribute="centerY" secondItem="x36-el-R23" secondAttribute="centerY" id="qtt-nr-ciO"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Loj-GO-XMr"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="activityIndicator" destination="x36-el-R23" id="ft5-ye-isC"/>
                         <segue destination="lfF-9E-neQ" kind="show" identifier="showInputControls" id="4UP-Re-caK"/>
                     </connections>
                 </viewController>

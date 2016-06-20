@@ -30,6 +30,7 @@
 #import "JMResource.h"
 #import "JMShareViewController.h"
 #import "JMAnalyticsManager.h"
+#import "JMBaseResourceView.h"
 
 NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewerWebEnvironmentIdentifier";
 
@@ -93,7 +94,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 }
 
 #pragma mark - Custom Accessors
-- (UIView *)resourceView
+- (UIView *)contentView
 {
     JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
     return webEnvironment.webView;
@@ -102,23 +103,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 #pragma mark - Setups
 - (void)setupSubviews
 {
-    [self.view addSubview:[self resourceView]];
-    [self setupResourceViewLayout];
-}
-
-- (void)setupResourceViewLayout
-{
-    UIView *resourceView = [self resourceView];
-    resourceView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[resourceView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"resourceView": resourceView}]];
-
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[resourceView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"resourceView": resourceView}]];
+    [self addContentView:[self contentView]];
 }
 
 - (void)resetSubViews
@@ -220,7 +205,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 - (void)shareResource
 {
     JMShareViewController *shareViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMShareViewController"];
-    shareViewController.imageForSharing = [self.resourceView renderedImage];
+    shareViewController.imageForSharing = [self.contentView renderedImage];
     [self.navigationController pushViewController:shareViewController animated:YES];
 }
 

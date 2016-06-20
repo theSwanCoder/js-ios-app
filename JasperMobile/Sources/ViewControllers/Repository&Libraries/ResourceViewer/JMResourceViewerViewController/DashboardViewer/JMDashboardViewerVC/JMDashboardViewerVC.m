@@ -90,7 +90,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)printResource
 {
     [super printResource];
-    [self printItem:[self.resourceView renderedImage] withName:self.dashboard.resource.resourceLookup.label completion:nil];
+    [self printItem:[self.contentView renderedImage] withName:self.dashboard.resource.resourceLookup.label completion:nil];
 }
 
 #pragma mark - Custom Accessors
@@ -103,7 +103,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     return _dashboard;
 }
 
-- (UIView *)resourceView
+- (UIView *)contentView
 {
     return self.webEnvironment.webView;
 }

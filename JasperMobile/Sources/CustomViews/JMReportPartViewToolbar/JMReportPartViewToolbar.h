@@ -22,22 +22,27 @@
 
 
 //
-//  JMResourceViewerViewController.h
+//  JMReportPartViewToolbar.h
 //  TIBCO JasperMobile
 //
 
+
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
+ @author Aleksandr Dakhno odahno@tibco.com
+ @since 2.6
  */
 
-#import "JMBaseResourceViewerVC.h"
+@class JMReportPart;
+@protocol JMReportPartViewToolbarDelegate;
 
-extern NSString * const kJMResourceViewerWebEnvironmentIdentifier;
 
-@interface JMResourceViewerViewController : JMBaseResourceViewerVC <WKNavigationDelegate>
-- (UIView *)contentView;
-- (void)printResource __attribute__((objc_requires_super));
-- (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void (^)(BOOL completed, NSError *error))completion;
-- (void)handleLowMemory __attribute__((objc_requires_super));
+@interface JMReportPartViewToolbar : UIView
+@property (nonatomic, strong) JMReportPart *currentPart;
+@property (nonatomic, strong) NSArray <JMReportPart *> *parts;
+@property (nonatomic, weak) NSObject <JMReportPartViewToolbarDelegate> *delegate;
+@end
+
+@protocol JMReportPartViewToolbarDelegate
+@optional
+- (void)reportPartViewToolbarDidChangePart:(JMReportPartViewToolbar *)toolbar;
 @end

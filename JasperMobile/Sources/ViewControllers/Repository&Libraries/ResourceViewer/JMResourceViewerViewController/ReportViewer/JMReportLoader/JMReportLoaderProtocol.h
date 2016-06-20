@@ -37,6 +37,7 @@
 @class JMWebEnvironment;
 @class JMResource;
 @class JMReportBookmark;
+@class JMReportPart;
 
 @protocol JMReportLoaderProtocol <JSReportLoaderProtocol>
 
@@ -53,6 +54,7 @@
 - (void)exportReportWithFormat:(NSString * __nonnull)exportFormat;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 - (void)navigateToBookmark:(JMReportBookmark *__nonnull)bookmark withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion; /** @since 2.6 */
+- (void)navigateToPart:(JMReportPart *__nonnull)part withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion; /** @since 2.6 */
 - (void)fitReportViewToScreen;
 @end
 

@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -20,24 +20,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
-//  JMResourceViewerViewController.h
+//  JMBaseResourceView.m
 //  TIBCO JasperMobile
 //
 
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
+#import "JMBaseResourceView.h"
+#import "JMThemesManager.h"
 
-#import "JMBaseResourceViewerVC.h"
+@implementation JMBaseResourceView
 
-extern NSString * const kJMResourceViewerWebEnvironmentIdentifier;
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.topToolbar.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
+}
 
-@interface JMResourceViewerViewController : JMBaseResourceViewerVC <WKNavigationDelegate>
-- (UIView *)contentView;
-- (void)printResource __attribute__((objc_requires_super));
-- (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void (^)(BOOL completed, NSError *error))completion;
-- (void)handleLowMemory __attribute__((objc_requires_super));
 @end

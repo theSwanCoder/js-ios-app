@@ -36,16 +36,19 @@
 #import "JMAnalyticsManager.h"
 #import "JMBookmarksVC.h"
 #import "JMReportBookmark.h"
+#import "JMReportPartViewToolbar.h"
+#import "JMReportPart.h"
 
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierViz    = @"kJMReportViewerPrimaryWebEnvironmentIdentifierViz";
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMReportViewerPrimaryWebEnvironmentIdentifierREST";
 NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierViz  = @"kJMReportViewerSecondaryWebEnvironmentIdentifierViz";
 NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMReportViewerSecondaryWebEnvironmentIdentifierREST";
 
-@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate>
+@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, copy) void(^exportCompletion)(NSString *resourcePath);
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
+@property (nonatomic, weak) JMReportPartViewToolbar *reportPartToolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
@@ -78,6 +81,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    [self hideTopToolbarAnimated:NO];
     [self configureReport];
 
     [self addObservers];
@@ -198,7 +203,12 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)reportDidUpdateParts
 {
-    JMLog(@"parts: %@", self.report.parts);
+    if (self.report.parts) {
+        [self addTopToolbar:self.reportPartToolbar];
+        [self showTopToolbarAnimated:YES];
+    } else {
+        [self hideTopToolbarAnimated:YES];
+    }
 }
 
 #pragma mark - Actions
@@ -257,7 +267,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     }
 }
 
-- (UIView *)resourceView
+- (UIView *)contentView
 {
     return self.webEnvironment.webView;
 }
@@ -265,6 +275,10 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)setupSubviews
 {
     // setup subviews after getting report info
+    if (!self.webEnvironment) {
+        [self setupWebEnvironment];
+    }
+    [super setupSubviews];
 }
 
 - (void)setupWebEnvironment
@@ -274,8 +288,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                             webEnvironment:self.webEnvironment];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 
-    [self.view insertSubview:[self resourceView] belowSubview:self.emptyReportMessageLabel];
-    [self setupResourceViewLayout];
+    //[self.view insertSubview:[self contentView] belowSubview:self.emptyReportMessageLabel];
+    //[self setupResourceViewLayout];
 }
 
 - (void)updateToobarAppearence
@@ -283,10 +297,10 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     if (self.toolbar && self.report.isMultiPageReport && !self.report.isReportEmpty) {
         self.toolbar.currentPage = self.report.currentPage;
         if (self.navigationController.visibleViewController == self) {
-            [self.navigationController setToolbarHidden:NO animated:YES];
+            [self showPaginationToolbar];
         }
     } else {
-        [self.navigationController setToolbarHidden:YES animated:YES];
+        [self hidePaginationToolbar];
     }
 }
 
@@ -349,7 +363,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                             // in this point we should have valid cookies
                                                                             // only one case remains - when cookies was changed and the webEvnironment has old cookies
                                                                             // but this case will handle correctly because the webEvironment raise auth error
-                                                                            if (!self.webEnvironment) {
+                                                                            if (!strongSelf.webEnvironment) {
                                                                                 [strongSelf setupWebEnvironment];
                                                                             }
 
@@ -362,7 +376,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                             
                                                                             if ([visibleInputControls count]) {
                                                                                 // setup report options
-                                                                                if (self.isChildReport && self.initialReportParameters) {
+                                                                                if (strongSelf.isChildReport && strongSelf.initialReportParameters) {
                                                                                     // generate 'none' report option
                                                                                     [strongSelf.report generateReportOptionsWithInputControls:visibleInputControls];
 
@@ -542,6 +556,16 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     return _toolbar;
 }
 
+- (JMReportPartViewToolbar *)reportPartToolbar
+{
+    if (!_reportPartToolbar) {
+        _reportPartToolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportPartViewToolbar" owner:self options:nil] firstObject];
+        _reportPartToolbar.parts = self.report.parts;
+        _reportPartToolbar.delegate = self;
+    }
+    return _reportPartToolbar;
+}
+
 #pragma mark - JMReportViewerToolBarDelegate
 - (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage
 {
@@ -565,11 +589,25 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     [self.reportLoader fetchPageNumber:toPage withCompletion:changePageCompletion];
 }
 
+#pragma mark - JMReportPartViewToolbarDelegate
+- (void)reportPartViewToolbarDidChangePart:(JMReportPartViewToolbar *)toolbar
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    if ([self.reportLoader respondsToSelector:@selector(navigateToPart:withCompletion:)]) {
+        __weak typeof(self)weakSelf = self;
+        [self startShowLoaderWithMessage:@"status_loading"];
+        [self.reportLoader navigateToPart:toolbar.currentPart withCompletion:^(BOOL success, NSError *error) {
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf stopShowLoader];
+        }];
+    }
+}
+
 #pragma mark - Run report
 - (void)runReportWithPage:(NSInteger)page
 {
     [self hideEmptyReportMessage];
-    [self hideToolbar];
+    [self hidePaginationToolbar];
     [self hideReportView];
     self.toolbar.enable = NO;
 
@@ -615,7 +653,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     self.report.activeReportOption = newActiveOption;
     if (self.report.isReportAlreadyLoaded && !isURIChanged) {
         [self hideEmptyReportMessage];
-        [self hideToolbar];
+        [self hidePaginationToolbar];
         [self hideReportView];
 
         __weak typeof(self)weakSelf = self;
@@ -647,7 +685,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)refreshReport
 {
     [self hideEmptyReportMessage];
-    [self hideToolbar];
+    [self hidePaginationToolbar];
     [self hideReportView];
     
     __weak typeof(self)weakSelf = self;
@@ -902,14 +940,17 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)showEmptyReportMessage
 {
     self.emptyReportMessageLabel.hidden = NO;
-    [self.navigationController setToolbarHidden:YES animated:YES];
+    [self hidePaginationToolbar];
 }
 
 - (void)hideEmptyReportMessage
 {
     self.emptyReportMessageLabel.hidden = YES;
-    [self.navigationController setToolbarHidden:!self.report.isMultiPageReport
-                                       animated:YES];
+    if (self.report.isMultiPageReport) {
+        [self showPaginationToolbar];
+    } else {
+        [self hidePaginationToolbar];
+    }
 }
 
 - (BOOL)isReportReady
@@ -918,24 +959,24 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     return isCountOfPagesExist;
 }
 
-- (void)hideToolbar
+- (void)hidePaginationToolbar
 {
     [self.navigationController setToolbarHidden:YES animated:YES];
 }
 
-- (void)showToolbar
+- (void)showPaginationToolbar
 {
     [self.navigationController setToolbarHidden:NO animated:YES];
 }
 
 - (void)hideReportView
 {
-    [self resourceView].hidden = YES;
+    [self contentView].hidden = YES;
 }
 
 - (void)showReportView
 {
-    [self resourceView].hidden = NO;
+    [self contentView].hidden = NO;
 }
 
 - (void)layoutEmptyReportLabelInView:(UIView *)view {
@@ -974,7 +1015,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (UIView *)viewToShowOnExternalWindow
 {
     UIView *view = [UIView new];
-    UIView *reportView = [self resourceView];
+    UIView *reportView = [self contentView];
 
     [view addSubview:reportView];
 
@@ -998,7 +1039,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)addControlsForExternalWindow
 {
-    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentView:[self resourceView]];
+    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentView:[self contentView]];
 
     CGRect controlViewFrame = self.view.frame;
     controlViewFrame.origin.y = 0;

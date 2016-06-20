@@ -53,16 +53,16 @@
     return _savedReports;
 }
 
-- (UIView *)resourceView
+- (UIView *)contentView
 {
-    UIView *resourceView;
+    UIView *contentView;
     if (self.imageView) {
-        resourceView = self.imageView;
+        contentView = self.imageView;
     } else {
         JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
-        resourceView = webEnvironment.webView;
+        contentView = webEnvironment.webView;
     }
-    return resourceView;
+    return contentView;
 }
 
 #pragma mark - Overrided methods
@@ -293,7 +293,7 @@
 
 - (void)showImageWithURL:(NSURL *)url
 {
-    [[self resourceView] removeFromSuperview];
+    [[self contentView] removeFromSuperview];
 
     NSData *data = [NSData dataWithContentsOfURL:url];
     UIImage *image = [UIImage imageWithData:data];

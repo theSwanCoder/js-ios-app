@@ -50,15 +50,19 @@ extern NSString * const kJMShowDashboardViewerSegue;
 extern NSString * const kJMShowSavedRecourcesViewerSegue;
 
 @interface JMBaseResourceViewerVC : JMBaseViewController <JMResourceClientHolder, JMMenuActionsViewDelegate>
-@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, weak) id <JMBaseResourceViewerVCDelegate>delegate;
 
 // setup
 - (void)setupSubviews;
+- (void)addContentView:(UIView *)contentView;
 - (void)setupLeftBarButtonItems NS_REQUIRES_SUPER;
 - (void)setupRightBarButtonItems NS_REQUIRES_SUPER;
 - (void)resetSubViews;
 
+// Working with top toolbar
+- (void)addTopToolbar:(UIView *)toolbar;
+- (void)showTopToolbarAnimated:(BOOL)animated;
+- (void)hideTopToolbarAnimated:(BOOL)animated;
 
 // Resource Viewing
 - (void) startResourceViewing;

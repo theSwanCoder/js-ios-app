@@ -237,6 +237,31 @@
                                     }];
 }
 
+- (void)navigateToPart:(JMReportPart *__nonnull)part withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion
+{
+    NSAssert(completion != nil, @"Completion is nil");
+
+    JSReportLoaderCompletionBlock heapBlock = [completion copy];
+
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.navigateToPage"
+                                                                parameters:@{
+                                                                        @"page" : part.page
+                                                                }];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:^(NSDictionary *parameters, NSError *error) {
+                                        __typeof(self) strongSelf = weakSelf;
+                                        if (error) {
+                                            NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                                            heapBlock(NO, vizError);
+                                        } else {
+                                            NSNumber *page = parameters[@"page"];
+                                            [strongSelf.report updateCurrentPage:page.integerValue];
+                                            heapBlock(YES, nil);
+                                        }
+                                    }];
+}
+
 - (void)cancel
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));

@@ -29,6 +29,7 @@
 #import "JMMainNavigationController.h"
 #import "UIViewController+Additions.h"
 #import "JMResource.h"
+#import "JMBaseResourceView.h"
 
 NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
 NSString * const kJMShowMultiPageReportSegue = @"ShowMultiPageReport";
@@ -45,6 +46,12 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 @synthesize resource = _resource;
 
 #pragma mark - UIViewController LifeCycle
+- (void)loadView
+{
+    JMBaseResourceView *resourceView = [[[NSBundle mainBundle] loadNibNamed:@"JMBaseResourceView" owner:self options:nil] firstObject];
+    self.view = resourceView;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -120,9 +127,63 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     // override in children
 }
 
+- (void)addContentView:(UIView *)contentView
+{
+    [((JMBaseResourceView *)self.view).contentView addSubview:contentView];
+    contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[contentView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"contentView": contentView}]];
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[contentView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"contentView": contentView}]];
+}
+
 - (void)resetSubViews
 {
     // override in children
+}
+
+// Working with top toolbar
+- (void)addTopToolbar:(UIView *)toolbar
+{
+    [((JMBaseResourceView *)self.view).topToolbar addSubview:toolbar];
+    toolbar.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[toolbar]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"toolbar": toolbar}]];
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[toolbar]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"toolbar": toolbar}]];
+}
+
+- (void)showTopToolbarAnimated:(BOOL)animated
+{
+    ((JMBaseResourceView *)self.view).topToolbarTopConstraint.constant = 0;
+    if (animated) {
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             [self.view layoutIfNeeded];
+                         }];
+    }
+}
+
+- (void)hideTopToolbarAnimated:(BOOL)animated
+{
+    JMBaseResourceView *resourceView = (JMBaseResourceView *)self.view;
+    resourceView.topToolbarTopConstraint.constant = - CGRectGetHeight(resourceView.topToolbar.frame);
+    if (animated) {
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             [self.view layoutIfNeeded];
+                         }];
+    }
 }
 
 #pragma mark - Setup Navigation Items
@@ -311,20 +372,20 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)startShowLoadingIndicators
 {
     [JMUtils showNetworkActivityIndicator];
-    [self.activityIndicator startAnimating];
+    [((JMBaseResourceView *)self.view).activityIndicator startAnimating];
 }
 
 - (void)stopShowLoadingIndicators
 {
     [JMUtils hideNetworkActivityIndicator];
-    [self.activityIndicator stopAnimating];
+    [((JMBaseResourceView *)self.view).activityIndicator stopAnimating];
 }
 
 - (void)startShowLoaderWithMessage:(NSString *)message
 {
     [JMUtils showNetworkActivityIndicator];
     [JMCancelRequestPopup presentWithMessage:message];
-    [self.activityIndicator startAnimating];
+    [((JMBaseResourceView *)self.view).activityIndicator startAnimating];
 }
 
 - (void)startShowLoaderWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock
@@ -332,14 +393,14 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     [JMUtils showNetworkActivityIndicator];
     [JMCancelRequestPopup presentWithMessage:message
                                  cancelBlock:cancelBlock];
-    [self.activityIndicator startAnimating];
+    [((JMBaseResourceView *)self.view).activityIndicator startAnimating];
 }
 
 - (void)stopShowLoader
 {
     [JMUtils hideNetworkActivityIndicator];
     [JMCancelRequestPopup dismiss];
-    [self.activityIndicator stopAnimating];
+    [((JMBaseResourceView *)self.view).activityIndicator stopAnimating];
 }
 
 @end
