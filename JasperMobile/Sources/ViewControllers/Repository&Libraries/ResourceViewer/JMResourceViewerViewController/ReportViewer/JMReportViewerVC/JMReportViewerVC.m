@@ -49,7 +49,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 @property (nonatomic, copy) void(^exportCompletion)(NSString *resourcePath);
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (nonatomic, weak) JMReportPartViewToolbar *reportPartToolbar;
-@property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
+@property (weak, nonatomic) UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
@@ -82,6 +82,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [self addEmptyReportLabelInView:self.view];
+    [self hideEmptyReportMessage];
     [self hideTopToolbarAnimated:NO];
     [self configureReport];
 
@@ -287,10 +289,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report
                                                             webEnvironment:self.webEnvironment];
     [self.configurator updateReportLoaderDelegateWithObject:self];
-
-    //[self.view insertSubview:[self contentView] belowSubview:self.emptyReportMessageLabel];
-    //[self setupResourceViewLayout];
 }
+
+
 
 - (void)updateToobarAppearence
 {
@@ -979,7 +980,39 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     [self contentView].hidden = NO;
 }
 
-- (void)layoutEmptyReportLabelInView:(UIView *)view {
+- (void)cleanWebEnvironment
+{
+    if ([JMUtils isSystemVersion9]) {
+        [self.webEnvironment removeCookies];
+    } else {
+        [self.webEnvironment.webView removeFromSuperview];
+        self.webEnvironment = nil;
+        [[JMWebViewManager sharedInstance] reset];
+    }
+}
+
+#pragma mark - Empty Report Label
+- (UILabel *)createEmptyReportMessageLabel
+{
+    UILabel *label = [UILabel new];
+    label.text = JMCustomLocalizedString(@"report_viewer_emptyreport_title", nil);
+    return label;
+}
+
+- (void)addEmptyReportLabelInView:(UIView *)view
+{
+    [self.emptyReportMessageLabel removeFromSuperview];
+
+    UILabel *emptyReportLabel = [self createEmptyReportMessageLabel];
+    [view addSubview:emptyReportLabel];
+    self.emptyReportMessageLabel = emptyReportLabel;
+
+    [self setupEmptyReportLabelConstriantsInView:view];
+}
+
+- (void)setupEmptyReportLabelConstriantsInView:(UIView *)view
+{
+    [self.emptyReportMessageLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
 
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.emptyReportMessageLabel
                                                                   attribute:NSLayoutAttributeCenterX
@@ -998,17 +1031,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                              multiplier:1
                                                constant:0];
     [view addConstraint:constraint];
-}
-
-- (void)cleanWebEnvironment
-{
-    if ([JMUtils isSystemVersion9]) {
-        [self.webEnvironment removeCookies];
-    } else {
-        [self.webEnvironment.webView removeFromSuperview];
-        self.webEnvironment = nil;
-        [[JMWebViewManager sharedInstance] reset];
-    }
 }
 
 #pragma mark - Work with external screen
@@ -1030,8 +1052,10 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                         views:@{@"reportView": reportView}]];
 
 
-    [view addSubview:self.emptyReportMessageLabel];
-    [self layoutEmptyReportLabelInView:view];
+    [self addEmptyReportLabelInView:view];
+    if (![self.report isReportEmpty]) {
+        [self hideEmptyReportMessage];
+    }
 
     return view;
 }
@@ -1054,8 +1078,10 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
     [super setupSubviews];
 
-    [self.view addSubview:self.emptyReportMessageLabel];
-    [self layoutEmptyReportLabelInView:self.view];
+    [self addEmptyReportLabelInView:self.view];
+    if (![self.report isReportEmpty]) {
+        [self hideEmptyReportMessage];
+    }
 
     [self hideExternalWindowWithCompletion:^{
         if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {

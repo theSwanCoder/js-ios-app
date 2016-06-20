@@ -2643,26 +2643,12 @@ your business wherever you are.</string>
                     <view key="view" contentMode="scaleToFill" id="4yE-ST-XvN">
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report is empty!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XON-xy-195">
-                                <rect key="frame" x="30" y="258" width="540" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="centerY" secondItem="XON-xy-195" secondAttribute="centerY" id="3RZ-pj-KFI"/>
-                            <constraint firstItem="XON-xy-195" firstAttribute="centerX" secondItem="4yE-ST-XvN" secondAttribute="centerX" id="IhY-ZB-PdU"/>
-                            <constraint firstItem="XON-xy-195" firstAttribute="width" secondItem="4yE-ST-XvN" secondAttribute="width" multiplier="0.9" id="iYt-Nf-0eo"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="M31-Dc-8pu"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="emptyReportMessageLabel" destination="XON-xy-195" id="qYd-k5-to1"/>
                         <segue destination="Udh-pd-kGH" kind="show" identifier="ShowReportOptions" id="oVm-x8-oKE"/>
                         <segue destination="r1t-0l-AbT" kind="show" identifier="SaveReportViewControllerSegue" id="y8h-Nv-5bi"/>
                         <segue destination="mZ5-qt-wbc" kind="show" identifier="showBookmarks" id="ts6-X2-xMi"/>
