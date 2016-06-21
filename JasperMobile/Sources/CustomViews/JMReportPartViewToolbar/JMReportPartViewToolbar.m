@@ -30,6 +30,7 @@
 #import "JMReportPart.h"
 
 @interface JMReportPartViewToolbar()
+@property (nonatomic, strong, readwrite) JMReportPart *currentPart;
 @property (weak, nonatomic) IBOutlet UIButton *previousButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
@@ -53,12 +54,53 @@
 {
     _currentPart = currentPart;
     self.titleLabel.text = _currentPart.name;
+
+    self.nextButton.enabled = YES;
+    self.previousButton.enabled = YES;
+
+    NSUInteger newIndex = [self.parts indexOfObject:currentPart];
+    // previous part
+    if (newIndex == 0) {
+        self.previousButton.enabled = NO;
+    }
+
+    // next part
+    if (newIndex == self.parts.count - 1) {
+        self.nextButton.enabled = NO;
+    }
 }
 
 - (void)setParts:(NSArray<JMReportPart *> *)parts
 {
     _parts = parts;
     self.currentPart = _parts.firstObject;
+}
+
+#pragma mark - Public API
+- (void)updateCurrentPartForPage:(NSInteger)page
+{
+    self.currentPart = [self partForPage:page];
+}
+
+- (JMReportPart *)partForPage:(NSInteger)page
+{
+    JMReportPart *partForPage;
+    for (NSUInteger i = 0; i < self.parts.count; i++) {
+        JMReportPart *part = self.parts[i];
+        if (i < self.parts.count - 1) {
+            JMReportPart *afterPart = self.parts[i+1];
+            NSInteger fromPage = part.page.integerValue;
+            NSInteger toPage = afterPart.page.integerValue;
+            if (page >= fromPage && page < toPage) {
+                partForPage = part;
+                break;
+            }
+        } else {
+            // It's last part
+            partForPage = part;
+        }
+    }
+    return partForPage;
 }
 
 #pragma mark - Actions
@@ -83,10 +125,6 @@
 {
     NSUInteger currentIndex = [self.parts indexOfObject:self.currentPart];
     NSUInteger previousIndex = currentIndex - 1;
-    if (previousIndex == 0) {
-        self.previousButton.enabled = NO;
-    }
-    self.nextButton.enabled = YES;
     JMReportPart *part = self.parts[previousIndex];
     return part;
 }
@@ -95,10 +133,6 @@
 {
     NSUInteger currentIndex = [self.parts indexOfObject:self.currentPart];
     NSUInteger nextIndex = currentIndex + 1;
-    if (nextIndex == self.parts.count - 1) {
-        self.nextButton.enabled = NO;
-    }
-    self.previousButton.enabled = YES;
     JMReportPart *part = self.parts[nextIndex];
     return part;
 }

@@ -166,6 +166,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)reportLoaderDidChangeCurrentPage:(NSNotification *)notification
 {
     self.toolbar.currentPage = self.report.currentPage;
+    if (self.report.parts) {
+        [self.reportPartToolbar updateCurrentPartForPage:self.report.currentPage];
+    }
 }
 
 - (void)cookiesDidChange
