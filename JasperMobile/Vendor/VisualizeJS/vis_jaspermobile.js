@@ -194,12 +194,12 @@ JasperMobile.Report.REST.API = {
             JasperMobile.Report.REST.API.elasticChart = null;
             container.style.zoom = "";
             JasperMobile.Callback.log("clear content");
-            JasperMobile.Callback.listener("JasperMobile.Report.REST.API.injectContent", {});
+            JasperMobile.Callback.callback("JasperMobile.Report.REST.API.injectContent", {});
         } else {
             container.style.zoom = 2;
             JasperMobile.Helper.resetBodyTransformStyles();
             JasperMobile.Helper.updateBodyTransformStylesToFitWindow();
-            JasperMobile.Callback.listener("JasperMobile.Report.REST.API.injectContent", {});
+            JasperMobile.Callback.callback("JasperMobile.Report.REST.API.injectContent", {});
         }
     },
     verifyEnvironmentIsReady: function() {
@@ -1395,5 +1395,6 @@ window.onerror = function myErrorHandler(message, source, lineno, colno, error) 
             "source" : source
         }
     });
+    // run default handler
     return false;
 };
