@@ -49,6 +49,7 @@
 - (void)dealloc
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 + (instancetype)sharedInstance {
@@ -69,6 +70,10 @@
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleMemoryWarnings)
                                                      name:UIApplicationDidReceiveMemoryWarningNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(cookiesDidChange)
+                                                     name:JSRestClientDidChangeCookies
                                                    object:nil];
     }
     return self;
@@ -119,10 +124,24 @@
 - (void)reset
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    // TODO: need reset?
-//    [self.webEnvironments makeObjectsPerformSelector:@selector(reset)];
-
+    for(JMWebEnvironment *webEnvironment in self.webEnvironments) {
+        [webEnvironment.webView removeFromSuperview];
+    }
     self.webEnvironments = [NSMutableArray array];
+}
+
+#pragma mark - Notifications
+- (void)cookiesDidChange
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    if ([JMUtils isSystemVersion9]) {
+        for(JMWebEnvironment *webEnvironment in self.webEnvironments) {
+            [webEnvironment removeCookies];
+            [webEnvironment addCookies];
+        }
+    } else {
+        [self reset];
+    }
 }
 
 @end

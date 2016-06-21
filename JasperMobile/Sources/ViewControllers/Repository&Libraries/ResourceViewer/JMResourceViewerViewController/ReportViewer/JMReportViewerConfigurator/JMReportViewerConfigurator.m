@@ -39,6 +39,11 @@
 
 #pragma mark - Public API
 
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+}
+
 - (instancetype)initWithReport:(JMReport *)report webEnvironment:(JMWebEnvironment *)webEnvironment {
     self = [super init];
     if (self) {

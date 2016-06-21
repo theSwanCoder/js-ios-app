@@ -140,15 +140,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                              selector:@selector(reportDidUpdateParts)
                                                  name:JMReportPartsDidUpdateNotification
                                                object:self.report];
-
-    // Change cookies notification
-    // At the moment we need this notification for 'non' visualize reports
-    if (![JMUtils isSupportVisualize]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(cookiesDidChange)
-                                                     name:JSRestClientDidChangeCookies
-                                                   object:nil];
-    }
 }
 
 - (void)multipageNotification
@@ -168,23 +159,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     if (self.report.parts) {
         [self.reportPartToolbar updateCurrentPartForPage:self.report.currentPage];
     }
-}
-
-- (void)cookiesDidChange
-{
-    [self.reportLoader cancel];
-
-    [self cleanWebEnvironment];
-    [self.webEnvironment addCookies];
-
-    NSInteger reportCurrentPage = self.report.currentPage;
-    if (reportCurrentPage == NSNotFound) {
-        reportCurrentPage = 1;
-    }
-    [self.report restoreDefaultState];
-    [self.report updateCurrentPage:reportCurrentPage];
-
-    [self runReportWithPage:self.report.currentPage];
 }
 
 - (void)reportDidUpdateBookmarks
@@ -278,10 +252,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)setupSubviews
 {
-    // setup subviews after getting report info
-    if (!self.webEnvironment) {
-        [self setupWebEnvironment];
-    }
+    [self setupWebEnvironment];
     [super setupSubviews];
 }
 
@@ -367,7 +338,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                             // only one case remains - when cookies was changed and the webEvnironment has old cookies
                                                                             // but this case will handle correctly because the webEvironment raise auth error
                                                                             if (!strongSelf.webEnvironment) {
-                                                                                [strongSelf setupWebEnvironment];
+                                                                                // This case posible for iOS8
+                                                                                // because in that case we are removing all webEnvironment when cookies were updated
+                                                                                [strongSelf setupSubviews];
                                                                             }
 
                                                                             NSMutableArray *visibleInputControls = [NSMutableArray array];
@@ -709,21 +682,23 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)handleError:(NSError *)error
 {
     switch (error.code) {
-        case JSReportLoaderErrorTypeAuthentification:
-            [self cleanWebEnvironment];
-
+        case JSReportLoaderErrorTypeAuthentification: {
             NSInteger reportCurrentPage = self.report.currentPage;
             [self.report restoreDefaultState];
             [self.report updateCurrentPage:reportCurrentPage];
             // Here 'break;' doesn't need, because we should try to create new session and reload report
+        }
         case JSSessionExpiredErrorCode:
             if (self.restClient.keepSession) {
                 __weak typeof(self)weakSelf = self;
                 [self startShowLoaderWithMessage:@"status_loading"];
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
                     __strong typeof(self)strongSelf = weakSelf;
-
-                    [strongSelf.webEnvironment addCookies];
+                    if (!strongSelf.webEnvironment) {
+                        // This case posible for iOS8
+                        // because in that case we are removing all webEnvironment when cookies were updated
+                        [strongSelf setupSubviews];
+                    }
 
                     [strongSelf stopShowLoader];
                     if (!result.error) {
@@ -980,17 +955,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)showReportView
 {
     [self contentView].hidden = NO;
-}
-
-- (void)cleanWebEnvironment
-{
-    if ([JMUtils isSystemVersion9]) {
-        [self.webEnvironment removeCookies];
-    } else {
-        [self.webEnvironment.webView removeFromSuperview];
-        self.webEnvironment = nil;
-        [[JMWebViewManager sharedInstance] reset];
-    }
 }
 
 #pragma mark - Empty Report Label
