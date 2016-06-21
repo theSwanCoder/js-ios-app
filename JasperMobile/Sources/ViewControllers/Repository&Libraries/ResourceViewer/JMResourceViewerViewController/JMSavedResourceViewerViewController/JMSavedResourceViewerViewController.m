@@ -289,6 +289,7 @@
     [webEnvironment loadLocalFileFromURL:url
                               fileFormat:resourceFormat
                                  baseURL:baseURL];
+    [self stopShowLoader];
 }
 
 - (void)showImageWithURL:(NSURL *)url
