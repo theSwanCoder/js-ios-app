@@ -73,8 +73,21 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"DOMContentLoaded";
     JMJavascriptRequestCompletion heapBlock = [completion copy];
+    __weak __typeof(self) weakSelf = self;
     JMJavascriptRequestCompletion completionWithCookies = ^(JMJavascriptResponse *callback, NSError *error) {
         JMLog(@"Callback: DOMContentLoaded");
+        __typeof(self) strongSelf = weakSelf;
+        // add window.onerror listener
+        NSString *listenerId = @"JasperMobile.Events.Window.OnError";
+        __weak __typeof(self) weakSelf = strongSelf;
+        [self addListenerWithId:listenerId
+                       callback:^(JMJavascriptResponse *callback, NSError *error) {
+                           __typeof(self) strongSelf = weakSelf;
+                           if ([strongSelf.delegate respondsToSelector:@selector(javascriptNativeBridge:didReceiveOnWindowError:)]) {
+                               [strongSelf.delegate javascriptNativeBridge:strongSelf
+                                                   didReceiveOnWindowError:error];
+                           }
+                       }];
         if (heapBlock) {
             heapBlock(callback, error);
         }
@@ -168,23 +181,6 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     NSLog(@"request from webView, allHTTPHeaderFields: %@", navigationAction.request.allHTTPHeaderFields);
 
     decisionHandler(WKNavigationActionPolicyAllow);
-}
-
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
-{
-//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-
-    // add window.onerror listener
-    NSString *listenerId = @"JasperMobile.Events.Window.OnError";
-   __weak __typeof(self) weakSelf = self;
-    [self addListenerWithId:listenerId
-                   callback:^(JMJavascriptResponse *callback, NSError *error) {
-                       __typeof(self) strongSelf = weakSelf;
-                       if ([strongSelf.delegate respondsToSelector:@selector(javascriptNativeBridge:didReceiveOnWindowError:)]) {
-                           [strongSelf.delegate javascriptNativeBridge:strongSelf
-                                               didReceiveOnWindowError:error];
-                       }
-                   }];
 }
 
 #pragma mark - WKScriptMessageHandler
