@@ -84,7 +84,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
     [self addEmptyReportLabelInView:self.view];
     [self hideEmptyReportMessage];
-    [self hideTopToolbarAnimated:NO];
     [self configureReport];
 
     [self addObservers];
