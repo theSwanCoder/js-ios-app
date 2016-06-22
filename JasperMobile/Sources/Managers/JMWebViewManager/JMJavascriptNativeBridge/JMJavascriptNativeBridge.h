@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, JMJavascriptNativeBrigdeErrorType) {
     JMJavascriptNativeBridgeErrorTypeOther,
 };
 
-typedef void(^JMJavascriptRequestCompletion)(JMJavascriptResponse *__nullable callback, NSError * __nullable error);
+typedef void(^JMJavascriptRequestCompletion)(JMJavascriptResponse *__nullable response, NSError * __nullable error);
 
 @interface JMJavascriptNativeBridge : NSObject
 @property (nonatomic, weak, readonly, nullable) WKWebView *webView;

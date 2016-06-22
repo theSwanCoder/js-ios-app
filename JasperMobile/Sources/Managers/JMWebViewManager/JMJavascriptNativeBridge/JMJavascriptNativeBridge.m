@@ -88,6 +88,13 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                                                    didReceiveOnWindowError:error];
                            }
                        }];
+
+        // verify if there is a listener which waiting for this event
+        JMJavascriptRequest *listener = [self findListenerForCommand:@"DOMContentLoaded"];
+        if (listener) {
+            JMJavascriptRequestCompletion listenerCompletion = self.listenerCallbacks[listener];
+            listenerCompletion(nil, nil);
+        }
         if (heapBlock) {
             heapBlock(callback, error);
         }
@@ -107,15 +114,19 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                    completion:(JMJavascriptRequestCompletion __nullable)completion
 {
 //    JMLog(@"send request: %@", request);
-    if (completion) {
-        self.requestCompletions[request] = [completion copy];
-    }
 
     [self.webView evaluateJavaScript:[request fullJavascriptRequestString]
                    completionHandler:^(id result, NSError *error) {
                        JMLog(@"request: %@", request);
                        JMLog(@"error: %@", error);
                        JMLog(@"result: %@", result);
+                       if (!error) {
+                           if (completion) {
+                               self.requestCompletions[request] = [completion copy];
+                           }
+                       } else {
+                           completion(nil, error);
+                       }
                    }];
 }
 
@@ -314,19 +325,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
             break;
         }
         case JMJavascriptCallbackTypeListener: {
-            for (JMJavascriptRequest *request in self.listenerCallbacks) {
-                if ([request.command isEqualToString:response.command]) {
-                    JMJavascriptRequestCompletion completion = self.listenerCallbacks[request];
-                    if (response.parameters && response.parameters[@"error"]) {
-                        NSDictionary *errorJSON = response.parameters[@"error"];
-                        NSError *error = [self makeErrorFromWebViewError:errorJSON];
-                        completion(nil, error);
-                    } else {
-                        completion(response, nil);
-                    }
-                    break;
-                }
-            }
+            [self handleListenersForResponse:response];
             break;
         }
         case JMJavascriptCallbackTypeCallback: {
@@ -351,6 +350,33 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
             break;
         }
     }
+}
+
+- (void)handleListenersForResponse:(JMJavascriptResponse *)response
+{
+    JMJavascriptRequest *listener = [self findListenerForCommand:response.command];
+    if (listener) {
+        JMJavascriptRequestCompletion completion = self.listenerCallbacks[listener];
+        if (response.parameters && response.parameters[@"error"]) {
+            NSDictionary *errorJSON = response.parameters[@"error"];
+            NSError *error = [self makeErrorFromWebViewError:errorJSON];
+            completion(nil, error);
+        } else {
+            completion(response, nil);
+        }
+    }
+}
+
+- (JMJavascriptRequest *)findListenerForCommand:(NSString *)command
+{
+    JMJavascriptRequest *listener;
+    for (JMJavascriptRequest *request in self.listenerCallbacks) {
+        if ([request.command isEqualToString:command]) {
+            listener = request;
+            break;
+        }
+    }
+    return listener;
 }
 
 - (NSError *)makeErrorFromWebViewError:(NSDictionary *)errorJSON
