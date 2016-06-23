@@ -39,7 +39,7 @@ typedef void(^JMWebEnvironmentRequestBooleanCompletion)(BOOL isSuccess, NSError 
 typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nullable params, NSError * __nullable error);
 
 @interface JMWebEnvironment : NSObject
-@property (nonatomic, strong) WKWebView * __nonnull webView;
+@property (nonatomic, strong) WKWebView * __nullable webView;
 @property (nonatomic, copy) NSString * __nonnull identifier;
 @property (nonatomic, assign, getter=isCancel) BOOL cancel;
 @property (nonatomic, assign, getter=isCookiesReady) BOOL cookiesReady;
@@ -68,4 +68,5 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 
 - (void)resetZoom;
 - (void)clean;
+- (void)reset;
 @end

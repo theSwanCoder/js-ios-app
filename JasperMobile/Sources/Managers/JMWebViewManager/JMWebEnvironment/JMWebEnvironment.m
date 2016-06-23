@@ -253,11 +253,15 @@
 
 - (void)clean
 {
-    [self.bridge removeAllListeners];
-    self.pendingOperations = [NSMutableArray array];
-
     NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
     [self.webView loadRequest:clearingRequest];
+}
+
+- (void)reset
+{
+    [self.bridge removeAllListeners];
+    self.pendingOperations = [NSMutableArray array];
+    self.webView = nil;
 }
 
 #pragma mark - Helpers
