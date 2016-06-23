@@ -61,7 +61,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 - (void)dealloc
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 }
 
 #pragma mark - Public API
@@ -115,16 +115,16 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 {
 //    JMLog(@"send request: %@", request);
 
+    if (completion) {
+        self.requestCompletions[request] = [completion copy];
+    }
     [self.webView evaluateJavaScript:[request fullJavascriptRequestString]
                    completionHandler:^(id result, NSError *error) {
                        JMLog(@"request: %@", request);
                        JMLog(@"error: %@", error);
                        JMLog(@"result: %@", result);
-                       if (!error) {
-                           if (completion) {
-                               self.requestCompletions[request] = [completion copy];
-                           }
-                       } else {
+                       if (error) {
+                           [self.requestCompletions removeObjectForKey:request];
                            completion(nil, error);
                        }
                    }];
