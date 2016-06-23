@@ -130,13 +130,11 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                    }];
 }
 
-- (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nullable)callback
+- (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nonnull)callback
 {
-    if (callback) {
-        JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = listenerId;
-        self.listenerCallbacks[request] = [callback copy];
-    }
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = listenerId;
+    self.listenerCallbacks[request] = [callback copy];
 }
 
 - (void)removeAllListeners
@@ -162,9 +160,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
     if ([self isLoginRequest:navigationAction.request]) {
         // For dashboard only (without visualize)
-        if (![JMUtils isSupportVisualize]) {
-            [self handleUnauthRequest];
-        }
+        [self handleUnauthRequest];
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     }

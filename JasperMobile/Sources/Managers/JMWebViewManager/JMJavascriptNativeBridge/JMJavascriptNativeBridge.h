@@ -58,7 +58,7 @@ typedef void(^JMJavascriptRequestCompletion)(JMJavascriptResponse *__nullable re
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMJavascriptRequestCompletion __nullable)completion;
 // listeners
-- (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nullable)callback;
+- (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nonnull)callback;
 - (void)removeAllListeners;
 @end
 
