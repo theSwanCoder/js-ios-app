@@ -36,6 +36,8 @@
 extern NSString * __nonnull const JMWebviewManagerDidResetWebviewsNotification;
 
 @interface JMWebViewManager : NSObject
+@property (nonatomic, strong) NSArray *cookies;
+
 + (instancetype __nonnull)sharedInstance;
 - (JMWebEnvironment * __nullable)webEnvironmentForId:(NSString * __nonnull)identifier;
 - (void)removeWebEnvironmentForId:(NSString *__nonnull)identifier;

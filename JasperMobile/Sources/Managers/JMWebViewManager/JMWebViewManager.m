@@ -35,7 +35,6 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 
 @interface JMWebViewManager()
 @property (nonatomic, strong) NSMutableArray *webEnvironments;
-@property (nonatomic, strong) NSArray *cookies;
 @end
 
 @implementation JMWebViewManager
