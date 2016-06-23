@@ -50,7 +50,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (nonatomic, weak) JMReportPartViewToolbar *reportPartToolbar;
 @property (weak, nonatomic) UILabel *emptyReportMessageLabel;
-@property (nonatomic, strong, readwrite) JMReport *report;
+@property (nonatomic, strong) JMReport *report;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
 @property (nonatomic, weak) JMWebEnvironment *webEnvironment;
@@ -79,16 +79,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 }
 
 #pragma mark - UIViewController LifeCycle
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    [self addEmptyReportLabelInView:self.view];
-    [self hideEmptyReportMessage];
-    [self configureReport];
-
-    [self addObservers];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -140,6 +130,10 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                              selector:@selector(reportDidUpdateParts)
                                                  name:JMReportPartsDidUpdateNotification
                                                object:self.report];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(webviewDidReset)
+                                                 name:JMWebviewManagerDidResetWebviewsNotification
+                                               object:nil];
 }
 
 - (void)multipageNotification
@@ -187,6 +181,20 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     } else {
         [self hideTopToolbarAnimated:YES];
     }
+}
+
+- (void)webviewDidReset
+{
+    if ([JMUtils isSystemVersion9]) {
+        JMLog(@"reseting for ios9");
+    } else {
+        JMLog(@"reseting for ios8");
+        [self.reportLoader cancel];
+        [self stopShowLoader];
+        NSLog(@"self.restClient: %@", self.restClient);
+    }
+    [self setupSubviews];
+    [self runReportWithPage:self.report.currentPage];
 }
 
 #pragma mark - Actions
@@ -252,19 +260,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)setupSubviews
 {
-    [self setupWebEnvironment];
-    [super setupSubviews];
+    [self addEmptyReportLabelInView:self.view];
+    [self hideEmptyReportMessage];
 }
-
-- (void)setupWebEnvironment
-{
-    self.webEnvironment = [self currentWebEnvironment];
-    self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report
-                                                            webEnvironment:self.webEnvironment];
-    [self.configurator updateReportLoaderDelegateWithObject:self];
-}
-
-
 
 - (void)updateToobarAppearence
 {
@@ -281,18 +279,14 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Overloaded methods
 - (void) startResourceViewing
 {
-    // empty method because parent call it from viewDidLoad
-    // there is issue with "white screen" after loading input controls
-    // until current view doesn't appear (on iOS 7)
+    [self addObservers];
+    [self configureReport];
 }
 
 - (void)startLoadReportWithPage:(NSInteger)page
 {
     BOOL isReportAlreadyLoaded = self.report.isReportAlreadyLoaded;
     BOOL isReportInLoadingProcess = self.reportLoader.isReportInLoadingProcess;
-
-    JMLog(@"report parameters: %@", self.report.reportParameters);
-    JMLog(@"report input controls: %@", self.report.activeReportOption.inputControls);
 
     if(!isReportAlreadyLoaded && !isReportInLoadingProcess) {
         // show report with loaded input controls
@@ -333,16 +327,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                         if (result.error) {
                                                                             errorHandlingBlock(result.error, @"Report Input Controls Loading Error");
                                                                         } else {
-                                                                            // Web Environment requires valid cookies for working,
-                                                                            // in this point we should have valid cookies
-                                                                            // only one case remains - when cookies was changed and the webEvnironment has old cookies
-                                                                            // but this case will handle correctly because the webEvironment raise auth error
-                                                                            if (!strongSelf.webEnvironment) {
-                                                                                // This case posible for iOS8
-                                                                                // because in that case we are removing all webEnvironment when cookies were updated
-                                                                                [strongSelf setupSubviews];
-                                                                            }
-
                                                                             NSMutableArray *visibleInputControls = [NSMutableArray array];
                                                                             for (JSInputControlDescriptor *inputControl in result.objects) {
                                                                                 if (inputControl.visible.boolValue) {
@@ -506,6 +490,25 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     return webEnvironmentIdentifier;
 }
 
+- (JMReportViewerConfigurator *)configurator
+{
+    if (!_configurator) {
+        _configurator = [JMReportViewerConfigurator configuratorWithReport:self.report
+                                                            webEnvironment:self.webEnvironment];
+        [_configurator updateReportLoaderDelegateWithObject:self];
+    }
+    return _configurator;
+}
+
+- (JMWebEnvironment *)webEnvironment
+{
+    if (!_webEnvironment) {
+        _webEnvironment = [self currentWebEnvironment];
+        [super setupSubviews];
+    }
+    return _webEnvironment;
+}
+
 - (id<JMReportLoaderProtocol>)reportLoader
 {
     return [self.configurator reportLoader];
@@ -568,13 +571,15 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - JMReportPartViewToolbarDelegate
 - (void)reportPartViewToolbarDidChangePart:(JMReportPartViewToolbar *)toolbar
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     if ([self.reportLoader respondsToSelector:@selector(navigateToPart:withCompletion:)]) {
         __weak typeof(self)weakSelf = self;
         [self startShowLoaderWithMessage:@"status_loading"];
         [self.reportLoader navigateToPart:toolbar.currentPart withCompletion:^(BOOL success, NSError *error) {
             __strong typeof(self) strongSelf = weakSelf;
             [strongSelf stopShowLoader];
+            if (error) {
+                [strongSelf handleError:error];
+            }
         }];
     }
 }
@@ -682,44 +687,34 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)handleError:(NSError *)error
 {
     switch (error.code) {
-        case JSReportLoaderErrorTypeAuthentification: {
-            NSInteger reportCurrentPage = self.report.currentPage;
-            [self.report restoreDefaultState];
-            [self.report updateCurrentPage:reportCurrentPage];
-            // Here 'break;' doesn't need, because we should try to create new session and reload report
-        }
-        case JSSessionExpiredErrorCode:
+        case JSReportLoaderErrorTypeAuthentification:
+        case JSSessionExpiredErrorCode: {
             if (self.restClient.keepSession) {
-                __weak typeof(self)weakSelf = self;
+                __weak typeof(self) weakSelf = self;
                 [self startShowLoaderWithMessage:@"status_loading"];
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
-                    __strong typeof(self)strongSelf = weakSelf;
-                    if (!strongSelf.webEnvironment) {
-                        // This case posible for iOS8
-                        // because in that case we are removing all webEnvironment when cookies were updated
-                        [strongSelf setupSubviews];
-                    }
-
+                    __strong typeof(self) strongSelf = weakSelf;
                     [strongSelf stopShowLoader];
                     if (!result.error) {
-                        // TODO: Need add restoring for current page
-                        [strongSelf runReportWithPage:strongSelf.report.currentPage];
+                        // TODO: show message 'Session was expired' with button 'Reload'
+                        [strongSelf runReportWithPage:1];
                     } else {
-                        __weak typeof(self)weakSelf = strongSelf;
+                        __weak typeof(self) weakSelf = strongSelf;
                         [JMUtils showLoginViewAnimated:YES completion:^{
-                            __strong typeof(self)strongSelf = weakSelf;
+                            __strong typeof(self) strongSelf = weakSelf;
                             [strongSelf cancelResourceViewingAndExit:YES];
                         }];
                     }
                 }];
             } else {
-                __weak typeof(self)weakSelf = self;
+                __weak typeof(self) weakSelf = self;
                 [JMUtils showLoginViewAnimated:YES completion:^{
-                    __strong typeof(self)strongSelf = weakSelf;
-                    [strongSelf cancelResourceViewingAndExit:YES];
+                    __strong typeof(self) strongSelf = weakSelf;
+                    [strongSelf runReportWithPage:1];
                 }];
             }
             break;
+        }
         case JSReportLoaderErrorTypeEmtpyReport:
             [self showEmptyReportMessage];
             break;
@@ -842,7 +837,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Input Controls
 - (void)showInputControlsViewControllerWithBackButton:(BOOL)isShowBackButton
 {
-    JMInputControlsViewController *inputControlsViewController = (JMInputControlsViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
+    JMInputControlsViewController *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
     inputControlsViewController.report = self.report;
     
     __weak typeof(self) weakSelf = self;
@@ -868,12 +863,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         UIBarButtonItem *backItem = [self backBarButtonItemWithTarget:inputControlsViewController
                                                                action:@selector(backButtonTapped:)];
         inputControlsViewController.navigationItem.leftBarButtonItem = backItem;
-    }
-
-    // There is issue in iOS 7 if self.view is not appeared, we can see white screen after pushing another VC
-    while (!self.view.superview) {
-        // wait
-        [NSThread sleepForTimeInterval:0.25f];
     }
 
     [self.navigationController pushViewController:inputControlsViewController animated:YES];
@@ -1093,8 +1082,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 {
     if ([self.reportLoader respondsToSelector:@selector(navigateToBookmark:withCompletion:)]) {
         [self startShowLoaderWithMessage:@"status_loading"];
+        __weak __typeof(self) weakSelf = self;
         [self.reportLoader navigateToBookmark:bookmark withCompletion:^(BOOL success, NSError *error) {
-            [self stopShowLoader];
+            __typeof(self) strongSelf = weakSelf;
+            [strongSelf stopShowLoader];
+            if (error) {
+                [strongSelf handleError:error];
+            }
         }];
     }
 }

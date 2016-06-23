@@ -28,9 +28,7 @@
 #import "JMReportLoaderProtocol.h"
 #import "JMReportViewerVC.h"
 #import "JMVisualizeReportLoader.h"
-#import "JMVisualizeManager.h"
-#import "JMWebViewManager.h"
-#import "JMWebEnvironment.h"
+#import "JMVIZWebEnvironment.h"
 #import "JMResource.h"
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptNativeBridge.h"
@@ -41,8 +39,7 @@
 @property (nonatomic, weak, readwrite) JMReport *report;
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
 @property (nonatomic, copy) NSString *exportFormat;
-@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
-//@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
+@property (nonatomic, weak) JMVIZWebEnvironment *webEnvironment;
 @property (nonatomic, assign, getter=isCancelLoading) BOOL cancelLoading;
 @end
 
@@ -74,9 +71,10 @@
 {
     self = [self initWithReport:report restClient:restClient];
     if (self) {
-        _visualizeManager = [JMVisualizeManager new];
-        _webEnvironment = webEnvironment;
+        NSAssert([webEnvironment isKindOfClass:[JMVIZWebEnvironment class]], @"WebEnvironment isn't correct class");
+        _webEnvironment = (JMVIZWebEnvironment *) webEnvironment;
         _webEnvironment.cancel = NO;
+        [self addListenersForVisualizeEvents];
     }
     return self;
 }
@@ -94,101 +92,129 @@
 - (void)runReportWithPage:(NSInteger)page completion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.report != nil, @"Report is nil");
 
-    [self addListenersForVisualizeEvents];
+    if (self.cancelLoading) {
+        return;
+    }
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment verifyEnvironmentReadyWithCompletion:^(BOOL isWebViewLoaded) {
-        __typeof(self) strongSelf = weakSelf;
-        strongSelf.isReportInLoadingProcess = YES;
-        if (isWebViewLoaded) {
-            [strongSelf fetchPageNumber:page
-                         withCompletion:heapBlock];
-        } else {
-            __weak __typeof(self) weakSelf = strongSelf;
-            [strongSelf prepearingWebEnvironmentWithCompletion:^(BOOL success, NSError *error) {
-                __typeof(self) strongSelf = weakSelf;
-                if (error) {
-                    // TODO: show error
-                    JMLog(@"error: %@", error);
-                } else {
-                    [strongSelf freshLoadReportWithPageNumber:page
-                                                   completion:heapBlock];
-                }
-            }];
-        }
-    }];
+    if (self.report.isReportAlreadyLoaded) {
+        [self freshLoadReportWithPageNumber:page
+                                       completion:heapBlock];
+    } else {
+        __weak __typeof(self) weakSelf = self;
+        [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
+            __typeof(self) strongSelf = weakSelf;
+            if (strongSelf.cancelLoading) {
+                return;
+            }
+            if (isReady) {
+                [strongSelf freshLoadReportWithPageNumber:page
+                                               completion:heapBlock];
+            } else {
+                heapBlock(NO, [strongSelf loaderErrorFromBridgeError:error]);
+            }
+        }];
+    }
 }
 
 - (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.report != nil, @"Report is nil");
 
-    if (!self.report.isReportAlreadyLoaded) {
-        [self freshLoadReportWithPageNumber:pageNumber
-                                 completion:completion];
-    } else {
-        [self selectPageWithPageNumber:pageNumber
-                            completion:completion];
+    if (self.isCancelLoading) {
+        return;
     }
+
+    JSReportLoaderCompletionBlock heapBlock = [completion copy];
+
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.selectPage"
+                                                                parameters:@{
+                                                                        @"pageNumber" : @(pageNumber)
+                                                                }];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:^(NSDictionary *parameters, NSError *error) {
+                                        __typeof(self) strongSelf = weakSelf;
+                                        if (strongSelf.isCancelLoading) {
+                                            return;
+                                        }
+                                        if (error) {
+                                            NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                                            heapBlock(NO, vizError);
+                                        } else {
+                                            [strongSelf.report updateCurrentPage:pageNumber];
+                                            heapBlock(YES, nil);
+                                        }
+                                    }];
 }
 
 - (void)applyReportParametersWithCompletion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.report != nil, @"Report is nil");
+
+    if (self.isCancelLoading) {
+        return;
+    }
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
+    if (self.report.isReportAlreadyLoaded) {
+        [self.report updateCurrentPage:1];
+        [self.report updateCountOfPages:NSNotFound];
 
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment verifyEnvironmentReadyWithCompletion:^(BOOL isWebViewLoaded) {
-        __typeof(self) strongSelf = weakSelf;
-        if (!isWebViewLoaded) {
-            __weak __typeof(self) weakSelf = strongSelf;
-            [self prepearingWebEnvironmentWithCompletion:^(BOOL success, NSError *error) {
-                __typeof(self) strongSelf = weakSelf;
-                if (error) {
-                    JMLog(@"error: %@", error);
+        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.applyReportParams"
+                                                                    parameters:[self runParameters]];
+        __weak __typeof(self) weakSelf = self;
+        [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+            __typeof(self) strongSelf = weakSelf;
+            if (error) {
+                NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                heapBlock(NO, vizError);
+            } else {
+                if (parameters[@"pages"]) {
+                    NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
+                    [strongSelf.report updateCountOfPages:countOfPages];
                 } else {
-                    [strongSelf freshLoadReportWithPageNumber:strongSelf.report.currentPage
-                                                   completion:heapBlock];
-                }
-            }];
-        } else {
-            [strongSelf.report updateCurrentPage:1];
-            [strongSelf.report updateCountOfPages:NSNotFound];
-
-            JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.applyReportParams"
-                                                                        parameters:[strongSelf runParameters]];
-            __weak __typeof(self) weakSelf = strongSelf;
-            [strongSelf.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-                __typeof(self) strongSelf = weakSelf;
-                if (error) {
-                    NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
-                    heapBlock(NO, vizError);
-                } else {
-                    if (parameters[@"pages"]) {
-                        NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
-                        [strongSelf.report updateCountOfPages:countOfPages];
-                    } else {
 #ifndef __RELEASE__
-                        NSError *absentPagesError = [NSError errorWithDomain:@"Visualize Error" code:0 userInfo:@{
-                                NSLocalizedDescriptionKey : @"Absent of pages after applying report parameters"
-                        }];
-                        [JMUtils presentAlertControllerWithError:absentPagesError
-                                                      completion:nil];
+                    NSError *absentPagesError = [NSError errorWithDomain:@"Visualize Error" code:0 userInfo:@{
+                            NSLocalizedDescriptionKey : @"Absent of pages after applying report parameters"
+                    }];
+                    [JMUtils presentAlertControllerWithError:absentPagesError
+                                                  completion:nil];
 #endif
-                    }
-                    heapBlock(YES, nil);
                 }
-            }];
-        }
-    }];
+                heapBlock(YES, nil);
+            }
+        }];
+
+    } else {
+        __weak __typeof(self) weakSelf = self;
+        [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
+            __typeof(self) strongSelf = weakSelf;
+            if (strongSelf.cancelLoading) {
+                return;
+            }
+            if (isReady) {
+                [strongSelf freshLoadReportWithPageNumber:self.report.currentPage
+                                               completion:heapBlock];
+            } else {
+                heapBlock(NO, [strongSelf loaderErrorFromBridgeError:error]);
+            }
+        }];
+    }
 }
 
 - (void)refreshReportWithCompletion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.report != nil, @"Report is nil");
+
+    if (self.cancelLoading) {
+        return;
+    }
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
@@ -203,9 +229,11 @@
     [self.webEnvironment sendJavascriptRequest:request
                             completion:^(NSDictionary *parameters, NSError *error) {
                                 __typeof(self) strongSelf = weakSelf;
+                                if (strongSelf.cancelLoading) {
+                                    return;
+                                }
                                 if (error) {
-                                    NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
-                                    heapBlock(NO, vizError);
+                                    heapBlock(NO, [strongSelf loaderErrorFromBridgeError:error]);
                                 } else {
                                     strongSelf.report.isReportAlreadyLoaded = YES;
                                     [strongSelf.report updateCurrentPage:1];
@@ -217,6 +245,11 @@
 - (void)navigateToBookmark:(JMReportBookmark *__nonnull)bookmark withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.report != nil, @"Report is nil");
+
+    if (self.cancelLoading) {
+        return;
+    }
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
@@ -228,6 +261,9 @@
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:^(NSDictionary *parameters, NSError *error) {
                                         __typeof(self) strongSelf = weakSelf;
+                                        if (strongSelf.cancelLoading) {
+                                            return;
+                                        }
                                         if (error) {
                                             NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
                                             heapBlock(NO, vizError);
@@ -240,6 +276,11 @@
 - (void)navigateToPart:(JMReportPart *__nonnull)part withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.report != nil, @"Report is nil");
+
+    if (self.cancelLoading) {
+        return;
+    }
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
@@ -251,6 +292,9 @@
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:^(NSDictionary *parameters, NSError *error) {
                                         __typeof(self) strongSelf = weakSelf;
+                                        if (strongSelf.cancelLoading) {
+                                            return;
+                                        }
                                         if (error) {
                                             NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
                                             heapBlock(NO, vizError);
@@ -270,53 +314,39 @@
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.cancel"
                                                                 parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        // Need capture self to wait until this request finishes
         if (error) {
             JMLog(@"error: %@", error);
         } else {
             JMLog(@"canceling report was finished");
+            self.webEnvironment.cancel = YES;
+            self.report.isReportAlreadyLoaded = NO;
+            [self.webEnvironment removeAllListeners];
         }
     }];
-
-    self.webEnvironment.cancel = YES;
-    [self.webEnvironment removeAllListeners];
 }
 
 - (void)destroy
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     if (self.isCancelLoading) {
         return;
     }
 
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.destroyReport"
                                                                 parameters:nil];
-    __typeof(self) weakSelf = self;
+
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
+        // Need capture self to wait until this request finishes
+        JMLog(@"finish of destroying");
         if (error) {
             JMLog(@"error: %@", error);
         } else {
             JMLog(@"callback: %@", parameters);
-            strongSelf.report.isReportAlreadyLoaded = NO;
-            [strongSelf.webEnvironment removeAllListeners];
+            self.report.isReportAlreadyLoaded = NO;
+            [self.webEnvironment removeAllListeners];
         }
     }];
-}
-
-- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
-{
-    BOOL isInitialScaleFactorSet = self.visualizeManager.viewportScaleFactor > 0.01;
-    BOOL isInitialScaleFactorTheSame = fabs(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49;
-    if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
-        self.visualizeManager.viewportScaleFactor = scaleFactor;
-
-        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortScale"
-                                                                    parameters:@{
-                                                                            @"scale" : @(scaleFactor)
-                                                                    }];
-        [self.webEnvironment sendJavascriptRequest:request
-                                        completion:nil];
-    }
 }
 
 - (void)fitReportViewToScreen
@@ -328,43 +358,6 @@
 }
 
 #pragma mark - Private
-- (void)prepearingWebEnvironmentWithCompletion:(JSReportLoaderCompletionBlock)completion
-{
-    JSReportLoaderCompletionBlock heapBlock = [completion copy];
-
-    self.isReportInLoadingProcess = YES;
-    [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
-        if (success) {
-            __weak __typeof(self) weakSelf = self;
-            [self.webEnvironment loadHTML:self.report.HTMLString
-                                  baseURL:[NSURL URLWithString:self.report.baseURLString]
-                               completion:^(BOOL isSuccess, NSError *error) {
-                                   __typeof(self) strongSelf = weakSelf;
-                                   if (isSuccess) {
-                                       // load vis into web environment
-                                       JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
-                                                                                                                parameters:@{
-                                                                                                                        @"scriptURLs" : @[
-                                                                                                                                strongSelf.visualizeManager.visualizePath,
-                                                                                                                                @"https://code.jquery.com/jquery.min.js"
-                                                                                                                        ]
-                                                                                                                }];
-                                       [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
-                                                                             completion:^(NSDictionary *params, NSError *error) {
-                                                                                 heapBlock(error == nil, error);
-                                                                             }];
-                                   } else {
-                                       NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
-                                       heapBlock(NO, vizError);
-                                   }
-                               }];
-        } else {
-            if (heapBlock) {
-                heapBlock(NO, error);
-            }
-        }
-    }];
-}
 
 - (void)freshLoadReportWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
@@ -375,10 +368,16 @@
         return;
     }
 
+    if (self.isCancelLoading) {
+        return;
+    }
+
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
     // need for clean running, but not selecting page
     self.report.isReportAlreadyLoaded = NO;
+    self.isReportInLoadingProcess = YES;
+
     [self.report updateCountOfPages:NSNotFound];
     [self.report updateCurrentPage:pageNumber];
 
@@ -392,70 +391,21 @@
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:^(NSDictionary *parameters, NSError *error) {
-                                __typeof(self) strongSelf = weakSelf;
-                                if (error) {
-                                    JMLog(@"have error");
-                                    JMLog(@"send the error to viewer");
-                                    NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
-                                    heapBlock(NO, vizError);
-                                } else {
-                                    strongSelf.report.isReportAlreadyLoaded = YES;
-                                    strongSelf.isReportInLoadingProcess = NO;
-                                    heapBlock(YES, nil);
-                                }
-                            }];
-}
-
-- (void)selectPageWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock __nonnull)completion
-{
-    NSAssert(completion != nil, @"Completion is nil");
-
-    if (!self.report) {
-        return;
-    }
-
-    JSReportLoaderCompletionBlock heapBlock = [completion copy];
-
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.selectPage"
-                                                                parameters:@{
-                                                                        @"pageNumber" : @(pageNumber)
-                                                                }];
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment sendJavascriptRequest:request
-                            completion:^(NSDictionary *parameters, NSError *error) {
-                                __typeof(self) strongSelf = weakSelf;
-                                if (error) {
-                                    NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
-                                    heapBlock(NO, vizError);
-                                } else {
-                                    [strongSelf.report updateCurrentPage:pageNumber];
-                                    heapBlock(YES, nil);
-                                }
-                            }];
-}
-
-- (void)startLoadHTMLWithCompletion:(void(^)(BOOL success, NSError *error))completion
-{
-    JMLog(@"visuzalise.js did start load");
-    [self.visualizeManager loadVisualizeJSWithCompletion:^(BOOL success, NSError *error){
-        if (success) {
-            JMLog(@"visuzalise.js did end load");
-
-            NSString *baseURLString = self.restClient.serverProfile.serverUrl;
-            [self.report updateHTMLString:self.visualizeManager.htmlString
-                             baseURLSring:baseURLString];
-
-            if (completion) {
-                completion(YES, nil);
-            }
-        } else {
-            // TODO: handle this error
-            JMLog(@"Error loading visualize.js");
-            if (completion) {
-                completion(NO, error);
-            }
-        }
-    }];
+                                        __typeof(self) strongSelf = weakSelf;
+                                        if (strongSelf.isCancelLoading) {
+                                            return;
+                                        }
+                                        strongSelf.isReportInLoadingProcess = NO;
+                                        if (error) {
+                                            JMLog(@"have error");
+                                            JMLog(@"send the error to viewer");
+                                            NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
+                                            heapBlock(NO, vizError);
+                                        } else {
+                                            strongSelf.report.isReportAlreadyLoaded = YES;
+                                            heapBlock(YES, nil);
+                                        }
+                                    }];
 }
 
 - (void)addListenersForVisualizeEvents

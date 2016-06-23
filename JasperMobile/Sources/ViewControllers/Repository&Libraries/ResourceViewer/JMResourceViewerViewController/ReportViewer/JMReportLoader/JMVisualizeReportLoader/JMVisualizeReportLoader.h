@@ -32,10 +32,8 @@
  */
 
 @protocol JMReportLoaderProtocol;
-@class JMVisualizeManager;
 
 @interface JMVisualizeReportLoader : NSObject <JMReportLoaderProtocol>
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @property (nonatomic, weak) id<JMReportLoaderDelegate> delegate;
 @end
 

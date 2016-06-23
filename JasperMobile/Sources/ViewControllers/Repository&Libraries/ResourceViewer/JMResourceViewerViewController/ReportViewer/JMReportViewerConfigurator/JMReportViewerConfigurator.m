@@ -34,6 +34,7 @@
 #import "JMVisualizeManager.h"
 #import "JMWebViewManager.h"
 #import "JMWebEnvironment.h"
+#import "JMVIZWebEnvironment.h"
 
 @implementation JMReportViewerConfigurator
 
@@ -45,6 +46,8 @@
 }
 
 - (instancetype)initWithReport:(JMReport *)report webEnvironment:(JMWebEnvironment *)webEnvironment {
+    NSAssert(report != nil, @"Report is nil");
+    NSAssert(webEnvironment != nil, @"WebEnvironment is nil");
     self = [super init];
     if (self) {
         BOOL needVisualizeFlow = NO;
@@ -57,13 +60,14 @@
             _reportLoader = [JMVisualizeReportLoader loaderWithReport:report
                                                            restClient:self.restClient
                                                        webEnvironment:webEnvironment];
-            ((JMVisualizeReportLoader *)_reportLoader).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
+            ((JMVIZWebEnvironment *)webEnvironment).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
         } else {
             JMLog(@"run with REST");
             _reportLoader = (id <JMReportLoaderProtocol>) [JMRestReportLoader loaderWithReport:report
                                                                                     restClient:self.restClient
                                                                                 webEnvironment:webEnvironment];
         }
+        NSAssert(_reportLoader != nil, @"Report Loader wasn't created");
     }
     return self;
 }
