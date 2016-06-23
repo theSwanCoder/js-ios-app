@@ -29,11 +29,13 @@
 #import "JMWebViewManager.h"
 #import "JMUtils.h"
 #import "JMWebEnvironment.h"
+#import "JMVIZWebEnvironment.h"
+
+NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManagerDidResetWebviewsNotification";
 
 @interface JMWebViewManager()
-//@property (nonatomic, strong, readwrite) WKWebView *primaryWebView;
-//@property (nonatomic, strong, readwrite) WKWebView *secondaryWebView;
 @property (nonatomic, strong) NSMutableArray *webEnvironments;
+@property (nonatomic, strong) NSArray *cookies;
 @end
 
 @implementation JMWebViewManager
@@ -72,11 +74,20 @@
                                                      name:UIApplicationDidReceiveMemoryWarningNotification
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(cookiesDidChange)
+                                                 selector:@selector(cookiesDidChange:)
                                                      name:JSRestClientDidChangeCookies
                                                    object:nil];
     }
     return self;
+}
+
+#pragma mark - Custom Accessors
+- (NSArray *)cookies
+{
+    if(!_cookies) {
+        _cookies = self.restClient.cookies;
+    }
+    return _cookies;
 }
 
 #pragma mark - Public API
@@ -117,7 +128,13 @@
 
 - (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier
 {
-    JMWebEnvironment *webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier];
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    id webEnvironment;
+    if ([JMUtils isSupportVisualize]) {
+        webEnvironment = [JMVIZWebEnvironment webEnvironmentWithId:identifier initialCookies:self.cookies];
+    } else {
+        webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier initialCookies:self.cookies];
+    }
     return webEnvironment;
 }
 
@@ -128,19 +145,30 @@
         [webEnvironment.webView removeFromSuperview];
     }
     self.webEnvironments = [NSMutableArray array];
+    [[NSNotificationCenter defaultCenter] postNotificationName:JMWebviewManagerDidResetWebviewsNotification
+                                                        object:self];
 }
 
 #pragma mark - Notifications
-- (void)cookiesDidChange
+- (void)cookiesDidChange:(NSNotification *)notification
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if ([JMUtils isSystemVersion9]) {
-        for(JMWebEnvironment *webEnvironment in self.webEnvironments) {
-            [webEnvironment removeCookies];
-            [webEnvironment addCookies];
+    if ([notification.object isKindOfClass:[JSRESTBase class]]) {
+        // We need set cookies from correct restClient
+        JSRESTBase *restClient = notification.object;
+        self.cookies = restClient.cookies;
+        if ([JMUtils isSystemVersion9]) {
+            for(JMWebEnvironment *webEnvironment in self.webEnvironments) {
+                webEnvironment.cookiesReady = NO;
+                [webEnvironment removeCookiesWithCompletion:^(BOOL success) {
+                    [webEnvironment addCookies:self.cookies];
+                }];
+            }
+        } else {
+            [self reset];
         }
     } else {
-        [self reset];
+        // TODO: need handle this case?
     }
 }
 

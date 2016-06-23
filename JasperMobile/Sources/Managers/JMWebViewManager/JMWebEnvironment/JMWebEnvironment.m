@@ -41,22 +41,23 @@
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 }
 
-- (instancetype)initWithId:(NSString *)identifier
+- (instancetype)initWithId:(NSString *)identifier initialCookies:(NSArray *__nullable)cookies
 {
     self = [super init];
     if (self) {
         _identifier = identifier;
-        _webView = [self createWebView];
+        _webView = [self createWebViewWithCookies:cookies];
         _bridge = [JMJavascriptNativeBridge bridgeWithWebView:_webView];
         _bridge.delegate = self;
         _cancel = NO;
+        _pendingOperations = [NSMutableArray array];
     }
     return self;
 }
 
-+ (instancetype)webEnvironmentWithId:(NSString *)identifier
++ (instancetype)webEnvironmentWithId:(NSString *)identifier initialCookies:(NSArray *__nullable)cookies
 {
-    return [[self alloc] initWithId:identifier];
+    return [[self alloc] initWithId:identifier initialCookies:cookies];
 }
 
 #pragma mark - Public API
@@ -64,6 +65,7 @@
          baseURL:(NSURL * __nullable)baseURL
       completion:(JMWebEnvironmentRequestBooleanCompletion __nullable)completion
 {
+    NSAssert(HTMLString != nil, @"HTML should not be nil");
     JMJavascriptRequestCompletion javascriptRequestCompletion;
 
     if (!self.isCancel) {
@@ -85,31 +87,63 @@
     }
 }
 
-- (void)removeCookies
+- (void)removeCookiesWithCompletion:(void(^)(BOOL success))completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    if ([JMUtils isSystemVersion9]) {
-        NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeCookies]];
-        WKWebsiteDataStore *websiteDataStore = self.webView.configuration.websiteDataStore;
-        [websiteDataStore fetchDataRecordsOfTypes:dataTypes
-                                completionHandler:^(NSArray<WKWebsiteDataRecord *> *array) {
-                                    [websiteDataStore removeDataOfTypes:dataTypes
-                                                         forDataRecords:array
-                                                      completionHandler:^{
-                                                          JMLog(@"cookies removed successfully");
-                                                      }];
-                                }];
-    }
+    NSAssert([JMUtils isSystemVersion9], @"Should be called only for iOS9");
+
+    NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeCookies]];
+    WKWebsiteDataStore *websiteDataStore = self.webView.configuration.websiteDataStore;
+    [websiteDataStore fetchDataRecordsOfTypes:dataTypes
+                            completionHandler:^(NSArray<WKWebsiteDataRecord *> *array) {
+                                [websiteDataStore removeDataOfTypes:dataTypes
+                                                     forDataRecords:array
+                                                  completionHandler:^{
+                                                      JMLog(@"cookies removed successfully");
+                                                      if (completion) {
+                                                          completion(YES);
+                                                      }
+                                                  }];
+                            }];
 }
 
-- (void)addCookies
+- (void)addCookies:(NSArray *)cookies
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    NSString *cookiesAsString = [self cookiesAsStringFromCookies:self.restClient.cookies];
-    [self.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
-        JMLog(@"setting cookies");
-        JMLog(@"error: %@", error);
-        JMLog(@"o: %@", o);
+    __weak __typeof(self) weakSelf = self;
+    void(^addCookiesBlock)(void) = ^{
+        __typeof(self) strongSelf = weakSelf;
+        NSString *cookiesAsString = [strongSelf cookiesAsStringFromCookies:cookies];
+        [strongSelf.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
+            JMLog(@"setting cookies");
+            JMLog(@"error: %@", error);
+            JMLog(@"o: %@", o);
+            if (!error) {
+                strongSelf.cookiesReady = YES;
+                // if there is pending operations - call them
+                for (JMWebEnvironmentVoidBlock blockOperation in strongSelf.pendingOperations) {
+                    blockOperation();
+                }
+                strongSelf.pendingOperations = [NSMutableArray array];
+            }
+        }];
+    };
+
+    [self verifyDOMReadyWithCompletion:^(BOOL isDOMReady) {
+        if (isDOMReady) {
+            JMLog(@"DOM is ready");
+            JMLog(@"addCookiesBlock: %@", addCookiesBlock);
+            addCookiesBlock();
+        } else {
+            // pending for setting of cookies
+            [self addListenerWithId:@"DOMContentLoaded"
+                           callback:^(NSDictionary *params, NSError *error) {
+                               // TODO: need unsubscribe?
+                               if (!error) {
+                                   addCookiesBlock();
+                               }
+                           }];
+        }
     }];
 }
 
@@ -149,35 +183,45 @@
 
 - (void)verifyEnvironmentReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
 {
-    if ([JMUtils isSupportVisualize]) {
-        [self isWebViewLoadedVisualize:self.webView completion:completion];
-    } else {
-        [self isWebViewLoadedJasperMobile:self.webView completion:^(BOOL isWebViewLoaded) {
-            if (isWebViewLoaded) {
-                [self isWebViewLoadedContentDiv:self.webView completion:^(BOOL isContantDivLoaded) {
-                    completion(isContantDivLoaded);
-                }];
-            } else {
-                completion(NO);
-            }
-        }];
-    }
+    [self verifyJasperMobileEnableWithCompletion:^(BOOL isJasperMobileLoaded) {
+        if (isJasperMobileLoaded) {
+            [self isWebViewLoadedContentDiv:self.webView completion:^(BOOL isContantDivLoaded) {
+                completion(isContantDivLoaded);
+            }];
+        } else {
+            // TODO: need load html
+            completion(NO);
+        }
+    }];
 }
 
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
 {
+    JMWebEnvironmentRequestParametersCompletion heapBlock;
+    if (completion) {
+        heapBlock = [completion copy];
+    }
     if (!self.isCancel) {
-        if (completion) {
-            [self.bridge sendJavascriptRequest:request
-                                    completion:^(JMJavascriptResponse *callback, NSError *error) {
-                                        if (!self.isCancel) {
-                                            completion(callback.parameters, error);
-                                        }
-                                    }];
+        JMWebEnvironmentVoidBlock sendRequestBlock = ^{
+            if (heapBlock) {
+                [self.bridge sendJavascriptRequest:request
+                                        completion:^(JMJavascriptResponse *response, NSError *error) {
+                                            if (!self.isCancel) {
+                                                heapBlock(response.parameters, error);
+                                            }
+                                        }];
+            } else {
+                [self.bridge sendJavascriptRequest:request
+                                        completion:nil];
+            }
+        };
+        if (self.isCookiesReady) {
+            JMLog(@"cookies is ready, send request");
+            sendRequestBlock();
         } else {
-            [self.bridge sendJavascriptRequest:request
-                                    completion:nil];
+            JMLog(@"pending of sending of a request to webview");
+            [self.pendingOperations addObject:[sendRequestBlock copy]];
         }
     }
 }
@@ -210,25 +254,25 @@
 - (void)clean
 {
     [self.bridge removeAllListeners];
+    self.pendingOperations = [NSMutableArray array];
 
     NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
     [self.webView loadRequest:clearingRequest];
 }
 
 #pragma mark - Helpers
-- (WKWebView *)createWebView
+- (WKWebView *)createWebViewWithCookies:(NSArray <NSHTTPCookie *>*)cookies
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     WKWebViewConfiguration* webViewConfig = [WKWebViewConfiguration new];
     WKUserContentController *contentController = [WKUserContentController new];
 
-    [contentController addUserScript:[self injectCookiesScript]];
+    [contentController addUserScript:[self injectCookiesScriptWithCookies:cookies]];
     [contentController addUserScript:[self jaspermobileScript]];
 
     webViewConfig.userContentController = contentController;
 
     WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webViewConfig];
-    webView.scrollView.bounces = NO;
 
     // From for iOS9
 //    webView.customUserAgent = @"Mozilla/5.0 (Linux; Android 5.0.1; SCH-I545 Build/LRX22C) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.95 Mobile Safari/537.36";
@@ -246,13 +290,14 @@
     return script;
 }
 
-- (WKUserScript *)injectCookiesScript
+- (WKUserScript *)injectCookiesScriptWithCookies:(NSArray <NSHTTPCookie *>*)cookies
 {
-    NSString *cookiesAsString = [self cookiesAsStringFromCookies:self.restClient.cookies];
+    NSString *cookiesAsString = [self cookiesAsStringFromCookies:cookies];
 
     WKUserScript *script = [[WKUserScript alloc] initWithSource:cookiesAsString
                                                   injectionTime:WKUserScriptInjectionTimeAtDocumentStart
                                                forMainFrameOnly:YES];
+    self.cookiesReady = YES;
     return script;
 }
 
@@ -268,26 +313,34 @@
     return cookiesAsString;
 }
 
-- (void)isWebViewLoadedVisualize:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
+- (void)verifyDOMReadyWithCompletion:(void(^)(BOOL isReady))completion
 {
-    NSString *jsCommand = @"typeof(visualize)";
-    [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
-        BOOL isFunction = [result isEqualToString:@"function"];
-        BOOL isLoaded = !error && isFunction;
-        if (!self.isCancel) {
-            completion(isLoaded);
+    [self verifyJasperMobileEnableWithCompletion:^(BOOL isJasperMobileEnable) {
+        if (isJasperMobileEnable) {
+            NSString *jsCommand = @"JasperMobile.isDOMReady;";
+            [self.webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
+                NSAssert([result isKindOfClass:[NSNumber class]], @"Wrong class of result");
+                BOOL isDOMReady = ((NSNumber *)result).boolValue;
+                BOOL isLoaded = !error && isDOMReady;
+                if (!self.isCancel) {
+                    completion(isLoaded);
+                }
+            }];
+        } else {
+            // TODO: need load html
+            completion(NO);
         }
     }];
 }
 
-- (void)isWebViewLoadedJasperMobile:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
+- (void)verifyJasperMobileEnableWithCompletion:(void(^ __nonnull)(BOOL isEnable))completion
 {
-    NSString *jsCommand = @"typeof(JasperMobile)";
-    [webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
+    NSString *jsCommand = @"typeof(JasperMobile);";
+    [self.webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
         BOOL isObject = [result isEqualToString:@"object"];
-        BOOL isLoaded = !error && isObject;
+        BOOL isEnable = !error && isObject;
         if (!self.isCancel) {
-            completion(isLoaded);
+            completion(isEnable);
         }
     }];
 }

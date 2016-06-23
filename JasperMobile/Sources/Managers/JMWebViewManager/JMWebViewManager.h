@@ -33,6 +33,8 @@
  @since 2.0
  */
 
+extern NSString * __nonnull const JMWebviewManagerDidResetWebviewsNotification;
+
 @interface JMWebViewManager : NSObject
 + (instancetype __nonnull)sharedInstance;
 - (JMWebEnvironment * __nullable)webEnvironmentForId:(NSString * __nonnull)identifier;
