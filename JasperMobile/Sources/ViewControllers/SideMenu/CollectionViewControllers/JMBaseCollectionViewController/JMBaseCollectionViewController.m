@@ -499,43 +499,18 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 //        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:cell.resourceLookup];
 //        [[JMExportManager sharedInstance] cancelTaskForSavedResource:savedReport];
     } else {
-        void (^configureNextVCBlock)(void) = ^{
-            NSString *resourceViewerVCIdentifier = [resource resourceViewerVCIdentifier];
-            if (resourceViewerVCIdentifier) {
-                nextVC = [self.storyboard instantiateViewControllerWithIdentifier:resourceViewerVCIdentifier];
-                if ([nextVC respondsToSelector:@selector(setResource:)]) {
-                    [nextVC setResource:resource];
-                }
-                // Customizing report viewer view controller
-                if (resource.type == JMResourceTypeReport) {
-                    JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
-                    JMReport *report = (JMReport *)[nextVC report];
-                    report.thumbnailImage = cell.thumbnailImage;
-                }
+        NSString *resourceViewerVCIdentifier = [resource resourceViewerVCIdentifier];
+        if (resourceViewerVCIdentifier) {
+            nextVC = [self.storyboard instantiateViewControllerWithIdentifier:resourceViewerVCIdentifier];
+            if ([nextVC respondsToSelector:@selector(setResource:)]) {
+                [nextVC setResource:resource];
             }
-        };
-        
-        if (resource.type == JMResourceTypeLegacyDashboard || (resource.type == JMResourceTypeDashboard && ![JMUtils isServerVersionUpOrEqual6])) {
-            [JMUtils showNetworkActivityIndicator];
-            [JMCancelRequestPopup presentWithMessage:@"status_loading"
-                                         cancelBlock:nil];
-            [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
-                [JMCancelRequestPopup dismiss];
-                [JMUtils hideNetworkActivityIndicator];
-                
-                if (!result.error) {
-                    [[JMWebViewManager sharedInstance] reset];
-                    configureNextVCBlock();
-                    if (nextVC) {
-                        [self.navigationController pushViewController:nextVC animated:YES];
-                    }
-                } else {
-                    [JMUtils showLoginViewAnimated:YES completion:nil];
-                }
-            }];
-            
-        } else {
-            configureNextVCBlock();
+            // Customizing report viewer view controller
+            if (resource.type == JMResourceTypeReport) {
+                JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
+                JMReport *report = (JMReport *)[nextVC report];
+                report.thumbnailImage = cell.thumbnailImage;
+            }
         }
     }
 
