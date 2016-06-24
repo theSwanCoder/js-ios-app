@@ -53,7 +53,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 @property (nonatomic, strong) JMReport *report;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
-@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
 @property (nonatomic, weak) UIBarButtonItem *currentBackButton;
 @end
 
@@ -130,10 +129,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                              selector:@selector(reportDidUpdateParts)
                                                  name:JMReportPartsDidUpdateNotification
                                                object:self.report];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(webviewDidReset)
-                                                 name:JMWebviewManagerDidResetWebviewsNotification
-                                               object:nil];
 }
 
 - (void)multipageNotification
@@ -181,20 +176,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     } else {
         [self hideTopToolbarAnimated:YES];
     }
-}
-
-- (void)webviewDidReset
-{
-    if ([JMUtils isSystemVersion9]) {
-        JMLog(@"reseting for ios9");
-    } else {
-        JMLog(@"reseting for ios8");
-        [self.reportLoader cancel];
-        [self stopShowLoader];
-        NSLog(@"self.restClient: %@", self.restClient);
-    }
-    [self setupSubviews];
-    [self runReportWithPage:self.report.currentPage];
 }
 
 #pragma mark - Actions
@@ -279,6 +260,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Overloaded methods
 - (void) startResourceViewing
 {
+    [super setupSubviews];
     [self addObservers];
     [self configureReport];
 }
@@ -467,8 +449,11 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Custom accessors
 - (JMWebEnvironment *)currentWebEnvironment
 {
-    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:[self currentWebEnvironmentIdentifier]];
-    return webEnvironment;
+    if ([JMUtils isSystemVersion9]) {
+        return [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
+    } else {
+        return [super currentWebEnvironment];
+    }
 }
 
 - (NSString *)currentWebEnvironmentIdentifier
@@ -498,15 +483,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         [_configurator updateReportLoaderDelegateWithObject:self];
     }
     return _configurator;
-}
-
-- (JMWebEnvironment *)webEnvironment
-{
-    if (!_webEnvironment) {
-        _webEnvironment = [self currentWebEnvironment];
-        [super setupSubviews];
-    }
-    return _webEnvironment;
 }
 
 - (id<JMReportLoaderProtocol>)reportLoader
@@ -696,8 +672,30 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                     __strong typeof(self) strongSelf = weakSelf;
                     [strongSelf stopShowLoader];
                     if (!result.error) {
-                        // TODO: show message 'Session was expired' with button 'Reload'
-                        [strongSelf runReportWithPage:1];
+                        if (self.webEnvironment.isReusable) {
+                            [strongSelf.webEnvironment updateCookiesWithCookies:strongSelf.restClient.cookies
+                                                                     completion:^(BOOL success) {
+                                                                         __weak typeof(self)strongSelf = weakSelf;
+                                                                         if (success) {
+                                                                             [strongSelf showSessionExpiredAlert];
+                                                                         } else {
+                                                                             NSError *error = [NSError errorWithDomain:@"Webview Error"
+                                                                                                                  code:0
+                                                                                                              userInfo:@{
+                                                                                                                      NSLocalizedDescriptionKey : @"Error of initializing webview"
+                                                                                                              }];
+                                                                             [JMUtils presentAlertControllerWithError:error
+                                                                                                           completion:^{
+                                                                                                               __weak typeof(self)strongSelf = weakSelf;
+                                                                                                               [strongSelf cancelResourceViewingAndExit:YES];
+                                                                                                           }];
+                                                                         }
+                                                                     }];
+                        } else {
+                            [self.webEnvironment reset];
+                            self.webEnvironment = nil;
+                            [self showSessionExpiredAlert];
+                        }
                     } else {
                         __weak typeof(self) weakSelf = strongSelf;
                         [JMUtils showLoginViewAnimated:YES completion:^{
@@ -710,7 +708,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                 __weak typeof(self) weakSelf = self;
                 [JMUtils showLoginViewAnimated:YES completion:^{
                     __strong typeof(self) strongSelf = weakSelf;
-                    [strongSelf runReportWithPage:1];
+                    [strongSelf cancelResourceViewingAndExit:YES];
                 }];
             }
             break;
@@ -733,6 +731,24 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
             break;
         }
     }
+}
+
+- (void)showSessionExpiredAlert
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was expired"
+                                                                                      message:@"Reload?"
+                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                      cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                                                          [self cancelResourceViewingAndExit:YES];
+                                                                      }];
+    __weak typeof(self) weakSelf = self;
+    [alertController addActionWithLocalizedTitle:@"dialog_button_reload"
+                                           style:UIAlertActionStyleDefault
+                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                             __strong typeof(self) strongSelf = weakSelf;
+                                             [strongSelf startResourceViewing];
+                                         }];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
