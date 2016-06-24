@@ -32,11 +32,14 @@
  */
 
 #import "JMBaseResourceViewerVC.h"
+@class JMWebEnvironment;
 
 extern NSString * const kJMResourceViewerWebEnvironmentIdentifier;
 
 @interface JMResourceViewerViewController : JMBaseResourceViewerVC <WKNavigationDelegate>
+@property (nonatomic, strong) JMWebEnvironment *webEnvironment;
 - (UIView *)contentView;
+- (JMWebEnvironment *)currentWebEnvironment;
 - (void)printResource __attribute__((objc_requires_super));
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void (^)(BOOL completed, NSError *error))completion;
 - (void)handleLowMemory __attribute__((objc_requires_super));

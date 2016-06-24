@@ -94,10 +94,17 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 }
 
 #pragma mark - Custom Accessors
+- (JMWebEnvironment *)webEnvironment
+{
+    if (!_webEnvironment) {
+        _webEnvironment = [self currentWebEnvironment];
+    }
+    return _webEnvironment;
+}
+
 - (UIView *)contentView
 {
-    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
-    return webEnvironment.webView;
+    return self.webEnvironment.webView;
 }
 
 #pragma mark - Setups
@@ -108,8 +115,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 
 - (void)resetSubViews
 {
-    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
-    [webEnvironment clean];
+    [self.webEnvironment clean];
 }
 
 - (void)cancelResourceViewingAndExit:(BOOL)exit
@@ -119,6 +125,11 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 //    self.webView.navigationDelegate = nil;
 
     [super cancelResourceViewingAndExit:exit];
+}
+
+- (JMWebEnvironment *)currentWebEnvironment
+{
+    return [[JMWebViewManager sharedInstance] webEnvironment];
 }
 
 #pragma mark - Overriden methods
