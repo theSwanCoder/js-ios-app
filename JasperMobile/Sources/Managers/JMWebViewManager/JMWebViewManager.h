@@ -33,13 +33,10 @@
  @since 2.0
  */
 
-extern NSString * __nonnull const JMWebviewManagerDidResetWebviewsNotification;
-
 @interface JMWebViewManager : NSObject
-@property (nonatomic, strong) NSArray *cookies;
-
+@property (nonatomic, strong) NSArray *__nullable cookies;
 + (instancetype __nonnull)sharedInstance;
-- (JMWebEnvironment * __nullable)webEnvironmentForId:(NSString * __nonnull)identifier;
-- (void)removeWebEnvironmentForId:(NSString *__nonnull)identifier;
+- (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier;
+- (JMWebEnvironment * __nonnull)webEnvironment;
 - (void)reset;
 @end

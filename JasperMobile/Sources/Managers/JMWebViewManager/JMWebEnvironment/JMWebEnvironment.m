@@ -38,19 +38,17 @@
 #pragma mark - Initializers
 - (void)dealloc
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 }
 
 - (instancetype)initWithId:(NSString *)identifier initialCookies:(NSArray *__nullable)cookies
 {
     self = [super init];
     if (self) {
-        _identifier = identifier;
         _webView = [self createWebViewWithCookies:cookies];
+        _identifier = identifier;
         _bridge = [JMJavascriptNativeBridge bridgeWithWebView:_webView];
         _bridge.delegate = self;
-        _cancel = NO;
-        _pendingOperations = [NSMutableArray array];
     }
     return self;
 }
@@ -107,57 +105,45 @@
                             }];
 }
 
-- (void)addCookies:(NSArray *)cookies
+- (void)updateCookiesWithCookies:(NSArray *)cookies completion:(void(^)(BOOL success))completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    __weak __typeof(self) weakSelf = self;
-    void(^addCookiesBlock)(void) = ^{
-        __typeof(self) strongSelf = weakSelf;
-        NSString *cookiesAsString = [strongSelf cookiesAsStringFromCookies:cookies];
-        [strongSelf.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
-            JMLog(@"setting cookies");
-            JMLog(@"error: %@", error);
-            JMLog(@"o: %@", o);
-            if (!error) {
-                strongSelf.cookiesReady = YES;
-                // if there is pending operations - call them
-                for (JMWebEnvironmentVoidBlock blockOperation in strongSelf.pendingOperations) {
-                    blockOperation();
+    [self removeCookiesWithCompletion:^(BOOL success) {
+        if (success) {
+            NSString *cookiesAsString = [self cookiesAsStringFromCookies:cookies];
+            [self.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
+                JMLog(@"setting cookies");
+                JMLog(@"error: %@", error);
+                JMLog(@"o: %@", o);
+                if (error) {
+                    // TODO: how handle this case?
+                    completion(NO);
+                } else {
+                    completion(YES);
                 }
-                strongSelf.pendingOperations = [NSMutableArray array];
-            }
-        }];
-    };
-
-    [self verifyDOMReadyWithCompletion:^(BOOL isDOMReady) {
-        if (isDOMReady) {
-            JMLog(@"DOM is ready");
-            JMLog(@"addCookiesBlock: %@", addCookiesBlock);
-            addCookiesBlock();
+            }];
         } else {
-            // pending for setting of cookies
-            [self addListenerWithId:@"DOMContentLoaded"
-                           callback:^(NSDictionary *params, NSError *error) {
-                               // TODO: need unsubscribe?
-                               if (!error) {
-                                   addCookiesBlock();
-                               }
-                           }];
+            completion(NO);
         }
     }];
 }
 
 - (void)loadRequest:(NSURLRequest * __nonnull)request
 {
-    if (!self.isCancel) {
-        if ([request.URL isFileURL]) {
-            // TODO: detect format of file for request
-            [self loadLocalFileFromURL:request.URL
-                            fileFormat:nil
-                               baseURL:nil];
-        } else {
-            [self.webView loadRequest:request];
+    if (self.isCancel) {
+        return;
+    }
+
+    if ([request.URL isFileURL]) {
+        // TODO: detect format of file for request
+        [self loadLocalFileFromURL:request.URL
+                        fileFormat:nil
+                           baseURL:nil];
+    } else {
+        if (self.isCancel) {
+            return;
         }
+        [self.webView loadRequest:request];
     }
 }
 
@@ -203,25 +189,16 @@
         heapBlock = [completion copy];
     }
     if (!self.isCancel) {
-        JMWebEnvironmentVoidBlock sendRequestBlock = ^{
-            if (heapBlock) {
-                [self.bridge sendJavascriptRequest:request
-                                        completion:^(JMJavascriptResponse *response, NSError *error) {
-                                            if (!self.isCancel) {
-                                                heapBlock(response.parameters, error);
-                                            }
-                                        }];
-            } else {
-                [self.bridge sendJavascriptRequest:request
-                                        completion:nil];
-            }
-        };
-        if (self.isCookiesReady) {
-            JMLog(@"cookies is ready, send request");
-            sendRequestBlock();
+        if (heapBlock) {
+            [self.bridge sendJavascriptRequest:request
+                                    completion:^(JMJavascriptResponse *response, NSError *error) {
+                                        if (!self.isCancel) {
+                                            heapBlock(response.parameters, error);
+                                        }
+                                    }];
         } else {
-            JMLog(@"pending of sending of a request to webview");
-            [self.pendingOperations addObject:[sendRequestBlock copy]];
+            [self.bridge sendJavascriptRequest:request
+                                    completion:nil];
         }
     }
 }
@@ -260,7 +237,7 @@
 - (void)reset
 {
     [self.bridge removeAllListeners];
-    self.pendingOperations = [NSMutableArray array];
+    [self.webView removeFromSuperview];
     self.webView = nil;
 }
 
@@ -268,6 +245,7 @@
 - (WKWebView *)createWebViewWithCookies:(NSArray <NSHTTPCookie *>*)cookies
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"cookies: %@", cookies);
     WKWebViewConfiguration* webViewConfig = [WKWebViewConfiguration new];
     WKUserContentController *contentController = [WKUserContentController new];
 
@@ -301,7 +279,6 @@
     WKUserScript *script = [[WKUserScript alloc] initWithSource:cookiesAsString
                                                   injectionTime:WKUserScriptInjectionTimeAtDocumentStart
                                                forMainFrameOnly:YES];
-    self.cookiesReady = YES;
     return script;
 }
 

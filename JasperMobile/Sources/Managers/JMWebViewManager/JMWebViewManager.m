@@ -90,16 +90,16 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 }
 
 #pragma mark - Public API
-- (JMWebEnvironment *)webEnvironmentForId:(NSString *)identifier
+- (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier
 {
-//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-//    JMLog(@"identifier: %@", identifier);
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"identifier: %@", identifier);
     JMWebEnvironment *webEnvironment;
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
     NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
 
     if ( filtredWebEnvironments.count == 0 ) {
-        webEnvironment = [self createNewWebEnvironmentWithId:identifier];
+        webEnvironment = [self createNewWebEnvironmentWithId:identifier needReuse:YES];
         [self.webEnvironments addObject:webEnvironment];
     } else if ( filtredWebEnvironments.count > 1 ) {
         return nil;
@@ -110,30 +110,27 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
     return webEnvironment;
 }
 
-- (void)removeWebEnvironmentForId:(NSString *)identifier
-{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
-    NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
-
-    if ( filtredWebEnvironments.count == 0 ) {
-        return;
-    } else if ( filtredWebEnvironments.count > 1 ) {
-        // TODO: need error?
-    } else {
-        JMWebEnvironment *webEnvironment = filtredWebEnvironments.firstObject;
-        [self.webEnvironments removeObject:webEnvironment];
-    }
-}
-
-- (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier
+- (JMWebEnvironment * __nonnull)webEnvironment
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    id webEnvironment;
+    JMWebEnvironment *webEnvironment;
+    webEnvironment = [JMWebEnvironment webEnvironmentWithId:nil
+                                             initialCookies:self.cookies];
+    return webEnvironment;
+}
+
+- (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier needReuse:(BOOL)needReuse
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMWebEnvironment *webEnvironment;
     if ([JMUtils isSupportVisualize]) {
-        webEnvironment = [JMVIZWebEnvironment webEnvironmentWithId:identifier initialCookies:self.cookies];
+        webEnvironment = [JMVIZWebEnvironment webEnvironmentWithId:identifier
+                                                    initialCookies:self.cookies];
     } else {
-        webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier initialCookies:self.cookies];
+        webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier
+                                                 initialCookies:self.cookies];
     }
+    webEnvironment.reusable = needReuse;
     return webEnvironment;
 }
 
@@ -144,8 +141,6 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         [webEnvironment.webView removeFromSuperview];
     }
     self.webEnvironments = [NSMutableArray array];
-    [[NSNotificationCenter defaultCenter] postNotificationName:JMWebviewManagerDidResetWebviewsNotification
-                                                        object:self];
 }
 
 #pragma mark - Notifications
@@ -156,19 +151,10 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         // We need set cookies from correct restClient
         JSRESTBase *restClient = notification.object;
         self.cookies = restClient.cookies;
-        if ([JMUtils isSystemVersion9]) {
-            for(JMWebEnvironment *webEnvironment in self.webEnvironments) {
-                webEnvironment.cookiesReady = NO;
-                [webEnvironment removeCookiesWithCompletion:^(BOOL success) {
-                    [webEnvironment addCookies:self.cookies];
-                }];
-            }
-        } else {
-            [self reset];
-        }
     } else {
         // TODO: need handle this case?
     }
 }
+
 
 @end

@@ -42,18 +42,17 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 @property (nonatomic, strong) WKWebView * __nullable webView;
 @property (nonatomic, copy) NSString * __nonnull identifier;
 @property (nonatomic, assign, getter=isCancel) BOOL cancel;
-@property (nonatomic, assign, getter=isCookiesReady) BOOL cookiesReady;
-@property (nonatomic, strong) NSMutableArray <JMWebEnvironmentVoidBlock>* __nonnull pendingOperations;
+@property (nonatomic, assign, getter=isReusable) BOOL reusable;
 
 - (instancetype __nullable)initWithId:(NSString *__nonnull)identifier initialCookies:(NSArray *__nullable)cookies;
-+ (instancetype __nullable)webEnvironmentWithId:(NSString *__nonnull)identifier initialCookies:(NSArray *__nullable)cookies;
++ (instancetype __nullable)webEnvironmentWithId:(NSString *__nullable)identifier initialCookies:(NSArray *__nullable)cookies;
 - (void)verifyEnvironmentReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion;
 - (void)verifyJasperMobileEnableWithCompletion:(void (^ __nonnull)(BOOL isEnable))completion;
 - (void)loadHTML:(NSString * __nonnull)HTMLString
          baseURL:(NSURL * __nullable)baseURL
       completion:(JMWebEnvironmentRequestBooleanCompletion __nullable)completion;
-- (void)removeCookiesWithCompletion:(void(^__nullable)(BOOL success))completion;
-- (void)addCookies:(NSArray *__nonnull)cookies;
+- (void)updateCookiesWithCookies:(NSArray *__nullable)cookies completion:(void (^__nonnull)(BOOL success))completion;
+
 - (void)loadRequest:(NSURLRequest * __nonnull)request;
 - (void)loadLocalFileFromURL:(NSURL * __nonnull)fileURL
                   fileFormat:(NSString * __nullable)fileFormat
