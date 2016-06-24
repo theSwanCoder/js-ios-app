@@ -51,37 +51,11 @@
     [self verifyJasperMobileEnableWithCompletion:^(BOOL isJasperMobileEnable) {
         __typeof(self) strongSelf = weakSelf;
         if (isJasperMobileEnable) {
-            if (strongSelf.isCookiesReady) {
-                JMLog(@"cookies is ready");
-                completion(YES, nil);
-            } else {
-                JMLog(@"cookies isn't ready");
-                // pending completion
-                // wait until cookies will be loaded
-                JMWebEnvironmentVoidBlock operationBlock = ^{
-                    completion(YES, nil);
-                };
-                JMLog(@"pending preparing webview");
-                [strongSelf.pendingOperations addObject:[operationBlock copy]];
-            }
+            completion(YES, nil);
         } else {
-            __weak __typeof(self) weakSelf = strongSelf;
             [strongSelf loadJasperMobilePageWithCompletion:^(BOOL isLoaded, NSError *error) {
-                __typeof(self) strongSelf = weakSelf;
                 if (isLoaded) {
-                    if (strongSelf.isCookiesReady) {
-                        JMLog(@"cookies is ready");
-                        completion(YES, nil);
-                    } else {
-                        JMLog(@"cookies isn't ready");
-                        // pending completion
-                        // wait until cookies will be loaded
-                        JMWebEnvironmentVoidBlock operationBlock = ^{
-                            completion(YES, nil);
-                        };
-                        JMLog(@"pending of preparing webview");
-                        [strongSelf.pendingOperations addObject:[operationBlock copy]];
-                    }
+                    completion(YES, nil);
                 } else {
                     completion(NO, error);
                 }
