@@ -758,8 +758,6 @@ JasperMobile.Dashboard.API = {
     runDashboard: function(params) {
         var success = params["success"];
         var failed = params["failed"];
-        JasperMobile.Callback.log("run dashboard with callback 'success': " + success);
-        JasperMobile.Callback.log("run dashboard with callback 'failed': " + failed);
         JasperMobile.Dashboard.API.isAmber = params["is_for_6_0"];
         var successFn = function() {
 
@@ -923,9 +921,11 @@ JasperMobile.Dashboard.API = {
                     maximized: false,
                     interactive: false
                 }).done(function() {
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {
-                        "component" : dashletId
-                    });
+                    setTimeout(function(){
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {
+                            "component" : dashletId
+                        });
+                    }, 3000);
                 }).fail(function(error) {
                     JasperMobile.Callback.log("failed refresh with error: " + error);
                     JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {
@@ -976,9 +976,11 @@ JasperMobile.Dashboard.API = {
             if (minimizeButton != null && minimizeButton.nodeName == "BUTTON") {
                 minimizeButton.click();
                 JasperMobile.Dashboard.API._enableClicks();
-                // TODO: need add callbacks?
+                setTimeout(function(){
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {});
+                }, 3000);
             } else {
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {
                     "error" : {
                         "code" : "maximize.button.error",
                         "message" : "Component is not ready"
@@ -986,7 +988,7 @@ JasperMobile.Dashboard.API = {
                 });
             }
         } else {
-            JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
+            JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {
                 "error" : {
                     "code" : "maximize.button.error",
                     "message" : "Component is not ready"
@@ -1025,17 +1027,22 @@ JasperMobile.Dashboard.API = {
         var maximizeButton = JasperMobile.Dashboard.API._findDashletMaximizeButtonWithDashletId(dashletId);
         if (maximizeButton != null) {
             if (maximizeButton.disabled) {
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
                     "error" : {
                         "code" : "maximize.button.error",
                         "message" : "Component is not ready"
                     }
                 });
             } else {
-                maximizeButton.click();
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.maximizeDashlet", {
+                JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didStartMaximize", {
                     "component" : dashletId
                 });
+                maximizeButton.click();
+                setTimeout(function(){
+                    JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
+                        "component" : dashletId
+                    });
+                }, 3000);
             }
         } else {
             JasperMobile.Callback.log("There is not maximize button");
@@ -1168,14 +1175,15 @@ JasperMobile.Dashboard.API = {
         }, 10000);
     },
     applyParams: function(parameters) {
-
         JasperMobile.Dashboard.API.dashboardObject.params(parameters).run()
             .done(function() {
-                var data = JasperMobile.Dashboard.API.dashboardObject.data();
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.applyParams", {
-                    "components" : data.components,
-                    "params" : data.parameters
-                });
+                setTimeout(function(){
+                    var data = JasperMobile.Dashboard.API.dashboardObject.data();
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.applyParams", {
+                        "components" : data.components,
+                        "params" : data.parameters
+                    });
+                }, 3000);
             })
             .fail(function(error) {
                 JasperMobile.Callback.log("failed apply");
@@ -1247,7 +1255,7 @@ JasperMobile.Dashboard.API = {
                 //self._hideDashlets(dashboardId, dashlet);
 
                 if (component && !component.maximized) {
-                    JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.willMaximize", {
+                    JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didStartMaximize", {
                         "component" : component
                     });
                     JasperMobile.Dashboard.API.selectedDashlet.className += "originalDashletInScaledCanvas";
@@ -1256,11 +1264,13 @@ JasperMobile.Dashboard.API = {
                         interactive: true
                     }, function() {
                         JasperMobile.Dashboard.API.selectedComponent = component;
-                        JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didMaximize", {
-                            "component" : component
-                        });
+                        setTimeout(function(){
+                            JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
+                                "component" : component
+                            });
+                        }, 3000);
                     }, function(error) {
-                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
                             "error" : {
                                 "code" : error.errorCode,
                                 "message" : error.message
@@ -1313,13 +1323,16 @@ JasperMobile.Dashboard.API = {
             overlay.addEventListener("click", function(event) {
                 var maximizeButton = dashletWrapper.getElementsByClassName("maximizeDashletButton")[0];
                 if (maximizeButton != undefined &&  maximizeButton.nodeName == "BUTTON" && !maximizeButton.disabled) {
+                    JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didStartMaximize", {});
                     maximizeButton.click();
                     JasperMobile.Dashboard.API._disableClicks();
-                    JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didMaximize", {
-                        "componentId" : componentId
-                    });
+                    setTimeout(function(){
+                        JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
+                            "componentId" : componentId
+                        });
+                    }, 3000);
                 } else {
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
                         "error" : {
                             "code" : "maximize.button.error",
                             "message" : "Component is not ready"
@@ -1328,7 +1341,7 @@ JasperMobile.Dashboard.API = {
                 }
             });
         } else {
-            JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed", {
+            JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
                 "error" : {
                     "code" : "maximize.button.error",
                     "message" : "Component is not ready"
