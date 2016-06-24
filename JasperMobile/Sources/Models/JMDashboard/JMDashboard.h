@@ -45,6 +45,4 @@
 
 - (instancetype)initWithResource:(JMResource *)resource;
 + (instancetype)dashboardWithResource:(JMResource *)resource;
-
-- (void)updateResourceRequest;
 @end

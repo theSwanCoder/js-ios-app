@@ -40,13 +40,18 @@
 @implementation JMDashboard
 
 #pragma mark - LifyCycle
+- (void)dealloc
+{
+    JMLog(@"%@ _ %@", self, NSStringFromSelector(_cmd));
+}
+
 - (instancetype)initWithResource:(JMResource *)resource
 {
     self = [super init];
     if (self) {
         _resource = resource;
         _resourceURI = resource.resourceLookup.uri;
-        _resourceRequest = [self createResourceRequest];
+        _resourceRequest = [self createResourceRequestWithCookies:self.restClient.cookies];
     }
     return self;
 }
@@ -61,7 +66,7 @@
 #pragma mark - Private API
 
 #pragma mark - Helpers
-- (NSURLRequest *)createResourceRequest
+- (NSURLRequest *)createResourceRequestWithCookies:(NSArray *)cookies
 {
     NSString *dashboardUrl = [NSString stringWithFormat:@"flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=%@", _resourceURI];
     dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
@@ -69,15 +74,10 @@
     
     NSMutableURLRequest *dashboardRequest = [self.restClient.requestSerializer requestWithMethod:@"GET" URLString:dashboardUrl parameters:nil error:nil];
     dashboardRequest.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
-    [dashboardRequest addValue:[self cookiesAsStringFromCookies:self.restClient.cookies]
+    [dashboardRequest addValue:[self cookiesAsStringFromCookies:cookies]
             forHTTPHeaderField:@"Cookie"];
 
     return dashboardRequest;
-}
-
-- (void)updateResourceRequest
-{
-    self.resourceRequest = [self createResourceRequest];
 }
 
 - (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
