@@ -59,8 +59,7 @@
     if (self.imageView) {
         contentView = self.imageView;
     } else {
-        JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
-        contentView = webEnvironment.webView;
+        contentView = self.webEnvironment.webView;
     }
     return contentView;
 }
@@ -285,10 +284,9 @@
              resourceFormat:(NSString *)resourceFormat
                     baseURL:(NSURL *)baseURL
 {
-    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForId:kJMResourceViewerWebEnvironmentIdentifier];
-    [webEnvironment loadLocalFileFromURL:url
-                              fileFormat:resourceFormat
-                                 baseURL:baseURL];
+    [self.webEnvironment loadLocalFileFromURL:url
+                                   fileFormat:resourceFormat
+                                      baseURL:baseURL];
     [self stopShowLoader];
 }
 
