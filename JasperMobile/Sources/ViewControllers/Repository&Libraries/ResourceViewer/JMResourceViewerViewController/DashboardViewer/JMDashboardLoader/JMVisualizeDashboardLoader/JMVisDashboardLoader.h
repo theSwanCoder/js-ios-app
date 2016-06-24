@@ -34,8 +34,5 @@
 
 #import "JMDashboardLoader.h"
 
-@class JMVisualizeManager;
-
 @interface JMVisDashboardLoader : NSObject <JMDashboardLoader>
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @end

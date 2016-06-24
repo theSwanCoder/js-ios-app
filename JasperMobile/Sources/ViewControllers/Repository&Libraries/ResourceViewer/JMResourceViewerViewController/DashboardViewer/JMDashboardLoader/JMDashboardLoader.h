@@ -64,19 +64,20 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 - (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)applyParameters:(NSDictionary *__nonnull)parameters;
-- (void)maximizeDashletForComponent:(JSDashboardComponent *__nullable)component;
-- (void)minimizeDashletForComponent:(JSDashboardComponent *__nullable)component;
-- (void)minimizeDashlet;
+- (void)applyParameters:(NSDictionary *__nonnull)parameters completion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)maximizeDashletForComponent:(JSDashboardComponent *__nullable)component completion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)minimizeDashletForComponent:(JSDashboardComponent *__nullable)component completion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)minimizeDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)cancel;
 - (void)destroy;
 - (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end
 
 
 @protocol JMDashboardLoaderDelegate <NSObject>
-- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didStartMaximazeDashletWithTitle:(NSString * __nonnull)title;
+@optional
+- (void)dashboardLoaderDidStartMaximizeDashlet:(id<JMDashboardLoader> __nonnull)loader;
+- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didEndMaximazeDashletWithTitle:(NSString * __nonnull)title;
 - (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
                resource:(JMResource * __nullable)resource
              parameters:(NSArray * __nullable)parameters;

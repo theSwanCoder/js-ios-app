@@ -46,8 +46,11 @@
 {
     self = [super init];
     if (self) {
+        NSAssert(dashboard != nil, @"Dashboard is nil");
+        NSAssert(webEnvironment != nil, @"WebEnvironment is nil");
         _dashboard = dashboard;
         _webEnvironment = webEnvironment;
+        [self addListenersForWebEnvironmentEvents];
     }
     return self;
 }
@@ -62,8 +65,6 @@
 #pragma mark - Public API
 - (void)loadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
-    [self addListenersForWebEnvironmentEvents];
-
     // TODO: reimplement without request
     [self.webEnvironment loadRequest:self.dashboard.resourceRequest];
 
@@ -85,14 +86,17 @@
     });
 }
 
-- (void)minimizeDashlet {
+- (void)minimizeDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
+{
+    JMDashboardLoaderCompletion heapBlock = [completion copy];
+
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"MobileDashboard.minimizeDashlet"
                                                                 parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         if (error) {
-            JMLog(@"error: %@", error);
+            heapBlock(NO, error);
         } else {
-            JMLog(@"parameters: %@", parameters);
+            heapBlock(YES, nil);
         }
     }];
 }
@@ -114,7 +118,7 @@
     NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.API.unauthorized";
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment addListenerWithId:unauthorizedListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Dashboard.API.unauthorized");
+        JMLog(unauthorizedListenerId);
         __typeof(self) strongSelf = weakSelf;
         [strongSelf.delegate dashboardLoaderDidReceiveAuthRequest:self];
     }];

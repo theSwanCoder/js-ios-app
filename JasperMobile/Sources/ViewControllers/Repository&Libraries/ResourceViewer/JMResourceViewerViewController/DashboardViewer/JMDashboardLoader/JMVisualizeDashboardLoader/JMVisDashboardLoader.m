@@ -32,16 +32,15 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 };
 
 #import "JMVisDashboardLoader.h"
-#import "JMVisualizeManager.h"
 #import "JMDashboard.h"
-#import "JMWebEnvironment.h"
+#import "JMVIZWebEnvironment.h"
 #import "JMResource.h"
 #import "JMJavascriptRequest.h"
 
 @interface JMVisDashboardLoader()
 @property (nonatomic, weak) JMDashboard *dashboard;
-@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
-@property (nonatomic, assign, getter=isCancelLoad) BOOL cancelLoad;
+@property (nonatomic, weak) JMVIZWebEnvironment *webEnvironment;
+@property (nonatomic, assign, getter=isCancelLoad) BOOL cancelLoading;
 @end
 
 @implementation JMVisDashboardLoader
@@ -58,9 +57,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     self = [super init];
     if (self) {
+        NSAssert([webEnvironment isKindOfClass:[JMVIZWebEnvironment class]], @"WebEnvironment isn't correct class");
         _dashboard = dashboard;
-        _visualizeManager = [JMVisualizeManager new];
-        _webEnvironment = webEnvironment;
+        _webEnvironment = (JMVIZWebEnvironment *) webEnvironment;
+        [self addListenersForVisualizeEvents];
     }
     return self;
 }
@@ -76,46 +76,32 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - Public API
 - (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion
 {
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
     if (self.isCancelLoad) {
         return;
     }
 
-    [self addListenersForVisualizeEvents];
-
     JMDashboardLoaderCompletion heapBlock = [completion copy];
+
     __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment verifyEnvironmentReadyWithCompletion:^(BOOL isWebViewLoaded) {
+    [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
-        if (isWebViewLoaded) {
-            [strongSelf handleDOMContentLoadedWithCompletion:heapBlock];
+        if (strongSelf.cancelLoading) {
+            return;
+        }
+        if (isReady) {
+            [strongSelf runDashboardWithCompletion:heapBlock];
         } else {
-            __weak __typeof(self) weakSelf = strongSelf;
-            [strongSelf startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
-                __typeof(self) strongSelf = weakSelf;
-                if (success) {
-                    // load vis into web environment
-                    JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScript"
-                                                                                             parameters:@{
-                                                                                                     @"scriptURL" : strongSelf.visualizeManager.visualizePath,
-                                                                                             }];
-                    [strongSelf.webEnvironment sendJavascriptRequest:requireJSLoadRequest
-                                                          completion:^(NSDictionary *params, NSError *error) {
-                                                              if (error) {
-                                                                  JMLog(@"error: %@", error);
-                                                              } else {
-                                                                  [strongSelf handleDOMContentLoadedWithCompletion:heapBlock];
-                                                              }
-                                                          }];
-                } else {
-                    NSLog(@"Error loading HTML%@", error.localizedDescription);
-                }
-            }];
+            heapBlock(NO, error);
         }
     }];
 }
 
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion
 {
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
     if (self.isCancelLoad) {
         return;
     }
@@ -124,11 +110,15 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.refresh"
                                                                 parameters:nil];
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.cancelLoading) {
+            return;
+        }
         if (error) {
             heapBlock(NO, error);
         } else {
-//            JMLog(@"callback: %@", callback);
             heapBlock(YES, nil);
         }
     }];
@@ -136,7 +126,9 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion) completion
 {
-    if (self.isCancelLoad) {
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+    if (self.cancelLoading) {
         return;
     }
 
@@ -144,15 +136,20 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.refreshDashlet"
                                                                 parameters:nil];
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.cancelLoading) {
+            return;
+        }
         if (error) {
             heapBlock(NO, error);
         } else {
-//            JMLog(@"callback: %@", callback);
             NSString *isFullReload = parameters[@"isFullReload"];
             if ([isFullReload isEqualToString:@"true"]) {
-                if (self.dashboard.maximizedComponent) {
-                    [self maximizeDashletForComponent:self.dashboard.maximizedComponent];
+                if (strongSelf.dashboard.maximizedComponent) {
+                    [strongSelf maximizeDashletForComponent:strongSelf.dashboard.maximizedComponent
+                                                 completion:heapBlock];
                 }
             }
             heapBlock(YES, nil);
@@ -162,7 +159,9 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion) completion
 {
-    if (self.isCancelLoad) {
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+    if (self.cancelLoading) {
         return;
     }
 
@@ -170,38 +169,48 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.getDashboardParameters"
                                                                            parameters:nil];
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.cancelLoading) {
+            return;
+        }
         if (error) {
             heapBlock(NO, error);
         } else {
-//            JMLog(@"callback: %@", callback);
             heapBlock(YES, nil);
         }
     }];
 }
 
-- (void)applyParameters:(NSDictionary *)parameters
+- (void)applyParameters:(NSDictionary *)parameters completion:(JMDashboardLoaderCompletion __nonnull) completion
 {
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
     if (self.isCancelLoad) {
         return;
     }
+    JMDashboardLoaderCompletion heapBlock = [completion copy];
 
-    // TODO: replace received parameter for dictionary
-    JMLog(@"%@", NSStringFromSelector(_cmd));
     JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.applyParams"
                                                                            parameters:parameters];
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.cancelLoading) {
+            return;
+        }
         if (error) {
-            JMLog(@"error: %@", error);
+            heapBlock(NO, error);
         } else {
-            JMLog(@"parameters: %@", parameters);
+            heapBlock(YES, nil);
         }
     }];
 }
 
 - (void)cancel
 {
-    self.cancelLoad = YES;
+    self.cancelLoading = YES;
     [self cancelDashboard];
 }
 
@@ -210,32 +219,42 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     [self destroyDashboard];
 }
 
-- (void)maximizeDashletForComponent:(JSDashboardComponent *__nullable)component
+- (void)maximizeDashletForComponent:(JSDashboardComponent *__nullable)component completion:(JMDashboardLoaderCompletion __nonnull) completion
 {
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
     if (self.isCancelLoad) {
         return;
     }
+    JMDashboardLoaderCompletion heapBlock = [completion copy];
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.maximizeDashlet"
                                                                 parameters:@{
                                                                         @"identifier" : component != nil ? component.identifier : @"null"
                                                                 }];
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.cancelLoading) {
+            return;
+        }
         if (error) {
-            JMLog(@"error: %@", error);
+            heapBlock(NO, error);
         } else {
-            JMLog(@"parameters: %@", parameters);
-            self.dashboard.maximizedComponent = component;
+            strongSelf.dashboard.maximizedComponent = component;
+            heapBlock(YES, nil);
         }
     }];
 }
 
-- (void)minimizeDashletForComponent:(JSDashboardComponent *__nullable)component
+- (void)minimizeDashletForComponent:(JSDashboardComponent *__nullable)component completion:(JMDashboardLoaderCompletion __nonnull) completion
 {
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
     if (self.isCancelLoad) {
         return;
     }
-
+    JMDashboardLoaderCompletion heapBlock = [completion copy];
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.minimizeDashlet"
                                                                 parameters:@{
                                                                         @"identifier" : component != nil ? component.identifier : @"null"
@@ -243,35 +262,55 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.cancelLoading) {
+            return;
+        }
         if (error) {
-            JMLog(@"error: %@", error);
+            heapBlock(NO, error);
         } else {
-            JMLog(@"parameters: %@", parameters);
             strongSelf.dashboard.maximizedComponent = nil;
+            heapBlock(YES, nil);
         }
     }];
 }
 
-- (void)minimizeDashlet
+- (void)minimizeDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion
 {
-    [self minimizeDashletForComponent:self.dashboard.maximizedComponent];
-}
-
-- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
-{
-    BOOL isInitialScaleFactorSet = self.visualizeManager.viewportScaleFactor > 0.01;
-    BOOL isInitialScaleFactorTheSame = fabs(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49;
-    if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
-        self.visualizeManager.viewportScaleFactor = scaleFactor;
-        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortScale"
-                                                                    parameters:@{
-                                                                            @"scale" : @(scaleFactor)
-                                                                    }];
-        [self.webEnvironment sendJavascriptRequest:request completion:nil];
-    }
+    [self minimizeDashletForComponent:self.dashboard.maximizedComponent completion:completion];
 }
 
 #pragma mark - Private API
+- (void)runDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
+{
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+    if (self.isCancelLoad) {
+        return;
+    }
+
+    JMDashboardLoaderCompletion heapBlock = [completion copy];
+    // run
+    JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.runDashboard"
+                                                                   parameters:@{
+                                                                           @"uri" : self.dashboard.resourceURI,
+                                                                           @"is_for_6_0" : @([JMUtils isServerAmber]),
+                                                                           @"success" : @"null",
+                                                                           @"failed" : @"null",
+                                                                   }];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.isCancelLoad) {
+            return;
+        }
+        if (error) {
+            heapBlock(NO, error);
+        } else {
+            heapBlock(YES, nil);
+        }
+    }];
+}
+
 - (void)destroyDashboard
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
@@ -303,79 +342,46 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 }
 
 #pragma mark - Helpers
-- (void)startLoadHTMLWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
-{
-    if (self.isCancelLoad) {
-        return;
-    }
-
-    JMLog(@"visuzalise.js did start load");
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-    __weak __typeof(self) weakSelf = self;
-    [self.visualizeManager loadVisualizeJSWithCompletion:^(BOOL success, NSError *error){
-        __typeof(self) strongSelf = weakSelf;
-        if (success) {
-            JMLog(@"visuzalise.js did end load");
-            NSString *baseURLString = strongSelf.restClient.serverProfile.serverUrl;
-            NSString *htmlString = [strongSelf.visualizeManager htmlString];
-            [strongSelf.webEnvironment loadHTML:htmlString
-                                        baseURL:[NSURL URLWithString:baseURLString]
-                                     completion:heapBlock];
-        } else {
-            // TODO: handle this error
-            JMLog(@"Error loading visualize.js");
-            // TODO: add error code
-            error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
-                                        code:0
-                                    userInfo:nil];
-            completion(NO, error);
-        }
-    }];
-}
-
 - (void)addListenersForVisualizeEvents
 {
-    NSString *dashletWillMaximizeListenerId = @"JasperMobile.Dashboard.API.events.dashlet.willMaximize";
+    NSString *dashletWillMaximizeListenerId = @"JasperMobile.Dashboard.API.events.dashlet.didStartMaximize";
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment addListenerWithId:dashletWillMaximizeListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Dashboard.API.events.dashlet.willMaximize");
-    }];
-
-    NSString *dashletDidMaximizeListenerId = @"JasperMobile.Dashboard.API.events.dashlet.didMaximize";
-    [self.webEnvironment addListenerWithId:dashletDidMaximizeListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Dashboard.API.events.dashlet.didMaximize");
+        JMLog(dashletWillMaximizeListenerId);
         __typeof(self) strongSelf = weakSelf;
-        [strongSelf handleDidStartMaximazeDashletWithParameters:parameters];
-    }];
-
-    NSString *dashletDidMaximizeFailedListenerId = @"JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed";
-    [self.webEnvironment addListenerWithId:dashletDidMaximizeFailedListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Dashboard.API.events.dashlet.didMaximize.failed");
-        __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.isCancelLoad) {
-            return;
+        if ([strongSelf.delegate respondsToSelector:@selector(dashboardLoaderDidStartMaximizeDashlet:)]) {
+            [strongSelf.delegate dashboardLoaderDidStartMaximizeDashlet:strongSelf];
         }
+    }];
 
-        [JMUtils presentAlertControllerWithError:error
-                                      completion:nil];
+    NSString *dashletDidMaximizeListenerId = @"JasperMobile.Dashboard.API.events.dashlet.didEndMaximize";
+    [self.webEnvironment addListenerWithId:dashletDidMaximizeListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(dashletDidMaximizeListenerId);
+        __typeof(self) strongSelf = weakSelf;
+        if (error) {
+            [JMUtils presentAlertControllerWithError:error
+                                          completion:nil];
+        } else {
+            [strongSelf handleDidEndMaximazeDashletWithParameters:parameters];
+        }
     }];
 
     // Links
     NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.Dashboard.API.run.linkOptions.events.ReportExecution";
     [self.webEnvironment addListenerWithId:reportExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.ReportExecution");
+        JMLog(reportExecutionLinkOptionListenerId);
         __typeof(self) strongSelf = weakSelf;
         [strongSelf handleOnReportExecution:parameters];
     }];
     NSString *referenceLinkOptionListenerId = @"JasperMobile.Dashboard.API.run.linkOptions.events.Reference";
     [self.webEnvironment addListenerWithId:referenceLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Report.API.run.linkOptions.events.Reference");
+        JMLog(referenceLinkOptionListenerId);
         __typeof(self) strongSelf = weakSelf;
         [strongSelf handleOnReferenceClick:parameters];
     }];
     NSString *adHocExecutionLinkOptionListenerId = @"JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution";
     [self.webEnvironment addListenerWithId:adHocExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution");
+        JMLog(adHocExecutionLinkOptionListenerId);
         __typeof(self) strongSelf = weakSelf;
         [strongSelf handleOnAdHocExecution:parameters];
     }];
@@ -383,38 +389,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     // Authorization
     NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.API.unauthorized";
     [self.webEnvironment addListenerWithId:unauthorizedListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(@"JasperMobile.Dashboard.API.unauthorized");
+        JMLog(unauthorizedListenerId);
         __typeof(self) strongSelf = weakSelf;
         [strongSelf.delegate dashboardLoaderDidReceiveAuthRequest:self];
     }];
 }
 
 #pragma mark - Handle JS callbacks
-- (void)handleDOMContentLoadedWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
-{
-    if (self.isCancelLoad) {
-        return;
-    }
-
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-    // run
-    JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.API.runDashboard"
-                                                                   parameters:@{
-                                                                           @"uri" : self.dashboard.resourceURI,
-                                                                           @"is_for_6_0" : @([JMUtils isServerAmber]),
-                                                                           @"success" : @"null",
-                                                                           @"failed" : @"null",
-                                                                   }];
-    [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
-        if (error) {
-            heapBlock(NO, error);
-        } else {
-            heapBlock(YES, nil);
-        }
-    }];
-}
-
-- (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
+- (void)handleDidEndMaximazeDashletWithParameters:(NSDictionary *)parameters
 {
     if (self.isCancelLoad) {
         return;
@@ -433,7 +415,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
             }
         }
     }
-    [self.delegate dashboardLoader:self didStartMaximazeDashletWithTitle:title];
+
+    if ([self.delegate respondsToSelector:@selector(dashboardLoader:didEndMaximazeDashletWithTitle:)]) {
+        [self.delegate dashboardLoader:self didEndMaximazeDashletWithTitle:title];
+    }
 }
 
 - (void)handleOnReportExecution:(NSDictionary *)parameters
