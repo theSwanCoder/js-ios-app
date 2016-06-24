@@ -50,6 +50,9 @@
 		ja = 再試行
 		zh = 重试
 		tags = ios
+	[dialog_button_reload]
+		en = Reload
+		tags = ios,new
 	[dialog_button_run_report]
 		en = Run Report
 		de = Bericht ausführen
