@@ -30,11 +30,13 @@
 #import "JMUtils.h"
 #import "JMWebEnvironment.h"
 #import "JMVIZWebEnvironment.h"
+#import "JMRESTWebEnvironment.h"
 
 NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManagerDidResetWebviewsNotification";
 
 @interface JMWebViewManager()
 @property (nonatomic, strong) NSMutableArray *webEnvironments;
+@property (nonatomic, weak) JMWebEnvironment *activeNonReusableWebEnvironment;
 @end
 
 @implementation JMWebViewManager
@@ -113,7 +115,9 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 - (JMWebEnvironment * __nonnull)webEnvironment
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self createNewWebEnvironmentWithId:nil needReuse:NO];
+    JMWebEnvironment *webEnvironment = [self createNewWebEnvironmentWithId:nil needReuse:NO];
+    self.activeNonReusableWebEnvironment = webEnvironment;
+    return webEnvironment;
 }
 
 - (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier needReuse:(BOOL)needReuse
@@ -124,7 +128,7 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         webEnvironment = [JMVIZWebEnvironment webEnvironmentWithId:identifier
                                                     initialCookies:self.cookies];
     } else {
-        webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier
+        webEnvironment = [JMRESTWebEnvironment webEnvironmentWithId:identifier
                                                  initialCookies:self.cookies];
     }
     webEnvironment.reusable = needReuse;
@@ -138,6 +142,7 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         [webEnvironment.webView removeFromSuperview];
     }
     self.webEnvironments = [NSMutableArray array];
+    self.activeNonReusableWebEnvironment = nil;
 }
 
 #pragma mark - Notifications
@@ -152,6 +157,10 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         for (JMWebEnvironment *webEnvironment in self.webEnvironments) {
             [webEnvironment updateCookiesWithCookies:self.cookies];
         }
+        if (self.activeNonReusableWebEnvironment) {
+            [self.activeNonReusableWebEnvironment reset];
+        }
+        JMLog(@"active non reusable web environment: %@", self.activeNonReusableWebEnvironment);
     } else {
         // TODO: need handle this case?
     }

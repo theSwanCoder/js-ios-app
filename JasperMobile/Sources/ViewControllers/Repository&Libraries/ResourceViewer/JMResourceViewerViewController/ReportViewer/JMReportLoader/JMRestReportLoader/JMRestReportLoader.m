@@ -27,7 +27,7 @@
 //
 
 #import "JMRestReportLoader.h"
-#import "JMWebEnvironment.h"
+#import "JMRESTWebEnvironment.h"
 #import "JMHTMLParser.h"
 #import "JMHTMLScript.h"
 #import "JMJavascriptRequest.h"
@@ -39,7 +39,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 @end
 
 @interface JMRestReportLoader()
-@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
+@property (nonatomic, weak) JMRESTWebEnvironment *webEnvironment;
 @end
 
 @implementation JMRestReportLoader
@@ -71,7 +71,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
     self = [self initWithReport:report
                       restClient:restClient];
     if (self) {
-        _webEnvironment = webEnvironment;
+        _webEnvironment = (JMRESTWebEnvironment *) webEnvironment;
     }
     return self;
 }
@@ -94,8 +94,8 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 - (void)destroy
 {
-    [self verifyIsContentDivCreatedWithCompletion:^(BOOL isCreated, NSError *error) {
-        if (isCreated) {
+    if (self.webEnvironment.isReady) {
+        if (self.webEnvironment.isReusable) {
             JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
                                                                                      parameters:@{
                                                                                              @"HTMLString" : @"",
@@ -112,8 +112,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
         } else {
             [self.webEnvironment clean];
         }
-    }];
-
+    }
 }
 
 - (void)fitReportViewToScreen
@@ -127,8 +126,8 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 #pragma mark - Private API
 - (void)startLoadReportHTML
 {
-    [self prepareEnvironmentWithCompletion:^(BOOL success, NSError *error) {
-        if (success) {
+    [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
+        if (isReady) {
             [self renderReportWithCompletion:^(BOOL success, NSError *error) {
                 if (success) {
                     [super startLoadReportHTML];
@@ -148,59 +147,24 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 - (void)loadHTMLWithOldFlow
 {
     [self.webEnvironment loadHTML:self.report.HTMLString
-                          baseURL:[NSURL URLWithString:self.report.baseURLString]
-                       completion:^(BOOL isSuccess, NSError *error) {
-                           JMJavascriptRequest *applyZoomRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.applyZoomForReport"
-                                                                                                parameters:nil];
-                           [self.webEnvironment sendJavascriptRequest:applyZoomRequest
-                                                           completion:^(NSDictionary *params, NSError *error) {
-                                                               if (error) {
-                                                                   JMLog(@"error of applying zoom: %@", error);
-                                                               }
-                                                               [super startLoadReportHTML];
-                                                           }];
-                       }];
-}
+                          baseURL:[NSURL URLWithString:self.report.baseURLString]];
 
-
-#pragma mark - Prepear
-
-- (void)prepareEnvironmentWithCompletion:(JMRestReportLoaderCompletion __nonnull)completion
-{
-    JMRestReportLoaderCompletion heapBlock = [completion copy];
-
-    __weak __typeof(self) weakSelf = self;
-    [self verifyIsContentDivCreatedWithCompletion:^(BOOL isCreated, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (isCreated) {
-            heapBlock(YES, nil);
-        } else {
-            NSString *htmlStringPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer_rest" ofType:@"html"];
-            NSString *htmlString = [NSString stringWithContentsOfFile:htmlStringPath encoding:NSUTF8StringEncoding error:nil];
-
-            // add static dependencies
-            // fusion chart dependencies need to be loaded first
-            NSString *jrsURI = self.restClient.serverProfile.serverUrl;
-            NSString *staticDependencies = @"";
-            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/FusionCharts.js\"></script>", jrsURI];
-            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/jquery.min.js\"></script>", jrsURI];
-            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/FusionCharts.HC.js\"></script>", jrsURI];
-            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/../widgets/FusionCharts.HC.Widgets.js\"></script>", jrsURI];
-
-            htmlString = [htmlString stringByReplacingOccurrencesOfString:@"STATIC_DEPENDENCIES" withString:staticDependencies];
-
-            [strongSelf.webEnvironment loadHTML:htmlString
-                                        baseURL:[NSURL URLWithString:strongSelf.restClient.serverProfile.serverUrl]
-                                     completion:^(BOOL isSuccess, NSError *error) {
-                                         if (isSuccess) {
-                                             heapBlock(YES, nil);
-                                         } else {
-                                             heapBlock(NO, error);
-                                         }
-                                     }];
-        }
+    // Pending block will call after page will be loaded into webview
+    [self.webEnvironment addPendingBlock:^{
+        JMJavascriptRequest *applyZoomRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.applyZoomForReport"
+                                                                             parameters:nil];
+        [self.webEnvironment sendJavascriptRequest:applyZoomRequest
+                                        completion:^(NSDictionary *params, NSError *error) {
+                                            if (error) {
+                                                JMLog(@"error of applying zoom: %@", error);
+                                            }
+                                            [super startLoadReportHTML];
+                                        }];
     }];
 }
+
+
+#pragma mark - Preparing
 
 - (void)cacheDependencies:(NSArray <NSString *>*)dependencies completion:(void(^)(void))completion
 {
@@ -228,13 +192,6 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                                                     }];
         [downloadTask resume];
     }
-}
-
-- (void)verifyIsContentDivCreatedWithCompletion:(JMRestReportLoaderCompletion __nonnull)completion
-{
-    [self.webEnvironment verifyEnvironmentReadyWithCompletion:^(BOOL isEnvironmentReady) {
-        completion(isEnvironmentReady, nil);
-    }];
 }
 
 #pragma mark - Render Report

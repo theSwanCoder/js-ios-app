@@ -129,6 +129,17 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                              selector:@selector(reportDidUpdateParts)
                                                  name:JMReportPartsDidUpdateNotification
                                                object:self.report];
+    BOOL usingVisualizeFlow = NO;
+    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    if (activeServerProfile && activeServerProfile.useVisualize.boolValue) {
+        usingVisualizeFlow = YES;
+    }
+    if (!usingVisualizeFlow) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(webEnvironmentDidReset:)
+                                                     name:JMWebEnvironmentDidResetNotification
+                                                   object:nil];
+    }
 }
 
 - (void)multipageNotification
@@ -166,6 +177,23 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     } else {
         [self hideTopToolbarAnimated:YES];
     }
+}
+
+- (void)webEnvironmentDidReset:(NSNotification *)notification
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"notification: %@", notification);
+
+    [self.reportLoader cancel];
+    [self stopShowLoader];
+    self.webEnvironment = nil;
+    self.report = nil; // TODO: need this ???
+    self.configurator = nil;
+
+    [self hidePaginationToolbar];
+    [self hideTopToolbarAnimated:YES];
+    [self removeBookmarkItem];
+    [self showSessionExpiredAlert];
 }
 
 #pragma mark - Actions
@@ -662,7 +690,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                         if (!strongSelf.webEnvironment.isReusable) {
                             [strongSelf.webEnvironment reset];
                             strongSelf.webEnvironment = nil;
-                            strongSelf.report = nil; // TODO: ???
+                            strongSelf.report = nil; // TODO: need this ???
                             strongSelf.configurator = nil;
                         }
                         [strongSelf hidePaginationToolbar];

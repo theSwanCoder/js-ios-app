@@ -29,6 +29,8 @@
 #import "JMWebEnvironment.h"
 #import "JMJavascriptNativeBridge.h"
 
+NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnvironmentDidResetNotification";
+
 @interface JMWebEnvironment() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, strong) JMJavascriptNativeBridge * __nonnull bridge;
 @property (nonatomic, strong) NSMutableArray <JMWebEnvironmentPendingBlock>*pendingBlocks;
@@ -173,20 +175,6 @@
     }
 }
 
-- (void)verifyEnvironmentReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
-{
-    [self verifyJasperMobileEnableWithCompletion:^(BOOL isJasperMobileLoaded) {
-        if (isJasperMobileLoaded) {
-            [self isWebViewLoadedContentDiv:self.webView completion:^(BOOL isContantDivLoaded) {
-                completion(isContantDivLoaded);
-            }];
-        } else {
-            // TODO: need load html
-            completion(NO);
-        }
-    }];
-}
-
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
 {
@@ -249,6 +237,11 @@
     [self.webView removeFromSuperview];
     self.webView = nil;
     self.pendingBlocks = [NSMutableArray array];
+
+    JMLog(@"JMWebEnvironmentDidResetNotification: %@", JMWebEnvironmentDidResetNotification);
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:JMWebEnvironmentDidResetNotification
+                                                        object:self];
 }
 
 #pragma mark - Helpers
@@ -306,6 +299,7 @@
 
 - (void)verifyJasperMobileEnableWithCompletion:(void(^ __nonnull)(BOOL isEnable))completion
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     NSAssert(completion != nil, @"Completion is nil");
     NSString *jsCommand = @"typeof(JasperMobile);";
     [self.webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
@@ -313,21 +307,6 @@
         BOOL isEnable = !error && isObject;
         completion(isEnable);
     }];
-}
-
-- (void)isWebViewLoadedContentDiv:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isContantDivLoaded))completion
-{
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.isContainerLoaded"
-                                                                parameters:nil];
-    [self.bridge sendJavascriptRequest:request
-                            completion:^(JMJavascriptResponse *callback, NSError *error) {
-                                if (error) {
-                                    completion(NO);
-                                } else {
-                                    NSString *isContainerLoaded = callback.parameters[@"isContainerLoaded"];
-                                    completion([isContainerLoaded isEqualToString:@"true"]);
-                                }
-                            }];
 }
 
 #pragma mark - JMJavascriptNativeBridgeDelegate

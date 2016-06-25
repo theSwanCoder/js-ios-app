@@ -96,7 +96,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
 #pragma mark - Custom Accessors
 - (JMWebEnvironment *)webEnvironment
 {
-    if (!_webEnvironment) {
+    if (!_webEnvironment || !_webEnvironment.webView) {
         _webEnvironment = [self currentWebEnvironment];
     }
     return _webEnvironment;

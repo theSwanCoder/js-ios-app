@@ -34,6 +34,8 @@
 @since 2.4
 */
 
+extern NSString * __nonnull const JMWebEnvironmentDidResetNotification;
+
 typedef void(^JMWebEnvironmentPendingBlock)(void);
 typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nullable params, NSError * __nullable error);
 
