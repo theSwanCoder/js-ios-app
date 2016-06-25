@@ -59,7 +59,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     self.title = self.resource.resourceLookup.label;
 
     [self hideTopToolbarAnimated:NO];
-    [self setupSubviews];
     [self setupNavigationItems];
 
     // start point of loading resource
