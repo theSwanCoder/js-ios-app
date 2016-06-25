@@ -42,6 +42,13 @@
 @implementation JMSavedResourceViewerViewController
 @synthesize changedReportName;
 
+#pragma mark - UIViewController Life Cycle
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    [self setupSubviews];
+}
 
 #pragma mark - Accessors
 - (JMSavedResources *)savedReports
@@ -59,7 +66,7 @@
     if (self.imageView) {
         contentView = self.imageView;
     } else {
-        contentView = self.webEnvironment.webView;
+        contentView = [super contentView];
     }
     return contentView;
 }
