@@ -89,28 +89,27 @@
 - (void)loadJasperMobilePageWithCompletion:(void(^)(BOOL isLoaded, NSError *error))completion
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    __weak __typeof(self) weakSelf = self;
     [self loadHTML:self.visualizeManager.htmlString
-           baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
-        completion:^(BOOL isSuccess, NSError *error) {
-            __typeof(self) strongSelf = weakSelf;
-            if (isSuccess) {
-                // load vis into web environment
-                JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
-                                                                                         parameters:@{
-                                                                                                 @"scriptURLs" : @[
-                                                                                                         strongSelf.visualizeManager.visualizePath,
-                                                                                                         @"https://code.jquery.com/jquery.min.js"
-                                                                                                 ]
-                                                                                         }];
-                [strongSelf sendJavascriptRequest:requireJSLoadRequest
-                                       completion:^(NSDictionary *params, NSError *error) {
-                                           completion(error == nil, error);
-                                       }];
-            } else {
-                completion(NO, error);
-            }
-        }];
+           baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
+
+    __weak __typeof(self) weakSelf = self;
+    JMWebEnvironmentPendingBlock pendingBlock = ^{
+        JMLog(@"JasperMobile was loaded");
+        __typeof(self) strongSelf = weakSelf;
+        // load vis into web environment
+        JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
+                                                                                 parameters:@{
+                                                                                         @"scriptURLs" : @[
+                                                                                                 strongSelf.visualizeManager.visualizePath,
+                                                                                                 @"https://code.jquery.com/jquery.min.js"
+                                                                                         ]
+                                                                                 }];
+        [strongSelf sendJavascriptRequest:requireJSLoadRequest
+                               completion:^(NSDictionary *params, NSError *error) {
+                                   completion(error == nil, error);
+                               }];
+    };
+    [self addPendingBlock:pendingBlock];
 }
 
 @end

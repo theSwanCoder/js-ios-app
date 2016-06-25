@@ -73,7 +73,6 @@
     if (self) {
         NSAssert([webEnvironment isKindOfClass:[JMVIZWebEnvironment class]], @"WebEnvironment isn't correct class");
         _webEnvironment = (JMVIZWebEnvironment *) webEnvironment;
-        _webEnvironment.cancel = NO;
         [self addListenersForVisualizeEvents];
     }
     return self;
@@ -319,7 +318,6 @@
             JMLog(@"error: %@", error);
         } else {
             JMLog(@"canceling report was finished");
-            self.webEnvironment.cancel = YES;
             self.report.isReportAlreadyLoaded = NO;
             [self.webEnvironment removeAllListeners];
         }

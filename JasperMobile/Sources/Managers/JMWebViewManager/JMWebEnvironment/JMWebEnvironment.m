@@ -31,6 +31,7 @@
 
 @interface JMWebEnvironment() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, strong) JMJavascriptNativeBridge * __nonnull bridge;
+@property (nonatomic, strong) NSMutableArray <JMWebEnvironmentPendingBlock>*pendingBlocks;
 @end
 
 @implementation JMWebEnvironment
@@ -45,10 +46,17 @@
 {
     self = [super init];
     if (self) {
+        _pendingBlocks = [NSMutableArray array];
         _webView = [self createWebViewWithCookies:cookies];
         _identifier = identifier;
         _bridge = [JMJavascriptNativeBridge bridgeWithWebView:_webView];
         _bridge.delegate = self;
+        __weak __typeof(self) weakSelf = self;
+        [self addListenerWithId:@"DOMContentLoaded"
+                       callback:^(NSDictionary *params, NSError *error) {
+                           __typeof(self) strongSelf = weakSelf;
+                           strongSelf.ready = YES;
+                       }];
     }
     return self;
 }
@@ -58,31 +66,59 @@
     return [[self alloc] initWithId:identifier initialCookies:cookies];
 }
 
+#pragma mark - Custom Accessors
+- (void)setReady:(BOOL)ready
+{
+    _ready = ready;
+    if (_ready) {
+        for (JMWebEnvironmentPendingBlock pendingBlock in self.pendingBlocks) {
+            pendingBlock();
+        }
+        self.pendingBlocks = [NSMutableArray array];
+    }
+}
+
 #pragma mark - Public API
+- (void)addPendingBlock:(JMWebEnvironmentPendingBlock)pendingBlock
+{
+    NSAssert(pendingBlock != nil, @"Pending block is nil");
+    [self.pendingBlocks addObject:pendingBlock];
+}
+
+- (void)updateCookiesWithCookies:(NSArray *)cookies
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    self.ready = NO;
+    __weak __typeof(self) weakSelf = self;
+    [self removeCookiesWithCompletion:^(BOOL success) {
+        __typeof(self) strongSelf = weakSelf;
+        if (success) {
+            NSString *cookiesAsString = [strongSelf cookiesAsStringFromCookies:cookies];
+            __weak __typeof(self) weakSelf = strongSelf;
+            [strongSelf.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
+                __typeof(self) strongSelf = weakSelf;
+                JMLog(@"setting cookies");
+                JMLog(@"error: %@", error);
+                JMLog(@"o: %@", o);
+                if (error) {
+                    // TODO: how handle this case?
+                } else {
+                    strongSelf.ready = YES;
+                }
+            }];
+        } else {
+            // TODO: how handle this case?
+        }
+    }];
+}
+
 - (void)loadHTML:(NSString * __nonnull)HTMLString
          baseURL:(NSURL * __nullable)baseURL
-      completion:(JMWebEnvironmentRequestBooleanCompletion __nullable)completion
 {
     NSAssert(HTMLString != nil, @"HTML should not be nil");
-    JMJavascriptRequestCompletion javascriptRequestCompletion;
 
-    if (!self.isCancel) {
-        if (completion) {
-            javascriptRequestCompletion = ^(JMJavascriptResponse *callback, NSError *error) {
-                if (!self.isCancel) {
-                    if (error) {
-                        completion(NO, error);
-                    } else {
-                        completion(YES, nil);
-                    }
-                }
-            };
-        }
-
-        [self.bridge startLoadHTMLString:HTMLString
-                                 baseURL:baseURL
-                              completion:javascriptRequestCompletion];
-    }
+    [self.bridge startLoadHTMLString:HTMLString
+                             baseURL:baseURL];
 }
 
 - (void)removeCookiesWithCompletion:(void(^)(BOOL success))completion
@@ -105,44 +141,14 @@
                             }];
 }
 
-- (void)updateCookiesWithCookies:(NSArray *)cookies completion:(void(^)(BOOL success))completion
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [self removeCookiesWithCompletion:^(BOOL success) {
-        if (success) {
-            NSString *cookiesAsString = [self cookiesAsStringFromCookies:cookies];
-            [self.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
-                JMLog(@"setting cookies");
-                JMLog(@"error: %@", error);
-                JMLog(@"o: %@", o);
-                if (error) {
-                    // TODO: how handle this case?
-                    completion(NO);
-                } else {
-                    completion(YES);
-                }
-            }];
-        } else {
-            completion(NO);
-        }
-    }];
-}
-
 - (void)loadRequest:(NSURLRequest * __nonnull)request
 {
-    if (self.isCancel) {
-        return;
-    }
-
     if ([request.URL isFileURL]) {
         // TODO: detect format of file for request
         [self loadLocalFileFromURL:request.URL
                         fileFormat:nil
                            baseURL:nil];
     } else {
-        if (self.isCancel) {
-            return;
-        }
         [self.webView loadRequest:request];
     }
 }
@@ -184,38 +190,39 @@
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
 {
-    JMWebEnvironmentRequestParametersCompletion heapBlock;
-    if (completion) {
-        heapBlock = [completion copy];
-    }
-    if (!self.isCancel) {
-        if (heapBlock) {
-            [self.bridge sendJavascriptRequest:request
-                                    completion:^(JMJavascriptResponse *response, NSError *error) {
-                                        if (!self.isCancel) {
-                                            heapBlock(response.parameters, error);
-                                        }
-                                    }];
+    __weak __typeof(self) weakSelf = self;
+    JMWebEnvironmentPendingBlock pendingBlock = ^{
+        JMLog(@"request was sent");
+        __typeof(self) strongSelf = weakSelf;
+        if (completion) {
+            JMWebEnvironmentRequestParametersCompletion heapBlock;
+            heapBlock = [completion copy];
+            [strongSelf.bridge sendJavascriptRequest:request
+                                          completion:^(JMJavascriptResponse *response, NSError *error) {
+                                              heapBlock(response.parameters, error);
+                                          }];
         } else {
-            [self.bridge sendJavascriptRequest:request
-                                    completion:nil];
+            [strongSelf.bridge sendJavascriptRequest:request
+                                          completion:nil];
         }
+    };
+
+    if (self.ready) {
+        JMLog(@"sending request");
+        pendingBlock();
+    } else {
+        JMLog(@"pending request");
+        [self addPendingBlock:pendingBlock];
     }
 }
 
 - (void)addListenerWithId:(NSString *)listenerId
                  callback:(JMWebEnvironmentRequestParametersCompletion)callback
 {
-    if (!self.isCancel) {
-        __weak __typeof(self) weakSelf = self;
-        [self.bridge addListenerWithId:listenerId
-                              callback:^(JMJavascriptResponse *jsCallback, NSError *error) {
-                                  __typeof(self) strongSelf = weakSelf;
-                                  if (!strongSelf.isCancel) {
-                                      callback(jsCallback.parameters, error);
-                                  }
-                              }];
-    }
+    [self.bridge addListenerWithId:listenerId
+                          callback:^(JMJavascriptResponse *jsCallback, NSError *error) {
+                              callback(jsCallback.parameters, error);
+                          }];
 }
 
 - (void)removeAllListeners
@@ -232,6 +239,8 @@
 {
     NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
     [self.webView loadRequest:clearingRequest];
+    self.ready = NO;
+    self.pendingBlocks = [NSMutableArray array];
 }
 
 - (void)reset
@@ -239,6 +248,7 @@
     [self.bridge removeAllListeners];
     [self.webView removeFromSuperview];
     self.webView = nil;
+    self.pendingBlocks = [NSMutableArray array];
 }
 
 #pragma mark - Helpers
@@ -294,35 +304,14 @@
     return cookiesAsString;
 }
 
-- (void)verifyDOMReadyWithCompletion:(void(^)(BOOL isReady))completion
-{
-    [self verifyJasperMobileEnableWithCompletion:^(BOOL isJasperMobileEnable) {
-        if (isJasperMobileEnable) {
-            NSString *jsCommand = @"JasperMobile.isDOMReady;";
-            [self.webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
-                NSAssert([result isKindOfClass:[NSNumber class]], @"Wrong class of result");
-                BOOL isDOMReady = ((NSNumber *)result).boolValue;
-                BOOL isLoaded = !error && isDOMReady;
-                if (!self.isCancel) {
-                    completion(isLoaded);
-                }
-            }];
-        } else {
-            // TODO: need load html
-            completion(NO);
-        }
-    }];
-}
-
 - (void)verifyJasperMobileEnableWithCompletion:(void(^ __nonnull)(BOOL isEnable))completion
 {
+    NSAssert(completion != nil, @"Completion is nil");
     NSString *jsCommand = @"typeof(JasperMobile);";
     [self.webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
         BOOL isObject = [result isEqualToString:@"object"];
         BOOL isEnable = !error && isObject;
-        if (!self.isCancel) {
-            completion(isEnable);
-        }
+        completion(isEnable);
     }];
 }
 
@@ -342,8 +331,9 @@
 }
 
 #pragma mark - JMJavascriptNativeBridgeDelegate
-- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveOnWindowError:(NSError *__nonnull)error
+- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveError:(NSError *__nonnull)error
 {
+    JMLog(@"error from bridge: %@", error);
 #ifndef __RELEASE__
     // TODO: move to loader layer
     [JMUtils presentAlertControllerWithError:error
