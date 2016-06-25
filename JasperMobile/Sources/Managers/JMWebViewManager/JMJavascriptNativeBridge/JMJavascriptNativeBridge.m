@@ -50,6 +50,16 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         _webView.navigationDelegate = self;
         [_webView.configuration.userContentController addScriptMessageHandler:self
                                                                          name:@"JMJavascriptNativeBridge"];
+        // add window.onerror listener
+        __weak __typeof(self) weakSelf = self;
+        [self addListenerWithId:@"JasperMobile.Events.Window.OnError"
+                       callback:^(JMJavascriptResponse *callback, NSError *error) {
+                           __typeof(self) strongSelf = weakSelf;
+                           if ([strongSelf.delegate respondsToSelector:@selector(javascriptNativeBridge:didReceiveError:)]) {
+                               [strongSelf.delegate javascriptNativeBridge:strongSelf
+                                                           didReceiveError:error];
+                           }
+                       }];
     }
     return self;
 }
@@ -67,46 +77,13 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 #pragma mark - Public API
 - (void)startLoadHTMLString:(NSString *)HTMLString
                     baseURL:(NSURL *)baseURL
-                 completion:(JMJavascriptRequestCompletion __nullable)completion
 {
-//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"DOMContentLoaded";
-    JMJavascriptRequestCompletion heapBlock = [completion copy];
-    __weak __typeof(self) weakSelf = self;
-    JMJavascriptRequestCompletion completionWithCookies = ^(JMJavascriptResponse *callback, NSError *error) {
-        JMLog(@"Callback: DOMContentLoaded");
-        __typeof(self) strongSelf = weakSelf;
-        // add window.onerror listener
-        NSString *listenerId = @"JasperMobile.Events.Window.OnError";
-        __weak __typeof(self) weakSelf = strongSelf;
-        [self addListenerWithId:listenerId
-                       callback:^(JMJavascriptResponse *callback, NSError *error) {
-                           __typeof(self) strongSelf = weakSelf;
-                           if ([strongSelf.delegate respondsToSelector:@selector(javascriptNativeBridge:didReceiveOnWindowError:)]) {
-                               [strongSelf.delegate javascriptNativeBridge:strongSelf
-                                                   didReceiveOnWindowError:error];
-                           }
-                       }];
-
-        // verify if there is a listener which waiting for this event
-        JMJavascriptRequest *listener = [self findListenerForCommand:@"DOMContentLoaded"];
-        if (listener) {
-            JMJavascriptRequestCompletion listenerCompletion = self.listenerCallbacks[listener];
-            listenerCompletion(nil, nil);
-        }
-        if (heapBlock) {
-            heapBlock(callback, error);
-        }
-    };
-
-    self.requestCompletions[request] = [completionWithCookies copy];
-
-    // TODO: replace with safety approach
     if (baseURL) {
         [self.webView stopLoading];
         [self.webView loadHTMLString:HTMLString
                              baseURL:baseURL];
+    } else {
+        // TODO: how handle this case?
     }
 }
 
@@ -132,6 +109,8 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 - (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nonnull)callback
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"listenerId: %@", listenerId);
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = listenerId;
     self.listenerCallbacks[request] = [callback copy];

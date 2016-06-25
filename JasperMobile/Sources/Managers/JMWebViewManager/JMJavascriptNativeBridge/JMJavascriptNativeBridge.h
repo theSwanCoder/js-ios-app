@@ -52,8 +52,7 @@ typedef void(^JMJavascriptRequestCompletion)(JMJavascriptResponse *__nullable re
 + (instancetype __nullable)bridgeWithWebView:(WKWebView * __nonnull)webView;
 
 - (void)startLoadHTMLString:(NSString *__nonnull)HTMLString
-                    baseURL:(NSURL *__nonnull)baseURL
-                 completion:(JMJavascriptRequestCompletion __nullable)completion;
+                    baseURL:(NSURL *__nonnull)baseURL;
 // js requests
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMJavascriptRequestCompletion __nullable)completion;
@@ -64,7 +63,7 @@ typedef void(^JMJavascriptRequestCompletion)(JMJavascriptResponse *__nullable re
 
 @protocol JMJavascriptNativeBridgeDelegate <NSObject>
 @optional
-- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveOnWindowError:(NSError *__nonnull)error;
+- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveError:(NSError *__nonnull)error;
 - (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge shouldLoadExternalRequest:(NSURLRequest * __nonnull)request;
 @end
 

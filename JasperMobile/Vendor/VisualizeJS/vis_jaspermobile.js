@@ -1404,7 +1404,7 @@ JasperMobile.Dashboard.API = {
 
 // Start Point
 document.addEventListener("DOMContentLoaded", function(event) {
-    JasperMobile.Callback.callback("DOMContentLoaded", null);
+    JasperMobile.Callback.listener("DOMContentLoaded", null);
 
     // intercepting network calls
     XMLHttpRequest.prototype.reallySend = XMLHttpRequest.prototype.send;
