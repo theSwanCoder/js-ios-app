@@ -113,10 +113,7 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 - (JMWebEnvironment * __nonnull)webEnvironment
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    JMWebEnvironment *webEnvironment;
-    webEnvironment = [JMWebEnvironment webEnvironmentWithId:nil
-                                             initialCookies:self.cookies];
-    return webEnvironment;
+    return [self createNewWebEnvironmentWithId:nil needReuse:NO];
 }
 
 - (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier needReuse:(BOOL)needReuse
@@ -151,6 +148,10 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         // We need set cookies from correct restClient
         JSRESTBase *restClient = notification.object;
         self.cookies = restClient.cookies;
+        // TODO: what need we do if cookies if nil?
+        for (JMWebEnvironment *webEnvironment in self.webEnvironments) {
+            [webEnvironment updateCookiesWithCookies:self.cookies];
+        }
     } else {
         // TODO: need handle this case?
     }
