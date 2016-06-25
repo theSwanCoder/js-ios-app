@@ -153,24 +153,14 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)reportDidUpdateBookmarks
 {
     if ([self reportHasBookmarks]) {
-        NSMutableArray *rightNavItems = [self.navigationItem.rightBarButtonItems mutableCopy];
-        for (UIBarButtonItem *item in rightNavItems) {
-            if (item.action == @selector(showBookmarks)) {
-                return;
-            }
-        }
-        UIBarButtonItem *bookmarkItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bookmarks_item"]
-                                                                         style:UIBarButtonItemStyleDone
-                                                                        target:self
-                                                                        action:@selector(showBookmarks)];
-        [rightNavItems addObject:bookmarkItem];
-        self.navigationItem.rightBarButtonItems = rightNavItems;
+        [self addBookmarkItem];
     }
 }
 
 - (void)reportDidUpdateParts
 {
     if (self.report.parts) {
+        // TODO: need ability remove from top toolbar?
         [self addTopToolbar:self.reportPartToolbar];
         [self showTopToolbarAnimated:YES];
     } else {
@@ -234,11 +224,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     }
 }
 
-- (UIView *)contentView
-{
-    return self.webEnvironment.webView;
-}
-
 - (void)setupSubviews
 {
     [self addEmptyReportLabelInView:self.view];
@@ -260,7 +245,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Overloaded methods
 - (void) startResourceViewing
 {
-    [super setupSubviews];
     [self addObservers];
     [self configureReport];
 }
@@ -300,6 +284,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                               } else {
                                   JSResourceReportUnit *reportUnit = result.objects.firstObject;
                                   if (reportUnit) {
+                                      [super setupSubviews];
                                       // get report input controls
                                       __weak typeof(self) weakSelf = strongSelf;
                                       [strongSelf.restClient inputControlsForReport:reportURI
@@ -667,35 +652,23 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         case JSSessionExpiredErrorCode: {
             if (self.restClient.keepSession) {
                 __weak typeof(self) weakSelf = self;
+                JMLog(@"Handle session expired");
+                JMLog(@"self.restClient: %@", self.restClient);
                 [self startShowLoaderWithMessage:@"status_loading"];
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
                     __strong typeof(self) strongSelf = weakSelf;
                     [strongSelf stopShowLoader];
                     if (!result.error) {
-                        if (self.webEnvironment.isReusable) {
-                            [strongSelf.webEnvironment updateCookiesWithCookies:strongSelf.restClient.cookies
-                                                                     completion:^(BOOL success) {
-                                                                         __weak typeof(self)strongSelf = weakSelf;
-                                                                         if (success) {
-                                                                             [strongSelf showSessionExpiredAlert];
-                                                                         } else {
-                                                                             NSError *error = [NSError errorWithDomain:@"Webview Error"
-                                                                                                                  code:0
-                                                                                                              userInfo:@{
-                                                                                                                      NSLocalizedDescriptionKey : @"Error of initializing webview"
-                                                                                                              }];
-                                                                             [JMUtils presentAlertControllerWithError:error
-                                                                                                           completion:^{
-                                                                                                               __weak typeof(self)strongSelf = weakSelf;
-                                                                                                               [strongSelf cancelResourceViewingAndExit:YES];
-                                                                                                           }];
-                                                                         }
-                                                                     }];
-                        } else {
-                            [self.webEnvironment reset];
-                            self.webEnvironment = nil;
-                            [self showSessionExpiredAlert];
+                        if (!strongSelf.webEnvironment.isReusable) {
+                            [strongSelf.webEnvironment reset];
+                            strongSelf.webEnvironment = nil;
+                            strongSelf.report = nil; // TODO: ???
+                            strongSelf.configurator = nil;
                         }
+                        [strongSelf hidePaginationToolbar];
+                        [strongSelf hideTopToolbarAnimated:YES];
+                        [strongSelf removeBookmarkItem];
+                        [strongSelf showSessionExpiredAlert];
                     } else {
                         __weak typeof(self) weakSelf = strongSelf;
                         [JMUtils showLoginViewAnimated:YES completion:^{
@@ -960,6 +933,52 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)showReportView
 {
     [self contentView].hidden = NO;
+}
+
+#pragma mark - Bookmark Item Helpers
+- (void)addBookmarkItem
+{
+    UIBarButtonItem *bookmarkItem = [self findBookmarkItem];
+    if (bookmarkItem) {
+        return;
+    } else {
+        NSMutableArray *rightNavItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+        [rightNavItems addObject:[self createBookmarkItem]];
+        self.navigationItem.rightBarButtonItems = rightNavItems;
+    }
+}
+
+- (UIBarButtonItem *__nullable)findBookmarkItem
+{
+    UIBarButtonItem *bookmarkItem;
+    for (UIBarButtonItem *item in self.navigationItem.rightBarButtonItems) {
+        if (item.action == @selector(showBookmarks)) {
+            bookmarkItem = item;
+            break;
+        }
+    }
+    return bookmarkItem;
+}
+
+- (UIBarButtonItem *)createBookmarkItem
+{
+    UIBarButtonItem *bookmarkItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bookmarks_item"]
+                                                                     style:UIBarButtonItemStyleDone
+                                                                    target:self
+                                                                    action:@selector(showBookmarks)];
+    return bookmarkItem;
+}
+
+- (void)removeBookmarkItem
+{
+    UIBarButtonItem *bookmarkItem = [self findBookmarkItem];
+    if (bookmarkItem) {
+        NSMutableArray *rightNavItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+        [rightNavItems removeObject:bookmarkItem];
+        self.navigationItem.rightBarButtonItems = rightNavItems;
+    } else {
+        return;
+    }
 }
 
 #pragma mark - Empty Report Label

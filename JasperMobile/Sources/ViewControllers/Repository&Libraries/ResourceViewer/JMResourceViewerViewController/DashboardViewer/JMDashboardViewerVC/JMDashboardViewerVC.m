@@ -109,16 +109,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     return _dashboard;
 }
 
-- (UIView *)contentView
-{
-    return self.webEnvironment.webView;
-}
-
-- (void)setupSubviews
-{
-    // setup subviews after getting dashboard info
-}
-
 - (JMWebEnvironment *)currentWebEnvironment
 {
     BOOL needReuse = (self.dashboard.resource.type != JMResourceTypeLegacyDashboard) && [JMUtils isSystemVersion9];
@@ -178,7 +168,6 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     if (![self isDashletShown]) {
         [super setupRightBarButtonItems];
-        self.rightButtonItems = self.navigationItem.rightBarButtonItems;
     }
 }
 
@@ -398,6 +387,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     }
 
     self.leftButtonItem = self.navigationItem.leftBarButtonItem;
+    self.rightButtonItems = self.navigationItem.rightBarButtonItems;
     self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
                                                                target:self
                                                                action:@selector(minimizeDashlet)];
@@ -478,17 +468,13 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self switchFromTV];
     }
 
-    if ([JMUtils isSupportVisualize] && self.dashboard.resource.type == JMResourceTypeDashboard) {
-        [self startResourceViewing];
-    } else {
-        [self handleAuthError];
-    }
+    [self handleAuthError];
 }
 
 #pragma mark - Helpers
 - (BOOL)isDashletShown
 {
-    return self.leftButtonItem != nil;
+    return self.dashboard.maximizedComponent != nil;
 }
 
 - (void)fetchDashboardMetaDataWithCompletion:(void(^)(NSArray <JSDashboardComponent *> *components, NSArray <JSInputControlDescriptor *> *inputControls, NSError *error))completion
@@ -562,6 +548,14 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     switch (error.code) {
         case JMJavascriptNativeBridgeErrorAuthError: {
+            if ([self isDashletShown]) {
+                self.navigationItem.leftBarButtonItem = self.leftButtonItem;
+                self.navigationItem.rightBarButtonItems = self.rightButtonItems;
+                self.navigationItem.title = self.resource.resourceLookup.label;
+                self.leftButtonItem = nil;
+                self.rightButtonItems = nil;
+                self.dashboard.maximizedComponent = nil;
+            }
             [self handleAuthError];
             break;
         }
@@ -589,34 +583,14 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
             __weak typeof(self)strongSelf = weakSelf;
             if (!result.error) {
-                __weak typeof(self)weakSelf = strongSelf;
-                if (strongSelf.webEnvironment.isReusable) {
-                    [strongSelf.webEnvironment updateCookiesWithCookies:[JMWebViewManager sharedInstance].cookies
-                                                             completion:^(BOOL success) {
-                                                                 __weak typeof(self)strongSelf = weakSelf;
-                                                                 if (success) {
-                                                                    [strongSelf showSessionExpiredAlert];
-                                                                 } else {
-                                                                     NSError *error = [NSError errorWithDomain:@"Webview Error"
-                                                                                                          code:0
-                                                                                                      userInfo:@{
-                                                                                                              NSLocalizedDescriptionKey : @"Error of initializing webview"
-                                                                                                      }];
-                                                                     [JMUtils presentAlertControllerWithError:error
-                                                                                                   completion:^{
-                                                                                                       __weak typeof(self)strongSelf = weakSelf;
-                                                                                                       [strongSelf cancelResourceViewingAndExit:YES];
-                                                                                                   }];
-                                                                 }
-                                                             }];
-                } else {
+                if (!strongSelf.webEnvironment.isReusable) {
                     // reset state
                     [strongSelf.webEnvironment reset];
                     strongSelf.webEnvironment = nil;
                     strongSelf.dashboard = nil;
                     strongSelf.configurator = nil;
-                    [strongSelf showSessionExpiredAlert];
                 }
+                [strongSelf showSessionExpiredAlert];
             } else {
                 __weak typeof(self)weakSelf = strongSelf;
                 [JMUtils showLoginViewAnimated:YES completion:^{
