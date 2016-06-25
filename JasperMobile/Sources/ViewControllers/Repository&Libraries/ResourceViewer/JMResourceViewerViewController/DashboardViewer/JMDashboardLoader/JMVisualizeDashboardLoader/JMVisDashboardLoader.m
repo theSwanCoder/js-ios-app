@@ -385,14 +385,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         __typeof(self) strongSelf = weakSelf;
         [strongSelf handleOnAdHocExecution:parameters];
     }];
-
-    // Authorization
-    NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.API.unauthorized";
-    [self.webEnvironment addListenerWithId:unauthorizedListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(unauthorizedListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf.delegate dashboardLoaderDidReceiveAuthRequest:self];
-    }];
 }
 
 #pragma mark - Handle JS callbacks
