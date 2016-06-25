@@ -1,6 +1,5 @@
 
 var JasperMobile = {
-    isDOMReady : false,
     Report : {},
     Dashboard : {},
     Callback: {},
@@ -1072,44 +1071,61 @@ JasperMobile.Dashboard.API = {
             .done(function() {
                 JasperMobile.Callback.log("done refresh");
                 var data = JasperMobile.Dashboard.API.dashboardObject.data();
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
-                    "components" : data.components,
-                    "params" : data.parameters,
-                    "isFullReload" : "false"
-                });
+                setTimeout(function() {
+                    JasperMobile.Callback.log("state: " + JasperMobile.Dashboard.API.refreshedDashboardObject.state());
+                    if (JasperMobile.Dashboard.API.refreshedDashboardObject.state() === "rejected") {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                            "error" : {
+                                "code" : "dashboard.refresh.rejected",
+                                "message" : "Refresh was rejected"
+                            }
+                        });
+                    } else if (JasperMobile.Dashboard.API.refreshedDashboardObject.state() === "pending") {
+                        // TODO: update handling this case
+                        var uri = JasperMobile.Dashboard.API.dashboardObject.properties().resource;
+                        JasperMobile.Dashboard.API.dashboardObject.destroy();
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                            "error" : {
+                                "code" : "dashboard.refresh.pending",
+                                "message" : "Refresh was pended"
+                            }
+                        });
+                    } else if (JasperMobile.Dashboard.API.refreshedDashboardObject.state() === "resolved") {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                            "components" : data.components,
+                            "params" : data.parameters
+                        });
+                    } else {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                            "error" : {
+                                "code" : "dashboard.refresh.undefined",
+                                "message" : "Refresh failed with 'undefied' error"
+                            }
+                        });
+                    }
+                }, 3000);
             })
             .fail(function(error) {
                 JasperMobile.Callback.log("failed refresh with error: " + error);
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
-                    "error" : {
-                        "code" : error.errorCode,
-                        "message" : error.message
-                    }
-                });
-            });
-        setTimeout(function() {
-            JasperMobile.Callback.log("state: " + JasperMobile.Dashboard.API.refreshedDashboardObject.state());
-            if (JasperMobile.Dashboard.API.refreshedDashboardObject.state() === "pending") {
-                var uri = JasperMobile.Dashboard.API.dashboardObject.properties().resource;
-                JasperMobile.Dashboard.API.dashboardObject.cancel();
-                JasperMobile.Dashboard.API.runDashboard({
-                    "uri" : uri,
-                    success: function() {
+                if (error.errorCode == "authentication.error") {
+                    JasperMobile.Dashboard.API.dashboardObject.destroy();
+                    setTimeout(function () {
                         JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
-                            "isFullReload": "true"
+                            "error" : {
+                                "code" : error.errorCode,
+                                "message" : error.message
+                            }
                         });
-                    },
-                    failed: function(error) {
-                        JasperMobile.Callback.log("failed refresh with error (after timeout): " + error);
-                        if (error.errorCode == "authentication.error") {
-                            JasperMobile.Callback.listener("JasperMobile.Dashboard.API.unauthorized", {});
-                        } else {
-                            // TODO: handle this.
+                    }, 3000);
+                } else {
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                        "error" : {
+                            "code" : error.errorCode,
+                            "message" : error.message
                         }
-                    }
-                });
-            }
-        }, 10000);
+                    });
+                }
+            });
     },
     cancel: function() {
         JasperMobile.Callback.log("start cancel");
@@ -1172,7 +1188,7 @@ JasperMobile.Dashboard.API = {
                     }
                 });
             }
-        }, 10000);
+        }, 6000);
     },
     applyParams: function(parameters) {
         JasperMobile.Dashboard.API.dashboardObject.params(parameters).run()
@@ -1388,7 +1404,6 @@ JasperMobile.Dashboard.API = {
 
 // Start Point
 document.addEventListener("DOMContentLoaded", function(event) {
-    JasperMobile.isDOMReady = true;
     JasperMobile.Callback.callback("DOMContentLoaded", null);
 
     // intercepting network calls
