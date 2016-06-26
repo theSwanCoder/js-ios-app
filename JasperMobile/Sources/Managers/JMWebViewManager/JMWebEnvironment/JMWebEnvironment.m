@@ -126,21 +126,41 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
 - (void)removeCookiesWithCompletion:(void(^)(BOOL success))completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    NSAssert([JMUtils isSystemVersion9], @"Should be called only for iOS9");
+    if ([JMUtils isSystemVersion9]) {
+        NSSet *dataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
+        WKWebsiteDataStore *websiteDataStore = self.webView.configuration.websiteDataStore;
+        [websiteDataStore fetchDataRecordsOfTypes:dataTypes
+                                completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {
+                                    for (WKWebsiteDataRecord *record in records) {
+                                        NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+                                        if ([record.displayName containsString:serverURL.host]) {
+                                            [websiteDataStore removeDataOfTypes:record.dataTypes
+                                                                 forDataRecords:@[record]
+                                                              completionHandler:^{
+                                                                  JMLog(@"record (%@) removed successfully", record);
+                                                              }];
+                                        }
+                                    }
+                                    if (completion) {
+                                        completion(YES);
+                                    }
+                                }];
+    } else {
+        [self removeCookiesForOldVersionWitchCompletion:completion];
+    }
+}
 
-    NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeCookies]];
-    WKWebsiteDataStore *websiteDataStore = self.webView.configuration.websiteDataStore;
-    [websiteDataStore fetchDataRecordsOfTypes:dataTypes
-                            completionHandler:^(NSArray<WKWebsiteDataRecord *> *array) {
-                                [websiteDataStore removeDataOfTypes:dataTypes
-                                                     forDataRecords:array
-                                                  completionHandler:^{
-                                                      JMLog(@"cookies removed successfully");
-                                                      if (completion) {
-                                                          completion(YES);
-                                                      }
-                                                  }];
-                            }];
+- (void)removeCookiesForOldVersionWitchCompletion:(void(^)(BOOL success))completion
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    NSString *libraryPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *cookiesFolderPath = [libraryPath stringByAppendingString:@"/Cookies"];
+    NSError *errors;
+    BOOL success = [[NSFileManager defaultManager] removeItemAtPath:cookiesFolderPath error:&errors];
+    if (!success) {
+        JMLog(@"error of removing cookies: %@", errors);
+    }
+    completion(success);
 }
 
 - (void)loadRequest:(NSURLRequest * __nonnull)request
@@ -315,8 +335,8 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
     JMLog(@"error from bridge: %@", error);
 #ifndef __RELEASE__
     // TODO: move to loader layer
-    [JMUtils presentAlertControllerWithError:error
-                                  completion:nil];
+//    [JMUtils presentAlertControllerWithError:error
+//                                  completion:nil];
 #endif
 }
 
