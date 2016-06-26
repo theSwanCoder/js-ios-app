@@ -36,7 +36,6 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 
 @interface JMWebViewManager()
 @property (nonatomic, strong) NSMutableArray *webEnvironments;
-@property (nonatomic, weak) JMWebEnvironment *activeNonReusableWebEnvironment;
 @end
 
 @implementation JMWebViewManager
@@ -116,7 +115,6 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMWebEnvironment *webEnvironment = [self createNewWebEnvironmentWithId:nil needReuse:NO];
-    self.activeNonReusableWebEnvironment = webEnvironment;
     return webEnvironment;
 }
 
@@ -142,7 +140,6 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         [webEnvironment.webView removeFromSuperview];
     }
     self.webEnvironments = [NSMutableArray array];
-    self.activeNonReusableWebEnvironment = nil;
 }
 
 #pragma mark - Notifications
@@ -157,10 +154,6 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         for (JMWebEnvironment *webEnvironment in self.webEnvironments) {
             [webEnvironment updateCookiesWithCookies:self.cookies];
         }
-        if (self.activeNonReusableWebEnvironment) {
-            [self.activeNonReusableWebEnvironment reset];
-        }
-        JMLog(@"active non reusable web environment: %@", self.activeNonReusableWebEnvironment);
     } else {
         // TODO: need handle this case?
     }
