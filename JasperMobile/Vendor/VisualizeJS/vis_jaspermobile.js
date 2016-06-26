@@ -328,8 +328,8 @@ JasperMobile.Report.REST.API = {
     applyZoomForReport: function() {
         var tableNode = document.getElementsByClassName("jrPage")[0];
         if (tableNode.nodeName == "TABLE") {
-            document.body.innerHTML = "<div id='containter'></div>";
-            var container = document.getElementById("containter");
+            document.body.innerHTML = "<div id='container'></div>";
+            var container = document.getElementById("container");
             container.appendChild(tableNode);
             var table = tableNode;
             var scale = "scale(" + innerWidth / parseInt(table.style.width) + ")";
@@ -386,7 +386,7 @@ JasperMobile.Report.VIS.API = {
         var errorFn = function(error) {
             JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.runReport", {
                 "error" : {
-                    "code" : error.errorCode,
+                    "code"    : error.errorCode,
                     "message" : error.message
                 }
             });
@@ -744,7 +744,13 @@ JasperMobile.Report.VIS.API = {
     }
 };
 
-// VIZ Dashboards
+// Dashboards
+JasperMobile.Dashboard = {
+    Legacy : {},
+    // Move to this from JasperMobile.Dashboard.API
+    VIS  : {}
+};
+
 JasperMobile.Dashboard.API = {
     dashboardObject: {},
     refreshedDashboardObject: {},
@@ -1399,6 +1405,98 @@ JasperMobile.Dashboard.API = {
                 return components[i];
             }
         }
+    }
+};
+
+JasperMobile.Dashboard.Legacy.API = {
+    runDashboard: function(parameters) {
+        var url = parameters["URL"];
+        JasperMobile.Dashboard.Legacy.API.loadDashboard(
+            url,
+            function() {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.Legacy.API.runDashboard", {});
+            },
+            function(error) {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.Legacy.API.runDashboard", {
+                    "error" : error
+                });
+            }
+        );
+    },
+    refresh: function(parameters) {
+        var url = parameters["URL"];
+        JasperMobile.Dashboard.Legacy.API.loadDashboard(
+            url,
+            function() {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.Legacy.API.refresh", {});
+            },
+            function(error) {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.Legacy.API.refresh", {
+                    "error" : error
+                });
+            }
+        );
+    },
+    loadDashboard: function(URL, success, failure) {
+        JasperMobile.Callback.log("loadDashboard with URL: " + URL);
+        JasperMobile.Callback.log("container: " + document.getElementById("container"));
+        // There could be more than 1 time events on login.html
+        var authErrorWasSent = false;
+        var windowWidth = window.innerWidth;
+
+        var xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function() {
+            var responseURL = xmlhttp.responseURL;
+            JasperMobile.Callback.log("responseURL: " + responseURL);
+            if (responseURL.indexOf("login.html") > -1 && !authErrorWasSent) {
+                authErrorWasSent = true;
+                xmlhttp.abort();
+                failure({
+                    "code" : "authentication.error",
+                    "message" : "Authentication error"
+                });
+                return;
+            }
+
+            if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+                if (xmlhttp.status == 200) {
+                    JasperMobile.Callback.log("done of loading html");
+                    document.getElementById("container").innerHTML = xmlhttp.responseText;
+                    var bodyWidth = document.width;
+                    var container = jQuery("#container");
+                    container.html(xmlhttp.responseText).promise().done(function(){
+                        JasperMobile.Callback.log("html was added to container");
+                    });
+                    //var dashboardFrameParent = jQuery("#dashboardFrameParent");
+                    setTimeout(function() {
+                        var scale = "scale(" + parseInt(windowWidth) / parseInt(document.width) + ")";
+                        var origin = "0% 0%";
+                        JasperMobile.Helper.updateTransformStyles(document.body, scale, origin);
+                        success();
+                    }, 3000);
+                } else {
+                    JasperMobile.Callback.log("xmlhttp.status: " + xmlhttp.status);
+                }
+            }
+        };
+        xmlhttp.open("GET", URL, true);
+        xmlhttp.send();
+    },
+    cancel: function() {
+
+    },
+    destroy: function() {
+        JasperMobile.Dashboard.Legacy.API.destroyDashboard(function() {
+            JasperMobile.Callback.callback("JasperMobile.Dashboard.Legacy.API.destroy", {});
+        });
+    },
+    destroyDashboard: function(completion) {
+        document.body.innerHTML = "";
+        JasperMobile.Helper.resetBodyTransformStyles();
+        setTimeout(function() {
+            completion();
+        }, 500);
     }
 };
 

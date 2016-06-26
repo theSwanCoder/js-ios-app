@@ -47,6 +47,7 @@
 
 
 NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashboardViewerPrimaryWebEnvironmentIdentifier";
+NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier";
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -111,19 +112,16 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 - (JMWebEnvironment *)currentWebEnvironment
 {
-    BOOL needReuse = (self.dashboard.resource.type != JMResourceTypeLegacyDashboard) && [JMUtils isSystemVersion9];
-    if (needReuse) {
-        return [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
-    } else {
-        return [super currentWebEnvironment];
-    }
+    return [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
 }
 
 - (NSString *)currentWebEnvironmentIdentifier
 {
     NSString *webEnvironmentIdentifier;
-    if ([JMUtils isSupportVisualize] && self.dashboard.resource.type != JMResourceTypeLegacyDashboard) {
+    if (self.dashboard.resource.type != JMResourceTypeLegacyDashboard) {
         webEnvironmentIdentifier = kJMDashboardViewerPrimaryWebEnvironmentIdentifier;
+    } else {
+        webEnvironmentIdentifier = kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier;
     }
     return webEnvironmentIdentifier;
 }
@@ -217,10 +215,12 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)reloadDashboard
 {
     [self startShowLoaderWithMessage:@"status_loading"];
+    [self hideDashboardView];
     __weak typeof(self)weakSelf = self;
     [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
         __weak typeof(self)strongSelf = weakSelf;
         [strongSelf stopShowLoader];
+        [strongSelf showDashboardView];
         if (error) {
             [strongSelf handleError:error];
         }
@@ -296,12 +296,12 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
                                    [self.dashboardLoader cancel];
                                    [super cancelResourceViewingAndExit:YES];
                                }];
-
+    [self hideDashboardView];
     __weak typeof(self)weakSelf = self;
     [self.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
         __weak typeof(self)strongSelf = weakSelf;
         [strongSelf stopShowLoader];
-
+        [strongSelf showDashboardView];
         if (success) {
             // Analytics
             NSString *label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceLabelDashboardVisualize : kJMAnalyticsResourceLabelDashboardFlow;
@@ -543,6 +543,16 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     return self.dashboard.inputControls.count > 0;
 }
 
+- (void)hideDashboardView
+{
+    [self contentView].hidden = YES;
+}
+
+- (void)showDashboardView
+{
+    [self contentView].hidden = NO;
+}
+
 #pragma mark - Error handling
 - (void)handleError:(NSError *)error
 {
@@ -583,7 +593,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
         [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
             __weak typeof(self)strongSelf = weakSelf;
             if (!result.error) {
-                if (!strongSelf.webEnvironment.isReusable) {
+                if (strongSelf.dashboard.resource.type == JMResourceTypeLegacyDashboard) {
                     // reset state
                     [strongSelf.webEnvironment reset];
                     strongSelf.webEnvironment = nil;

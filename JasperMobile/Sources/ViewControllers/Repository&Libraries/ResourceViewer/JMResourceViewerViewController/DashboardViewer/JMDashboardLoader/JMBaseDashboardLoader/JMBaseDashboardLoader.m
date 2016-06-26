@@ -28,19 +28,25 @@
 
 #import "JMBaseDashboardLoader.h"
 #import "JMDashboard.h"
-#import "JMWebEnvironment.h"
+#import "JMRESTWebEnvironment.h"
 #import "JMJavascriptRequest.h"
 
 @interface JMBaseDashboardLoader()
 @property (nonatomic, weak) JMDashboard *dashboard;
-@property (nonatomic) BOOL isLoadDone;
-@property (nonatomic, weak) JMWebEnvironment *webEnvironment;
+@property (nonatomic, weak) JMRESTWebEnvironment *webEnvironment;
+@property (nonatomic, assign, getter=isCancelLoad) BOOL cancelLoading;
 @end
 
-@implementation JMBaseDashboardLoader
+@implementation
+JMBaseDashboardLoader
 @synthesize delegate = _delegate;
 
 #pragma mark - Initializers
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+}
+
 - (id<JMDashboardLoader> __nullable)initWithDashboard:(JMDashboard *__nonnull)dashboard
                                        webEnvironment:(JMWebEnvironment *)webEnvironment
 {
@@ -49,7 +55,7 @@
         NSAssert(dashboard != nil, @"Dashboard is nil");
         NSAssert(webEnvironment != nil, @"WebEnvironment is nil");
         _dashboard = dashboard;
-        _webEnvironment = webEnvironment;
+        _webEnvironment = (JMRESTWebEnvironment *) webEnvironment;
         [self addListenersForWebEnvironmentEvents];
     }
     return self;
@@ -65,25 +71,53 @@
 #pragma mark - Public API
 - (void)loadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
-    // TODO: reimplement without request
-    [self.webEnvironment loadRequest:self.dashboard.resourceRequest];
-
-//    [self injectJSCodeOldDashboard];
-    if (completion) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            completion(YES, nil);
-        });
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+    if (self.isCancelLoad) {
+        return;
     }
+
+    JMDashboardLoaderCompletion heapBlock = [completion copy];
+
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.cancelLoading) {
+            return;
+        }
+        if (isReady) {
+            [strongSelf runDashboardWithCompletion:heapBlock];
+        } else {
+            heapBlock(NO, error);
+        }
+    }];
 }
 
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion)completion
 {
-    [self.webEnvironment clean];
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
 
-    // waiting until page will be cleared
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self loadDashboardWithCompletion:completion];
-    });
+    JMDashboardLoaderCompletion heapBlock = [completion copy];
+
+    [self destroyDashboardWithCompletion:^(BOOL success, NSError *error) {
+        if (success) {
+            __weak __typeof(self) weakSelf = self;
+            [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
+                __typeof(self) strongSelf = weakSelf;
+                if (strongSelf.cancelLoading) {
+                    return;
+                }
+                if (isReady) {
+                    [strongSelf refreshDashboardWithCompletion:heapBlock];
+                } else {
+                    heapBlock(NO, error);
+                }
+            }];
+        } else {
+            heapBlock(NO, error);
+        }
+    }];
 }
 
 - (void)minimizeDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
@@ -103,15 +137,90 @@
 
 - (void)cancel
 {
-    [self.webEnvironment clean];
+    self.cancelLoading = YES;
 }
 
 - (void)destroy
 {
-    [self.webEnvironment clean];
+    [self destroyDashboardWithCompletion:nil];
 }
 
 #pragma mark - Helpers
+- (void)runDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
+{
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+
+    JMDashboardLoaderCompletion heapBlock = [completion copy];
+    // run
+    JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.Legacy.API.runDashboard"
+                                                                   parameters:@{
+                                                                           @"URL" : self.dashboard.resourceRequest.URL.absoluteString,
+                                                                   }];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.isCancelLoad) {
+            return;
+        }
+        if (error) {
+            heapBlock(NO, error);
+        } else {
+            heapBlock(YES, nil);
+        }
+    }];
+}
+
+- (void)refreshDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
+{
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+
+    JMDashboardLoaderCompletion heapBlock = [completion copy];
+
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.Legacy.API.refresh"
+                                                                parameters:@{
+                                                                        @"URL" : self.dashboard.resourceRequest.URL.absoluteString
+                                                                }];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.isCancelLoad) {
+            return;
+        }
+        if (error) {
+            heapBlock(NO, error);
+        } else {
+            heapBlock(YES, nil);
+        }
+    }];
+}
+
+- (void)destroyDashboardWithCompletion:(JMDashboardLoaderCompletion __nullable)completion
+{
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+
+    JMDashboardLoaderCompletion heapBlock = [completion copy];
+
+    JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.Legacy.API.destroy"
+                                                                   parameters:nil];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.isCancelLoad) {
+            return;
+        }
+        if (!heapBlock) {
+            return;
+        }
+        if (!error) {
+            heapBlock(YES, nil);
+        } else {
+            heapBlock(NO, error);
+        }
+    }];
+}
+
 - (void)addListenersForWebEnvironmentEvents
 {
     // Authorization
