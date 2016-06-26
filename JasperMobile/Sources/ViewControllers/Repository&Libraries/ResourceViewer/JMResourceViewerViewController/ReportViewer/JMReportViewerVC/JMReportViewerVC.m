@@ -78,6 +78,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 }
 
 #pragma mark - UIViewController LifeCycle
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    [self addObservers];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -129,17 +136,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                              selector:@selector(reportDidUpdateParts)
                                                  name:JMReportPartsDidUpdateNotification
                                                object:self.report];
-    BOOL usingVisualizeFlow = NO;
-    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-    if (activeServerProfile && activeServerProfile.useVisualize.boolValue) {
-        usingVisualizeFlow = YES;
-    }
-    if (!usingVisualizeFlow) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(webEnvironmentDidReset:)
-                                                     name:JMWebEnvironmentDidResetNotification
-                                                   object:nil];
-    }
 }
 
 - (void)multipageNotification
@@ -177,23 +173,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     } else {
         [self hideTopToolbarAnimated:YES];
     }
-}
-
-- (void)webEnvironmentDidReset:(NSNotification *)notification
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    JMLog(@"notification: %@", notification);
-
-    [self.reportLoader cancel];
-    [self stopShowLoader];
-    self.webEnvironment = nil;
-    self.report = nil; // TODO: need this ???
-    self.configurator = nil;
-
-    [self hidePaginationToolbar];
-    [self hideTopToolbarAnimated:YES];
-    [self removeBookmarkItem];
-    [self showSessionExpiredAlert];
 }
 
 #pragma mark - Actions
@@ -273,7 +252,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Overloaded methods
 - (void) startResourceViewing
 {
-    [self addObservers];
     [self configureReport];
 }
 
@@ -462,11 +440,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Custom accessors
 - (JMWebEnvironment *)currentWebEnvironment
 {
-    if ([JMUtils isSystemVersion9]) {
-        return [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
-    } else {
-        return [super currentWebEnvironment];
-    }
+    return [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
 }
 
 - (NSString *)currentWebEnvironmentIdentifier
@@ -687,15 +661,17 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                     __strong typeof(self) strongSelf = weakSelf;
                     [strongSelf stopShowLoader];
                     if (!result.error) {
-                        if (!strongSelf.webEnvironment.isReusable) {
-                            [strongSelf.webEnvironment reset];
-                            strongSelf.webEnvironment = nil;
-                            strongSelf.report = nil; // TODO: need this ???
-                            strongSelf.configurator = nil;
-                        }
                         [strongSelf hidePaginationToolbar];
                         [strongSelf hideTopToolbarAnimated:YES];
                         [strongSelf removeBookmarkItem];
+                        [strongSelf hideReportView];
+                        strongSelf.report.isReportAlreadyLoaded = NO;
+                        if (![JMUtils isSupportVisualize]) {
+                            JMLog(@"Recreate configutator");
+                            // TODO: udpate rest loader to be able reuse
+                            [strongSelf.reportLoader cancel];
+                            strongSelf.configurator = nil;
+                        }
                         [strongSelf showSessionExpiredAlert];
                     } else {
                         __weak typeof(self) weakSelf = strongSelf;
