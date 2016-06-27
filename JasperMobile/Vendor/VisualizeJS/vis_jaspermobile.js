@@ -1467,13 +1467,12 @@ JasperMobile.Dashboard.Legacy.API = {
             if (xmlhttp.readyState == XMLHttpRequest.DONE) {
                 if (xmlhttp.status == 200) {
                     JasperMobile.Callback.log("done of loading html");
-                    document.getElementById("container").innerHTML = xmlhttp.responseText;
                     var bodyWidth = document.width;
-                    var container = jQuery("#container");
+                    var container = jQuery(document.body);
+                    container.attr('id', 'dashboardViewer');
                     container.html(xmlhttp.responseText).promise().done(function(){
                         JasperMobile.Callback.log("html was added to container");
                     });
-                    //var dashboardFrameParent = jQuery("#dashboardFrameParent");
                     setTimeout(function() {
                         var scale = "scale(" + parseInt(windowWidth) / parseInt(document.width) + ")";
                         var origin = "0% 0%";
@@ -1498,6 +1497,7 @@ JasperMobile.Dashboard.Legacy.API = {
     },
     destroyDashboard: function(completion) {
         document.body.innerHTML = "";
+        document.body.id = "";
         JasperMobile.Helper.resetBodyTransformStyles();
         setTimeout(function() {
             completion();
