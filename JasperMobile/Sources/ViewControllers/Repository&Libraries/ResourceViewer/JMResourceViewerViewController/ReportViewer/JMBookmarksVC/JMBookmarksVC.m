@@ -63,14 +63,15 @@ static NSString *const kJMBookmarkTableViewCellId = @"JMBookmarkTableViewCell";
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    JMReportBookmark *bookmark = self.bookmarks[indexPath.row];
-    if (bookmark.isSelected) {
-        JMLog(@"bookmark selected");
-        [cell setSelected:YES animated:YES];
-    }
-}
+// TODO: enable 'selecting' bookmarks.
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    JMReportBookmark *bookmark = self.bookmarks[indexPath.row];
+//    if (bookmark.isSelected) {
+//        JMLog(@"bookmark selected");
+//        [cell setSelected:YES animated:YES];
+//    }
+//}
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
