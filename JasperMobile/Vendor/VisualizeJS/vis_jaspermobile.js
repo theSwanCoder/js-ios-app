@@ -1409,8 +1409,11 @@ JasperMobile.Dashboard.API = {
 };
 
 JasperMobile.Dashboard.Legacy.API = {
+    dashboardFlowURI: "flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=",
     runDashboard: function(parameters) {
-        var url = parameters["URL"];
+        var baseURL = parameters["baseURL"];
+        var resourceURI = parameters["resourceURI"];
+        var url = baseURL + JasperMobile.Dashboard.Legacy.API.dashboardFlowURI + resourceURI;
         JasperMobile.Dashboard.Legacy.API.loadDashboard(
             url,
             function() {
@@ -1424,7 +1427,9 @@ JasperMobile.Dashboard.Legacy.API = {
         );
     },
     refresh: function(parameters) {
-        var url = parameters["URL"];
+        var baseURL = parameters["baseURL"];
+        var resourceURI = parameters["resourceURI"];
+        var url = baseURL + JasperMobile.Dashboard.Legacy.API.dashboardFlowURI + resourceURI;
         JasperMobile.Dashboard.Legacy.API.loadDashboard(
             url,
             function() {

@@ -34,7 +34,6 @@
 // setters
 @property (nonatomic, strong, readwrite) JMResource *resource;
 @property (nonatomic, copy, readwrite) NSString *resourceURI;
-@property (nonatomic, strong, readwrite) NSURLRequest *resourceRequest;
 @end
 
 @implementation JMDashboard
@@ -51,7 +50,6 @@
     if (self) {
         _resource = resource;
         _resourceURI = resource.resourceLookup.uri;
-        _resourceRequest = [self createResourceRequestWithCookies:self.restClient.cookies];
     }
     return self;
 }
@@ -59,36 +57,6 @@
 + (instancetype)dashboardWithResource:(JMResource *)resourceLookup
 {
     return [[self alloc] initWithResource:resourceLookup];
-}
-
-#pragma mark - Public API
-
-#pragma mark - Private API
-
-#pragma mark - Helpers
-- (NSURLRequest *)createResourceRequestWithCookies:(NSArray *)cookies
-{
-    NSString *dashboardUrl = [NSString stringWithFormat:@"flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=%@", _resourceURI];
-    dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
-    dashboardUrl = [[NSURL URLWithString:dashboardUrl relativeToURL:self.restClient.baseURL] absoluteString];
-    
-    NSMutableURLRequest *dashboardRequest = [self.restClient.requestSerializer requestWithMethod:@"GET" URLString:dashboardUrl parameters:nil error:nil];
-    dashboardRequest.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
-    [dashboardRequest addValue:[self cookiesAsStringFromCookies:cookies]
-            forHTTPHeaderField:@"Cookie"];
-
-    return dashboardRequest;
-}
-
-- (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
-{
-    NSString *cookiesAsString = @"";
-    for (NSHTTPCookie *cookie in cookies) {
-        NSString *name = cookie.name;
-        NSString *value = cookie.value;
-        cookiesAsString = [cookiesAsString stringByAppendingFormat:@"%@=%@; ", name, value];
-    }
-    return cookiesAsString;
 }
 
 @end

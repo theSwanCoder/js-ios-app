@@ -155,7 +155,8 @@ JMBaseDashboardLoader
     // run
     JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.Legacy.API.runDashboard"
                                                                    parameters:@{
-                                                                           @"URL" : self.dashboard.resourceRequest.URL.absoluteString,
+                                                                           @"baseURL" : self.restClient.baseURL.absoluteString,
+                                                                           @"resourceURI" : self.dashboard.resourceURI
                                                                    }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
@@ -180,7 +181,8 @@ JMBaseDashboardLoader
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.Legacy.API.refresh"
                                                                 parameters:@{
-                                                                        @"URL" : self.dashboard.resourceRequest.URL.absoluteString
+                                                                        @"baseURL" : self.restClient.baseURL.absoluteString,
+                                                                        @"resourceURI" : self.dashboard.resourceURI
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {

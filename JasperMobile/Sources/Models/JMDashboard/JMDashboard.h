@@ -38,7 +38,6 @@
 // getters
 @property (nonatomic, strong, readonly) JMResource *resource;
 @property (nonatomic, copy, readonly) NSString *resourceURI;
-@property (nonatomic, strong, readonly) NSURLRequest *resourceRequest;
 @property (nonatomic, copy) NSArray <JSInputControlDescriptor *>*inputControls;
 @property (nonatomic, copy) NSArray <JSDashboardComponent *>*components;
 @property (nonatomic, weak) JSDashboardComponent *maximizedComponent;
