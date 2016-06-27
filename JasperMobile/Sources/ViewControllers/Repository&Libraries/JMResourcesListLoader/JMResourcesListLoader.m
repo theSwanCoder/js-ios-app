@@ -251,14 +251,22 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                 NSArray *dashboardsValues = @[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY];
                 JMResourceLoaderOption *dashboardFilterOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_dashboard", nil)
                                                                                                   value:dashboardsValues];
+
+                // adhoc views
+                NSArray *adhocViewsValues = @[kJS_WS_TYPE_ADHOC_VIEW_UNIT];
+                JMResourceLoaderOption *adhocViewFilterOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_adhoc_view", nil)
+                                                                                                  value:adhocViewsValues];
+
                 // all
                 NSArray *allValues = reportsValues;
                 allValues = [allValues arrayByAddingObjectsFromArray:dashboardsValues];
+                allValues = [allValues arrayByAddingObjectsFromArray:adhocViewsValues];
                 JMResourceLoaderOption *allItemsFilterOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_all", nil)
                                                                                            value:allValues];
                 allOptions = @[
                         allItemsFilterOption,
                         reportFilterOption,
+                        adhocViewFilterOption,
                         dashboardFilterOption
                 ];
             } else {

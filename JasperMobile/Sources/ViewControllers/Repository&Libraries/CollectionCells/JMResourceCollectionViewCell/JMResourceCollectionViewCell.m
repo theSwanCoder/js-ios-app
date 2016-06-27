@@ -175,6 +175,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                         [strongSelf updateResourceImage:image thumbnails:NO];
                                                     }
                                                 }];
+    } else if (self.resource.type == JMResourceTypeAdhocView) {
+        JMLog(@"adhoc view cell");
     }
     
     if (resourceImage || _thumbnailImage) {

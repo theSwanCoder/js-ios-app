@@ -763,6 +763,25 @@
             </objects>
             <point key="canvasLocation" x="-1250" y="4318"/>
         </scene>
+        <!--Adhoc ViewerVC-->
+        <scene sceneID="6rL-u4-90S">
+            <objects>
+                <viewController storyboardIdentifier="JMAdhocViewerVC" id="x28-ph-vn2" customClass="JMAdhocViewerVC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="szm-eQ-aiI"/>
+                        <viewControllerLayoutGuide type="bottom" id="xdA-fI-J8y"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kp1-ZW-zbA">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="dbF-qi-2cT"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kmk-7P-ahY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="315" y="-194"/>
+        </scene>
         <!--Favorites Collection View Controller-->
         <scene sceneID="qHV-w6-yY6">
             <objects>
@@ -812,7 +831,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yyc-wK-rxI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1247" y="-855"/>
+            <point key="canvasLocation" x="-1250" y="-1615"/>
         </scene>
         <!--Repository Collection View Controller-->
         <scene sceneID="3ZA-cH-fFr">
@@ -831,7 +850,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xoR-P6-umr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-490" y="-855"/>
+            <point key="canvasLocation" x="-490" y="-1615"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="rFy-K3-jJj">
@@ -847,7 +866,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n7F-SI-xze" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1247" y="-1559"/>
+            <point key="canvasLocation" x="-1255" y="-2323"/>
         </scene>
         <!--Schedules Collection View Controller-->
         <scene sceneID="Zse-hf-Zhg">
@@ -866,7 +885,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5WO-i8-AL7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-490" y="-2273"/>
+            <point key="canvasLocation" x="-490" y="-3087"/>
         </scene>
         <!--ScheduleVC-->
         <scene sceneID="340-MM-7JM">
@@ -1024,7 +1043,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBc-2F-rBb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="208" y="-2273"/>
+            <point key="canvasLocation" x="315" y="-3087"/>
         </scene>
         <!--Multi Selected ItemsVC-->
         <scene sceneID="Iem-wL-nwX">
@@ -1095,7 +1114,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7LM-e3-DOi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-490" y="-1559"/>
+            <point key="canvasLocation" x="-490" y="-2323"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="F2H-0Z-7s2">
@@ -1112,7 +1131,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OOZ-Ut-jAB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1240" y="-2273"/>
+            <point key="canvasLocation" x="-1250" y="-3087"/>
         </scene>
         <!--Onboard Intro View Controller-->
         <scene sceneID="v1d-Bj-4Xv">
@@ -1471,7 +1490,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rOj-6o-aXF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-490" y="-129"/>
+            <point key="canvasLocation" x="-490" y="-909"/>
         </scene>
         <!--Share View Controller-->
         <scene sceneID="Pw6-0q-LJh">
@@ -1505,7 +1524,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Qf-Ih-2a9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="315" y="-855"/>
+            <point key="canvasLocation" x="-490" y="-3807"/>
         </scene>
         <!--Saved Resource Viewer View Controller-->
         <scene sceneID="H8W-pD-vyf">
@@ -1524,7 +1543,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AZ1-ow-pjK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="315" y="-129"/>
+            <point key="canvasLocation" x="315" y="-909"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="dwz-GE-Keh">
@@ -1540,7 +1559,7 @@ your business wherever you are.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8rk-e3-6te" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1247" y="-129"/>
+            <point key="canvasLocation" x="-1247" y="-909"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="lVt-ar-uCd">
@@ -1581,6 +1600,7 @@ your business wherever you are.</string>
                     <connections>
                         <segue destination="ErU-ou-rS1" kind="show" identifier="ShowDashboardViewer" id="RHS-U1-mL5"/>
                         <segue destination="CyQ-uv-PHh" kind="show" identifier="ShowReportViewer" id="IXG-JN-Ecs"/>
+                        <segue destination="x28-ph-vn2" kind="show" identifier="showAdhocView" id="D1K-X8-rXJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3As-aU-PG2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2687,19 +2707,19 @@ your business wherever you are.</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XNR-vc-kE9">
-                                                    <rect key="frame" x="8" y="3" width="547" height="21"/>
+                                                    <rect key="frame" x="8" y="3" width="539" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GKP-c5-XWZ">
-                                                    <rect key="frame" x="8" y="21" width="547" height="17"/>
+                                                    <rect key="frame" x="8" y="21" width="539" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XGm-BW-XuW">
-                                                    <rect key="frame" x="565" y="8" width="27" height="27"/>
+                                                    <rect key="frame" x="557" y="0.0" width="43" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="XGm-BW-XuW" secondAttribute="height" multiplier="1:1" id="Lsd-ly-Cer"/>
                                                     </constraints>

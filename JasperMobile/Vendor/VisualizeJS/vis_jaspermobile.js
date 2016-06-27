@@ -1505,6 +1505,47 @@ JasperMobile.Dashboard.Legacy.API = {
     }
 };
 
+// Adhoc Views
+JasperMobile.AdhocView = {
+    VIS: {}
+};
+
+JasperMobile.AdhocView.VIS.API = {
+    adhocView: undefined,
+    v: undefined,
+    run: function(parameters) {
+        var uri = parameters["uri"];
+        JasperMobile.Callback.log("uri: " + uri);
+
+        var successFn = function(status) {
+            JasperMobile.Callback.callback("JasperMobile.AdhocView.VIS.API.run", {
+                "status" : status
+            });
+        };
+        var errorFn = function(error) {
+            JasperMobile.Callback.callback("JasperMobile.AdhocView.VIS.API.run", {
+                "error" : {
+                    "code"    : error.errorCode,
+                    "message" : error.message
+                }
+            });
+        };
+
+        var adhocViewStruct = {
+            resource: uri,
+            container: "#container",
+            success: successFn,
+            error: errorFn
+        };
+        var auth = {};
+        var runFn = function (v) {
+            JasperMobile.AdhocView.VIS.API.v = v;
+            JasperMobile.AdhocView.VIS.API.adhocView = v.adhocView(adhocViewStruct);
+        };
+        visualize(auth, runFn, errorFn);
+    }
+};
+
 // Start Point
 document.addEventListener("DOMContentLoaded", function(event) {
     JasperMobile.Callback.listener("DOMContentLoaded", null);

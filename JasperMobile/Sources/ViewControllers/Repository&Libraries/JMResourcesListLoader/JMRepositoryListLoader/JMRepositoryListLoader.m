@@ -120,6 +120,7 @@
                                                               kJS_WS_TYPE_REPORT_UNIT,
                                                               kJS_WS_TYPE_DASHBOARD,
                                                               kJS_WS_TYPE_DASHBOARD_LEGACY,
+                                                              kJS_WS_TYPE_ADHOC_VIEW_UNIT,
                                                               kJS_WS_TYPE_FOLDER,
                                                               kJS_WS_TYPE_FILE
                                                       ]]

@@ -126,3 +126,6 @@
 	[resources_type_schedule]
 		en = Schedule
 		tags = ios,new
+	[resources_type_adhoc_view]
+		en = Adhoc View
+		tags = ios,new

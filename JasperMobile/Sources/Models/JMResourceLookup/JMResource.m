@@ -78,6 +78,7 @@
             break;
         }
         case JMResourceTypeSchedule: {break;}
+        case JMResourceTypeAdhocView: {break;}
     }
     return model;
 }
@@ -118,6 +119,10 @@
             localizedResourceType = JMCustomLocalizedString(@"resources_type_schedule", nil);
             break;
         }
+        case JMResourceTypeAdhocView: {
+            localizedResourceType = JMCustomLocalizedString(@"resources_type_schedule", nil);
+            break;
+        }
     }
     return localizedResourceType;
 }
@@ -150,6 +155,10 @@
         }
         case JMResourceTypeSchedule: {
             vcIdentifier = @"JMScheduleVC";
+            break;
+        }
+        case JMResourceTypeAdhocView: {
+            vcIdentifier = @"JMAdhocViewerVC";
             break;
         }
     }
@@ -189,6 +198,11 @@
             vcIdentifier = @"JMScheduleInfoViewController";
             break;
         }
+        case JMResourceTypeAdhocView: {
+            // TODO: create separate subclass
+            vcIdentifier = @"JMResourceInfoViewController";
+            break;
+        }
     }
     return vcIdentifier;
 }
@@ -212,6 +226,8 @@
         return JMResourceTypeFile;
     } else if([resourceLookup.resourceType isEqualToString:kJMScheduleUnit]) {
         return JMResourceTypeSchedule;
+    } else if([resourceLookup.resourceType isEqualToString:kJS_WS_TYPE_ADHOC_VIEW_UNIT]) {
+        return JMResourceTypeAdhocView;
     }
     return NSNotFound;
 }

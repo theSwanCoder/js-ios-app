@@ -39,7 +39,8 @@ typedef NS_ENUM(NSInteger, JMResourceType) {
     JMResourceTypeTempExportedReport,
     JMResourceTypeDashboard,
     JMResourceTypeLegacyDashboard,
-    JMResourceTypeSchedule
+    JMResourceTypeSchedule,
+    JMResourceTypeAdhocView,
 };
 
 @interface JMResource : NSObject

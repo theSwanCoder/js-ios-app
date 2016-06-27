@@ -40,6 +40,9 @@
 		ja = ダッシュボード
 		zh = 仪表板
 		tags = ios
+	[resources_filterby_type_adhoc_view]
+		en = Adhoc View
+		tags = ios,new
 	[resources_filterby_type_folder]
 		en = Folders
 		de = Ordner
