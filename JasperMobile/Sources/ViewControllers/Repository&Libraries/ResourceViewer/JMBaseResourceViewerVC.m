@@ -217,20 +217,34 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     }
     
     if ([self favoriteItemShouldDisplaySeparately]) {
-        [navBarItems addObject:[self favoriteBarButtonItem]];
+        UIBarButtonItem *favoriteItem = [self findFavoriteItem:navBarItems];
+        if (!favoriteItem) {
+            [navBarItems addObject:[self favoriteBarButtonItem]];
+        } else {
+            [self changeImageForFavoriteItem:favoriteItem];
+        }
     } else {
         // remove favorite item
-        for (UIBarButtonItem *item in navBarItems) {
-            if (item.action == @selector(favoriteButtonTapped:)) {
-                [navBarItems removeObject:item];
-                break;
-            }
+        UIBarButtonItem *favoriteItem = [self findFavoriteItem:navBarItems];
+        if (favoriteItem) {
+            [navBarItems removeObject:favoriteItem];
         }
     }
     
     self.navigationItem.rightBarButtonItems = [navBarItems copy];
 }
 
+- (UIBarButtonItem *)findFavoriteItem:(NSArray *)navBarItems
+{
+    UIBarButtonItem *favoriteItem;
+    for (UIBarButtonItem *item in navBarItems) {
+        if (item.action == @selector(favoriteButtonTapped:)) {
+            favoriteItem = item;
+            break;
+        }
+    }
+    return favoriteItem;
+}
 
 #pragma mark - Resource Viewing
 -(void) startResourceViewing
@@ -339,6 +353,14 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
                                                                     action:@selector(favoriteButtonTapped:)];
     favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
     return favoriteItem;
+}
+
+- (void)changeImageForFavoriteItem:(UIBarButtonItem *)favoriteItem
+{
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource];
+    NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
+    favoriteItem.image = [UIImage imageNamed:imageName];
+    favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
 }
 
 - (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem
