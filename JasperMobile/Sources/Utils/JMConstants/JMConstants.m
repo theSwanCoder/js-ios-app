@@ -146,3 +146,6 @@ NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex = 2;
 // Login VC
 NSString *const JMLoginVCLastUserNameKey           = @"JMLoginVCLastUserNameKey";
 NSString *const JMLoginVCLastServerProfileAliasKey = @"JMLoginVCLastServerProfileAliasKey";
+
+// Adhoc Views
+NSString *const kJS_WS_TYPE_ADHOC_VIEW_UNIT = @"adhocView";

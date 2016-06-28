@@ -153,3 +153,6 @@ extern NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex;
 // Login VC
 extern NSString *const JMLoginVCLastUserNameKey;
 extern NSString *const JMLoginVCLastServerProfileAliasKey;
+
+// Adhoc Views
+extern NSString *const kJS_WS_TYPE_ADHOC_VIEW_UNIT;

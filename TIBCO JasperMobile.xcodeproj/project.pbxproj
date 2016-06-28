@@ -138,7 +138,7 @@
 		08E2AC9D1B1E056900AC462B /* JMSavingReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC7B1B1E056900AC462B /* JMSavingReportViewController.m */; };
 		08E62C8319922B0B0081CA83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E62C8019922B0B0081CA83 /* main.m */; };
 		08F2D1701CB268C500C6E4EF /* Resource_Viewer_Share.txt in Resources */ = {isa = PBXBuildFile; fileRef = 08F2D16F1CB268C500C6E4EF /* Resource_Viewer_Share.txt */; };
-		7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */; };
+		2E60BFBF0E24589CB10FC196 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF56FDF75F49FFF817F08D96 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */; };
 		930E18DC1CEC98C600CE5E10 /* JMPerformanceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E18DB1CEC98C600CE5E10 /* JMPerformanceUITests.m */; };
 		930E18DD1CEC9A7100CE5E10 /* JMBaseUITestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */; };
@@ -531,7 +531,6 @@
 		08F2D16F1CB268C500C6E4EF /* Resource_Viewer_Share.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Resource_Viewer_Share.txt; sourceTree = "<group>"; };
 		20A5E8D0860C986563FB740C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		93047D511AB6F5750047C982 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		93047D521AB6F5750047C982 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
 		93047D531AB6F5750047C982 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceFields.h; sourceTree = "<group>"; };
@@ -785,6 +784,7 @@
 		BDF3D2521B8B03F40005AA28 /* JMReportOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportOptionsViewController.m; sourceTree = "<group>"; };
 		BDF3D2581B8B166B0005AA28 /* JMReportOptionsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportOptionsCell.h; sourceTree = "<group>"; };
 		BDF3D2591B8B166B0005AA28 /* JMReportOptionsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportOptionsCell.m; sourceTree = "<group>"; };
+		DF56FDF75F49FFF817F08D96 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -830,7 +830,6 @@
 				93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */,
 				0871503E19F1266900C5875E /* libz.dylib in Frameworks */,
 				F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */,
-				7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */,
 				93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */,
 				93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */,
 				08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */,
@@ -844,6 +843,7 @@
 				F55CC333174CFFCE00CEB39E /* UIKit.framework in Frameworks */,
 				F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */,
 				F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */,
+				2E60BFBF0E24589CB10FC196 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3236,9 +3236,9 @@
 				F55CC332174CFFCE00CEB39E /* UIKit.framework */,
 				F55CC334174CFFCE00CEB39E /* Foundation.framework */,
 				F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */,
-				3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */,
 				93F54FD91BD7975E00355A30 /* Fabric.framework */,
 				93F54FDA1BD7975E00355A30 /* Crashlytics.framework */,
+				DF56FDF75F49FFF817F08D96 /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3317,14 +3317,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F55CC375174CFFCF00CEB39E /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile" */;
 			buildPhases = (
-				93B2D7EA1CAD4B7100F60BF7 /* Run Script Generate Localizations */,
 				6F5F5E6592158193EE742D9E /* Check Pods Manifest.lock */,
+				93B2D7EA1CAD4B7100F60BF7 /* Run Script Generate Localizations */,
 				F55CC32B174CFFCE00CEB39E /* Sources */,
 				F55CC32C174CFFCE00CEB39E /* Frameworks */,
 				0844F14019F694730082C6E5 /* Run Update Build Version Script */,
 				F55CC32D174CFFCE00CEB39E /* Resources */,
 				9D3415DC47E90FD0EB7D031E /* Copy Pods Resources */,
 				935E06761BD7969C007F8DDA /* Run Script (Fabric) */,
+				2448BDCF06DF51945FFFE157 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3481,6 +3482,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\n# Auto Increment Version Script\n# set CFBundleVersion to 1.0.1 first!!!\n# the perl regex splits out the last part of a build number (ie: 1.1.1) and increments it by one\n# if you have a build number that is more than 3 components, add a '\\.\\d+' into the first part of the regex.\n# Increment build number for release builds only!!!.\n\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\nbuildPlist=${INFOPLIST_FILE}\nappVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$buildPlist\"`\nbuildAppVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(.+\\d+)\\.\\d+/$1/eg'`\n\n\nif [ \"${appVersion}\" = \"${buildAppVersion}\" ]; then\nbuildVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/.+\\.(\\d+)/($1+1)/eg'`\nelse\nbuildVersion=1\nfi\n\nnewBuildVersion=${appVersion}.${buildVersion}\necho $newBuildVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $newBuildVersion\" \"$buildPlist\"\nfi";
+		};
+		2448BDCF06DF51945FFFE157 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		6F5F5E6592158193EE742D9E /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3907,7 +3923,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4345,7 +4361,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4396,7 +4412,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
