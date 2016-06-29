@@ -1,10 +1,11 @@
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, "8.0"
+use_frameworks!
 
 pod 'Appirater', '2.0.5'
 pod 'SWRevealViewController', '2.3.0'
 pod 'JaspersoftSDK', :git => 'https://github.com/Jaspersoft/js-ios-sdk.git',  :branch => 'other_improvements', :subspecs => ['JSCore', 'JSSecurity', 'JSReportExtention']
-pod 'Charts/Realm'
+pod 'Charts'
 post_install do |installer_representation|
   installer_representation.pods_project.targets.each do |target|
     if target.name == "Pods-JaspersoftSDK"
@@ -26,4 +27,3 @@ post_install do |installer_representation|
     end
   end
 end
-use_frameworks!

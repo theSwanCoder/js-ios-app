@@ -141,7 +141,8 @@
             break;
         }
         case JMResourceTypeReport: {
-            vcIdentifier = @"JMReportViewerVC";
+//            vcIdentifier = @"JMReportViewerVC";
+            vcIdentifier = @"JMAdhocViewerVC";
             break;
         }
         case JMResourceTypeTempExportedReport: {break;}

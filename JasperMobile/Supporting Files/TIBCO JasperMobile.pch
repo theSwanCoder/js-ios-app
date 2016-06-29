@@ -37,7 +37,6 @@
 
 // Swift
     //#import "TIBCO_JasperMobile-Swift.h"
-//#import < "TIBCO_JasperMobile-Swift.h"
     #import "TIBCO JasperMobile-Bridging-Header.h"
 
 // Crashlytics

@@ -506,11 +506,11 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
                 [nextVC setResource:resource];
             }
             // Customizing report viewer view controller
-            if (resource.type == JMResourceTypeReport) {
-                JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
-                JMReport *report = (JMReport *)[nextVC report];
-                report.thumbnailImage = cell.thumbnailImage;
-            }
+//            if (resource.type == JMResourceTypeReport) {
+//                JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
+//                JMReport *report = (JMReport *)[nextVC report];
+//                report.thumbnailImage = cell.thumbnailImage;
+//            }
         }
     }
 

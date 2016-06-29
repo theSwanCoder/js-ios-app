@@ -774,9 +774,24 @@
                     <view key="view" contentMode="scaleToFill" id="kp1-ZW-zbA">
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DwJ-oy-H2z" customClass="BarChartView" customModule="Charts">
+                                <rect key="frame" x="20" y="8" width="560" height="520"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="DwJ-oy-H2z" firstAttribute="top" secondItem="szm-eQ-aiI" secondAttribute="bottom" constant="8" symbolic="YES" id="FO7-tg-koJ"/>
+                            <constraint firstItem="xdA-fI-J8y" firstAttribute="top" secondItem="DwJ-oy-H2z" secondAttribute="bottom" constant="8" symbolic="YES" id="UVQ-SZ-Wdn"/>
+                            <constraint firstItem="DwJ-oy-H2z" firstAttribute="trailing" secondItem="kp1-ZW-zbA" secondAttribute="trailingMargin" id="cAh-MP-C0G"/>
+                            <constraint firstItem="DwJ-oy-H2z" firstAttribute="leading" secondItem="kp1-ZW-zbA" secondAttribute="leadingMargin" id="jYM-gv-gDw"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="dbF-qi-2cT"/>
+                    <connections>
+                        <outlet property="barChartView" destination="DwJ-oy-H2z" id="g2e-Dq-E78"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kmk-7P-ahY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

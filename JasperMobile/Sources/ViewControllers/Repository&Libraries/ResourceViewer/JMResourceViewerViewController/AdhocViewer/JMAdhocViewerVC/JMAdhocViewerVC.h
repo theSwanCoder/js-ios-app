@@ -31,8 +31,8 @@
 @since 2.6
 */
 
-#import "JMResourceViewerViewController.h"
+#import "JMBaseViewController.h"
 #import "JMRefreshable.h"
 
-@interface JMAdhocViewerVC : JMResourceViewerViewController <JMRefreshable>
+@interface JMAdhocViewerVC : JMBaseViewController <JMRefreshable>
 @end
