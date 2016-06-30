@@ -163,6 +163,11 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
                                                                         views:@{@"toolbar": toolbar}]];
 }
 
+- (void)removeTopToolbar
+{
+    [((JMBaseResourceView *) self.view).topToolbar.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+}
+
 - (void)showTopToolbarAnimated:(BOOL)animated
 {
     ((JMBaseResourceView *)self.view).topToolbarTopConstraint.constant = 0;

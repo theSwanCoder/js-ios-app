@@ -61,6 +61,7 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 
 // Working with top toolbar
 - (void)addTopToolbar:(UIView *)toolbar;
+- (void)removeTopToolbar;
 - (void)showTopToolbarAnimated:(BOOL)animated;
 - (void)hideTopToolbarAnimated:(BOOL)animated;
 

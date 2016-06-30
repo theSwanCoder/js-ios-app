@@ -661,11 +661,18 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                     __strong typeof(self) strongSelf = weakSelf;
                     [strongSelf stopShowLoader];
                     if (!result.error) {
+                        // reset pagination
                         [strongSelf hidePaginationToolbar];
-                        [strongSelf hideTopToolbarAnimated:YES];
+                        // reset top toolbar
+                        [strongSelf hideTopToolbarAnimated:NO];
+                        [strongSelf removeTopToolbar];
+                        strongSelf.reportPartToolbar = nil;
+                        // reset bookmarks
                         [strongSelf removeBookmarkItem];
-                        [strongSelf hideReportView];
+                        // reset report
+                        [strongSelf.report restoreDefaultState];
                         strongSelf.report.isReportAlreadyLoaded = NO;
+                        [strongSelf hideReportView];
                         if (![JMUtils isSupportVisualize]) {
                             JMLog(@"Recreate configutator");
                             // TODO: udpate rest loader to be able reuse

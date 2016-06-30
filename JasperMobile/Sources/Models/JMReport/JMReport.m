@@ -35,6 +35,14 @@ NSString * __nonnull const JMReportPartsDidUpdateNotification = @"JMReportPartsD
 
 @implementation JMReport
 
+- (void)restoreDefaultState
+{
+    [super restoreDefaultState];
+
+    self.bookmarks = nil;
+    self.parts = nil;
+}
+
 #pragma mark - Custom Accessors
 - (void)setBookmarks:(NSArray<JMReportBookmark *> *)bookmarks
 {
