@@ -100,7 +100,7 @@
         JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
                                                                                  parameters:@{
                                                                                          @"scriptURLs" : @[
-                                                                                                 strongSelf.visualizeManager.visualizePath,
+                                                                                                 //strongSelf.visualizeManager.visualizePath,
                                                                                                  @"https://code.jquery.com/jquery.min.js"
                                                                                          ]
                                                                                  }];

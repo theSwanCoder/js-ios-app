@@ -1543,6 +1543,64 @@ JasperMobile.AdhocView.VIS.API = {
             JasperMobile.AdhocView.VIS.API.adhocView = v.adhocView(adhocViewStruct);
         };
         visualize(auth, runFn, errorFn);
+    },
+    renderHighcharts: function (highchartsConfig) {
+
+        var reqjsPaths = highchartsConfig.requirejsConfig.paths,
+            moduleName, modulePath;
+
+        // process paths to remove ".js" where necessary
+        for (moduleName in reqjsPaths) {
+            if (reqjsPaths.hasOwnProperty(moduleName)) {
+                modulePath = reqjsPaths[moduleName];
+
+                if (modulePath.indexOf("reportresource?resource") == -1) {
+                    reqjsPaths[moduleName] = modulePath.substring(0, modulePath.indexOf(".js"));
+                }
+            }
+        }
+
+        require.config(highchartsConfig.requirejsConfig);
+
+        require(['jquery', 'highcharts-more'], function($, Highcharts) {
+            var options = {},
+                highchartsInstance;
+
+            highchartsConfig.globalOptions && Highcharts.setOptions(highchartsConfig.globalOptions);
+
+            var MasterDfd = new jQuery.Deferred();
+            MasterDfd.resolve();
+
+            $.each(highchartsConfig.services, function(idx, entry) {
+                var srv = entry.service;
+                var srvData = entry.data;
+                if ("dataSettingService" === srv) {
+                    options = srvData;
+                } else {
+                    MasterDfd = MasterDfd.then(function() {
+                        var DFD = new $.Deferred();
+                        require([srv], function(Service) {
+                            if ('itemHyperlinkSettingService' === srv) {
+                                var hService = new Service(null, options, srvData);
+                                hService.perform();
+                            } else {
+                                Service.perform(options, srvData);
+                            }
+                            DFD.resolve();
+                        });
+                        return DFD;
+                    });
+                }
+            });
+
+            MasterDfd.then(function() {
+                options.chart.width = highchartsConfig.chartDimensions.width;
+                options.chart.height = highchartsConfig.chartDimensions.height;
+                options.chart.renderTo = highchartsConfig.renderTo;
+
+                highchartsInstance = new Highcharts.Chart(options);
+            });
+        });
     }
 };
 

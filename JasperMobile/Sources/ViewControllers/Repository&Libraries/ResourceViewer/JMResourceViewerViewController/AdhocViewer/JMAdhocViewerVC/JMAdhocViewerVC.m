@@ -32,12 +32,17 @@
 #import "JMVIZWebEnvironment.h"
 #import "JMJavascriptRequest.h"
 #import "Charts-Swift.h"
+#import "UIColor+RGBComponent.h"
 
 NSString *const kJMAdhocViewWebEnvironemntId = @"kJMAdhocViewWebEnvironemntId";
 
-@interface JMAdhocViewerVC()
+@interface JMAdhocViewerVC() <ChartViewDelegate>
 //@property (nonatomic, strong) JMResource *resource;
 @property (weak, nonatomic) IBOutlet BarChartView *barChartView;
+@property (nonatomic, strong) NSArray <BarChartDataSet *> *dataSet;
+@property (nonatomic, strong) NSArray *firstDataSetValues;
+@property (nonatomic, strong) NSArray *secondDataSetValues;
+@property (nonatomic, strong) NSArray *thirdDataSetValues;
 @end
 
 @implementation JMAdhocViewerVC
@@ -52,11 +57,81 @@ NSString *const kJMAdhocViewWebEnvironemntId = @"kJMAdhocViewWebEnvironemntId";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
+    // setup native chart
+    self.firstDataSetValues = @[
+            @316.67,
+            @958.0,
+            @553.36,
+            @1828.03,
+            @159.05,
+            @255.5,
+            @414.55,
+            @97.35,
+            @271.95,
+            @38.8,
+            @408.1,
+            @388.7,
+            @1227.1,
+            @1615.8,
+            // @4266.48 - // TOTAL
+    ];
+    self.secondDataSetValues = @[
+            @130.5991,
+            @374.1945,
+            @223.8714,
+            @728.665,
+            @68.1635,
+            @99.8315,
+            @167.995,
+            @36.7765,
+            @105.0405,
+            @14.37,
+            @156.187,
+            @158.1315,
+            @495.9335,
+            @654.065,
+            // @1706.912 - // TOTAL
+    ];
+    self.thirdDataSetValues = @[
+            @0.8563462703357563,
+            @0.8928271866810314,
+            @0.6330944470377184,
+            @0.7890173011216982,
+            @0.8367881644850372,
+            @0.8296963084197128,
+            @0.8324029750048191,
+            @0.5651340996168582,
+            @0.5187539223671735,
+            @0.0,
+            @0.5859321719978693,
+            @0.6787836030189892,
+            @0.9433643149826642,
+            @0.8624904719303602,
+            //@0.7923236818515335 - // TOTAL
+    ];
+    self.dataSet = @[
+            [self barChartDataSetWithValues:self.firstDataSetValues
+                                      label:@"Store Sales 2013"
+                                      color:[UIColor colorFromHexString:@"#0d233a"]],
+            [self barChartDataSetWithValues:self.secondDataSetValues
+                                      label:@"Store Cost 2013"
+                                      color:[UIColor colorFromHexString:@"#2f7ed8"]],
+            [self barChartDataSetWithValues:self.thirdDataSetValues
+                                      label:@"$ Per Sq Foot"
+                                      color:[UIColor colorFromHexString:@"#910000"]]
+    ];
+
     [self startResourceViewing];
 }
 
 - (void)startResourceViewing
+{
+//    [self showHighChart];
+    [self showNativeChart];
+}
+
+- (void)showHighChart
 {
 //    __weak __typeof(self) weakSelf = self;
 //    [((JMVIZWebEnvironment *)self.webEnvironment) prepareWithCompletion:^(BOOL isReady, NSError *error) {
@@ -64,7 +139,7 @@ NSString *const kJMAdhocViewWebEnvironemntId = @"kJMAdhocViewWebEnvironemntId";
 //        if (isReady) {
 //            JMLog(@"ready");
 //            JMLog(@"resource uri: %@", strongSelf.resource.resourceLookup.uri);
-//            [strongSelf loadAdhocViewWithCompletion:^(BOOL success, NSError *error) {
+//            [strongSelf renderHighChartWithCompletion:^(BOOL success, NSError *error) {
 //                if (error) {
 //                    JMLog(@"error of loading adhoc view");
 //                } else {
@@ -75,10 +150,9 @@ NSString *const kJMAdhocViewWebEnvironemntId = @"kJMAdhocViewWebEnvironemntId";
 //            JMLog(@"not ready");
 //        }
 //    }];
-    [self showChart];
 }
 
-- (void)showChart
+- (void)showNativeChart
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 //    NSArray <NSString *>*months = @[@"Jan", @"Feb", @"Mar", @"Apr", @"May", @"Jun", @"Jul", @"Aug", @"Sep", @"Oct", @"Nov", @"Dec"];
@@ -104,13 +178,9 @@ NSString *const kJMAdhocViewWebEnvironemntId = @"kJMAdhocViewWebEnvironemntId";
                                          @"Supermarket (Mexico)",
                                          @"Supermarket (USA)"
                                          ];
-    
+
     BarChartData *chartData = [[BarChartData alloc] initWithXVals:xAxisValues
-                                                         dataSets:@[
-                                                                    [self firstDataSetWithXAxisValues:xAxisValues],
-                                                                    [self secondDataSetWithXAxisValues:xAxisValues],
-                                                                    [self thirdDataSetWithXAxisValues:xAxisValues]
-                                                                    ]];
+                                                         dataSets:self.dataSet];
     self.barChartView.data = chartData;
     self.barChartView.xAxis.enabled = NO;
 //    self.barChartView.xAxis.labelPosition = XAxisLabelPositionBottom;
@@ -120,6 +190,8 @@ NSString *const kJMAdhocViewWebEnvironemntId = @"kJMAdhocViewWebEnvironemntId";
     self.barChartView.descriptionText = @"";
     JMLog(@"isGrouped: %@", chartData.isGrouped ? @"YES" : @"NO");
     self.barChartView.rightAxis.enabled = NO;
+//    self.barChartView.leftAxis.enabled = NO;
+    [self.barChartView animateWithXAxisDuration:1.5 easingOption:ChartEasingOptionEaseInOutBounce];
 //    ChartYAxis *leftAxis = self.barChartView.leftAxis;
 //    leftAxis.axisMaxValue = 2000;
 //    leftAxis.axisMinValue = 0.0;
@@ -128,102 +200,27 @@ NSString *const kJMAdhocViewWebEnvironemntId = @"kJMAdhocViewWebEnvironemntId";
 //    ChartYAxis *rightAxis = self.barChartView.rightAxis;
 //    rightAxis.axisMaxValue = 1.0;
 //    rightAxis.axisMinValue = 0.0;
+    self.barChartView.delegate = self;
+    ChartMarker *marker = [ChartMarker new];
+    marker.image = [UIImage imageNamed:@"AppIcon29x29@2x.png"];
+    marker.offset = CGPointMake(-15, -30);
+    self.barChartView.marker = marker;
 }
 
-- (BarChartDataSet *)firstDataSetWithXAxisValues:(NSArray *)xAxisValues
+- (BarChartDataSet *)barChartDataSetWithValues:(NSArray *)values label:(NSString *)label color:(UIColor *)color
 {
-    NSArray <NSNumber *>*values = @[
-                                    @316.67, 
-                                    @958.0, 
-                                    @553.36, 
-                                    @1828.03, 
-                                    @159.05, 
-                                    @255.5,
-                                    @414.55,
-                                    @97.35,
-                                    @271.95,
-                                    @38.8,
-                                    @408.1,
-                                    @388.7,
-                                    @1227.1,
-                                    @1615.8,
-                                    // @4266.48 - // TOTAL
-                                    ];
     NSArray <NSNumber *>*normalizedValues = [self normalizeValues:values];
     NSMutableArray <BarChartDataEntry *>*dataEntries = [NSMutableArray array];
     for (NSNumber *value in normalizedValues) {
         NSInteger index = [normalizedValues indexOfObject:value];
-        BarChartDataEntry *dataEntry = [[BarChartDataEntry alloc] initWithValue:normalizedValues[index].doubleValue 
+        BarChartDataEntry *dataEntry = [[BarChartDataEntry alloc] initWithValue:normalizedValues[index].doubleValue
                                                                          xIndex:index];
         [dataEntries addObject:dataEntry];
     }
-    BarChartDataSet *chartDataSet = [[BarChartDataSet alloc] initWithYVals:dataEntries 
-                                                                     label:@"Store Sales 2013"];
-    chartDataSet.colors = @[[UIColor blackColor]];
-    return chartDataSet;
-}
-
-- (BarChartDataSet *)secondDataSetWithXAxisValues:(NSArray *)xAxisValues
-{
-    NSArray <NSNumber *>*values = @[
-                                    @130.5991, 
-                                    @374.1945, 
-                                    @223.8714, 
-                                    @728.665, 
-                                    @68.1635, 
-                                    @99.8315,
-                                    @167.995,
-                                    @36.7765,
-                                    @105.0405,
-                                    @14.37,
-                                    @156.187,
-                                    @158.1315,
-                                    @495.9335,
-                                    @654.065,
-                                    // @1706.912 - // TOTAL
-                                    ];
-    NSArray <NSNumber *>*normalizedValues = [self normalizeValues:values];
-    NSMutableArray <BarChartDataEntry *>*dataEntries = [NSMutableArray array];
-    for (NSNumber *value in normalizedValues) {
-        NSInteger index = [normalizedValues indexOfObject:value];
-        BarChartDataEntry *dataEntry = [[BarChartDataEntry alloc] initWithValue:normalizedValues[index].doubleValue 
-                                                                         xIndex:index];
-        [dataEntries addObject:dataEntry];
-    }
-    BarChartDataSet *chartDataSet = [[BarChartDataSet alloc] initWithYVals:dataEntries label:@"Store Cost 2013"];
-    chartDataSet.colors = @[[UIColor blueColor]];
-    return chartDataSet;
-}
-
-- (BarChartDataSet *)thirdDataSetWithXAxisValues:(NSArray *)xAxisValues
-{
-    NSArray <NSNumber *>*values = @[
-                                    @0.8563462703357563,
-                                    @0.8928271866810314,
-                                    @0.6330944470377184,
-                                    @0.7890173011216982,
-                                    @0.8367881644850372,
-                                    @0.8296963084197128,
-                                    @0.8324029750048191,
-                                    @0.5651340996168582,
-                                    @0.5187539223671735,
-                                    @0.0,
-                                    @0.5859321719978693,
-                                    @0.6787836030189892,
-                                    @0.9433643149826642,
-                                    @0.8624904719303602,
-                                    //@0.7923236818515335 - // TOTAL
-                                    ];
-    NSArray <NSNumber *>*normalizedValues = [self normalizeValues:values];
-    NSMutableArray <BarChartDataEntry *>*dataEntries = [NSMutableArray array];
-    for (NSNumber *value in normalizedValues) {
-        NSInteger index = [normalizedValues indexOfObject:value];
-        BarChartDataEntry *dataEntry = [[BarChartDataEntry alloc] initWithValue:normalizedValues[index].doubleValue 
-                                                                         xIndex:index];
-        [dataEntries addObject:dataEntry];
-    }
-    BarChartDataSet *chartDataSet = [[BarChartDataSet alloc] initWithYVals:dataEntries label:@"$ Per Sq Foot"];
-    chartDataSet.colors = @[[UIColor redColor]];
+    BarChartDataSet *chartDataSet = [[BarChartDataSet alloc] initWithYVals:dataEntries
+                                                                     label:label];
+    chartDataSet.colors = @[color];
+    chartDataSet.drawValuesEnabled = NO;
     return chartDataSet;
 }
 
@@ -280,6 +277,30 @@ NSString *const kJMAdhocViewWebEnvironemntId = @"kJMAdhocViewWebEnvironemntId";
     return maxValue;
 }
 
+#pragma mark - ChartViewDelegate
+- (void)chartValueSelected:(ChartViewBase * _Nonnull)chartView entry:(ChartDataEntry * _Nonnull)entry dataSetIndex:(NSInteger)dataSetIndex highlight:(ChartHighlight * _Nonnull)highlight
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"entry: %@", entry);
+    JMLog(@"dataSetIndex: %@", @(dataSetIndex));
+    JMLog(@"highlight: %@", highlight);
+//    ChartMarker *marker = [ChartMarker new];
+//    self.barChartView.marker = marker;
+    NSNumber *selectedNumber = @0;
+    if (dataSetIndex == 0) {
+        selectedNumber = self.firstDataSetValues[entry.xIndex];
+    } else if (dataSetIndex == 1) {
+        selectedNumber = self.secondDataSetValues[entry.xIndex];
+    } else if (dataSetIndex == 2) {
+        selectedNumber = self.thirdDataSetValues[entry.xIndex];
+    }
+    JMLog(@"selectedNumber: %@", selectedNumber);
+
+    [self.barChartView.marker refreshContentWithEntry:entry highlight:highlight];
+    JMLog(@"marker: %@", self.barChartView.marker);
+    JMLog(@"drawMarkers: %@", self.barChartView.drawMarkers ? @"YES" : @"NO");
+}
+
 #pragma mark - JMRefreshable
 - (void)refresh
 {
@@ -328,5 +349,11 @@ NSString *const kJMAdhocViewWebEnvironemntId = @"kJMAdhocViewWebEnvironemntId";
 //                                        }
 //                                    }];
 //}
+
+#pragma mark - HighCharts
+- (void)renderHighChartWithCompletion:(void(^)(BOOL success, NSError *error))completion
+{
+
+}
 
 @end
