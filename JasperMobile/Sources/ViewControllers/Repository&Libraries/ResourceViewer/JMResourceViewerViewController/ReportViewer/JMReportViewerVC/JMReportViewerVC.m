@@ -653,32 +653,37 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         case JSReportLoaderErrorTypeAuthentification:
         case JSSessionExpiredErrorCode: {
             if (self.restClient.keepSession) {
+                [self hideReportView];
                 __weak typeof(self) weakSelf = self;
                 JMLog(@"Handle session expired");
                 JMLog(@"self.restClient: %@", self.restClient);
+                // reset pagination
+                [self hidePaginationToolbar];
+                // reset top toolbar
+                [self hideTopToolbarAnimated:NO];
+                [self removeTopToolbar];
+                self.reportPartToolbar = nil;
+                // reset bookmarks
+                [self removeBookmarkItem];
+                // reset report
+                [self.report restoreDefaultState];
+                self.report.isReportAlreadyLoaded = NO;
+                if (![JMUtils isSupportVisualize]) {
+                    JMLog(@"Recreate configutator");
+                    // TODO: udpate rest loader to be able reuse
+                    [self.reportLoader cancel];
+                    self.configurator = nil;
+                } else if (![JMUtils isSystemVersion9] && [JMUtils isSupportVisualize]) {
+                    [self.webEnvironment reset];
+                    [[JMWebViewManager sharedInstance] removeWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
+                    self.webEnvironment = nil;
+                    self.configurator = nil;
+                }
                 [self startShowLoaderWithMessage:@"status_loading"];
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
                     __strong typeof(self) strongSelf = weakSelf;
                     [strongSelf stopShowLoader];
                     if (!result.error) {
-                        // reset pagination
-                        [strongSelf hidePaginationToolbar];
-                        // reset top toolbar
-                        [strongSelf hideTopToolbarAnimated:NO];
-                        [strongSelf removeTopToolbar];
-                        strongSelf.reportPartToolbar = nil;
-                        // reset bookmarks
-                        [strongSelf removeBookmarkItem];
-                        // reset report
-                        [strongSelf.report restoreDefaultState];
-                        strongSelf.report.isReportAlreadyLoaded = NO;
-                        [strongSelf hideReportView];
-                        if (![JMUtils isSupportVisualize]) {
-                            JMLog(@"Recreate configutator");
-                            // TODO: udpate rest loader to be able reuse
-                            [strongSelf.reportLoader cancel];
-                            strongSelf.configurator = nil;
-                        }
                         [strongSelf showSessionExpiredAlert];
                     } else {
                         __weak typeof(self) weakSelf = strongSelf;

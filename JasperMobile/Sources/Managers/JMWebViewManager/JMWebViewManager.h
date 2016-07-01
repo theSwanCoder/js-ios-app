@@ -37,6 +37,7 @@
 @property (nonatomic, strong) NSArray *__nullable cookies;
 + (instancetype __nonnull)sharedInstance;
 - (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier;
+- (void)removeWebEnvironmentWithId:(NSString *__nonnull)identifier;
 - (JMWebEnvironment * __nonnull)webEnvironment;
 - (void)reset;
 @end

@@ -51,22 +51,29 @@
     [self verifyJasperMobileEnableWithCompletion:^(BOOL isJasperMobileEnable) {
         __typeof(self) strongSelf = weakSelf;
         if (isJasperMobileEnable) {
-            completion(YES, nil);
-        } else {
-            [strongSelf loadJasperMobilePageWithCompletion:^(BOOL isLoaded, NSError *error) {
-                if (isLoaded) {
+            [strongSelf verifyVisualizeLoadedWithCompletion:^(BOOL isVisualizeLoaded) {
+                if (isVisualizeLoaded) {
                     completion(YES, nil);
                 } else {
-                    completion(NO, error);
+                    [strongSelf loadVisualizeWithCompletion:completion];
                 }
             }];
+        } else {
+            [strongSelf loadJasperMobilePageWithCompletion:completion];
         }
     }];
 }
 
-- (void)verifyEnvironmentReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
+- (void)verifyVisualizeLoadedWithCompletion:(void(^ __nonnull)(BOOL isVisualizeLoaded))completion
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSAssert(completion != nil, @"Completion is nil");
+    NSString *jsCommand = @"typeof(visualize);";
+    [self.webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
+        BOOL isFunction = [result isEqualToString:@"function"];
+        BOOL isEnable = !error && isFunction;
+        completion(isEnable);
+    }];
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
@@ -93,23 +100,28 @@
            baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
 
     __weak __typeof(self) weakSelf = self;
-    JMWebEnvironmentPendingBlock pendingBlock = ^{
+    [self addPendingBlock:^{
         JMLog(@"JasperMobile was loaded");
         __typeof(self) strongSelf = weakSelf;
-        // load vis into web environment
-        JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
-                                                                                 parameters:@{
-                                                                                         @"scriptURLs" : @[
-                                                                                                 strongSelf.visualizeManager.visualizePath,
-                                                                                                 @"https://code.jquery.com/jquery.min.js"
-                                                                                         ]
-                                                                                 }];
-        [strongSelf sendJavascriptRequest:requireJSLoadRequest
-                               completion:^(NSDictionary *params, NSError *error) {
-                                   completion(error == nil, error);
-                               }];
-    };
-    [self addPendingBlock:pendingBlock];
+        [strongSelf loadVisualizeWithCompletion:completion];
+    }];
+}
+
+- (void)loadVisualizeWithCompletion:(void(^)(BOOL isLoaded, NSError *error))completion
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    // load vis into web environment
+    JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
+                                                                             parameters:@{
+                                                                                     @"scriptURLs" : @[
+                                                                                             self.visualizeManager.visualizePath,
+                                                                                             //@"https://code.jquery.com/jquery.min.js"
+                                                                                     ]
+                                                                             }];
+    [self sendJavascriptRequest:requireJSLoadRequest
+                     completion:^(NSDictionary *params, NSError *error) {
+                         completion(error == nil, error);
+                     }];
 }
 
 @end

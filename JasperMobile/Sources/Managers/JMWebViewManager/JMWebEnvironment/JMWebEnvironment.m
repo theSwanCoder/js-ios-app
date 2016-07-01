@@ -155,12 +155,17 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     NSString *libraryPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject;
     NSString *cookiesFolderPath = [libraryPath stringByAppendingString:@"/Cookies"];
-    NSError *errors;
-    BOOL success = [[NSFileManager defaultManager] removeItemAtPath:cookiesFolderPath error:&errors];
-    if (!success) {
-        JMLog(@"error of removing cookies: %@", errors);
+    NSError *error;
+    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:cookiesFolderPath error:&error];
+    for (NSString *contentPath in contents) {
+        error = nil;
+        NSString *fullContentPath = [cookiesFolderPath stringByAppendingFormat:@"/%@", contentPath];
+        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:fullContentPath error:&error];
+        if (!success) {
+            JMLog(@"error of removing cookies: %@", error);
+        }
     }
-    completion(success);
+    completion(YES);
 }
 
 - (void)loadRequest:(NSURLRequest * __nonnull)request

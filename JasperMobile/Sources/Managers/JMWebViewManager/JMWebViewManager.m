@@ -95,20 +95,22 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMLog(@"identifier: %@", identifier);
-    JMWebEnvironment *webEnvironment;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
-    NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
 
-    if ( filtredWebEnvironments.count == 0 ) {
+    JMWebEnvironment *webEnvironment = [self findWebEnvironmentForId:identifier];
+    if (!webEnvironment) {
         webEnvironment = [self createNewWebEnvironmentWithId:identifier needReuse:YES];
         [self.webEnvironments addObject:webEnvironment];
-    } else if ( filtredWebEnvironments.count > 1 ) {
-        return nil;
-    } else {
-        webEnvironment = [filtredWebEnvironments firstObject];
     }
 
     return webEnvironment;
+}
+
+- (void)removeWebEnvironmentWithId:(NSString * __nonnull)identifier
+{
+    JMWebEnvironment *webEnvironment = [self findWebEnvironmentForId:identifier];
+    if (webEnvironment) {
+        [self.webEnvironments removeObject:webEnvironment];
+    }
 }
 
 - (JMWebEnvironment * __nonnull)webEnvironment
@@ -159,5 +161,21 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
     }
 }
 
+#pragma mark - Helpers
+- (JMWebEnvironment *)findWebEnvironmentForId:(NSString *)identifier
+{
+    JMWebEnvironment *webEnvironment;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
+    NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
+
+    if ( filtredWebEnvironments.count == 0 ) {
+        return nil;
+    } else if ( filtredWebEnvironments.count > 1 ) {
+        return nil;
+    } else {
+        webEnvironment = [filtredWebEnvironments firstObject];
+    }
+    return webEnvironment;
+}
 
 @end
