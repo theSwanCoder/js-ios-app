@@ -472,7 +472,7 @@
     [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(localPageLinkOptionListenerId);
         __typeof(self) strongSelf = weakSelf;
-        NSString *locationString = parameters[@"page"];
+        NSString *locationString = parameters[@"destination"];
         [strongSelf.report updateCurrentPage:locationString.integerValue];
     }];
     NSString *localAnchorLinkOptionListenerId = @"JasperMobile.Report.VIS.API.Event.Link.LocalAnchor";
@@ -483,7 +483,7 @@
     [self.webEnvironment addListenerWithId:referenceLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(referenceLinkOptionListenerId);
         __typeof(self) strongSelf = weakSelf;
-        NSString *locationString = parameters[@"location"];
+        NSString *locationString = parameters[@"destination"];
         if (locationString) {
             NSURL *locationURL = [NSURL URLWithString:locationString];
             if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReference:)]) {
