@@ -379,7 +379,7 @@
     [self.report updateCountOfPages:NSNotFound];
     [self.report updateCurrentPage:pageNumber];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.runReport"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.run"
                                                                 parameters: @{
                                                                         @"uri"        : self.report.reportURI,
                                                                         @"params"     : [self runParameters],
