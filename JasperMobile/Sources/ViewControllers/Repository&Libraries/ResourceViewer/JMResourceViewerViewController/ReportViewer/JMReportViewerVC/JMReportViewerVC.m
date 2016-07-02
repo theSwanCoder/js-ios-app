@@ -907,17 +907,12 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)showEmptyReportMessage
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    JMLog(@"self.emptyReportMessageLabel: %@", self.emptyReportMessageLabel);
     self.emptyReportMessageLabel.hidden = NO;
     [self hidePaginationToolbar];
 }
 
 - (void)hideEmptyReportMessage
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    JMLog(@"self.emptyReportMessageLabel: %@", self.emptyReportMessageLabel);
-
     self.emptyReportMessageLabel.hidden = YES;
     if (self.report.isMultiPageReport) {
         [self showPaginationToolbar];
