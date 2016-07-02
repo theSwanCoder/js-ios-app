@@ -129,9 +129,9 @@
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.selectPage"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.navigateTo"
                                                                 parameters:@{
-                                                                        @"pageNumber" : @(pageNumber)
+                                                                        @"destination" : @(pageNumber)
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
@@ -144,7 +144,8 @@
                                             NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
                                             heapBlock(NO, vizError);
                                         } else {
-                                            [strongSelf.report updateCurrentPage:pageNumber];
+                                            NSNumber *page = parameters[@"destination"];
+                                            [strongSelf.report updateCurrentPage:page.integerValue];
                                             heapBlock(YES, nil);
                                         }
                                     }];
@@ -252,9 +253,11 @@
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.navigateToBookmark"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.navigateTo"
                                                                 parameters:@{
-                                                                        @"anchor" : bookmark.anchor
+                                                                        @"destination" : @{
+                                                                                @"anchor" : bookmark.anchor
+                                                                        }
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
@@ -283,9 +286,9 @@
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.navigateToPage"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.navigateTo"
                                                                 parameters:@{
-                                                                        @"page" : part.page
+                                                                        @"destination" : part.page
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
@@ -298,7 +301,7 @@
                                             NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
                                             heapBlock(NO, vizError);
                                         } else {
-                                            NSNumber *page = parameters[@"page"];
+                                            NSNumber *page = parameters[@"destination"];
                                             [strongSelf.report updateCurrentPage:page.integerValue];
                                             heapBlock(YES, nil);
                                         }
@@ -331,7 +334,7 @@
         return;
     }
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.destroyReport"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.destroy"
                                                                 parameters:nil];
 
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
