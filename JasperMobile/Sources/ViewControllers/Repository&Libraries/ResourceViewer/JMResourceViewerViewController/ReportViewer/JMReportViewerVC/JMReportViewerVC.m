@@ -82,6 +82,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 {
     [super viewDidLoad];
 
+    [self addEmptyReportLabelInView:self.view];
+    [self hideEmptyReportMessage];
     [self addObservers];
 }
 
@@ -229,12 +231,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     if ([self isContentOnTV]) {
         return;
     }
-}
-
-- (void)setupSubviews
-{
-    [self addEmptyReportLabelInView:self.view];
-    [self hideEmptyReportMessage];
 }
 
 - (void)updateToobarAppearence
@@ -911,12 +907,17 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)showEmptyReportMessage
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.emptyReportMessageLabel: %@", self.emptyReportMessageLabel);
     self.emptyReportMessageLabel.hidden = NO;
     [self hidePaginationToolbar];
 }
 
 - (void)hideEmptyReportMessage
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.emptyReportMessageLabel: %@", self.emptyReportMessageLabel);
+
     self.emptyReportMessageLabel.hidden = YES;
     if (self.report.isMultiPageReport) {
         [self showPaginationToolbar];
@@ -1000,6 +1001,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Empty Report Label
 - (UILabel *)createEmptyReportMessageLabel
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     UILabel *label = [UILabel new];
     label.text = JMCustomLocalizedString(@"report_viewer_emptyreport_title", nil);
     return label;
@@ -1007,9 +1009,12 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)addEmptyReportLabelInView:(UIView *)view
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [self.emptyReportMessageLabel removeFromSuperview];
 
     UILabel *emptyReportLabel = [self createEmptyReportMessageLabel];
+    JMLog(@"emptyReportLabel: %@", emptyReportLabel);
+    JMLog(@"view: %@", view);
     [view addSubview:emptyReportLabel];
     self.emptyReportMessageLabel = emptyReportLabel;
 
