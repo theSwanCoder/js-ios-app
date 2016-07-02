@@ -629,7 +629,10 @@ JasperMobile.Report.VIS.privateAPI = {
         container.height = height;
         if (report != undefined && typeof(report.resize) == "function") {
             report.resize();
-            success();
+            success({
+                "width"  : width,
+                "height" : height
+            });
         } else {
             fail({
                 "code" : "undefined",
@@ -690,20 +693,9 @@ JasperMobile.Report.VIS.API = {
     },
     fitReportViewToScreen: function() {
         JasperMobile.Report.VIS.privateAPI.executeOperation("fitReportViewToScreen", null,
-            function() {
+            function(size) {
                 JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.fitReportViewToScreen", {
-                    size: {
-                        "width"  : width,
-                        "height" : height
-                    }
-                });
-            },
-            function(error) {
-                JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.fitReportViewToScreen", {
-                    "error" : {
-                        "code" : error.errorCode,
-                        "message" : error.message
-                    }
+                    "size" : size
                 });
             });
     }

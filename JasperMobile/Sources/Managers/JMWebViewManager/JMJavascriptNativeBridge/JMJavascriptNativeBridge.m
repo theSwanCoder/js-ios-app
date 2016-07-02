@@ -102,7 +102,9 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
                        JMLog(@"result: %@", result);
                        if (error) {
                            [self.requestCompletions removeObjectForKey:request];
-                           completion(nil, error);
+                           if (completion) {
+                               completion(nil, error);
+                           }
                        }
                    }];
 }
