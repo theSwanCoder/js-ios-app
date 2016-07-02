@@ -173,26 +173,7 @@ JasperMobile.Callback = {
 
 JasperMobile.Report = {
     REST : {},
-    VIS  : {
-        activeReport: {
-            container: undefined,
-            object: undefined,
-            totalPages: function() {
-                return this.object.data().totalPages;
-            },
-            currentPage: function() {
-                return this.object.pages();
-            },
-            reset: function () {
-                this.container = undefined;
-                this.object = undefined;
-            }
-        },
-        API: {},
-        privateAPI: {},
-        Helpers : {},
-        Handlers: {}
-    }
+    VIS  : {}
 };
 
 // REST Reports
@@ -402,6 +383,28 @@ JasperMobile.Report.REST.API = {
 };
 
 // VIZ Reports
+JasperMobile.Report.VIS = {
+    activeReport: {
+        container: undefined,
+        object: undefined,
+        totalPages: function() {
+            return this.object.data().totalPages;
+        },
+        currentPage: function() {
+            return this.object.pages();
+        },
+        reset: function () {
+            this.container = undefined;
+            this.object = undefined;
+        }
+    },
+    API: {},
+    privateAPI: {},
+    Helpers : {},
+    Handlers: {
+        Hyperlinks : {}
+    }
+};
 JasperMobile.Report.VIS.Helpers = {
     isAmber: false,
     initReportStructWithParameters: function(parameters) {
@@ -548,8 +551,7 @@ JasperMobile.Report.VIS.Helpers = {
         }
     }
 };
-
-JasperMobile.Report.VIS.Hyperlinks = {
+JasperMobile.Report.VIS.Handlers.Hyperlinks = {
     handleReportExecution: function(link) {
         var data = {
             resource: link.parameters._report,
@@ -597,7 +599,6 @@ JasperMobile.Report.VIS.Hyperlinks = {
         });
     }
 };
-
 JasperMobile.Report.VIS.privateAPI = {
     executeOperation: function(operation, parameters, success, fail) {
         var request = "JasperMobile.Report.VIS.API." + operation;
@@ -675,7 +676,6 @@ JasperMobile.Report.VIS.privateAPI = {
         }
     }
 };
-
 JasperMobile.Report.VIS.API = {
     run: function(params) {
         visualize(
