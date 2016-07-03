@@ -401,7 +401,6 @@ JasperMobile.Report.VIS = {
             nextIndexToFree : 0,
             containers : undefined,
             setContainers: function(parameters) {
-                JasperMobile.Callback.log("setContainers: " + JSON.stringify(parameters));
                 this.containers = parameters["containers"];
                 for (var i = 0; i < this.containers.length; ++i) {
                     var container = this.containers[i];
@@ -443,9 +442,6 @@ JasperMobile.Report.VIS = {
                 return nextContainer;
             },
             findInactiveContainer: function() {
-                JasperMobile.Callback.log("find inactive container");
-                JasperMobile.Callback.log("containers: " + JSON.stringify(this.containers));
-
                 var inActiveContainer = undefined;
                 var container = undefined;
                 for (var i = 0; i < this.containers.length; i++) {
@@ -558,8 +554,6 @@ JasperMobile.Report.VIS = {
             };
         },
         containsReport: function(uri) {
-            JasperMobile.Callback.log("uri: " + uri);
-            JasperMobile.Callback.log("reports: " + JSON.stringify(this.reports));
             return (this.reports[uri] != undefined);
         },
         setActiveReport: function(uri) {
@@ -787,13 +781,11 @@ JasperMobile.Report.VIS.Handlers.Hyperlinks = {
 };
 JasperMobile.Report.VIS.privateAPI = {
     executeOperation: function(report, operation, parameters, success, fail) {
-        JasperMobile.Callback.log("executeOperation: " + operation);
         if (report == undefined) {
             report = JasperMobile.Report.VIS.activeReport
         }
         var request = "JasperMobile.Report.VIS.API." + operation;
         if (fail == undefined) {
-            JasperMobile.Callback.log("create a new fail function");
             fail = function(error) {
                 JasperMobile.Callback.callback(request, {
                     "error" : {
@@ -947,7 +939,6 @@ JasperMobile.Report.VIS.API = {
         );
     },
     destroy: function() {
-        JasperMobile.Callback.log("call 'destroy'");
         JasperMobile.Report.VIS.manager.containerManager.hideContainer(JasperMobile.Report.VIS.activeReport.container);
         JasperMobile.Report.VIS.activeReport = undefined;
         JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.destroy", {});
