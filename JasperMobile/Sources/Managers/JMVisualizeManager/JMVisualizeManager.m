@@ -100,8 +100,7 @@
 {
     if (!_visualizePath) {
         NSString *baseURL = self.restClient.serverProfile.serverUrl;
-        baseURL = [baseURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-        NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js?baseUrl=%@", self.restClient.serverProfile.serverUrl, baseURL];
+        NSString *visualizePath = [[NSString stringWithFormat:@"%@/client/visualize.js?baseUrl=%@", self.restClient.serverProfile.serverUrl, baseURL] queryEncodedString];
         _visualizePath = visualizePath;
     }
     return _visualizePath;

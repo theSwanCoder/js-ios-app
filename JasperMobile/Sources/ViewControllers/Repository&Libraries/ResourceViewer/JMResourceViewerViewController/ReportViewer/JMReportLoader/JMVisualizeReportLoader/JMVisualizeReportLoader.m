@@ -523,6 +523,34 @@
             }
         }
     }];
+    NSString *remoteAnchorListenerId = @"JasperMobile.Report.VIS.API.Event.Link.RemoteAnchor";
+    [self.webEnvironment addListenerWithId:remoteAnchorListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(remoteAnchorListenerId);
+        __typeof(self) strongSelf = weakSelf;
+        JMLog(@"parameters: %@", parameters);
+        NSDictionary *link = parameters[@"link"];
+        if (link && [link isKindOfClass:[NSDictionary class]]) {
+            NSString *href = link[@"href"];
+            if (href) {
+                NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
+                if ([prefix isEqualToString:@"."]) {
+                    href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
+                }
+                NSString *fullURLString = [strongSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
+                JMLog(@"full url string: %@", fullURLString);
+                NSURL *locationURL = [NSURL URLWithString:fullURLString];
+                if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReference:)]) {
+                    [strongSelf.delegate reportLoader:strongSelf didReceiveOnClickEventForReference:locationURL];
+                }
+            }
+        }
+    }];
+    NSString *remotePageListenerId = @"JasperMobile.Report.VIS.API.Event.Link.RemotePage";
+    [self.webEnvironment addListenerWithId:remotePageListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(remotePageListenerId);
+        __typeof(self) strongSelf = weakSelf;
+        JMLog(@"parameters: %@", parameters);
+    }];
 }
 
 #pragma mark - Helpers

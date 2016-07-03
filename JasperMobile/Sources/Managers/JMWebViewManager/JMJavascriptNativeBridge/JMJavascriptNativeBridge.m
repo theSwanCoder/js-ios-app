@@ -113,9 +113,15 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMLog(@"listenerId: %@", listenerId);
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = listenerId;
-    self.listenerCallbacks[request] = [callback copy];
+
+    JMJavascriptRequest *request = [self findListenerForCommand:listenerId];
+    if (!request) {
+        request = [JMJavascriptRequest new];
+        request.command = listenerId;
+        self.listenerCallbacks[request] = [callback copy];
+    } else {
+        JMLog(@"listener is already exists");
+    }
 }
 
 - (void)removeAllListeners

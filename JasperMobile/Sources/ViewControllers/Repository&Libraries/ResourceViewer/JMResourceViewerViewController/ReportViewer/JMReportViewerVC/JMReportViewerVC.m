@@ -53,7 +53,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 @property (nonatomic, strong) JMReport *report;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
-@property (nonatomic, weak) UIBarButtonItem *currentBackButton;
 @end
 
 @implementation JMReportViewerVC
@@ -192,6 +191,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
             [self hideExternalWindowWithCompletion:nil];
         }
     }
+    [self.reportLoader destroy];
     [super cancelResourceViewingAndExit:exit];
 }
 
@@ -207,14 +207,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)backActionInWebView
 {
-    [self startShowLoaderWithMessage:@"status_loading"];
-    __weak typeof(self) weakSelf = self;
-    [self.reportLoader runReportWithPage:self.report.currentPage
-                              completion:^(BOOL success, NSError *error) {
-                                  typeof(self) strongSelf = weakSelf;
-                                  [strongSelf stopShowLoader];
-                                  strongSelf.navigationItem.leftBarButtonItem = strongSelf.currentBackButton;
-                              }];
+    self.report.isReportAlreadyLoaded = NO;
+    [self runReportWithPage:1];
+    [self setupLeftBarButtonItems];
 }
 
 #pragma mark - Notifications
@@ -756,15 +751,18 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 -(void)reportLoader:(id<JMReportLoaderProtocol>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
 {
+    JMLog(@"open reference from URL: %@", urlReference);
     NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
     if ([urlReference.host isEqualToString:serverURL.host]) {
+        [self hidePaginationToolbar];
+        [self hideTopToolbarAnimated:YES];
+
         NSURLRequest *request = [NSURLRequest requestWithURL:urlReference];
         [self.webEnvironment.webView loadRequest:request];
 
         UIBarButtonItem *backButton = [self backButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
                                                          target:self
                                                          action:@selector(backActionInWebView)];
-        self.currentBackButton = self.navigationItem.leftBarButtonItem;
         self.navigationItem.leftBarButtonItem = backButton;
     } else {
         // TODO: open in safari view controller
@@ -777,7 +775,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - WebView helpers
 - (void)resetSubViews
 {
-    [self.reportLoader destroy];
     [self.webEnvironment resetZoom];
     [self.webEnvironment.webView removeFromSuperview];
 

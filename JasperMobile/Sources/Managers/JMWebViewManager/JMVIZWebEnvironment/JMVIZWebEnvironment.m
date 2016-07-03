@@ -120,13 +120,18 @@
                                                                              }];
     [self sendJavascriptRequest:requireJSLoadRequest
                      completion:^(NSDictionary *params, NSError *error) {
-                         [self createContainers];
-                         completion(error == nil, error);
+                         if (error) {
+                             completion(NO, error);
+                         } else {
+                             [self createContainers];
+                             completion(YES, nil);
+                         }
                      }];
 }
 
 - (void)createContainers
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.manager.containerManager.setContainers"
                                                                 parameters:@{
                                                                         @"containers" : @[

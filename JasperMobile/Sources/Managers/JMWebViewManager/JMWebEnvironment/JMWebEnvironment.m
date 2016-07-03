@@ -53,12 +53,6 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
         _identifier = identifier;
         _bridge = [JMJavascriptNativeBridge bridgeWithWebView:_webView];
         _bridge.delegate = self;
-        __weak __typeof(self) weakSelf = self;
-        [self addListenerWithId:@"DOMContentLoaded"
-                       callback:^(NSDictionary *params, NSError *error) {
-                           __typeof(self) strongSelf = weakSelf;
-                           strongSelf.ready = YES;
-                       }];
     }
     return self;
 }
@@ -84,7 +78,13 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
 - (void)addPendingBlock:(JMWebEnvironmentPendingBlock)pendingBlock
 {
     NSAssert(pendingBlock != nil, @"Pending block is nil");
-    [self.pendingBlocks addObject:pendingBlock];
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    if (self.isReady) {
+        JMLog(@"send pending block without saving it");
+        pendingBlock();
+    } else {
+        [self.pendingBlocks addObject:pendingBlock];
+    }
 }
 
 - (void)updateCookiesWithCookies:(NSArray *)cookies
@@ -118,7 +118,15 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
          baseURL:(NSURL * __nullable)baseURL
 {
     NSAssert(HTMLString != nil, @"HTML should not be nil");
-
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    self.ready = NO;
+    __weak __typeof(self) weakSelf = self;
+    [self addListenerWithId:@"DOMContentLoaded"
+                   callback:^(NSDictionary *params, NSError *error) {
+                       __typeof(self) strongSelf = weakSelf;
+                       JMLog(@"Event was received: DOMContentLoaded");
+                       strongSelf.ready = YES;
+                   }];
     [self.bridge startLoadHTMLString:HTMLString
                              baseURL:baseURL];
 }
