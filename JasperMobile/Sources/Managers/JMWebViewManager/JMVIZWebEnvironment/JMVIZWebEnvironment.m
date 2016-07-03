@@ -120,8 +120,32 @@
                                                                              }];
     [self sendJavascriptRequest:requireJSLoadRequest
                      completion:^(NSDictionary *params, NSError *error) {
+                         [self createContainers];
                          completion(error == nil, error);
                      }];
+}
+
+- (void)createContainers
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.manager.containerManager.setContainers"
+                                                                parameters:@{
+                                                                        @"containers" : @[
+                                                                                @{
+                                                                                        @"name" : @"container",
+                                                                                        @"isActive" : @NO
+                                                                                },
+                                                                                @{
+                                                                                        @"name" : @"container1",
+                                                                                        @"isActive" : @NO
+                                                                                },
+                                                                                @{
+                                                                                        @"name" : @"container2",
+                                                                                        @"isActive" : @NO
+                                                                                },
+                                                                        ]
+                                                                }];
+    [self sendJavascriptRequest:request
+                     completion:nil];
 }
 
 @end

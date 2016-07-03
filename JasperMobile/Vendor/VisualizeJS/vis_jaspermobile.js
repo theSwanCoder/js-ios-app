@@ -131,6 +131,15 @@ var JasperMobile = {
                 width: width,
                 height: height
             };
+        },
+        createDivElement: function(name, styles) {
+            var divElement = document.createElement('div');
+            divElement.id = name;
+            for (var styleName in styles) {
+                if (!styles.hasOwnProperty(styleName)) continue;
+                divElement.style.styleName = styles[styleName];
+            }
+            document.body.appendChild(divElement);
         }
     }
 };
@@ -384,18 +393,178 @@ JasperMobile.Report.REST.API = {
 
 // VIZ Reports
 JasperMobile.Report.VIS = {
-    activeReport: {
-        container: undefined,
-        object: undefined,
-        totalPages: function() {
-            return this.object.data().totalPages;
+    activeReport: undefined,
+    manager: {
+        reports: {},
+        containerManager: {
+            activeContainer: undefined,
+            nextIndexToFree : 0,
+            containers : undefined,
+            setContainers: function(parameters) {
+                JasperMobile.Callback.log("setContainers: " + JSON.stringify(parameters));
+                this.containers = parameters["containers"];
+                for (var i = 0; i < this.containers.length; ++i) {
+                    var container = this.containers[i];
+                    JasperMobile.Helper.createDivElement(container.name, {
+                        "width" : "100%",
+                        "height" : "100%",
+                        "margin" : "0 auto"
+                    });
+                }
+            },
+            changeActiveContainer: function() {
+                if (this.activeContainer == undefined) {
+                    this.activeContainer = this.containers[0];
+                } else {
+                    var nextContainer = this.nextContainer();
+                    this.hideContainer(this.activeContainer);
+                    this.showContainer(nextContainer);
+                    this.activeContainer = nextContainer;
+                }
+                this.activeContainer.isActive = true;
+            },
+            nextContainer: function() {
+                var currentIndex = this.containers.indexOf(this.activeContainer);
+                var nextContainer = this.findInactiveContainer();
+
+                // there isn't any free spot,
+                if (nextContainer == undefined) {
+                    var containerToFree = this.containers[this.nextIndexToFree];
+                    JasperMobile.Report.VIS.manager.removeReportInContainer(containerToFree, function() {
+                        JasperMobile.Callback.log("report was removed");
+                    });
+
+                    // chage next index
+                    if (++this.nextIndexToFree == this.containers.length) {
+                        this.nextIndexToFree = 0;
+                    }
+                    nextContainer = containerToFree;
+                }
+                return nextContainer;
+            },
+            findInactiveContainer: function() {
+                JasperMobile.Callback.log("find inactive container");
+                JasperMobile.Callback.log("containers: " + JSON.stringify(this.containers));
+
+                var inActiveContainer = undefined;
+                var container = undefined;
+                for (var i = 0; i < this.containers.length; i++) {
+                    container = this.containers[i];
+                    if (container.isActive) {
+                        continue;
+                    } else {
+                        inActiveContainer = container;
+                        break;
+                    }
+                }
+                return inActiveContainer;
+            },
+            hideContainer: function(container) {
+                var element = document.getElementById(container.name);
+                element.style.display = "none";
+            },
+            showContainer: function(container) {
+                var element = document.getElementById(container.name);
+                element.style.display = "block";
+            },
+            clearContainer: function(container) {
+                var containerElement = document.getElementById(container.name);
+                containerElement.innerHTML = "";
+            },
+            reset: function() {
+                for(var i = 0; i < this.containers.length; ++i) {
+                    var container = this.containers[i];
+                    container.isActive = false;
+                }
+                this.nextIndexToFree = 0;
+            }
         },
-        currentPage: function() {
-            return this.object.pages();
+        addReport:function(object) {
+            var report = this.createReport(object);
+            report.container = this.containerManager.activeContainer;
+            var uri = report.object.resource();
+            report.uri = uri;
+            JasperMobile.Report.VIS.activeReport = report;
+            this.reports[uri] = report;
         },
-        reset: function () {
-            this.container = undefined;
-            this.object = undefined;
+        removeReportInContainer: function(container, success) {
+            var report = this.findReportInContainer(container);
+            if (report != undefined) {
+                delete this.reports[report.uri];
+                report.destroy(success);
+            } else {
+                // TODO: show error
+                JasperMobile.Callback.log("error of finding report in container");
+            }
+        },
+        findReportInContainer: function(container) {
+            var reportInContainer = undefined;
+            for (var reportURI in this.reports) {
+                if (!this.reports.hasOwnProperty(reportURI)) continue;
+
+                var report = this.reports[reportURI];
+                if (report.container.name == container.name) {
+                    reportInContainer = report;
+                    break;
+                }
+            }
+            return reportInContainer;
+        },
+        removeAllReports: function() {
+            for (var reportURI in this.reports) {
+                if (!this.reports.hasOwnProperty(reportURI)) continue;
+
+                var report = this.reports[reportURI];
+                (function(self, report){
+                    report.destroy(
+                        function () {
+                            JasperMobile.Callback.log("report was destroyed at: " + report.uri);
+                        },
+                        function(error){
+                            self.containerManager.clearContainer(report.container);
+                            JasperMobile.Callback.log("error while destroying report: " + report.uri);
+                            JasperMobile.Callback.log("error: " + JSON.stringify(error));
+                        })
+                })(this, report);
+            }
+            this.reports = {};
+        },
+        createReport: function(object) {
+            return {
+                object: object,
+                container: undefined,
+                uri: undefined,
+                totalPages: function() {
+                    return this.object.data().totalPages;
+                },
+                currentPage: function() {
+                    return this.object.pages();
+                },
+                bookmarks: function() {
+                    return this.object.data().bookmarks;
+                },
+                parts: function() {
+                    return this.object.data().reportParts;
+                },
+                destroy: function(success, fail) {
+                    JasperMobile.Report.VIS.privateAPI.executeOperation(
+                        this,
+                        "destroy",
+                        null,
+                        success,
+                        fail
+                    );
+                }
+            };
+        },
+        containsReport: function(uri) {
+            JasperMobile.Callback.log("uri: " + uri);
+            JasperMobile.Callback.log("reports: " + JSON.stringify(this.reports));
+            return (this.reports[uri] != undefined);
+        },
+        setActiveReport: function(uri) {
+            JasperMobile.Report.VIS.activeReport = this.reports[uri];
+            this.containerManager.showContainer(JasperMobile.Report.VIS.activeReport.container);
         }
     },
     API: {},
@@ -403,6 +572,11 @@ JasperMobile.Report.VIS = {
     Helpers : {},
     Handlers: {
         Hyperlinks : {}
+    },
+    reset: function() {
+        this.activeReport = undefined;
+        this.manager.containerManager.reset();
+        this.manager.removeAllReports();
     }
 };
 JasperMobile.Report.VIS.Helpers = {
@@ -418,11 +592,13 @@ JasperMobile.Report.VIS.Helpers = {
         return report;
     },
     runFn: function(params) {
+        var self = this;
         return function(v) {
-            var parameters = params;
-            parameters["container"] = "container";
-            JasperMobile.Report.VIS.activeReport.object = v.report(JasperMobile.Report.VIS.Helpers.initReportStructWithParameters(parameters));
-            JasperMobile.Report.VIS.activeReport.container = parameters["container"];
+            // TODO: where to get container? manager?
+            //params["container"] = "container";
+            var reportObject = v.report(self.initReportStructWithParameters(params));
+            // save report object
+            JasperMobile.Report.VIS.manager.addReport(reportObject);
         };
     },
     structFn: function(parameters) {
@@ -436,12 +612,13 @@ JasperMobile.Report.VIS.Helpers = {
     },
     baseStructFn: function(parameters) {
         var self = this;
+        var container = JasperMobile.Report.VIS.manager.containerManager.activeContainer.name;
         return {
             resource: parameters["uri"],
             params: parameters["params"],
             pages: parameters["pages"],
             scale: "width",
-            container: "#" + parameters["container"],
+            container: "#" + container,
             success: self.success,
             error: self.failed,
             events: self.events,
@@ -452,10 +629,19 @@ JasperMobile.Report.VIS.Helpers = {
             }
         };
     },
-    success: function(status) {
+    success: function(reportData) {
+        var status = "undefined";
+        if (JasperMobile.Report.VIS.activeReport.totalPages() == undefined) {
+            status = "inProgress";
+        } else {
+            status = "ready";
+        }
         JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.run", {
-            "status" : status,
-            "pages" : JasperMobile.Report.VIS.activeReport.totalPages()
+            "status"      : status,
+            "currentPage" : JasperMobile.Report.VIS.activeReport.currentPage(),
+            "totalPages"  : JasperMobile.Report.VIS.activeReport.totalPages(),
+            "bookmarks"   : JasperMobile.Report.VIS.activeReport.bookmarks(),
+            "parts"       : JasperMobile.Report.VIS.activeReport.parts()
         });
     },
     failed: function(error) {
@@ -600,7 +786,11 @@ JasperMobile.Report.VIS.Handlers.Hyperlinks = {
     }
 };
 JasperMobile.Report.VIS.privateAPI = {
-    executeOperation: function(operation, parameters, success, fail) {
+    executeOperation: function(report, operation, parameters, success, fail) {
+        JasperMobile.Callback.log("executeOperation: " + operation);
+        if (report == undefined) {
+            report = JasperMobile.Report.VIS.activeReport
+        }
         var request = "JasperMobile.Report.VIS.API." + operation;
         if (fail == undefined) {
             JasperMobile.Callback.log("create a new fail function");
@@ -613,22 +803,22 @@ JasperMobile.Report.VIS.privateAPI = {
                 });
             }
         }
-        if (JasperMobile.Report.VIS.activeReport.object) {
+        if (report) {
             if( typeof(this[operation]) == "function" ) {
                 this[operation](
-                    JasperMobile.Report.VIS.activeReport,
+                    report,
                     parameters,
                     success,
                     fail
                 );
             } else {
-                JasperMobile.Callback.log("Wrong operation: " + operation);
+                JasperMobile.Callback.log("Wrong operation: " + JSON.stringify(operation));
             }
         } else {
             JasperMobile.Callback.callback(request, {
                 "error": {
                     "code" : "visualize.error",
-                    "message" : "JasperMobile.Report.VIS.activeReport.object == nil"
+                    "message" : "Report object is not exist!"
                 }
             });
         }
@@ -659,7 +849,7 @@ JasperMobile.Report.VIS.privateAPI = {
             .fail(fail);
     },
     fitReportViewToScreen: function(report, parameters, success, fail) {
-        var container = document.getElementById(report.container);
+        var container = document.getElementById(report.container.name);
         container.width = JasperMobile.Helper.sizeOfWindow().width;
         container.height = JasperMobile.Helper.sizeOfWindow().height;
         if (report.object != undefined && typeof(report.object.resize) == "function") {
@@ -678,57 +868,104 @@ JasperMobile.Report.VIS.privateAPI = {
 };
 JasperMobile.Report.VIS.API = {
     run: function(params) {
-        visualize(
-            JasperMobile.Report.VIS.Helpers.authFn(),
-            JasperMobile.Report.VIS.Helpers.runFn(params),
-            JasperMobile.Report.VIS.Helpers.failed
-        );
+        if (JasperMobile.Report.VIS.manager.containsReport(params["uri"])) {
+            JasperMobile.Report.VIS.manager.setActiveReport(params["uri"]);
+            if (JasperMobile.Report.VIS.activeReport.currentPage() == 1) {
+                JasperMobile.Report.VIS.Helpers.success(JasperMobile.Report.VIS.activeReport.object.data());
+            } else {
+                this.navigateTo(
+                    {"destination" : 1},
+                    JasperMobile.Report.VIS.Helpers.success
+                );
+            }
+        } else {
+            JasperMobile.Report.VIS.manager.containerManager.changeActiveContainer();
+            visualize(
+                JasperMobile.Report.VIS.Helpers.authFn(),
+                JasperMobile.Report.VIS.Helpers.runFn(params),
+                JasperMobile.Report.VIS.Helpers.failed
+            );
+        }
     },
-    refresh: function() {
-        JasperMobile.Report.VIS.privateAPI.executeOperation("refresh", null,
-            function(status) {
+    refresh: function(success) {
+        if (typeof(success) != "function") {
+            success = function(status) {
                 JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.refresh", {
                     "status": status,
                     "totalPages": JasperMobile.Report.VIS.activeReport.totalPages()
                 });
-            });
+            };
+        }
+        JasperMobile.Report.VIS.privateAPI.executeOperation(
+            undefined,
+            "refresh",
+            undefined,
+            success
+        );
     },
-    applyReportParams: function(parameters) {
-        JasperMobile.Report.VIS.privateAPI.executeOperation("updateReportWithParameters", parameters,
-            function(reportData) {
+    applyReportParams: function(parameters, success) {
+        if (typeof(success) != "function") {
+            success = function(reportData) {
                 JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.applyReportParams", {
                     "pages": reportData.totalPages
                 });
-            });
+            };
+        }
+        JasperMobile.Report.VIS.privateAPI.executeOperation(
+            undefined,
+            "updateReportWithParameters",
+            parameters,
+            success
+        );
     },
-    navigateTo: function(parameters) {
-        JasperMobile.Report.VIS.privateAPI.executeOperation("navigateTo", parameters,
-            function(data) {
+    navigateTo: function(parameters, success) {
+        if (typeof(success) != "function") {
+            success = function(data) {
                 JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.navigateTo", {
                     "destination": JasperMobile.Report.VIS.activeReport.currentPage()
                 });
-            });
+            };
+        }
+        JasperMobile.Report.VIS.privateAPI.executeOperation(
+            undefined,
+            "navigateTo",
+            parameters,
+            success
+        );
     },
-    cancel: function() {
-        JasperMobile.Report.VIS.privateAPI.executeOperation("cancel", null,
-            function() {
+    cancel: function(success) {
+        if (typeof(success) != "function") {
+            success = function() {
                 JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.cancel", {});
-            });
+            };
+        }
+        JasperMobile.Report.VIS.privateAPI.executeOperation(
+            undefined,
+            "cancel",
+            undefined,
+            success
+        );
     },
     destroy: function() {
-        JasperMobile.Report.VIS.privateAPI.executeOperation("destroy", null,
-            function() {
-                JasperMobile.Report.VIS.activeReport.reset();
-                JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.destroy", {});
-            });
+        JasperMobile.Callback.log("call 'destroy'");
+        JasperMobile.Report.VIS.manager.containerManager.hideContainer(JasperMobile.Report.VIS.activeReport.container);
+        JasperMobile.Report.VIS.activeReport = undefined;
+        JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.destroy", {});
     },
-    fitReportViewToScreen: function() {
-        JasperMobile.Report.VIS.privateAPI.executeOperation("fitReportViewToScreen", null,
-            function(size) {
+    fitReportViewToScreen: function(success) {
+        if (typeof(success) != "function") {
+            success = function(size) {
                 JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.fitReportViewToScreen", {
                     "size" : size
                 });
-            });
+            };
+        }
+        JasperMobile.Report.VIS.privateAPI.executeOperation(
+            undefined,
+            "fitReportViewToScreen",
+            null,
+            success
+        );
     }
 };
 

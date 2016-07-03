@@ -358,6 +358,15 @@
                                     completion:nil];
 }
 
+- (void)reset
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.reset"
+                                                                parameters:nil];
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:nil];
+}
+
 #pragma mark - Private
 
 - (void)freshLoadReportWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock __nonnull)completion
@@ -404,6 +413,29 @@
                                             heapBlock(NO, vizError);
                                         } else {
                                             strongSelf.report.isReportAlreadyLoaded = YES;
+                                            NSString *status = parameters[@"status"];
+                                            NSNumber *currentPage = parameters[@"currentPage"];
+                                            NSNumber *totalPages = parameters[@"totalPages"];
+
+                                            if ([status isEqualToString:@"ready"]) {
+                                                [strongSelf.report updateCurrentPage:currentPage.integerValue];
+                                                [strongSelf.report updateCountOfPages:totalPages.integerValue];
+                                            } else {
+                                                if (currentPage) {
+                                                    [strongSelf.report updateCurrentPage:currentPage.integerValue];
+                                                }
+                                            }
+
+                                            NSArray *bookmarks = parameters[@"bookmarks"];
+                                            if (bookmarks && [bookmarks isKindOfClass:[NSArray class]]) {
+                                                strongSelf.report.bookmarks = [strongSelf mapBookmarksFromParams:bookmarks];
+                                            }
+
+                                            NSArray *parts = parameters[@"parts"];
+                                            if (parts && [parts isKindOfClass:[NSArray class]]) {
+                                                strongSelf.report.parts = [strongSelf mapReportPartsFromParams:parts];
+                                            }
+
                                             heapBlock(YES, nil);
                                         }
                                     }];

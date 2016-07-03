@@ -168,7 +168,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)reportDidUpdateParts
 {
-    if (self.report.parts) {
+    if (self.report.parts && self.report.parts.count > 0) {
         // TODO: need ability remove from top toolbar?
         [self addTopToolbar:self.reportPartToolbar];
         [self showTopToolbarAnimated:YES];
@@ -675,6 +675,9 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                     self.webEnvironment = nil;
                     self.configurator = nil;
                 }
+                if ([self.reportLoader respondsToSelector:@selector(reset)]) {
+                    [self.reportLoader reset];
+                }
                 [self startShowLoaderWithMessage:@"status_loading"];
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
                     __strong typeof(self) strongSelf = weakSelf;
@@ -1107,7 +1110,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 #pragma mark - Bookmarks
 - (BOOL)reportHasBookmarks
 {
-    return self.report.bookmarks != nil;
+    return self.report.bookmarks != nil && self.report.bookmarks.count > 0;
 }
 
 - (void)showBookmarks

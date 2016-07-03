@@ -55,6 +55,7 @@
 - (void)navigateToBookmark:(JMReportBookmark *__nonnull)bookmark withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion; /** @since 2.6 */
 - (void)navigateToPart:(JMReportPart *__nonnull)part withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion; /** @since 2.6 */
 - (void)fitReportViewToScreen;
+- (void)reset;
 @end
 
 @protocol JMReportLoaderDelegate <NSObject>
