@@ -115,7 +115,7 @@
                                                                              parameters:@{
                                                                                      @"scriptURLs" : @[
                                                                                              self.visualizeManager.visualizePath,
-                                                                                             //@"https://code.jquery.com/jquery.min.js"
+                                                                                             @"https://code.jquery.com/jquery.min.js"
                                                                                      ]
                                                                              }];
     [self sendJavascriptRequest:requireJSLoadRequest
