@@ -140,6 +140,13 @@ var JasperMobile = {
                 divElement.style.styleName = styles[styleName];
             }
             document.body.appendChild(divElement);
+        },
+        removeDivElement: function(name) {
+            var divElement = document.getElementById(name);
+            document.body.removeChild(divElement);
+        },
+        existDivElement: function(name) {
+            return document.getElementById(name) != undefined;
         }
     }
 };
@@ -398,6 +405,10 @@ JasperMobile.Report.VIS = {
         reports: {},
         containerManager: {
             activeContainer: undefined,
+            defaultContainer: {
+                name : "container",
+                isActive : true
+            },
             nextIndexToFree : 0,
             containers : undefined,
             setContainers: function(parameters) {
@@ -410,6 +421,23 @@ JasperMobile.Report.VIS = {
                         "margin" : "0 auto"
                     });
                 }
+            },
+            chooseDefaultContainer: function() {
+                if (!JasperMobile.Helper.existDivElement(this.defaultContainer.name)) {
+                    this.createDefaultContainer();
+                }
+                this.activeContainer = this.defaultContainer;
+            },
+            createDefaultContainer: function() {
+                var containerName = JasperMobile.Report.VIS.manager.containerManager.defaultContainer;
+                JasperMobile.Helper.createDivElement(containerName.name, {
+                    "width" : "100%",
+                    "height" : "100%",
+                    "margin" : "0 auto"
+                });
+            },
+            removeDefaultContainer: function() {
+                JasperMobile.Helper.removeDivElement(this.defaultContainer.name);
             },
             changeActiveContainer: function() {
                 if (this.activeContainer == undefined) {
@@ -591,8 +619,15 @@ JasperMobile.Report.VIS.Helpers = {
             // TODO: where to get container? manager?
             //params["container"] = "container";
             var reportObject = v.report(self.initReportStructWithParameters(params));
-            // save report object
-            JasperMobile.Report.VIS.manager.addReport(reportObject);
+            if (JasperMobile.Report.VIS.manager.containerManager.containers != undefined &&
+                JasperMobile.Report.VIS.manager.containerManager.containers.length > 0) {
+                // save report object
+                JasperMobile.Report.VIS.manager.addReport(reportObject);
+            } else {
+                var report = JasperMobile.Report.VIS.manager.createReport(reportObject);
+                report.container = JasperMobile.Report.VIS.manager.containerManager.activeContainer;
+                JasperMobile.Report.VIS.activeReport = report;
+            }
         };
     },
     structFn: function(parameters) {
@@ -889,7 +924,13 @@ JasperMobile.Report.VIS.API = {
                 );
             }
         } else {
-            JasperMobile.Report.VIS.manager.containerManager.changeActiveContainer();
+            if (JasperMobile.Report.VIS.manager.containerManager.containers != undefined &&
+                JasperMobile.Report.VIS.manager.containerManager.containers.length > 0) {
+                // Choose other container
+                JasperMobile.Report.VIS.manager.containerManager.changeActiveContainer();
+            } else {
+                JasperMobile.Report.VIS.manager.containerManager.chooseDefaultContainer();
+            }
             visualize(
                 JasperMobile.Report.VIS.Helpers.authFn(),
                 JasperMobile.Report.VIS.Helpers.runFn(params),
@@ -957,9 +998,16 @@ JasperMobile.Report.VIS.API = {
         );
     },
     destroy: function() {
-        JasperMobile.Report.VIS.manager.containerManager.hideContainer(JasperMobile.Report.VIS.activeReport.container);
-        JasperMobile.Report.VIS.activeReport = undefined;
-        JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.destroy", {});
+        if (JasperMobile.Report.VIS.manager.containerManager.containers != undefined &&
+            JasperMobile.Report.VIS.manager.containerManager.containers.length > 0) {
+            JasperMobile.Report.VIS.manager.containerManager.hideContainer(JasperMobile.Report.VIS.activeContainer);
+        } else {
+            JasperMobile.Report.VIS.activeReport.destroy(function() {
+                JasperMobile.Report.VIS.manager.containerManager.activeContainer = undefined;
+                JasperMobile.Report.VIS.activeReport = undefined;
+                JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.destroy", {});
+            });
+        }
     },
     fitReportViewToScreen: function(success) {
         if (typeof(success) != "function") {
