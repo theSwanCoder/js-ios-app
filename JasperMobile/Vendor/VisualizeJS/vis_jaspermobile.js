@@ -794,7 +794,7 @@ JasperMobile.Report.VIS.Handlers.Hyperlinks = {
                 anchor:link.anchor
             }
         };
-        JasperMobile.Report.VIS.privateAPI.executeOperation("navigateTo", parameters,
+        JasperMobile.Report.VIS.privateAPI.executeOperation(undefined, "navigateTo", parameters,
             function(data) {
                 JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.Event.Link.LocalAnchor", {
                     "destination" : link.pages
@@ -808,7 +808,7 @@ JasperMobile.Report.VIS.Handlers.Hyperlinks = {
         var parameters = {
             "destination": link.pages
         };
-        JasperMobile.Report.VIS.privateAPI.executeOperation("navigateTo", parameters,
+        JasperMobile.Report.VIS.privateAPI.executeOperation(undefined, "navigateTo", parameters,
             function(data) {
                 JasperMobile.Callback.listener("JasperMobile.Report.VIS.API.Event.Link.LocalPage", {
                     "destination" : link.pages
