@@ -337,13 +337,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                                             if (strongSelf.initialReportParameters) {
                                                                                                 [strongSelf.report updateReportParameters:strongSelf.initialReportParameters];
                                                                                             }
-                                                                                            [strongSelf startLoadReportWithPage:1];
+                                                                                            [strongSelf startLoadReportWithPage:strongSelf.initialPage];
                                                                                         }
                                                                                     }
                                                                                 }];
                                                                             } else {
                                                                                 [strongSelf stopShowLoader];
-                                                                                [strongSelf startLoadReportWithPage:1];
+                                                                                [strongSelf startLoadReportWithPage:strongSelf.initialPage];
                                                                             }
                                                                         }
                                                                     }];
@@ -429,6 +429,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 }
 
 #pragma mark - Custom accessors
+- (NSInteger)initialPage
+{
+    if (_initialPage == 0) {
+        _initialPage = 1;
+    }
+    return _initialPage;
+}
 - (JMWebEnvironment *)currentWebEnvironment
 {
     return [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
@@ -737,6 +744,16 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
     reportViewController.resource = resource;
     reportViewController.initialReportParameters = reportParameters;
+    reportViewController.isChildReport = YES;
+    [self.navigationController pushViewController:reportViewController animated:YES];
+}
+
+- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resource withParameters:(NSArray *__nullable)reportParameters page:(NSInteger)page
+{
+    JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+    reportViewController.resource = resource;
+    reportViewController.initialReportParameters = reportParameters;
+    reportViewController.initialPage = page;
     reportViewController.isChildReport = YES;
     [self.navigationController pushViewController:reportViewController animated:YES];
 }

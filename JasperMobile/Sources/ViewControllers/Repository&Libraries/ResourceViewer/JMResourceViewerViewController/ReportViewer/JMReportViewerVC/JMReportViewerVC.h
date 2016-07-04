@@ -41,4 +41,5 @@
 @property (nonatomic, assign) BOOL isChildReport;
 @property (nonatomic, copy) void(^exitBlock)(void);
 @property (nonatomic, strong) NSArray *initialReportParameters;
+@property (nonatomic, assign) NSInteger initialPage;
 @end

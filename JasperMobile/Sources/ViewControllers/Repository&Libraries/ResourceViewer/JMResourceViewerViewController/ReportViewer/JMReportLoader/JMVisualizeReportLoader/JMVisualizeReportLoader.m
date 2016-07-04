@@ -573,44 +573,71 @@
 #pragma mark - Hyperlinks handlers
 - (void)handleRunReportWithParameters:(NSDictionary *)parameters
 {
-    NSDictionary *params = parameters[@"data"];
-    if (!params) {
+    JMLog(@"parameters: %@", parameters);
+    NSDictionary *data = parameters[@"data"];
+    if (!data) {
         return;
     }
 
-    NSString *reportPath = params[@"resource"];
+    if (![self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResource:withParameters:page:)]) {
+        return;
+    }
+
+    NSString *reportPath = data[@"resource"];
     if (reportPath) {
-        [self.restClient resourceLookupForURI:reportPath resourceType:kJS_WS_TYPE_REPORT_UNIT modelClass:[JSResourceLookup class] completionBlock:^(JSOperationResult *result) {
-            NSError *error = result.error;
-            if (error) {
-                NSString *errorString = error.localizedDescription;
-                JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
-                if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
-                    errorType = JSReportLoaderErrorTypeAuthentification;
-                }
-                if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventWithError:)]) {
-                    [self.delegate reportLoader:self didReceiveOnClickEventWithError:[self createErrorWithType:errorType errorMessage:errorString]];
-                }
-            } else {
-                JSResourceLookup *resourceLookup = [result.objects firstObject];
-                if (resourceLookup) {
-                    resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
+        [self.restClient resourceLookupForURI:reportPath
+                                 resourceType:kJS_WS_TYPE_REPORT_UNIT
+                                   modelClass:[JSResourceLookup class]
+                              completionBlock:^(JSOperationResult *result) {
+                                  NSError *error = result.error;
+                                  if (error) {
+                                      NSString *errorString = error.localizedDescription;
+                                      JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
+                                      if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
+                                          errorType = JSReportLoaderErrorTypeAuthentification;
+                                      }
+                                      if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventWithError:)]) {
+                                          [self.delegate reportLoader:self
+                                      didReceiveOnClickEventWithError:[self createErrorWithType:errorType
+                                                                                   errorMessage:errorString]];
+                                      }
+                                  } else {
+                                      JSResourceLookup *resourceLookup = [result.objects firstObject];
+                                      if (resourceLookup) {
+                                          resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
 
-                    NSMutableArray *reportParameters = [NSMutableArray array];
-                    NSDictionary *rawParameters = params[@"params"];
-                    for (NSString *key in rawParameters) {
-                        JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:key
-                                                                                               value:rawParameters[key]];
-                        [reportParameters addObject:reportParameter];
-                    }
+                                          NSMutableArray *reportParameters = [NSMutableArray array];
+                                          NSDictionary *rawParameters = data[@"params"];
+                                          for (NSString *key in rawParameters) {
+                                              JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:key
+                                                                                                                     value:rawParameters[key]];
+                                              [reportParameters addObject:reportParameter];
+                                          }
 
-                    JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
-                    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResource:withParameters:)]) {
-                        [self.delegate reportLoader:self didReceiveOnClickEventForResource:resource withParameters:[reportParameters copy]];
-                    }
-                }
-            }
-        }];
+                                          JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
+                                          NSInteger initialPage = 1;
+                                          NSDictionary *params = data[@"params"];
+                                          if (params && [params isKindOfClass:[NSDictionary class]]) {
+                                              NSArray *pages = params[@"_page"];
+                                              if (pages && [pages isKindOfClass:[NSArray class]]) {
+                                                  // TODO: need support multipages?
+                                                  NSString *page = pages.firstObject;
+                                                  if (page && [page isKindOfClass:[NSString class]]) {
+                                                      // TODO: investigate other cases
+                                                      NSInteger pageValue = page.integerValue;
+                                                      if (pageValue > 0) {
+                                                          initialPage = pageValue;
+                                                      }
+                                                  }
+                                              }
+                                          }
+                                          [self.delegate reportLoader:self
+                                    didReceiveOnClickEventForResource:resource
+                                                       withParameters:[reportParameters copy]
+                                                                 page:initialPage];
+                                      }
+                                  }
+                              }];
     }
 }
 
