@@ -28,6 +28,7 @@
 
 #import "JMWebEnvironment.h"
 #import "JMJavascriptNativeBridge.h"
+#import "JMReportDestination.h"
 
 NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnvironmentDidResetNotification";
 

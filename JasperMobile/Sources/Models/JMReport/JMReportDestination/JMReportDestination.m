@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,24 +22,12 @@
 
 
 //
-//  JMReportViewerVC.h
+//  JMReportDestination.h
 //  TIBCO JasperMobile
 //
 
-/**
-@author Aleksandr Dakhno odahno@tibco.com
-@since 2.1
-*/
+#import "JMReportDestination.h"
 
-#import "JMResourceViewerViewController.h"
-#import "JMRefreshable.h"
-#import "JMReport.h"
-#import "JMReportLoaderProtocol.h"
 
-@interface JMReportViewerVC : JMResourceViewerViewController <JMRefreshable>
-@property (nonatomic, strong, readonly) JMReport *report;
-@property (nonatomic, assign) BOOL isChildReport;
-@property (nonatomic, copy) void(^exitBlock)(void);
-@property (nonatomic, strong) NSArray *initialReportParameters;
-@property (nonatomic, strong) JMReportDestination *initialDestination;
+@implementation JMReportDestination
 @end

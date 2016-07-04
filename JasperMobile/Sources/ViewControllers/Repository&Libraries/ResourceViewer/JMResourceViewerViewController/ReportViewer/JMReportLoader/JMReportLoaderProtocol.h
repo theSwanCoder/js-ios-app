@@ -38,6 +38,7 @@
 @class JMResource;
 @class JMReportBookmark;
 @class JMReportPart;
+@class JMReportDestination;
 
 @protocol JMReportLoaderProtocol <JSReportLoaderProtocol>
 
@@ -52,6 +53,7 @@
                                            restClient:(nonnull JSRESTBase *)restClient
                                        webEnvironment:(nonnull JMWebEnvironment *)webEnvironment;
 - (void)exportReportWithFormat:(NSString * __nonnull)exportFormat;
+- (void)runReportWithDestination:(JMReportDestination *__nonnull)destination completion:(nonnull JSReportLoaderCompletionBlock)completion;
 - (void)navigateToBookmark:(JMReportBookmark *__nonnull)bookmark withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion; /** @since 2.6 */
 - (void)navigateToPart:(JMReportPart *__nonnull)part withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion; /** @since 2.6 */
 - (void)fitReportViewToScreen;
@@ -60,7 +62,7 @@
 @protocol JMReportLoaderDelegate <NSObject>
 @optional
 - (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resource withParameters:(NSArray *__nullable)reportParameters;
-- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resource withParameters:(NSArray *__nullable)reportParameters page:(NSInteger)page;
+- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resource withParameters:(NSArray *__nullable)reportParameters destination:(JMReportDestination *__nonnull)destination;
 - (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventWithError:(NSError *__nonnull)error;
 - (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoder didReceiveOnClickEventForReference:(NSURL *__nonnull)urlReference;
 @end

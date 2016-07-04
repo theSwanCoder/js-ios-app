@@ -34,6 +34,7 @@
 #import "JMJavascriptNativeBridge.h"
 #import "JMReportBookmark.h"
 #import "JMReportPart.h"
+#import "JMReportDestination.h"
 
 @interface JMVisualizeReportLoader()
 @property (nonatomic, weak, readwrite) JMReport *report;
@@ -88,7 +89,7 @@
 }
 
 #pragma mark - Public API
-- (void)runReportWithPage:(NSInteger)page completion:(JSReportLoaderCompletionBlock __nonnull)completion
+- (void)runReportWithDestination:(JMReportDestination *)destination completion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.report != nil, @"Report is nil");
@@ -99,8 +100,8 @@
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
     if (self.report.isReportAlreadyLoaded) {
-        [self freshLoadReportWithPageNumber:page
-                                       completion:heapBlock];
+        [self freshLoadReportWithDestination:destination
+                                 completion:heapBlock];
     } else {
         __weak __typeof(self) weakSelf = self;
         [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
@@ -109,13 +110,20 @@
                 return;
             }
             if (isReady) {
-                [strongSelf freshLoadReportWithPageNumber:page
+                [strongSelf freshLoadReportWithDestination:destination
                                                completion:heapBlock];
             } else {
                 heapBlock(NO, [strongSelf loaderErrorFromBridgeError:error]);
             }
         }];
     }
+}
+
+- (void)runReportWithPage:(NSInteger)page completion:(JSReportLoaderCompletionBlock __nonnull)completion
+{
+    JMReportDestination *destination = [JMReportDestination new];
+    destination.page = page;
+    [self runReportWithDestination:destination completion:completion];
 }
 
 - (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion
@@ -359,8 +367,7 @@
 }
 
 #pragma mark - Private
-
-- (void)freshLoadReportWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock __nonnull)completion
+- (void)freshLoadReportWithDestination:(JMReportDestination *)destination completion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
 
@@ -380,18 +387,28 @@
     self.isReportInLoadingProcess = YES;
 
     [self.report updateCountOfPages:NSNotFound];
-    [self.report updateCurrentPage:pageNumber];
+    [self.report updateCurrentPage:destination.page];
+
+    id pages;
+    if (destination.anchor) {
+        pages =  @{
+                @"anchor" : destination.anchor,
+        };
+    } else {
+        pages = @(destination.page);
+    }
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.run"
                                                                 parameters: @{
                                                                         @"uri"        : self.report.reportURI,
                                                                         @"params"     : [self runParameters],
-                                                                        @"pages"      : @(pageNumber),
+                                                                        @"pages"      : pages,
                                                                         @"is_for_6_0" : @([JMUtils isServerAmber]),
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:^(NSDictionary *parameters, NSError *error) {
+                                        JMLog(@"parameters: %@", parameters);
                                         __typeof(self) strongSelf = weakSelf;
                                         if (strongSelf.isCancelLoading) {
                                             return;
@@ -405,15 +422,18 @@
                                         } else {
                                             strongSelf.report.isReportAlreadyLoaded = YES;
                                             NSString *status = parameters[@"status"];
-                                            NSNumber *currentPage = parameters[@"currentPage"];
+                                            id pages = parameters[@"pages"];
                                             NSNumber *totalPages = parameters[@"totalPages"];
 
                                             if ([status isEqualToString:@"ready"]) {
-                                                [strongSelf.report updateCurrentPage:currentPage.integerValue];
                                                 [strongSelf.report updateCountOfPages:totalPages.integerValue];
-                                            } else {
-                                                if (currentPage) {
-                                                    [strongSelf.report updateCurrentPage:currentPage.integerValue];
+                                            }
+
+                                            if (pages) {
+                                                if ([pages isKindOfClass:[NSNumber class]]) {
+                                                    [strongSelf.report updateCurrentPage:[pages integerValue]];
+                                                } else if ([pages isKindOfClass:[NSDictionary class]]) {
+                                                    // TODO: need handle anchors? and how?
                                                 }
                                             }
 
@@ -432,6 +452,13 @@
                                     }];
 }
 
+- (void)freshLoadReportWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock __nonnull)completion
+{
+    JMReportDestination *destination = [JMReportDestination new];
+    destination.page = pageNumber;
+    [self freshLoadReportWithDestination:destination completion:completion];
+}
+
 - (void)addListenersForVisualizeEvents
 {
     // Life Cycle
@@ -440,6 +467,7 @@
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment addListenerWithId:reportCompletedListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(reportCompletedListenerId);
+        JMLog(@"parameters: %@", parameters);
         __typeof(self) strongSelf = weakSelf;
         // TODO: move into separate method
         NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
@@ -448,6 +476,7 @@
     NSString *changePagesStateListenerId = @"JasperMobile.Report.Event.changePagesState";
     [self.webEnvironment addListenerWithId:changePagesStateListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(changePagesStateListenerId);
+        JMLog(@"parameters: %@", parameters);
         __typeof(self) strongSelf = weakSelf;
         NSString *locationString = parameters[@"page"];
         [strongSelf.report updateCurrentPage:locationString.integerValue];
@@ -455,6 +484,7 @@
     NSString *bookmarsReadyListenerId = @"JasperMobile.Report.Event.bookmarksReady";
     [self.webEnvironment addListenerWithId:bookmarsReadyListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(bookmarsReadyListenerId);
+        JMLog(@"parameters: %@", parameters);
         __typeof(self) strongSelf = weakSelf;
         if (error) {
             // TODO: handle error
@@ -470,6 +500,7 @@
     NSString *partsReadyListenerId = @"JasperMobile.Report.Event.reportPartsReady";
     [self.webEnvironment addListenerWithId:partsReadyListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(partsReadyListenerId);
+        JMLog(@"parameters: %@", parameters);
         __typeof(self) strongSelf = weakSelf;
         if (error) {
             // TODO: handle error
@@ -579,7 +610,7 @@
         return;
     }
 
-    if (![self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResource:withParameters:page:)]) {
+    if (![self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResource:withParameters:destination:)]) {
         return;
     }
 
@@ -616,6 +647,7 @@
 
                                           JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
                                           NSInteger initialPage = 1;
+                                          NSString *initialAnchor;
                                           NSDictionary *params = data[@"params"];
                                           if (params && [params isKindOfClass:[NSDictionary class]]) {
                                               NSArray *pages = params[@"_page"];
@@ -630,11 +662,26 @@
                                                       }
                                                   }
                                               }
+                                              NSArray *anchors = params[@"_anchor"];
+                                              if (anchors && [anchors isKindOfClass:[NSArray class]]) {
+                                                  NSString *anchor = anchors.firstObject;
+                                                  if (anchor && [anchor isKindOfClass:[NSString class]]) {
+                                                      initialAnchor = anchor;
+                                                  }
+                                              }
+                                          }
+
+                                          JMReportDestination *destination = [JMReportDestination new];
+                                          if (initialAnchor) {
+                                              destination.anchor = initialAnchor;
+                                              destination.page = initialPage;
+                                          } else {
+                                              destination.page = initialPage;
                                           }
                                           [self.delegate reportLoader:self
                                     didReceiveOnClickEventForResource:resource
                                                        withParameters:[reportParameters copy]
-                                                                 page:initialPage];
+                                                          destination:destination];
                                       }
                                   }
                               }];

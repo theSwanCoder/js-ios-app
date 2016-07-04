@@ -38,6 +38,7 @@
 #import "JMReportBookmark.h"
 #import "JMReportPartViewToolbar.h"
 #import "JMReportPart.h"
+#import "JMReportDestination.h"
 
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierViz    = @"kJMReportViewerPrimaryWebEnvironmentIdentifierViz";
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMReportViewerPrimaryWebEnvironmentIdentifierREST";
@@ -208,7 +209,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 - (void)backActionInWebView
 {
     self.report.isReportAlreadyLoaded = NO;
-    [self runReportWithPage:1];
+    self.initialDestination = nil;
+    [self runReportWithDestination:self.initialDestination];
     [self setupLeftBarButtonItems];
 }
 
@@ -246,7 +248,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     [self configureReport];
 }
 
-- (void)startLoadReportWithPage:(NSInteger)page
+- (void)startLoadReportWithDestination:(JMReportDestination *)destination
 {
     BOOL isReportAlreadyLoaded = self.report.isReportAlreadyLoaded;
     BOOL isReportInLoadingProcess = self.reportLoader.isReportInLoadingProcess;
@@ -254,7 +256,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     if(!isReportAlreadyLoaded && !isReportInLoadingProcess) {
         // show report with loaded input controls
         // when we start running a report from another report by tapping on hyperlink
-        [self runReportWithPage:page];
+        [self runReportWithDestination:destination];
     }
 }
 
@@ -337,13 +339,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                                             if (strongSelf.initialReportParameters) {
                                                                                                 [strongSelf.report updateReportParameters:strongSelf.initialReportParameters];
                                                                                             }
-                                                                                            [strongSelf startLoadReportWithPage:strongSelf.initialPage];
+                                                                                            [strongSelf startLoadReportWithDestination:strongSelf.initialDestination];
                                                                                         }
                                                                                     }
                                                                                 }];
                                                                             } else {
                                                                                 [strongSelf stopShowLoader];
-                                                                                [strongSelf startLoadReportWithPage:strongSelf.initialPage];
+                                                                                [strongSelf startLoadReportWithDestination:strongSelf.initialDestination];
                                                                             }
                                                                         }
                                                                     }];
@@ -429,12 +431,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 }
 
 #pragma mark - Custom accessors
-- (NSInteger)initialPage
+- (JMReportDestination *)initialDestination
 {
-    if (_initialPage == 0) {
-        _initialPage = 1;
+    if (!_initialDestination) {
+        _initialDestination = [JMReportDestination new];
+        _initialDestination.page = 1;
     }
-    return _initialPage;
+    return _initialDestination;
 }
 - (JMWebEnvironment *)currentWebEnvironment
 {
@@ -546,7 +549,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 }
 
 #pragma mark - Run report
-- (void)runReportWithPage:(NSInteger)page
+- (void)runReportWithDestination:(JMReportDestination *)destination
 {
     [self hideEmptyReportMessage];
     [self hidePaginationToolbar];
@@ -554,8 +557,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     self.toolbar.enable = NO;
 
     __weak typeof(self)weakSelf = self;
-    [self startShowLoaderWithMessage:@"status_loading"];
-    [self.reportLoader runReportWithPage:page completion:^(BOOL success, NSError *error) {
+    void(^completion)(BOOL success, NSError *error) = ^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf stopShowLoader];
         strongSelf.toolbar.enable = YES;
@@ -573,7 +575,16 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         } else {
             [strongSelf handleError:error];
         }
-    }];
+    };
+
+    [self startShowLoaderWithMessage:@"status_loading"];
+    if ([self.reportLoader respondsToSelector:@selector(runReportWithDestination:completion:)]) {
+        [self.reportLoader runReportWithDestination:destination
+                                  completion:completion];
+    } else {
+        [self.reportLoader runReportWithPage:destination.page
+                                  completion:completion];
+    }
 }
 
 - (void)updateReportWithNewActiveReportOption:(JSReportOption *)newActiveOption
@@ -612,7 +623,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         }];
     } else {
         self.report.isReportAlreadyLoaded = NO;
-        [self runReportWithPage:1];
+        self.initialDestination = nil;
+        [self runReportWithDestination:self.initialDestination];
     }
 }
 
@@ -621,7 +633,8 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 {
     [self.report restoreDefaultState];
     [self updateToobarAppearence];
-    [self runReportWithPage:1];
+    self.initialDestination = nil;
+    [self runReportWithDestination:self.initialDestination];
 }
 
 - (void)refreshReport
@@ -748,12 +761,12 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     [self.navigationController pushViewController:reportViewController animated:YES];
 }
 
-- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resource withParameters:(NSArray *__nullable)reportParameters page:(NSInteger)page
+- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resource withParameters:(NSArray *__nullable)reportParameters destination:(JMReportDestination *)destination
 {
     JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
     reportViewController.resource = resource;
     reportViewController.initialReportParameters = reportParameters;
-    reportViewController.initialPage = page;
+    reportViewController.initialDestination = destination;
     reportViewController.isChildReport = YES;
     [self.navigationController pushViewController:reportViewController animated:YES];
 }

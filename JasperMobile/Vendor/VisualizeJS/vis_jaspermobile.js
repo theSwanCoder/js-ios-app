@@ -564,7 +564,7 @@ JasperMobile.Report.VIS = {
                 totalPages: function() {
                     return this.object.data().totalPages;
                 },
-                currentPage: function() {
+                pages: function() {
                     return this.object.pages();
                 },
                 bookmarks: function() {
@@ -670,7 +670,7 @@ JasperMobile.Report.VIS.Helpers = {
         }
         JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.run", {
             "status"      : status,
-            "currentPage" : JasperMobile.Report.VIS.activeReport.currentPage(),
+            "pages"       : JasperMobile.Report.VIS.activeReport.pages(),
             "totalPages"  : JasperMobile.Report.VIS.activeReport.totalPages(),
             "bookmarks"   : JasperMobile.Report.VIS.activeReport.bookmarks(),
             "parts"       : JasperMobile.Report.VIS.activeReport.parts()
