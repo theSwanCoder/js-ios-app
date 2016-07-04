@@ -496,6 +496,9 @@ JasperMobile.Report.VIS = {
                 containerElement.innerHTML = "";
             },
             reset: function() {
+                if (this.containers == undefined) {
+                    return;
+                }
                 for(var i = 0; i < this.containers.length; ++i) {
                     var container = this.containers[i];
                     container.isActive = false;
@@ -1000,7 +1003,7 @@ JasperMobile.Report.VIS.API = {
     destroy: function() {
         if (JasperMobile.Report.VIS.manager.containerManager.containers != undefined &&
             JasperMobile.Report.VIS.manager.containerManager.containers.length > 0) {
-            JasperMobile.Report.VIS.manager.containerManager.hideContainer(JasperMobile.Report.VIS.activeContainer);
+            JasperMobile.Report.VIS.manager.containerManager.hideContainer(JasperMobile.Report.VIS.activeReport.container);
         } else {
             JasperMobile.Report.VIS.activeReport.destroy(function() {
                 JasperMobile.Report.VIS.manager.containerManager.activeContainer = undefined;

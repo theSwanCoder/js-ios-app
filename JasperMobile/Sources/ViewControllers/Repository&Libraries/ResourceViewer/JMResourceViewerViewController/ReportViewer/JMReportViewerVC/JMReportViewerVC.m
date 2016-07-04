@@ -670,9 +670,6 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                     self.webEnvironment = nil;
                     self.configurator = nil;
                 }
-                if ([self.reportLoader respondsToSelector:@selector(reset)]) {
-                    [self.reportLoader reset];
-                }
                 [self startShowLoaderWithMessage:@"status_loading"];
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
                     __strong typeof(self) strongSelf = weakSelf;

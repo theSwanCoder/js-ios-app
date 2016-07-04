@@ -92,6 +92,14 @@
     }
 }
 
+- (void)cleanCache
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.reset"
+                                                                parameters:nil];
+    [self sendJavascriptRequest:request
+                     completion:nil];
+}
+
 #pragma mark - Helpers
 - (void)loadJasperMobilePageWithCompletion:(void(^)(BOOL isLoaded, NSError *error))completion
 {

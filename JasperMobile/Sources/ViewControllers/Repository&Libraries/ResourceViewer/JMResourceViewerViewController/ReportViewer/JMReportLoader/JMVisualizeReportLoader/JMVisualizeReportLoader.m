@@ -358,15 +358,6 @@
                                     completion:nil];
 }
 
-- (void)reset
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.reset"
-                                                                parameters:nil];
-    [self.webEnvironment sendJavascriptRequest:request
-                                    completion:nil];
-}
-
 #pragma mark - Private
 
 - (void)freshLoadReportWithPageNumber:(NSInteger)pageNumber completion:(JSReportLoaderCompletionBlock __nonnull)completion

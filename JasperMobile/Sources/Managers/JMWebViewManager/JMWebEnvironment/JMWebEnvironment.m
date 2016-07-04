@@ -91,6 +91,7 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.ready = NO;
+    [self cleanCache];
     __weak __typeof(self) weakSelf = self;
     [self removeCookiesWithCompletion:^(BOOL success) {
         __typeof(self) strongSelf = weakSelf;
@@ -249,6 +250,11 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
 - (void)removeAllListeners
 {
     [self.bridge removeAllListeners];
+}
+
+- (void)cleanCache
+{
+    // implement in childs
 }
 
 - (void)resetZoom
