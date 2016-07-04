@@ -54,7 +54,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 @property (weak, nonatomic) UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
-@property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
+@property (nonatomic, strong) JMExternalWindowControlsVC *controlsViewController;
 @end
 
 @implementation JMReportViewerVC
@@ -218,6 +218,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     [self.webEnvironment.webView goBack];
     [self runReportWithDestination:self.initialDestination];
     [self setupLeftBarButtonItems];
+    [self setupRightBarButtonItems];
 }
 
 #pragma mark - Notifications
@@ -801,6 +802,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                                   target:strongSelf
                                                                                   action:@selector(backActionInWebView)];
                                  strongSelf.navigationItem.leftBarButtonItem = backButton;
+                                 self.navigationItem.rightBarButtonItems = nil;
                              }
                          }];
 }
@@ -835,6 +837,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                          target:self
                                                          action:@selector(backActionInWebView)];
         self.navigationItem.leftBarButtonItem = backButton;
+        self.navigationItem.rightBarButtonItems = nil;
     } else {
         // TODO: open in safari view controller
         if (urlReference && [[UIApplication sharedApplication] canOpenURL:urlReference]) {
