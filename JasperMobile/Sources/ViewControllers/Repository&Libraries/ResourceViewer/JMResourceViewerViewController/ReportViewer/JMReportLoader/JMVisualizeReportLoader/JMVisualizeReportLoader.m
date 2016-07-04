@@ -422,13 +422,12 @@
                                         } else {
                                             strongSelf.report.isReportAlreadyLoaded = YES;
                                             NSString *status = parameters[@"status"];
-                                            id pages = parameters[@"pages"];
                                             NSNumber *totalPages = parameters[@"totalPages"];
-
                                             if ([status isEqualToString:@"ready"]) {
                                                 [strongSelf.report updateCountOfPages:totalPages.integerValue];
                                             }
 
+                                            id pages = parameters[@"pages"];
                                             if (pages) {
                                                 if ([pages isKindOfClass:[NSNumber class]]) {
                                                     [strongSelf.report updateCurrentPage:[pages integerValue]];

@@ -918,7 +918,7 @@ JasperMobile.Report.VIS.API = {
     run: function(params) {
         if (JasperMobile.Report.VIS.manager.containsReport(params["uri"])) {
             JasperMobile.Report.VIS.manager.setActiveReport(params["uri"]);
-            if (JasperMobile.Report.VIS.activeReport.currentPage() == 1) {
+            if (JasperMobile.Report.VIS.activeReport.pages() == 1) {
                 JasperMobile.Report.VIS.Helpers.success(JasperMobile.Report.VIS.activeReport.object.data());
             } else {
                 this.navigateTo(
@@ -976,7 +976,7 @@ JasperMobile.Report.VIS.API = {
         if (typeof(success) != "function") {
             success = function(data) {
                 JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.navigateTo", {
-                    "destination": JasperMobile.Report.VIS.activeReport.currentPage()
+                    "destination": JasperMobile.Report.VIS.activeReport.pages()
                 });
             };
         }
@@ -1004,6 +1004,7 @@ JasperMobile.Report.VIS.API = {
         if (JasperMobile.Report.VIS.manager.containerManager.containers != undefined &&
             JasperMobile.Report.VIS.manager.containerManager.containers.length > 0) {
             JasperMobile.Report.VIS.manager.containerManager.hideContainer(JasperMobile.Report.VIS.activeReport.container);
+            JasperMobile.Callback.callback("JasperMobile.Report.VIS.API.destroy", {});
         } else {
             JasperMobile.Report.VIS.activeReport.destroy(function() {
                 JasperMobile.Report.VIS.manager.containerManager.activeContainer = undefined;

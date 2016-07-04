@@ -119,19 +119,22 @@
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     // load vis into web environment
+    NSString *vizPath = self.visualizeManager.visualizePath;
     JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
                                                                              parameters:@{
                                                                                      @"scriptURLs" : @[
-                                                                                             self.visualizeManager.visualizePath,
+                                                                                             vizPath,
                                                                                              @"https://code.jquery.com/jquery.min.js"
                                                                                      ]
                                                                              }];
+    __weak  __typeof(self) weakSelf = self;
     [self sendJavascriptRequest:requireJSLoadRequest
                      completion:^(NSDictionary *params, NSError *error) {
+                         __typeof(self) strongSelf = weakSelf;
                          if (error) {
                              completion(NO, error);
                          } else {
-                             //[self createContainers];
+                             [strongSelf createContainers];
                              completion(YES, nil);
                          }
                      }];
