@@ -610,10 +610,6 @@
         return;
     }
 
-    if (![self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResource:withParameters:destination:)]) {
-        return;
-    }
-
     NSString *reportPath = data[@"resource"];
     if (reportPath) {
         [self.restClient resourceLookupForURI:reportPath
@@ -646,42 +642,57 @@
                                           }
 
                                           JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
-                                          NSInteger initialPage = 1;
-                                          NSString *initialAnchor;
                                           NSDictionary *params = data[@"params"];
                                           if (params && [params isKindOfClass:[NSDictionary class]]) {
-                                              NSArray *pages = params[@"_page"];
-                                              if (pages && [pages isKindOfClass:[NSArray class]]) {
-                                                  // TODO: need support multipages?
-                                                  NSString *page = pages.firstObject;
-                                                  if (page && [page isKindOfClass:[NSString class]]) {
-                                                      // TODO: investigate other cases
-                                                      NSInteger pageValue = page.integerValue;
-                                                      if (pageValue > 0) {
-                                                          initialPage = pageValue;
+                                              NSArray *outputs = params[@"_output"];
+                                              if (outputs) {
+                                                  if ([outputs isKindOfClass:[NSArray class]]) {
+                                                      // handle output
+                                                      if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResource:withOutputFormats:)]) {
+                                                          [self.delegate reportLoader:self
+                                                    didReceiveOnClickEventForResource:resource
+                                                                    withOutputFormats:outputs];
                                                       }
                                                   }
-                                              }
-                                              NSArray *anchors = params[@"_anchor"];
-                                              if (anchors && [anchors isKindOfClass:[NSArray class]]) {
-                                                  NSString *anchor = anchors.firstObject;
-                                                  if (anchor && [anchor isKindOfClass:[NSString class]]) {
-                                                      initialAnchor = anchor;
+                                              } else {
+                                                  NSInteger initialPage = 1;
+                                                  NSString *initialAnchor;
+                                                  NSArray *pages = params[@"_page"];
+                                                  if (pages && [pages isKindOfClass:[NSArray class]]) {
+                                                      // TODO: need support multipages?
+                                                      NSString *page = pages.firstObject;
+                                                      if (page && [page isKindOfClass:[NSString class]]) {
+                                                          // TODO: investigate other cases
+                                                          NSInteger pageValue = page.integerValue;
+                                                          if (pageValue > 0) {
+                                                              initialPage = pageValue;
+                                                          }
+                                                      }
+                                                  }
+                                                  NSArray *anchors = params[@"_anchor"];
+                                                  if (anchors && [anchors isKindOfClass:[NSArray class]]) {
+                                                      NSString *anchor = anchors.firstObject;
+                                                      if (anchor && [anchor isKindOfClass:[NSString class]]) {
+                                                          initialAnchor = anchor;
+                                                      }
+                                                  }
+
+                                                  JMReportDestination *destination = [JMReportDestination new];
+                                                  if (initialAnchor) {
+                                                      destination.anchor = initialAnchor;
+                                                      destination.page = initialPage;
+                                                  } else {
+                                                      destination.page = initialPage;
+                                                  }
+                                                  if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResource:withParameters:destination:)]) {
+                                                      [self.delegate reportLoader:self
+                                                didReceiveOnClickEventForResource:resource
+                                                                   withParameters:[reportParameters copy]
+                                                                      destination:destination];
                                                   }
                                               }
                                           }
 
-                                          JMReportDestination *destination = [JMReportDestination new];
-                                          if (initialAnchor) {
-                                              destination.anchor = initialAnchor;
-                                              destination.page = initialPage;
-                                          } else {
-                                              destination.page = initialPage;
-                                          }
-                                          [self.delegate reportLoader:self
-                                    didReceiveOnClickEventForResource:resource
-                                                       withParameters:[reportParameters copy]
-                                                          destination:destination];
                                       }
                                   }
                               }];

@@ -48,10 +48,11 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, copy) void(^exportCompletion)(NSString *resourcePath);
+@property (nonatomic, strong) NSURL *tempResourceURL;
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (nonatomic, weak) JMReportPartViewToolbar *reportPartToolbar;
 @property (weak, nonatomic) UILabel *emptyReportMessageLabel;
-@property (nonatomic, strong) JMReport *report;
+@property (nonatomic, strong, readwrite) JMReport *report;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
 @end
@@ -208,8 +209,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)backActionInWebView
 {
+    if (self.tempResourceURL) {
+        [self removeResourceWithURL:self.tempResourceURL];
+    }
+    self.tempResourceURL = nil;
     self.report.isReportAlreadyLoaded = NO;
     self.initialDestination = nil;
+    [self.webEnvironment.webView goBack];
     [self runReportWithDestination:self.initialDestination];
     [self setupLeftBarButtonItems];
 }
@@ -752,13 +758,51 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
-- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventForResource:(JMResource *)resource withParameters:(NSArray *)reportParameters
+- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resource withOutputFormats:(NSArray *__nullable)outputs
 {
-    JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
-    reportViewController.resource = resource;
-    reportViewController.initialReportParameters = reportParameters;
-    reportViewController.isChildReport = YES;
-    [self.navigationController pushViewController:reportViewController animated:YES];
+    JMLog(@"outputs: %@", outputs);
+
+    if (outputs.count == 0) {
+        return;
+    }
+
+    JSReportSaver *reportSaver = [[JSReportSaver alloc] initWithReport:[resource modelOfResource]
+                                                            restClient:self.restClient];
+    [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:^{
+        [reportSaver cancelSavingReport];
+    }];
+
+    NSString *reportName = [self tempReportName];
+    __weak __typeof(self) weakSelf = self;
+    [reportSaver saveReportWithName:reportName
+                             format:outputs.firstObject
+                         pagesRange:[JSReportPagesRange allPagesRange]
+                         completion:^(NSURL * _Nullable savedReportURL, NSError * _Nullable error) {
+                             __typeof(self) strongSelf = weakSelf;
+                             [JMCancelRequestPopup dismiss];
+                             if (error) {
+                                 if (error.code == JSSessionExpiredErrorCode) {
+                                     [JMUtils showLoginViewAnimated:YES completion:nil];
+                                 } else {
+                                     [JMUtils presentAlertControllerWithError:error completion:nil];
+                                 }
+                             } else {
+                                 NSString *fullReportName = [reportName stringByAppendingPathExtension:outputs.firstObject];
+                                 strongSelf.tempResourceURL = [savedReportURL URLByAppendingPathComponent:fullReportName];
+
+                                 [strongSelf hidePaginationToolbar];
+                                 [strongSelf hideTopToolbarAnimated:YES];
+
+                                 [strongSelf.webEnvironment loadLocalFileFromURL:strongSelf.tempResourceURL
+                                                                fileFormat:outputs.firstObject
+                                                                   baseURL:[NSURL URLWithString:strongSelf.restClient.serverProfile.serverUrl]];
+
+                                 UIBarButtonItem *backButton = [strongSelf backButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
+                                                                                  target:strongSelf
+                                                                                  action:@selector(backActionInWebView)];
+                                 strongSelf.navigationItem.leftBarButtonItem = backButton;
+                             }
+                         }];
 }
 
 - (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resource withParameters:(NSArray *__nullable)reportParameters destination:(JMReportDestination *)destination
