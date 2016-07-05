@@ -607,7 +607,6 @@ JasperMobile.Report.VIS = {
 JasperMobile.Report.VIS.Helpers = {
     isAmber: false,
     initReportStructWithParameters: function(parameters) {
-        JasperMobile.Report.VIS.Helpers.isAmber = parameters["is_for_6_0"]; // TODO: replace with switch
         var report;
         if (this.isAmber) {
             report = this.baseStructFn(parameters);
@@ -619,8 +618,6 @@ JasperMobile.Report.VIS.Helpers = {
     runFn: function(params) {
         var self = this;
         return function(v) {
-            // TODO: where to get container? manager?
-            //params["container"] = "container";
             var reportObject = v.report(self.initReportStructWithParameters(params));
             if (JasperMobile.Report.VIS.manager.containerManager.containers != undefined &&
                 JasperMobile.Report.VIS.manager.containerManager.containers.length > 0) {
@@ -916,6 +913,8 @@ JasperMobile.Report.VIS.privateAPI = {
 };
 JasperMobile.Report.VIS.API = {
     run: function(params) {
+        JasperMobile.Report.VIS.Helpers.isAmber = params["is_for_6_0"]; // TODO: replace with switch
+
         if (JasperMobile.Report.VIS.manager.containsReport(params["uri"])) {
             JasperMobile.Report.VIS.manager.setActiveReport(params["uri"]);
             if (JasperMobile.Report.VIS.activeReport.pages() == 1) {
