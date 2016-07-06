@@ -37,6 +37,7 @@
     if (self) {
         _type = type;
         _title = [self titleForRowType:type];
+        _hintMessage = [self hintMessageForRowType:type];
         _hidden = hidden;
     }
     return self;
@@ -148,6 +149,20 @@
         }
     }
     return title;
+}
+
+- (NSString *)hintMessageForRowType:(JMScheduleVCRowType)type
+{
+    switch(type) {
+        case JMScheduleVCRowTypeCalendarDatesInMonth:
+            return JMCustomLocalizedString(@"schedules_new_job_monthDays_hint", nil);
+        case JMScheduleVCRowTypeCalendarHours:
+            return JMCustomLocalizedString(@"schedules_new_job_hours_hint", nil);
+        case JMScheduleVCRowTypeCalendarMinutes:
+            return JMCustomLocalizedString(@"schedules_new_job_minutes_hint", nil);
+        default:
+            return nil;
+    }
 }
 
 @end

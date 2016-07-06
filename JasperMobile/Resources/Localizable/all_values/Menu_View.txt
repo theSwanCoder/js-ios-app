@@ -56,7 +56,7 @@
 		es = Acerca de
 		fr = À propos
 		it = Informazioni
-		jp = 詳細
+		ja = 詳細
 		pt = Sobre
 		zh = 关于
 		tags = ios

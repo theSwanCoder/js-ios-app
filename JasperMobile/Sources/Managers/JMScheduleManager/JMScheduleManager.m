@@ -129,7 +129,7 @@
             }
             // TODO: enhance error
             if (fullMessage.length == 0) {
-                fullMessage = @"General error of creating a new schedule.";
+                fullMessage = JMCustomLocalizedString(@"schedules_error_general", nil);
 
             }
             NSError *createScheduledJobError = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules_error_domain", nil)
@@ -273,6 +273,11 @@
     trigger.type = JSScheduleTriggerTypeCalendar;
     trigger.timezone = [self currentTimeZone];
 
+    trigger.months = @[@1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12];
+    
+    trigger.hours = @"0";
+    trigger.minutes = @"0";
+    
     // start date policy
     trigger.startType = JSScheduleTriggerStartTypeImmediately;
     trigger.startDate = nil;

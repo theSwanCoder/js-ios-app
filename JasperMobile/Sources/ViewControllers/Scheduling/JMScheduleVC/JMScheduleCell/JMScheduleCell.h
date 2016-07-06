@@ -32,9 +32,10 @@
 */
 
 @protocol JMScheduleCellDelegate;
+#import "JMScheduleVCRow.h"
 
 @interface JMScheduleCell : UITableViewCell <UITextFieldDelegate>
-@property(nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) JMScheduleVCRow *scheduleRow;
 @property (weak, nonatomic) IBOutlet UITextField *valueTextField;
 @property (nonatomic, weak) NSObject <JMScheduleCellDelegate> *delegate;
 - (void)showErrorMessage:(NSString *)message;

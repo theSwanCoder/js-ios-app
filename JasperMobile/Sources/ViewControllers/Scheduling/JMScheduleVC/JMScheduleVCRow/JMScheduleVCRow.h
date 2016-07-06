@@ -53,7 +53,7 @@ typedef NS_ENUM(NSInteger, JMScheduleVCRowType) {
     JMScheduleVCRowTypeCalendarSelectedMonths,
     JMScheduleVCRowTypeCalendarEveryDay,  // boolean
     JMScheduleVCRowTypeCalendarSelectedDays,
-    JMScheduleVCRowTypeCalendarDatesInMonth, // TODO: implement in next release
+    JMScheduleVCRowTypeCalendarDatesInMonth,
     JMScheduleVCRowTypeCalendarHours,
     JMScheduleVCRowTypeCalendarMinutes,
     // End Policy (common)
@@ -65,6 +65,7 @@ typedef NS_ENUM(NSInteger, JMScheduleVCRowType) {
 
 @interface JMScheduleVCRow : NSObject
 @property (nonatomic, strong, readonly) NSString *title;
+@property (nonatomic, strong, readonly) NSString *hintMessage;
 @property (nonatomic, strong) NSString *errorMessage;
 @property (nonatomic, assign, readonly) JMScheduleVCRowType type;
 @property (nonatomic, assign, getter=isHidden) BOOL hidden;

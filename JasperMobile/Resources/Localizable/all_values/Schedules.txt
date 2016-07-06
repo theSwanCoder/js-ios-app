@@ -97,6 +97,7 @@
 		de = Bezeichnung der Ausgabedatei
 		es = Nombre del archivo de salida
 		fr = Nom du fichier de sortie
+        it = Nome file di stampa
 		ja = ファイル名を出力する
 		pt = Nome do arquivo de saída
 		zh = 输出文件名
@@ -281,7 +282,15 @@
 		pt = Minutos
 		zh = 分钟
 		tags = ios
-
+    [schedules_new_job_monthDays_hint]
+        en = Enter dates (9, 12, 15) or date ranges (9-12, 1-17)
+        tags = ios,new
+    [schedules_new_job_hours_hint]
+        en = Enter 24-hour times like 9, 12, 15 or ranges like 9-12, 1-17
+        tags = ios,new
+    [schedules_new_job_minutes_hint]
+        en = Enter 0, 15, 30, 45 to run every 1/4 hour
+        tags = ios,new
 
 [[Schedule Notifications]]
     [schedules_created_success]
@@ -358,6 +367,9 @@
 		pt = Especifique um nome para a tarefa agendada.
 		zh = 为已安排任务指定一个名称。
 		tags = ios
+    [schedules_error_wrong_datesinmonth]
+        en = Specify the dates of the months when the job should run.
+        tags = ios,new
 	[schedules_error_wrong_hours]
 		en = Specify the hour(s) when the job should run.
 		tags = ios,new
@@ -425,4 +437,7 @@
 		tags = ios
     [schedules_error_notwriteable_output_folder]
         en = You do not have permission to schedule report to the folder. Log in as a permitted user if you can.
+        tags = ios,new
+    [schedules_error_general]
+        en = General error of creating a new schedule.
         tags = ios,new

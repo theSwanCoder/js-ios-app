@@ -30,16 +30,29 @@
 
 
 @interface JMScheduleCell ()
+@property(nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property(nonatomic, weak) IBOutlet UILabel *errorLabel;
 @property(nonatomic, weak) IBOutlet NSLayoutConstraint *titleLabelCenterYConstraint;
 @property(nonatomic, weak) IBOutlet NSLayoutConstraint *textFieldCenterYConstraint;
 @end
 
 @implementation JMScheduleCell
+- (void)setScheduleRow:(JMScheduleVCRow *)scheduleRow {
+    if (_scheduleRow != scheduleRow) {
+        _scheduleRow = scheduleRow;
+        self.titleLabel.text = scheduleRow.title;
+    }
+}
 
 #pragma mark - Public API
 - (void)showErrorMessage:(NSString *)message
 {
+    if (message) {
+        self.errorLabel.textColor = [UIColor redColor];
+    } else {
+        self.errorLabel.textColor = [UIColor grayColor];
+        message = self.scheduleRow.hintMessage;
+    }
     self.errorLabel.text = message;
     self.titleLabelCenterYConstraint.constant = (message.length == 0) ? 0 : -10;
     self.textFieldCenterYConstraint.constant = (message.length == 0) ? 0 : -10;

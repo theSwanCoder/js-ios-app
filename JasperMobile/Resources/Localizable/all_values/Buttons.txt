@@ -13,12 +13,12 @@
 	[dialog_button_ok]
 		en = OK
 		de = OK
-		fr = OK
+		fr = Accepter
 		es = Aceptar
-		it = OK
-		pt = OK
-		ja = OK
-		zh = 确定
+		it = Accetta
+		pt = Aceitar
+		ja = 受け入れる
+		zh = 接受
 		tags = ios
 	[dialog_button_cancel]
 		en = Cancel
