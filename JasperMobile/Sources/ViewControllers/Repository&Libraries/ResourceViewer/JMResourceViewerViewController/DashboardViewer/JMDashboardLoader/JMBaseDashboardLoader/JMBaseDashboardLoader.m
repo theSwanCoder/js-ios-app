@@ -226,7 +226,7 @@ JMBaseDashboardLoader
 - (void)addListenersForWebEnvironmentEvents
 {
     // Authorization
-    NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.API.unauthorized";
+    NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.VIS.API.unauthorized";
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment addListenerWithId:unauthorizedListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(unauthorizedListenerId);

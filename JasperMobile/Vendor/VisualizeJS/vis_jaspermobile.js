@@ -1032,11 +1032,10 @@ JasperMobile.Report.VIS.API = {
 // Dashboards
 JasperMobile.Dashboard = {
     Legacy : {},
-    // Move to this from JasperMobile.Dashboard.API
     VIS  : {}
 };
 
-JasperMobile.Dashboard.API = {
+JasperMobile.Dashboard.VIS.API = {
     dashboardObject: {},
     refreshedDashboardObject: {},
     canceledDashboardObject: {},
@@ -1048,21 +1047,21 @@ JasperMobile.Dashboard.API = {
     runDashboard: function(params) {
         var success = params["success"];
         var failed = params["failed"];
-        JasperMobile.Dashboard.API.isAmber = params["is_for_6_0"];
+        JasperMobile.Dashboard.VIS.API.isAmber = params["is_for_6_0"];
         var successFn = function() {
 
             setTimeout(function(){
-                var data = JasperMobile.Dashboard.API.dashboardObject.data();
+                var data = JasperMobile.Dashboard.VIS.API.dashboardObject.data();
                 if (data.components) {
-                    JasperMobile.Dashboard.API._configureComponents(data.components);
+                    JasperMobile.Dashboard.VIS.API._configureComponents(data.components);
                 }
-                if (JasperMobile.Dashboard.API.isAmber) {
-                    JasperMobile.Dashboard.API._defineComponentsClickEventAmber();
+                if (JasperMobile.Dashboard.VIS.API.isAmber) {
+                    JasperMobile.Dashboard.VIS.API._defineComponentsClickEventAmber();
                 } else {
-                    JasperMobile.Dashboard.API._defineComponentsClickEvent();
+                    JasperMobile.Dashboard.VIS.API._defineComponentsClickEvent();
                 }
 
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.runDashboard", {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.runDashboard", {
                     "components" : data.components ? data.components : {},
                     "params" : data.parameters
                 });
@@ -1083,7 +1082,7 @@ JasperMobile.Dashboard.API = {
             }
         };
         var errorFn = function(error) {
-            JasperMobile.Callback.callback("JasperMobile.Dashboard.API.runDashboard", {
+            JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.runDashboard", {
                 "error" : {
                     "code" : error.errorCode,
                     "message" : error.message
@@ -1101,13 +1100,13 @@ JasperMobile.Dashboard.API = {
                     click: function(event, link, defaultHandler) {
                         var type = link.type;
                         JasperMobile.Callback.log("link type: " + type);
-                        JasperMobile.Dashboard.API.defaultHandler = defaultHandler;
-                        if (JasperMobile.Dashboard.API.isAmber) {
+                        JasperMobile.Dashboard.VIS.API.defaultHandler = defaultHandler;
+                        if (JasperMobile.Dashboard.VIS.API.isAmber) {
                             // There are cases when the same event goes several times
                             // It looks like a vis bug.
                             var contains = false;
-                            for (var i = 0; i < JasperMobile.Dashboard.API.activeLinks.length; ++i) {
-                                var currentLink = JasperMobile.Dashboard.API.activeLinks[i];
+                            for (var i = 0; i < JasperMobile.Dashboard.VIS.API.activeLinks.length; ++i) {
+                                var currentLink = JasperMobile.Dashboard.VIS.API.activeLinks[i];
                                 if (currentLink.id == link.id) {
                                     contains = true;
                                     break;
@@ -1117,10 +1116,10 @@ JasperMobile.Dashboard.API = {
                                 return;
                             }
                             // save the link temporary to prevent handling it several times
-                            JasperMobile.Dashboard.API.activeLinks.push(link);
+                            JasperMobile.Dashboard.VIS.API.activeLinks.push(link);
                             // remove all links after some timeout
                             setTimeout(function() {
-                                JasperMobile.Dashboard.API.activeLinks = [];
+                                JasperMobile.Dashboard.VIS.API.activeLinks = [];
                             },3000);
                         }
                         switch (type) {
@@ -1129,7 +1128,7 @@ JasperMobile.Dashboard.API = {
                                     resource: link.parameters._report,
                                     params: JasperMobile.Helper.collectReportParams(link)
                                 };
-                                JasperMobile.Callback.listener("JasperMobile.Dashboard.API.run.linkOptions.events.ReportExecution", {
+                                JasperMobile.Callback.listener("JasperMobile.Dashboard.VIS.API.run.linkOptions.events.ReportExecution", {
                                     "data" : data
                                 });
                                 break;
@@ -1144,14 +1143,14 @@ JasperMobile.Dashboard.API = {
                             }
                             case "Reference": {
                                 var href = link.href;
-                                JasperMobile.Callback.listener("JasperMobile.Dashboard.API.run.linkOptions.events.Reference", {
+                                JasperMobile.Callback.listener("JasperMobile.Dashboard.VIS.API.run.linkOptions.events.Reference", {
                                     "location" : href
                                 });
                                 break;
                             }
                             case "AdHocExecution": {
                                 if (defaultHandler == undefined) {
-                                    JasperMobile.Callback.listener("JasperMobile.Dashboard.API.run.linkOptions.events.AdHocExecution", {
+                                    JasperMobile.Callback.listener("JasperMobile.Dashboard.VIS.API.run.linkOptions.events.AdHocExecution", {
                                         "link" : link
                                     });
                                 } else {
@@ -1171,7 +1170,7 @@ JasperMobile.Dashboard.API = {
         };
         var auth = {};
 
-        if (JasperMobile.Dashboard.API.isAmber) {
+        if (JasperMobile.Dashboard.VIS.API.isAmber) {
             auth.auth = {
                 loginFn: function(properties, request) {
                     return (new jQuery.Deferred()).resolve();
@@ -1188,15 +1187,15 @@ JasperMobile.Dashboard.API = {
 
         var dashboardFn = function (v) {
             // save link for dashboardObject
-            JasperMobile.Dashboard.API.dashboardFunction = v.dashboard;
-            JasperMobile.Dashboard.API.dashboardObject = JasperMobile.Dashboard.API.dashboardFunction(dashboardStruct);
+            JasperMobile.Dashboard.VIS.API.dashboardFunction = v.dashboard;
+            JasperMobile.Dashboard.VIS.API.dashboardObject = JasperMobile.Dashboard.VIS.API.dashboardFunction(dashboardStruct);
         };
 
         visualize(auth, dashboardFn, errorFn);
     },
     getDashboardParameters: function() {
-        var data = JasperMobile.Dashboard.API.dashboardObject.data();
-        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.getDashboardParameters", {
+        var data = JasperMobile.Dashboard.VIS.API.dashboardObject.data();
+        JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.getDashboardParameters", {
             "components" : data.components,
             "params" : data.parameters
         });
@@ -1204,21 +1203,21 @@ JasperMobile.Dashboard.API = {
     minimizeDashlet: function(parameters) {
         var dashletId = parameters["identifier"];
         if (dashletId != "null") {
-            if (JasperMobile.Dashboard.API.isAmber) {
-                JasperMobile.Dashboard.API.minimizeDashletForAmber();
+            if (JasperMobile.Dashboard.VIS.API.isAmber) {
+                JasperMobile.Dashboard.VIS.API.minimizeDashletForAmber();
             } else {
-                JasperMobile.Dashboard.API.dashboardObject.updateComponent(dashletId, {
+                JasperMobile.Dashboard.VIS.API.dashboardObject.updateComponent(dashletId, {
                     maximized: false,
                     interactive: false
                 }).done(function() {
                     setTimeout(function(){
-                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.minimizeDashlet", {
                             "component" : dashletId
                         });
                     }, 3000);
                 }).fail(function(error) {
                     JasperMobile.Callback.log("failed refresh with error: " + error);
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.minimizeDashlet", {
                         "error" : {
                             "code" : error.errorCode,
                             "message" : error.message
@@ -1227,8 +1226,8 @@ JasperMobile.Dashboard.API = {
                 });
             }
         } else {
-            if (JasperMobile.Dashboard.API.isAmber) {
-                JasperMobile.Dashboard.API.minimizeDashletForAmber();
+            if (JasperMobile.Dashboard.VIS.API.isAmber) {
+                JasperMobile.Dashboard.VIS.API.minimizeDashletForAmber();
             } else {
                 // TODO: need this?
                 //this._showDashlets();
@@ -1239,17 +1238,17 @@ JasperMobile.Dashboard.API = {
                     chartWrappers[i].style.display = 'none';
                 }
 
-                JasperMobile.Dashboard.API.selectedDashlet.classList.remove('originalDashletInScaledCanvas');
+                JasperMobile.Dashboard.VIS.API.selectedDashlet.classList.remove('originalDashletInScaledCanvas');
 
-                JasperMobile.Dashboard.API.dashboardObject.updateComponent(JasperMobile.Dashboard.API.selectedComponent.id, {
+                JasperMobile.Dashboard.VIS.API.dashboardObject.updateComponent(JasperMobile.Dashboard.VIS.API.selectedComponent.id, {
                     maximized: false,
                     interactive: false
                 }, function() {
-                    JasperMobile.Dashboard.API.selectedDashlet = {};
-                    JasperMobile.Dashboard.API.selectedComponent = {};
+                    JasperMobile.Dashboard.VIS.API.selectedDashlet = {};
+                    JasperMobile.Dashboard.VIS.API.selectedComponent = {};
                     // TODO: need add callbacks?
                 }, function(error) {
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.minimizeDashlet", {
                         "error" : {
                             "code" : error.errorCode,
                             "message" : error.message
@@ -1265,12 +1264,12 @@ JasperMobile.Dashboard.API = {
             var minimizeButton = canvasOverlay.getElementsByClassName("minimizeDashlet")[0];
             if (minimizeButton != null && minimizeButton.nodeName == "BUTTON") {
                 minimizeButton.click();
-                JasperMobile.Dashboard.API._enableClicks();
+                JasperMobile.Dashboard.VIS.API._enableClicks();
                 setTimeout(function(){
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {});
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.minimizeDashlet", {});
                 }, 3000);
             } else {
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.minimizeDashlet", {
                     "error" : {
                         "code" : "maximize.button.error",
                         "message" : "Component is not ready"
@@ -1278,7 +1277,7 @@ JasperMobile.Dashboard.API = {
                 });
             }
         } else {
-            JasperMobile.Callback.callback("JasperMobile.Dashboard.API.minimizeDashlet", {
+            JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.minimizeDashlet", {
                 "error" : {
                     "code" : "maximize.button.error",
                     "message" : "Component is not ready"
@@ -1289,19 +1288,19 @@ JasperMobile.Dashboard.API = {
     maximizeDashlet: function(parameters) {
         var dashletId = parameters["identifier"];
         if (dashletId) {
-            if (JasperMobile.Dashboard.API.isAmber) {
-                JasperMobile.Dashboard.API.maximizeDashletForAmber(dashletId);
+            if (JasperMobile.Dashboard.VIS.API.isAmber) {
+                JasperMobile.Dashboard.VIS.API.maximizeDashletForAmber(dashletId);
             } else {
-                JasperMobile.Dashboard.API.dashboardObject.updateComponent(dashletId, {
+                JasperMobile.Dashboard.VIS.API.dashboardObject.updateComponent(dashletId, {
                     maximized: true,
                     interactive: true
                 }).done(function() {
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.maximizeDashlet", {
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.maximizeDashlet", {
                         "component" : dashletId
                     });
                 }).fail(function(error) {
                     JasperMobile.Callback.log("failed refresh with error: " + error);
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.maximizeDashlet", {
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.maximizeDashlet", {
                         "error" : {
                             "code" : error.errorCode,
                             "message" : error.message
@@ -1314,22 +1313,22 @@ JasperMobile.Dashboard.API = {
         }
     },
     maximizeDashletForAmber: function(dashletId) {
-        var maximizeButton = JasperMobile.Dashboard.API._findDashletMaximizeButtonWithDashletId(dashletId);
+        var maximizeButton = JasperMobile.Dashboard.VIS.API._findDashletMaximizeButtonWithDashletId(dashletId);
         if (maximizeButton != null) {
             if (maximizeButton.disabled) {
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.events.dashlet.didEndMaximize", {
                     "error" : {
                         "code" : "maximize.button.error",
                         "message" : "Component is not ready"
                     }
                 });
             } else {
-                JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didStartMaximize", {
+                JasperMobile.Callback.listener("JasperMobile.Dashboard.VIS.API.events.dashlet.didStartMaximize", {
                     "component" : dashletId
                 });
                 maximizeButton.click();
                 setTimeout(function(){
-                    JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
+                    JasperMobile.Callback.listener("JasperMobile.Dashboard.VIS.API.events.dashlet.didEndMaximize", {
                         "component" : dashletId
                     });
                 }, 3000);
@@ -1357,37 +1356,37 @@ JasperMobile.Dashboard.API = {
     },
     refresh: function() {
         JasperMobile.Callback.log("start refresh");
-        JasperMobile.Callback.log("dashboard object: " + JasperMobile.Dashboard.API.dashboardObject);
-        JasperMobile.Dashboard.API.refreshedDashboardObject = JasperMobile.Dashboard.API.dashboardObject.refresh()
+        JasperMobile.Callback.log("dashboard object: " + JasperMobile.Dashboard.VIS.API.dashboardObject);
+        JasperMobile.Dashboard.VIS.API.refreshedDashboardObject = JasperMobile.Dashboard.VIS.API.dashboardObject.refresh()
             .done(function() {
                 JasperMobile.Callback.log("done refresh");
-                var data = JasperMobile.Dashboard.API.dashboardObject.data();
+                var data = JasperMobile.Dashboard.VIS.API.dashboardObject.data();
                 setTimeout(function() {
-                    JasperMobile.Callback.log("state: " + JasperMobile.Dashboard.API.refreshedDashboardObject.state());
-                    if (JasperMobile.Dashboard.API.refreshedDashboardObject.state() === "rejected") {
-                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                    JasperMobile.Callback.log("state: " + JasperMobile.Dashboard.VIS.API.refreshedDashboardObject.state());
+                    if (JasperMobile.Dashboard.VIS.API.refreshedDashboardObject.state() === "rejected") {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.refresh", {
                             "error" : {
                                 "code" : "dashboard.refresh.rejected",
                                 "message" : "Refresh was rejected"
                             }
                         });
-                    } else if (JasperMobile.Dashboard.API.refreshedDashboardObject.state() === "pending") {
+                    } else if (JasperMobile.Dashboard.VIS.API.refreshedDashboardObject.state() === "pending") {
                         // TODO: update handling this case
-                        var uri = JasperMobile.Dashboard.API.dashboardObject.properties().resource;
-                        JasperMobile.Dashboard.API.dashboardObject.destroy();
-                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                        var uri = JasperMobile.Dashboard.VIS.API.dashboardObject.properties().resource;
+                        JasperMobile.Dashboard.VIS.API.dashboardObject.destroy();
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.refresh", {
                             "error" : {
                                 "code" : "dashboard.refresh.pending",
                                 "message" : "Refresh was pended"
                             }
                         });
-                    } else if (JasperMobile.Dashboard.API.refreshedDashboardObject.state() === "resolved") {
-                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                    } else if (JasperMobile.Dashboard.VIS.API.refreshedDashboardObject.state() === "resolved") {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.refresh", {
                             "components" : data.components,
                             "params" : data.parameters
                         });
                     } else {
-                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.refresh", {
                             "error" : {
                                 "code" : "dashboard.refresh.undefined",
                                 "message" : "Refresh failed with 'undefied' error"
@@ -1399,9 +1398,9 @@ JasperMobile.Dashboard.API = {
             .fail(function(error) {
                 JasperMobile.Callback.log("failed refresh with error: " + error);
                 if (error.errorCode == "authentication.error") {
-                    JasperMobile.Dashboard.API.dashboardObject.destroy();
+                    JasperMobile.Dashboard.VIS.API.dashboardObject.destroy();
                     setTimeout(function () {
-                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.refresh", {
                             "error" : {
                                 "code" : error.errorCode,
                                 "message" : error.message
@@ -1409,7 +1408,7 @@ JasperMobile.Dashboard.API = {
                         });
                     }, 3000);
                 } else {
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refresh", {
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.refresh", {
                         "error" : {
                             "code" : error.errorCode,
                             "message" : error.message
@@ -1420,15 +1419,15 @@ JasperMobile.Dashboard.API = {
     },
     cancel: function() {
         JasperMobile.Callback.log("start cancel");
-        JasperMobile.Callback.log("dashboard object: " + JasperMobile.Dashboard.API.dashboardObject);
-        JasperMobile.Dashboard.API.canceledDashboardObject = JasperMobile.Dashboard.API.dashboardObject.cancel()
+        JasperMobile.Callback.log("dashboard object: " + JasperMobile.Dashboard.VIS.API.dashboardObject);
+        JasperMobile.Dashboard.VIS.API.canceledDashboardObject = JasperMobile.Dashboard.VIS.API.dashboardObject.cancel()
             .done(function() {
                 JasperMobile.Callback.log("success cancel");
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.cancel", {});
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.cancel", {});
             })
             .fail(function(error) {
                 JasperMobile.Callback.log("failed cancel with error: " + error);
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.cancel", {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.cancel", {
                     "error" : {
                         "code" : error.errorCode,
                         "message" : error.message
@@ -1438,12 +1437,12 @@ JasperMobile.Dashboard.API = {
     },
     refreshDashlet: function() {
         JasperMobile.Callback.log("start refresh component");
-        JasperMobile.Callback.log("dashboard object: " + JasperMobile.Dashboard.API.dashboardObject);
-        JasperMobile.Dashboard.API.refreshedDashboardObject = JasperMobile.Dashboard.API.dashboardObject.refresh(JasperMobile.Dashboard.API.selectedComponent.id)
+        JasperMobile.Callback.log("dashboard object: " + JasperMobile.Dashboard.VIS.API.dashboardObject);
+        JasperMobile.Dashboard.VIS.API.refreshedDashboardObject = JasperMobile.Dashboard.VIS.API.dashboardObject.refresh(JasperMobile.Dashboard.VIS.API.selectedComponent.id)
             .done(function() {
                 JasperMobile.Callback.log("success refresh");
-                var data = JasperMobile.Dashboard.API.dashboardObject.data();
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refreshDashlet", {
+                var data = JasperMobile.Dashboard.VIS.API.dashboardObject.data();
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.refreshDashlet", {
                     "components" : data.components,
                     "params" : data.parameters,
                     "isFullReload" : "false"
@@ -1451,7 +1450,7 @@ JasperMobile.Dashboard.API = {
             })
             .fail(function(error) {
                 JasperMobile.Callback.log("failed refresh dashlet with error: " + error);
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refreshDashlet", {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.refreshDashlet", {
                     "error" : {
                         "code" : error.errorCode,
                         "message" : error.message
@@ -1459,20 +1458,20 @@ JasperMobile.Dashboard.API = {
                 });
             });
         setTimeout(function() {
-            JasperMobile.Callback.log("state: " + JasperMobile.Dashboard.API.refreshedDashboardObject.state());
-            if (JasperMobile.Dashboard.API.refreshedDashboardObject.state() === "pending") {
-                var uri = JasperMobile.Dashboard.API.dashboardObject.properties().resource;
-                JasperMobile.Dashboard.API.dashboardObject.cancel();
-                JasperMobile.Dashboard.API.runDashboard({
+            JasperMobile.Callback.log("state: " + JasperMobile.Dashboard.VIS.API.refreshedDashboardObject.state());
+            if (JasperMobile.Dashboard.VIS.API.refreshedDashboardObject.state() === "pending") {
+                var uri = JasperMobile.Dashboard.VIS.API.dashboardObject.properties().resource;
+                JasperMobile.Dashboard.VIS.API.dashboardObject.cancel();
+                JasperMobile.Dashboard.VIS.API.runDashboard({
                     "uri" : uri,
                     success: function() {
-                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.refreshDashlet", {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.refreshDashlet", {
                             "isFullReload": "true"
                         });
                     },
                     failed: function(error) {
                         if (error.errorCode == "authentication.error") {
-                            JasperMobile.Callback.listener("JasperMobile.Dashboard.API.unauthorized", {});
+                            JasperMobile.Callback.listener("JasperMobile.Dashboard.VIS.API.unauthorized", {});
                         } else {
                             // TODO: handle this.
                         }
@@ -1482,11 +1481,11 @@ JasperMobile.Dashboard.API = {
         }, 6000);
     },
     applyParams: function(parameters) {
-        JasperMobile.Dashboard.API.dashboardObject.params(parameters).run()
+        JasperMobile.Dashboard.VIS.API.dashboardObject.params(parameters).run()
             .done(function() {
                 setTimeout(function(){
-                    var data = JasperMobile.Dashboard.API.dashboardObject.data();
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.applyParams", {
+                    var data = JasperMobile.Dashboard.VIS.API.dashboardObject.data();
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.applyParams", {
                         "components" : data.components,
                         "params" : data.parameters
                     });
@@ -1494,7 +1493,7 @@ JasperMobile.Dashboard.API = {
             })
             .fail(function(error) {
                 JasperMobile.Callback.log("failed apply");
-                JasperMobile.Callback.callback("JasperMobile.Dashboard.API.applyParams", {
+                JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.applyParams", {
                     "error" : {
                         "code" : error.errorCode,
                         "message" : error.message
@@ -1503,13 +1502,13 @@ JasperMobile.Dashboard.API = {
             });
     },
     destroy: function() {
-        if (JasperMobile.Dashboard.API.dashboardObject) {
-            JasperMobile.Dashboard.API.dashboardObject.destroy()
+        if (JasperMobile.Dashboard.VIS.API.dashboardObject) {
+            JasperMobile.Dashboard.VIS.API.dashboardObject.destroy()
                 .done(function() {
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.destroy", {});
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.destroy", {});
                 })
                 .fail(function(error) {
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.destroy", {
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.destroy", {
                         "error" : {
                             "code" : error.errorCode,
                             "message" : error.message
@@ -1517,10 +1516,10 @@ JasperMobile.Dashboard.API = {
                     });
                 });
         } else {
-            JasperMobile.Callback.callback("JasperMobile.Dashboard.API.destroy", {
+            JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.destroy", {
                 "error": {
                     "code" : "visualize.error",
-                    "message" : "JasperMobile.Dashboard.API.dashboardObject == nil"
+                    "message" : "JasperMobile.Dashboard.VIS.API.dashboardObject == nil"
                 }
             });
         }
@@ -1528,7 +1527,7 @@ JasperMobile.Dashboard.API = {
     _configureComponents: function(components) {
         components.forEach( function(component) {
             if (component.type !== 'inputControl') {
-                JasperMobile.Dashboard.API.dashboardObject.updateComponent(component.id, {
+                JasperMobile.Dashboard.VIS.API.dashboardObject.updateComponent(component.id, {
                     interactive: false,
                     toolbar: false
                 });
@@ -1536,13 +1535,13 @@ JasperMobile.Dashboard.API = {
         });
     },
     _defineComponentsClickEvent: function() {
-        var dashboardId = JasperMobile.Dashboard.API.dashboardFunction.componentIdDomAttribute;
-        var dashlets = JasperMobile.Dashboard.API._getDashlets(dashboardId); // DOM elements
+        var dashboardId = JasperMobile.Dashboard.VIS.API.dashboardFunction.componentIdDomAttribute;
+        var dashlets = JasperMobile.Dashboard.VIS.API._getDashlets(dashboardId); // DOM elements
         for (var i = 0; i < dashlets.length; ++i) {
             var parentElement = dashlets[i].parentElement;
             // set onClick listener for parent of dashlet
             parentElement.onclick = function(event) {
-                JasperMobile.Dashboard.API.selectedDashlet = this;
+                JasperMobile.Dashboard.VIS.API.selectedDashlet = this;
                 var targetClass = event.target.className;
                 if (targetClass !== 'overlay') {
                     return;
@@ -1556,28 +1555,28 @@ JasperMobile.Dashboard.API = {
 
                 var component, id;
                 id = this.getAttribute(dashboardId);
-                component = JasperMobile.Dashboard.API._getComponentById(id); // Model object
+                component = JasperMobile.Dashboard.VIS.API._getComponentById(id); // Model object
 
                 // TODO: need this?
                 //self._hideDashlets(dashboardId, dashlet);
 
                 if (component && !component.maximized) {
-                    JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didStartMaximize", {
+                    JasperMobile.Callback.listener("JasperMobile.Dashboard.VIS.API.events.dashlet.didStartMaximize", {
                         "component" : component
                     });
-                    JasperMobile.Dashboard.API.selectedDashlet.className += "originalDashletInScaledCanvas";
-                    JasperMobile.Dashboard.API.dashboardObject.updateComponent(id, {
+                    JasperMobile.Dashboard.VIS.API.selectedDashlet.className += "originalDashletInScaledCanvas";
+                    JasperMobile.Dashboard.VIS.API.dashboardObject.updateComponent(id, {
                         maximized: true,
                         interactive: true
                     }, function() {
-                        JasperMobile.Dashboard.API.selectedComponent = component;
+                        JasperMobile.Dashboard.VIS.API.selectedComponent = component;
                         setTimeout(function(){
-                            JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
+                            JasperMobile.Callback.listener("JasperMobile.Dashboard.VIS.API.events.dashlet.didEndMaximize", {
                                 "component" : component
                             });
                         }, 3000);
                     }, function(error) {
-                        JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
+                        JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.events.dashlet.didEndMaximize", {
                             "error" : {
                                 "code" : error.errorCode,
                                 "message" : error.message
@@ -1601,7 +1600,7 @@ JasperMobile.Dashboard.API = {
             } else {
                 // JasperMobile.Callback.log("componentId: " + componentId);
                 (function(nodeElement, componentId) {
-                    JasperMobile.Dashboard.API._configureDashletForAmber(nodeElement, componentId);
+                    JasperMobile.Dashboard.VIS.API._configureDashletForAmber(nodeElement, componentId);
                 })(nodeElement, componentId);
             }
         }
@@ -1630,16 +1629,16 @@ JasperMobile.Dashboard.API = {
             overlay.addEventListener("click", function(event) {
                 var maximizeButton = dashletWrapper.getElementsByClassName("maximizeDashletButton")[0];
                 if (maximizeButton != undefined &&  maximizeButton.nodeName == "BUTTON" && !maximizeButton.disabled) {
-                    JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didStartMaximize", {});
+                    JasperMobile.Callback.listener("JasperMobile.Dashboard.VIS.API.events.dashlet.didStartMaximize", {});
                     maximizeButton.click();
-                    JasperMobile.Dashboard.API._disableClicks();
+                    JasperMobile.Dashboard.VIS.API._disableClicks();
                     setTimeout(function(){
-                        JasperMobile.Callback.listener("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
+                        JasperMobile.Callback.listener("JasperMobile.Dashboard.VIS.API.events.dashlet.didEndMaximize", {
                             "componentId" : componentId
                         });
                     }, 3000);
                 } else {
-                    JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
+                    JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.events.dashlet.didEndMaximize", {
                         "error" : {
                             "code" : "maximize.button.error",
                             "message" : "Component is not ready"
@@ -1648,7 +1647,7 @@ JasperMobile.Dashboard.API = {
                 }
             });
         } else {
-            JasperMobile.Callback.callback("JasperMobile.Dashboard.API.events.dashlet.didEndMaximize", {
+            JasperMobile.Callback.callback("JasperMobile.Dashboard.VIS.API.events.dashlet.didEndMaximize", {
                 "error" : {
                     "code" : "maximize.button.error",
                     "message" : "Component is not ready"
@@ -1684,7 +1683,7 @@ JasperMobile.Dashboard.API = {
         return dashlets;
     },
     _getComponentById: function(id) {
-        var components = JasperMobile.Dashboard.API.dashboardObject.data().components;
+        var components = JasperMobile.Dashboard.VIS.API.dashboardObject.data().components;
         for (var i = 0; components.length; ++i) {
             if (components[i].id === id) {
                 return components[i];

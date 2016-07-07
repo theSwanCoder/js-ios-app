@@ -285,7 +285,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 - (void)handleUnauthRequest
 {
-    NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.API.unauthorized";
+    NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.VIS.API.unauthorized";
     for (JMJavascriptRequest *request in self.listenerCallbacks) {
         if ([request.command isEqualToString:unauthorizedListenerId]) {
             JMJavascriptRequestCompletion completion = self.listenerCallbacks[request];
