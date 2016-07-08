@@ -93,34 +93,22 @@
 #pragma mark - Helpers
 - (NSString *)titleForSectionType:(JMScheduleVCSectionType)type
 {
-    NSString *title;
     switch(type) {
-        case JMNewScheduleVCSectionTypeMain: {
-            title = @"Main";
-            break;
-        }
-        case JMNewScheduleVCSectionTypeOutputOptions: {
-            title = @"Output Options";
-            break;
-        }
-        case JMNewScheduleVCSectionTypeScheduleStart: {
-            title = @"Schedule Start";
-            break;
-        }
-        case JMNewScheduleVCSectionTypeRecurrence: {
-            title = @"Recurrence";
-            break;
-        }
-        case JMNewScheduleVCSectionTypeScheduleEnd: {
-            title = @"Schedule End";
-            break;
-        }
-        case JMNewScheduleVCSectionTypeHolidays: {
-            title = @"Holidays";
-            break;
-        }
+        case JMNewScheduleVCSectionTypeMain:
+            return JMCustomLocalizedString(@"schedules_new_job_section_main", nil);
+        case JMNewScheduleVCSectionTypeOutputOptions:
+            return JMCustomLocalizedString(@"schedules_new_job_section_output", nil);
+        case JMNewScheduleVCSectionTypeScheduleStart:
+            return JMCustomLocalizedString(@"schedules_new_job_section_start", nil);
+        case JMNewScheduleVCSectionTypeRecurrence:
+            return JMCustomLocalizedString(@"schedules_new_job_section_recurrence", nil);
+        case JMNewScheduleVCSectionTypeScheduleEnd:
+            return JMCustomLocalizedString(@"schedules_new_job_section_end", nil);
+        case JMNewScheduleVCSectionTypeHolidays:
+            return JMCustomLocalizedString(@"schedules_new_job_section_holiday", nil);
+        default:
+            return nil;
     }
-    return title;
 }
 
 @end

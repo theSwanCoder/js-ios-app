@@ -62,6 +62,30 @@
 		tags = ios
 
 [[New Job]]
+    [schedules_new_job_section_main]
+        en = Main
+        tags = ios,new
+    [schedules_new_job_section_output]
+        en = Output Options
+        tags = ios,new
+    [schedules_new_job_section_start]
+        en = Schedule Start
+        tags = ios,new
+    [schedules_new_job_section_recurrence]
+        en = Recurrence
+        tags = ios,new
+    [schedules_new_job_section_end]
+        en = Schedule End
+        tags = ios,new
+    [schedules_new_job_section_holiday]
+        en = Holidays
+        tags = ios,new
+    [schedules_new_job_selected_months_title]
+        en = Select months
+        tags = ios,new
+    [schedules_new_job_selected_days_title]
+        en = Select days
+        tags = ios,new
 	[schedules_new_job_label]
 		en = Name
 		de = Auftrags-Etikett
@@ -182,6 +206,21 @@
 		pt = Intervalo
 		zh = 间隔
 		tags = ios
+    [schedules_new_job_recurrenceIntervalUnit_none]
+        en = None
+        tags = ios,new
+    [schedules_new_job_recurrenceIntervalUnit_minutes]
+        en = Minutes
+        tags = ios,new
+    [schedules_new_job_recurrenceIntervalUnit_hours]
+        en = Hours
+        tags = ios,new
+    [schedules_new_job_recurrenceIntervalUnit_days]
+        en = Days
+        tags = ios,new
+    [schedules_new_job_recurrenceIntervalUnit_weeks]
+        en = Weeks
+        tags = ios,new
 	[schedules_new_job_run_indefinitely]
 		en = Run Indefinitely
 		de = Auf unbestimmte Zeit durchführen
@@ -212,6 +251,15 @@
 		pt = Tipo de Recorrência
 		zh = 循环类型
 		tags = ios
+    [schedules_new_job_repeat_type_none]
+        en = None
+        tags = ios,new
+    [schedules_new_job_repeat_type_simple]
+        en = Simple
+        tags = ios,new
+    [schedules_new_job_repeat_type_calendar]
+        en = Calendar
+        tags = ios,new
 	[schedules_job_calendar_every_month]
 		en = Every Month
 		de = Jeden Monat

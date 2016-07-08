@@ -336,7 +336,7 @@
 - (void)selectMonths
 {
     JMMultiSelectedItemsVC *multiValuesVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMMultiSelectedItemsVC"];
-    multiValuesVC.title = @"Select months";
+    multiValuesVC.title = JMCustomLocalizedString(@"schedules_new_job_selected_months_title", nil);
 
     JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) [self currentTrigger];
     NSAssert(calendarTrigger.type == JSScheduleTriggerTypeCalendar, @"should be calendar trigger");
@@ -376,7 +376,7 @@
 - (void)selectDays
 {
     JMMultiSelectedItemsVC *multiValuesVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMMultiSelectedItemsVC"];
-    multiValuesVC.title = @"Select days";
+    multiValuesVC.title = JMCustomLocalizedString(@"schedules_new_job_selected_days_title", nil);
 
     JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) [self currentTrigger];
     NSAssert(calendarTrigger.type == JSScheduleTriggerTypeCalendar, @"should be calendar trigger");
@@ -1107,54 +1107,33 @@
 
 - (NSString *)stringValueForRecurrenceType:(JSScheduleSimpleTriggerRecurrenceIntervalType)recurrenceType
 {
-    NSString *stringValue;
-
     switch(recurrenceType) {
-        case JSScheduleSimpleTriggerRecurrenceIntervalTypeNone: {
-            stringValue = @"None";
-            break;
-        }
-        case JSScheduleSimpleTriggerRecurrenceIntervalTypeMinute: {
-            stringValue = @"Minutes";
-            break;
-        }
-        case JSScheduleSimpleTriggerRecurrenceIntervalTypeHour: {
-            stringValue = @"Hours";
-            break;
-        }
-        case JSScheduleSimpleTriggerRecurrenceIntervalTypeDay: {
-            stringValue = @"Days";
-            break;
-        }
-        case JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek: {
-            stringValue = @"Weeks";
-            break;
-        }
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeNone:
+            return JMCustomLocalizedString(@"schedules_new_job_recurrenceIntervalUnit_none", nil);
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeMinute:
+            return JMCustomLocalizedString(@"schedules_new_job_recurrenceIntervalUnit_minutes", nil);
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeHour:
+            return JMCustomLocalizedString(@"schedules_new_job_recurrenceIntervalUnit_hours", nil);
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeDay:
+            return JMCustomLocalizedString(@"schedules_new_job_recurrenceIntervalUnit_days", nil);
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek:
+            return JMCustomLocalizedString(@"schedules_new_job_recurrenceIntervalUnit_weeks", nil);
+        default: return nil;
     }
-
-    return stringValue;
 }
 
 - (NSString *)stringValueForTriggerType:(JSScheduleTriggerType)repeatType
 {
-    NSString *stringValue;
-
     switch(repeatType) {
-        case JSScheduleTriggerTypeNone: {
-            stringValue = @"None";
-            break;
-        }
-        case JSScheduleTriggerTypeSimple: {
-            stringValue = @"Simple";
-            break;
-        }
-        case JSScheduleTriggerTypeCalendar: {
-            stringValue = @"Calendar";
-            break;
-        }
-    }
+        case JSScheduleTriggerTypeNone:
+            return JMCustomLocalizedString(@"schedules_new_job_repeat_type_none", nil);
+        case JSScheduleTriggerTypeSimple:
+            return JMCustomLocalizedString(@"schedules_new_job_repeat_type_simple", nil);
+        case JSScheduleTriggerTypeCalendar:
+            return JMCustomLocalizedString(@"schedules_new_job_repeat_type_calendar", nil);
+        default: return nil;
 
-    return stringValue;
+    }
 }
 
 #pragma mark - Validation
