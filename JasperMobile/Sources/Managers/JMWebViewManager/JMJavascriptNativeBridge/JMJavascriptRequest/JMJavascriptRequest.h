@@ -31,10 +31,21 @@
 @since 2.1
 */
 
+typedef NS_ENUM(NSInteger, JMJavascriptNamespace) {
+    JMJavascriptNamespaceDefault,
+    JMJavascriptNamespaceVISReport,
+    JMJavascriptNamespaceVISDashboard,
+    JMJavascriptNamespaceRESTReport,
+    JMJavascriptNamespaceRESTDashboard
+};
+
 @interface JMJavascriptRequest : NSObject <NSCopying>
-@property (nonatomic, copy) NSString *__nonnull command;
-- (instancetype __nullable)initWithCommand:(NSString * __nonnull)command parameters:(NSDictionary * __nullable)parameters;
-+ (instancetype __nullable)requestWithCommand:(NSString * __nonnull)command parameters:(NSDictionary * __nullable)parameters;
-// Public API
+- (instancetype __nullable)initWithCommand:(NSString * __nonnull)command
+                               inNamespace:(JMJavascriptNamespace)namespace
+                                parameters:(NSDictionary * __nullable)parameters;
++ (instancetype __nullable)requestWithCommand:(NSString * __nonnull)command
+                                  inNamespace:(JMJavascriptNamespace)namespace
+                                   parameters:(NSDictionary * __nullable)parameters;
 - (NSString *__nonnull)fullJavascriptRequestString;
+- (NSString *__nonnull)fullCommand;
 @end

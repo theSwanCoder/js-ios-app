@@ -116,8 +116,9 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
     JMJavascriptRequest *request = [self findListenerForCommand:listenerId];
     if (!request) {
-        request = [JMJavascriptRequest new];
-        request.command = listenerId;
+        request = [JMJavascriptRequest requestWithCommand:listenerId
+                                              inNamespace:JMJavascriptNamespaceDefault
+                                               parameters:nil];
         self.listenerCallbacks[request] = [callback copy];
     } else {
         JMLog(@"listener is already exists");
@@ -285,9 +286,9 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 
 - (void)handleUnauthRequest
 {
-    NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.VIS.API.unauthorized";
+    NSString *unauthorizedListenerId = @"JasperMobile.VIS.Dashboard.API.unauthorized";
     for (JMJavascriptRequest *request in self.listenerCallbacks) {
-        if ([request.command isEqualToString:unauthorizedListenerId]) {
+        if ([request.fullCommand isEqualToString:unauthorizedListenerId]) {
             JMJavascriptRequestCompletion completion = self.listenerCallbacks[request];
             NSError *error = [self makeErrorFromWebViewError:@{
                     @"code" : @"authentication.error"
@@ -314,7 +315,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
         case JMJavascriptCallbackTypeCallback: {
             JMJavascriptRequest *foundRequest;
             for (JMJavascriptRequest *request in self.requestCompletions) {
-                if ([request.command isEqualToString:response.command]) {
+                if ([request.fullCommand isEqualToString:response.command]) {
                     foundRequest = request;
                     JMJavascriptRequestCompletion completion = self.requestCompletions[request];
                     if (response.parameters && response.parameters[@"error"]) {
@@ -354,7 +355,7 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
 {
     JMJavascriptRequest *listener;
     for (JMJavascriptRequest *request in self.listenerCallbacks) {
-        if ([request.command isEqualToString:command]) {
+        if ([request.fullCommand isEqualToString:command]) {
             listener = request;
             break;
         }
