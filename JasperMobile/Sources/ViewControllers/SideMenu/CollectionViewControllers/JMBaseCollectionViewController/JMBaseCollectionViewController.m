@@ -224,10 +224,20 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     return _resourceListLoader;
 }
 
+- (void)updateFilterByIndex:(NSInteger)newIndex
+{
+    // Could be overriden in children
+}
+
 - (NSInteger)defaultFilterByIndex
 {
     // Could be overriden in children
     return 0;
+}
+
+- (void)updateSortByIndex:(NSInteger)newIndex
+{
+    // Could be overriden in children
 }
 
 - (NSInteger)defaultSortByIndex
@@ -685,6 +695,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             NSUInteger selectedIndex = [popup selectedIndex];
             if (selectedIndex != self.resourceListLoader.filterBySelectedIndex) {
                 self.resourceListLoader.filterBySelectedIndex = selectedIndex;
+                [self updateFilterByIndex:selectedIndex];
                 self.isScrollToTop = YES;
             }
             break;
@@ -693,6 +704,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             NSUInteger selectedIndex = [popup selectedIndex];
             if (selectedIndex != self.resourceListLoader.sortBySelectedIndex) {
                 self.resourceListLoader.sortBySelectedIndex = selectedIndex;
+                [self updateSortByIndex:selectedIndex];
                 self.isScrollToTop = YES;
             }
             break;

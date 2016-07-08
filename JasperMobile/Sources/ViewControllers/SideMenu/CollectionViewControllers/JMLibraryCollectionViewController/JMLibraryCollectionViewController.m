@@ -30,6 +30,9 @@
 #import "SWRevealViewController.h"
 #import "JMLibraryListLoader.h"
 
+NSString *const kJMLibraryCollectionViewFilterByIndexKey = @"kJMLibraryCollectionViewFilterByIndexKey";
+NSString *const kJMLibraryCollectionViewSortByIndexKey = @"kJMLibraryCollectionViewSortByIndexKey";
+
 @interface JMLibraryCollectionViewController()
 @end
 
@@ -38,8 +41,8 @@
 #pragma mark -LifeCycle
 -(void)awakeFromNib {
     [super awakeFromNib];
-    self.filterByIndex = JMLibraryListLoaderFilterIndexByAll;
-    self.sortByIndex = JMLibraryListLoaderSortIndexByName;
+    self.filterByIndex = JMLibraryListLoaderFilterIndexByUndefined;
+    self.sortByIndex = JMLibraryListLoaderSortIndexByUndefined;
 }
 
 -(void)viewDidLoad
@@ -61,13 +64,37 @@
     return NSClassFromString(@"JMLibraryListLoader");
 }
 
+- (void)updateFilterByIndex:(NSInteger)newIndex
+{
+    self.filterByIndex = newIndex;
+    [[NSUserDefaults standardUserDefaults] setInteger:newIndex
+                                               forKey:kJMLibraryCollectionViewFilterByIndexKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (NSInteger)defaultFilterByIndex
 {
+    if (self.filterByIndex == JMLibraryListLoaderFilterIndexByUndefined) {
+        NSInteger filterByIndex = [[NSUserDefaults standardUserDefaults] integerForKey:kJMLibraryCollectionViewFilterByIndexKey];
+        self.filterByIndex = filterByIndex;
+    }
     return self.filterByIndex;
+}
+
+- (void)updateSortByIndex:(NSInteger)newIndex
+{
+    self.filterByIndex = newIndex;
+    [[NSUserDefaults standardUserDefaults] setInteger:newIndex
+                                               forKey:kJMLibraryCollectionViewSortByIndexKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSInteger)defaultSortByIndex
 {
+    if (self.sortByIndex == JMLibraryListLoaderSortIndexByUndefined) {
+        NSInteger sortByIndex = [[NSUserDefaults standardUserDefaults] integerForKey:kJMLibraryCollectionViewSortByIndexKey];
+        self.sortByIndex = sortByIndex;
+    }
     return self.sortByIndex;
 }
 
