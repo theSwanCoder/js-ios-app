@@ -96,7 +96,8 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 {
     if (self.webEnvironment.isReady) {
         if (self.webEnvironment.isReusable) {
-            JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
+            JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"API.injectContent"
+                                                                                    inNamespace:JMJavascriptNamespaceRESTReport
                                                                                      parameters:@{
                                                                                              @"HTMLString" : @"",
                                                                                              @"transformationScale" : @"0.0"
@@ -117,8 +118,9 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 - (void)fitReportViewToScreen
 {
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Report.REST.API.fitReportViewToScreen";
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.fitReportViewToScreen"
+                                                               inNamespace:JMJavascriptNamespaceRESTReport
+                                                                parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:nil];
 }
@@ -151,7 +153,8 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
     // Pending block will call after page will be loaded into webview
     [self.webEnvironment addPendingBlock:^{
-        JMJavascriptRequest *applyZoomRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.applyZoomForReport"
+        JMJavascriptRequest *applyZoomRequest = [JMJavascriptRequest requestWithCommand:@"API.applyZoomForReport"
+                                                                            inNamespace:JMJavascriptNamespaceRESTReport
                                                                              parameters:nil];
         [self.webEnvironment sendJavascriptRequest:applyZoomRequest
                                         completion:^(NSDictionary *params, NSError *error) {
@@ -252,7 +255,8 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
             @"HTMLString" : HTMLString,
             @"transformationScale" : [JMUtils isIphone] ? @"0.25" : @"0.5"
     };
-    JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.injectContent"
+    JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"API.injectContent"
+                                                                            inNamespace:JMJavascriptNamespaceRESTReport
                                                                              parameters:params];
 
     __weak __typeof(self) weakSelf = self;
@@ -354,6 +358,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                        completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
     JMJavascriptRequest *loadDependenciesRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
+                                                                               inNamespace:JMJavascriptNamespaceDefault
                                                                                  parameters:@{
                                                                                          @"scriptURLs" : links,
                                                                                  }];
@@ -374,7 +379,8 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
                      isElasticChart:(BOOL)isElasticChart
                          completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
-    JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.renderHighcharts"
+    JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"API.renderHighcharts"
+                                                                          inNamespace:JMJavascriptNamespaceRESTReport
                                                                            parameters:@{
                                                                                    @"scripts"         : scripts,
                                                                                    @"isElasticChart"  : isElasticChart ? @"true" : @"false"
@@ -396,7 +402,8 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 - (void)executeOtherScripts:(NSArray *)scripts
                  completion:(JMRestReportLoaderCompletion __nonnull)completion
 {
-    JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.REST.API.executeScripts"
+    JMJavascriptRequest *chartRenderRequest = [JMJavascriptRequest requestWithCommand:@"API.executeScripts"
+                                                                          inNamespace:JMJavascriptNamespaceRESTReport
                                                                            parameters:@{
                                                                                    @"scripts" : scripts,
                                                                            }];

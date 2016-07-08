@@ -137,7 +137,8 @@
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.navigateTo"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.navigateTo"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:@{
                                                                         @"destination" : @(pageNumber)
                                                                 }];
@@ -173,7 +174,8 @@
         [self.report updateCurrentPage:1];
         [self.report updateCountOfPages:NSNotFound];
 
-        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.applyReportParams"
+        JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.applyReportParams"
+                                                                   inNamespace:JMJavascriptNamespaceVISReport
                                                                     parameters:[self runParameters]];
         __weak __typeof(self) weakSelf = self;
         [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
@@ -230,9 +232,9 @@
     self.report.isReportAlreadyLoaded = NO;
     [self.report updateCountOfPages:NSNotFound];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Report.VIS.API.refresh";
-
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.refresh"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
+                                                                parameters:nil];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
                             completion:^(NSDictionary *parameters, NSError *error) {
@@ -261,7 +263,8 @@
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.navigateTo"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.navigateTo"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:@{
                                                                         @"destination" : @{
                                                                                 @"anchor" : bookmark.anchor
@@ -294,7 +297,8 @@
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.navigateTo"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.navigateTo"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:@{
                                                                         @"destination" : part.page
                                                                 }];
@@ -321,7 +325,8 @@
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.cancelLoading = YES;
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.cancel"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.cancel"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         // Need capture self to wait until this request finishes
@@ -342,7 +347,8 @@
         return;
     }
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.destroy"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.destroy"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:nil];
 
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
@@ -360,8 +366,9 @@
 
 - (void)fitReportViewToScreen
 {
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"JasperMobile.Report.VIS.API.fitReportViewToScreen";
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.fitReportViewToScreen"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
+                                                                parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:nil];
 }
@@ -398,7 +405,8 @@
         pages = @(destination.page);
     }
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.API.run"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.run"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters: @{
                                                                         @"uri"        : self.report.reportURI,
                                                                         @"params"     : [self runParameters],

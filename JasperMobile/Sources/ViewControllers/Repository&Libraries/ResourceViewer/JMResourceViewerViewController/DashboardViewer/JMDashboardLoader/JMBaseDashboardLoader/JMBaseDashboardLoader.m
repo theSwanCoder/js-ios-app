@@ -122,17 +122,18 @@ JMBaseDashboardLoader
 
 - (void)minimizeDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
 {
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"MobileDashboard.minimizeDashlet"
-                                                                parameters:nil];
-    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        if (error) {
-            heapBlock(NO, error);
-        } else {
-            heapBlock(YES, nil);
-        }
-    }];
+    // TODO: correct this
+//    JMDashboardLoaderCompletion heapBlock = [completion copy];
+//
+//    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"MobileDashboard.minimizeDashlet"
+//                                                                parameters:nil];
+//    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+//        if (error) {
+//            heapBlock(NO, error);
+//        } else {
+//            heapBlock(YES, nil);
+//        }
+//    }];
 }
 
 - (void)cancel
@@ -153,7 +154,8 @@ JMBaseDashboardLoader
 
     JMDashboardLoaderCompletion heapBlock = [completion copy];
     // run
-    JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.Legacy.API.runDashboard"
+    JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"API.runDashboard"
+                                                                  inNamespace:JMJavascriptNamespaceRESTDashboard
                                                                    parameters:@{
                                                                            @"baseURL" : self.restClient.baseURL.absoluteString,
                                                                            @"resourceURI" : self.dashboard.resourceURI
@@ -179,7 +181,8 @@ JMBaseDashboardLoader
 
     JMDashboardLoaderCompletion heapBlock = [completion copy];
 
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.Legacy.API.refresh"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.refresh"
+                                                               inNamespace:JMJavascriptNamespaceRESTDashboard
                                                                 parameters:@{
                                                                         @"baseURL" : self.restClient.baseURL.absoluteString,
                                                                         @"resourceURI" : self.dashboard.resourceURI
@@ -204,7 +207,8 @@ JMBaseDashboardLoader
 
     JMDashboardLoaderCompletion heapBlock = [completion copy];
 
-    JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Dashboard.Legacy.API.destroy"
+    JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"API.destroy"
+                                                                  inNamespace:JMJavascriptNamespaceRESTDashboard
                                                                    parameters:nil];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
@@ -226,7 +230,7 @@ JMBaseDashboardLoader
 - (void)addListenersForWebEnvironmentEvents
 {
     // Authorization
-    NSString *unauthorizedListenerId = @"JasperMobile.Dashboard.VIS.API.unauthorized";
+    NSString *unauthorizedListenerId = @"JasperMobile.VIS.Dashboard.API.unauthorized";
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment addListenerWithId:unauthorizedListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(unauthorizedListenerId);
@@ -243,6 +247,7 @@ JMBaseDashboardLoader
     }
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortScale"
+                                                               inNamespace:JMJavascriptNamespaceDefault
                                                                 parameters:@{
                                                                         @"scale" : @(initialScale)
                                                                 }];
