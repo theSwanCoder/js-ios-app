@@ -84,6 +84,7 @@
         self.visualizeManager.viewportScaleFactor = scaleFactor;
 
         JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortScale"
+                                                                   inNamespace:JMJavascriptNamespaceDefault
                                                                     parameters:@{
                                                                             @"scale" : @(scaleFactor)
                                                                     }];
@@ -94,7 +95,8 @@
 
 - (void)cleanCache
 {
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.reset"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"reset"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:nil];
     [self sendJavascriptRequest:request
                      completion:nil];
@@ -121,6 +123,7 @@
     // load vis into web environment
     NSString *vizPath = self.visualizeManager.visualizePath;
     JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
+                                                                            inNamespace:JMJavascriptNamespaceDefault
                                                                              parameters:@{
                                                                                      @"scriptURLs" : @[
                                                                                              vizPath,
@@ -143,7 +146,8 @@
 - (void)createContainers
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Report.VIS.manager.containerManager.setContainers"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.VIS.containerManager.setContainers"
+                                                               inNamespace:JMJavascriptNamespaceDefault
                                                                 parameters:@{
                                                                         @"containers" : @[
                                                                                 @{

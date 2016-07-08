@@ -92,6 +92,7 @@
 - (void)isWebViewLoadedContentDiv:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isContantDivLoaded))completion
 {
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.isContainerLoaded"
+                                                               inNamespace:JMJavascriptNamespaceDefault
                                                                 parameters:nil];
     [self sendJavascriptRequest:request
                             completion:^(NSDictionary *parameters, NSError *error) {
