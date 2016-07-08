@@ -51,7 +51,6 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
-@property (nonatomic, strong) UIBarButtonItem *leftButtonItem;
 
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
@@ -204,10 +203,9 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
         if (error) {
             [strongSelf handleError:error];
         } else {
-            strongSelf.navigationItem.leftBarButtonItem = strongSelf.leftButtonItem;
-            strongSelf.navigationItem.rightBarButtonItems = strongSelf.rightButtonItems;
             strongSelf.navigationItem.title = strongSelf.resource.resourceLookup.label;
-            strongSelf.leftButtonItem = nil;
+            [strongSelf setupLeftBarButtonItems];
+            strongSelf.navigationItem.rightBarButtonItems = strongSelf.rightButtonItems;
         }
     }];
 }
@@ -370,6 +368,7 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
 #pragma mark - JMDashboardLoaderDelegate
 - (void)dashboardLoaderDidStartMaximizeDashlet:(id<JMDashboardLoader> __nonnull)loader
 {
+    self.rightButtonItems = self.navigationItem.rightBarButtonItems;
     [self startShowLoaderWithMessage:@"status_loading"];
 }
 
@@ -386,8 +385,6 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
         self.navigationItem.rightBarButtonItem = refreshDashlet;
     }
 
-    self.leftButtonItem = self.navigationItem.leftBarButtonItem;
-    self.rightButtonItems = self.navigationItem.rightBarButtonItems;
     self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
                                                                target:self
                                                                action:@selector(minimizeDashlet)];
@@ -559,12 +556,11 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
     switch (error.code) {
         case JMJavascriptNativeBridgeErrorAuthError: {
             if ([self isDashletShown]) {
-                self.navigationItem.leftBarButtonItem = self.leftButtonItem;
-                self.navigationItem.rightBarButtonItems = self.rightButtonItems;
-                self.navigationItem.title = self.resource.resourceLookup.label;
-                self.leftButtonItem = nil;
-                self.rightButtonItems = nil;
                 self.dashboard.maximizedComponent = nil;
+                self.navigationItem.title = self.resource.resourceLookup.label;
+                [self setupLeftBarButtonItems];
+                self.navigationItem.rightBarButtonItems = self.rightButtonItems;
+                self.rightButtonItems = nil;
             }
             [self handleAuthError];
             break;
@@ -699,7 +695,6 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
                     strongSelf.navigationItem.rightBarButtonItem = refreshDashlet;
                 }
 
-                strongSelf.leftButtonItem = strongSelf.navigationItem.leftBarButtonItem;
                 strongSelf.navigationItem.leftBarButtonItem = [strongSelf backButtonWithTitle:strongSelf.title
                                                                                        target:strongSelf
                                                                                        action:@selector(minimizeDashlet)];
@@ -719,10 +714,10 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
                 [strongSelf handleError:error];
             } else {
                 // TODO: move to separate method
-                strongSelf.navigationItem.leftBarButtonItem = strongSelf.leftButtonItem;
-                strongSelf.navigationItem.rightBarButtonItems = strongSelf.rightButtonItems;
                 strongSelf.navigationItem.title = strongSelf.resource.resourceLookup.label;
-                strongSelf.leftButtonItem = nil;
+                [strongSelf setupLeftBarButtonItems];
+                strongSelf.navigationItem.rightBarButtonItems = strongSelf.rightButtonItems;
+                strongSelf.rightButtonItems = nil;
             }
         }];
     }
