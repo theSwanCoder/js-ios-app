@@ -523,24 +523,24 @@
 
     // Hyperlinks
 
-    NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.Report.VIS.API.Event.Link.ReportExecution";
+    NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.ReportExecution";
     [self.webEnvironment addListenerWithId:reportExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(reportExecutionLinkOptionListenerId);
         __typeof(self) strongSelf = weakSelf;
         [strongSelf handleRunReportWithParameters:parameters];
     }];
-    NSString *localPageLinkOptionListenerId = @"JasperMobile.Report.VIS.API.Event.Link.LocalPage";
+    NSString *localPageLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.LocalPage";
     [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(localPageLinkOptionListenerId);
         __typeof(self) strongSelf = weakSelf;
         NSString *locationString = parameters[@"destination"];
         [strongSelf.report updateCurrentPage:locationString.integerValue];
     }];
-    NSString *localAnchorLinkOptionListenerId = @"JasperMobile.Report.VIS.API.Event.Link.LocalAnchor";
+    NSString *localAnchorLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.LocalAnchor";
     [self.webEnvironment addListenerWithId:localAnchorLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(localAnchorLinkOptionListenerId);
     }];
-    NSString *referenceLinkOptionListenerId = @"JasperMobile.Report.VIS.API.Event.Link.Reference";
+    NSString *referenceLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.Reference";
     [self.webEnvironment addListenerWithId:referenceLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(referenceLinkOptionListenerId);
         __typeof(self) strongSelf = weakSelf;
@@ -552,7 +552,7 @@
             }
         }
     }];
-    NSString *remoteAnchorListenerId = @"JasperMobile.Report.VIS.API.Event.Link.RemoteAnchor";
+    NSString *remoteAnchorListenerId = @"JasperMobile.VIS.Report.Event.Link.RemoteAnchor";
     [self.webEnvironment addListenerWithId:remoteAnchorListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(remoteAnchorListenerId);
         __typeof(self) strongSelf = weakSelf;
@@ -574,7 +574,7 @@
             }
         }
     }];
-    NSString *remotePageListenerId = @"JasperMobile.Report.VIS.API.Event.Link.RemotePage";
+    NSString *remotePageListenerId = @"JasperMobile.VIS.Report.Event.Link.RemotePage";
     [self.webEnvironment addListenerWithId:remotePageListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(remotePageListenerId);
         __typeof(self) strongSelf = weakSelf;

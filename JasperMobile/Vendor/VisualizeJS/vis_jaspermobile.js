@@ -849,6 +849,7 @@ JasperMobile.VIS.Report.Helpers = {
         }
     },
     linkOptionsEventsClick: function(event, link) {
+        JasperMobile.Callback.log("link: " + JSON.stringify(link));
         var type = link.type;
         switch (type) {
             case "ReportExecution": {
@@ -899,7 +900,7 @@ JasperMobile.VIS.Report.Handlers.Hyperlinks = {
             params: JasperMobile.VIS.Report.Helpers.collectReportParams(link)
         };
         JasperMobile.Callback.log("Event: linkOption - ReportExecution");
-        JasperMobile.Callback.listener("JasperMobile.VIS.Report.API.Event.Link.ReportExecution", {
+        JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.ReportExecution", {
             "data" : data
         });
     },
@@ -911,7 +912,7 @@ JasperMobile.VIS.Report.Handlers.Hyperlinks = {
         };
         JasperMobile.VIS.Report.privateAPI.executeOperation(undefined, "navigateTo", parameters,
             function(data) {
-                JasperMobile.Callback.listener("JasperMobile.VIS.Report.API.Event.Link.LocalAnchor", {
+                JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.LocalAnchor", {
                     "destination" : link.pages
                 });
             },
@@ -925,7 +926,7 @@ JasperMobile.VIS.Report.Handlers.Hyperlinks = {
         };
         JasperMobile.VIS.Report.privateAPI.executeOperation(undefined, "navigateTo", parameters,
             function(data) {
-                JasperMobile.Callback.listener("JasperMobile.VIS.Report.API.Event.Link.LocalPage", {
+                JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.LocalPage", {
                     "destination" : link.pages
                 });
             },
@@ -935,17 +936,17 @@ JasperMobile.VIS.Report.Handlers.Hyperlinks = {
     },
     handleReference: function(link) {
         var href = link.href;
-        JasperMobile.Callback.listener("JasperMobile.VIS.Report.API.Event.Link.Reference", {
+        JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.Reference", {
             "destination" : href
         });
     },
     handleRemoteAnchor: function(link) {
-        JasperMobile.Callback.listener("JasperMobile.VIS.Report.API.Event.Link.RemoteAnchor", {
+        JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.RemoteAnchor", {
             "link" : link
         });
     },
     handleRemotePage: function (link) {
-        JasperMobile.Callback.listener("JasperMobile.VIS.Report.API.Event.Link.RemotePage", {
+        JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.RemotePage", {
             "link" : link
         });
     }
