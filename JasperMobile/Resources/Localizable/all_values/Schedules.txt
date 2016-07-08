@@ -359,6 +359,9 @@
 		pt = Validação da criação de nova tarefa agendada
 		zh = 创造新工作计划的验证
 		tags = ios
+    [error_report_job_trigger_no_fire]
+        en = Because of the way the current schedule is defined, the job will never run. Change the schedule if you want it to run.
+        tags = ios,new
 	[schedules_error_empty_filename]
 		en = Specify an output file name.
 		de = Dateiname ist leer.

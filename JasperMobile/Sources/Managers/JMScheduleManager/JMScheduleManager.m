@@ -115,31 +115,35 @@
 #pragma mark - Hanlde Errors
 - (void)handleErrorsWithData:(NSData *)jsonData completion:(JMScheduleCompletion)completion
 {
-    NSError *serializeError;
-    NSDictionary *bodyJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&serializeError];
+    NSError *error;
+    NSDictionary *bodyJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
     if (bodyJSON) {
+        NSString *errorMessage = @"";
         NSArray *errors = bodyJSON[@"error"];
         if (errors.count > 0) {
-            NSString *fullMessage = @"";
             for (NSDictionary *errorJSON in errors) {
                 NSString *message = [self errorMessageFromData:errorJSON];
                 if (message.length) {
-                    fullMessage = [fullMessage stringByAppendingFormat:@"\n%@\n", message];
+                    errorMessage = [errorMessage stringByAppendingFormat:@"\n%@\n", message];
                 }
             }
-            // TODO: enhance error
-            if (fullMessage.length == 0) {
-                fullMessage = JMCustomLocalizedString(@"schedules_error_general", nil);
-
+        } else if (bodyJSON[@"errorCode"] && bodyJSON[@"message"]) {
+            errorMessage = bodyJSON[@"message"];
+            if ([errorMessage rangeOfString:@"will never fire"].location != NSNotFound) {
+                errorMessage = JMCustomLocalizedString(@"error_report_job_trigger_no_fire", nil);
             }
-            NSError *createScheduledJobError = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules_error_domain", nil)
-                                                                          code:0
-                                                                      userInfo:@{NSLocalizedDescriptionKey: fullMessage}];
-            completion(nil, createScheduledJobError);
         }
-    } else {
-        completion(nil, serializeError);
+        // TODO: enhance error
+        if (errorMessage.length == 0) {
+            errorMessage = JMCustomLocalizedString(@"schedules_error_general", nil);
+            
+        }
+        error = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules_error_domain", nil)
+                                           code:0
+                                       userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
+
     }
+    completion(nil, error);
 }
 
 - (NSString *)errorMessageFromData:(NSDictionary *)data
