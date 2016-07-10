@@ -34,7 +34,10 @@
 
 @implementation JMBaseCollectionView
 
--(void)awakeFromNib {
+-(void)awakeFromNib 
+{
+    [super awakeFromNib];
+    
     [[NSBundle mainBundle] loadNibNamed:@"JMBaseCollectionView" owner:self options:nil];
     [self addSubview: self.contentView];
 

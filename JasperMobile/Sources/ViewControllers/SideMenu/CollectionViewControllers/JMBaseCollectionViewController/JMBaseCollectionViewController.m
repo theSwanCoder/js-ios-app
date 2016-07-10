@@ -65,7 +65,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 
 #pragma mark - LifeCycle
--(void)awakeFromNib {
+-(void)awakeFromNib 
+{
+    [super awakeFromNib];
+    
     JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
     baseCollectionView.contentView.translatesAutoresizingMaskIntoConstraints = NO;
 

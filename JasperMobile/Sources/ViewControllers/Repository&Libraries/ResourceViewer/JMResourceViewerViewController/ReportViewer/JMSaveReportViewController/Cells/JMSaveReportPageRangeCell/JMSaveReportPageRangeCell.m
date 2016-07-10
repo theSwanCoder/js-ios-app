@@ -47,6 +47,8 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+    
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
