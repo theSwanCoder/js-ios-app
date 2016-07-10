@@ -62,6 +62,7 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 
 - (void)addListenerWithId:(NSString *__nonnull)listenerId
                  callback:(JMWebEnvironmentRequestParametersCompletion __nonnull)callback;
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 - (void)removeAllListeners;
 - (void)cleanCache;
 - (void)resetZoom;

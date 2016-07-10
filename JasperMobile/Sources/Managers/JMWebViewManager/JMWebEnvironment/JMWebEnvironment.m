@@ -248,6 +248,11 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
                           }];
 }
 
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
+{
+    // imlement in childs
+}
+
 - (void)removeAllListeners
 {
     [self.bridge removeAllListeners];

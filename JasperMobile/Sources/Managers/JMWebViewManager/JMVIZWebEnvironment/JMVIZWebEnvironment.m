@@ -130,14 +130,14 @@
                                                                                              @"https://code.jquery.com/jquery.min.js"
                                                                                      ]
                                                                              }];
-    __weak  __typeof(self) weakSelf = self;
+//    __weak  __typeof(self) weakSelf = self;
     [self sendJavascriptRequest:requireJSLoadRequest
                      completion:^(NSDictionary *params, NSError *error) {
-                         __typeof(self) strongSelf = weakSelf;
+//                         __typeof(self) strongSelf = weakSelf;
                          if (error) {
                              completion(NO, error);
                          } else {
-                             //[strongSelf createContainers];
+//                             [strongSelf createContainers];
                              completion(YES, nil);
                          }
                      }];

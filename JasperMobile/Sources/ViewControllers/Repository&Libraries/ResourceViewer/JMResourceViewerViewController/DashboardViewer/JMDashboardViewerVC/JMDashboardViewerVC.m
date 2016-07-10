@@ -81,7 +81,7 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
 {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
 
-    if (![self isContentOnTV] && [self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+    if (![self isContentOnTV] && [self.webEnvironment respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
         // TODO: fix this
 //        CGFloat initialScaleViewport = 0.75;
 //        BOOL isCompactWidth = newCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
