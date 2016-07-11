@@ -24,8 +24,10 @@
 #import "JMServerOptionManager.h"
 #import "JMServerProfile+Helpers.h"
 
-static NSString * const kJMBooleanCellIdentifier = @"BooleanCell";
-static NSString * const kJMTextCellIdentifier = @"TextEditCell";
+NSString * const kJMBooleanCellIdentifier = @"BooleanCell";
+NSString * const kJMTextCellIdentifier = @"TextEditCell";
+
+NSString *const JMCacheReportsOptionDidChangeNotification = @"JMCacheReportsOptionDidChangeNotification";
 
 @interface JMServerOptionManager ()
 @property (nonatomic, readwrite) NSDictionary <NSNumber *, JMServerOption *>*availableOptions;
@@ -58,7 +60,14 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
     self.serverProfile.keepSession  = [self.availableOptions[@(JMServerOptionTypeKeepSession)] optionValue];
 #ifndef  __RELEASE__
     self.serverProfile.useVisualize = [self.availableOptions[@(JMServerOptionTypeUseVisualize)] optionValue];
-    self.serverProfile.cacheReports = [self.availableOptions[@(JMServerOptionTypeCacheReports)] optionValue];
+    BOOL cacheReportsNewValue = ((NSNumber *)[self.availableOptions[@(JMServerOptionTypeCacheReports)] optionValue]).boolValue;
+    BOOL cacheReportsCurrentValue = self.serverProfile.cacheReports.boolValue;
+    if (cacheReportsCurrentValue != cacheReportsNewValue) {
+        // POST notification
+        [[NSNotificationCenter defaultCenter] postNotificationName:JMCacheReportsOptionDidChangeNotification
+                                                            object:self.serverProfile];
+    }
+    self.serverProfile.cacheReports = @(cacheReportsNewValue);
 #endif
     
     if ([[JMCoreDataManager sharedInstance].managedObjectContext hasChanges]) {

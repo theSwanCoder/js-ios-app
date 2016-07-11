@@ -28,11 +28,11 @@
 #import "JMServerProfile.h"
 
 @implementation JMServerProfile
-
 @dynamic alias;
 @dynamic askPassword;
 @dynamic keepSession;
 @dynamic useVisualize;
+@dynamic cacheReports;
 @dynamic organization;
 @dynamic serverUrl;
 @dynamic favorites;

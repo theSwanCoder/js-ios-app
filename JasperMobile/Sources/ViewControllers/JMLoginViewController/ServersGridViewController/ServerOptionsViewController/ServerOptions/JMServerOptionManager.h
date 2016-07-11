@@ -45,6 +45,8 @@ typedef NS_ENUM(NSInteger, JMServerOptionType) {
     JMServerOptionTypeCacheReports,
 };
 
+extern NSString *const JMCacheReportsOptionDidChangeNotification;
+
 @interface JMServerOptionManager : NSObject
 @property (nonatomic, strong) JMServerProfile *serverProfile;
 @property (nonatomic, readonly) NSDictionary <NSNumber *, JMServerOption *>*availableOptions;
