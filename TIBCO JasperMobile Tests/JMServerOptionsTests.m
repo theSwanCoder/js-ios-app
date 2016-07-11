@@ -35,7 +35,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "JMServerOptions.h"
+#import "JMServerOptionManager.h"
 #import "JMServerProfile.h"
 
 @interface JMServerOptionsTests : XCTestCase

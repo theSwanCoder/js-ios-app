@@ -67,7 +67,7 @@
 		089B15BB1AA756BD0021A915 /* JMTextServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14D91AA756BD0021A915 /* JMTextServerOptionCell.m */; };
 		089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14DB1AA756BD0021A915 /* JMServerOptionsViewController.m */; };
 		089B15BD1AA756BD0021A915 /* JMServerOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14DF1AA756BD0021A915 /* JMServerOption.m */; };
-		089B15BE1AA756BD0021A915 /* JMServerOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14E11AA756BD0021A915 /* JMServerOptions.m */; };
+		089B15BE1AA756BD0021A915 /* JMServerOptionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14E11AA756BD0021A915 /* JMServerOptionManager.m */; };
 		089B15C01AA756BD0021A915 /* JMLoadingCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14E91AA756BD0021A915 /* JMLoadingCollectionViewCell.m */; };
 		089B15C11AA756BD0021A915 /* JMGridLoadingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 089B14EB1AA756BD0021A915 /* JMGridLoadingCollectionViewCell.xib */; };
 		089B15C31AA756BD0021A915 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 089B14ED1AA756BD0021A915 /* JMHorizontalLoadingCollectionViewCell.xib */; };
@@ -392,8 +392,8 @@
 		089B14DB1AA756BD0021A915 /* JMServerOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionsViewController.m; sourceTree = "<group>"; };
 		089B14DE1AA756BD0021A915 /* JMServerOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMServerOption.h; sourceTree = "<group>"; };
 		089B14DF1AA756BD0021A915 /* JMServerOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOption.m; sourceTree = "<group>"; };
-		089B14E01AA756BD0021A915 /* JMServerOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMServerOptions.h; sourceTree = "<group>"; };
-		089B14E11AA756BD0021A915 /* JMServerOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptions.m; sourceTree = "<group>"; };
+		089B14E01AA756BD0021A915 /* JMServerOptionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMServerOptionManager.h; sourceTree = "<group>"; };
+		089B14E11AA756BD0021A915 /* JMServerOptionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionManager.m; sourceTree = "<group>"; };
 		089B14E81AA756BD0021A915 /* JMLoadingCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLoadingCollectionViewCell.h; sourceTree = "<group>"; };
 		089B14E91AA756BD0021A915 /* JMLoadingCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLoadingCollectionViewCell.m; sourceTree = "<group>"; };
 		089B14EB1AA756BD0021A915 /* JMGridLoadingCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMGridLoadingCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -625,6 +625,7 @@
 		93A8B5C91CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedItemInfoScreenUITests.m; sourceTree = "<group>"; };
 		93A8B5CC1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardPrintDialogUITests.h; sourceTree = "<group>"; };
 		93A8B5CD1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardPrintDialogUITests.m; sourceTree = "<group>"; };
+		93AE1B471D33876C00B4742B /* JasperMobile_v_2_ 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "JasperMobile_v_2_ 7.xcdatamodel"; sourceTree = "<group>"; };
 		93BC5BA01D098E7C0068387F /* JasperMobile_v_2_6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile_v_2_6.xcdatamodel; sourceTree = "<group>"; };
 		93C4E3101C737DB300A19D64 /* JMUITestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMUITestConstants.h; sourceTree = "<group>"; };
 		93C4E3111C737DB300A19D64 /* JMUITestConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUITestConstants.m; sourceTree = "<group>"; };
@@ -1272,8 +1273,8 @@
 			isa = PBXGroup;
 			children = (
 				089B14DD1AA756BD0021A915 /* JMServerOption */,
-				089B14E01AA756BD0021A915 /* JMServerOptions.h */,
-				089B14E11AA756BD0021A915 /* JMServerOptions.m */,
+				089B14E01AA756BD0021A915 /* JMServerOptionManager.h */,
+				089B14E11AA756BD0021A915 /* JMServerOptionManager.m */,
 			);
 			path = ServerOptions;
 			sourceTree = "<group>";
@@ -3634,7 +3635,7 @@
 				9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */,
 				089B15B71AA756BD0021A915 /* JMServerCollectionViewCell.m in Sources */,
 				0801DFAE1AAF2CFB00DD072C /* JMLocalization.m in Sources */,
-				089B15BE1AA756BD0021A915 /* JMServerOptions.m in Sources */,
+				089B15BE1AA756BD0021A915 /* JMServerOptionManager.m in Sources */,
 				089B15BA1AA756BD0021A915 /* JMServerOptionCell.m in Sources */,
 				08DD182D1B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel in Sources */,
 				089B15BD1AA756BD0021A915 /* JMServerOption.m in Sources */,
@@ -4487,13 +4488,14 @@
 		08DD18231B135BE500856112 /* JasperMobile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				93AE1B471D33876C00B4742B /* JasperMobile_v_2_ 7.xcdatamodel */,
 				93BC5BA01D098E7C0068387F /* JasperMobile_v_2_6.xcdatamodel */,
 				08DD18241B135BE500856112 /* JasperMobile.xcdatamodel */,
 				08DD18251B135BE500856112 /* JasperMobile_v_1_9.xcdatamodel */,
 				08DD18261B135BE500856112 /* JasperMobile_v_2_0.xcdatamodel */,
 				08DD18271B135BE500856112 /* JasperMobile_v_2_1.xcdatamodel */,
 			);
-			currentVersion = 93BC5BA01D098E7C0068387F /* JasperMobile_v_2_6.xcdatamodel */;
+			currentVersion = 93AE1B471D33876C00B4742B /* JasperMobile_v_2_ 7.xcdatamodel */;
 			path = JasperMobile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

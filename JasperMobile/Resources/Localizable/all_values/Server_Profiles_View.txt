@@ -93,6 +93,9 @@
 	[servers_useVisualize_label]
 		en = Use Visualize
 		tags = ios,new
+	[servers_cacheReport_label]
+		en = Cache Reports
+		tags = ios,new
 	[servers_title_new]
 		en = New Server Profile
 		de = Neues Serverprofil

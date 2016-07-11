@@ -24,7 +24,7 @@
 #import "JMServerOptionsViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "JMServerProfile+Helpers.h"
-#import "JMServerOptions.h"
+#import "JMServerOptionManager.h"
 
 #import "JMServerOptionCell.h"
 
@@ -34,43 +34,36 @@
 @interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, JMServerOptionCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
-@property (nonatomic, strong) JMServerOptions *serverOptions;
+@property (nonatomic, strong) JMServerOptionManager *serverOptionManager;
+@property (nonatomic, copy) NSArray <JMServerOption *>*serverOptions;
 @property (nonatomic, strong) JSRESTBase *restBase;
 @end
 
 @implementation JMServerOptionsViewController
 @dynamic serverProfile;
 
-#pragma mark - Initialization
+#pragma mark - UIViewController Life Cycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    if (self.serverOptions.isExistingServerProfile) {
+    if (self.serverOptionManager.isExistingServerProfile) {
         self.title = self.serverProfile.alias;
     } else {
         self.title = JMCustomLocalizedString(@"servers_title_new", nil);
     }
-
-    [self.saveButton setTitle:JMCustomLocalizedString(@"dialog_button_save", nil) forState:UIControlStateNormal];
-    [self.saveButton setTitleColor:[[JMThemesManager sharedManager] serverProfileSaveButtonTextColor] forState:UIControlStateNormal];
-    self.saveButton.backgroundColor = [[JMThemesManager sharedManager] serverProfileSaveButtonBackgroundColor];
-    
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
-    self.tableView.layer.cornerRadius = 4;
-    if (!self.serverProfile) {
-        self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:nil];
-    }
-    self.serverOptions.editable = self.editable;
-    self.tableView.rowHeight = 50.f;
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+
+    [self setupSaveButton];
+    [self setupTableView];
+    [self setupServerOptions];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self.serverOptions discardChanges];
+    [self.serverOptionManager discardChanges];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -78,16 +71,55 @@
     [self.tableView reloadData];
 }
 
+#pragma mark - Setups
+- (void)setupTableView
+{
+    self.tableView.layer.cornerRadius = 4;
+    if (!self.serverProfile) {
+        self.serverOptionManager = [[JMServerOptionManager alloc] initWithServerProfile:nil];
+    }
+    self.tableView.rowHeight = 50.f;
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+}
+
+- (void)setupSaveButton
+{
+    [self.saveButton setTitle:JMCustomLocalizedString(@"dialog_button_save", nil) forState:UIControlStateNormal];
+    [self.saveButton setTitleColor:[[JMThemesManager sharedManager] serverProfileSaveButtonTextColor] forState:UIControlStateNormal];
+    self.saveButton.backgroundColor = [[JMThemesManager sharedManager] serverProfileSaveButtonBackgroundColor];
+}
+
+- (void)setupServerOptions
+{
+    self.serverOptionManager.editable = self.editable;
+
+    NSMutableArray *serverOptions = [NSMutableArray array];
+    [serverOptions addObject:self.serverOptionManager.availableOptions[@(JMServerOptionTypeAlias)]];
+    [serverOptions addObject:self.serverOptionManager.availableOptions[@(JMServerOptionTypeURL)]];
+    [serverOptions addObject:self.serverOptionManager.availableOptions[@(JMServerOptionTypeOrganization)]];
+    [serverOptions addObject:self.serverOptionManager.availableOptions[@(JMServerOptionTypeAskPassword)]];
+    [serverOptions addObject:self.serverOptionManager.availableOptions[@(JMServerOptionTypeKeepSession)]];
+#ifndef  __RELEASE__
+    [serverOptions addObject:self.serverOptionManager.availableOptions[@(JMServerOptionTypeUseVisualize)]];
+    [serverOptions addObject:self.serverOptionManager.availableOptions[@(JMServerOptionTypeCacheReports)]];
+#endif
+    self.serverOptions = serverOptions;
+}
+
+#pragma mark - Custom Accessors
+
 - (JMServerProfile *)serverProfile
 {
-    return self.serverOptions.serverProfile;
+    return self.serverOptionManager.serverProfile;
 }
 
 - (void)setServerProfile:(JMServerProfile *)serverProfile
 {
-    self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:serverProfile];
+    self.serverOptionManager = [[JMServerOptionManager alloc] initWithServerProfile:serverProfile];
     [self.tableView reloadData];
 }
+
+#pragma mark - Public API
 
 - (void)cancel
 {
@@ -99,12 +131,12 @@
 #pragma mark - UITableViewDataSource, UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.serverOptions.optionsArray count];
+    return [self.serverOptions count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMServerOption *option = self.serverOptions.optionsArray[indexPath.row];
+    JMServerOption *option = self.serverOptions[indexPath.row];
     
     JMServerOptionCell *cell = (JMServerOptionCell *) [tableView dequeueReusableCellWithIdentifier:option.cellIdentifier];
     cell.serverOption = option;
@@ -118,7 +150,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMServerOption *option = self.serverOptions.optionsArray[indexPath.row];
+    JMServerOption *option = self.serverOptions[indexPath.row];
     if (option.errorString) {
         CGFloat maxWidth = tableView.frame.size.width - 30;
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
@@ -135,9 +167,9 @@
 - (IBAction)saveButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
-    if ([self.serverOptions isValidData]) {
+    if ([self.serverOptionManager isValidData]) {
         // verify https scheme
-        NSString *scheme = [self.serverOptions urlSchemeForServerProfile];
+        NSString *scheme = [self.serverOptionManager urlSchemeForServerProfile];
         BOOL isHTTPSScheme = [scheme isEqualToString:@"https"];
         if (isHTTPSScheme) {
             [self saveServerOptions];
@@ -164,7 +196,7 @@
 - (void)saveServerOptions
 {
     // save in DB current profile with updated properties
-    [self.serverOptions saveChanges];
+    [self.serverOptionManager saveChanges];
 }
 
 - (void)showSecurityHTTPAlert

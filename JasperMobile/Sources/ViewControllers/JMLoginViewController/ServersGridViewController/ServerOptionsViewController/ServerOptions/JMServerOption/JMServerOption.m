@@ -25,20 +25,37 @@
 
 @implementation JMServerOption
 
-- (id)init
+- (instancetype)initWithTitle:(NSString *)title
+                  optionValue:(id)optionValue
+               cellIdentifier:(NSString *)cellIdentifier
+                     editable:(BOOL)editable
 {
     self = [super init];
     if (self) {
-        self.editable = YES;
+        _titleString = title;
+        _optionValue = optionValue;
+        _cellIdentifier = cellIdentifier;
+        _editable = editable;
     }
     return self;
+}
+
++ (instancetype)optionWithTitle:(NSString *)title
+                    optionValue:(id)optionValue
+                 cellIdentifier:(NSString *)cellIdentifier
+                       editable:(BOOL)editable
+{
+    return [[self alloc] initWithTitle:title
+                           optionValue:optionValue
+                        cellIdentifier:cellIdentifier
+                              editable:editable];
 }
 
 - (void)setOptionValue:(id)optionValue
 {
     if (optionValue != _optionValue) {
         _optionValue = optionValue;
-        self.errorString = nil;
+        _errorString = nil;
     }
 }
 

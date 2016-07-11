@@ -22,7 +22,7 @@
 
 
 //
-//  JMServerOptions.h
+//  JMServerOptionManager.h
 //  TIBCO JasperMobile
 //
 
@@ -35,10 +35,19 @@
 #import "JMServerProfile.h"
 #import "JMServerOption.h"
 
-@interface JMServerOptions : NSObject
+typedef NS_ENUM(NSInteger, JMServerOptionType) {
+    JMServerOptionTypeAlias,
+    JMServerOptionTypeURL,
+    JMServerOptionTypeOrganization,
+    JMServerOptionTypeAskPassword,
+    JMServerOptionTypeKeepSession,
+    JMServerOptionTypeUseVisualize,
+    JMServerOptionTypeCacheReports,
+};
 
+@interface JMServerOptionManager : NSObject
 @property (nonatomic, strong) JMServerProfile *serverProfile;
-@property (nonatomic, readonly) NSArray *optionsArray;
+@property (nonatomic, readonly) NSDictionary <NSNumber *, JMServerOption *>*availableOptions;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, assign) BOOL isExistingServerProfile;
 
