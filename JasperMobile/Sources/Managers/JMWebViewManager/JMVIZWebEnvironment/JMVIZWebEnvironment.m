@@ -29,18 +29,34 @@
 #import "JMVIZWebEnvironment.h"
 #import "JMVisualizeManager.h"
 #import "JMJavascriptRequest.h"
+#import "JMServerOptionManager.h"
 
 
 @implementation JMVIZWebEnvironment
 
 #pragma mark - Init
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype __nullable)initWithId:(NSString *__nonnull)identifier initialCookies:(NSArray *__nullable)cookies;
 {
     self = [super initWithId:identifier initialCookies:cookies];
     if (self) {
         _visualizeManager = [JMVisualizeManager new];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(cacheReportsOptionDidChange:)
+                                                     name:JMCacheReportsOptionDidChangeNotification
+                                                   object:nil];
     }
     return self;
+}
+
+#pragma mark - Notification
+- (void)cacheReportsOptionDidChange:(NSNotification *)notification
+{
+    [self cleanCache];
 }
 
 #pragma mark - Public API
@@ -130,14 +146,17 @@
                                                                                              @"https://code.jquery.com/jquery.min.js"
                                                                                      ]
                                                                              }];
-//    __weak  __typeof(self) weakSelf = self;
+    __weak  __typeof(self) weakSelf = self;
     [self sendJavascriptRequest:requireJSLoadRequest
                      completion:^(NSDictionary *params, NSError *error) {
-//                         __typeof(self) strongSelf = weakSelf;
+                         __typeof(self) strongSelf = weakSelf;
                          if (error) {
                              completion(NO, error);
                          } else {
-//                             [strongSelf createContainers];
+                             JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+                             if (activeProfile.cacheReports.boolValue) {
+                                 [strongSelf createContainers];
+                             }
                              completion(YES, nil);
                          }
                      }];
