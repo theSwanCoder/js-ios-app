@@ -62,12 +62,12 @@ NSString *const JMCacheReportsOptionDidChangeNotification = @"JMCacheReportsOpti
     self.serverProfile.useVisualize = [self.availableOptions[@(JMServerOptionTypeUseVisualize)] optionValue];
     BOOL cacheReportsNewValue = ((NSNumber *)[self.availableOptions[@(JMServerOptionTypeCacheReports)] optionValue]).boolValue;
     BOOL cacheReportsCurrentValue = self.serverProfile.cacheReports.boolValue;
+    self.serverProfile.cacheReports = @(cacheReportsNewValue);
     if (cacheReportsCurrentValue != cacheReportsNewValue) {
         // POST notification
         [[NSNotificationCenter defaultCenter] postNotificationName:JMCacheReportsOptionDidChangeNotification
                                                             object:self.serverProfile];
     }
-    self.serverProfile.cacheReports = @(cacheReportsNewValue);
 #endif
     
     if ([[JMCoreDataManager sharedInstance].managedObjectContext hasChanges]) {
@@ -163,7 +163,7 @@ NSString *const JMCacheReportsOptionDidChangeNotification = @"JMCacheReportsOpti
                                                              optionValue:self.serverProfile.useVisualize  ? : @(NO)
                                                           cellIdentifier:kJMBooleanCellIdentifier
                                                                 editable:YES],
-            @(JMServerOptionTypeCacheReports) : [JMServerOption optionWithTitle:[self localizedString:@"servers_useVisualize_label" mandatory:NO]
+            @(JMServerOptionTypeCacheReports) : [JMServerOption optionWithTitle:[self localizedString:@"servers_cacheReport_label" mandatory:NO]
                                                              optionValue:self.serverProfile.cacheReports  ? : @(NO)
                                                           cellIdentifier:kJMBooleanCellIdentifier
                                                                 editable:YES],

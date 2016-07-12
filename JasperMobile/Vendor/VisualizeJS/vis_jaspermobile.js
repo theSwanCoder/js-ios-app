@@ -151,9 +151,22 @@ var JasperMobile = {
             style.innerHTML = innerHTML;
             document.getElementsByTagName('head')[0].appendChild(style);
         },
-        removeDivElement: function(name) {
-            var divElement = document.getElementById(name);
+        removeDivElementWithID: function(id) {
+            var divElement = document.getElementById(id);
+            if (divElement == undefined) {
+                return;
+            }
             document.body.removeChild(divElement);
+        },
+        removeDivElementsWithClass: function(className) {
+            var elements = document.getElementsByClassName(className);
+            if (elements.length == 0) {
+                return;
+            }
+            for (var i = 0; i < elements.length; ++i) {
+                var element = elements[i];
+                document.body.removeChild(element);
+            }
         },
         existDivElement: function(name) {
             return document.getElementById(name) != undefined;
@@ -197,6 +210,128 @@ JasperMobile.Callback = {
     }
 };
 
+JasperMobile.containerManager = {
+    activeContainer: undefined,
+    defaultContainer: {
+        name : "container",
+        isActive : true
+    },
+    nextIndexToFree : 0,
+    containers : undefined,
+    setContainers: function(parameters) {
+        this.containers = parameters["containers"];
+        for (var i = 0; i < this.containers.length; ++i) {
+            var container = this.containers[i];
+            JasperMobile.Helper.createDivElement(container.name, {
+                "width" : "100%",
+                "height" : "100%",
+                "margin" : "0 auto"
+            });
+        }
+    },
+    removeAllContainers: function() {
+        if (this.containers == undefined) {
+            JasperMobile.Helper.removeDivElementWithID(this.defaultContainer.name);
+        } else {
+            for (var i = 0; i < this.containers.length; ++i) {
+                var container = this.containers[i];
+                JasperMobile.Helper.removeDivElementWithID(container.name);
+            }
+            this.containers = undefined;
+        }
+    },
+    chooseDefaultContainer: function() {
+        if (!JasperMobile.Helper.existDivElement(this.defaultContainer.name)) {
+            this.createDefaultContainer();
+        }
+        this.activeContainer = this.defaultContainer;
+    },
+    createDefaultContainer: function() {
+        var containerName = this.defaultContainer;
+        JasperMobile.Helper.createDivElement(containerName.name, {
+            "width" : "100%",
+            "height" : "100%",
+            "margin" : "0 auto"
+        });
+    },
+    removeDefaultContainer: function() {
+        JasperMobile.Helper.removeDivElementWithID(this.defaultContainer.name);
+    },
+    changeActiveContainer: function(freeContainerFromReport) {
+        if (this.activeContainer == undefined) {
+            this.activeContainer = this.containers[0];
+        } else {
+            var nextContainer = this.nextContainer();
+            freeContainerFromReport(nextContainer);
+            this.hideContainer(this.activeContainer);
+            this.showContainer(nextContainer);
+            this.activeContainer = nextContainer;
+        }
+        this.activeContainer.isActive = true;
+    },
+    nextContainer: function() {
+        var currentIndex = this.containers.indexOf(this.activeContainer);
+        var nextContainer = this.findInactiveContainer();
+
+        // there isn't any free spot,
+        if (nextContainer == undefined) {
+            var containerToFree = this.containers[this.nextIndexToFree];
+            // chage next index
+            if (++this.nextIndexToFree == this.containers.length) {
+                this.nextIndexToFree = 0;
+            }
+            nextContainer = containerToFree;
+        }
+        return nextContainer;
+    },
+    findInactiveContainer: function() {
+        var inActiveContainer = undefined;
+        var container = undefined;
+        for (var i = 0; i < this.containers.length; i++) {
+            container = this.containers[i];
+            if (container.isActive) {
+                continue;
+            } else {
+                inActiveContainer = container;
+                break;
+            }
+        }
+        return inActiveContainer;
+    },
+    hideContainer: function(container) {
+        var element = document.getElementById(container.name);
+        element.style.display = "none";
+    },
+    showContainer: function(container) {
+        var element = document.getElementById(container.name);
+        element.style.display = "block";
+    },
+    clearContainer: function(container) {
+        var containerElement = document.getElementById(container.name);
+        containerElement.innerHTML = "";
+    },
+    reset: function() {
+        if (this.containers == undefined) {
+            return;
+        }
+        for(var i = 0; i < this.containers.length; ++i) {
+            var container = this.containers[i];
+            this.clearContainer(container);
+            container.isActive = false;
+        }
+        this.nextIndexToFree = 0;
+        // remove
+        // m-Dialog
+        // jive_dropdown_menu
+        // TODO: invesigate all cases
+        JasperMobile.Helper.removeDivElementsWithClass("m-Dialog");
+        JasperMobile.Helper.removeDivElementsWithClass("m-jive_dropdown_menu");
+    },
+    shouldReuseContainers: function() {
+        return JasperMobile.containerManager.containers != undefined && JasperMobile.containerManager.containers.length > 0;
+    }
+};
+
 // REST flow
 JasperMobile.REST = {
     Report: {},
@@ -208,6 +343,10 @@ JasperMobile.REST.Report.API = {
     elasticChart: null,
     transformationScale: 0.0,
     injectContent: function(contentObject, transformationScale) {
+        if (!JasperMobile.containerManager.shouldReuseContainers()) {
+            JasperMobile.containerManager.chooseDefaultContainer();
+        }
+
         JasperMobile.REST.Report.API.transformationScale = contentObject["transformationScale"];
         var content = contentObject["HTMLString"];
         var container = document.getElementById('container');
@@ -509,110 +648,6 @@ JasperMobile.REST.Dashboard.API = {
 
 // VIZ flow
 JasperMobile.VIS = {
-    containerManager : {
-        activeContainer: undefined,
-        defaultContainer: {
-            name : "container",
-            isActive : true
-        },
-        nextIndexToFree : 0,
-        containers : undefined,
-        setContainers: function(parameters) {
-            this.containers = parameters["containers"];
-            for (var i = 0; i < this.containers.length; ++i) {
-                var container = this.containers[i];
-                JasperMobile.Helper.createDivElement(container.name, {
-                    "width" : "100%",
-                    "height" : "100%",
-                    "margin" : "0 auto"
-                });
-            }
-        },
-        chooseDefaultContainer: function() {
-            if (!JasperMobile.Helper.existDivElement(this.defaultContainer.name)) {
-                this.createDefaultContainer();
-            }
-            this.activeContainer = this.defaultContainer;
-        },
-        createDefaultContainer: function() {
-            var containerName = this.defaultContainer;
-            JasperMobile.Helper.createDivElement(containerName.name, {
-                "width" : "100%",
-                "height" : "100%",
-                "margin" : "0 auto"
-            });
-        },
-        removeDefaultContainer: function() {
-            JasperMobile.Helper.removeDivElement(this.defaultContainer.name);
-        },
-        changeActiveContainer: function() {
-            if (this.activeContainer == undefined) {
-                this.activeContainer = this.containers[0];
-            } else {
-                var nextContainer = this.nextContainer();
-                this.hideContainer(this.activeContainer);
-                this.showContainer(nextContainer);
-                this.activeContainer = nextContainer;
-            }
-            this.activeContainer.isActive = true;
-        },
-        nextContainer: function() {
-            var currentIndex = this.containers.indexOf(this.activeContainer);
-            var nextContainer = this.findInactiveContainer();
-
-            // there isn't any free spot,
-            if (nextContainer == undefined) {
-                var containerToFree = this.containers[this.nextIndexToFree];
-                // TODO: fix this
-                // JasperMobile.Report.VIS.manager.removeReportInContainer(containerToFree, function() {
-                //     JasperMobile.Callback.log("report was removed");
-                // });
-
-                // chage next index
-                if (++this.nextIndexToFree == this.containers.length) {
-                    this.nextIndexToFree = 0;
-                }
-                nextContainer = containerToFree;
-            }
-            return nextContainer;
-        },
-        findInactiveContainer: function() {
-            var inActiveContainer = undefined;
-            var container = undefined;
-            for (var i = 0; i < this.containers.length; i++) {
-                container = this.containers[i];
-                if (container.isActive) {
-                    continue;
-                } else {
-                    inActiveContainer = container;
-                    break;
-                }
-            }
-            return inActiveContainer;
-        },
-        hideContainer: function(container) {
-            var element = document.getElementById(container.name);
-            element.style.display = "none";
-        },
-        showContainer: function(container) {
-            var element = document.getElementById(container.name);
-            element.style.display = "block";
-        },
-        clearContainer: function(container) {
-            var containerElement = document.getElementById(container.name);
-            containerElement.innerHTML = "";
-        },
-        reset: function() {
-            if (this.containers == undefined) {
-                return;
-            }
-            for(var i = 0; i < this.containers.length; ++i) {
-                var container = this.containers[i];
-                container.isActive = false;
-            }
-            this.nextIndexToFree = 0;
-        }
-    },
     Helpers: {
         authFn: function(isForAmber) {
             if (isForAmber) {
@@ -641,7 +676,7 @@ JasperMobile.VIS.Report = {
         reports: {},
         addReport:function(object) {
             var report = this.createReport(object);
-            report.container = this.containerManager.activeContainer;
+            report.container = JasperMobile.containerManager.activeContainer;
             var uri = report.object.resource();
             report.uri = uri;
             JasperMobile.VIS.Report.activeReport = report;
@@ -722,7 +757,7 @@ JasperMobile.VIS.Report = {
         },
         setActiveReport: function(uri) {
             JasperMobile.VIS.Report.activeReport = this.reports[uri];
-            JasperMobile.VIS.containerManager.showContainer(JasperMobile.VIS.Report.activeReport.container);
+            JasperMobile.containerManager.showContainer(JasperMobile.VIS.Report.activeReport.container);
         }
     },
     API: {},
@@ -733,7 +768,7 @@ JasperMobile.VIS.Report = {
     },
     reset: function() {
         this.activeReport = undefined;
-        JasperMobile.VIS.containerManager.reset();
+        JasperMobile.containerManager.reset();
         this.manager.removeAllReports();
     }
 };
@@ -752,13 +787,12 @@ JasperMobile.VIS.Report.Helpers = {
         var self = this;
         return function(v) {
             var reportObject = v.report(self.initReportStructWithParameters(params));
-            if (JasperMobile.VIS.containerManager.containers != undefined &&
-                JasperMobile.VIS.containerManager.containers.length > 0) {
+            if (JasperMobile.containerManager.shouldReuseContainers()) {
                 // save report object
                 JasperMobile.VIS.Report.manager.addReport(reportObject);
             } else {
                 var report = JasperMobile.VIS.Report.manager.createReport(reportObject);
-                report.container = JasperMobile.VIS.containerManager.activeContainer;
+                report.container = JasperMobile.containerManager.activeContainer;
                 JasperMobile.VIS.Report.activeReport = report;
             }
         };
@@ -774,7 +808,7 @@ JasperMobile.VIS.Report.Helpers = {
     },
     baseStructFn: function(parameters) {
         var self = this;
-        var container = JasperMobile.VIS.containerManager.activeContainer.name;
+        var container = JasperMobile.containerManager.activeContainer.name;
         return {
             resource: parameters["uri"],
             params: parameters["params"],
@@ -793,6 +827,15 @@ JasperMobile.VIS.Report.Helpers = {
     },
     success: function(reportData) {
         var status = "undefined";
+        if (JasperMobile.VIS.Report.activeReport == undefined) {
+            JasperMobile.Callback.callback("JasperMobile.VIS.Report.API.run", {
+                "error" : {
+                    "code"    : "Visualize Error",
+                    "message" : "An error of creating a report object"
+                }
+            });
+            return;
+        }
         if (JasperMobile.VIS.Report.activeReport.totalPages() == undefined) {
             status = "inProgress";
         } else {
@@ -1045,12 +1088,17 @@ JasperMobile.VIS.Report.API = {
                 );
             }
         } else {
-            if (JasperMobile.VIS.containerManager.containers != undefined &&
-                JasperMobile.VIS.containerManager.containers.length > 0) {
+            if (JasperMobile.containerManager.shouldReuseContainers()) {
                 // Choose other container
-                JasperMobile.VIS.containerManager.changeActiveContainer();
+                JasperMobile.containerManager.changeActiveContainer(function(container) {
+                    if (container != undefined) {
+                        JasperMobile.VIS.Report.manager.removeReportInContainer(container, function() {
+                            JasperMobile.Callback.log("report was removed");
+                        });
+                    }
+                });
             } else {
-                JasperMobile.VIS.containerManager.chooseDefaultContainer();
+                JasperMobile.containerManager.chooseDefaultContainer();
             }
             visualize(
                 JasperMobile.VIS.Helpers.authFn(JasperMobile.VIS.Report.Helpers.isAmber),
@@ -1119,13 +1167,12 @@ JasperMobile.VIS.Report.API = {
         );
     },
     destroy: function() {
-        if (JasperMobile.VIS.containerManager.containers != undefined &&
-            JasperMobile.VIS.containerManager.containers.length > 0) {
-            JasperMobile.VIS.containerManager.hideContainer(JasperMobile.VIS.Report.activeReport.container);
+        if (JasperMobile.containerManager.shouldReuseContainers()) {
+            JasperMobile.containerManager.hideContainer(JasperMobile.VIS.Report.activeReport.container);
             JasperMobile.Callback.callback("JasperMobile.VIS.Report.API.destroy", {});
         } else {
             JasperMobile.VIS.Report.activeReport.destroy(function() {
-                JasperMobile.VIS.containerManager.activeContainer = undefined;
+                JasperMobile.containerManager.activeContainer = undefined;
                 JasperMobile.VIS.Report.activeReport = undefined;
                 JasperMobile.Callback.callback("JasperMobile.VIS.Report.API.destroy", {});
             });
@@ -1210,7 +1257,7 @@ JasperMobile.VIS.Dashboard.Setup = {
     },
     baseStructFn: function(parameters) {
         var self = this;
-        var container = JasperMobile.VIS.containerManager.activeContainer.name;
+        var container = JasperMobile.containerManager.activeContainer.name;
         return {
             resource: parameters["uri"],
             container: "#" + container,
@@ -1651,7 +1698,7 @@ JasperMobile.VIS.Dashboard.PrivateAPI = {
 JasperMobile.VIS.Dashboard.API = {
     run: function(params) {
         JasperMobile.VIS.Dashboard.state.isAmber = params["is_for_6_0"];
-        JasperMobile.VIS.containerManager.chooseDefaultContainer();
+        JasperMobile.containerManager.chooseDefaultContainer();
         visualize(
             JasperMobile.VIS.Helpers.authFn(JasperMobile.VIS.Dashboard.state.isAmber),
             JasperMobile.VIS.Dashboard.Setup.runFn(params),

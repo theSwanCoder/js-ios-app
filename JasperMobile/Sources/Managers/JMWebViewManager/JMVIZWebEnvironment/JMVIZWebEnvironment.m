@@ -56,7 +56,12 @@
 #pragma mark - Notification
 - (void)cacheReportsOptionDidChange:(NSNotification *)notification
 {
+    JMServerProfile *serverProfile = notification.object;
     [self cleanCache];
+    [self removeContainers];
+    if (serverProfile.cacheReports.boolValue) {
+        [self createContainers];
+    }
 }
 
 #pragma mark - Public API
@@ -162,10 +167,20 @@
                      }];
 }
 
+- (void)removeContainers
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.containerManager.removeAllContainers"
+                                                               inNamespace:JMJavascriptNamespaceDefault
+                                                                parameters:nil];
+    [self sendJavascriptRequest:request
+                     completion:nil];
+}
+
 - (void)createContainers
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.VIS.containerManager.setContainers"
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.containerManager.setContainers"
                                                                inNamespace:JMJavascriptNamespaceDefault
                                                                 parameters:@{
                                                                         @"containers" : @[
