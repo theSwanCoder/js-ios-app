@@ -8,7 +8,7 @@
 
 #import "JMPerformanceUITests.h"
 
-NSInteger static kJMRunReportTestCellIndex = 1;
+NSInteger static kJMRunReportTestCellIndex = 2;
 
 @implementation JMPerformanceUITests
 
