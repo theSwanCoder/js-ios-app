@@ -552,6 +552,10 @@ JasperMobile.REST.Report.API = {
 JasperMobile.REST.Dashboard.API = {
     dashboardFlowURI: "flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=",
     runDashboard: function(parameters) {
+        if (!JasperMobile.containerManager.shouldReuseContainers()) {
+            JasperMobile.containerManager.chooseDefaultContainer();
+        }
+
         var baseURL = parameters["baseURL"];
         var resourceURI = parameters["resourceURI"];
         var url = baseURL + JasperMobile.REST.Dashboard.API.dashboardFlowURI + resourceURI;
