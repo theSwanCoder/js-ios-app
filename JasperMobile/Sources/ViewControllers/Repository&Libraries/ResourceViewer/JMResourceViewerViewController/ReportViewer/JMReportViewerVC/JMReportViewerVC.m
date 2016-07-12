@@ -45,6 +45,13 @@ NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMRep
 NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierViz  = @"kJMReportViewerSecondaryWebEnvironmentIdentifierViz";
 NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMReportViewerSecondaryWebEnvironmentIdentifierREST";
 
+// TODO: we could extend this enum for tracking different states (like 'report isn't ready', 'multipage report' and so on)
+// and simplify a logic of handling this states.
+typedef NS_ENUM(NSInteger, JMReportViewerViewState) {
+    JMReportViewerViewStateMain,
+    JMReportViewerViewStateChild,
+};
+
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, copy) void(^exportCompletion)(NSString *resourcePath);
@@ -55,6 +62,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 @property (nonatomic, strong, readwrite) JMReport *report;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @property (nonatomic, strong) JMExternalWindowControlsVC *controlsViewController;
+@property (nonatomic, assign) JMReportViewerViewState state;
 @end
 
 @implementation JMReportViewerVC
@@ -86,6 +94,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     [self addEmptyReportLabelInView:self.view];
     [self hideEmptyReportMessage];
     [self addObservers];
+    self.state = JMReportViewerViewStateMain;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -209,6 +218,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
 
 - (void)backActionInWebView
 {
+    self.state = JMReportViewerViewStateMain;
     if (self.tempResourceURL) {
         [self removeResourceWithURL:self.tempResourceURL];
     }
@@ -246,6 +256,13 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
         }
     } else {
         [self hidePaginationToolbar];
+    }
+}
+
+- (void)setupRightBarButtonItems
+{
+    if (self.state == JMReportViewerViewStateMain) {
+        [super setupRightBarButtonItems];
     }
 }
 
@@ -803,6 +820,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                                                   action:@selector(backActionInWebView)];
                                  strongSelf.navigationItem.leftBarButtonItem = backButton;
                                  self.navigationItem.rightBarButtonItems = nil;
+                                 self.state = JMReportViewerViewStateChild;
                              }
                          }];
 }
@@ -838,6 +856,7 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
                                                          action:@selector(backActionInWebView)];
         self.navigationItem.leftBarButtonItem = backButton;
         self.navigationItem.rightBarButtonItems = nil;
+        self.state = JMReportViewerViewStateChild;
     } else {
         // TODO: open in safari view controller
         if (urlReference && [[UIApplication sharedApplication] canOpenURL:urlReference]) {
