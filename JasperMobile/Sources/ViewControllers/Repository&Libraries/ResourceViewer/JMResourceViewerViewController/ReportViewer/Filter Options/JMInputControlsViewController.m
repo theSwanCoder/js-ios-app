@@ -508,13 +508,14 @@
 
 - (void)inputControlCellDidChangedValue:(JMInputControlCell *)cell
 {
-    if (self.noneReportOption != self.activeReportOption) {
-        _activeReportOption = [JSReportOption defaultReportOption];
-        _activeReportOption.inputControls = self.inputControls;
+    NSAssert([self.reportOptions indexOfObject:self.activeReportOption] != NSNotFound, @"Not existing report option");
 
-        [self updateRightBurButtonItem];
-        [self.tableView reloadData];
-    }
+    JSReportOption *newReportOption = [JSReportOption defaultReportOption];
+    newReportOption.inputControls = self.inputControls;
+    self.activeReportOption = newReportOption;
+
+    [self updateRightBurButtonItem];
+    [self.tableView reloadData];
 }
 
 #pragma mark - JMReportOptionsViewControllerDelegate
