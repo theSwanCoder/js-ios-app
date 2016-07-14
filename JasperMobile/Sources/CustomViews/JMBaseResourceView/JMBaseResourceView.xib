@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="16A238m" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -18,30 +18,42 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FA9-zE-MNt">
-                    <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                    <rect key="frame" x="0.0" y="44" width="600" height="512"/>
                 </view>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Ngh-gR-Mej">
-                    <rect key="frame" x="290" y="312" width="20" height="20"/>
+                    <rect key="frame" x="290" y="290" width="20" height="20"/>
                 </activityIndicatorView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8SV-3C-9i0">
+                    <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="OxZ-UF-b2t"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="8SV-3C-9i0" secondAttribute="trailing" id="ANN-Sx-mkS"/>
                 <constraint firstItem="FA9-zE-MNt" firstAttribute="top" secondItem="6Ea-4g-rR4" secondAttribute="bottom" id="GYl-dw-5e1"/>
                 <constraint firstItem="FA9-zE-MNt" firstAttribute="leading" secondItem="mik-OW-WC2" secondAttribute="leading" id="InQ-Eo-PnW"/>
+                <constraint firstAttribute="bottom" secondItem="8SV-3C-9i0" secondAttribute="bottom" id="J7B-Do-YSb"/>
                 <constraint firstItem="Ngh-gR-Mej" firstAttribute="centerX" secondItem="FA9-zE-MNt" secondAttribute="centerX" id="PBF-tn-2AB"/>
                 <constraint firstItem="6Ea-4g-rR4" firstAttribute="top" secondItem="mik-OW-WC2" secondAttribute="top" id="SXo-YZ-Azk"/>
                 <constraint firstItem="6Ea-4g-rR4" firstAttribute="leading" secondItem="mik-OW-WC2" secondAttribute="leading" id="bqi-ms-9id"/>
-                <constraint firstAttribute="bottom" secondItem="FA9-zE-MNt" secondAttribute="bottom" id="ipp-kp-ePD"/>
+                <constraint firstItem="FA9-zE-MNt" firstAttribute="bottom" secondItem="8SV-3C-9i0" secondAttribute="top" id="lkd-kA-z2s"/>
                 <constraint firstAttribute="trailing" secondItem="FA9-zE-MNt" secondAttribute="trailing" id="lmX-ct-8vf"/>
+                <constraint firstItem="8SV-3C-9i0" firstAttribute="leading" secondItem="mik-OW-WC2" secondAttribute="leading" id="pJH-6S-OPq"/>
                 <constraint firstItem="Ngh-gR-Mej" firstAttribute="centerY" secondItem="FA9-zE-MNt" secondAttribute="centerY" id="s58-jE-0nN"/>
                 <constraint firstAttribute="trailing" secondItem="6Ea-4g-rR4" secondAttribute="trailing" id="umZ-aK-yti"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <connections>
                 <outlet property="activityIndicator" destination="Ngh-gR-Mej" id="ofP-Gw-6ks"/>
+                <outlet property="bottomView" destination="8SV-3C-9i0" id="s4l-nQ-96K"/>
+                <outlet property="bottomViewBottomConstraint" destination="J7B-Do-YSb" id="eQ3-fx-nS0"/>
                 <outlet property="contentView" destination="FA9-zE-MNt" id="G6f-ZG-1LT"/>
-                <outlet property="topToolbar" destination="6Ea-4g-rR4" id="pFe-uJ-QHo"/>
-                <outlet property="topToolbarTopConstraint" destination="SXo-YZ-Azk" id="4Ou-ue-DTN"/>
+                <outlet property="topView" destination="6Ea-4g-rR4" id="2cS-SZ-cbN"/>
+                <outlet property="topViewTopConstraint" destination="SXo-YZ-Azk" id="7O7-Aa-xFf"/>
             </connections>
             <point key="canvasLocation" x="286" y="358"/>
         </view>

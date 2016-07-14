@@ -33,7 +33,8 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.topToolbar.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
+    self.topView.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
+    self.bottomView.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
 }
 
 @end

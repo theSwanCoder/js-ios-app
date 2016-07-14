@@ -31,8 +31,10 @@
  */
 
 @interface JMBaseResourceView : UIView
-@property(nonatomic, weak) IBOutlet UIView *topToolbar;
+@property(nonatomic, weak) IBOutlet UIView *topView;
 @property(nonatomic, weak) IBOutlet UIView *contentView;
+@property(nonatomic, weak) IBOutlet UIView *bottomView;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topToolbarTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topViewTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewBottomConstraint;
 @end
