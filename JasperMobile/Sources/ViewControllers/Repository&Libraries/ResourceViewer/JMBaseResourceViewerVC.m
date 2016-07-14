@@ -150,7 +150,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 // Working with top toolbar
 - (void)addTopToolbar:(UIView *)toolbar
 {
-    [((JMBaseResourceView *)self.view).topToolbar addSubview:toolbar];
+    [((JMBaseResourceView *)self.view).topView addSubview:toolbar];
     toolbar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[toolbar]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
@@ -165,12 +165,12 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)removeTopToolbar
 {
-    [((JMBaseResourceView *) self.view).topToolbar.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [((JMBaseResourceView *) self.view).topView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
 - (void)showTopToolbarAnimated:(BOOL)animated
 {
-    ((JMBaseResourceView *)self.view).topToolbarTopConstraint.constant = 0;
+    ((JMBaseResourceView *)self.view).topViewTopConstraint.constant = 0;
     if (animated) {
         [UIView animateWithDuration:0.25
                          animations:^{
@@ -182,7 +182,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)hideTopToolbarAnimated:(BOOL)animated
 {
     JMBaseResourceView *resourceView = (JMBaseResourceView *)self.view;
-    resourceView.topToolbarTopConstraint.constant = - CGRectGetHeight(resourceView.topToolbar.frame);
+    resourceView.topViewTopConstraint.constant = - CGRectGetHeight(resourceView.topView.frame);
     if (animated) {
         [UIView animateWithDuration:0.25
                          animations:^{
