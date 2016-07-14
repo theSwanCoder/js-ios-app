@@ -46,4 +46,8 @@
 - (void)updateOriginXWithValue:(CGFloat)newOriginX;
 - (void)updateOriginYWithValue:(CGFloat)newOriginY;
 - (void)updateHeightWithValue:(CGFloat)newHeight;
+
+// Autolayout
+// Make subview fill its parent view
+- (void)fillWithView:(UIView *)view;
 @end
