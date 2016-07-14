@@ -27,7 +27,6 @@
 //
 
 #import "JMResource.h"
-#import "JMReport.h"
 #import "JMDashboard.h"
 #import "JMVisualizeDashboard.h"
 
@@ -61,7 +60,7 @@
         case JMResourceTypeFolder: {break;}
         case JMResourceTypeSavedResource: {break;}
         case JMResourceTypeReport: {
-            model = [JMReport reportWithResourceLookup:self.resourceLookup];
+            model = [JSReport reportWithResourceLookup:self.resourceLookup];
             break;
         }
         case JMResourceTypeTempExportedReport: {break;}

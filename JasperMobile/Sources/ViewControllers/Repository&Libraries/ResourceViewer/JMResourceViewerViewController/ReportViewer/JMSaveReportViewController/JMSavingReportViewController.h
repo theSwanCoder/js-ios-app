@@ -35,7 +35,6 @@
 
 #import <UIKit/UIKit.h>
 #import "JMEditabledViewController.h"
-#import "JMReport.h"
 
 @protocol JMSaveReportViewControllerDelegate <NSObject>
 
@@ -48,6 +47,5 @@ extern NSString * const kJMSaveReportViewControllerSegue;
 
 @interface JMSavingReportViewController : JMEditabledViewController
 @property (nonatomic, weak) id <JMSaveReportViewControllerDelegate> delegate;
-
-@property (nonatomic, strong) JMReport *report;
+@property (nonatomic, strong) JSReport *report;
 @end

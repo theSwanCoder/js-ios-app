@@ -32,13 +32,13 @@
  @since 2.6
  */
 
-@class JMReportPart;
+@class JSReportPart;
 @protocol JMReportPartViewToolbarDelegate;
 
 
 @interface JMReportPartViewToolbar : UIView
-@property (nonatomic, strong, readonly) JMReportPart *currentPart;
-@property (nonatomic, strong) NSArray <JMReportPart *> *parts;
+@property (nonatomic, strong, readonly) JSReportPart *currentPart;
+@property (nonatomic, strong) NSArray <JSReportPart *> *parts;
 @property (nonatomic, weak) NSObject <JMReportPartViewToolbarDelegate> *delegate;
 - (void)updateCurrentPartForPage:(NSInteger)page;
 @end

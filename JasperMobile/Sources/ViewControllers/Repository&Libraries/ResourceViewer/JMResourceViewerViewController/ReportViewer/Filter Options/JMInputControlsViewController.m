@@ -80,7 +80,6 @@
             }
         } else {
             strongSelf.inputControls = inputControls;
-            strongSelf.report.isReportWithInputControls = YES;
             if (inputControls.count == 0) {
                 JSReportOption *reportOption = [JSReportOption defaultReportOption];
                 strongSelf.reportOptions = [@[reportOption] mutableCopy];

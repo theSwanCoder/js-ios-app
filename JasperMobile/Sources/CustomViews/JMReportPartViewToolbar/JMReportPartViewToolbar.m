@@ -27,10 +27,10 @@
 //
 
 #import "JMReportPartViewToolbar.h"
-#import "JMReportPart.h"
+#import "JSReportPart.h"
 
 @interface JMReportPartViewToolbar()
-@property (nonatomic, strong, readwrite) JMReportPart *currentPart;
+@property (nonatomic, strong, readwrite) JSReportPart *currentPart;
 @property (weak, nonatomic) IBOutlet UIButton *previousButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
@@ -50,10 +50,10 @@
 }
 
 #pragma mark - Custom Accessors
-- (void)setCurrentPart:(JMReportPart *)currentPart
+- (void)setCurrentPart:(JSReportPart *)currentPart
 {
     _currentPart = currentPart;
-    self.titleLabel.text = _currentPart.name;
+    self.titleLabel.text = _currentPart.title;
 
     self.nextButton.enabled = YES;
     self.previousButton.enabled = YES;
@@ -70,7 +70,7 @@
     }
 }
 
-- (void)setParts:(NSArray<JMReportPart *> *)parts
+- (void)setParts:(NSArray<JSReportPart *> *)parts
 {
     _parts = parts;
     self.currentPart = _parts.firstObject;
@@ -82,13 +82,13 @@
     self.currentPart = [self partForPage:page];
 }
 
-- (JMReportPart *)partForPage:(NSInteger)page
+- (JSReportPart *)partForPage:(NSInteger)page
 {
-    JMReportPart *partForPage;
+    JSReportPart *partForPage;
     for (NSUInteger i = 0; i < self.parts.count; i++) {
-        JMReportPart *part = self.parts[i];
+        JSReportPart *part = self.parts[i];
         if (i < self.parts.count - 1) {
-            JMReportPart *afterPart = self.parts[i+1];
+            JSReportPart *afterPart = self.parts[i+1];
             NSInteger fromPage = part.page.integerValue;
             NSInteger toPage = afterPart.page.integerValue;
             if (page >= fromPage && page < toPage) {
@@ -121,19 +121,19 @@
 }
 
 #pragma mark - Helpers
-- (JMReportPart *)previousPart
+- (JSReportPart *)previousPart
 {
     NSUInteger currentIndex = [self.parts indexOfObject:self.currentPart];
     NSUInteger previousIndex = currentIndex - 1;
-    JMReportPart *part = self.parts[previousIndex];
+    JSReportPart *part = self.parts[previousIndex];
     return part;
 }
 
-- (JMReportPart *)nextPart
+- (JSReportPart *)nextPart
 {
     NSUInteger currentIndex = [self.parts indexOfObject:self.currentPart];
     NSUInteger nextIndex = currentIndex + 1;
-    JMReportPart *part = self.parts[nextIndex];
+    JSReportPart *part = self.parts[nextIndex];
     return part;
 }
 

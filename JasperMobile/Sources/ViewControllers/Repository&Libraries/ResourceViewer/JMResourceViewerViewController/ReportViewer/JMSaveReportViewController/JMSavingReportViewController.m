@@ -29,7 +29,6 @@
 #import "JMSaveReportFormatCell.h"
 #import "JMSaveReportPagesCell.h"
 #import "JMSaveReportPageRangeCell.h"
-#import "JMReport.h"
 #import "JSReportSaver.h"
 #import "JMExportManager.h"
 #import "JMReportExportTask.h"
@@ -89,8 +88,14 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
     [self setupSections];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reportLoaderDidChangeCountOfPages:) name:kJSReportCountOfPagesDidChangeNotification object:self.report];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupSections) name:kJSReportIsMutlipageDidChangedNotification object:self.report];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportLoaderDidChangeCountOfPages:)
+                                                 name:JSReportCountOfPagesDidChangeNotification
+                                               object:self.report];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(setupSections)
+                                                 name:JSReportIsMutlipageDidChangedNotification
+                                               object:self.report];
 }
 
 #pragma mark - Setups

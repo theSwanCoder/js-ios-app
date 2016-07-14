@@ -32,9 +32,9 @@
 @since 2.6
 */
 
-@class JMReportBookmark;
+@class JSReportBookmark;
 
 @interface JMBookmarksVC : JMBaseViewController
-@property (nonatomic, copy) NSArray <JMReportBookmark *>* __nonnull bookmarks;
-@property (nonatomic, copy) void(^__nonnull exitBlock)(JMReportBookmark * __nonnull selectedBookmark);
+@property (nonatomic, copy) NSArray <JSReportBookmark *>* __nonnull bookmarks;
+@property (nonatomic, copy) void(^__nonnull exitBlock)(JSReportBookmark * __nonnull selectedBookmark);
 @end

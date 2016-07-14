@@ -32,10 +32,8 @@
  */
 
 #import "JMEditabledViewController.h"
-#import "JMRefreshable.h"
-#import "JMReport.h"
 
 @interface JMInputControlsViewController : JMEditabledViewController
-@property (nonatomic, strong) JMReport *report;
+@property (nonatomic, strong) JSReport *report;
 @property (nonatomic, copy) void(^completionBlock)(NSArray <JSReportParameter *> *reportParameters, NSString *reportOptionURI);
 @end
