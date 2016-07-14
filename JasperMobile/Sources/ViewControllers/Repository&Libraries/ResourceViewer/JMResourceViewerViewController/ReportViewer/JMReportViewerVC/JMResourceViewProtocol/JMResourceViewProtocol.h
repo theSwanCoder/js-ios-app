@@ -22,17 +22,18 @@
 
 
 //
-//  JMReportDestination.h
+//  JMResourceViewProtocol.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.6
- */
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.6
+*/
 
-
-@interface JMReportDestination : NSObject
-@property (nonatomic, strong) NSString *anchor;
-@property (nonatomic, assign) NSInteger page;
+@protocol JMResourceViewProtocol <NSObject>
+- (UIView *)contentView;
+- (UIView *)topToolbarView;
+- (UIView *)bottomToolbarView;
+- (UIView *)nonExistingResourceView;
 @end
