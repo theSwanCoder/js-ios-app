@@ -80,29 +80,38 @@
             }
         } else {
             strongSelf.inputControls = inputControls;
-            JSReportOption *reportOption = [JSReportOption defaultReportOption];
-            reportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
-            strongSelf.reportOptions = [@[reportOption] mutableCopy];
-            strongSelf.noneReportOption = reportOption;
-            strongSelf.activeReportOption = reportOption;
+            strongSelf.report.isReportWithInputControls = YES;
+            if (inputControls.count == 0) {
+                JSReportOption *reportOption = [JSReportOption defaultReportOption];
+                strongSelf.reportOptions = [@[reportOption] mutableCopy];
+                strongSelf.noneReportOption = reportOption;
+                _activeReportOption = reportOption;
+                [strongSelf.tableView reloadData];
+            } else {
+                JSReportOption *reportOption = [JSReportOption defaultReportOption];
+                reportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
+                strongSelf.reportOptions = [@[reportOption] mutableCopy];
+                strongSelf.noneReportOption = reportOption;
+                _activeReportOption = reportOption;
 
-            [strongSelf showLoading];
-            __weak typeof(self) weakSelf = strongSelf;
-            [strongSelf loadReportOptionsWithCompletion:^(NSArray *reportOptions, NSError *error) {
-                typeof(self) strongSelf = weakSelf;
-                [strongSelf hideLoading];
-                if (error) {
-                    if (error.code == JSSessionExpiredErrorCode) {
-                        [JMUtils showLoginViewAnimated:YES completion:nil];
+                [strongSelf showLoading];
+                __weak typeof(self) weakSelf = strongSelf;
+                [strongSelf loadReportOptionsWithCompletion:^(NSArray *reportOptions, NSError *error) {
+                    typeof(self) strongSelf = weakSelf;
+                    [strongSelf hideLoading];
+                    if (error) {
+                        if (error.code == JSSessionExpiredErrorCode) {
+                            [JMUtils showLoginViewAnimated:YES completion:nil];
+                        } else {
+                            [JMUtils presentAlertControllerWithError:error
+                                                          completion:nil];
+                        }
                     } else {
-                        [JMUtils presentAlertControllerWithError:error
-                                                      completion:nil];
+                        [strongSelf.reportOptions addObjectsFromArray:reportOptions];
+                        [strongSelf.tableView reloadData];
                     }
-                } else {
-                    [strongSelf.reportOptions addObjectsFromArray:reportOptions];
-                    [strongSelf.tableView reloadData];
-                }
-            }];
+                }];
+            }
         }
     }];
 }
@@ -237,11 +246,7 @@
                                                   [visibleInputControls addObject:inputControl];
                                               }
                                           }
-                                          if ([visibleInputControls count]) {
-                                              completion(visibleInputControls, nil);
-                                          } else {
-                                              completion(nil, nil);
-                                          }
+                                          completion(visibleInputControls, nil);
                                       }
                                   }];
 }
@@ -269,6 +274,17 @@
 - (void)runReport
 {
     [self.view endEditing:YES];
+
+    // empty 'none' option
+    // we need this if an user marked 'always prompt' as true, but there are any input controls
+    BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
+    if ( isEmptyNoneOption) {
+        if (self.completionBlock) {
+            self.completionBlock(nil, self.report.reportURI);
+        }
+        return;
+    }
+
     BOOL isNoneReportOption = [self isNoneReportOption:self.activeReportOption];
 
     if (isNoneReportOption) { // NONE OPTION
@@ -370,7 +386,10 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     NSInteger numberOfSections = 0;
-    if ([self isMultyReportOptions]) {
+    // empty 'none' option
+    // we need this if an user marked 'always prompt' as true, but there are any input controls
+    BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
+    if ([self isMultyReportOptions] || isEmptyNoneOption) {
         numberOfSections ++;
     }
     if ([self.inputControls count]) {
@@ -392,7 +411,12 @@
     titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     titleLabel.backgroundColor = [UIColor clearColor];
     NSString *sectionTitle = JMCustomLocalizedString(@"report_viewer_options_title", nil);
-    if ([self isMultyReportOptions] && section == 0) {
+
+    // empty 'none' option
+    // we need this if an user marked 'always prompt' as true, but there are any input controls
+    BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
+    BOOL isSeveralReportOptions = [self isMultyReportOptions];
+    if ( (isSeveralReportOptions || isEmptyNoneOption) && section == 0) {
         sectionTitle = JMCustomLocalizedString(@"report_viewer_report_options_title", nil);
     }
     titleLabel.text = [sectionTitle uppercaseString];
@@ -407,7 +431,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([self isMultyReportOptions] && section == 0) {
+    // empty 'none' option
+    // we need this if an user marked 'always prompt' as true, but there are any input controls
+    BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
+    BOOL isSeveralReportOptions = [self isMultyReportOptions];
+    if ( (isSeveralReportOptions || isEmptyNoneOption) && section == 0) {
         return 1;
     }
     return self.inputControls.count;
@@ -426,7 +454,11 @@
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 
     // Configure the cell for this indexPath
-    if ([self isMultyReportOptions] && indexPath.section == 0) {
+    // empty 'none' option
+    // we need this if an user marked 'always prompt' as true, but there are any input controls
+    BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
+    BOOL isSeveralReportOptions = [self isMultyReportOptions];
+    if ( (isSeveralReportOptions || isEmptyNoneOption) && indexPath.section == 0) {
         JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
         roCell.titleLabel.text = self.activeReportOption.label;
     } else {
@@ -467,7 +499,11 @@
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     // Configure the cell for this indexPath
-    if ([self isMultyReportOptions] && indexPath.section == 0) {
+    // empty 'none' option
+    // we need this if an user marked 'always prompt' as true, but there are any input controls
+    BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
+    BOOL isSeveralReportOptions = [self isMultyReportOptions];
+    if ( (isSeveralReportOptions || isEmptyNoneOption) && indexPath.section == 0) {
         JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
         roCell.titleLabel.text = self.activeReportOption.label;
     } else {
@@ -569,7 +605,11 @@
 
 - (NSString *)cellIdentifierForIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self isMultyReportOptions] && indexPath.section == 0) {
+    // empty 'none' option
+    // we need this if an user marked 'always prompt' as true, but there are any input controls
+    BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
+    BOOL isSeveralReportOptions = [self isMultyReportOptions];
+    if ( (isSeveralReportOptions || isEmptyNoneOption) && indexPath.section == 0) {
         return @"ReportOptionsCell";
     }
     JSInputControlDescriptor *inputControlDescriptor = self.inputControls[indexPath.row];
