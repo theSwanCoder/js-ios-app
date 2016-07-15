@@ -34,7 +34,7 @@
 #import "JMWebViewManager.h"
 #import "JMWebEnvironment.h"
 #import "JMVIZWebEnvironment.h"
-#import "JMReportViewerStateManager.h"
+#import "JMResourceViewerStateManager.h"
 #import "JMResourcePrintManager.h"
 
 @interface JMReportViewerConfigurator()
@@ -90,9 +90,9 @@
 }
 
 #pragma mark - Helpers
-- (JMReportViewerStateManager *)createStateManager
+- (JMResourceViewerStateManager *)createStateManager
 {
-    return [JMReportViewerStateManager new];
+    return [JMResourceViewerStateManager new];
 }
 
 - (JMResourcePrintManager *)createPrintManager

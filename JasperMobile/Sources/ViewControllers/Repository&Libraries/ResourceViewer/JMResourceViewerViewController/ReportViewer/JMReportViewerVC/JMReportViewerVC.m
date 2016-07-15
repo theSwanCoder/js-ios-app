@@ -34,7 +34,7 @@
 #import "JMAnalyticsManager.h"
 #import "JMBookmarksVC.h"
 #import "JMReportPartViewToolbar.h"
-#import "JMReportViewerStateManager.h"
+#import "JMResourceViewerStateManager.h"
 #import "JMResourcePrintManager.h"
 
 
@@ -465,7 +465,7 @@
     return self.configurator.webEnvironment;
 }
 
-- (JMReportViewerStateManager *)stateManager
+- (JMResourceViewerStateManager *)stateManager
 {
     return self.configurator.stateManager;
 }

@@ -22,7 +22,7 @@
 
 
 //
-//  JMReportViewerStateManager.h
+//  JMResourceViewerStateManager.h
 //  TIBCO JasperMobile
 //
 
@@ -52,7 +52,7 @@ typedef NS_ENUM(NSInteger, JMReportVieweToolbarState) {
     JMReportVieweToolbarStateBottomHidden
 };
 
-@interface JMReportViewerStateManager : NSObject
+@interface JMResourceViewerStateManager : NSObject
 @property (nonatomic, weak) UIViewController <JMResourceClientHolder, JMResourceViewProtocol, JMMenuActionsViewDelegate>*controller;
 @property (nonatomic, assign) JMReportViewerState activeState;
 @property (nonatomic, copy) void(^cancelOperationBlock)(void);

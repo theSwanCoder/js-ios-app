@@ -22,12 +22,12 @@
 
 
 //
-//  JMReportViewerStateManager.m
+//  JMResourceViewerStateManager.m
 //  TIBCO JasperMobile
 //
 
 
-#import "JMReportViewerStateManager.h"
+#import "JMResourceViewerStateManager.h"
 #import "JMResourceClientHolder.h"
 #import "JMFavorites+Helpers.h"
 #import "JMCancelRequestPopup.h"
@@ -39,13 +39,13 @@
 #import "JMResource.h"
 #import "JMReportViewerVC.h"
 
-@interface JMReportViewerStateManager() <PopoverViewDelegate>
+@interface JMResourceViewerStateManager() <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
 @property (nonatomic, weak) UIView *contentView;
 @property (nonatomic, weak) UIView *nonExistingResourceView;
 @end
 
-@implementation JMReportViewerStateManager
+@implementation JMResourceViewerStateManager
 
 #pragma mark - Life Cycle
 - (void)dealloc
