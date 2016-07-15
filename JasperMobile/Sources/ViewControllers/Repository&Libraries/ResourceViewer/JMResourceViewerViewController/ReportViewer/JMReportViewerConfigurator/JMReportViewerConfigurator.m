@@ -37,6 +37,7 @@
 #import "JMResourceViewerStateManager.h"
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerInfoPageManager.h"
+#import "JMResourceViewerShareManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMReportLoaderProtocol> reportLoader;
@@ -77,6 +78,7 @@
         _stateManager = [self createStateManager];
         _printManager = [self createPrintManager];
         _infoPageManager = [self createInfoPageManager];
+        _shareManager = [self createShareManager];
     }
     return self;
 }
@@ -105,6 +107,11 @@
 - (JMResourceViewerInfoPageManager *)createInfoPageManager
 {
     return [JMResourceViewerInfoPageManager new];
+}
+
+- (JMResourceViewerShareManager *)createShareManager
+{
+    return [JMResourceViewerShareManager new];
 }
 
 @end

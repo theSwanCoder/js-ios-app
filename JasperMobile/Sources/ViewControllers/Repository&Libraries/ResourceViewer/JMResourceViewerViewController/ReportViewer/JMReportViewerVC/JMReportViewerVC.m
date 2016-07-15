@@ -37,6 +37,7 @@
 #import "JMResourceViewerStateManager.h"
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerInfoPageManager.h"
+#import "JMResourceViewerShareManager.h"
 
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
@@ -664,6 +665,11 @@
             [self.configurator.printManager printResource:self.resource completion:^{
                 [[self stateManager] setupPageForState:currentState];
             }];
+            break;
+        }
+        case JMMenuActionsViewAction_Share:{
+            self.configurator.shareManager.controller = self;
+            [self.configurator.shareManager shareContentView:[self contentView]];
             break;
         }
         default:
