@@ -61,4 +61,6 @@ typedef NS_ENUM(NSInteger, JMReportVieweToolbarState) {
 - (void)updatePageForToolbarState:(JMReportVieweToolbarState)toolbarState;
 - (void)updatePageForChangingSizeClass;
 - (void)hideMenuView;
+
+- (void)updateFavoriteState;
 @end

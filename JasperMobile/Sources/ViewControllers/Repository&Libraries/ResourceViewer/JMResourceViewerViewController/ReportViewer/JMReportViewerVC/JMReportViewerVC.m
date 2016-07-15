@@ -632,6 +632,11 @@
     [[self stateManager] hideMenuView];
     // TODO: add handling of other actions
     switch (action) {
+        case JMMenuActionsViewAction_MakeFavorite:
+        case JMMenuActionsViewAction_MakeUnFavorite:
+            // TODO: find other solution
+            [[self stateManager] updateFavoriteState];
+            break;
         case JMMenuActionsViewAction_Info: {
             self.configurator.infoPageManager.controller = self;
             [self.configurator.infoPageManager showInfoPageForResource:self.resource];

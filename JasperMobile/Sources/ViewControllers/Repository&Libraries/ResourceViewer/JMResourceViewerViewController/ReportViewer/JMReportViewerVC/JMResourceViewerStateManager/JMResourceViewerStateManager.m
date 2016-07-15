@@ -397,25 +397,21 @@
 
 - (void)showTopToolbarAnimated:(BOOL)animated
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [self setTopToolbarVisible:YES animated:animated];
 }
 
 - (void)hideTopToolbarAnimated:(BOOL)animated
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [self setTopToolbarVisible:NO animated:animated];
 }
 
 - (void)showBottomToolbarAnimated:(BOOL)animated
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [self setBottomToolbarVisible:YES animated:animated];
 }
 
 - (void)hideBottomToolbarAnimated:(BOOL)animated
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [self setBottomToolbarVisible:NO animated:animated];
 }
 
@@ -448,7 +444,6 @@
 
 - (void)setupViews
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMBaseResourceView *resourceView = (JMBaseResourceView *)self.controller.view;
 
     //
@@ -482,13 +477,11 @@
 
 - (void)hideMainView
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.contentView.hidden = YES;
 }
 
 - (void)showProgress
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [JMUtils showNetworkActivityIndicator];
     [((JMBaseResourceView *)self.controller.view).activityIndicator startAnimating];
     [JMCancelRequestPopup presentWithMessage:@"status_loading"
@@ -497,7 +490,6 @@
 
 - (void)hideProgress
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [JMUtils hideNetworkActivityIndicator];
     [((JMBaseResourceView *)self.controller.view).activityIndicator stopAnimating];
     [JMCancelRequestPopup dismiss];
@@ -506,13 +498,11 @@
 #pragma mark - Setup Resource Not Exist View
 - (void)showResourceNotExistView
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.nonExistingResourceView.hidden = NO;
 }
 
 - (void)hideResourceNotExistView
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.nonExistingResourceView.hidden = YES;
 }
 
