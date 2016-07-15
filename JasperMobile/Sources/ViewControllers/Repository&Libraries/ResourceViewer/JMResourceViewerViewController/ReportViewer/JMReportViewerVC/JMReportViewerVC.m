@@ -638,6 +638,10 @@
             [self showInputControlsViewControllerWithInitialParameters:[self report].reportParameters];
             break;
         }
+        case JMMenuActionsViewAction_Save: {
+            [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
+            break;
+        }
         case JMMenuActionsViewAction_Schedule: {
             [self scheduleReport];
             break;
