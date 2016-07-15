@@ -36,34 +36,40 @@
 @protocol JMReportLoaderDelegate;
 @class JMWebEnvironment;
 @class JMResource;
-@class JMReportBookmark;
-@class JMReportPart;
-@class JMReportDestination;
+@class JSReportBookmark;
+@class JSReportPart;
+@class JSReportDestination;
 
 @protocol JMReportLoaderProtocol <JSReportLoaderProtocol>
-
-- (void)setDelegate:(id<JMReportLoaderDelegate> __nullable)delegate;
-- (void)destroy;
-
 @optional
-- (nullable id<JMReportLoaderProtocol>)initWithReport:(nonnull JSReport *)report
-                                        restClient:(nonnull JSRESTBase *)restClient
-                                    webEnvironment:(nonnull JMWebEnvironment *)webEnvironment;
-+ (nullable id<JMReportLoaderProtocol>)loaderWithReport:(nonnull JSReport *)report
-                                           restClient:(nonnull JSRESTBase *)restClient
-                                       webEnvironment:(nonnull JMWebEnvironment *)webEnvironment;
-- (void)exportReportWithFormat:(NSString * __nonnull)exportFormat;
-- (void)runReportWithDestination:(JMReportDestination *__nonnull)destination completion:(nonnull JSReportLoaderCompletionBlock)completion;
-- (void)navigateToBookmark:(JMReportBookmark *__nonnull)bookmark withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion; /** @since 2.6 */
-- (void)navigateToPart:(JMReportPart *__nonnull)part withCompletion:(JSReportLoaderCompletionBlock __nonnull)completion; /** @since 2.6 */
+- (void)setDelegate:(id<JMReportLoaderDelegate> __nullable)delegate;
+
+- (nullable id<JMReportLoaderProtocol>)initWithRestClient:(nonnull JSRESTBase *)restClient
+                                           webEnvironment:(nonnull JMWebEnvironment *)webEnvironment;
++ (nullable id<JMReportLoaderProtocol>)loaderWithRestClient:(nonnull JSRESTBase *)restClient
+                                             webEnvironment:(nonnull JMWebEnvironment *)webEnvironment;
+- (void)runReport:(nonnull JSReport *)report
+initialDestination:(nullable JSReportDestination *)destination
+        initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
+        completion:(nonnull JSReportLoaderCompletionBlock)completion;
+- (void)navigateToBookmark:(nonnull JSReportBookmark *)bookmark
+                completion:(nonnull JSReportLoaderCompletionBlock)completion; /** @since 2.6 */
+- (void)navigateToPart:(nonnull JSReportPart *)part
+            completion:(nonnull JSReportLoaderCompletionBlock)completion; /** @since 2.6 */
+- (void)destroy;
 - (void)fitReportViewToScreen;
 @end
 
 @protocol JMReportLoaderDelegate <NSObject>
 @optional
-- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resource withOutputFormats:(NSArray *__nullable)outputs;
-- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventForResource:(JMResource *__nonnull)resource withParameters:(NSArray *__nullable)reportParameters destination:(JMReportDestination *__nonnull)destination;
-- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoader didReceiveOnClickEventWithError:(NSError *__nonnull)error;
-- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)reportLoder didReceiveOnClickEventForReference:(NSURL *__nonnull)urlReference;
+- (void)reportLoaderDidReceiveEvent:(id<JMReportLoaderProtocol> __nonnull)reportLoader
+                        forResource:(JMResource *__nonnull)resource
+                  withOutputFormats:(NSArray *__nullable)outputs;
+- (void)reportLoaderDidReceiveEvent:(id<JMReportLoaderProtocol> __nonnull)reportLoader
+                        forResource:(JMResource *__nonnull)resource
+                     withParameters:(NSArray *__nullable)reportParameters
+                        destination:(JSReportDestination *__nonnull)destination;
+- (void)reportLoaderDidReceiveEvent:(id<JMReportLoaderProtocol> __nonnull)reportLoader
+                       forReference:(NSURL *__nonnull)urlReference;
 @end
 

@@ -50,39 +50,34 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 }
 
-- (instancetype)initWithReport:(JSReport *)report
-                    restClient:(JSRESTBase *)restClient
+- (instancetype)initWithRestClient:(JSRESTBase *)restClient
 {
-    self = [super initWithReport:report restClient:restClient];
+    self = [super initWithRestClient:restClient];
     return self;
 }
 
 + (instancetype)loaderWithReport:(JSReport *)report
                       restClient:(JSRESTBase *)restClient
 {
-    return [[self alloc] initWithReport:report restClient:restClient];
+    return [[self alloc] initWithRestClient:restClient];
 }
 
 
-- (id <JMReportLoaderProtocol>)initWithReport:(JSReport *)report
-                                   restClient:(JSRESTBase *)restClient
-                               webEnvironment:(JMWebEnvironment *)webEnvironment
+- (id <JMReportLoaderProtocol>)initWithRestClient:(JSRESTBase *)restClient
+                                   webEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    self = [self initWithReport:report
-                      restClient:restClient];
+    self = [self initWithRestClient:restClient];
     if (self) {
         _webEnvironment = (JMRESTWebEnvironment *) webEnvironment;
     }
     return self;
 }
 
-+ (id<JMReportLoaderProtocol>)loaderWithReport:(nonnull JSReport *)report
-                                    restClient:(nonnull JSRESTBase *)restClient
-                                webEnvironment:(JMWebEnvironment *)webEnvironment
++ (id<JMReportLoaderProtocol>)loaderWithRestClient:(nonnull JSRESTBase *)restClient
+                                    webEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    return [[self alloc] initWithReport:report
-                             restClient:restClient
-                         webEnvironment:webEnvironment];
+    return [[self alloc] initWithRestClient:restClient
+                             webEnvironment:webEnvironment];
 }
 
 #pragma mark - Public API

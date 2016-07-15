@@ -30,7 +30,6 @@
 #import "JMReportLoaderProtocol.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMRestReportLoader.h"
-#import "JMReport.h"
 #import "JMVisualizeManager.h"
 #import "JMWebViewManager.h"
 #import "JMWebEnvironment.h"
@@ -45,8 +44,8 @@
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 }
 
-- (instancetype)initWithReport:(JMReport *)report webEnvironment:(JMWebEnvironment *)webEnvironment {
-    NSAssert(report != nil, @"Report is nil");
+- (instancetype)initWithWebEnvironment:(JMWebEnvironment *)webEnvironment
+{
     NSAssert(webEnvironment != nil, @"WebEnvironment is nil");
     self = [super init];
     if (self) {
@@ -57,24 +56,22 @@
         }
         if (needVisualizeFlow) {
             JMLog(@"run with VIZ");
-            _reportLoader = [JMVisualizeReportLoader loaderWithReport:report
-                                                           restClient:self.restClient
-                                                       webEnvironment:webEnvironment];
+            _reportLoader = [JMVisualizeReportLoader loaderWithRestClient:self.restClient
+                                                           webEnvironment:webEnvironment];
             ((JMVIZWebEnvironment *)webEnvironment).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
         } else {
             JMLog(@"run with REST");
-            _reportLoader = (id <JMReportLoaderProtocol>) [JMRestReportLoader loaderWithReport:report
-                                                                                    restClient:self.restClient
-                                                                                webEnvironment:webEnvironment];
+            _reportLoader = (id <JMReportLoaderProtocol>) [JMRestReportLoader loaderWithRestClient:self.restClient
+                                                                                    webEnvironment:webEnvironment];
         }
         NSAssert(_reportLoader != nil, @"Report Loader wasn't created");
     }
     return self;
 }
 
-+ (instancetype)configuratorWithReport:(JMReport *)report webEnvironment:(JMWebEnvironment *)webEnvironment
++ (instancetype)configuratorWithWebEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    return [[self alloc] initWithReport:report webEnvironment:webEnvironment];
+    return [[self alloc] initWithWebEnvironment:webEnvironment];
 }
 
 - (void)updateReportLoaderDelegateWithObject:(id <JMReportLoaderDelegate>)delegate

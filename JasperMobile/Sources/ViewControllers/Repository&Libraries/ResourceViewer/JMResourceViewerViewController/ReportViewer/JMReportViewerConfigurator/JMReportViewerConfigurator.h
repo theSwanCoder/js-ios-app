@@ -33,7 +33,7 @@
 */
 
 @protocol JMReportLoaderProtocol;
-@class JMReport;
+@class JSReport;
 @protocol JMReportLoaderDelegate;
 @class JMWebEnvironment;
 
@@ -41,7 +41,7 @@
 @property (nonatomic, strong) id <JMReportLoaderProtocol> __nonnull reportLoader;
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
 
-- (instancetype __nonnull)initWithReport:(JMReport * __nonnull)report webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
-+ (instancetype __nullable)configuratorWithReport:(JMReport *__nonnull)report webEnvironment:(JMWebEnvironment *__nonnull)webEnvironment;
+- (instancetype __nonnull)initWithWebEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
++ (instancetype __nullable)configuratorWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment;
 - (void)updateReportLoaderDelegateWithObject:(id<JMReportLoaderDelegate>__nullable)delegate;
 @end
