@@ -32,14 +32,17 @@
 */
 
 #import "JMResourceViewerViewController.h"
-#import "JMRefreshable.h"
-#import "JMReport.h"
 #import "JMReportLoaderProtocol.h"
+#import "JMResourceViewProtocol.h"
 
-@interface JMReportViewerVC : JMResourceViewerViewController <JMRefreshable>
-@property (nonatomic, strong, readonly) JMReport *report;
-@property (nonatomic, assign) BOOL isChildReport;
+@class JMReportViewerToolBar;
+@class JMReportPartViewToolbar;
+
+@interface JMReportViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewProtocol, JMMenuActionsViewDelegate>
+@property (nonatomic, weak) JMReportViewerToolBar *paginaionToolbar;
+@property (nonatomic, weak) JMReportPartViewToolbar *reportPartToolbar;
 @property (nonatomic, copy) void(^exitBlock)(void);
-@property (nonatomic, strong) NSArray *initialReportParameters;
-@property (nonatomic, strong) JMReportDestination *initialDestination;
+@property (nonatomic, strong) NSArray <JSReportParameter *> *initialReportParameters;
+@property (nonatomic, strong) JSReportDestination *initialDestination;
+- (JSReport *)report;
 @end
