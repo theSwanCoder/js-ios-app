@@ -36,10 +36,12 @@
 @class JSReport;
 @protocol JMReportLoaderDelegate;
 @class JMWebEnvironment;
+@class JMReportViewerStateManager;
 
 @interface JMReportViewerConfigurator : NSObject
 @property (nonatomic, strong, readonly) id <JMReportLoaderProtocol> __nonnull reportLoader;
 @property (nonatomic, strong, readonly) JMWebEnvironment * __nonnull webEnvironment;
+@property (nonatomic, strong) JMReportViewerStateManager * __nonnull stateManager;
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
 
 - (instancetype __nonnull)initWithWebEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;

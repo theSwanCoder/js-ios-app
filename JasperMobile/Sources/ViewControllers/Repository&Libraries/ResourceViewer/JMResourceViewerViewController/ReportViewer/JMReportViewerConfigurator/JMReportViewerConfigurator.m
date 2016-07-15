@@ -34,6 +34,7 @@
 #import "JMWebViewManager.h"
 #import "JMWebEnvironment.h"
 #import "JMVIZWebEnvironment.h"
+#import "JMReportViewerStateManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMReportLoaderProtocol> reportLoader;
@@ -71,6 +72,7 @@
                                                                                     webEnvironment:webEnvironment];
         }
         NSAssert(_reportLoader != nil, @"Report Loader wasn't created");
+        _stateManager = [self createStateManager];
     }
     return self;
 }
@@ -83,6 +85,12 @@
 - (void)updateReportLoaderDelegateWithObject:(id <JMReportLoaderDelegate>)delegate
 {
     [[self reportLoader] setDelegate:delegate];
+}
+
+#pragma mark - Helpers
+- (JMReportViewerStateManager *)createStateManager
+{
+    return [JMReportViewerStateManager new];
 }
 
 @end
