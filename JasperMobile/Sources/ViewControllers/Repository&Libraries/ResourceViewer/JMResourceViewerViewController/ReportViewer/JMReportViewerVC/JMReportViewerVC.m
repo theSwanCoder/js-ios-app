@@ -161,7 +161,7 @@
 
 - (void)reportLoaderDidChangeCountOfPages:(NSNotification *)notification
 {
-    self.paginaionToolbar.countOfPages = [self report].countOfPages;
+    self.paginationToolbar.countOfPages = [self report].countOfPages;
 
     BOOL isReportReady = [self report].countOfPages != NSNotFound;
     if (isReportReady && [self report].isReportEmpty) {
@@ -171,7 +171,7 @@
 
 - (void)reportLoaderDidChangeCurrentPage:(NSNotification *)notification
 {
-    self.paginaionToolbar.currentPage = [self report].currentPage;
+    self.paginationToolbar.currentPage = [self report].currentPage;
     if ([self report].parts) {
         [self.reportPartToolbar updateCurrentPartForPage:[self report].currentPage];
     }
