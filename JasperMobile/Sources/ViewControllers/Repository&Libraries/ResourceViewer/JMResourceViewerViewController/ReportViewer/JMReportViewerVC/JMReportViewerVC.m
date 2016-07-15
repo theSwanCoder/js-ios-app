@@ -24,7 +24,6 @@
 #import "JMReportViewerVC.h"
 #import "JMBaseResourceView.h"
 #import "JMReportViewerConfigurator.h"
-#import "JMWebViewManager.h"
 #import "JMSavingReportViewController.h"
 #import "ALToastView.h"
 #import "JMInputControlsViewController.h"
@@ -79,8 +78,8 @@
 {
     [coordinator animateAlongsideTransition:nil completion:^(id <UIViewControllerTransitionCoordinatorContext> context) {
         [self.stateManager updatePageForChangingSizeClass];
-        if ([self.reportLoader respondsToSelector:@selector(fitReportViewToScreen)]) {
-            [self.reportLoader fitReportViewToScreen];
+        if ([[self reportLoader] respondsToSelector:@selector(fitReportViewToScreen)]) {
+            [[self reportLoader] fitReportViewToScreen];
         }
     }];
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
@@ -91,7 +90,7 @@
     [super prepareForSegue:segue sender:sender];
     if ([segue.identifier isEqualToString:kJMSaveReportViewControllerSegue]) {
         JMSavingReportViewController *destinationViewController = segue.destinationViewController;
-        destinationViewController.report = self.report;
+        destinationViewController.report = [self report];
         destinationViewController.delegate = self;
     }
 }
@@ -127,27 +126,27 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(multipageNotification)
                                                  name:JSReportIsMutlipageDidChangedNotification
-                                               object:self.report];
+                                               object:[self report]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportLoaderDidChangeCountOfPages:)
                                                  name:JSReportCountOfPagesDidChangeNotification
-                                               object:self.report];
+                                               object:[self report]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportLoaderDidChangeCurrentPage:)
                                                  name:JSReportCurrentPageDidChangeNotification
-                                               object:self.report];
+                                               object:[self report]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportDidUpdateBookmarks)
                                                  name:JSReportBookmarksDidUpdateNotification
-                                               object:self.report];
+                                               object:[self report]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportDidUpdateParts)
                                                  name:JSReportPartsDidUpdateNotification
-                                               object:self.report];
+                                               object:[self report]];
 }
 
 - (void)multipageNotification
@@ -229,7 +228,7 @@
 - (void)exitAction
 {
     [self.stateManager setupPageForState:JMReportViewerStateDestroy];
-    [self.reportLoader destroy];
+    [[self reportLoader] destroy];
     [self resetSubViews];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -333,13 +332,13 @@
     [self.stateManager setupPageForState:JMReportViewerStateLoading];
 
     JSReport *report = [self.resource modelOfResource];
-    if ([self.reportLoader respondsToSelector:@selector(runReport:initialDestination:initialParameters:completion:)]) {
-        [self.reportLoader runReport:report
+    if ([[self reportLoader] respondsToSelector:@selector(runReport:initialDestination:initialParameters:completion:)]) {
+        [[self reportLoader] runReport:report
                   initialDestination:destination
                    initialParameters:self.initialReportParameters
                           completion:completion];
     } else {
-        [self.reportLoader runReport:report
+        [[self reportLoader] runReport:report
                          initialPage:@(destination.page)
                    initialParameters:self.initialReportParameters
                           completion:completion];
@@ -351,7 +350,7 @@
     [self.stateManager setupPageForState:JMReportViewerStateLoading];
 
     __weak typeof(self)weakSelf = self;
-    [self.reportLoader runReportWithReportURI:reportURI
+    [[self reportLoader] runReportWithReportURI:reportURI
                                   initialPage:nil
                             initialParameters:nil
                                    completion:^(BOOL success, NSError *error) {
@@ -378,10 +377,10 @@
         self.initialReportParameters = reportParameters;
         [self runReportWithDestination:self.initialDestination];
     } else {
-        if (self.reportLoader.state == JSReportLoaderStateReady) {
+        if ([self reportLoader].state == JSReportLoaderStateReady) {
             [self.stateManager setupPageForState:JMReportViewerStateLoading];
             __weak typeof(self)weakSelf = self;
-            [self.reportLoader applyReportParameters:reportParameters
+            [[self reportLoader] applyReportParameters:reportParameters
                                           completion:^(BOOL success, NSError *error) {
                                               __strong typeof(self)strongSelf = weakSelf;
                                               if (success) {
@@ -390,7 +389,7 @@
                                                   [strongSelf handleError:error];
                                               }
                                           }];
-        } else if (self.reportLoader.state == JSReportLoaderStateInitial || self.reportLoader.state == JSReportLoaderStateFailed) {
+        } else if ([self reportLoader].state == JSReportLoaderStateInitial || [self reportLoader].state == JSReportLoaderStateFailed) {
             self.initialReportParameters = reportParameters;
             [self runReportWithDestination:self.initialDestination];
         }
@@ -402,16 +401,16 @@
 - (void)navigateToPage:(NSInteger)page completion:(void(^ __nonnull)(BOOL success))completion
 {
     NSAssert(completion != nil, @"Completion is nil");
-    if ([self.reportLoader respondsToSelector:@selector(shouldDisplayLoadingView)] && [self.reportLoader shouldDisplayLoadingView]) {
+    if ([[self reportLoader] respondsToSelector:@selector(shouldDisplayLoadingView)] && [[self reportLoader] shouldDisplayLoadingView]) {
         [self.stateManager setupPageForState:JMReportViewerStateLoading];
     }
     __weak typeof(self)weakSelf = self;
-    [self.reportLoader fetchPage:@(page)
+    [[self reportLoader] fetchPage:@(page)
                       completion:^(BOOL success, NSError *error) {
                           __strong typeof(self)strongSelf = weakSelf;
                           if (success) {
                               completion(YES);
-                              if ([self.reportLoader respondsToSelector:@selector(shouldDisplayLoadingView)] && [self.reportLoader shouldDisplayLoadingView]) {
+                              if ([[self reportLoader] respondsToSelector:@selector(shouldDisplayLoadingView)] && [[self reportLoader] shouldDisplayLoadingView]) {
                                   [strongSelf.stateManager setupPageForState:JMReportViewerStateResourceReady];
                               }
                           } else {
@@ -422,10 +421,10 @@
 
 - (void)navigateToBookmark:(JSReportBookmark *__nonnull)bookmark
 {
-    if ([self.reportLoader respondsToSelector:@selector(navigateToBookmark:completion:)]) {
+    if ([[self reportLoader] respondsToSelector:@selector(navigateToBookmark:completion:)]) {
         [self.stateManager setupPageForState:JMReportViewerStateLoading];
         __weak __typeof(self) weakSelf = self;
-        [self.reportLoader navigateToBookmark:bookmark completion:^(BOOL success, NSError *error) {
+        [[self reportLoader] navigateToBookmark:bookmark completion:^(BOOL success, NSError *error) {
             __typeof(self) strongSelf = weakSelf;
             if (error) {
                 [strongSelf handleError:error];
@@ -441,7 +440,7 @@
     [self.stateManager setupPageForState:JMReportViewerStateLoading];
 
     __weak typeof(self)weakSelf = self;
-    [self.reportLoader refreshReportWithCompletion:^(BOOL success, NSError *error) {
+    [[self reportLoader] refreshReportWithCompletion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         if (success) {
             [strongSelf.stateManager setupPageForState:JMReportViewerStateResourceReady];
@@ -454,12 +453,12 @@
 #pragma mark - Helpers
 - (id<JMReportLoaderProtocol>)reportLoader
 {
-    return [self.configurator reportLoader];
+    return self.configurator.reportLoader;
 }
 
 - (JSReport *)report
 {
-    return self.reportLoader.report;
+    return [self reportLoader].report;
 }
 
 - (JMWebEnvironment *)webEnvironment
@@ -513,12 +512,12 @@
 #pragma mark - JMReportPartViewToolbarDelegate
 - (void)reportPartViewToolbarDidChangePart:(JMReportPartViewToolbar *)toolbar
 {
-    if ([self.reportLoader respondsToSelector:@selector(navigateToPart:completion:)]) {
+    if ([[self reportLoader] respondsToSelector:@selector(navigateToPart:completion:)]) {
 
         [self.stateManager setupPageForState:JMReportViewerStateLoading];
 
         __weak typeof(self)weakSelf = self;
-        [self.reportLoader navigateToPart:toolbar.currentPart completion:^(BOOL success, NSError *error) {
+        [[self reportLoader] navigateToPart:toolbar.currentPart completion:^(BOOL success, NSError *error) {
             __strong typeof(self) strongSelf = weakSelf;
             if (error) {
                 [strongSelf handleError:error];
@@ -542,7 +541,7 @@
                 JMLog(@"Handle session expired");
                 if (![JMUtils isSupportVisualize]) {
                     // TODO: udpate rest loader to be able reuse
-                    [self.reportLoader cancel];
+                    [[self reportLoader] cancel];
                     self.configurator = nil;
                 } else if (![JMUtils isSystemVersion9] && [JMUtils isSupportVisualize]) {
                     [[self webEnvironment] reset];
