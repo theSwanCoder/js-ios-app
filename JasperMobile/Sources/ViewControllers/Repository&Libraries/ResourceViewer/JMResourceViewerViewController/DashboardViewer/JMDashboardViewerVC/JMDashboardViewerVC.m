@@ -437,7 +437,6 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
             JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
             reportViewController.resource = resource;
             reportViewController.initialReportParameters = parameters;
-            reportViewController.isChildReport = YES;
             [self.navigationController pushViewController:reportViewController animated:YES];
 
             break;
