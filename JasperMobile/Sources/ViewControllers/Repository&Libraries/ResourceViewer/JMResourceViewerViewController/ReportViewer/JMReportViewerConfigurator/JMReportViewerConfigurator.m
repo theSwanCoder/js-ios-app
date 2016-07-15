@@ -35,6 +35,11 @@
 #import "JMWebEnvironment.h"
 #import "JMVIZWebEnvironment.h"
 
+@interface JMReportViewerConfigurator()
+@property (nonatomic, strong, readwrite) id <JMReportLoaderProtocol> reportLoader;
+@property (nonatomic, strong, readwrite) JMWebEnvironment *webEnvironment;
+@end
+
 @implementation JMReportViewerConfigurator
 
 #pragma mark - Public API
@@ -49,6 +54,7 @@
     NSAssert(webEnvironment != nil, @"WebEnvironment is nil");
     self = [super init];
     if (self) {
+        _webEnvironment = webEnvironment;
         BOOL needVisualizeFlow = NO;
         JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
         if (activeServerProfile && activeServerProfile.useVisualize.boolValue) {

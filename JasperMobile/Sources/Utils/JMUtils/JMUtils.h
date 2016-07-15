@@ -29,6 +29,8 @@
 #import "JMServerProfile.h"
 #import "JMLoginViewController.h"
 
+@class JMReportViewerConfigurator;
+
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @author Alexey Gubarev ogubarie@tibco.com
@@ -171,6 +173,9 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (JMServerProfile *__nullable)activeServerProfile;
 
 + (float)minSupportedServerVersion;
+
++ (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorReusableWebView;
++ (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorNonReusableWebView;
 
 + (BOOL)isCompactWidth;
 

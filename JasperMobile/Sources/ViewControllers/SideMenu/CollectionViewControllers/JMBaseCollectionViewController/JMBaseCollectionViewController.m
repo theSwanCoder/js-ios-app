@@ -520,8 +520,11 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             }
             // Customizing report viewer view controller
             if (resource.type == JMResourceTypeReport) {
+                JMReportViewerVC *reportViewerVC = (JMReportViewerVC *)nextVC;
+                reportViewerVC.configurator = [JMUtils reportViewerConfiguratorReusableWebView];
+
                 JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
-                JSReport *report = [nextVC report];
+                JSReport *report = [reportViewerVC report];
                 report.thumbnailImage = cell.thumbnailImage;
             }
         }

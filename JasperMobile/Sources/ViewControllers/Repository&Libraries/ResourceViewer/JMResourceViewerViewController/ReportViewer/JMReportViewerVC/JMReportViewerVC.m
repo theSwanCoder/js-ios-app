@@ -37,13 +37,9 @@
 #import "JMReportPartViewToolbar.h"
 #import "JMReportViewerStateManager.h"
 
-NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierViz    = @"kJMReportViewerPrimaryWebEnvironmentIdentifierViz";
-NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMReportViewerPrimaryWebEnvironmentIdentifierREST";
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
-@property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, strong) JMReportViewerStateManager *stateManager;
-@property (nonatomic, strong) JMWebEnvironment *webEnvironment;
 // TODO: move into separate managers
 @property (nonatomic, assign) NSInteger lowMemoryWarningsCount;
 @end
@@ -124,42 +120,6 @@ NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMRep
     }
     return _initialDestination;
 }
-- (JMWebEnvironment *)currentWebEnvironment
-{
-    return [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
-}
-
-// TODO: move out of class as external dependency
-- (NSString *)currentWebEnvironmentIdentifier
-{
-    NSString *webEnvironmentIdentifier;
-    if ([JMUtils isSupportVisualize]) {
-        webEnvironmentIdentifier = kJMReportViewerPrimaryWebEnvironmentIdentifierViz;
-    } else {
-        webEnvironmentIdentifier = kJMReportViewerPrimaryWebEnvironmentIdentifierREST;
-    }
-
-    return webEnvironmentIdentifier;
-}
-
-// TODO: move out of class as external dependency
-- (JMWebEnvironment *)webEnvironment
-{
-    if (!_webEnvironment || !_webEnvironment.webView) {
-        _webEnvironment = [self currentWebEnvironment];
-    }
-    return _webEnvironment;
-}
-
-// TODO: move out of class as external dependency
-- (JMReportViewerConfigurator *)configurator
-{
-    if (!_configurator) {
-        _configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:self.webEnvironment];
-        [_configurator updateReportLoaderDelegateWithObject:self];
-    }
-    return _configurator;
-}
 
 #pragma mark - Observe Notifications
 - (void)addObservers
@@ -239,7 +199,7 @@ NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMRep
 #pragma mark - JMResourceViewProtocol
 - (UIView *)contentView
 {
-    return self.webEnvironment.webView;
+    return [self webEnvironment].webView;
 }
 
 - (UIView *)topToolbarView
@@ -276,7 +236,7 @@ NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMRep
 
 - (void)backActionInWebView
 {
-    [self.webEnvironment.webView goBack];
+    [[self webEnvironment].webView goBack];
 
     self.initialDestination = nil;
     [self runReportWithDestination:self.initialDestination];
@@ -502,6 +462,11 @@ NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMRep
     return self.reportLoader.report;
 }
 
+- (JMWebEnvironment *)webEnvironment
+{
+    return self.configurator.webEnvironment;
+}
+
 #pragma mark - Handle Low Memory
 - (void)didReceiveMemoryWarning
 {
@@ -536,7 +501,7 @@ NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMRep
 - (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage
 {
     toolbar.enable = NO;
-    [self.webEnvironment resetZoom];
+    [[self webEnvironment] resetZoom];
 
     [self navigateToPage:toPage completion:^(BOOL success) {
         if (success) {
@@ -580,9 +545,10 @@ NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMRep
                     [self.reportLoader cancel];
                     self.configurator = nil;
                 } else if (![JMUtils isSystemVersion9] && [JMUtils isSupportVisualize]) {
-                    [self.webEnvironment reset];
-                    [[JMWebViewManager sharedInstance] removeWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
-                    self.webEnvironment = nil;
+                    [[self webEnvironment] reset];
+                    // TODO: fix this
+//                    [[JMWebViewManager sharedInstance] removeWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
+//                    self.webEnvironment = nil;
                     self.configurator = nil;
                 }
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
@@ -649,10 +615,11 @@ NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMRep
 #pragma mark - WebView helpers
 - (void)resetSubViews
 {
-    [self.webEnvironment resetZoom];
-    [self.webEnvironment.webView removeFromSuperview];
+    [[self webEnvironment] resetZoom];
+    [[self webEnvironment].webView removeFromSuperview];
 
-    self.webEnvironment = nil;
+    // TODO: fix this
+//    self.webEnvironment = nil;
 }
 
 #pragma mark - JMMenuActionsViewDelegate

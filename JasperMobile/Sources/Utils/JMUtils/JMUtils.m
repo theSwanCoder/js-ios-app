@@ -39,7 +39,11 @@
 #import "JSConstants.h"
 #import "JMServersGridViewController.h"
 #import "JMServerOptionsViewController.h"
+#import "JMReportViewerConfigurator.h"
+#import "JMWebViewManager.h"
 
+NSString *const JMReportViewerVisualizeWebEnvironmentIdentifier = @"JMReportViewerVisualizeWebEnvironmentIdentifier";
+NSString *const JMReportViewerRESTWebEnvironmentIdentifier = @"JMReportViewerRESTWebEnvironmentIdentifier";
 
 void jmDebugLog(NSString *format, ...) {
 #ifndef __RELEASE__
@@ -476,6 +480,38 @@ void jmDebugLog(NSString *format, ...) {
 + (float)minSupportedServerVersion
 {
     return kJS_SERVER_VERSION_CODE_AMBER_6_0_0;
+}
+
+#pragma mark - Report Viewer Helpers
+
++ (JMReportViewerConfigurator *)reportViewerConfiguratorReusableWebView
+{
+    JMReportViewerConfigurator *configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:[self reusableWebEnvironment]];
+    return configurator;
+}
+
++ (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorNonReusableWebView
+{
+    JMReportViewerConfigurator *configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:[[JMWebViewManager sharedInstance] webEnvironment]];
+    return configurator;
+}
+
++ (JMWebEnvironment *)reusableWebEnvironment
+{
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
+    return webEnvironment;
+}
+
+
++ (NSString *)currentWebEnvironmentIdentifier
+{
+    NSString *webEnvironmentIdentifier;
+    if ([JMUtils isSupportVisualize]) {
+        webEnvironmentIdentifier = JMReportViewerVisualizeWebEnvironmentIdentifier;
+    } else {
+        webEnvironmentIdentifier = JMReportViewerRESTWebEnvironmentIdentifier;
+    }
+    return webEnvironmentIdentifier;
 }
 
 @end
