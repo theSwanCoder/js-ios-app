@@ -41,7 +41,6 @@
 
 @interface JMReportViewerStateManager() <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
-@property (nonatomic, assign) JMReportViewerState activeState;
 @property (nonatomic, weak) UIView *contentView;
 @property (nonatomic, weak) UIView *nonExistingResourceView;
 @end

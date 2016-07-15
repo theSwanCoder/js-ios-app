@@ -54,6 +54,7 @@ typedef NS_ENUM(NSInteger, JMReportVieweToolbarState) {
 
 @interface JMReportViewerStateManager : NSObject
 @property (nonatomic, weak) UIViewController <JMResourceClientHolder, JMResourceViewProtocol, JMMenuActionsViewDelegate>*controller;
+@property (nonatomic, assign) JMReportViewerState activeState;
 @property (nonatomic, copy) void(^cancelOperationBlock)(void);
 @property (nonatomic, copy) void(^backActionBlock)(void);
 - (void)setupPageForState:(JMReportViewerState)state;
