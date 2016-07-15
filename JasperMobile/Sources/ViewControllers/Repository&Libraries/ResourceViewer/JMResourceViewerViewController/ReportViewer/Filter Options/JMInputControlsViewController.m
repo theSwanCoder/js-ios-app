@@ -89,9 +89,8 @@
             } else {
                 JSReportOption *reportOption = [JSReportOption defaultReportOption];
                 reportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
-                strongSelf.reportOptions = [@[reportOption] mutableCopy];
                 strongSelf.noneReportOption = reportOption;
-                _activeReportOption = reportOption;
+                strongSelf.reportOptions = [@[strongSelf.noneReportOption] mutableCopy];
 
                 [strongSelf showLoading];
                 __weak typeof(self) weakSelf = strongSelf;
@@ -100,14 +99,46 @@
                     [strongSelf hideLoading];
                     if (error) {
                         if (error.code == JSSessionExpiredErrorCode) {
-                            [JMUtils showLoginViewAnimated:YES completion:nil];
+                            [JMUtils showLoginViewAnimated:YES
+                                                completion:nil];
                         } else {
                             [JMUtils presentAlertControllerWithError:error
                                                           completion:nil];
                         }
                     } else {
                         [strongSelf.reportOptions addObjectsFromArray:reportOptions];
-                        [strongSelf.tableView reloadData];
+
+                        if (strongSelf.initialReportOptionURI) {
+                            for (JSReportOption *option in strongSelf.reportOptions) {
+                                if ([option.uri isEqualToString:strongSelf.initialReportOptionURI]) {
+                                    [strongSelf showLoading];
+                                    [strongSelf loadInputControlsForReportOption:option
+                                                                      completion:^(NSArray *inputControls, NSError *error) {
+                                                                          __strong typeof(self) strongSelf = weakSelf;
+                                                                          [strongSelf hideLoading];
+                                                                          if (error) {
+                                                                              if (error.code == JSSessionExpiredErrorCode) {
+                                                                                  [JMUtils showLoginViewAnimated:YES
+                                                                                                      completion:nil];
+                                                                              } else {
+                                                                                  [JMUtils presentAlertControllerWithError:error
+                                                                                                                completion:nil];
+                                                                              }
+                                                                          } else {
+                                                                              _activeReportOption = option;
+                                                                              _activeReportOption.inputControls = inputControls;
+                                                                              strongSelf.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
+                                                                              [strongSelf.tableView reloadData];
+                                                                          }
+                                                                      }];
+                                    break;
+                                }
+                            }
+                        } else {
+                            _activeReportOption = strongSelf.noneReportOption;
+                            [strongSelf.tableView reloadData];
+                        }
+
                     }
                 }];
             }
@@ -194,8 +225,8 @@
                                                          __strong typeof(self) strongSelf = weakSelf;
                                                          if (strongSelf) {
                                                              [strongSelf showLoading];
-                                                             [self.restClient deleteReportOption:strongSelf.activeReportOption
-                                                                                   withReportURI:strongSelf.report.reportURI
+                                                             [strongSelf.restClient deleteReportOption:strongSelf.activeReportOption
+                                                                                   withReportURI:strongSelf.reportURI
                                                                                       completion:^(JSOperationResult * _Nullable result) {
                                                                                           [strongSelf hideLoading];
                                                                                           if (result.error) {
@@ -233,8 +264,8 @@
 
 - (void)loadInputControlsWithCompletion:(void(^)(NSArray *inputControls, NSError *error))completion
 {
-    [self.restClient inputControlsForReport:self.report.reportURI
-                                   selectedValues:nil // TODO: add initial values
+    [self.restClient inputControlsForReport:self.reportURI
+                                   selectedValues:self.initialReportParameters // TODO: add initial values
                                   completionBlock:^(JSOperationResult * _Nullable result) {
                                       if (result.error) {
                                           completion(nil, result.error);
@@ -250,9 +281,28 @@
                                   }];
 }
 
+- (void)loadInputControlsForReportOption:(JSReportOption *)option completion:(void(^)(NSArray *inputControls, NSError *error))completion
+{
+    [self.restClient inputControlsForReport:option.uri
+                             selectedValues:nil
+                            completionBlock:^(JSOperationResult *result) {
+                                if (result.error) {
+                                    completion(nil, result.error);
+                                } else {
+                                    NSMutableArray *visibleInputControls = [NSMutableArray array];
+                                    for (JSInputControlDescriptor *inputControl in result.objects) {
+                                        if (inputControl.visible.boolValue) {
+                                            [visibleInputControls addObject:inputControl];
+                                        }
+                                    }
+                                    completion(visibleInputControls, nil);
+                                }
+                            }];
+}
+
 - (void)loadReportOptionsWithCompletion:(void(^)(NSArray *reportOptions, NSError *error))completion
 {
-    [self.restClient reportOptionsForReportURI:self.report.reportURI
+    [self.restClient reportOptionsForReportURI:self.reportURI
                                     completion:^(JSOperationResult * _Nullable result) {
                                         if (result.error) {
                                             completion(nil, result.error);
@@ -279,7 +329,7 @@
     BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
     if ( isEmptyNoneOption) {
         if (self.completionBlock) {
-            self.completionBlock(nil, self.report.reportURI);
+            self.completionBlock(nil, self.reportURI);
         }
         return;
     }
@@ -564,34 +614,27 @@
             [self showLoading];
 
             __weak typeof(self)weakSelf = self;
-            [self.restClient inputControlsForReport:self.activeReportOption.uri
-                                     selectedValues:nil
-                                    completionBlock:^(JSOperationResult *result) {
-                                        __strong typeof(self) strongSelf = weakSelf;
-                                        [strongSelf hideLoading];
-                                        if (result.error) {
-                                            if (result.error.code == JSSessionExpiredErrorCode) {
-                                                [JMUtils showLoginViewAnimated:YES completion:nil];
-                                            } else {
-                                                __weak typeof(self) weakSelf = strongSelf;
-                                                [JMUtils presentAlertControllerWithError:result.error completion:^{
-                                                    __strong typeof(self) strongSelf = weakSelf;
-                                                    strongSelf.activeReportOption = oldActiveReportOption;
-                                                }];
-                                            }
-                                        } else {
-                                            NSMutableArray *visibleInputControls = [NSMutableArray array];
-                                            for (JSInputControlDescriptor *inputControl in result.objects) {
-                                                if (inputControl.visible.boolValue) {
-                                                    [visibleInputControls addObject:inputControl];
+            [self loadInputControlsForReportOption:self.activeReportOption
+                                        completion:^(NSArray *inputControls, NSError *error) {
+                                            __strong typeof(self) strongSelf = weakSelf;
+                                            [strongSelf hideLoading];
+                                            if (error) {
+                                                if (error.code == JSSessionExpiredErrorCode) {
+                                                    [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                } else {
+                                                    __weak typeof(self) weakSelf = strongSelf;
+                                                    [JMUtils presentAlertControllerWithError:error completion:^{
+                                                        __strong typeof(self) strongSelf = weakSelf;
+                                                        strongSelf.activeReportOption = oldActiveReportOption;
+                                                    }];
                                                 }
+                                            } else {
+                                                strongSelf.activeReportOption.inputControls = inputControls;
+                                                strongSelf.inputControls = [[NSArray alloc] initWithArray:inputControls
+                                                                                                copyItems:YES];
+                                                [strongSelf.tableView reloadData];
                                             }
-                                            strongSelf.activeReportOption.inputControls = visibleInputControls;
-                                            strongSelf.inputControls = [[NSArray alloc] initWithArray:visibleInputControls
-                                                                                            copyItems:YES];
-                                            [strongSelf.tableView reloadData];
-                                        }
-                                    }];
+                                        }];
         } else {
             self.inputControls = [[NSArray alloc] initWithArray:self.activeReportOption.inputControls
                                                       copyItems:YES];
@@ -662,7 +705,7 @@
     }];
     NSString *resourceURI = self.activeReportOption.uri;
     if (![resourceURI length]) {
-        resourceURI = self.report.resourceLookup.uri;
+        resourceURI = self.reportURI;
     }
     __weak typeof(self) weakSelf = self;
     [self.restClient updatedInputControlsValues:resourceURI
@@ -711,7 +754,7 @@
         [self showLoadingWithCancelBlock:^{
             [self.restClient cancelAllRequests];
         }];
-        NSString *resourceFolderURI = [self.report.resourceLookup.uri stringByDeletingLastPathComponent];
+        NSString *resourceFolderURI = [self.reportURI stringByDeletingLastPathComponent];
         __weak typeof(self) weakSelf = self;
         [self.restClient resourceLookupForURI:resourceFolderURI resourceType:kJS_WS_TYPE_FOLDER
                                    modelClass:[JSResourceLookup class]
@@ -754,7 +797,7 @@
     NSString *newReportOptionName = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     __weak typeof(self) weakSelf = self;
-    [self.restClient createReportOptionWithReportURI:self.report.resourceLookup.uri
+    [self.restClient createReportOptionWithReportURI:self.reportURI
                                          optionLabel:newReportOptionName
                                     reportParameters:reportParameters
                                           completion:^(JSOperationResult * _Nullable result) {
