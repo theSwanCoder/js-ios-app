@@ -42,6 +42,8 @@
 @interface JMReportViewerStateManager() <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
 @property (nonatomic, assign) JMReportViewerState activeState;
+@property (nonatomic, weak) UIView *contentView;
+@property (nonatomic, weak) UIView *nonExistingResourceView;
 @end
 
 @implementation JMReportViewerStateManager
@@ -63,6 +65,13 @@
                                                    object:nil];
     }
     return self;
+}
+
+#pragma mark - Custom Accessors
+- (void)setController:(UIViewController <JMResourceClientHolder, JMResourceViewProtocol, JMMenuActionsViewDelegate> *)controller
+{
+    _controller = controller;
+    [self setupViews];
 }
 
 #pragma mark - Notifications
@@ -210,30 +219,35 @@
 - (void)setupMainViewForState:(JMReportViewerState)state
 {
     [self hideResourceNotExistView];
-    [self hideProgress];
     switch (state) {
         case JMReportViewerStateInitial: {
-            [self setupViews];
+            [self hideProgress];
             [self showResourceNotExistView];
             break;
         }
         case JMReportViewerStateDestroy: {
+            [self hideProgress];
             break;
         }
         case JMReportViewerStateLoading: {
             [self showProgress];
+            [self hideResourceNotExistView];
             [self hideMainView];
             break;
         }
         case JMReportViewerStateResourceFailed: {
+            [self hideProgress];
             [self showResourceNotExistView];
             break;
         }
         case JMReportViewerStateResourceReady: {
+            [self hideProgress];
+            [self hideResourceNotExistView];
             [self showMainView];
             break;
         }
         case JMReportViewerStateResourceNotExist: {
+            [self hideProgress];
             [self showResourceNotExistView];
             break;
         }
@@ -433,33 +447,48 @@
 
 #pragma mark - Setup Main View
 
+- (void)setupViews
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMBaseResourceView *resourceView = (JMBaseResourceView *)self.controller.view;
+
+    //
+    UIView *contentView = [self.controller contentView];
+    [resourceView.contentView fillWithView:contentView];
+    self.contentView = contentView;
+
+    //
+    UIView *topToolbarView = [self.controller topToolbarView];
+    [resourceView.topView fillWithView:topToolbarView];
+    // TODO: come up with other solution
+    ((JMReportViewerVC *)self.controller).reportPartToolbar = (JMReportPartViewToolbar *)topToolbarView;
+
+    //
+    UIView *bottomToolbarView = [self.controller bottomToolbarView];
+    [resourceView.bottomView fillWithView:bottomToolbarView];
+    // TODO: come up with other solution
+    ((JMReportViewerVC *)self.controller).paginaionToolbar = (JMReportViewerToolBar *)bottomToolbarView;
+
+    //
+    UIView *nonExistingResourceView = [self.controller nonExistingResourceView];
+    [resourceView.contentView fillWithView:nonExistingResourceView];
+    self.nonExistingResourceView = nonExistingResourceView;
+}
+
 - (void)showMainView
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [self.controller contentView].hidden = NO;
-}
-
-- (void)setupViews
-{
-    JMBaseResourceView *resourceView = (JMBaseResourceView *)self.controller.view;
-    [resourceView.contentView fillWithView:[self.controller contentView]];
-    [resourceView.topView fillWithView:[self.controller topToolbarView]];
-    [resourceView.bottomView fillWithView:[self.controller bottomToolbarView]];
-    [resourceView.contentView fillWithView:[self.controller nonExistingResourceView]];
-    [self hideMainView];
-    [self hideResourceNotExistView];
+    self.contentView.hidden = NO;
 }
 
 - (void)hideMainView
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [self.controller contentView].hidden = YES;
+    self.contentView.hidden = YES;
 }
 
 - (void)showProgress
 {
-    [self hideProgress];
-
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [JMUtils showNetworkActivityIndicator];
     [((JMBaseResourceView *)self.controller.view).activityIndicator startAnimating];
@@ -479,13 +508,13 @@
 - (void)showResourceNotExistView
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [self.controller nonExistingResourceView].hidden = NO;
+    self.nonExistingResourceView.hidden = NO;
 }
 
 - (void)hideResourceNotExistView
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [self.controller nonExistingResourceView].hidden = YES;
+    self.nonExistingResourceView.hidden = YES;
 }
 
 #pragma mark - PopoverViewDelegate Methods
