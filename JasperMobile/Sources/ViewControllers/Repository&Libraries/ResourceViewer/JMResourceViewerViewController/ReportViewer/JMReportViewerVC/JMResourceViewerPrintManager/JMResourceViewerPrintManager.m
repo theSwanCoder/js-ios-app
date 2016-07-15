@@ -22,21 +22,21 @@
 
 
 //
-//  JMResourcePrintManager.m
+//  JMResourceViewerPrintManager.m
 //  TIBCO JasperMobile
 //
-#import "JMResourcePrintManager.h"
+#import "JMResourceViewerPrintManager.h"
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
 #import "JMMainNavigationController.h"
 
-@interface JMResourcePrintManager() <UIPrintInteractionControllerDelegate>
+@interface JMResourceViewerPrintManager() <UIPrintInteractionControllerDelegate>
 @property (nonatomic, strong) JMResource *resource;
 @property (nonatomic, strong) UINavigationController *printNavController;
 @property (nonatomic, assign) CGSize printSettingsPreferredContentSize;
 @end
 
-@implementation JMResourcePrintManager
+@implementation JMResourceViewerPrintManager
 
 #pragma mark - Public API
 

@@ -35,7 +35,7 @@
 #import "JMBookmarksVC.h"
 #import "JMReportPartViewToolbar.h"
 #import "JMResourceViewerStateManager.h"
-#import "JMResourcePrintManager.h"
+#import "JMResourceViewerPrintManager.h"
 
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>

@@ -22,7 +22,7 @@
 
 
 //
-//  JMResourcePrintManager.h
+//  JMResourceViewerPrintManager.h
 //  TIBCO JasperMobile
 //
 
@@ -34,7 +34,7 @@
 
 @class JMResource;
 
-@interface JMResourcePrintManager : NSObject
+@interface JMResourceViewerPrintManager : NSObject
 @property (nonatomic, weak) UIViewController * __nullable controller;
 - (void)printResource:(JMResource * __nonnull)resource completion:(void(^ __nullable)(void))completion;
 @end

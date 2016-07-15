@@ -35,7 +35,7 @@
 #import "JMWebEnvironment.h"
 #import "JMVIZWebEnvironment.h"
 #import "JMResourceViewerStateManager.h"
-#import "JMResourcePrintManager.h"
+#import "JMResourceViewerPrintManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMReportLoaderProtocol> reportLoader;
@@ -95,9 +95,9 @@
     return [JMResourceViewerStateManager new];
 }
 
-- (JMResourcePrintManager *)createPrintManager
+- (JMResourceViewerPrintManager *)createPrintManager
 {
-    return [JMResourcePrintManager new];
+    return [JMResourceViewerPrintManager new];
 }
 
 @end

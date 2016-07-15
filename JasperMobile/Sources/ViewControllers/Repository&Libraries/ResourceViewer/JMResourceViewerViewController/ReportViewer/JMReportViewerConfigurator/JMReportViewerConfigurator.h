@@ -37,13 +37,13 @@
 @protocol JMReportLoaderDelegate;
 @class JMWebEnvironment;
 @class JMResourceViewerStateManager;
-@class JMResourcePrintManager;
+@class JMResourceViewerPrintManager;
 
 @interface JMReportViewerConfigurator : NSObject
 @property (nonatomic, strong, readonly) id <JMReportLoaderProtocol> __nonnull reportLoader;
 @property (nonatomic, strong, readonly) JMWebEnvironment * __nonnull webEnvironment;
 @property (nonatomic, strong) JMResourceViewerStateManager * __nonnull stateManager;
-@property (nonatomic, strong) JMResourcePrintManager * __nonnull printManager;
+@property (nonatomic, strong) JMResourceViewerPrintManager * __nonnull printManager;
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
 
 - (instancetype __nonnull)initWithWebEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
