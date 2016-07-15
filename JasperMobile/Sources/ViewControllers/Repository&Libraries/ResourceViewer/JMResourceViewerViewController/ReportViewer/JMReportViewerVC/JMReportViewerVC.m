@@ -36,6 +36,7 @@
 #import "JMReportPartViewToolbar.h"
 #import "JMResourceViewerStateManager.h"
 #import "JMResourceViewerPrintManager.h"
+#import "JMResourceViewerInfoPageManager.h"
 
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
@@ -631,6 +632,11 @@
     [[self stateManager] hideMenuView];
     // TODO: add handling of other actions
     switch (action) {
+        case JMMenuActionsViewAction_Info: {
+            self.configurator.infoPageManager.controller = self;
+            [self.configurator.infoPageManager showInfoPageForResource:self.resource];
+            break;
+        }
         case JMMenuActionsViewAction_Refresh:
             [self refreshReport];
             break;
