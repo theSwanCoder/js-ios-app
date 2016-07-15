@@ -35,6 +35,7 @@
 #import "JMWebEnvironment.h"
 #import "JMVIZWebEnvironment.h"
 #import "JMReportViewerStateManager.h"
+#import "JMResourcePrintManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMReportLoaderProtocol> reportLoader;
@@ -73,6 +74,7 @@
         }
         NSAssert(_reportLoader != nil, @"Report Loader wasn't created");
         _stateManager = [self createStateManager];
+        _printManager = [self createPrintManager];
     }
     return self;
 }
@@ -91,6 +93,11 @@
 - (JMReportViewerStateManager *)createStateManager
 {
     return [JMReportViewerStateManager new];
+}
+
+- (JMResourcePrintManager *)createPrintManager
+{
+    return [JMResourcePrintManager new];
 }
 
 @end

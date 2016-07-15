@@ -35,10 +35,10 @@
 #import "JMBookmarksVC.h"
 #import "JMReportPartViewToolbar.h"
 #import "JMReportViewerStateManager.h"
+#import "JMResourcePrintManager.h"
 
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
-//@property (nonatomic, strong) JMReportViewerStateManager *stateManager;
 // TODO: move into separate managers
 @property (nonatomic, assign) NSInteger lowMemoryWarningsCount;
 @end
@@ -640,6 +640,15 @@
         }
         case JMMenuActionsViewAction_Schedule: {
             [self scheduleReport];
+            break;
+        }
+        case JMMenuActionsViewAction_Print: {
+            JMReportViewerState currentState = [self stateManager].activeState;
+            [[self stateManager] setupPageForState:JMReportViewerStateLoading];
+            self.configurator.printManager.controller = self;
+            [self.configurator.printManager printResource:self.resource completion:^{
+                [[self stateManager] setupPageForState:currentState];
+            }];
             break;
         }
         default:
