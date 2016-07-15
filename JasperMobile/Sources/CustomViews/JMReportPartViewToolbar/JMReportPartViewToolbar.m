@@ -38,17 +38,6 @@
 
 @implementation JMReportPartViewToolbar
 
-#pragma mark - Life Cycle
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-
-    self.previousButton.enabled = NO;
-    if (self.parts.count == 1) {
-        self.nextButton.enabled = NO;
-    }
-}
-
 #pragma mark - Custom Accessors
 - (void)setCurrentPart:(JSReportPart *)currentPart
 {
@@ -73,6 +62,12 @@
 - (void)setParts:(NSArray<JSReportPart *> *)parts
 {
     _parts = parts;
+
+    self.previousButton.enabled = NO;
+    if (_parts.count == 1) {
+        self.nextButton.enabled = NO;
+    }
+
     self.currentPart = _parts.firstObject;
 }
 
