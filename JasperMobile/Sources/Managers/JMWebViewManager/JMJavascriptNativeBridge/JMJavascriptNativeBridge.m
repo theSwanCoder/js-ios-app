@@ -29,6 +29,7 @@
 #import "JMJavascriptNativeBridge.h"
 
 NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
+NSString *JMJavascriptNativeBridgeErrorCodeKey = @"JMJavascriptNativeBridgeErrorCodeKey";
 
 @interface JMJavascriptNativeBridge() <WKNavigationDelegate, WKScriptMessageHandler>
 @property (nonatomic, weak, readwrite) WKWebView *webView;
@@ -369,8 +370,9 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     NSInteger code = JMJavascriptNativeBridgeErrorTypeOther;
 
     id errorCode = errorJSON[@"code"];
+    NSString *errorCodeString;
     if (errorCode && [errorCode isKindOfClass:[NSString class]]) {
-        NSString *errorCodeString = errorCode;
+        errorCodeString = errorCode;
         if ([errorCodeString isEqualToString:@"window.onerror"]) {
             code = JMJavascriptNativeBridgeErrorTypeWindow;
         } else if ([errorCodeString isEqualToString:@"unexpected.error"]) {
@@ -382,15 +384,18 @@ NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
     // TODO: need add handle integer codes?
 
     NSString *errorMessage = errorJSON[@"message"];
-    NSDictionary *userInfo;
+    NSMutableDictionary *userInfo;
     if (errorMessage) {
-        userInfo = @{
-                NSLocalizedDescriptionKey: errorMessage
-        };
+        userInfo = [@{
+                NSLocalizedDescriptionKey : errorMessage
+        } mutableCopy];
     } else {
-        userInfo = @{
+        userInfo = [@{
                 NSLocalizedDescriptionKey: @"Error"
-        };
+        } mutableCopy];
+    }
+    if (errorCodeString) {
+        userInfo[JMJavascriptNativeBridgeErrorCodeKey] = errorCodeString;
     }
     NSError *error = [NSError errorWithDomain:visualizeErrorDomain
                                          code:code

@@ -42,6 +42,8 @@ typedef NS_ENUM(NSInteger, JMJavascriptNativeBrigdeErrorType) {
     JMJavascriptNativeBridgeErrorTypeOther,
 };
 
+extern NSString * __nonnull JMJavascriptNativeBridgeErrorCodeKey;
+
 typedef void(^JMJavascriptRequestCompletion)(JMJavascriptResponse *__nullable response, NSError * __nullable error);
 
 @interface JMJavascriptNativeBridge : NSObject
