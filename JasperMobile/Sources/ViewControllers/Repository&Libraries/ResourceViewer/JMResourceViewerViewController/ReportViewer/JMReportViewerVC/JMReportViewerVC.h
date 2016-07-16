@@ -40,8 +40,6 @@
 @class JMReportViewerConfigurator;
 
 @interface JMReportViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewProtocol, JMMenuActionsViewDelegate>
-@property (nonatomic, weak) JMReportViewerToolBar *paginationToolbar;
-@property (nonatomic, weak) JMReportPartViewToolbar *reportPartToolbar;
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, strong) NSArray <JSReportParameter *> *initialReportParameters;
 @property (nonatomic, strong) JSReportDestination *initialDestination;

@@ -137,16 +137,6 @@
                                                object:[self report]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reportLoaderDidChangeCountOfPages:)
-                                                 name:JSReportCountOfPagesDidChangeNotification
-                                               object:[self report]];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reportLoaderDidChangeCurrentPage:)
-                                                 name:JSReportCurrentPageDidChangeNotification
-                                               object:[self report]];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportDidUpdateBookmarks)
                                                  name:JSReportBookmarksDidUpdateNotification
                                                object:[self report]];
@@ -166,24 +156,6 @@
     }
 }
 
-- (void)reportLoaderDidChangeCountOfPages:(NSNotification *)notification
-{
-    self.paginationToolbar.countOfPages = [self report].countOfPages;
-
-    BOOL isReportReady = [self report].countOfPages != NSNotFound;
-    if (isReportReady && [self report].isReportEmpty) {
-        [[self stateManager] setupPageForState:JMReportViewerStateResourceNotExist];
-    }
-}
-
-- (void)reportLoaderDidChangeCurrentPage:(NSNotification *)notification
-{
-    self.paginationToolbar.currentPage = [self report].currentPage;
-    if ([self report].parts) {
-        [self.reportPartToolbar updateCurrentPartForPage:[self report].currentPage];
-    }
-}
-
 - (void)reportDidUpdateBookmarks
 {
     if ([self reportHasBookmarks]) {
@@ -194,9 +166,6 @@
 - (void)reportDidUpdateParts
 {
     if ([self reportHasParts]) {
-        if (!self.reportPartToolbar.parts) {
-            self.reportPartToolbar.parts = [self report].parts;
-        }
         [[self stateManager] updatePageForToolbarState:JMReportVieweToolbarStateTopVisible];
     } else {
         [[self stateManager] updatePageForToolbarState:JMReportVieweToolbarStateTopHidden];

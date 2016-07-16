@@ -522,14 +522,10 @@
     //
     UIView *topToolbarView = [self.controller topToolbarView];
     [resourceView.topView fillWithView:topToolbarView];
-    // TODO: come up with other solution
-    ((JMReportViewerVC *)self.controller).reportPartToolbar = (JMReportPartViewToolbar *)topToolbarView;
 
     //
     UIView *bottomToolbarView = [self.controller bottomToolbarView];
     [resourceView.bottomView fillWithView:bottomToolbarView];
-    // TODO: come up with other solution
-    ((JMReportViewerVC *)self.controller).paginationToolbar = (JMReportViewerToolBar *)bottomToolbarView;
 
     //
     UIView *nonExistingResourceView = [self.controller nonExistingResourceView];

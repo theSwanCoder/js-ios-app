@@ -45,12 +45,43 @@
     self.currentPageField.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
     self.currentPageField.inputView = self.pickerView;
     self.currentPageField.inputAccessoryView = [self pickerToolbar];
+
+    [self addObsevers];
 }
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.pickerView.delegate = nil;
     self.pickerView.dataSource = nil;
+}
+
+#pragma mark - Notifications
+- (void)addObsevers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportLoaderDidChangeCountOfPages:)
+                                                 name:JSReportCountOfPagesDidChangeNotification
+                                               object:nil]; // TODO: restrict object with an correct report object
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportLoaderDidChangeCurrentPage:)
+                                                 name:JSReportCurrentPageDidChangeNotification
+                                               object:nil]; // TODO: restrict object with an correct report object
+}
+
+- (void)reportLoaderDidChangeCountOfPages:(NSNotification *)notification
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JSReport *report = notification.object;
+    JMLog(@"count of pages: %@", @(report.countOfPages));
+    self.countOfPages = report.countOfPages;
+}
+
+- (void)reportLoaderDidChangeCurrentPage:(NSNotification *)notification
+{
+    JSReport *report = notification.object;
+    self.currentPage = report.currentPage;
 }
 
 #pragma mark - Properties

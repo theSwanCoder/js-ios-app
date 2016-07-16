@@ -195,18 +195,6 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
             NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
             heapBlock(NO, vizError);
         } else {
-            if (parameters[@"pages"]) {
-                NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
-                [strongSelf.report updateCountOfPages:countOfPages];
-            } else {
-#ifndef __RELEASE__
-                NSError *absentPagesError = [NSError errorWithDomain:@"Visualize Error" code:0 userInfo:@{
-                        NSLocalizedDescriptionKey : @"Absent of pages after applying report parameters"
-                }];
-                [JMUtils presentAlertControllerWithError:absentPagesError
-                                              completion:nil];
-#endif
-            }
             heapBlock(YES, nil);
         }
     }];
@@ -487,8 +475,8 @@ initialDestination:(nullable JSReportDestination *)destination
                                         } else {
                                             strongSelf.state = JSReportLoaderStateReady;
                                             NSString *status = parameters[@"status"];
-                                            NSNumber *totalPages = parameters[@"totalPages"];
                                             if ([status isEqualToString:@"ready"]) {
+                                                NSNumber *totalPages = parameters[@"totalPages"];
                                                 [strongSelf.report updateCountOfPages:totalPages.integerValue];
                                             }
 

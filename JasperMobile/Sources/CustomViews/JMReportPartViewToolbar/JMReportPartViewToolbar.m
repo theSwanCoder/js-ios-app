@@ -38,6 +38,49 @@
 
 @implementation JMReportPartViewToolbar
 
+#pragma mark - Life Cycle
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+
+    [self addObsevers];
+}
+
+
+#pragma mark - Notifications
+- (void)addObsevers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportLoaderDidChangeCurrentPage:)
+                                                 name:JSReportCurrentPageDidChangeNotification
+                                               object:nil]; // TODO: restrict object with an correct report object
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportDidUpdateParts:)
+                                                 name:JSReportPartsDidUpdateNotification
+                                               object:nil]; // TODO: restrict object with an correct report object
+}
+
+- (void)reportLoaderDidChangeCurrentPage:(NSNotification *)notification
+{
+    JSReport *report = notification.object;
+    [self updateCurrentPartForPage:report.currentPage];
+}
+
+- (void)reportDidUpdateParts:(NSNotification *)notification
+{
+    JSReport *report = notification.object;
+    if (!self.parts) {
+        self.parts = report.parts;
+    }
+}
+
 #pragma mark - Custom Accessors
 - (void)setCurrentPart:(JSReportPart *)currentPart
 {
