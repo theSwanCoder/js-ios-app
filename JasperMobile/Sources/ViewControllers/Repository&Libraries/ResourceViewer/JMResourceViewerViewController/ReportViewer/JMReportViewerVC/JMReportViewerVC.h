@@ -33,13 +33,13 @@
 
 #import "JMResourceViewerViewController.h"
 #import "JMReportLoaderProtocol.h"
-#import "JMResourceViewProtocol.h"
+#import "JMResourceViewerProtocol.h"
 
 @class JMReportViewerToolBar;
 @class JMReportPartViewToolbar;
 @class JMReportViewerConfigurator;
 
-@interface JMReportViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewProtocol, JMMenuActionsViewDelegate>
+@interface JMReportViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, strong) NSArray <JSReportParameter *> *initialReportParameters;
 @property (nonatomic, strong) JSReportDestination *initialDestination;

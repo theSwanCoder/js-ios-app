@@ -22,7 +22,7 @@
 
 
 //
-//  JMResourceViewProtocol.h
+//  JMResourceViewerProtocol.h
 //  TIBCO JasperMobile
 //
 
@@ -31,7 +31,7 @@
 @since 2.6
 */
 
-@protocol JMResourceViewProtocol <NSObject>
+@protocol JMResourceViewerProtocol <NSObject>
 - (UIView *)contentView;
 - (UIView *)topToolbarView;
 - (UIView *)bottomToolbarView;

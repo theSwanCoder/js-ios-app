@@ -32,7 +32,7 @@
 */
 
 @protocol JMResourceClientHolder;
-@protocol JMResourceViewProtocol;
+@protocol JMResourceViewerProtocol;
 @protocol JMMenuActionsViewDelegate;
 
 typedef NS_ENUM(NSInteger, JMReportViewerState) {
@@ -53,7 +53,7 @@ typedef NS_ENUM(NSInteger, JMReportVieweToolbarState) {
 };
 
 @interface JMResourceViewerStateManager : NSObject
-@property (nonatomic, weak) UIViewController <JMResourceClientHolder, JMResourceViewProtocol, JMMenuActionsViewDelegate>*controller;
+@property (nonatomic, weak) UIViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate>*controller;
 @property (nonatomic, assign) JMReportViewerState activeState;
 @property (nonatomic, copy) void(^cancelOperationBlock)(void);
 @property (nonatomic, copy) void(^backActionBlock)(void);

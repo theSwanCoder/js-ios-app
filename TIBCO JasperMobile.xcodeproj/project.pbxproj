@@ -757,7 +757,7 @@
 		A1478DA88B598DAA1FCFC0E1 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		A1478DAD836BF0D06561BCAB /* Settings_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Settings_View.txt; sourceTree = "<group>"; };
 		A1478DB085E57E2AAFA392A1 /* Resource_Views.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Resource_Views.txt; sourceTree = "<group>"; };
-		A1478DBA87156F06676DD2A7 /* JMResourceViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceViewProtocol.h; sourceTree = "<group>"; };
+		A1478DBA87156F06676DD2A7 /* JMResourceViewerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceViewerProtocol.h; sourceTree = "<group>"; };
 		A1478E1BA0CDD2DEBCFE22D8 /* JMRESTWebEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRESTWebEnvironment.h; sourceTree = "<group>"; };
 		A1478E1EEE6B448244A33391 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A1478E1F99ADF8D0D90CB595 /* JMResourceViewerShareManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceViewerShareManager.m; sourceTree = "<group>"; };
@@ -1828,7 +1828,7 @@
 				08E2AC6A1B1E056900AC462B /* JMReportViewerVC.h */,
 				08E2AC6B1B1E056900AC462B /* JMReportViewerVC.m */,
 				A14785F9E5EB6BE9FC4CD99B /* JMResourceViewerStateManager */,
-				A1478B4475BDD5F5C0ADCE6F /* JMResourceViewProtocol */,
+				A1478B4475BDD5F5C0ADCE6F /* JMResourceViewerProtocol */,
 				A1478BC8F7793653F955C3FA /* JMResourceViewerPrintManager */,
 				A147893A04B1CB13E5FFF382 /* JMResourceViewerInfoPageManager */,
 				A147823298CE156C9B6C2CA9 /* JMResourceViewerShareManager */,
@@ -2959,12 +2959,12 @@
 			path = en.lproj;
 			sourceTree = "<group>";
 		};
-		A1478B4475BDD5F5C0ADCE6F /* JMResourceViewProtocol */ = {
+		A1478B4475BDD5F5C0ADCE6F /* JMResourceViewerProtocol */ = {
 			isa = PBXGroup;
 			children = (
-				A1478DBA87156F06676DD2A7 /* JMResourceViewProtocol.h */,
+				A1478DBA87156F06676DD2A7 /* JMResourceViewerProtocol.h */,
 			);
-			path = JMResourceViewProtocol;
+			path = JMResourceViewerProtocol;
 			sourceTree = "<group>";
 		};
 		A1478B79C7B87D2CA61D0795 /* JMHTMLScript */ = {

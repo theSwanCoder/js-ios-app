@@ -31,7 +31,7 @@
 #import "JMResourceClientHolder.h"
 #import "JMFavorites+Helpers.h"
 #import "JMCancelRequestPopup.h"
-#import "JMResourceViewProtocol.h"
+#import "JMResourceViewerProtocol.h"
 #import "JMBaseResourceView.h"
 #import "JMMenuActionsView.h"
 #import "PopoverView.h"
@@ -67,7 +67,7 @@
 }
 
 #pragma mark - Custom Accessors
-- (void)setController:(UIViewController <JMResourceClientHolder, JMResourceViewProtocol, JMMenuActionsViewDelegate> *)controller
+- (void)setController:(UIViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate> *)controller
 {
     _controller = controller;
     [self setupViews];
