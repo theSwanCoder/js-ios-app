@@ -160,7 +160,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
                                             NSError *vizError = [strongSelf loaderErrorFromBridgeError:error];
                                             heapBlock(NO, vizError);
                                         } else {
-                                            strongSelf.state = JSReportLoaderStateLoading;
+                                            strongSelf.state = JSReportLoaderStateReady;
                                             NSNumber *finishPage = parameters[@"destination"];
                                             [strongSelf.report updateCurrentPage:finishPage.integerValue];
                                             heapBlock(YES, nil);
@@ -297,6 +297,7 @@ initialDestination:(nullable JSReportDestination *)destination
             return;
         }
         if (isReady) {
+            self.state = JSReportLoaderStateConfigured;
             [strongSelf freshLoadReportWithDestination:destination
                                             parameters:initialParameters
                                             completion:heapBlock];
