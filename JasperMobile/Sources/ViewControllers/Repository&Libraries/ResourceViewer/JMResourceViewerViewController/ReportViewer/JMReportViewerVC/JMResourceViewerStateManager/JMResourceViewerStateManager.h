@@ -57,10 +57,9 @@ typedef NS_ENUM(NSInteger, JMReportVieweToolbarState) {
 @property (nonatomic, assign) JMReportViewerState activeState;
 @property (nonatomic, copy) void(^cancelOperationBlock)(void);
 @property (nonatomic, copy) void(^backActionBlock)(void);
+@property (nonatomic, copy) void(^backFromNestedResourceActionBlock)(void);
 - (void)setupPageForState:(JMReportViewerState)state;
 - (void)updatePageForToolbarState:(JMReportVieweToolbarState)toolbarState;
 - (void)updatePageForChangingSizeClass;
-- (void)hideMenuView;
-
 - (void)updateFavoriteState;
 @end

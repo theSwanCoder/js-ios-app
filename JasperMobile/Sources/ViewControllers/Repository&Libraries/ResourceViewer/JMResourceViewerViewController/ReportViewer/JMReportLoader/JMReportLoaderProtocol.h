@@ -39,6 +39,7 @@
 @class JSReportBookmark;
 @class JSReportPart;
 @class JSReportDestination;
+@class JMHyperlink;
 
 @protocol JMReportLoaderProtocol <JSReportLoaderProtocol>
 @optional
@@ -62,14 +63,7 @@ initialDestination:(nullable JSReportDestination *)destination
 
 @protocol JMReportLoaderDelegate <NSObject>
 @optional
-- (void)reportLoaderDidReceiveEvent:(id<JMReportLoaderProtocol> __nonnull)reportLoader
-                        forResource:(JMResource *__nonnull)resource
-                  withOutputFormats:(NSArray *__nullable)outputs;
-- (void)reportLoaderDidReceiveEvent:(id<JMReportLoaderProtocol> __nonnull)reportLoader
-                        forResource:(JMResource *__nonnull)resource
-                     withParameters:(NSArray *__nullable)reportParameters
-                        destination:(JSReportDestination *__nonnull)destination;
-- (void)reportLoaderDidReceiveEvent:(id<JMReportLoaderProtocol> __nonnull)reportLoader
-                       forReference:(NSURL *__nonnull)urlReference;
+- (void)reportLoader:(id<JMReportLoaderProtocol> __nonnull)loader didReceiveEventWithHyperlink:(JMHyperlink *__nonnull)hyperlink;
+- (void)reportLoaderDidReceiveEventWithUnsupportedHyperlink:(id<JMReportLoaderProtocol> __nonnull)loader;
 @end
 

@@ -40,7 +40,7 @@
 #import "JMReportViewerVC.h"
 
 @interface JMResourceViewerStateManager() <PopoverViewDelegate>
-@property (nonatomic, strong) PopoverView *popoverView;
+@property (nonatomic, weak) PopoverView *popoverView;
 @property (nonatomic, weak) UIView *contentView;
 @property (nonatomic, weak) UIView *nonExistingResourceView;
 @end
@@ -141,18 +141,19 @@
     }
 }
 
-// TODO: come up with a better solution
-- (void)hideMenuView
-{
-    [self.popoverView dismiss];
-}
-
 #pragma mark - Actions
 
 - (void)back
 {
     if (self.backActionBlock) {
         self.backActionBlock();
+    }
+}
+
+- (void)backFromNestedView
+{
+    if (self.backFromNestedResourceActionBlock) {
+        self.backFromNestedResourceActionBlock();
     }
 }
 
@@ -178,6 +179,7 @@
                                              withTitle:nil
                                        withContentView:actionsView
                                               delegate:self];
+    actionsView.popoverView = self.popoverView;
 }
 
 #pragma mark - Helpers
@@ -186,11 +188,7 @@
 {
     switch (state) {
         case JMReportViewerStateInitial: {
-            [self setupBackButton];
-            [self addMenuBarButton];
-            if ([self shouldShowFavoriteBarButton]) {
-                [self addFavoriteBarButton];
-            }
+            [self initialSetupNavigationItems];
             break;
         }
         case JMReportViewerStateDestroy: {
@@ -203,13 +201,14 @@
             break;
         }
         case JMReportViewerStateResourceReady: {
+            [self setupNavigationItems];
             break;
         }
         case JMReportViewerStateResourceNotExist: {
             break;
         }
         case JMReportViewerStateNestedResource: {
-            [self removeMenuBarButton];
+            [self setupNavigationItemsForNestedResource];
             break;
         }
     }
@@ -251,12 +250,49 @@
             break;
         }
         case JMReportViewerStateNestedResource: {
+            [self hideProgress];
             break;
         }
     }
 }
 
 #pragma mark - Setup Navigation Items
+
+- (void)initialSetupNavigationItems
+{
+    [self initialSetupBackButton];
+    [self addMenuBarButton];
+    if ([self shouldShowFavoriteBarButton]) {
+        [self addFavoriteBarButton];
+    }
+}
+
+- (void)setupNavigationItems
+{
+    if ([self isNavigationItemsForNestedResource]) {
+        [self initialSetupNavigationItems];
+    }
+}
+
+- (BOOL)isNavigationItemsForNestedResource
+{
+    BOOL isNavigationItemsForNestedResource = NO;
+
+    // TODO: extend this logic
+    BOOL isBackButtonForNestedResource = [self isBackButtonForNestedResource];
+    if (self.controller.navigationItem.rightBarButtonItems == nil && isBackButtonForNestedResource) {
+        isNavigationItemsForNestedResource = YES;
+    }
+
+    return isNavigationItemsForNestedResource;
+}
+
+- (void)setupNavigationItemsForNestedResource
+{
+    [self setupBackButtonForNestedResource];
+    [self removeMenuBarButton];
+}
+
 - (void)addMenuBarButton
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
@@ -269,6 +305,7 @@
 - (void)removeMenuBarButton
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    self.controller.navigationItem.rightBarButtonItems = nil;
 }
 
 - (void)addFavoriteBarButton
@@ -287,10 +324,25 @@
     self.controller.navigationItem.rightBarButtonItems = rightBarButtonItems;
 }
 
-- (void)setupBackButton
+- (void)initialSetupBackButton
 {
     UIBarButtonItem *backBarButton = [self backBarButton];
     self.controller.navigationItem.leftBarButtonItem = backBarButton;
+}
+
+- (void)setupBackButtonForNestedResource
+{
+    UIBarButtonItem *backBarButton = [self backBarButtonForNestedResource];
+    self.controller.navigationItem.leftBarButtonItem = backBarButton;
+}
+
+- (BOOL)isBackButtonForNestedResource
+{
+    BOOL isBackButtonForNestedResource = NO;
+    if (self.controller.navigationItem.leftBarButtonItem.action == @selector(backFromNestedView)) {
+        isBackButtonForNestedResource = YES;
+    }
+    return isBackButtonForNestedResource;
 }
 
 #pragma mark - Navigation Items Helpers
@@ -316,6 +368,22 @@
                                             style:UIBarButtonItemStylePlain
                                            target:self
                                            action:@selector(back)];
+    [item setBackgroundImage:resizebleBackButtonImage
+                    forState:UIControlStateNormal
+                  barMetrics:UIBarMetricsDefault];
+    return item;
+}
+
+- (UIBarButtonItem *)backBarButtonForNestedResource
+{
+    UIBarButtonItem *item;
+    NSString *backItemTitle = JMCustomLocalizedString(@"back_button_title", nil);
+    UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
+    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
+    item = [[UIBarButtonItem alloc] initWithTitle:[self croppedBackButtonTitle:backItemTitle]
+                                            style:UIBarButtonItemStylePlain
+                                           target:self
+                                           action:@selector(backFromNestedView)];
     [item setBackgroundImage:resizebleBackButtonImage
                     forState:UIControlStateNormal
                   barMetrics:UIBarMetricsDefault];

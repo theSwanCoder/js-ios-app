@@ -942,14 +942,25 @@ JasperMobile.VIS.Report.Helpers = {
 };
 JasperMobile.VIS.Report.Handlers.Hyperlinks = {
     handleReportExecution: function(link) {
-        var data = {
-            resource: link.parameters._report,
-            params: JasperMobile.VIS.Report.Helpers.collectReportParams(link)
-        };
-        JasperMobile.Callback.log("Event: linkOption - ReportExecution");
-        JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.ReportExecution", {
-            "data" : data
-        });
+        JasperMobile.Callback.log("handleReportExecution");
+        var data = {};
+        if (link.parameters) {
+            data = {
+                resource: link.parameters._report,
+                params: JasperMobile.VIS.Report.Helpers.collectReportParams(link)
+            };
+            JasperMobile.Callback.log("Event: linkOption - ReportExecution");
+            JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.ReportExecution", {
+                "data" : data
+            });
+        } else {
+            JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.ReportExecution", {
+                "error" : {
+                    "code" : "hyperlink.not.support.error",
+                    "message" : "Hyperlink doesn't support"
+                }
+            });
+        }
     },
     handleLocalAnchor: function(link) {
         var parameters = {

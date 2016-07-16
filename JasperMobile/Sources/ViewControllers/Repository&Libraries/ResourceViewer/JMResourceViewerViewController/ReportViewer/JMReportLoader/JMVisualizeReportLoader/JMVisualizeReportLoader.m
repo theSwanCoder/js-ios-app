@@ -35,6 +35,7 @@
 #import "JSReportDestination.h"
 #import "JSReportBookmark.h"
 #import "JSReportPart.h"
+#import "JMHyperlink.h"
 
 @interface JMVisualizeReportLoader()
 @property (nonatomic, assign, readwrite) JSReportLoaderState state;
@@ -438,7 +439,6 @@ initialDestination:(nullable JSReportDestination *)destination
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     NSAssert(completion != nil, @"Completion is nil");
 
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     if (!self.report) {
         return;
     }
@@ -576,8 +576,19 @@ initialDestination:(nullable JSReportDestination *)destination
     NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.ReportExecution";
     [self.webEnvironment addListenerWithId:reportExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
         JMLog(reportExecutionLinkOptionListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf handleRunReportWithParameters:parameters];
+        if (error) {
+            if (error.code == JMJavascriptNativeBridgeErrorTypeOther) {
+                NSString *javascriptErrorCode = error.userInfo[JMJavascriptNativeBridgeErrorCodeKey];
+                if (javascriptErrorCode && [javascriptErrorCode isEqualToString:@"hyperlink.not.support.error"]) {
+                    if ([self.delegate respondsToSelector:@selector(reportLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
+                        [self.delegate reportLoaderDidReceiveEventWithUnsupportedHyperlink:self];
+                    }
+                }
+            }
+        } else {
+            __typeof(self) strongSelf = weakSelf;
+            [strongSelf handleRunReportWithParameters:parameters];
+        }
     }];
     NSString *localPageLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.LocalPage";
     [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
@@ -596,9 +607,11 @@ initialDestination:(nullable JSReportDestination *)destination
         __typeof(self) strongSelf = weakSelf;
         NSString *locationString = parameters[@"destination"];
         if (locationString) {
-            NSURL *locationURL = [NSURL URLWithString:locationString];
-            if ([strongSelf.delegate respondsToSelector:@selector(reportLoaderDidReceiveEvent:forReference:)]) {
-                [strongSelf.delegate reportLoaderDidReceiveEvent:strongSelf forReference:locationURL];
+            if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                JMHyperlink *hyperlink = [JMHyperlink new];
+                hyperlink.type = JMHyperlinkTypeReference;
+                hyperlink.href = locationString;
+                [strongSelf.delegate reportLoader:strongSelf didReceiveEventWithHyperlink:hyperlink];
             }
         }
     }];
@@ -617,9 +630,11 @@ initialDestination:(nullable JSReportDestination *)destination
                 }
                 NSString *fullURLString = [strongSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
                 JMLog(@"full url string: %@", fullURLString);
-                NSURL *locationURL = [NSURL URLWithString:fullURLString];
-                if ([strongSelf.delegate respondsToSelector:@selector(reportLoaderDidReceiveEvent:forReference:)]) {
-                    [strongSelf.delegate reportLoaderDidReceiveEvent:strongSelf forReference:locationURL];
+                if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                    JMHyperlink *hyperlink = [JMHyperlink new];
+                    hyperlink.type = JMHyperlinkTypeRemoteAnchor;
+                    hyperlink.href = fullURLString;
+                    [strongSelf.delegate reportLoader:strongSelf didReceiveEventWithHyperlink:hyperlink];
                 }
             }
         }
@@ -639,9 +654,11 @@ initialDestination:(nullable JSReportDestination *)destination
                 }
                 NSString *fullURLString = [strongSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
                 JMLog(@"full url string: %@", fullURLString);
-                NSURL *locationURL = [NSURL URLWithString:fullURLString];
-                if ([strongSelf.delegate respondsToSelector:@selector(reportLoaderDidReceiveEvent:forReference:)]) {
-                    [strongSelf.delegate reportLoaderDidReceiveEvent:strongSelf forReference:locationURL];
+                if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                    JMHyperlink *hyperlink = [JMHyperlink new];
+                    hyperlink.type = JMHyperlinkTypeRemotePage;
+                    hyperlink.href = fullURLString;
+                    [strongSelf.delegate reportLoader:strongSelf didReceiveEventWithHyperlink:hyperlink];
                 }
             }
         }
@@ -671,103 +688,11 @@ initialDestination:(nullable JSReportDestination *)destination
 
     NSString *reportPath = data[@"resource"];
     if (reportPath) {
-        [self.restClient resourceLookupForURI:reportPath
-                                 resourceType:kJS_WS_TYPE_REPORT_UNIT
-                                   modelClass:[JSResourceLookup class]
-                              completionBlock:^(JSOperationResult *result) {
-                                  NSError *error = result.error;
-                                  if (error) {
-                                      NSString *errorString = error.localizedDescription;
-                                      JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
-                                      if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
-                                          errorType = JSReportLoaderErrorTypeAuthentification;
-                                      }
-                                      JMLog(@"Error of fetching a report metadata: %@", errorString);
-                                      // TODO: add error handling
-//                                      if ([self.delegate respondsToSelector:@selector(reportLoaderDidReceiveEvent:withError:)]) {
-//                                          [self.delegate reportLoader:self
-//                                      didReceiveOnClickEventWithError:[self createErrorWithType:errorType
-//                                                                                   errorMessage:errorString]];
-//                                      }
-                                  } else {
-                                      JSResourceLookup *resourceLookup = [result.objects firstObject];
-                                      if (resourceLookup) {
-                                          resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
-
-                                          NSMutableArray *reportParameters = [NSMutableArray array];
-                                          NSDictionary *rawParameters = data[@"params"];
-                                          for (NSString *key in rawParameters) {
-                                              JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:key
-                                                                                                                     value:rawParameters[key]];
-                                              [reportParameters addObject:reportParameter];
-                                          }
-
-                                          JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
-                                          NSDictionary *params = data[@"params"];
-                                          if (params && [params isKindOfClass:[NSDictionary class]]) {
-                                              NSArray *outputs = params[@"_output"];
-                                              if (outputs) {
-                                                  if ([outputs isKindOfClass:[NSArray class]]) {
-                                                      // handle output
-                                                      if ([self.delegate respondsToSelector:@selector(reportLoaderDidReceiveEvent:forResource:withOutputFormats:)]) {
-                                                          [self.delegate reportLoaderDidReceiveEvent:self
-                                                                                         forResource:resource
-                                                                                   withOutputFormats:outputs];
-                                                      }
-                                                  }
-                                              } else {
-                                                  NSInteger initialPage = 1;
-                                                  NSString *initialAnchor;
-                                                  NSArray *pages = params[@"_page"];
-                                                  if (pages && [pages isKindOfClass:[NSArray class]]) {
-                                                      // TODO: need support multipages?
-                                                      NSString *page = pages.firstObject;
-                                                      if (page && [page isKindOfClass:[NSString class]]) {
-                                                          // TODO: investigate other cases
-                                                          NSInteger pageValue = page.integerValue;
-                                                          if (pageValue > 0) {
-                                                              initialPage = pageValue;
-                                                          }
-                                                      }
-                                                  }
-                                                  NSArray *anchors = params[@"_anchor"];
-                                                  if (anchors && [anchors isKindOfClass:[NSArray class]]) {
-                                                      NSString *anchor = anchors.firstObject;
-                                                      if (anchor && [anchor isKindOfClass:[NSString class]]) {
-                                                          initialAnchor = anchor;
-                                                      }
-                                                  }
-
-                                                  JSReportDestination *destination = [JSReportDestination new];
-                                                  if (initialAnchor) {
-                                                      destination.anchor = initialAnchor;
-                                                      destination.page = initialPage;
-                                                  } else {
-                                                      destination.page = initialPage;
-                                                  }
-                                                  if ([self.delegate respondsToSelector:@selector(reportLoaderDidReceiveEvent:forResource:withParameters:destination:)]) {
-                                                      [self.delegate reportLoaderDidReceiveEvent:self
-                                                                                     forResource:resource
-                                                                                  withParameters:[reportParameters copy]
-                                                                                     destination:destination];
-                                                  }
-                                              }
-                                          }
-
-                                      }
-                                  }
-                              }];
+        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+            JMHyperlink *hyperlink = [JMHyperlink hyperlinkWithHref:reportPath withRawData:data[@"params"]];
+            [self.delegate reportLoader:self didReceiveEventWithHyperlink:hyperlink];
+        }
     }
-}
-
-- (NSError *)createErrorWithType:(JSReportLoaderErrorType)errorType errorMessage:(NSString *)errorMessage
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report_viewer_visualize_render_error", nil) };
-    NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
-                                         code:errorType
-                                     userInfo:userInfo];
-    return error;
 }
 
 #pragma mark - Bookmarks Handler

@@ -38,6 +38,8 @@
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerInfoPageManager.h"
 #import "JMResourceViewerShareManager.h"
+#import "JMResourceViewerHyperlinksManager.h"
+#import "PopoverView.h"
 
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
@@ -72,6 +74,8 @@
 
     [self addObservers];
 
+    [[self reportLoader] setDelegate:self];
+
     [self setupStateManager];
     [self startResourceViewing];
 }
@@ -104,6 +108,9 @@
     __weak __typeof(self) weakSelf = self;
     [self stateManager].backActionBlock = ^{
         [weakSelf exitAction];
+    };
+    [self stateManager].backFromNestedResourceActionBlock = ^{
+        [weakSelf backActionInWebView];
     };
     [self stateManager].cancelOperationBlock = ^{
         [weakSelf exitAction];
@@ -237,9 +244,8 @@
 - (void)backActionInWebView
 {
     [[self webEnvironment].webView goBack];
-
-    self.initialDestination = nil;
     [self runReportWithDestination:self.initialDestination];
+    [self.configurator.hyperlinksManager reset];
 }
 
 #pragma mark - Network methods
@@ -451,6 +457,26 @@
     }];
 }
 
+#pragma mark - JMReportLoaderDelegate
+- (void)reportLoader:(id<JMReportLoaderProtocol>)loader didReceiveEventWithHyperlink:(JMHyperlink *)hyperlink
+{
+    self.configurator.hyperlinksManager.controller = self;
+    self.configurator.hyperlinksManager.errorBlock = ^(NSError *error) {
+        [JMUtils presentAlertControllerWithError:error completion:nil];
+    };
+    [self.configurator.hyperlinksManager handleHyperlink:hyperlink];
+}
+
+- (void)reportLoaderDidReceiveEventWithUnsupportedHyperlink:(id<JMReportLoaderProtocol> __nonnull)loader
+{
+    // TODO: translate
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Visualize Message"
+                                                                                      message:@"The hyperlink could not be processed"
+                                                                            cancelButtonTitle:@"dialog_button_ok"
+                                                                      cancelCompletionHandler:nil];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
 #pragma mark - Helpers
 - (id<JMReportLoaderProtocol>)reportLoader
 {
@@ -630,8 +656,7 @@
 #pragma mark - JMMenuActionsViewDelegate
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
-    [[self stateManager] hideMenuView];
-    // TODO: add handling of other actions
+    [view.popoverView dismiss];
     switch (action) {
         case JMMenuActionsViewAction_MakeFavorite:
         case JMMenuActionsViewAction_MakeUnFavorite:
@@ -705,7 +730,7 @@
         } else if (reportOptionURI) {
             [strongSelf runReportWithReportURI:reportOptionURI];
         } else {
-            // For now do nothing.
+            [strongSelf runReportWithDestination:strongSelf.initialDestination];
         }
         [strongSelf.navigationController popViewControllerAnimated:YES];
     };

@@ -38,6 +38,7 @@
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerInfoPageManager.h"
 #import "JMResourceViewerShareManager.h"
+#import "JMResourceViewerHyperlinksManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMReportLoaderProtocol> reportLoader;
@@ -79,6 +80,7 @@
         _printManager = [self createPrintManager];
         _infoPageManager = [self createInfoPageManager];
         _shareManager = [self createShareManager];
+        _hyperlinksManager = [self createHyperlinksManager];
     }
     return self;
 }
@@ -86,11 +88,6 @@
 + (instancetype)configuratorWithWebEnvironment:(JMWebEnvironment *)webEnvironment
 {
     return [[self alloc] initWithWebEnvironment:webEnvironment];
-}
-
-- (void)updateReportLoaderDelegateWithObject:(id <JMReportLoaderDelegate>)delegate
-{
-    [[self reportLoader] setDelegate:delegate];
 }
 
 #pragma mark - Helpers
@@ -112,6 +109,11 @@
 - (JMResourceViewerShareManager *)createShareManager
 {
     return [JMResourceViewerShareManager new];
+}
+
+- (JMResourceViewerHyperlinksManager *)createHyperlinksManager
+{
+    return [JMResourceViewerHyperlinksManager new];
 }
 
 @end
