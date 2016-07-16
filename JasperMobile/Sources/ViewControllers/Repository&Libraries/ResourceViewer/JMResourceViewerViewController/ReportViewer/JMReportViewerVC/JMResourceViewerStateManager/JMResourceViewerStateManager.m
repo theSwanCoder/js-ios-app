@@ -182,6 +182,12 @@
     actionsView.popoverView = self.popoverView;
 }
 
+- (void)openDocumentAction
+{
+    NSAssert(self.openDocumentActionBlock != nil, @"Open Document Action Block is nil");
+    self.openDocumentActionBlock();
+}
+
 #pragma mark - Helpers
 
 - (void)setupNavigationItemForState:(JMReportViewerState)state
@@ -268,6 +274,7 @@
 
 - (void)setupNavigationItems
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     if ([self isNavigationItemsForNestedResource]) {
         [self initialSetupNavigationItems];
     }
@@ -279,7 +286,7 @@
 
     // TODO: extend this logic
     BOOL isBackButtonForNestedResource = [self isBackButtonForNestedResource];
-    if (self.controller.navigationItem.rightBarButtonItems == nil && isBackButtonForNestedResource) {
+    if (isBackButtonForNestedResource) {
         isNavigationItemsForNestedResource = YES;
     }
 
@@ -288,8 +295,12 @@
 
 - (void)setupNavigationItemsForNestedResource
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [self setupBackButtonForNestedResource];
     [self removeMenuBarButton];
+    if (self.openDocumentActionBlock) {
+        [self setupOpenDocumentBarButton];
+    }
 }
 
 - (void)addMenuBarButton
@@ -325,14 +336,23 @@
 
 - (void)initialSetupBackButton
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     UIBarButtonItem *backBarButton = [self backBarButton];
     self.controller.navigationItem.leftBarButtonItem = backBarButton;
 }
 
 - (void)setupBackButtonForNestedResource
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     UIBarButtonItem *backBarButton = [self backBarButtonForNestedResource];
     self.controller.navigationItem.leftBarButtonItem = backBarButton;
+}
+
+- (void)setupOpenDocumentBarButton
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    UIBarButtonItem *openDocumentBarButton = [self openDocumentBarButton];
+    self.controller.navigationItem.rightBarButtonItems = @[openDocumentBarButton];
 }
 
 - (BOOL)isBackButtonForNestedResource
@@ -424,6 +444,15 @@
                                            target:self
                                            action:@selector(updateFavoriteState)];
     [self decorateFavoriteBarButton:item];
+    return item;
+}
+
+- (UIBarButtonItem *)openDocumentBarButton
+{
+    UIBarButtonItem *item;
+    item = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                         target:self
+                                                         action:@selector(openDocumentAction)];
     return item;
 }
 

@@ -33,6 +33,7 @@
 #import "JMWebEnvironment.h"
 #import "JMHyperlink.h"
 #import "JMResourceViewerStateManager.h"
+#import "JMResourceViewerDocumentManager.h"
 
 @interface JMResourceViewerHyperlinksManager()
 @property (nonatomic, strong) NSURL *tempResourceURL;
@@ -146,6 +147,8 @@
         return;
     }
 
+    JMReportViewerState activeState = self.controller.configurator.stateManager.activeState;
+    [self.controller.configurator.stateManager setupPageForState:JMReportViewerStateLoading];
     __weak __typeof(self) weakSelf = self;
     [self fetchResourceLookupForURI:hyperlink.href completion:^(JSResourceLookup *resourceLookup, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
@@ -154,25 +157,42 @@
                 strongSelf.errorBlock(error);
             }
         } else {
+            [strongSelf.controller.configurator.stateManager setupPageForState:activeState];
             if (!resourceLookup) {
                 JMLog(@"There is no resource lookup");
                 return;
             }
+            [strongSelf.controller.configurator.stateManager setupPageForState:JMReportViewerStateLoading];
             __weak __typeof(self) weakSelf = strongSelf;
             JMResource *resource  = [JMResource resourceWithResourceLookup:resourceLookup];
             [strongSelf fetchReportExportWithResource:resource format:outputs.firstObject completion:^(NSURL *location, NSError *error) {
                 __typeof(self) strongSelf = weakSelf;
+                [strongSelf.controller.configurator.stateManager setupPageForState:activeState];
                 if (error) {
                     if (strongSelf.errorBlock) {
                         strongSelf.errorBlock(error);
                     }
                 } else {
                     if (location) {
-                        strongSelf.tempResourceURL = location;
-                        NSURLRequest *request = [NSURLRequest requestWithURL:location];
-                        [strongSelf.controller.configurator.webEnvironment.webView loadRequest:request];
-                        // TODO: come up with a better solution
-                        [strongSelf.controller.configurator.stateManager setupPageForState:JMReportViewerStateNestedResource];
+                        if ([strongSelf isFormatSupported:outputs.firstObject]) {
+                            strongSelf.tempResourceURL = location;
+                            // TODO: come up with a better solution
+                            __weak __typeof(self) weakSelf = strongSelf;
+                            strongSelf.controller.configurator.stateManager.openDocumentActionBlock = ^{
+                                __typeof(self) strongSelf = weakSelf;
+                                strongSelf.controller.configurator.documentManager.controller = weakSelf.controller;
+                                [strongSelf.controller.configurator.documentManager showOpenInMenuForResourceWithURL:location];
+                            };
+
+                            NSURLRequest *request = [NSURLRequest requestWithURL:location];
+                            [strongSelf.controller.configurator.webEnvironment.webView loadRequest:request];
+                            // TODO: come up with a better solution
+                            [strongSelf.controller.configurator.stateManager setupPageForState:JMReportViewerStateNestedResource];
+                        } else {
+                            // TODO: come up with a better solution
+                            strongSelf.controller.configurator.documentManager.controller = weakSelf.controller;
+                            [strongSelf.controller.configurator.documentManager showOpenInMenuForResourceWithURL:location];
+                        }
                     } else {
                         JMLog(@"There is no location of exported report");
                     }
@@ -196,6 +216,23 @@
             [[UIApplication sharedApplication] openURL:destinationURL];
         }
     }
+}
+
+- (NSArray *)supportedFormats
+{
+    return @[@"pdf", @"html", @"xls"];
+}
+
+- (BOOL)isFormatSupported:(NSString *)format
+{
+    BOOL isFormatSupported = NO;
+    for (NSString *supportedFormat in [self supportedFormats]) {
+        if ([supportedFormat isEqualToString:[format lowercaseString]]) {
+            isFormatSupported = YES;
+            break;
+        }
+    }
+    return isFormatSupported;
 }
 
 #pragma mark - Network API

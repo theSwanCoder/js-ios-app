@@ -40,6 +40,7 @@
 @class JMResourceViewerInfoPageManager;
 @class JMResourceViewerShareManager;
 @class JMResourceViewerHyperlinksManager;
+@class JMResourceViewerDocumentManager;
 
 @interface JMReportViewerConfigurator : NSObject
 @property (nonatomic, strong, readonly) id <JMReportLoaderProtocol> __nonnull reportLoader;
@@ -49,6 +50,7 @@
 @property (nonatomic, strong) JMResourceViewerInfoPageManager * __nonnull infoPageManager;
 @property (nonatomic, strong) JMResourceViewerShareManager * __nonnull shareManager;
 @property (nonatomic, strong) JMResourceViewerHyperlinksManager * __nonnull hyperlinksManager;
+@property (nonatomic, strong) JMResourceViewerDocumentManager * __nonnull documentManager;
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
 
 - (instancetype __nonnull)initWithWebEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;

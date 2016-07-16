@@ -39,6 +39,7 @@
 #import "JMResourceViewerInfoPageManager.h"
 #import "JMResourceViewerShareManager.h"
 #import "JMResourceViewerHyperlinksManager.h"
+#import "JMResourceViewerDocumentManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMReportLoaderProtocol> reportLoader;
@@ -81,6 +82,7 @@
         _infoPageManager = [self createInfoPageManager];
         _shareManager = [self createShareManager];
         _hyperlinksManager = [self createHyperlinksManager];
+        _documentManager = [self createDocumentManager];
     }
     return self;
 }
@@ -114,6 +116,11 @@
 - (JMResourceViewerHyperlinksManager *)createHyperlinksManager
 {
     return [JMResourceViewerHyperlinksManager new];
+}
+
+- (JMResourceViewerDocumentManager *)createDocumentManager
+{
+    return [JMResourceViewerDocumentManager new];
 }
 
 @end
