@@ -264,8 +264,10 @@
 
 - (void)loadInputControlsWithCompletion:(void(^)(NSArray *inputControls, NSError *error))completion
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"initial input controls: %@", self.initialReportParameters);
     [self.restClient inputControlsForReport:self.reportURI
-                                   selectedValues:self.initialReportParameters // TODO: add initial values
+                                   selectedValues:self.initialReportParameters
                                   completionBlock:^(JSOperationResult * _Nullable result) {
                                       if (result.error) {
                                           completion(nil, result.error);
@@ -305,7 +307,13 @@
     [self.restClient reportOptionsForReportURI:self.reportURI
                                     completion:^(JSOperationResult * _Nullable result) {
                                         if (result.error) {
-                                            completion(nil, result.error);
+                                            if (result.error.code == JSDataMappingErrorCode) {
+                                                // TODO: skip for now
+                                                // There is an case of getting 'string' object when there are no options.
+                                                completion(@[], nil);
+                                            } else {
+                                                completion(nil, result.error);
+                                            }
                                         } else {
                                             NSMutableArray *reportOptions = [NSMutableArray array];
                                             for (id reportOption in result.objects) {
