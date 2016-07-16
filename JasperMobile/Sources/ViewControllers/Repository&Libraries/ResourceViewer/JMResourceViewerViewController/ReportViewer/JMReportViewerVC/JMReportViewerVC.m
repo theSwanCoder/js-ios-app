@@ -132,19 +132,28 @@
 - (void)addObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportDidUpdateCountOfPages)
+                                                 name:JSReportCountOfPagesDidChangeNotification
+                                               object:[self report]];
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(multipageNotification)
                                                  name:JSReportIsMutlipageDidChangedNotification
                                                object:[self report]];
-
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportDidUpdateBookmarks)
                                                  name:JSReportBookmarksDidUpdateNotification
                                                object:[self report]];
-
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportDidUpdateParts)
                                                  name:JSReportPartsDidUpdateNotification
                                                object:[self report]];
+}
+
+- (void)reportDidUpdateCountOfPages
+{
+    if ([self report].countOfPages == 0) {
+        [[self stateManager] setupPageForState:JMReportViewerStateResourceNotExist];
+    }
 }
 
 - (void)multipageNotification
@@ -574,7 +583,6 @@
         }
         case JSReportLoaderErrorTypeEmtpyReport:
             // TODO: this isn't an error
-            [[self stateManager] setupPageForState:JMReportViewerStateResourceNotExist];
             break;
         case JSInvalidCredentialsErrorCode: {
             [JMUtils showLoginViewAnimated:YES completion:^{
