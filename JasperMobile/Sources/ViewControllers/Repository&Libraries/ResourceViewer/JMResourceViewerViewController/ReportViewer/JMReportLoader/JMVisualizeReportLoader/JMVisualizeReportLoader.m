@@ -183,6 +183,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
 
     [self.report updateCurrentPage:1];
     [self.report updateCountOfPages:NSNotFound];
+    self.report.reportParameters = parameters;
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.applyReportParams"
                                                                inNamespace:JMJavascriptNamespaceVISReport
