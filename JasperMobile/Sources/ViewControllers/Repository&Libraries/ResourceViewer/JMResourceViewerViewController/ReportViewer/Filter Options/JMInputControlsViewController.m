@@ -329,7 +329,7 @@
     BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
     if ( isEmptyNoneOption) {
         if (self.completionBlock) {
-            self.completionBlock(nil, self.reportURI);
+            self.completionBlock(nil, nil);
         }
         return;
     }
