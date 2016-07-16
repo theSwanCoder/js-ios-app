@@ -27,6 +27,7 @@
 #import "JMMenuAction.h"
 
 #import "UIColor+RGBComponent.h"
+#import "PopoverView.h"
 
 
 CGFloat static kJMMenuActionsViewCellPortraitHeight = 40;

@@ -34,6 +34,7 @@
 #import "JMMenuAction.h"
 
 @class JMMenuActionsView;
+@class PopoverView;
 
 @protocol JMMenuActionsViewDelegate <NSObject>
 @required
@@ -43,9 +44,8 @@
 
 @interface JMMenuActionsView : UIView
 @property (nonatomic, weak) id <JMMenuActionsViewDelegate> delegate;
+@property (nonatomic, weak) PopoverView *popoverView;
 @property (nonatomic, assign) JMMenuActionsViewAction availableActions;
 @property (nonatomic, assign) JMMenuActionsViewAction disabledActions;
-
 - (void)setAvailableActions:(JMMenuActionsViewAction)availableActions disabledActions:(JMMenuActionsViewAction)disabledActions;
-
 @end
