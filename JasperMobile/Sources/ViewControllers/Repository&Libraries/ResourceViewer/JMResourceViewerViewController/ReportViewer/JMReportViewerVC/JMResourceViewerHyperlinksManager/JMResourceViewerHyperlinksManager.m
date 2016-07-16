@@ -147,8 +147,8 @@
         return;
     }
 
-    JMReportViewerState activeState = self.controller.configurator.stateManager.activeState;
-    [self.controller.configurator.stateManager setupPageForState:JMReportViewerStateLoading];
+    JMResourceViewerState activeState = self.controller.configurator.stateManager.activeState;
+    [self.controller.configurator.stateManager setupPageForState:JMResourceViewerStateLoading];
     __weak __typeof(self) weakSelf = self;
     [self fetchResourceLookupForURI:hyperlink.href completion:^(JSResourceLookup *resourceLookup, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
@@ -162,7 +162,7 @@
                 JMLog(@"There is no resource lookup");
                 return;
             }
-            [strongSelf.controller.configurator.stateManager setupPageForState:JMReportViewerStateLoading];
+            [strongSelf.controller.configurator.stateManager setupPageForState:JMResourceViewerStateLoading];
             __weak __typeof(self) weakSelf = strongSelf;
             JMResource *resource  = [JMResource resourceWithResourceLookup:resourceLookup];
             [strongSelf fetchReportExportWithResource:resource format:outputs.firstObject completion:^(NSURL *location, NSError *error) {
@@ -187,7 +187,7 @@
                             NSURLRequest *request = [NSURLRequest requestWithURL:location];
                             [strongSelf.controller.configurator.webEnvironment.webView loadRequest:request];
                             // TODO: come up with a better solution
-                            [strongSelf.controller.configurator.stateManager setupPageForState:JMReportViewerStateNestedResource];
+                            [strongSelf.controller.configurator.stateManager setupPageForState:JMResourceViewerStateNestedResource];
                         } else {
                             // TODO: come up with a better solution
                             strongSelf.controller.configurator.documentManager.controller = weakSelf.controller;
@@ -210,7 +210,7 @@
         NSURLRequest *request = [NSURLRequest requestWithURL:destinationURL];
         [self.controller.configurator.webEnvironment.webView loadRequest:request];
         // TODO: come up with a better solution
-        [self.controller.configurator.stateManager setupPageForState:JMReportViewerStateNestedResource];
+        [self.controller.configurator.stateManager setupPageForState:JMResourceViewerStateNestedResource];
     } else {
         if (destinationURL && [[UIApplication sharedApplication] canOpenURL:destinationURL]) {
             [[UIApplication sharedApplication] openURL:destinationURL];

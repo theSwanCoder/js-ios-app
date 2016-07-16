@@ -36,32 +36,32 @@
 @protocol JMMenuActionsViewProtocol;
 @protocol JMMenuActionsViewDelegate;
 
-typedef NS_ENUM(NSInteger, JMReportViewerState) {
-    JMReportViewerStateInitial,
-    JMReportViewerStateDestroy,
-    JMReportViewerStateLoading,
-    JMReportViewerStateResourceReady,
-    JMReportViewerStateResourceFailed,
-    JMReportViewerStateResourceNotExist,
-    JMReportViewerStateNestedResource
+typedef NS_ENUM(NSInteger, JMResourceViewerState) {
+    JMResourceViewerStateInitial,
+    JMResourceViewerStateDestroy,
+    JMResourceViewerStateLoading,
+    JMResourceViewerStateResourceReady,
+    JMResourceViewerStateResourceFailed,
+    JMResourceViewerStateResourceNotExist,
+    JMResourceViewerStateNestedResource
 };
 
-typedef NS_ENUM(NSInteger, JMReportVieweToolbarState) {
-    JMReportVieweToolbarStateTopVisible,
-    JMReportVieweToolbarStateTopHidden,
-    JMReportVieweToolbarStateBottomVisible,
-    JMReportVieweToolbarStateBottomHidden
+typedef NS_ENUM(NSInteger, JMResourceViewerToolbarState) {
+    JMResourceViewerToolbarStateTopVisible,
+    JMResourceViewerToolbarStateTopHidden,
+    JMResourceViewerToolbarStateBottomVisible,
+    JMResourceViewerToolbarStateBottomHidden
 };
 
 @interface JMResourceViewerStateManager : NSObject
 @property (nonatomic, weak) UIViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol>*controller;
-@property (nonatomic, assign) JMReportViewerState activeState;
+@property (nonatomic, assign) JMResourceViewerState activeState;
 @property (nonatomic, copy) void(^openDocumentActionBlock)(void);
 @property (nonatomic, copy) void(^cancelOperationBlock)(void);
 @property (nonatomic, copy) void(^backActionBlock)(void);
 @property (nonatomic, copy) void(^backFromNestedResourceActionBlock)(void);
-- (void)setupPageForState:(JMReportViewerState)state;
-- (void)updatePageForToolbarState:(JMReportVieweToolbarState)toolbarState;
+- (void)setupPageForState:(JMResourceViewerState)state;
+- (void)updatePageForToolbarState:(JMResourceViewerToolbarState)toolbarState;
 - (void)updatePageForChangingSizeClass;
 - (void)updateFavoriteState;
 @end

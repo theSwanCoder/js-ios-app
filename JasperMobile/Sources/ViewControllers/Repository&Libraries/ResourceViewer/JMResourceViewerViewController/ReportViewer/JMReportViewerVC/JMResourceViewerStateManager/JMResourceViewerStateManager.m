@@ -82,13 +82,13 @@
 
 #pragma mark - Public API
 
-- (void)setupPageForState:(JMReportViewerState)state
+- (void)setupPageForState:(JMResourceViewerState)state
 {
     self.activeState = state;
     [self setupNavigationItemForState:state];
     [self setupMainViewForState:state];
     switch(state) {
-        case JMReportViewerStateInitial: {
+        case JMResourceViewerStateInitial: {
             [self hideTopToolbarAnimated:NO];
             [self hideBottomToolbarAnimated:NO];
         }
@@ -98,22 +98,22 @@
     }
 }
 
-- (void)updatePageForToolbarState:(JMReportVieweToolbarState)toolbarState
+- (void)updatePageForToolbarState:(JMResourceViewerToolbarState)toolbarState
 {
     switch(toolbarState) {
-        case JMReportVieweToolbarStateTopVisible: {
+        case JMResourceViewerToolbarStateTopVisible: {
             [self showTopToolbarAnimated:YES];
             break;
         }
-        case JMReportVieweToolbarStateTopHidden: {
+        case JMResourceViewerToolbarStateTopHidden: {
             [self hideTopToolbarAnimated:YES];
             break;
         }
-        case JMReportVieweToolbarStateBottomVisible: {
+        case JMResourceViewerToolbarStateBottomVisible: {
             [self showBottomToolbarAnimated:YES];
             break;
         }
-        case JMReportVieweToolbarStateBottomHidden: {
+        case JMResourceViewerToolbarStateBottomHidden: {
             [self hideBottomToolbarAnimated:YES];
             break;
         }
@@ -190,71 +190,71 @@
 
 #pragma mark - Helpers
 
-- (void)setupNavigationItemForState:(JMReportViewerState)state
+- (void)setupNavigationItemForState:(JMResourceViewerState)state
 {
     switch (state) {
-        case JMReportViewerStateInitial: {
+        case JMResourceViewerStateInitial: {
             [self initialSetupNavigationItems];
             break;
         }
-        case JMReportViewerStateDestroy: {
+        case JMResourceViewerStateDestroy: {
             break;
         }
-        case JMReportViewerStateLoading: {
+        case JMResourceViewerStateLoading: {
             break;
         }
-        case JMReportViewerStateResourceFailed: {
+        case JMResourceViewerStateResourceFailed: {
             break;
         }
-        case JMReportViewerStateResourceReady: {
+        case JMResourceViewerStateResourceReady: {
             [self setupNavigationItems];
             break;
         }
-        case JMReportViewerStateResourceNotExist: {
+        case JMResourceViewerStateResourceNotExist: {
             break;
         }
-        case JMReportViewerStateNestedResource: {
+        case JMResourceViewerStateNestedResource: {
             [self setupNavigationItemsForNestedResource];
             break;
         }
     }
 }
 
-- (void)setupMainViewForState:(JMReportViewerState)state
+- (void)setupMainViewForState:(JMResourceViewerState)state
 {
     [self hideResourceNotExistView];
     switch (state) {
-        case JMReportViewerStateInitial: {
+        case JMResourceViewerStateInitial: {
             [self hideProgress];
             [self showResourceNotExistView];
             break;
         }
-        case JMReportViewerStateDestroy: {
+        case JMResourceViewerStateDestroy: {
             [self hideProgress];
             break;
         }
-        case JMReportViewerStateLoading: {
+        case JMResourceViewerStateLoading: {
             [self showProgress];
             [self hideResourceNotExistView];
             [self hideMainView];
             break;
         }
-        case JMReportViewerStateResourceFailed: {
+        case JMResourceViewerStateResourceFailed: {
             [self hideProgress];
             [self showResourceNotExistView];
             break;
         }
-        case JMReportViewerStateResourceReady: {
+        case JMResourceViewerStateResourceReady: {
             [self hideProgress];
             [self hideResourceNotExistView];
             [self showMainView];
             break;
         }
-        case JMReportViewerStateResourceNotExist: {
+        case JMResourceViewerStateResourceNotExist: {
             [self showResourceNotExistView];
             break;
         }
-        case JMReportViewerStateNestedResource: {
+        case JMResourceViewerStateNestedResource: {
             [self hideProgress];
             break;
         }
@@ -619,7 +619,7 @@
 - (JMMenuActionsViewAction)disabledActions
 {
     JMMenuActionsViewAction disabledAction = JMMenuActionsViewAction_None;
-    if (self.activeState == JMReportViewerStateResourceNotExist) {
+    if (self.activeState == JMResourceViewerStateResourceNotExist) {
         disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ShowExternalDisplay;
     }
     return disabledAction;
