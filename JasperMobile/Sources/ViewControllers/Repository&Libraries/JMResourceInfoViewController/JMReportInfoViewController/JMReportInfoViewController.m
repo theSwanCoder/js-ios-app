@@ -28,6 +28,7 @@
 #import "JMReportInfoViewController.h"
 #import "JMScheduleVC.h"
 #import "JMResource.h"
+#import "JMReportViewerVC.h"
 
 @interface JMReportInfoViewController ()
 
@@ -59,6 +60,8 @@
     }
     
     if (nextVC) {
+        JMReportViewerVC *reportViewerVC = (JMReportViewerVC *)nextVC;
+        reportViewerVC.configurator = [JMUtils reportViewerConfiguratorReusableWebView];
         [self.navigationController pushViewController:nextVC animated:YES];
     }
 }
