@@ -36,16 +36,18 @@
 @class JMMenuActionsView;
 @class PopoverView;
 
-@protocol JMMenuActionsViewDelegate <NSObject>
-@required
-- (void) actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action;
+@protocol JMMenuActionsViewProtocol <NSObject>
+- (JMMenuActionsViewAction)availableActions;
+@optional
+- (JMMenuActionsViewAction)disabledActions;
+@end
 
+@protocol JMMenuActionsViewDelegate <NSObject>
+- (void) actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action;
 @end
 
 @interface JMMenuActionsView : UIView
 @property (nonatomic, weak) id <JMMenuActionsViewDelegate> delegate;
 @property (nonatomic, weak) PopoverView *popoverView;
-@property (nonatomic, assign) JMMenuActionsViewAction availableActions;
-@property (nonatomic, assign) JMMenuActionsViewAction disabledActions;
 - (void)setAvailableActions:(JMMenuActionsViewAction)availableActions disabledActions:(JMMenuActionsViewAction)disabledActions;
 @end

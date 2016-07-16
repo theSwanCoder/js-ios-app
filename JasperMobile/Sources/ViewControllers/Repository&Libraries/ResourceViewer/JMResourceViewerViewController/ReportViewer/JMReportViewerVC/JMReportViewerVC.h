@@ -39,7 +39,7 @@
 @class JMReportPartViewToolbar;
 @class JMReportViewerConfigurator;
 
-@interface JMReportViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate>
+@interface JMReportViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, strong) NSArray <JSReportParameter *> *initialReportParameters;
 @property (nonatomic, strong) JSReportDestination *initialDestination;

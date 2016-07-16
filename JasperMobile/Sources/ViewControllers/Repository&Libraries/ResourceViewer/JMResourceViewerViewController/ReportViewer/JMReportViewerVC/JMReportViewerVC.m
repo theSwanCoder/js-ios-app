@@ -119,6 +119,7 @@
 }
 
 #pragma mark - Custom accessors
+
 - (JSReportDestination *)initialDestination
 {
     if (!_initialDestination) {
@@ -129,6 +130,7 @@
 }
 
 #pragma mark - Observe Notifications
+
 - (void)addObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -630,7 +632,26 @@
 //    self.webEnvironment = nil;
 }
 
+#pragma mark - JMMenuActionsViewProtocol
+
+- (JMMenuActionsViewAction)availableActions
+{
+    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info | JMMenuActionsViewAction_Edit;
+
+    if ([self stateManager].activeState != JMReportViewerStateInitial) {
+        availableAction |= JMMenuActionsViewAction_Refresh;
+    }
+    availableAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule;
+    availableAction |= JMMenuActionsViewAction_Share | JMMenuActionsViewAction_Print;
+//    if ([self isExternalScreenAvailable]) {
+//        availableAction |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+//    }
+
+    return availableAction;
+}
+
 #pragma mark - JMMenuActionsViewDelegate
+
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     [view.popoverView dismiss];

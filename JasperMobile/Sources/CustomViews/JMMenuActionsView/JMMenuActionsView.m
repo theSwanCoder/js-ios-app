@@ -37,7 +37,8 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSDictionary *dataSource;
 @property (nonatomic, strong) NSArray *availableMenuActions;
-
+@property (nonatomic, assign) JMMenuActionsViewAction availableActions;
+@property (nonatomic, assign) JMMenuActionsViewAction disabledActions;
 @end
 
 
@@ -70,14 +71,6 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
     tableView.dataSource = self;
     tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     return tableView;
-}
-
-- (void)setAvailableActions:(JMMenuActionsViewAction)availableActions
-{
-    _availableActions = availableActions;
-    [self refreshDatasourceForAvailableActions];
-    [self updateFrameFitContent];
-    [self.tableView reloadData];
 }
 
 - (void)setAvailableActions:(JMMenuActionsViewAction)availableActions disabledActions:(JMMenuActionsViewAction)disabledActions

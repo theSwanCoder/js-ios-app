@@ -67,7 +67,7 @@
 }
 
 #pragma mark - Custom Accessors
-- (void)setController:(UIViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate> *)controller
+- (void)setController:(UIViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewProtocol, JMMenuActionsViewDelegate> *)controller
 {
     _controller = controller;
     [self setupViews];
@@ -170,8 +170,8 @@
 {
     JMMenuActionsView *actionsView = [JMMenuActionsView new];
     actionsView.delegate = self.controller;
-    [actionsView setAvailableActions:[self availableAction]
-                     disabledActions:[self disabledAction]];
+    [actionsView setAvailableActions:[self availableActions]
+                     disabledActions:[self disabledActions]];
     CGPoint point = CGPointMake(CGRectGetWidth(self.controller.view.frame), -10);
 
     self.popoverView = [PopoverView showPopoverAtPoint:point
@@ -577,34 +577,17 @@
 
 #pragma mark - JMMenuActionsViewProtocol
 
-- (JMMenuActionsViewAction)availableAction
+- (JMMenuActionsViewAction)availableActions
 {
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_None;
     if (![self shouldShowFavoriteBarButton]) {
         availableAction |= [self favoriteAction];
     }
-    availableAction |= JMMenuActionsViewAction_Info | JMMenuActionsViewAction_Edit;
-
-    if (self.activeState != JMReportViewerStateInitial) {
-        availableAction |= JMMenuActionsViewAction_Refresh;
-    }
-
-    availableAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule | JMMenuActionsViewAction_Share;
-
-//    if ([self isExternalScreenAvailable]) {
-//        availableAction |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
-//    }
-
-    BOOL isSaveReport = self.controller.resource.type == JMResourceTypeSavedResource;
-    BOOL isFile = self.controller.resource.type == JMResourceTypeFile;
-    if ( !(isSaveReport || isFile) ) {
-        availableAction |= JMMenuActionsViewAction_Print;
-    }
-
+    availableAction |= [self.controller availableActions];
     return availableAction;
 }
 
-- (JMMenuActionsViewAction)disabledAction
+- (JMMenuActionsViewAction)disabledActions
 {
     JMMenuActionsViewAction disabledAction = JMMenuActionsViewAction_None;
     if (self.activeState == JMReportViewerStateResourceNotExist) {

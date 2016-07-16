@@ -83,7 +83,8 @@
     
     JMMenuActionsView *actionsView = [JMMenuActionsView new];
     actionsView.delegate = self;
-    actionsView.availableActions = availableAction;
+    [actionsView setAvailableActions:availableAction
+                     disabledActions:JMMenuActionsViewAction_None];
     CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), -10);
     
     self.popoverView = [PopoverView showPopoverAtPoint:point
