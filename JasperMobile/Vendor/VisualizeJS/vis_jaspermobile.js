@@ -842,6 +842,11 @@ JasperMobile.VIS.Report.Helpers = {
         }
         if (JasperMobile.VIS.Report.activeReport.totalPages() == undefined) {
             status = "inProgress";
+            JasperMobile.VIS.Report.Helpers.detectMutlipageReport(function(isMultipageReport) {
+                if (isMultipageReport) {
+                    JasperMobile.Callback.listener("JasperMobile.Report.Event.MultipageReport", null);
+                }
+            });
         } else {
             status = "ready";
         }
@@ -938,6 +943,28 @@ JasperMobile.VIS.Report.Helpers = {
             }
         }
         return params;
+    },
+    detectMutlipageReport: function(completion) {
+        var exportParameters = {
+            outputFormat: "html",
+            pages : 2
+        };
+        JasperMobile.VIS.Report.privateAPI.executeOperation(
+            undefined,
+            "export",
+            exportParameters,
+            function(data) {
+                //JasperMobile.Callback.log("data: " + JSON.stringify(data));
+                var href = data.href;
+                if (href) {
+                    completion(true);
+                }
+            },
+            function(error) {
+                completion(false);
+                //JasperMobile.Callback.log("error: " + JSON.stringify(error));
+            }
+        );
     }
 };
 JasperMobile.VIS.Report.Handlers.Hyperlinks = {
@@ -1057,6 +1084,11 @@ JasperMobile.VIS.Report.privateAPI = {
     },
     navigateTo: function (report, parameters, success, fail) {
         report.object.pages(parameters.destination).run()
+            .done(success)
+            .fail(fail);
+    },
+    export: function(report, parameters, success, fail) {
+        report.object.export(parameters)
             .done(success)
             .fail(fail);
     },

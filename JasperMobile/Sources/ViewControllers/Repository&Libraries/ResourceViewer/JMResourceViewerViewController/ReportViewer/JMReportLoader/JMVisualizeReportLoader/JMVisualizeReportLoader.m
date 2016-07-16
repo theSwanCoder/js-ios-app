@@ -559,6 +559,16 @@ initialDestination:(nullable JSReportDestination *)destination
             }
         }
     }];
+    NSString *mulitpageReportListenerId = @"JasperMobile.Report.Event.MultipageReport";
+    [self.webEnvironment addListenerWithId:mulitpageReportListenerId callback:^(NSDictionary *parameters, NSError *error) {
+        JMLog(mulitpageReportListenerId);
+        __typeof(self) strongSelf = weakSelf;
+        if (error) {
+            // TODO: handle error
+        } else {
+            [strongSelf.report updateIsMultiPageReport:YES];
+        }
+    }];
 
     // Hyperlinks
 
