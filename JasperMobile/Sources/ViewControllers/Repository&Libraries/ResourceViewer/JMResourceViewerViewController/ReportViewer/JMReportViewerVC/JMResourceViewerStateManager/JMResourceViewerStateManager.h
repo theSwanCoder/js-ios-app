@@ -64,4 +64,5 @@ typedef NS_ENUM(NSInteger, JMResourceViewerToolbarState) {
 - (void)updatePageForToolbarState:(JMResourceViewerToolbarState)toolbarState;
 - (void)updatePageForChangingSizeClass;
 - (void)updateFavoriteState;
+- (void)reset;
 @end

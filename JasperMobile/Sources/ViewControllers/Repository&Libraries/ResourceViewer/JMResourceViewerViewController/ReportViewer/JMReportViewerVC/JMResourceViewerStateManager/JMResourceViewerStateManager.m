@@ -141,6 +141,16 @@
     }
 }
 
+- (void)reset
+{
+    // Resource view should have 3 subviews - topView, contentView, bottomView in which could be subviews
+    JMBaseResourceView *resourceView = (JMBaseResourceView *)self.controller.view;
+
+    [resourceView.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [resourceView.topView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [resourceView.bottomView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+}
+
 #pragma mark - Actions
 
 - (void)back
