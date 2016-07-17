@@ -147,8 +147,6 @@
         return;
     }
 
-    JMResourceViewerState activeState = self.controller.configurator.stateManager.activeState;
-    [self.controller.configurator.stateManager setupPageForState:JMResourceViewerStateLoading];
     __weak __typeof(self) weakSelf = self;
     [self fetchResourceLookupForURI:hyperlink.href completion:^(JSResourceLookup *resourceLookup, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
@@ -157,17 +155,14 @@
                 strongSelf.errorBlock(error);
             }
         } else {
-            [strongSelf.controller.configurator.stateManager setupPageForState:activeState];
             if (!resourceLookup) {
                 JMLog(@"There is no resource lookup");
                 return;
             }
-            [strongSelf.controller.configurator.stateManager setupPageForState:JMResourceViewerStateLoading];
             __weak __typeof(self) weakSelf = strongSelf;
             JMResource *resource  = [JMResource resourceWithResourceLookup:resourceLookup];
             [strongSelf fetchReportExportWithResource:resource format:outputs.firstObject completion:^(NSURL *location, NSError *error) {
                 __typeof(self) strongSelf = weakSelf;
-                [strongSelf.controller.configurator.stateManager setupPageForState:activeState];
                 if (error) {
                     if (strongSelf.errorBlock) {
                         strongSelf.errorBlock(error);
@@ -241,10 +236,15 @@
     NSAssert(resourceURI != nil, @"Resource URI is nil");
     NSAssert(completion != nil, @"Completion is nil");
 
+    JMResourceViewerState activeState = self.controller.configurator.stateManager.activeState;
+    [self.controller.configurator.stateManager setupPageForState:JMResourceViewerStateLoading];
+    __weak __typeof(self) weakSelf = self;
     [self.restClient resourceLookupForURI:resourceURI
                              resourceType:kJS_WS_TYPE_REPORT_UNIT
                                modelClass:[JSResourceLookup class]
                           completionBlock:^(JSOperationResult *result) {
+                              __typeof(self) strongSelf = weakSelf;
+                              [strongSelf.controller.configurator.stateManager setupPageForState:activeState];
                               if (result.error) {
                                   completion(nil, result.error);
                               } else {
@@ -266,10 +266,15 @@
                                                             restClient:self.restClient];
 
     NSString *reportName = [self tempReportName];
+    JMResourceViewerState activeState = self.controller.configurator.stateManager.activeState;
+    [self.controller.configurator.stateManager setupPageForState:JMResourceViewerStateLoading];
+    __weak __typeof(self) weakSelf = self;
     [reportSaver saveReportWithName:reportName
                              format:format
                          pagesRange:[JSReportPagesRange allPagesRange]
                          completion:^(NSURL * _Nullable savedReportURL, NSError * _Nullable error) {
+                             __typeof(self) strongSelf = weakSelf;
+                             [strongSelf.controller.configurator.stateManager setupPageForState:activeState];
                              if (error) {
                                  completion(nil, error);
                              } else {
