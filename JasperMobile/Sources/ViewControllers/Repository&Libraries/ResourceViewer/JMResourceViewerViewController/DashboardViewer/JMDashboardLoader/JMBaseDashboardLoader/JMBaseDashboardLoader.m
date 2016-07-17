@@ -143,7 +143,7 @@ JMBaseDashboardLoader
 
 - (void)destroy
 {
-    [self destroyDashboardWithCompletion:nil];
+    [self removeListenersForVisualizeEvents];
 }
 
 #pragma mark - Helpers
@@ -241,6 +241,11 @@ JMBaseDashboardLoader
                                 }
                                 [weakSelf.delegate dashboardLoaderDidReceiveAuthRequest:weakSelf];
                             }];
+}
+
+- (void)removeListenersForVisualizeEvents
+{
+    [self.webEnvironment removeListener:self];
 }
 
 - (void)injectJSCodeOldDashboard

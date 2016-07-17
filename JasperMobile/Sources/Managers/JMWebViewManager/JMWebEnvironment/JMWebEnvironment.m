@@ -287,6 +287,10 @@
 {
     [self resetZoom];
     [self.webView removeFromSuperview];
+    // TODO: need reset bridge because will be leak
+    if (!self.reusable) {
+        [self.bridge reset];
+    }
     self.pendingBlocks = [NSMutableArray array];
 }
 

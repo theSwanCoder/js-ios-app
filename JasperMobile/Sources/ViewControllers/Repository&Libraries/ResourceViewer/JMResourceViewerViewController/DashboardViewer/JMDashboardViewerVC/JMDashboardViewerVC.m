@@ -47,7 +47,6 @@
 
 
 NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashboardViewerPrimaryWebEnvironmentIdentifier";
-NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier";
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -111,17 +110,18 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
 
 - (JMWebEnvironment *)currentWebEnvironment
 {
-    return [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
+    JMWebEnvironment *webEnvironment;
+    if (self.dashboard.resource.type == JMResourceTypeLegacyDashboard) {
+        webEnvironment = [[JMWebViewManager sharedInstance] webEnvironment];
+    } else {
+        webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
+    }
+    return webEnvironment;
 }
 
 - (NSString *)currentWebEnvironmentIdentifier
 {
-    NSString *webEnvironmentIdentifier;
-    if (self.dashboard.resource.type != JMResourceTypeLegacyDashboard) {
-        webEnvironmentIdentifier = kJMDashboardViewerPrimaryWebEnvironmentIdentifier;
-    } else {
-        webEnvironmentIdentifier = kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier;
-    }
+    NSString *webEnvironmentIdentifier = kJMDashboardViewerPrimaryWebEnvironmentIdentifier;
     return webEnvironmentIdentifier;
 }
 
@@ -171,8 +171,7 @@ NSString * const kJMDashboardViewerLegacyDashboardsWebEnvironmentIdentifier = @"
 - (void)resetSubViews
 {
     [self.dashboardLoader destroy];
-    [self.webEnvironment resetZoom];
-    [self.webEnvironment.webView removeFromSuperview];
+    [self.webEnvironment reset];
 
     self.webEnvironment = nil;
 }
