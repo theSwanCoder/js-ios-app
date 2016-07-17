@@ -40,6 +40,7 @@
 #import "JMResourceViewerShareManager.h"
 #import "JMResourceViewerHyperlinksManager.h"
 #import "PopoverView.h"
+#import "JMFiltersVCResult.h"
 
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
@@ -702,14 +703,24 @@
     }
 
     __weak typeof(self) weakSelf = self;
-    inputControlsViewController.completionBlock = ^(NSArray <JSReportParameter *> *reportParameters, NSString *reportOptionURI) {
+    inputControlsViewController.completionBlock = ^(JMFiltersVCResult *result) {
         __strong typeof(self) strongSelf = weakSelf;
-        if (reportParameters) {
-            [strongSelf updateReportWithParameters:reportParameters];
-        } else if (reportOptionURI) {
-            [strongSelf runReportWithReportURI:reportOptionURI];
-        } else {
-            [strongSelf runReportWithDestination:strongSelf.initialDestination];
+        switch(result.type) {
+            case JMFiltersVCResultTypeNotChange : {
+                break;
+            }
+            case JMFiltersVCResultTypeEmptyFilters : {
+                [strongSelf runReportWithDestination:strongSelf.initialDestination];
+                break;
+            }
+            case JMFiltersVCResultTypeReportParameters : {
+                [strongSelf updateReportWithParameters:result.reportParameters];
+                break;
+            }
+            case JMFiltersVCResultTypeFilterOption : {
+            [strongSelf runReportWithReportURI:result.filterOptionURI];
+                break;
+            }
         }
         [strongSelf.navigationController popViewControllerAnimated:YES];
     };

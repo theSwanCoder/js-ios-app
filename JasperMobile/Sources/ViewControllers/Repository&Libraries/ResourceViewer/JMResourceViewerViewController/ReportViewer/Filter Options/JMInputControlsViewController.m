@@ -29,6 +29,7 @@
 #import "JMInputControlCell.h"
 #import "JMReportOptionsViewController.h"
 #import "JSReportOption.h"
+#import "JMFiltersVCResult.h"
 
 @interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
@@ -155,7 +156,9 @@
 - (void)backButtonTapped:(id)sender
 {
     if (self.completionBlock) {
-        self.completionBlock(nil, nil);
+        JMFiltersVCResult *result = [JMFiltersVCResult new];
+        result.type = JMFiltersVCResultTypeNotChange;
+        self.completionBlock(result);
     }
 }
 
@@ -337,7 +340,9 @@
     BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
     if ( isEmptyNoneOption) {
         if (self.completionBlock) {
-            self.completionBlock(nil, nil);
+            JMFiltersVCResult *result = [JMFiltersVCResult new];
+            result.type = JMFiltersVCResultTypeEmptyFilters;
+            self.completionBlock(result);
         }
         return;
     }
@@ -353,7 +358,10 @@
                         if (self.completionBlock) {
                             // parameters
                             NSArray <JSReportParameter *> *reportParameters = [JSUtils reportParametersFromInputControls:self.activeReportOption.inputControls];
-                            self.completionBlock(reportParameters, nil);
+                            JMFiltersVCResult *result = [JMFiltersVCResult new];
+                            result.type = JMFiltersVCResultTypeReportParameters;
+                            result.reportParameters = reportParameters;
+                            self.completionBlock(result);
                         }
                     } else {
                         [self.tableView reloadData];
@@ -364,7 +372,9 @@
             }
         } else {
             if (self.completionBlock) {
-                self.completionBlock(nil, nil);
+                JMFiltersVCResult *result = [JMFiltersVCResult new];
+                result.type = JMFiltersVCResultTypeNotChange;
+                self.completionBlock(result);
             }
         }
     } else { // SOME REPORT OPTION
@@ -372,11 +382,16 @@
         if (isReportOptionChanged) {
             if (self.completionBlock) {
                 // parameters
-                self.completionBlock(nil, self.activeReportOption.uri);
+                JMFiltersVCResult *result = [JMFiltersVCResult new];
+                result.type = JMFiltersVCResultTypeFilterOption;
+                result.filterOptionURI = self.activeReportOption.uri;
+                self.completionBlock(result);
             }
         } else {
             if (self.completionBlock) {
-                self.completionBlock(nil, nil);
+                JMFiltersVCResult *result = [JMFiltersVCResult new];
+                result.type = JMFiltersVCResultTypeNotChange;
+                self.completionBlock(result);
             }
         }
     }
@@ -708,7 +723,9 @@
     [self showLoadingWithCancelBlock:^{
         [self.restClient cancelAllRequests];
         if (self.completionBlock) {
-            self.completionBlock(nil, nil);
+            JMFiltersVCResult *result = [JMFiltersVCResult new];
+            result.type = JMFiltersVCResultTypeNotChange;
+            self.completionBlock(result);
         }
     }];
     NSString *resourceURI = self.activeReportOption.uri;

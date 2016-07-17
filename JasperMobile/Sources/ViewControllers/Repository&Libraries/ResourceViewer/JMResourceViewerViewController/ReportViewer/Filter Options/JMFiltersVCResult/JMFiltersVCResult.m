@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -21,22 +21,12 @@
  */
 
 //
-//  JMInputControlsViewController.h
+//  JMFiltersVCResult.h
 //  TIBCO JasperMobile
 //
 
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
+#import "JMFiltersVCResult.h"
 
-#import "JMEditabledViewController.h"
 
-@class JMFiltersVCResult;
-
-@interface JMInputControlsViewController : JMEditabledViewController
-@property (nonatomic, copy) NSString * __nonnull reportURI;
-@property (nonatomic, copy) NSArray * __nullable initialReportParameters;
-@property (nonatomic, copy) NSString *__nullable initialReportOptionURI;
-@property (nonatomic, copy) void(^ __nullable completionBlock)(JMFiltersVCResult * __nonnull result);
+@implementation JMFiltersVCResult
 @end
