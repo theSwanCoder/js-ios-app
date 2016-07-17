@@ -61,28 +61,6 @@
     self = [super init];
     if (self) {
         _webEnvironment = webEnvironment;
-        BOOL needVisualizeFlow = NO;
-        JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-        if (activeServerProfile && activeServerProfile.useVisualize.boolValue) {
-            needVisualizeFlow = YES;
-        }
-        if (needVisualizeFlow) {
-            JMLog(@"run with VIZ");
-            _reportLoader = [JMVisualizeReportLoader loaderWithRestClient:self.restClient
-                                                           webEnvironment:webEnvironment];
-            ((JMVIZWebEnvironment *)webEnvironment).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
-        } else {
-            JMLog(@"run with REST");
-            _reportLoader = (id <JMReportLoaderProtocol>) [JMRestReportLoader loaderWithRestClient:self.restClient
-                                                                                    webEnvironment:webEnvironment];
-        }
-        NSAssert(_reportLoader != nil, @"Report Loader wasn't created");
-        _stateManager = [self createStateManager];
-        _printManager = [self createPrintManager];
-        _infoPageManager = [self createInfoPageManager];
-        _shareManager = [self createShareManager];
-        _hyperlinksManager = [self createHyperlinksManager];
-        _documentManager = [self createDocumentManager];
     }
     return self;
 }
@@ -92,7 +70,46 @@
     return [[self alloc] initWithWebEnvironment:webEnvironment];
 }
 
+- (void)setup
+{
+    [self configWithWebEnvironment:self.webEnvironment];
+}
+
+- (void)reset
+{
+    [self.webEnvironment reset];
+    [self.stateManager reset];
+}
+
 #pragma mark - Helpers
+
+- (void)configWithWebEnvironment:(JMWebEnvironment *)webEnvironment
+{
+    _webEnvironment = webEnvironment;
+    BOOL needVisualizeFlow = NO;
+    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    if (activeServerProfile && activeServerProfile.useVisualize.boolValue) {
+        needVisualizeFlow = YES;
+    }
+    if (needVisualizeFlow) {
+        JMLog(@"run with VIZ");
+        _reportLoader = [JMVisualizeReportLoader loaderWithRestClient:self.restClient
+                                                       webEnvironment:webEnvironment];
+        ((JMVIZWebEnvironment *)webEnvironment).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
+    } else {
+        JMLog(@"run with REST");
+        _reportLoader = (id <JMReportLoaderProtocol>) [JMRestReportLoader loaderWithRestClient:self.restClient
+                                                                                webEnvironment:webEnvironment];
+    }
+    NSAssert(_reportLoader != nil, @"Report Loader wasn't created");
+    _stateManager = [self createStateManager];
+    _printManager = [self createPrintManager];
+    _infoPageManager = [self createInfoPageManager];
+    _shareManager = [self createShareManager];
+    _hyperlinksManager = [self createHyperlinksManager];
+    _documentManager = [self createDocumentManager];
+}
+
 - (JMResourceViewerStateManager *)createStateManager
 {
     return [JMResourceViewerStateManager new];
