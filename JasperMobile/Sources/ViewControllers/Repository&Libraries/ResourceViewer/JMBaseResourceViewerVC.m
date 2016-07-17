@@ -49,6 +49,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)loadView
 {
     JMBaseResourceView *resourceView = [[[NSBundle mainBundle] loadNibNamed:@"JMBaseResourceView" owner:self options:nil] firstObject];
+    resourceView.bottomViewBottomConstraint.constant = -CGRectGetHeight(resourceView.bottomView.frame);
     self.view = resourceView;
 }
 
