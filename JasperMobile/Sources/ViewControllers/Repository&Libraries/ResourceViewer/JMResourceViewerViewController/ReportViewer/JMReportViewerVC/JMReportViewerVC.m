@@ -270,31 +270,12 @@
             [[strongSelf stateManager] setupPageForState:JMResourceViewerStateInitial];
             BOOL isAlwaysPrompt = reportUnit.alwaysPromptControls;
             if (isAlwaysPrompt) {
-                [strongSelf showAlwaysPromptAlert];
+                [strongSelf showFiltersVCWithInitialParameters:strongSelf.initialReportParameters];
             } else {
                 [strongSelf runReportWithDestination:strongSelf.initialDestination];
             }
         }
     }];
-}
-
-- (void)showAlwaysPromptAlert
-{
-    // TODO: translate
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Input Controls"
-                                                                                      message:@"You must apply input values before the report can be displayed."
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
-                                                                      cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                                          [self exitAction];
-                                                                      }];
-    __weak typeof(self) weakSelf = self;
-    [alertController addActionWithLocalizedTitle:@"dialog_button_ok"
-                                           style:UIAlertActionStyleDefault
-                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                             __strong typeof(self) strongSelf = weakSelf;
-                                             [strongSelf showInputControlsViewControllerWithInitialParameters:nil];
-                                         }];
-    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)runReportWithDestination:(JSReportDestination *)destination
@@ -670,7 +651,7 @@
             [self refreshReport];
             break;
         case JMMenuActionsViewAction_Edit: {
-            [self showInputControlsViewControllerWithInitialParameters:[self report].reportParameters];
+            [self showFiltersVCWithInitialParameters:[self report].reportParameters];
             break;
         }
         case JMMenuActionsViewAction_Save: {
@@ -709,7 +690,7 @@
 
 #pragma mark - Input Controls
 
-- (void)showInputControlsViewControllerWithInitialParameters:(NSArray <JSReportParameter *> *)initialParameters
+- (void)showFiltersVCWithInitialParameters:(NSArray <JSReportParameter *> *)initialParameters
 {
     JMInputControlsViewController *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
     BOOL isReportOptionReportActive = ([self report].reportURI != nil) && ![[self report].reportURI isEqualToString:self.resource.resourceLookup.uri];
