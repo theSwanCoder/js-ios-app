@@ -87,6 +87,15 @@
     self.activeState = state;
     [self setupNavigationItemForState:state];
     [self setupMainViewForState:state];
+    switch(state) {
+        case JMResourceViewerStateInitial: {
+            [self hideTopToolbarAnimated:NO];
+            [self hideBottomToolbarAnimated:NO];
+        }
+        default: {
+            break;
+        }
+    }
 }
 
 - (void)updatePageForToolbarState:(JMResourceViewerToolbarState)toolbarState
@@ -226,8 +235,6 @@
     [self hideResourceNotExistView];
     switch (state) {
         case JMResourceViewerStateInitial: {
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
             [self hideProgress];
             [self showResourceNotExistView];
             break;

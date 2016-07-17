@@ -34,8 +34,6 @@
 @since 2.4
 */
 
-extern NSString * __nonnull const JMWebEnvironmentDidResetNotification;
-
 typedef void(^JMWebEnvironmentPendingBlock)(void);
 typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nullable params, NSError * __nullable error);
 
@@ -59,11 +57,11 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion;
-
-- (void)addListenerWithId:(NSString *__nonnull)listenerId
-                 callback:(JMWebEnvironmentRequestParametersCompletion __nonnull)callback;
+- (void)addListener:(id __nonnull)listener
+         forEventId:(NSString * __nonnull)eventId
+           callback:(JMWebEnvironmentRequestParametersCompletion __nonnull)callback;
+- (void)removeListener:(id __nonnull)listener;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
-- (void)removeAllListeners;
 - (void)cleanCache;
 - (void)resetZoom;
 - (void)clean;

@@ -240,6 +240,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.state = JSReportLoaderStateCancel;
+    [self removeListenersForVisualizeEvents];
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.cancel"
                                                                inNamespace:JMJavascriptNamespaceVISReport
@@ -250,7 +251,6 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
             JMLog(@"error: %@", error);
         } else {
             JMLog(@"canceling report was finished");
-            [self.webEnvironment removeAllListeners];
         }
     }];
 }
@@ -394,6 +394,7 @@ initialDestination:(nullable JSReportDestination *)destination
         return;
     }
 
+    [self removeListenersForVisualizeEvents];
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.destroy"
                                                                inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:nil];
@@ -406,7 +407,6 @@ initialDestination:(nullable JSReportDestination *)destination
         } else {
             JMLog(@"callback: %@", parameters);
             self.state = JSReportLoaderStateInitial;
-            [self.webEnvironment removeAllListeners];
         }
     }];
 }
@@ -512,157 +512,204 @@ initialDestination:(nullable JSReportDestination *)destination
 
     NSString *reportCompletedListenerId = @"JasperMobile.Report.Event.reportCompleted";
     __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment addListenerWithId:reportCompletedListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(reportCompletedListenerId);
-        JMLog(@"parameters: %@", parameters);
-        __typeof(self) strongSelf = weakSelf;
-        // TODO: move into separate method
-        NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
-        [strongSelf.report updateCountOfPages:countOfPages];
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:reportCompletedListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(reportCompletedListenerId);
+                                JMLog(@"parameters: %@", params);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                // TODO: move into separate method
+                                NSInteger countOfPages = ((NSNumber *)params[@"pages"]).integerValue;
+                                [weakSelf.report updateCountOfPages:countOfPages];
+                            }];
     NSString *changePagesStateListenerId = @"JasperMobile.Report.Event.changePagesState";
-    [self.webEnvironment addListenerWithId:changePagesStateListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(changePagesStateListenerId);
-        JMLog(@"parameters: %@", parameters);
-        __typeof(self) strongSelf = weakSelf;
-        NSString *locationString = parameters[@"page"];
-        [strongSelf.report updateCurrentPage:locationString.integerValue];
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:changePagesStateListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(changePagesStateListenerId);
+                                JMLog(@"parameters: %@", params);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                NSString *locationString = params[@"page"];
+                                [weakSelf.report updateCurrentPage:locationString.integerValue];
+                            }];
     NSString *bookmarsReadyListenerId = @"JasperMobile.Report.Event.bookmarksReady";
-    [self.webEnvironment addListenerWithId:bookmarsReadyListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(bookmarsReadyListenerId);
-        JMLog(@"parameters: %@", parameters);
-        __typeof(self) strongSelf = weakSelf;
-        if (error) {
-            // TODO: handle error
-        } else {
-            if (parameters[@"bookmarks"]) {
-                NSArray *bookmarks = [strongSelf mapBookmarksFromParams:parameters[@"bookmarks"]];
-                strongSelf.report.bookmarks = bookmarks;
-            } else {
-                // empty array;
-            }
-        }
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:bookmarsReadyListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(bookmarsReadyListenerId);
+                                JMLog(@"parameters: %@", params);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                if (error) {
+                                    // TODO: handle error
+                                } else {
+                                    if (params[@"bookmarks"]) {
+                                        NSArray *bookmarks = [weakSelf mapBookmarksFromParams:params[@"bookmarks"]];
+                                        weakSelf.report.bookmarks = bookmarks;
+                                    } else {
+                                        // empty array;
+                                    }
+                                }
+                            }];
     NSString *partsReadyListenerId = @"JasperMobile.Report.Event.reportPartsReady";
-    [self.webEnvironment addListenerWithId:partsReadyListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(partsReadyListenerId);
-        JMLog(@"parameters: %@", parameters);
-        __typeof(self) strongSelf = weakSelf;
-        if (error) {
-            // TODO: handle error
-        } else {
-            if (parameters[@"parts"]) {
-                NSArray *parts = [strongSelf mapReportPartsFromParams:parameters[@"parts"]];
-                strongSelf.report.parts = parts;
-            } else {
-                // empty array;
-            }
-        }
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:partsReadyListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(partsReadyListenerId);
+                                JMLog(@"parameters: %@", params);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                if (error) {
+                                    // TODO: handle error
+                                } else {
+                                    if (params[@"parts"]) {
+                                        NSArray *parts = [weakSelf mapReportPartsFromParams:params[@"parts"]];
+                                        weakSelf.report.parts = parts;
+                                    } else {
+                                        // empty array;
+                                    }
+                                }
+                            }];
     NSString *mulitpageReportListenerId = @"JasperMobile.Report.Event.MultipageReport";
-    [self.webEnvironment addListenerWithId:mulitpageReportListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(mulitpageReportListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        if (error) {
-            // TODO: handle error
-        } else {
-            [strongSelf.report updateIsMultiPageReport:YES];
-        }
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:mulitpageReportListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(mulitpageReportListenerId);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                if (error) {
+                                    // TODO: handle error
+                                } else {
+                                    [weakSelf.report updateIsMultiPageReport:YES];
+                                }
+                            }];
 
     // Hyperlinks
 
     NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.ReportExecution";
-    [self.webEnvironment addListenerWithId:reportExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(reportExecutionLinkOptionListenerId);
-        if (error) {
-            if (error.code == JMJavascriptNativeBridgeErrorTypeOther) {
-                NSString *javascriptErrorCode = error.userInfo[JMJavascriptNativeBridgeErrorCodeKey];
-                if (javascriptErrorCode && [javascriptErrorCode isEqualToString:@"hyperlink.not.support.error"]) {
-                    if ([self.delegate respondsToSelector:@selector(reportLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
-                        [self.delegate reportLoaderDidReceiveEventWithUnsupportedHyperlink:self];
-                    }
-                }
-            }
-        } else {
-            __typeof(self) strongSelf = weakSelf;
-            [strongSelf handleRunReportWithParameters:parameters];
-        }
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:reportExecutionLinkOptionListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(reportExecutionLinkOptionListenerId);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                if (error) {
+                                    if (error.code == JMJavascriptNativeBridgeErrorTypeOther) {
+                                        NSString *javascriptErrorCode = error.userInfo[JMJavascriptNativeBridgeErrorCodeKey];
+                                        if (javascriptErrorCode && [javascriptErrorCode isEqualToString:@"hyperlink.not.support.error"]) {
+                                            if ([weakSelf.delegate respondsToSelector:@selector(reportLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
+                                                [weakSelf.delegate reportLoaderDidReceiveEventWithUnsupportedHyperlink:weakSelf];
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    [weakSelf handleRunReportWithParameters:params];
+                                }
+                            }];
     NSString *localPageLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.LocalPage";
-    [self.webEnvironment addListenerWithId:localPageLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(localPageLinkOptionListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        NSString *locationString = parameters[@"destination"];
-        [strongSelf.report updateCurrentPage:locationString.integerValue];
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:localPageLinkOptionListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(localPageLinkOptionListenerId);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                NSString *locationString = params[@"destination"];
+                                [weakSelf.report updateCurrentPage:locationString.integerValue];
+                            }];
     NSString *localAnchorLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.LocalAnchor";
-    [self.webEnvironment addListenerWithId:localAnchorLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(localAnchorLinkOptionListenerId);
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:localAnchorLinkOptionListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(localAnchorLinkOptionListenerId);
+                            }];
     NSString *referenceLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.Reference";
-    [self.webEnvironment addListenerWithId:referenceLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(referenceLinkOptionListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        NSString *locationString = parameters[@"destination"];
-        if (locationString) {
-            if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
-                JMHyperlink *hyperlink = [JMHyperlink new];
-                hyperlink.type = JMHyperlinkTypeReference;
-                hyperlink.href = locationString;
-                [strongSelf.delegate reportLoader:strongSelf didReceiveEventWithHyperlink:hyperlink];
-            }
-        }
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:referenceLinkOptionListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(referenceLinkOptionListenerId);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                NSString *locationString = params[@"destination"];
+                                if (locationString) {
+                                    if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                        JMHyperlink *hyperlink = [JMHyperlink new];
+                                        hyperlink.type = JMHyperlinkTypeReference;
+                                        hyperlink.href = locationString;
+                                        [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                    }
+                                }
+                            }];
     NSString *remoteAnchorListenerId = @"JasperMobile.VIS.Report.Event.Link.RemoteAnchor";
-    [self.webEnvironment addListenerWithId:remoteAnchorListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(remoteAnchorListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        JMLog(@"parameters: %@", parameters);
-        NSDictionary *link = parameters[@"link"];
-        if (link && [link isKindOfClass:[NSDictionary class]]) {
-            NSString *href = link[@"href"];
-            if (href) {
-                NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
-                if ([prefix isEqualToString:@"."]) {
-                    href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
-                }
-                NSString *fullURLString = [strongSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
-                JMLog(@"full url string: %@", fullURLString);
-                if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
-                    JMHyperlink *hyperlink = [JMHyperlink new];
-                    hyperlink.type = JMHyperlinkTypeRemoteAnchor;
-                    hyperlink.href = fullURLString;
-                    [strongSelf.delegate reportLoader:strongSelf didReceiveEventWithHyperlink:hyperlink];
-                }
-            }
-        }
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:remoteAnchorListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(remoteAnchorListenerId);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                JMLog(@"parameters: %@", params);
+                                NSDictionary *link = params[@"link"];
+                                if (link && [link isKindOfClass:[NSDictionary class]]) {
+                                    NSString *href = link[@"href"];
+                                    if (href) {
+                                        NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
+                                        if ([prefix isEqualToString:@"."]) {
+                                            href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
+                                        }
+                                        NSString *fullURLString = [weakSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
+                                        JMLog(@"full url string: %@", fullURLString);
+                                        if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                            JMHyperlink *hyperlink = [JMHyperlink new];
+                                            hyperlink.type = JMHyperlinkTypeRemoteAnchor;
+                                            hyperlink.href = fullURLString;
+                                            [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                        }
+                                    }
+                                }
+                            }];
     NSString *remotePageListenerId = @"JasperMobile.VIS.Report.Event.Link.RemotePage";
-    [self.webEnvironment addListenerWithId:remotePageListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(remotePageListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        JMLog(@"parameters: %@", parameters);
-        NSDictionary *link = parameters[@"link"];
-        if (link && [link isKindOfClass:[NSDictionary class]]) {
-            NSString *href = link[@"href"];
-            if (href) {
-                NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
-                if ([prefix isEqualToString:@"."]) {
-                    href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
-                }
-                NSString *fullURLString = [strongSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
-                JMLog(@"full url string: %@", fullURLString);
-                if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
-                    JMHyperlink *hyperlink = [JMHyperlink new];
-                    hyperlink.type = JMHyperlinkTypeRemotePage;
-                    hyperlink.href = fullURLString;
-                    [strongSelf.delegate reportLoader:strongSelf didReceiveEventWithHyperlink:hyperlink];
-                }
-            }
-        }
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:remotePageListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(remotePageListenerId);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                JMLog(@"parameters: %@", params);
+                                NSDictionary *link = params[@"link"];
+                                if (link && [link isKindOfClass:[NSDictionary class]]) {
+                                    NSString *href = link[@"href"];
+                                    if (href) {
+                                        NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
+                                        if ([prefix isEqualToString:@"."]) {
+                                            href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
+                                        }
+                                        NSString *fullURLString = [weakSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
+                                        JMLog(@"full url string: %@", fullURLString);
+                                        if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                            JMHyperlink *hyperlink = [JMHyperlink new];
+                                            hyperlink.type = JMHyperlinkTypeRemotePage;
+                                            hyperlink.href = fullURLString;
+                                            [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                        }
+                                    }
+                                }
+                            }];
+}
+
+- (void)removeListenersForVisualizeEvents
+{
+    [self.webEnvironment removeListener:self];
 }
 
 #pragma mark - Helpers

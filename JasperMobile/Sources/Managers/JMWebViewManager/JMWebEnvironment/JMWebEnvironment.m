@@ -28,8 +28,7 @@
 
 #import "JMWebEnvironment.h"
 #import "JMJavascriptNativeBridge.h"
-
-NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnvironmentDidResetNotification";
+#import "JMJavascriptEvent.h"
 
 @interface JMWebEnvironment() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, strong) JMJavascriptNativeBridge * __nonnull bridge;
@@ -49,10 +48,8 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
     self = [super init];
     if (self) {
         _pendingBlocks = [NSMutableArray array];
-        _webView = [self createWebViewWithCookies:cookies];
         _identifier = identifier;
-        _bridge = [JMJavascriptNativeBridge bridgeWithWebView:_webView];
-        _bridge.delegate = self;
+        [self setupWebEnvironmentWithCookies:cookies];
     }
     return self;
 }
@@ -93,26 +90,33 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
     self.ready = NO;
     [self cleanCache];
     __weak __typeof(self) weakSelf = self;
-    [self removeCookiesWithCompletion:^(BOOL success) {
-        __typeof(self) strongSelf = weakSelf;
-        if (success) {
-            NSString *cookiesAsString = [strongSelf cookiesAsStringFromCookies:cookies];
-            __weak __typeof(self) weakSelf = strongSelf;
-            [strongSelf.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
-                __typeof(self) strongSelf = weakSelf;
-                JMLog(@"setting cookies");
-                JMLog(@"error: %@", error);
-                JMLog(@"o: %@", o);
-                if (error) {
-                    // TODO: how handle this case?
-                } else {
-                    strongSelf.ready = YES;
-                }
-            }];
-        } else {
-            // TODO: how handle this case?
-        }
-    }];
+    if ([JMUtils isSystemVersion9]) {
+        [self removeCookiesWithCompletion:^(BOOL success) {
+            __typeof(self) strongSelf = weakSelf;
+            if (success) {
+                NSString *cookiesAsString = [strongSelf cookiesAsStringFromCookies:cookies];
+                __weak __typeof(self) weakSelf = strongSelf;
+                [strongSelf.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
+                    __typeof(self) strongSelf = weakSelf;
+                    JMLog(@"setting cookies");
+                    JMLog(@"error: %@", error);
+                    JMLog(@"o: %@", o);
+                    if (error) {
+                        // TODO: how handle this case?
+                    } else {
+                        strongSelf.ready = YES;
+                    }
+                }];
+            } else {
+                // TODO: how handle this case?
+            }
+        }];
+    } else {
+        [self.bridge reset];
+        _webView = nil;
+        _bridge = nil;
+        [self setupWebEnvironmentWithCookies:cookies];
+    }
 }
 
 - (void)loadHTML:(NSString * __nonnull)HTMLString
@@ -122,12 +126,14 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.ready = NO;
     __weak __typeof(self) weakSelf = self;
-    [self addListenerWithId:@"DOMContentLoaded"
-                   callback:^(NSDictionary *params, NSError *error) {
-                       __typeof(self) strongSelf = weakSelf;
-                       JMLog(@"Event was received: DOMContentLoaded");
-                       strongSelf.ready = YES;
-                   }];
+    JMJavascriptEvent *event = [JMJavascriptEvent eventWithIdentifier:@"DOMContentLoaded"
+                                                             listener:self
+                                                             callback:^(JMJavascriptResponse *response, NSError *error) {
+                                                                 __typeof(self) strongSelf = weakSelf;
+                                                                 JMLog(@"Event was received: DOMContentLoaded");
+                                                                 strongSelf.ready = YES;
+                                                             }];
+    [self.bridge addListenerWithEvent:event];
     [self.bridge startLoadHTMLString:HTMLString
                              baseURL:baseURL];
 }
@@ -238,23 +244,25 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
     }
 }
 
-- (void)addListenerWithId:(NSString *)listenerId
-                 callback:(JMWebEnvironmentRequestParametersCompletion)callback
+- (void)addListener:(id)listener
+         forEventId:(NSString *)eventId
+           callback:(JMWebEnvironmentRequestParametersCompletion)callback
 {
-    [self.bridge addListenerWithId:listenerId
-                          callback:^(JMJavascriptResponse *jsCallback, NSError *error) {
-                              callback(jsCallback.parameters, error);
-                          }];
+    JMJavascriptEvent *event = [JMJavascriptEvent eventWithIdentifier:eventId listener:listener
+                                                             callback:^(JMJavascriptResponse *response, NSError *error) {
+                                                                 callback(response.parameters, error);
+                                                             }];
+    [self.bridge addListenerWithEvent:event];
+}
+
+- (void)removeListener:(id)listener
+{
+    [self.bridge removeListener:listener];
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
 {
     // imlement in childs
-}
-
-- (void)removeAllListeners
-{
-    [self.bridge removeAllListeners];
 }
 
 - (void)cleanCache
@@ -277,18 +285,21 @@ NSString * __nonnull const JMWebEnvironmentDidResetNotification = @"JMWebEnviron
 
 - (void)reset
 {
-    [self.bridge removeAllListeners];
+    [self resetZoom];
     [self.webView removeFromSuperview];
-    self.webView = nil;
     self.pendingBlocks = [NSMutableArray array];
-
-    JMLog(@"JMWebEnvironmentDidResetNotification: %@", JMWebEnvironmentDidResetNotification);
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:JMWebEnvironmentDidResetNotification
-                                                        object:self];
 }
 
 #pragma mark - Helpers
+
+- (void)setupWebEnvironmentWithCookies:(NSArray <NSHTTPCookie *> *__nonnull)cookies
+{
+    NSAssert(cookies != nil, @"Cookies are nil");
+    _webView = [self createWebViewWithCookies:cookies];
+    _bridge = [JMJavascriptNativeBridge bridgeWithWebView:_webView];
+    _bridge.delegate = self;
+}
+
 - (WKWebView *)createWebViewWithCookies:(NSArray <NSHTTPCookie *>*)cookies
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));

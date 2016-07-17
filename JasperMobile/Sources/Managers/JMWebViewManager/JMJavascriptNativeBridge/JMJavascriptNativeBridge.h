@@ -34,6 +34,7 @@
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptResponse.h"
 @protocol JMJavascriptNativeBridgeDelegate;
+@class JMJavascriptEvent;
 
 typedef NS_ENUM(NSInteger, JMJavascriptNativeBrigdeErrorType) {
     JMJavascriptNativeBridgeErrorTypeWindow,
@@ -58,9 +59,10 @@ typedef void(^JMJavascriptRequestCompletion)(JMJavascriptResponse *__nullable re
 // js requests
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMJavascriptRequestCompletion __nullable)completion;
-// listeners
-- (void)addListenerWithId:(NSString *__nonnull)listenerId callback:(JMJavascriptRequestCompletion __nonnull)callback;
-- (void)removeAllListeners;
+// event listeners
+- (void)addListenerWithEvent:(JMJavascriptEvent * __nonnull)event;
+- (void)removeListener:(id __nonnull)listener;
+- (void)reset;
 @end
 
 @protocol JMJavascriptNativeBridgeDelegate <NSObject>

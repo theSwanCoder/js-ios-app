@@ -41,11 +41,11 @@
 #import "JMResourceViewerHyperlinksManager.h"
 #import "PopoverView.h"
 #import "JMFiltersVCResult.h"
+#import "JMResourceViewerSessionManager.h"
 
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
-// TODO: move into separate managers
-@property (nonatomic, assign) NSInteger lowMemoryWarningsCount;
+@property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
 @end
 
 @implementation JMReportViewerVC
@@ -75,9 +75,13 @@
 
     [self addObservers];
 
-    [[self reportLoader] setDelegate:self];
+    self.sessionManager = [self createSessionManager];
+    self.sessionManager.controller = self;
 
+    [self.configurator setup];
+    [[self reportLoader] setDelegate:self];
     [self setupStateManager];
+
     [self startResourceViewing];
 }
 
@@ -163,8 +167,6 @@
 {
     if ([self report].isMultiPageReport) {
         [[self stateManager] updatePageForToolbarState:JMResourceViewerToolbarStateBottomVisible];
-    } else {
-        [[self stateManager] updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
     }
 }
 
@@ -179,8 +181,6 @@
 {
     if ([self reportHasParts]) {
         [[self stateManager] updatePageForToolbarState:JMResourceViewerToolbarStateTopVisible];
-    } else {
-        [[self stateManager] updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
     }
 }
 
@@ -218,7 +218,7 @@
 {
     [[self stateManager] setupPageForState:JMResourceViewerStateDestroy];
     [[self reportLoader] destroy];
-    [self resetSubViews];
+    [[self webEnvironment] reset];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -460,34 +460,9 @@
     return self.configurator.stateManager;
 }
 
-#pragma mark - Handle Low Memory
-- (void)didReceiveMemoryWarning
+- (JMResourceViewerSessionManager *)createSessionManager
 {
-    // Skip first warning.
-    // TODO: Consider replace this approach.
-    //
-    if (self.lowMemoryWarningsCount++ >= 1) {
-        [self handleLowMemory];
-    }
-
-    [super didReceiveMemoryWarning];
-}
-
-- (void)handleLowMemory
-{
-    [self.restClient cancelAllRequests];
-
-    // TODO: move into separate manager
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self resetSubViews];
-
-    NSString *errorMessage = JMCustomLocalizedString(@"resource_viewer_memory_warning", nil);
-    NSError *error = [NSError errorWithDomain:@"dialod_title_attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-    __weak typeof(self) weakSelf = self;
-    [JMUtils presentAlertControllerWithError:error completion:^{
-        __strong typeof(self) strongSelf = weakSelf;
-        [strongSelf exitAction];
-    }];
+    return [JMResourceViewerSessionManager new];
 }
 
 #pragma mark - JMReportViewerToolBarDelegate
@@ -527,42 +502,28 @@
 - (void)handleError:(NSError *)error
 {
     [[self stateManager] setupPageForState:JMResourceViewerStateResourceFailed];
+
     switch (error.code) {
         case JSReportLoaderErrorTypeAuthentification:
         case JSSessionExpiredErrorCode: {
-            if (self.restClient.keepSession) {
-                __weak typeof(self) weakSelf = self;
-                JMLog(@"Handle session expired");
-                if (![JMUtils isSupportVisualize]) {
-                    // TODO: udpate rest loader to be able reuse
-                    [[self reportLoader] cancel];
-                    self.configurator = nil;
-                } else if (![JMUtils isSystemVersion9] && [JMUtils isSupportVisualize]) {
-                    [[self webEnvironment] reset];
-                    // TODO: fix this
-//                    [[JMWebViewManager sharedInstance] removeWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
-//                    self.webEnvironment = nil;
-                    self.configurator = nil;
-                }
-                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
-                    __strong typeof(self) strongSelf = weakSelf;
-                    if (!result.error) {
-                        [strongSelf showSessionExpiredAlert];
-                    } else {
-                        __weak typeof(self) weakSelf = strongSelf;
-                        [JMUtils showLoginViewAnimated:YES completion:^{
-                            __strong typeof(self) strongSelf = weakSelf;
-                            [strongSelf exitAction];
-                        }];
-                    }
-                }];
-            } else {
-                __weak typeof(self) weakSelf = self;
-                [JMUtils showLoginViewAnimated:YES completion:^{
-                    __strong typeof(self) strongSelf = weakSelf;
-                    [strongSelf exitAction];
-                }];
-            }
+            __weak typeof(self) weakSelf = self;
+            self.sessionManager.cleanAction = ^{
+                __strong typeof(self) strongSelf = weakSelf;
+                [strongSelf.configurator reset];
+            };
+            self.sessionManager.executeAction = ^{
+                __strong typeof(self) strongSelf = weakSelf;
+                [strongSelf.configurator setup];
+                [[strongSelf reportLoader] setDelegate:strongSelf];
+                [strongSelf setupStateManager];
+
+                [strongSelf startResourceViewing];
+            };
+            self.sessionManager.exitAction = ^{
+                __strong typeof(self) strongSelf = weakSelf;
+                [strongSelf exitAction];
+            };
+            [self.sessionManager handleSessionExpired];
             break;
         }
         case JSReportLoaderErrorTypeEmtpyReport:
@@ -583,35 +544,6 @@
             break;
         }
     }
-}
-
-- (void)showSessionExpiredAlert
-{
-    // TODO: add translations
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was expired"
-                                                                                      message:@"Reload?"
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
-                                                                      cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                                          [self exitAction];
-                                                                      }];
-    __weak typeof(self) weakSelf = self;
-    [alertController addActionWithLocalizedTitle:@"dialog_button_reload"
-                                           style:UIAlertActionStyleDefault
-                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                             __strong typeof(self) strongSelf = weakSelf;
-                                             [strongSelf startResourceViewing];
-                                         }];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
-#pragma mark - WebView helpers
-- (void)resetSubViews
-{
-    [[self webEnvironment] resetZoom];
-    [[self webEnvironment].webView removeFromSuperview];
-
-    // TODO: fix this
-//    self.webEnvironment = nil;
 }
 
 #pragma mark - JMMenuActionsViewProtocol

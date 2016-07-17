@@ -230,13 +230,17 @@ JMBaseDashboardLoader
 - (void)addListenersForWebEnvironmentEvents
 {
     // Authorization
-    NSString *unauthorizedListenerId = @"JasperMobile.VIS.Dashboard.API.unauthorized";
     __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment addListenerWithId:unauthorizedListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(unauthorizedListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf.delegate dashboardLoaderDidReceiveAuthRequest:self];
-    }];
+    NSString *unauthorizedListenerId = @"JasperMobile.VIS.Dashboard.API.unauthorized";
+    [self.webEnvironment addListener:self
+                          forEventId:unauthorizedListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(unauthorizedListenerId);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                [weakSelf.delegate dashboardLoaderDidReceiveAuthRequest:weakSelf];
+                            }];
 }
 
 - (void)injectJSCodeOldDashboard

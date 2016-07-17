@@ -16,23 +16,14 @@ typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
 
 @class JMReport;
 @protocol JMReportLoaderDelegate;
-@protocol JMJavascriptNativeBridgeProtocol;
 
 @protocol JMReportLoader <NSObject>
-
-@required
-@property (nonatomic, weak, readonly) JMReport *report;
-@property (nonatomic, assign, readonly) BOOL isReportInLoadingProcess;
 @property (nonatomic, weak) id<JMReportLoaderDelegate> delegate;
-@property (nonatomic, strong) id<JMJavascriptNativeBridgeProtocol>bridge;
-
 - (instancetype)initWithReport:(JMReport *)report;
 + (instancetype)loaderWithReport:(JMReport *)report;
-
 - (void)runReportWithPage:(NSInteger)page completion:(void(^)(BOOL success, NSError *error))completionBlock;
 - (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(void(^)(BOOL success, NSError *error))completionBlock;
 - (void)cancelReport;
-
 @optional
 - (void)changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage withCompletion:(void (^)(BOOL success, NSError *error))completion;
 - (void)applyReportParametersWithCompletion:(void (^)(BOOL success, NSError *error))completion;
@@ -42,7 +33,6 @@ typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
 - (void)authenticate;
 
 @end
-
 
 @protocol JMReportLoaderDelegate <NSObject>
 @optional

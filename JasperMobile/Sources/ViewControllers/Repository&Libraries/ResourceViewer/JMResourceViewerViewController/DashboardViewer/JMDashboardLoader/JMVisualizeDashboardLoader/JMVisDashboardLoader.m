@@ -319,12 +319,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)destroyDashboard
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self removeListenersForVisualizeEvents];
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.destroy"
                                                                inNamespace:JMJavascriptNamespaceVISDashboard
                                                                 parameters:nil];
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         // Need capture self to wait until this request finishes
-        [self.webEnvironment removeAllListeners];
         if (error) {
             JMLog(@"error: %@", error);
         } else {
@@ -336,6 +336,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)cancelDashboard
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self removeListenersForVisualizeEvents];
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.cancel"
                                                                inNamespace:JMJavascriptNamespaceVISDashboard
                                                                 parameters:nil];
@@ -351,47 +352,59 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - Helpers
 - (void)addListenersForVisualizeEvents
 {
-    NSString *dashletWillMaximizeListenerId = @"JasperMobile.VIS.Dashboard.API.events.dashlet.didStartMaximize";
     __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment addListenerWithId:dashletWillMaximizeListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(dashletWillMaximizeListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        if ([strongSelf.delegate respondsToSelector:@selector(dashboardLoaderDidStartMaximizeDashlet:)]) {
-            [strongSelf.delegate dashboardLoaderDidStartMaximizeDashlet:strongSelf];
-        }
-    }];
-
+    NSString *dashletWillMaximizeListenerId = @"JasperMobile.VIS.Dashboard.API.events.dashlet.didStartMaximize";
+    [self.webEnvironment addListener:self
+                          forEventId:dashletWillMaximizeListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(dashletWillMaximizeListenerId);
+                                __typeof(self) strongSelf = weakSelf;
+                                if ([strongSelf.delegate respondsToSelector:@selector(dashboardLoaderDidStartMaximizeDashlet:)]) {
+                                    [strongSelf.delegate dashboardLoaderDidStartMaximizeDashlet:strongSelf];
+                                }
+                            }];
     NSString *dashletDidMaximizeListenerId = @"JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize";
-    [self.webEnvironment addListenerWithId:dashletDidMaximizeListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(dashletDidMaximizeListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        if (error) {
-            [JMUtils presentAlertControllerWithError:error
-                                          completion:nil];
-        } else {
-            [strongSelf handleDidEndMaximazeDashletWithParameters:parameters];
-        }
-    }];
+    [self.webEnvironment addListener:self forEventId:dashletDidMaximizeListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(dashletDidMaximizeListenerId);
+                                __typeof(self) strongSelf = weakSelf;
+                                if (error) {
+                                    [JMUtils presentAlertControllerWithError:error
+                                                                  completion:nil];
+                                } else {
+                                    [strongSelf handleDidEndMaximazeDashletWithParameters:params];
+                                }
+                            }];
 
     // Links
     NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.VIS.Dashboard.API.run.linkOptions.events.ReportExecution";
-    [self.webEnvironment addListenerWithId:reportExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(reportExecutionLinkOptionListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf handleOnReportExecution:parameters];
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:reportExecutionLinkOptionListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(reportExecutionLinkOptionListenerId);
+                                __typeof(self) strongSelf = weakSelf;
+                                [strongSelf handleOnReportExecution:params];
+                            }];
     NSString *referenceLinkOptionListenerId = @"JasperMobile.VIS.Dashboard.API.run.linkOptions.events.Reference";
-    [self.webEnvironment addListenerWithId:referenceLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(referenceLinkOptionListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf handleOnReferenceClick:parameters];
-    }];
+    [self.webEnvironment addListener:self
+                          forEventId:referenceLinkOptionListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(referenceLinkOptionListenerId);
+                                __typeof(self) strongSelf = weakSelf;
+                                [strongSelf handleOnReferenceClick:params];
+                            }];
     NSString *adHocExecutionLinkOptionListenerId = @"JasperMobile.VIS.Dashboard.API.run.linkOptions.events.AdHocExecution";
-    [self.webEnvironment addListenerWithId:adHocExecutionLinkOptionListenerId callback:^(NSDictionary *parameters, NSError *error) {
-        JMLog(adHocExecutionLinkOptionListenerId);
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf handleOnAdHocExecution:parameters];
-    }];
+    [self.webEnvironment addListener:self forEventId:adHocExecutionLinkOptionListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(adHocExecutionLinkOptionListenerId);
+                                __typeof(self) strongSelf = weakSelf;
+                                [strongSelf handleOnAdHocExecution:params];
+                            }];
+}
+
+- (void)removeListenersForVisualizeEvents
+{
+    [self.webEnvironment removeListener:self];
 }
 
 #pragma mark - Handle JS callbacks
