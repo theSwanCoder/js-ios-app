@@ -419,6 +419,7 @@ NSString *JMJavascriptNativeBridgeErrorCodeKey = @"JMJavascriptNativeBridgeError
         errorCodeString = errorCode;
         if ([errorCodeString isEqualToString:@"window.onerror"]) {
             code = JMJavascriptNativeBridgeErrorTypeWindow;
+            JMLog(@"window.onerror: %@", errorJSON);
         } else if ([errorCodeString isEqualToString:@"unexpected.error"]) {
             code = JMJavascriptNativeBridgeErrorTypeUnexpected;
         } else if ([errorCodeString isEqualToString:@"authentication.error"]) {
