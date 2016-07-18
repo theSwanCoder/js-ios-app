@@ -571,22 +571,6 @@ JasperMobile.REST.Dashboard.API = {
             }
         );
     },
-    refresh: function(parameters) {
-        var baseURL = parameters["baseURL"];
-        var resourceURI = parameters["resourceURI"];
-        var url = baseURL + JasperMobile.REST.Dashboard.API.dashboardFlowURI + resourceURI;
-        JasperMobile.REST.Dashboard.API.loadDashboard(
-            url,
-            function() {
-                JasperMobile.Callback.callback("JasperMobile.REST.Dashboard.API.refresh", {});
-            },
-            function(error) {
-                JasperMobile.Callback.callback("JasperMobile.REST.Dashboard.API.refresh", {
-                    "error" : error
-                });
-            }
-        );
-    },
     loadDashboard: function(URL, success, failure) {
         JasperMobile.Callback.log("loadDashboard with URL: " + URL);
         JasperMobile.Callback.log("container: " + document.getElementById("container"));
@@ -606,11 +590,11 @@ JasperMobile.REST.Dashboard.API = {
                     "code" : "authentication.error",
                     "message" : "Authentication error"
                 });
-                return;
             }
-
-            if (xmlhttp.readyState == XMLHttpRequest.DONE) {
-                if (xmlhttp.status == 200) {
+        };
+        xmlhttp.onload = function(e) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200 || xmlhttp.status === 0) {
                     JasperMobile.Callback.log("done of loading html");
                     var bodyWidth = document.width;
                     var container = jQuery(document.body);
@@ -629,24 +613,12 @@ JasperMobile.REST.Dashboard.API = {
                 }
             }
         };
+        xmlhttp.onerror = function(e) {
+            JasperMobile.Callback.log("error: " + JSON.stringify(e));
+            JasperMobile.Callback.log('onerror statustext: ' + xmlhttp.statusText + ',status: ' + xmlhttp.status);
+        };
         xmlhttp.open("GET", URL, true);
         xmlhttp.send();
-    },
-    cancel: function() {
-
-    },
-    destroy: function() {
-        JasperMobile.REST.Dashboard.API.destroyDashboard(function() {
-            JasperMobile.Callback.callback("JasperMobile.REST.Dashboard.API.destroy", {});
-        });
-    },
-    destroyDashboard: function(completion) {
-        document.body.innerHTML = "";
-        document.body.id = "";
-        JasperMobile.Helper.resetBodyTransformStyles();
-        setTimeout(function() {
-            completion();
-        }, 500);
     }
 };
 

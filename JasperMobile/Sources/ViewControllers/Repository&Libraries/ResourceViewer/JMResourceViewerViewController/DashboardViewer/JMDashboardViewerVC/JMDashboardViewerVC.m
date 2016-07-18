@@ -319,7 +319,11 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 - (JMMenuActionsViewAction)availableAction
 {
-    JMMenuActionsViewAction menuActions = [super availableAction] | JMMenuActionsViewAction_Refresh;
+    JMMenuActionsViewAction menuActions = [super availableAction];
+
+    if (self.resource.type != JMResourceTypeLegacyDashboard) {
+        menuActions |= JMMenuActionsViewAction_Refresh;
+    }
 
     if ([self isExternalScreenAvailable]) {
         menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;

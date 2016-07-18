@@ -158,7 +158,7 @@
                          if (error) {
                              completion(NO, error);
                          } else {
-                             JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+                             JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:strongSelf.restClient.serverProfile];
                              if (activeProfile.cacheReports.boolValue) {
                                  [strongSelf createContainers];
                              }

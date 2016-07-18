@@ -93,49 +93,6 @@ JMBaseDashboardLoader
     }];
 }
 
-- (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion)completion
-{
-    NSAssert(completion != nil, @"Completion is nil");
-    NSAssert(self.dashboard != nil, @"Dashboard is nil");
-
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-
-    [self destroyDashboardWithCompletion:^(BOOL success, NSError *error) {
-        if (success) {
-            __weak __typeof(self) weakSelf = self;
-            [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
-                __typeof(self) strongSelf = weakSelf;
-                if (strongSelf.cancelLoading) {
-                    return;
-                }
-                if (isReady) {
-                    [strongSelf refreshDashboardWithCompletion:heapBlock];
-                } else {
-                    heapBlock(NO, error);
-                }
-            }];
-        } else {
-            heapBlock(NO, error);
-        }
-    }];
-}
-
-- (void)minimizeDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
-{
-    // TODO: correct this
-//    JMDashboardLoaderCompletion heapBlock = [completion copy];
-//
-//    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"MobileDashboard.minimizeDashlet"
-//                                                                parameters:nil];
-//    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-//        if (error) {
-//            heapBlock(NO, error);
-//        } else {
-//            heapBlock(YES, nil);
-//        }
-//    }];
-}
-
 - (void)cancel
 {
     self.cancelLoading = YES;
@@ -147,8 +104,7 @@ JMBaseDashboardLoader
 }
 
 #pragma mark - Helpers
-- (void)runDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
-{
+- (void)runDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion {
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.dashboard != nil, @"Dashboard is nil");
 
@@ -174,59 +130,6 @@ JMBaseDashboardLoader
     }];
 }
 
-- (void)refreshDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
-{
-    NSAssert(completion != nil, @"Completion is nil");
-    NSAssert(self.dashboard != nil, @"Dashboard is nil");
-
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.refresh"
-                                                               inNamespace:JMJavascriptNamespaceRESTDashboard
-                                                                parameters:@{
-                                                                        @"baseURL" : self.restClient.baseURL.absoluteString,
-                                                                        @"resourceURI" : self.dashboard.resourceURI
-                                                                }];
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.isCancelLoad) {
-            return;
-        }
-        if (error) {
-            heapBlock(NO, error);
-        } else {
-            heapBlock(YES, nil);
-        }
-    }];
-}
-
-- (void)destroyDashboardWithCompletion:(JMDashboardLoaderCompletion __nullable)completion
-{
-    NSAssert(self.dashboard != nil, @"Dashboard is nil");
-
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-
-    JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"API.destroy"
-                                                                  inNamespace:JMJavascriptNamespaceRESTDashboard
-                                                                   parameters:nil];
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.isCancelLoad) {
-            return;
-        }
-        if (!heapBlock) {
-            return;
-        }
-        if (!error) {
-            heapBlock(YES, nil);
-        } else {
-            heapBlock(NO, error);
-        }
-    }];
-}
-
 - (void)addListenersForWebEnvironmentEvents
 {
     // Authorization
@@ -246,23 +149,6 @@ JMBaseDashboardLoader
 - (void)removeListenersForVisualizeEvents
 {
     [self.webEnvironment removeListener:self];
-}
-
-- (void)injectJSCodeOldDashboard
-{
-   CGFloat initialScale = 0.5;
-    if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
-        initialScale = 0.25;
-    }
-
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.updateViewPortScale"
-                                                               inNamespace:JMJavascriptNamespaceDefault
-                                                                parameters:@{
-                                                                        @"scale" : @(initialScale)
-                                                                }];
-    [self.webEnvironment sendJavascriptRequest:request
-                                    completion:nil];
-
 }
 
 @end
