@@ -75,8 +75,7 @@
 
     [self addObservers];
 
-    self.sessionManager = [self createSessionManager];
-    self.sessionManager.controller = self;
+    [self setupSessionManager];
 
     [self.configurator setup];
     [[self reportLoader] setDelegate:self];
@@ -107,6 +106,31 @@
 }
 
 #pragma mark - Setups
+
+- (void)setupSessionManager
+{
+    self.sessionManager = [self createSessionManager];
+    self.sessionManager.controller = self;
+
+    __weak typeof(self) weakSelf = self;
+    self.sessionManager.cleanAction = ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf.configurator reset];
+    };
+    self.sessionManager.executeAction = ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf.configurator setup];
+        [[strongSelf reportLoader] setDelegate:strongSelf];
+        [strongSelf setupStateManager];
+
+        [strongSelf startResourceViewing];
+    };
+    self.sessionManager.exitAction = ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf exitAction];
+    };
+}
+
 - (void)setupStateManager
 {
     [self stateManager].controller = self;
@@ -506,24 +530,7 @@
     switch (error.code) {
         case JSReportLoaderErrorTypeAuthentification:
         case JSSessionExpiredErrorCode: {
-            __weak typeof(self) weakSelf = self;
-            self.sessionManager.cleanAction = ^{
-                __strong typeof(self) strongSelf = weakSelf;
-                [strongSelf.configurator reset];
-            };
-            self.sessionManager.executeAction = ^{
-                __strong typeof(self) strongSelf = weakSelf;
-                [strongSelf.configurator setup];
-                [[strongSelf reportLoader] setDelegate:strongSelf];
-                [strongSelf setupStateManager];
-
-                [strongSelf startResourceViewing];
-            };
-            self.sessionManager.exitAction = ^{
-                __strong typeof(self) strongSelf = weakSelf;
-                [strongSelf exitAction];
-            };
-            [self.sessionManager handleSessionExpired];
+            [self.sessionManager handleSessionDidExpire];
             break;
         }
         case JSReportLoaderErrorTypeEmtpyReport:
@@ -650,7 +657,11 @@
                 break;
             }
             case JMFiltersVCResultTypeFilterOption : {
-            [strongSelf runReportWithReportURI:result.filterOptionURI];
+                [strongSelf runReportWithReportURI:result.filterOptionURI];
+                break;
+            }
+            case JMFiltersVCResultTypeSessionExpired: {
+                [strongSelf.sessionManager handleSessionDidChange];
                 break;
             }
         }

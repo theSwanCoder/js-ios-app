@@ -32,8 +32,9 @@
 
 #pragma mark - Public API
 
-- (void)handleSessionExpired
+- (void)handleSessionDidExpire
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     if (self.controller.restClient.keepSession) {
         if (self.cleanAction) {
             self.cleanAction();
@@ -61,6 +62,16 @@
                 strongSelf.exitAction();
             }
         }];
+    }
+}
+
+- (void)handleSessionDidChange
+{
+    if (self.cleanAction) {
+        self.cleanAction();
+    }
+    if (self.executeAction) {
+        self.executeAction();
     }
 }
 

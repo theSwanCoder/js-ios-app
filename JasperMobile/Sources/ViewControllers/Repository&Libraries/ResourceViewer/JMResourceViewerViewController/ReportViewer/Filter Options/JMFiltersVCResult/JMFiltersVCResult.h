@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, JMFiltersVCResultType) {
     JMFiltersVCResultTypeEmptyFilters,
     JMFiltersVCResultTypeReportParameters,
     JMFiltersVCResultTypeFilterOption,
+    JMFiltersVCResultTypeSessionExpired,
 };
 
 @interface JMFiltersVCResult : NSObject

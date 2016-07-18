@@ -67,87 +67,55 @@
 
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
 
-    [self showLoading];
+    [self addObservers];
+    [self startPoint];
+}
+
+
+#pragma mark - Notifications
+
+- (void)addObservers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cookiesDidChange:)
+                                                 name:JSRestClientDidChangeCookies
+                                               object:nil];
+}
+
+- (void)cookiesDidChange:(NSNotification *)notification
+{
+    [self showSessionExpiredAlert];
+}
+
+- (void)showSessionExpiredAlert
+{
     __weak typeof(self) weakSelf = self;
-    [self loadInputControlsWithCompletion:^(NSArray *inputControls, NSError *error) {
-        __strong typeof(self) strongSelf = weakSelf;
-        [strongSelf hideLoading];
-        if (error) {
-            if (error.code == JSSessionExpiredErrorCode) {
-                [JMUtils showLoginViewAnimated:YES completion:nil];
-            } else {
-                [JMUtils presentAlertControllerWithError:error
-                                              completion:nil];
-            }
-        } else {
-            strongSelf.inputControls = inputControls;
-            if (inputControls.count == 0) {
-                JSReportOption *reportOption = [JSReportOption defaultReportOption];
-                strongSelf.reportOptions = [@[reportOption] mutableCopy];
-                strongSelf.noneReportOption = reportOption;
-                _activeReportOption = reportOption;
-                [strongSelf.tableView reloadData];
-            } else {
-                JSReportOption *reportOption = [JSReportOption defaultReportOption];
-                reportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
-                strongSelf.noneReportOption = reportOption;
-                strongSelf.reportOptions = [@[strongSelf.noneReportOption] mutableCopy];
-
-                [strongSelf showLoading];
-                __weak typeof(self) weakSelf = strongSelf;
-                [strongSelf loadReportOptionsWithCompletion:^(NSArray *reportOptions, NSError *error) {
-                    typeof(self) strongSelf = weakSelf;
-                    [strongSelf hideLoading];
-                    if (error) {
-                        if (error.code == JSSessionExpiredErrorCode) {
-                            [JMUtils showLoginViewAnimated:YES
-                                                completion:nil];
-                        } else {
-                            [JMUtils presentAlertControllerWithError:error
-                                                          completion:nil];
-                        }
-                    } else {
-                        [strongSelf.reportOptions addObjectsFromArray:reportOptions];
-
-                        if (strongSelf.initialReportOptionURI) {
-                            for (JSReportOption *option in strongSelf.reportOptions) {
-                                if ([option.uri isEqualToString:strongSelf.initialReportOptionURI]) {
-                                    [strongSelf showLoading];
-                                    [strongSelf loadInputControlsForReportOption:option
-                                                                      completion:^(NSArray *inputControls, NSError *error) {
+    // TODO: add translations
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was expired"
+                                                                                      message:@"Reload?"
+                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                      cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                                           __strong typeof(self) strongSelf = weakSelf;
-                                                                          [strongSelf hideLoading];
-                                                                          if (error) {
-                                                                              if (error.code == JSSessionExpiredErrorCode) {
-                                                                                  [JMUtils showLoginViewAnimated:YES
-                                                                                                      completion:nil];
-                                                                              } else {
-                                                                                  [JMUtils presentAlertControllerWithError:error
-                                                                                                                completion:nil];
-                                                                              }
-                                                                          } else {
-                                                                              _activeReportOption = option;
-                                                                              _activeReportOption.inputControls = inputControls;
-                                                                              strongSelf.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
-                                                                              [strongSelf.tableView reloadData];
-                                                                          }
+                                                                          // back to collection view
+                                                                          [strongSelf.navigationController popToRootViewControllerAnimated:YES];
                                                                       }];
-                                    break;
-                                }
-                            }
-                        } else {
-                            _activeReportOption = strongSelf.noneReportOption;
-                            [strongSelf.tableView reloadData];
-                        }
-
-                    }
-                }];
-            }
-        }
-    }];
+    [alertController addActionWithLocalizedTitle:@"dialog_button_reload"
+                                           style:UIAlertActionStyleDefault
+                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                             __strong typeof(self) strongSelf = weakSelf;
+                                             if (strongSelf.completionBlock) {
+                                                 JMFiltersVCResult *result = [JMFiltersVCResult new];
+                                                 result.type = JMFiltersVCResultTypeSessionExpired;
+                                                 strongSelf.completionBlock(result);
+                                             } else {
+                                                 // TODO: We need completion block anyway
+                                             }
+                                         }];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - Actions
+
 - (IBAction)runReportAction:(id)sender
 {
     [self runReport];
@@ -233,12 +201,7 @@
                                                                                       completion:^(JSOperationResult * _Nullable result) {
                                                                                           [strongSelf hideLoading];
                                                                                           if (result.error) {
-                                                                                              if (result.error.code == JSSessionExpiredErrorCode) {
-                                                                                                  [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                                                              } else {
-                                                                                                  [JMUtils presentAlertControllerWithError:result.error
-                                                                                                                                completion:nil];
-                                                                                              }
+                                                                                              [strongSelf handleError:result.error completion:nil];
                                                                                           } else {
                                                                                               [strongSelf.reportOptions removeObject:strongSelf.activeReportOption];
                                                                                               strongSelf.activeReportOption = strongSelf.noneReportOption;
@@ -330,6 +293,71 @@
 }
 
 #pragma mark - Private API
+
+- (void)startPoint
+{
+    [self showLoading];
+    __weak typeof(self) weakSelf = self;
+    [self loadInputControlsWithCompletion:^(NSArray *inputControls, NSError *error) {
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf hideLoading];
+        if (error) {
+            [strongSelf handleError:error completion:nil];
+        } else {
+            strongSelf.inputControls = inputControls;
+            if (inputControls.count == 0) {
+                JSReportOption *reportOption = [JSReportOption defaultReportOption];
+                strongSelf.reportOptions = [@[reportOption] mutableCopy];
+                strongSelf.noneReportOption = reportOption;
+                _activeReportOption = reportOption;
+                [strongSelf.tableView reloadData];
+            } else {
+                JSReportOption *reportOption = [JSReportOption defaultReportOption];
+                reportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
+                strongSelf.noneReportOption = reportOption;
+                strongSelf.reportOptions = [@[strongSelf.noneReportOption] mutableCopy];
+
+                [strongSelf showLoading];
+                __weak typeof(self) weakSelf = strongSelf;
+                [strongSelf loadReportOptionsWithCompletion:^(NSArray *reportOptions, NSError *error) {
+                    typeof(self) strongSelf = weakSelf;
+                    [strongSelf hideLoading];
+                    if (error) {
+                        [strongSelf handleError:error completion:nil];
+                    } else {
+                        [strongSelf.reportOptions addObjectsFromArray:reportOptions];
+
+                        if (strongSelf.initialReportOptionURI) {
+                            for (JSReportOption *option in strongSelf.reportOptions) {
+                                if ([option.uri isEqualToString:strongSelf.initialReportOptionURI]) {
+                                    [strongSelf showLoading];
+                                    [strongSelf loadInputControlsForReportOption:option
+                                                                      completion:^(NSArray *inputControls, NSError *error) {
+                                                                          __strong typeof(self) strongSelf = weakSelf;
+                                                                          [strongSelf hideLoading];
+                                                                          if (error) {
+                                                                              [strongSelf handleError:error completion:nil];
+                                                                          } else {
+                                                                              _activeReportOption = option;
+                                                                              _activeReportOption.inputControls = inputControls;
+                                                                              strongSelf.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
+                                                                              [strongSelf.tableView reloadData];
+                                                                          }
+                                                                      }];
+                                    break;
+                                }
+                            }
+                        } else {
+                            _activeReportOption = strongSelf.noneReportOption;
+                            [strongSelf.tableView reloadData];
+                        }
+
+                    }
+                }];
+            }
+        }
+    }];
+}
 
 - (void)runReport
 {
@@ -642,15 +670,11 @@
                                             __strong typeof(self) strongSelf = weakSelf;
                                             [strongSelf hideLoading];
                                             if (error) {
-                                                if (error.code == JSSessionExpiredErrorCode) {
-                                                    [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                } else {
-                                                    __weak typeof(self) weakSelf = strongSelf;
-                                                    [JMUtils presentAlertControllerWithError:error completion:^{
-                                                        __strong typeof(self) strongSelf = weakSelf;
-                                                        strongSelf.activeReportOption = oldActiveReportOption;
-                                                    }];
-                                                }
+                                                __weak typeof(self) weakSelf = strongSelf;
+                                                [strongSelf handleError:error completion:^{
+                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                    strongSelf.activeReportOption = oldActiveReportOption;
+                                                }];
                                             } else {
                                                 strongSelf.activeReportOption.inputControls = inputControls;
                                                 strongSelf.inputControls = [[NSArray alloc] initWithArray:inputControls
@@ -741,11 +765,7 @@
                                     [strongSelf hideLoading];
 
                                     if (result.error) {
-                                        if (result.error.code == JSSessionExpiredErrorCode) {
-                                            [JMUtils showLoginViewAnimated:YES completion:nil];
-                                        } else {
-                                            [JMUtils presentAlertControllerWithError:result.error completion:nil];
-                                        }
+                                        [strongSelf handleError:result.error completion:nil];
                                     } else {
                                         for (JSInputControlState *state in result.objects) {
                                             for (JSInputControlDescriptor *inputControl in strongSelf.inputControls) {
@@ -788,11 +808,7 @@
                                   [strongSelf hideLoading];
 
                                   if (result.error) {
-                                      if (result.error.code == JSSessionExpiredErrorCode) {
-                                          [JMUtils showLoginViewAnimated:YES completion:nil];
-                                      } else {
-                                          [JMUtils presentAlertControllerWithError:result.error completion:nil];
-                                      }
+                                      [strongSelf handleError:result.error completion:nil];
                                   } else {
                                       strongSelf.parentFolderLookup = [result.objects firstObject];
                                       if (completion) {
@@ -829,11 +845,7 @@
                                               __strong typeof(self)strongSelf = weakSelf;
                                               [strongSelf hideLoading];
                                               if (result.error) {
-                                                  if (result.error.code == JSSessionExpiredErrorCode) {
-                                                      [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                  } else {
-                                                      [JMUtils presentAlertControllerWithError:result.error completion:nil];
-                                                  }
+                                                  [strongSelf handleError:result.error completion:nil];
                                               } else {
                                                   JSReportOption *reportOption = result.objects.firstObject;
                                                   if (reportOption) {
@@ -877,6 +889,19 @@
 - (void)hideLoading
 {
     [JMCancelRequestPopup dismiss];
+}
+
+#pragma mark - Errors Handle
+
+- (void)handleError:(NSError *)error completion:(void(^)(void))completion
+{
+    if (error.code == JSSessionExpiredErrorCode) {
+        [JMUtils showLoginViewAnimated:YES
+                            completion:nil];
+    } else {
+        [JMUtils presentAlertControllerWithError:error
+                                      completion:completion];
+    }
 }
 
 @end
