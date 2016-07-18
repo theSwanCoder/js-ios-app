@@ -306,11 +306,12 @@
         } else {
             strongSelf.inputControls = inputControls;
             if (inputControls.count == 0) {
-                JSReportOption *reportOption = [JSReportOption defaultReportOption];
-                strongSelf.reportOptions = [@[reportOption] mutableCopy];
-                strongSelf.noneReportOption = reportOption;
-                _activeReportOption = reportOption;
-                [strongSelf.tableView reloadData];
+                // back to report viewer
+                if (strongSelf.completionBlock) {
+                    JMFiltersVCResult *result = [JMFiltersVCResult new];
+                    result.type = JMFiltersVCResultTypeEmptyFilters;
+                    strongSelf.completionBlock(result);
+                }
             } else {
                 JSReportOption *reportOption = [JSReportOption defaultReportOption];
                 reportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];

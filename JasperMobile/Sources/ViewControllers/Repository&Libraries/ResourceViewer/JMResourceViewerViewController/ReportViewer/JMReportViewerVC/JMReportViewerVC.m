@@ -654,7 +654,9 @@
                 break;
             }
             case JMFiltersVCResultTypeEmptyFilters : {
-                [strongSelf runReportWithDestination:strongSelf.initialDestination];
+                if ([strongSelf stateManager].activeState != JMResourceViewerStateResourceReady) {
+                    [strongSelf runReportWithDestination:strongSelf.initialDestination];
+                }
                 break;
             }
             case JMFiltersVCResultTypeReportParameters : {
