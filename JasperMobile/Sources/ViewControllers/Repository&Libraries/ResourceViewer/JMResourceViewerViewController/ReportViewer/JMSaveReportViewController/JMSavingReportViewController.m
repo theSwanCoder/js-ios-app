@@ -87,7 +87,19 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                            forState:UIControlStateNormal];
 
     [self setupSections];
-    
+
+    [self addObservers];
+}
+
+#pragma mark - Notifications
+
+- (void)addObservers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cookiesDidChange:)
+                                                 name:JSRestClientDidChangeCookies
+                                               object:nil];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportLoaderDidChangeCountOfPages:)
                                                  name:JSReportCountOfPagesDidChangeNotification
@@ -96,6 +108,15 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                              selector:@selector(setupSections)
                                                  name:JSReportIsMutlipageDidChangedNotification
                                                object:self.report];
+}
+
+#pragma mark - Session Expired Handlers
+
+- (void)cookiesDidChange:(NSNotification *)notification
+{
+    if (self.sessionExpiredBlock) {
+        self.sessionExpiredBlock();
+    }
 }
 
 #pragma mark - Setups

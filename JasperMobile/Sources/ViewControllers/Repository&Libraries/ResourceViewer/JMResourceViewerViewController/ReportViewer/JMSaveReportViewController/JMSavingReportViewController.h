@@ -47,5 +47,6 @@ extern NSString * const kJMSaveReportViewControllerSegue;
 
 @interface JMSavingReportViewController : JMEditabledViewController
 @property (nonatomic, weak) id <JMSaveReportViewControllerDelegate> delegate;
+@property (nonatomic, copy) void(^sessionExpiredBlock)(void);
 @property (nonatomic, strong) JSReport *report;
 @end

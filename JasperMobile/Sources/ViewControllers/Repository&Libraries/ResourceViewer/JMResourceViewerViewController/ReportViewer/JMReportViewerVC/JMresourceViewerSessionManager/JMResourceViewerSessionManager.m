@@ -43,7 +43,7 @@
         [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
             __strong typeof(self) strongSelf = weakSelf;
             if (!result.error) {
-                [strongSelf showSessionExpiredAlert];
+                [strongSelf showSessionDidExpireAlert];
             } else {
                 __weak typeof(self) weakSelf = strongSelf;
                 [JMUtils showLoginViewAnimated:YES completion:^{
@@ -65,19 +65,24 @@
     }
 }
 
-- (void)handleSessionDidChange
+- (void)handleSessionDidChangeWithAlert:(BOOL)needAlert
 {
     if (self.cleanAction) {
         self.cleanAction();
     }
-    if (self.executeAction) {
-        self.executeAction();
+    if (needAlert) {
+        [self showSessionDidChangeAlert];
+    } else {
+        if (self.executeAction) {
+            self.executeAction();
+        }
     }
 }
 
+
 #pragma mark - Helpers
 
-- (void)showSessionExpiredAlert
+- (void)showSessionDidExpireAlert
 {
     __weak typeof(self) weakSelf = self;
     // TODO: add translations
@@ -86,6 +91,31 @@
                                                                             cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                                           __strong typeof(self) strongSelf = weakSelf;
+                                                                          if (strongSelf.exitAction) {
+                                                                              strongSelf.exitAction();
+                                                                          }
+                                                                      }];
+    [alertController addActionWithLocalizedTitle:@"dialog_button_reload"
+                                           style:UIAlertActionStyleDefault
+                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                             __strong typeof(self) strongSelf = weakSelf;
+                                             if (strongSelf.executeAction) {
+                                                 strongSelf.executeAction();
+                                             }
+                                         }];
+    [self.controller presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)showSessionDidChangeAlert
+{
+    __weak typeof(self) weakSelf = self;
+    // TODO: add translations
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was expired"
+                                                                                      message:@"Reload?"
+                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                      cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                                                          __strong typeof(self) strongSelf = weakSelf;
+                                                                          // back to collection view
                                                                           if (strongSelf.exitAction) {
                                                                               strongSelf.exitAction();
                                                                           }

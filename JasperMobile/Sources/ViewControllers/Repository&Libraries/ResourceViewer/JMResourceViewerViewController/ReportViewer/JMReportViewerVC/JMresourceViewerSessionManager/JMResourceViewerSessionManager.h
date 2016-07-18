@@ -39,5 +39,5 @@
 @property (nonatomic, copy) void(^ __nullable executeAction)(void);
 @property (nonatomic, copy) void(^ __nullable exitAction)(void);
 - (void)handleSessionDidExpire;
-- (void)handleSessionDidChange;
+- (void)handleSessionDidChangeWithAlert:(BOOL)needAlert;
 @end

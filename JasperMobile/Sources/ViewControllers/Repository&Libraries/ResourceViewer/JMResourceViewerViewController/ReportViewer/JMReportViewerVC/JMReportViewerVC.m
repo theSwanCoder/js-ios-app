@@ -102,6 +102,11 @@
         JMSavingReportViewController *destinationViewController = segue.destinationViewController;
         destinationViewController.report = [self report];
         destinationViewController.delegate = self;
+        __weak __typeof(self) weakSelf = self;
+        destinationViewController.sessionExpiredBlock = ^{
+            __weak __typeof(self) strongSelf = weakSelf;
+            [strongSelf.sessionManager handleSessionDidChangeWithAlert:YES];
+        };
     }
 }
 
@@ -661,7 +666,7 @@
                 break;
             }
             case JMFiltersVCResultTypeSessionExpired: {
-                [strongSelf.sessionManager handleSessionDidChange];
+                [strongSelf.sessionManager handleSessionDidChangeWithAlert:NO];
                 break;
             }
         }
