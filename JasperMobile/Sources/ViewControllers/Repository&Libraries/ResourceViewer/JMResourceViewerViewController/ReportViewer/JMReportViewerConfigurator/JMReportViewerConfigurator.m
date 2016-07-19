@@ -89,12 +89,7 @@
 - (void)configWithWebEnvironment:(JMWebEnvironment *)webEnvironment
 {
     _webEnvironment = webEnvironment;
-    BOOL needVisualizeFlow = NO;
-    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-    if (activeServerProfile && activeServerProfile.useVisualize.boolValue) {
-        needVisualizeFlow = YES;
-    }
-    if (needVisualizeFlow) {
+    if ([JMUtils flowTypeForReportViewer] == JMResourceFlowTypeVIZ) {
         JMLog(@"run with VIZ");
         _reportLoader = [JMVisualizeReportLoader loaderWithRestClient:self.restClient
                                                        webEnvironment:webEnvironment];

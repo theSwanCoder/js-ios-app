@@ -112,9 +112,10 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 {
     JMWebEnvironment *webEnvironment;
     if (self.dashboard.resource.type == JMResourceTypeLegacyDashboard) {
-        webEnvironment = [[JMWebViewManager sharedInstance] webEnvironment];
+        webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForFlowType:JMResourceFlowTypeREST];
     } else {
-        webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
+        webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]
+                                                                                flowType:JMResourceFlowTypeVIZ];
     }
     return webEnvironment;
 }

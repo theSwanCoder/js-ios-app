@@ -351,11 +351,6 @@ void jmDebugLog(NSString *format, ...) {
 
 #pragma mark - Helpers
 
-+ (BOOL)isSupportNewRESTFlow
-{
-    return [self isServerVersionUpOrEqual6];
-}
-
 + (BOOL)isSupportVisualize
 {
     return [self isServerVersionUpOrEqual6] && [self isServerProEdition];
@@ -490,15 +485,33 @@ void jmDebugLog(NSString *format, ...) {
     return configurator;
 }
 
++ (JMResourceFlowType)flowTypeForReportViewer
+{
+    JMResourceFlowType flowType = JMResourceFlowTypeUndefined;
+    BOOL needVisualizeFlow = NO;
+    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    if (activeServerProfile && activeServerProfile.useVisualize.boolValue) {
+        needVisualizeFlow = YES;
+    }
+    if (needVisualizeFlow && [JMUtils isSupportVisualize]) {
+        flowType = JMResourceFlowTypeVIZ;
+    } else {
+        flowType = JMResourceFlowTypeREST;
+    }
+    return flowType;
+}
+
 + (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorNonReusableWebView
 {
-    JMReportViewerConfigurator *configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:[[JMWebViewManager sharedInstance] webEnvironment]];
+
+    JMReportViewerConfigurator *configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:[[JMWebViewManager sharedInstance] webEnvironmentForFlowType:[self flowTypeForReportViewer]]];
     return configurator;
 }
 
 + (JMWebEnvironment *)reusableWebEnvironment
 {
-    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]];
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]
+                                                                                              flowType:[self flowTypeForReportViewer]];
     return webEnvironment;
 }
 

@@ -20,24 +20,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
 //  JMWebViewManager.h
 //  TIBCO JasperMobile
 //
-
-@class JMWebEnvironment;
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
  @since 2.0
  */
 
+@class JMWebEnvironment;
+
+typedef NS_ENUM(NSInteger, JMResourceFlowType) {
+    JMResourceFlowTypeUndefined,
+    JMResourceFlowTypeREST,
+    JMResourceFlowTypeVIZ
+};
+
 @interface JMWebViewManager : NSObject
 @property (nonatomic, strong) NSArray *__nullable cookies;
 + (instancetype __nonnull)sharedInstance;
+- (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier flowType:(JMResourceFlowType)flowType;
 - (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier;
-- (void)removeWebEnvironmentWithId:(NSString *__nonnull)identifier;
+- (JMWebEnvironment * __nonnull)webEnvironmentForFlowType:(JMResourceFlowType)flowType;
 - (JMWebEnvironment * __nonnull)webEnvironment;
+- (void)removeWebEnvironmentWithId:(NSString *__nonnull)identifier;
 - (void)reset;
 @end

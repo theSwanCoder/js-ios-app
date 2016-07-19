@@ -28,6 +28,7 @@
 #import <Foundation/Foundation.h>
 #import "JMServerProfile.h"
 #import "JMLoginViewController.h"
+#import "JMWebViewManager.h"
 
 @class JMReportViewerConfigurator;
 
@@ -137,9 +138,6 @@ void jmDebugLog(NSString * __nonnull format, ...);
 */
 + (BOOL)isServerAmber;
 
-
-+ (BOOL)isSupportNewRESTFlow;
-
 /**
  Returns YES if visualize is supported on current JRS instance
 
@@ -174,7 +172,10 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (float)minSupportedServerVersion;
 
++ (JMResourceFlowType)flowTypeForReportViewer;
+
 + (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorReusableWebView;
+
 + (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorNonReusableWebView;
 
 + (BOOL)isCompactWidth;

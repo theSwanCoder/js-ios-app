@@ -93,15 +93,32 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 #pragma mark - Public API
 - (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier
 {
+    return [self reusableWebEnvironmentWithId:identifier flowType:JMResourceFlowTypeUndefined];
+}
+
+- (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier flowType:(JMResourceFlowType)flowType
+{
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMLog(@"identifier: %@", identifier);
 
     JMWebEnvironment *webEnvironment = [self findWebEnvironmentForId:identifier];
     if (!webEnvironment) {
-        webEnvironment = [self createNewWebEnvironmentWithId:identifier needReuse:YES];
+        webEnvironment = [self createNewWebEnvironmentWithId:identifier flowType:flowType needReuse:YES];
         [self.webEnvironments addObject:webEnvironment];
     }
 
+    return webEnvironment;
+}
+
+- (JMWebEnvironment * __nonnull)webEnvironment
+{
+    return [self webEnvironmentForFlowType:JMResourceFlowTypeUndefined];
+}
+
+- (JMWebEnvironment * __nonnull)webEnvironmentForFlowType:(JMResourceFlowType)flowType
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMWebEnvironment *webEnvironment = [self createNewWebEnvironmentWithId:nil flowType:flowType needReuse:NO];
     return webEnvironment;
 }
 
@@ -113,23 +130,28 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
     }
 }
 
-- (JMWebEnvironment * __nonnull)webEnvironment
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    JMWebEnvironment *webEnvironment = [self createNewWebEnvironmentWithId:nil needReuse:NO];
-    return webEnvironment;
-}
+#pragma mark - Private API
 
-- (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier needReuse:(BOOL)needReuse
+- (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier flowType:(JMResourceFlowType)flowType needReuse:(BOOL)needReuse
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMWebEnvironment *webEnvironment;
-    if ([JMUtils isSupportVisualize]) {
-        webEnvironment = [JMVIZWebEnvironment webEnvironmentWithId:identifier
-                                                    initialCookies:self.cookies];
-    } else {
-        webEnvironment = [JMRESTWebEnvironment webEnvironmentWithId:identifier
-                                                 initialCookies:self.cookies];
+    switch (flowType) {
+        case JMResourceFlowTypeUndefined: {
+            webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier
+                                                         initialCookies:self.cookies];
+            break;
+        }
+        case JMResourceFlowTypeREST: {
+            webEnvironment = [JMRESTWebEnvironment webEnvironmentWithId:identifier
+                                                         initialCookies:self.cookies];
+            break;
+        }
+        case JMResourceFlowTypeVIZ: {
+            webEnvironment = [JMVIZWebEnvironment webEnvironmentWithId:identifier
+                                                        initialCookies:self.cookies];
+            break;
+        }
     }
     webEnvironment.reusable = needReuse;
     return webEnvironment;
