@@ -316,6 +316,7 @@
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [self setupBackButtonForNestedResource];
     [self removeMenuBarButton];
+    [self removeFavoriteBarButton:[self findFavoriteBarButton]];
     if (self.openDocumentActionBlock) {
         [self setupOpenDocumentBarButton];
     }
@@ -347,6 +348,9 @@
 - (void)removeFavoriteBarButton:(UIBarButtonItem *)favoriteButton
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    if (!favoriteButton) {
+        return;
+    }
     NSMutableArray *rightBarButtonItems = [self.controller.navigationItem.rightBarButtonItems mutableCopy];
     [rightBarButtonItems removeObject:favoriteButton];
     self.controller.navigationItem.rightBarButtonItems = rightBarButtonItems;
@@ -496,6 +500,10 @@
 
 - (BOOL)shouldShowFavoriteBarButton
 {
+    if (self.activeState == JMResourceViewerStateNestedResource) {
+        return NO;
+    }
+
     BOOL shouldShowFavoriteButton = NO;
     BOOL isCompactWidth = [JMUtils isCompactWidth];
     BOOL isRegularWidth = !isCompactWidth;
