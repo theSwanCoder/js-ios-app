@@ -273,7 +273,7 @@
     [self.restClient reportOptionsForReportURI:self.reportURI
                                     completion:^(JSOperationResult * _Nullable result) {
                                         if (result.error) {
-                                            if (result.error.code == JSDataMappingErrorCode) {
+                                            if (result.error.code == JSUnsupportedAcceptTypeErrorCode) {
                                                 // TODO: skip for now
                                                 // There is an case of getting 'string' object when there are no options.
                                                 completion(@[], nil);
