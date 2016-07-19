@@ -46,6 +46,8 @@
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
 @property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
+// TODO: temporary solution, remove in the next release
+@property (nonatomic, assign) BOOL shouldShowFiltersPage;
 @end
 
 @implementation JMReportViewerVC
@@ -287,6 +289,25 @@
                           }];
 }
 
+- (void)loadInputControlsWithCompletion:(void(^)(NSArray *inputControls, NSError *error))completion
+{
+    [self.restClient inputControlsForReport:self.resource.resourceLookup.uri
+                             selectedValues:self.initialReportParameters
+                            completionBlock:^(JSOperationResult *_Nullable result) {
+                                if (result.error) {
+                                    completion(nil, result.error);
+                                } else {
+                                    NSMutableArray *visibleInputControls = [NSMutableArray array];
+                                    for (JSInputControlDescriptor *inputControl in result.objects) {
+                                        if (inputControl.visible.boolValue) {
+                                            [visibleInputControls addObject:inputControl];
+                                        }
+                                    }
+                                    completion(visibleInputControls, nil);
+                                }
+                            }];
+}
+
 #pragma mark - Resource Viewing methods
 - (void)startResourceViewing
 {
@@ -297,13 +318,25 @@
         if (error) {
             [strongSelf handleError:error];
         } else {
-            [[strongSelf stateManager] setupPageForState:JMResourceViewerStateInitial];
-            BOOL isAlwaysPrompt = reportUnit.alwaysPromptControls;
-            if (isAlwaysPrompt) {
-                [strongSelf showFiltersVCWithInitialParameters:strongSelf.initialReportParameters];
-            } else {
-                [strongSelf runReportWithDestination:strongSelf.initialDestination];
-            }
+            // TODO: temporary solution, remove in the next release
+            // the main reason for this - we don't have ideal UX solution for case, when 'always prompt' enabled
+            // but there are any visible filters.
+            __weak typeof(self) weakSelf = strongSelf;
+            [strongSelf loadInputControlsWithCompletion:^(NSArray *inputControls, NSError *error) {
+                typeof(self) strongSelf = weakSelf;
+                if (error) {
+                    [strongSelf handleError:error];
+                } else {
+                    [[strongSelf stateManager] setupPageForState:JMResourceViewerStateInitial];
+                    BOOL isAlwaysPrompt = reportUnit.alwaysPromptControls;
+                    if (isAlwaysPrompt && inputControls.count > 0) {
+                        strongSelf.shouldShowFiltersPage = YES;
+                        [strongSelf showFiltersVCWithInitialParameters:strongSelf.initialReportParameters];
+                    } else {
+                        [strongSelf runReportWithDestination:strongSelf.initialDestination];
+                    }
+                }
+            }];
         }
     }];
 }
@@ -562,7 +595,11 @@
 
 - (JMMenuActionsViewAction)availableActions
 {
-    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info | JMMenuActionsViewAction_Edit;
+    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info;
+
+    if (self.shouldShowFiltersPage) {
+        availableAction |= JMMenuActionsViewAction_Edit;
+    }
 
     if ([self stateManager].activeState != JMResourceViewerStateInitial) {
         availableAction |= JMMenuActionsViewAction_Refresh;
