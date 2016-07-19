@@ -247,7 +247,6 @@
         }
         case JMResourceViewerStateLoading: {
             [self showProgress];
-            [self hideResourceNotExistView];
             [self hideMainView];
             break;
         }
@@ -260,7 +259,6 @@
         }
         case JMResourceViewerStateResourceReady: {
             [self hideProgress];
-            [self hideResourceNotExistView];
             [self showMainView];
             break;
         }
