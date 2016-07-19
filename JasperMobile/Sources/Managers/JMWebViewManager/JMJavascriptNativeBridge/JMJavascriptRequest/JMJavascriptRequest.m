@@ -87,7 +87,7 @@
 #pragma mark - Print
 - (NSString *)description
 {
-    NSString *description = [NSString stringWithFormat:@"\nJMJavascriptRequest: %@\ncommand:%@\nparametersAsString:%@", [super description], [self fullCommand], self.parametersAsString];
+    NSString *description = [NSString stringWithFormat:@"\nJMJavascriptRequest: %@\ncommand:%@\n", [super description], [self fullCommand]];
     return description;
 }
 
