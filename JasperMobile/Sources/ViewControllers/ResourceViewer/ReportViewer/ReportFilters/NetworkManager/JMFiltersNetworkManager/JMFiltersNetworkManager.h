@@ -31,26 +31,27 @@
 */
 
 @interface JMFiltersNetworkManager : NSObject
-- (instancetype)initWithRestClient:(JSRESTBase *)restClient;
-+ (instancetype)managerWithRestClient:(JSRESTBase *)restClient;
-- (void)loadInputControlsWithResourceURI:(NSString *)resourceURI
-                              completion:(void(^)(NSArray *inputControls, NSError *error))completion;
-- (void)loadInputControlsWithResourceURI:(NSString *)resourceURI
-                       initialParameters:(NSArray <JSReportParameter *>*)initialParameters
-                              completion:(void(^)(NSArray *inputControls, NSError *error))completion;
-- (void)loadInputControlsForReportOption:(JSReportOption *)option completion:(void (^)(NSArray *inputControls, NSError *error))completion;
-- (void)loadReportOptionsWithResourceURI:(NSString *)resourceURI
-                              completion:(void(^)(NSArray *reportOptions, NSError *error))completion;
-- (void)updateInputControlsWithResourceURI:(NSString *)resourceURI
-                          inputControlsIds:(NSArray <NSString *>*)inputControlsIds
-                         updatedParameters:(NSArray <JSReportParameter *>*)updatedParameters
-                                completion:(void(^)(NSArray <JSInputControlState *> *resultStates, NSError *error))completion;
-- (void)createReportOptionWithResourceURI:(NSString *)resourceURI
-                                    label:(NSString *)label
-                         reportParameters:(NSArray <JSReportParameter *>*)reportParameters
-                               completion:(void(^)(JSReportOption *reportOption, NSError *error))completion;
-- (void)deleteReportOption:(JSReportOption *)reportOption
-             withReportURI:(NSString *)reportURI
-                completion:(void(^)(BOOL success, NSError *error))completion;
+- (instancetype __nullable)initWithRestClient:(JSRESTBase *__nonnull)restClient;
++ (instancetype __nullable)managerWithRestClient:(JSRESTBase *__nonnull)restClient;
+- (void)loadInputControlsWithResourceURI:(NSString *__nonnull)resourceURI
+                              completion:(void(^__nonnull)(NSArray *__nullable inputControls, NSError *__nullable error))completion;
+- (void)loadInputControlsWithResourceURI:(NSString *__nonnull)resourceURI
+                       initialParameters:(NSArray <JSReportParameter *>*__nullable)initialParameters
+                              completion:(void(^__nonnull)(NSArray *__nullable inputControls, NSError *__nullable error))completion;
+- (void)loadInputControlsForReportOption:(JSReportOption *__nonnull)option
+                              completion:(void (^__nonnull)(NSArray *__nullable inputControls, NSError *__nullable error))completion;
+- (void)loadReportOptionsWithResourceURI:(NSString *__nonnull)resourceURI
+                              completion:(void(^__nonnull)(NSArray *__nullable reportOptions, NSError *__nullable error))completion;
+- (void)updateInputControlsWithResourceURI:(NSString *__nonnull)resourceURI
+                          inputControlsIds:(NSArray <NSString *>*__nonnull)inputControlsIds
+                         updatedParameters:(NSArray <JSReportParameter *>*__nonnull)updatedParameters
+                                completion:(void(^__nonnull)(NSArray <JSInputControlState *> *__nullable resultStates, NSError *__nullable error))completion;
+- (void)createReportOptionWithResourceURI:(NSString *__nonnull)resourceURI
+                                    label:(NSString *__nonnull)label
+                         reportParameters:(NSArray <JSReportParameter *>*__nonnull)reportParameters
+                               completion:(void(^__nonnull)(JSReportOption *__nullable reportOption, NSError *__nullable error))completion;
+- (void)deleteReportOption:(JSReportOption *__nonnull)reportOption
+             withReportURI:(NSString *__nonnull)reportURI
+                completion:(void(^__nonnull)(BOOL success, NSError *__nullable error))completion;
 - (void)reset;
 @end
