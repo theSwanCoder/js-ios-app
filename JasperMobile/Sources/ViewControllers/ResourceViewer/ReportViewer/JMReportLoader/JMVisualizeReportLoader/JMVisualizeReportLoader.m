@@ -491,12 +491,12 @@ initialDestination:(nullable JSReportDestination *)destination
                                             }
 
                                             NSArray *bookmarks = parameters[@"bookmarks"];
-                                            if (bookmarks && [bookmarks isKindOfClass:[NSArray class]]) {
+                                            if (bookmarks && [bookmarks isKindOfClass:[NSArray class]] && bookmarks.count > 0) {
                                                 strongSelf.report.bookmarks = [strongSelf mapBookmarksFromParams:bookmarks];
                                             }
 
                                             NSArray *parts = parameters[@"parts"];
-                                            if (parts && [parts isKindOfClass:[NSArray class]]) {
+                                            if (parts && [parts isKindOfClass:[NSArray class]] && parts.count > 0) {
                                                 strongSelf.report.parts = [strongSelf mapReportPartsFromParams:parts];
                                             }
 
