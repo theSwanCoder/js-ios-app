@@ -1739,7 +1739,7 @@
 		08E2AC3E1B1E056900AC462B /* ReportViewer */ = {
 			isa = PBXGroup;
 			children = (
-				08E2AC3F1B1E056900AC462B /* ReportsFilters */,
+				08E2AC3F1B1E056900AC462B /* ReportFilters */,
 				08E2AC6C1B1E056900AC462B /* JMSaveReportViewController */,
 				08E2AC5E1B1E056900AC462B /* JMReportLoader */,
 				08E2AC661B1E056900AC462B /* JMReportViewerConfigurator */,
@@ -1749,7 +1749,7 @@
 			path = ReportViewer;
 			sourceTree = "<group>";
 		};
-		08E2AC3F1B1E056900AC462B /* ReportsFilters */ = {
+		08E2AC3F1B1E056900AC462B /* ReportFilters */ = {
 			isa = PBXGroup;
 			children = (
 				BDF3D2501B8B03F40005AA28 /* ReportOptions */,
@@ -1758,7 +1758,7 @@
 				08E2AC5B1B1E056900AC462B /* JMInputControlsViewController.m */,
 				A1478133D7C5DE343A7CE6BB /* JMFiltersVCResult */,
 			);
-			path = ReportsFilters;
+			path = ReportFilters;
 			sourceTree = "<group>";
 		};
 		08E2AC401B1E056900AC462B /* InputControls */ = {
