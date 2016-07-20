@@ -42,11 +42,13 @@
 #import "PopoverView.h"
 #import "JMFiltersVCResult.h"
 #import "JMResourceViewerSessionManager.h"
+#import "JMFiltersNetworkManager.h"
 
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
 @property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
 // TODO: temporary solution, remove in the next release
+@property (nonatomic, strong) JMFiltersNetworkManager *filtersNetworkManager;
 @property (nonatomic, assign) BOOL shouldShowFiltersPage;
 @end
 
@@ -76,6 +78,8 @@
     self.title = self.resource.resourceLookup.label;
 
     [self addObservers];
+
+    self.filtersNetworkManager = [JMFiltersNetworkManager managerWithRestClient:self.restClient];
 
     [self setupSessionManager];
 
@@ -247,6 +251,7 @@
 #pragma mark - Actions
 - (void)exitAction
 {
+    [self.filtersNetworkManager reset];
     [[self stateManager] setupPageForState:JMResourceViewerStateDestroy];
     [[self reportLoader] destroy];
     [[self webEnvironment] reset];
@@ -291,21 +296,20 @@
 
 - (void)loadInputControlsWithCompletion:(void(^)(NSArray *inputControls, NSError *error))completion
 {
-    [self.restClient inputControlsForReport:self.resource.resourceLookup.uri
-                             selectedValues:self.initialReportParameters
-                            completionBlock:^(JSOperationResult *_Nullable result) {
-                                if (result.error) {
-                                    completion(nil, result.error);
-                                } else {
-                                    NSMutableArray *visibleInputControls = [NSMutableArray array];
-                                    for (JSInputControlDescriptor *inputControl in result.objects) {
-                                        if (inputControl.visible.boolValue) {
-                                            [visibleInputControls addObject:inputControl];
-                                        }
-                                    }
-                                    completion(visibleInputControls, nil);
-                                }
-                            }];
+    [self.filtersNetworkManager loadInputControlsWithResourceURI:self.resource.resourceLookup.uri
+                                               completion:^(NSArray *inputControls, NSError *error) {
+                                                   if (error) {
+                                                       completion(nil, error);
+                                                   } else {
+                                                       NSMutableArray *visibleInputControls = [NSMutableArray array];
+                                                       for (JSInputControlDescriptor *inputControl in inputControls) {
+                                                           if (inputControl.visible.boolValue) {
+                                                               [visibleInputControls addObject:inputControl];
+                                                           }
+                                                       }
+                                                       completion(visibleInputControls, nil);
+                                                   }
+                                               }];
 }
 
 #pragma mark - Resource Viewing methods
