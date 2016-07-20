@@ -29,6 +29,7 @@
 #import "JMWebEnvironment.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMJavascriptEvent.h"
+#import "UIView+Additions.h"
 
 @interface JMWebEnvironment() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, strong) JMJavascriptNativeBridge * __nonnull bridge;
@@ -112,10 +113,13 @@
             }
         }];
     } else {
+        UIView *webViewSuperview = self.webView.superview;
+        [self.webView removeFromSuperview];
         [self.bridge reset];
         _webView = nil;
         _bridge = nil;
         [self setupWebEnvironmentWithCookies:cookies];
+        [webViewSuperview fillWithView:self.webView];
     }
 }
 
