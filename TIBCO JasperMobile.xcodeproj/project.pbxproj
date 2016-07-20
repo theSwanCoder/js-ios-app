@@ -1740,7 +1740,7 @@
 			isa = PBXGroup;
 			children = (
 				08E2AC3F1B1E056900AC462B /* ReportFilters */,
-				08E2AC6C1B1E056900AC462B /* JMSaveReportViewController */,
+				08E2AC6C1B1E056900AC462B /* ReportExporting */,
 				08E2AC5E1B1E056900AC462B /* JMReportLoader */,
 				08E2AC661B1E056900AC462B /* JMReportViewerConfigurator */,
 				08E2AC691B1E056900AC462B /* JMReportViewerVC */,
@@ -1852,7 +1852,7 @@
 			path = JMReportViewerVC;
 			sourceTree = "<group>";
 		};
-		08E2AC6C1B1E056900AC462B /* JMSaveReportViewController */ = {
+		08E2AC6C1B1E056900AC462B /* ReportExporting */ = {
 			isa = PBXGroup;
 			children = (
 				08E2AC6D1B1E056900AC462B /* Cells */,
@@ -1860,7 +1860,7 @@
 				08E2AC7A1B1E056900AC462B /* JMSavingReportViewController.h */,
 				08E2AC7B1B1E056900AC462B /* JMSavingReportViewController.m */,
 			);
-			path = JMSaveReportViewController;
+			path = ReportExporting;
 			sourceTree = "<group>";
 		};
 		08E2AC6D1B1E056900AC462B /* Cells */ = {
