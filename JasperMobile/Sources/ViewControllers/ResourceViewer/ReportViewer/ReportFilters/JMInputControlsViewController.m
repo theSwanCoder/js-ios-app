@@ -41,6 +41,7 @@
 @property (nonatomic, strong) NSArray <JSInputControlDescriptor *> *inputControls;
 @property (nonatomic, strong) JSResourceLookup *parentFolderLookup;
 @property (nonatomic, strong) JMFiltersNetworkManager *networkManager;
+@property (nonatomic, assign, getter=isCookiesDidUpdate) BOOL cookiesDidUpdate;
 @end
 
 @implementation JMInputControlsViewController
@@ -88,6 +89,7 @@
 
 - (void)cookiesDidChange:(NSNotification *)notification
 {
+    self.cookiesDidUpdate = YES;
     [self showSessionExpiredAlert];
 }
 
@@ -349,6 +351,9 @@
             if ([self validateInputControls]) { // Local validation
                 [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) { // Server validation
                     if (dataIsValid) {
+                        if (self.cookiesDidUpdate) {
+                            return;
+                        }
                         if (self.completionBlock) {
                             // parameters
                             NSArray <JSReportParameter *> *reportParameters = [JSUtils reportParametersFromInputControls:self.activeReportOption.inputControls];
