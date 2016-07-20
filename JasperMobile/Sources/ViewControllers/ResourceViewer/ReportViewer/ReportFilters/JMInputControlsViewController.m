@@ -30,6 +30,7 @@
 #import "JMReportOptionsViewController.h"
 #import "JSReportOption.h"
 #import "JMFiltersVCResult.h"
+#import "JMFiltersNetworkManager.h"
 
 @interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
@@ -39,6 +40,7 @@
 @property (nonatomic, strong) NSMutableArray <JSReportOption *> *reportOptions;
 @property (nonatomic, strong) NSArray <JSInputControlDescriptor *> *inputControls;
 @property (nonatomic, strong) JSResourceLookup *parentFolderLookup;
+@property (nonatomic, strong) JMFiltersNetworkManager *networkManager;
 @end
 
 @implementation JMInputControlsViewController
@@ -68,6 +70,8 @@
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
 
     [self addObservers];
+
+    self.networkManager = [JMFiltersNetworkManager managerWithRestClient:self.restClient];
     [self startPoint];
 }
 
@@ -196,18 +200,20 @@
                                                          __strong typeof(self) strongSelf = weakSelf;
                                                          if (strongSelf) {
                                                              [strongSelf showLoading];
-                                                             [strongSelf.restClient deleteReportOption:strongSelf.activeReportOption
-                                                                                   withReportURI:strongSelf.reportURI
-                                                                                      completion:^(JSOperationResult * _Nullable result) {
-                                                                                          [strongSelf hideLoading];
-                                                                                          if (result.error) {
-                                                                                              [strongSelf handleError:result.error completion:nil];
-                                                                                          } else {
-                                                                                              [strongSelf.reportOptions removeObject:strongSelf.activeReportOption];
-                                                                                              strongSelf.activeReportOption = strongSelf.noneReportOption;
-                                                                                              [strongSelf.tableView reloadData];
-                                                                                          }
-                                                                                      }];
+                                                             __weak typeof(self) weakSelf = strongSelf;
+                                                             [self.networkManager deleteReportOption:strongSelf.activeReportOption
+                                                                                       withReportURI:strongSelf.reportURI
+                                                                                          completion:^(BOOL success, NSError *error) {
+                                                                                              typeof(self) strongSelf = weakSelf;
+                                                                                              [strongSelf hideLoading];
+                                                                                              if (success) {
+                                                                                                  [strongSelf.reportOptions removeObject:strongSelf.activeReportOption];
+                                                                                                  strongSelf.activeReportOption = strongSelf.noneReportOption;
+                                                                                                  [strongSelf.tableView reloadData];
+                                                                                              } else {
+                                                                                                  [strongSelf handleError:error completion:nil];
+                                                                                              }
+                                                                                          }];
                                                          }
                                                      }];
             [strongSelf presentViewController:alertController
@@ -226,138 +232,97 @@
         }];
 }
 
-#pragma mark - Network API
-
-- (void)loadInputControlsWithCompletion:(void(^)(NSArray *inputControls, NSError *error))completion
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    JMLog(@"initial input controls: %@", self.initialReportParameters);
-    [self.restClient inputControlsForReport:self.reportURI
-                                   selectedValues:self.initialReportParameters
-                                  completionBlock:^(JSOperationResult * _Nullable result) {
-                                      if (result.error) {
-                                          completion(nil, result.error);
-                                      } else {
-                                          NSMutableArray *visibleInputControls = [NSMutableArray array];
-                                          for (JSInputControlDescriptor *inputControl in result.objects) {
-                                              if (inputControl.visible.boolValue) {
-                                                  [visibleInputControls addObject:inputControl];
-                                              }
-                                          }
-                                          completion(visibleInputControls, nil);
-                                      }
-                                  }];
-}
-
-- (void)loadInputControlsForReportOption:(JSReportOption *)option completion:(void(^)(NSArray *inputControls, NSError *error))completion
-{
-    [self.restClient inputControlsForReport:option.uri
-                             selectedValues:nil
-                            completionBlock:^(JSOperationResult *result) {
-                                if (result.error) {
-                                    completion(nil, result.error);
-                                } else {
-                                    NSMutableArray *visibleInputControls = [NSMutableArray array];
-                                    for (JSInputControlDescriptor *inputControl in result.objects) {
-                                        if (inputControl.visible.boolValue) {
-                                            [visibleInputControls addObject:inputControl];
-                                        }
-                                    }
-                                    completion(visibleInputControls, nil);
-                                }
-                            }];
-}
-
-- (void)loadReportOptionsWithCompletion:(void(^)(NSArray *reportOptions, NSError *error))completion
-{
-    [self.restClient reportOptionsForReportURI:self.reportURI
-                                    completion:^(JSOperationResult * _Nullable result) {
-                                        if (result.error) {
-                                            if (result.error.code == JSUnsupportedAcceptTypeErrorCode) {
-                                                // TODO: skip for now
-                                                // There is an case of getting 'string' object when there are no options.
-                                                completion(@[], nil);
-                                            } else {
-                                                completion(nil, result.error);
-                                            }
-                                        } else {
-                                            NSMutableArray *reportOptions = [NSMutableArray array];
-                                            for (id reportOption in result.objects) {
-                                                if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
-                                                    [reportOptions addObject:reportOption];
-                                                }
-                                            }
-                                            completion(reportOptions, nil);
-                                        }
-                                    }];
-}
-
 #pragma mark - Private API
 
 - (void)startPoint
 {
     [self showLoading];
     __weak typeof(self) weakSelf = self;
-    [self loadInputControlsWithCompletion:^(NSArray *inputControls, NSError *error) {
-        __strong typeof(self) strongSelf = weakSelf;
+    [self prepareFiltersWithCompletion:^(NSArray<JSInputControlDescriptor *> *inputControls) {
+        typeof(self) strongSelf = weakSelf;
         [strongSelf hideLoading];
-        if (error) {
-            [strongSelf handleError:error completion:nil];
-        } else {
-            strongSelf.inputControls = inputControls;
-            if (inputControls.count == 0) {
-                // back to report viewer
-                if (strongSelf.completionBlock) {
-                    JMFiltersVCResult *result = [JMFiltersVCResult new];
-                    result.type = JMFiltersVCResultTypeEmptyFilters;
-                    strongSelf.completionBlock(result);
-                }
-            } else {
-                JSReportOption *reportOption = [JSReportOption defaultReportOption];
-                reportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
-                strongSelf.noneReportOption = reportOption;
-                strongSelf.reportOptions = [@[strongSelf.noneReportOption] mutableCopy];
-
-                [strongSelf showLoading];
-                __weak typeof(self) weakSelf = strongSelf;
-                [strongSelf loadReportOptionsWithCompletion:^(NSArray *reportOptions, NSError *error) {
-                    typeof(self) strongSelf = weakSelf;
-                    [strongSelf hideLoading];
-                    if (error) {
-                        [strongSelf handleError:error completion:nil];
-                    } else {
-                        [strongSelf.reportOptions addObjectsFromArray:reportOptions];
-
-                        if (strongSelf.initialReportOptionURI) {
-                            for (JSReportOption *option in strongSelf.reportOptions) {
-                                if ([option.uri isEqualToString:strongSelf.initialReportOptionURI]) {
-                                    [strongSelf showLoading];
-                                    [strongSelf loadInputControlsForReportOption:option
-                                                                      completion:^(NSArray *inputControls, NSError *error) {
-                                                                          __strong typeof(self) strongSelf = weakSelf;
-                                                                          [strongSelf hideLoading];
-                                                                          if (error) {
-                                                                              [strongSelf handleError:error completion:nil];
-                                                                          } else {
-                                                                              _activeReportOption = option;
-                                                                              _activeReportOption.inputControls = inputControls;
-                                                                              strongSelf.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
-                                                                              [strongSelf.tableView reloadData];
-                                                                          }
-                                                                      }];
-                                    break;
-                                }
-                            }
-                        } else {
-                            _activeReportOption = strongSelf.noneReportOption;
-                            [strongSelf.tableView reloadData];
-                        }
-
-                    }
-                }];
+        strongSelf.inputControls = inputControls;
+        if (inputControls.count == 0) {
+            // back to report viewer
+            if (strongSelf.completionBlock) {
+                JMFiltersVCResult *result = [JMFiltersVCResult new];
+                result.type = JMFiltersVCResultTypeEmptyFilters;
+                strongSelf.completionBlock(result);
             }
+        } else {
+            JSReportOption *reportOption = [JSReportOption defaultReportOption];
+            reportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
+            strongSelf.noneReportOption = reportOption;
+            strongSelf.reportOptions = [@[strongSelf.noneReportOption] mutableCopy];
+
+            [strongSelf showLoading];
+            __weak typeof(self) weakSelf = strongSelf;
+            [strongSelf prepareReportOptions:^(JSReportOption *activeReportOption) {
+                typeof(self) strongSelf = weakSelf;
+                [strongSelf hideLoading];
+                _activeReportOption = activeReportOption;
+                [self updateRightBurButtonItem];
+                [strongSelf.tableView reloadData];
+            }];
         }
     }];
+}
+
+- (void)prepareFiltersWithCompletion:(void(^)(NSArray <JSInputControlDescriptor *>*inputControls))completion
+{
+    __weak typeof(self) weakSelf = self;
+    [self.networkManager loadInputControlsWithResourceURI:self.reportURI
+                                        initialParameters:self.initialReportParameters
+                                               completion:^(NSArray *inputControls, NSError *error) {
+                                                   __strong typeof(self) strongSelf = weakSelf;
+                                                       if (error) {
+                                                           [strongSelf handleError:error completion:nil];
+                                                       } else {
+                                                           completion(inputControls);
+                                                       }
+                                                   }];
+}
+
+- (void)prepareReportOptions:(void(^)(JSReportOption *activeReportOption))completion
+{
+    __weak typeof(self) weakSelf = self;
+    [self.networkManager loadReportOptionsWithResourceURI:self.reportURI
+                                               completion:^(NSArray *reportOptions, NSError *error) {
+                                                   typeof(self) strongSelf = weakSelf;
+                                                   if (error) {
+                                                       [strongSelf handleError:error completion:nil];
+                                                   } else {
+                                                       [strongSelf.reportOptions addObjectsFromArray:reportOptions];
+                                                       if (strongSelf.initialReportOptionURI) {
+                                                           JSReportOption *activeReportOption;
+                                                           for (JSReportOption *option in strongSelf.reportOptions) {
+                                                               if ([option.uri isEqualToString:strongSelf.initialReportOptionURI]) {
+                                                                   activeReportOption = option;
+                                                                   break;
+                                                               }
+                                                           }
+                                                           if (activeReportOption) {
+                                                               __weak typeof(self) weakSelf = strongSelf;
+                                                               [self.networkManager loadInputControlsForReportOption:activeReportOption
+                                                                                                          completion:^(NSArray *inputControls, NSError *error) {
+                                                                                                              typeof(self) strongSelf = weakSelf;
+                                                                                                              if (error) {
+                                                                                                                  [strongSelf handleError:error completion:nil];
+                                                                                                              } else {
+                                                                                                                  activeReportOption.inputControls = inputControls;
+                                                                                                                  strongSelf.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
+                                                                                                                  completion(activeReportOption);
+                                                                                                              }
+                                                                                                          }];
+                                                           } else {
+                                                               completion(strongSelf.noneReportOption);
+                                                           }
+                                                       } else {
+                                                           completion(strongSelf.noneReportOption);
+                                                       }
+
+                                                   }
+                                               }];
 }
 
 - (void)runReport
@@ -634,7 +599,7 @@
 {
     if (descriptor.slaveDependencies.count) {
         [self showLoadingWithCancelBlock:^{
-            [self.restClient cancelAllRequests];
+            [self.networkManager reset];
             [self.navigationController popViewControllerAnimated:YES];
         }];
         [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) {
@@ -664,25 +629,24 @@
         
         if (![self.activeReportOption.inputControls count]) {
             [self showLoading];
-
             __weak typeof(self)weakSelf = self;
-            [self loadInputControlsForReportOption:self.activeReportOption
-                                        completion:^(NSArray *inputControls, NSError *error) {
-                                            __strong typeof(self) strongSelf = weakSelf;
-                                            [strongSelf hideLoading];
-                                            if (error) {
-                                                __weak typeof(self) weakSelf = strongSelf;
-                                                [strongSelf handleError:error completion:^{
-                                                    __strong typeof(self) strongSelf = weakSelf;
-                                                    strongSelf.activeReportOption = oldActiveReportOption;
-                                                }];
-                                            } else {
-                                                strongSelf.activeReportOption.inputControls = inputControls;
-                                                strongSelf.inputControls = [[NSArray alloc] initWithArray:inputControls
-                                                                                                copyItems:YES];
-                                                [strongSelf.tableView reloadData];
-                                            }
-                                        }];
+            [self.networkManager loadInputControlsForReportOption:self.activeReportOption
+                                                       completion:^(NSArray *inputControls, NSError *error) {
+                                                           __strong typeof(self) strongSelf = weakSelf;
+                                                           [strongSelf hideLoading];
+                                                           if (error) {
+                                                               __weak typeof(self) weakSelf = strongSelf;
+                                                               [strongSelf handleError:error completion:^{
+                                                                   __strong typeof(self) strongSelf = weakSelf;
+                                                                   strongSelf.activeReportOption = oldActiveReportOption;
+                                                               }];
+                                                           } else {
+                                                               strongSelf.activeReportOption.inputControls = inputControls;
+                                                               strongSelf.inputControls = [[NSArray alloc] initWithArray:inputControls
+                                                                                                               copyItems:YES];
+                                                               [strongSelf.tableView reloadData];
+                                                           }
+                                                       }];
         } else {
             self.inputControls = [[NSArray alloc] initWithArray:self.activeReportOption.inputControls
                                                       copyItems:YES];
@@ -746,7 +710,7 @@
     }
 
     [self showLoadingWithCancelBlock:^{
-        [self.restClient cancelAllRequests];
+        [self.networkManager reset];
         if (self.completionBlock) {
             JMFiltersVCResult *result = [JMFiltersVCResult new];
             result.type = JMFiltersVCResultTypeNotChange;
@@ -758,30 +722,30 @@
         resourceURI = self.reportURI;
     }
     __weak typeof(self) weakSelf = self;
-    [self.restClient updatedInputControlsValues:resourceURI
-                                            ids:allInputControls
-                                 selectedValues:selectedValues
-                                completionBlock:^(JSOperationResult *result) {
-                                    __strong typeof(self)strongSelf = weakSelf;
-                                    [strongSelf hideLoading];
+    [self.networkManager updateInputControlsWithResourceURI:resourceURI
+                                           inputControlsIds:allInputControls
+                                          updatedParameters:selectedValues
+                                                 completion:^(NSArray<JSInputControlState *> *resultStates, NSError *error) {
+                                                     __strong typeof(self)strongSelf = weakSelf;
+                                                     [strongSelf hideLoading];
 
-                                    if (result.error) {
-                                        [strongSelf handleError:result.error completion:nil];
-                                    } else {
-                                        for (JSInputControlState *state in result.objects) {
-                                            for (JSInputControlDescriptor *inputControl in strongSelf.inputControls) {
-                                                if ([state.uuid isEqualToString:inputControl.uuid]) {
-                                                    inputControl.state = state;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        [strongSelf.tableView reloadData];
-                                        if (completion) {
-                                            completion([strongSelf validateInputControls]);
-                                        }
-                                    }
-                                }];
+                                                     if (error) {
+                                                         [strongSelf handleError:error completion:nil];
+                                                     } else {
+                                                         for (JSInputControlState *state in resultStates) {
+                                                             for (JSInputControlDescriptor *inputControl in strongSelf.inputControls) {
+                                                                 if ([state.uuid isEqualToString:inputControl.uuid]) {
+                                                                     inputControl.state = state;
+                                                                     break;
+                                                                 }
+                                                             }
+                                                         }
+                                                         [strongSelf.tableView reloadData];
+                                                         if (completion) {
+                                                             completion([strongSelf validateInputControls]);
+                                                         }
+                                                     }
+                                                 }];
 }
 
 - (BOOL)isReportOptionsEditingAvailable
@@ -798,7 +762,7 @@
         }
     } else {
         [self showLoadingWithCancelBlock:^{
-            [self.restClient cancelAllRequests];
+            [self.networkManager reset];
         }];
         NSString *resourceFolderURI = [self.reportURI stringByDeletingLastPathComponent];
         __weak typeof(self) weakSelf = self;
@@ -839,23 +803,23 @@
     NSString *newReportOptionName = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     __weak typeof(self) weakSelf = self;
-    [self.restClient createReportOptionWithReportURI:self.reportURI
-                                         optionLabel:newReportOptionName
-                                    reportParameters:reportParameters
-                                          completion:^(JSOperationResult * _Nullable result) {
-                                              __strong typeof(self)strongSelf = weakSelf;
-                                              [strongSelf hideLoading];
-                                              if (result.error) {
-                                                  [strongSelf handleError:result.error completion:nil];
-                                              } else {
-                                                  JSReportOption *reportOption = result.objects.firstObject;
-                                                  if (reportOption) {
-                                                      reportOption.inputControls = strongSelf.inputControls;
-                                                      strongSelf.activeReportOption = reportOption;
-                                                  }
-                                                  [strongSelf.reportOptions addObject:strongSelf.activeReportOption];
-                                              }
-                                          }];
+    [self.networkManager createReportOptionWithResourceURI:self.reportURI
+                                                     label:newReportOptionName
+                                          reportParameters:reportParameters
+                                                completion:^(JSReportOption *reportOption, NSError *error) {
+                                                    __strong typeof(self)strongSelf = weakSelf;
+                                                    [strongSelf hideLoading];
+                                                    if (error) {
+                                                        [strongSelf handleError:error completion:nil];
+                                                    } else if (reportOption) {
+                                                        JSReportOption *activeReportOption = reportOption;
+                                                        activeReportOption.inputControls = strongSelf.inputControls;
+                                                        [strongSelf.reportOptions addObject:activeReportOption];
+                                                        strongSelf.activeReportOption = activeReportOption;
+                                                    } else {
+                                                        // TODO: need handle this case?
+                                                    }
+                                                }];
 }
 
 - (BOOL)isUniqueNewReportOptionName:(NSString *)name
@@ -871,8 +835,8 @@
 - (BOOL) currentReportOptionIsExisted
 {
     NSInteger indexOfCurrentOption = [self.reportOptions indexOfObject:self.activeReportOption];
-    return (indexOfCurrentOption != NSNotFound && indexOfCurrentOption != 0);
-
+    NSInteger indexOfNoneReportOption = [self.reportOptions indexOfObjectIdenticalTo:self.noneReportOption];
+    return (indexOfCurrentOption != NSNotFound && indexOfCurrentOption != indexOfNoneReportOption);
 }
 
 #pragma mark - Loading
