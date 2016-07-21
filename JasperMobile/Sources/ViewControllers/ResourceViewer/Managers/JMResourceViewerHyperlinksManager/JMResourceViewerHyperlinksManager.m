@@ -171,22 +171,13 @@
                     if (location) {
                         if ([strongSelf isFormatSupported:outputs.firstObject]) {
                             strongSelf.tempResourceURL = location;
-                            // TODO: come up with a better solution
-                            __weak __typeof(self) weakSelf = strongSelf;
-                            strongSelf.controller.configurator.stateManager.openDocumentActionBlock = ^{
-                                __typeof(self) strongSelf = weakSelf;
-                                strongSelf.controller.configurator.documentManager.controller = weakSelf.controller;
-                                [strongSelf.controller.configurator.documentManager showOpenInMenuForResourceWithURL:location];
-                            };
-
-                            NSURLRequest *request = [NSURLRequest requestWithURL:location];
-                            [strongSelf.controller.configurator.webEnvironment.webView loadRequest:request];
-                            // TODO: come up with a better solution
-                            [strongSelf.controller.configurator.stateManager setupPageForState:JMResourceViewerStateNestedResource];
+                            if ([strongSelf.delegate respondsToSelector:@selector(hyperlinksManager:willOpenLocalResourceFromURL:)]) {
+                                [strongSelf.delegate hyperlinksManager:strongSelf willOpenURL:location];
+                            }
                         } else {
-                            // TODO: come up with a better solution
-                            strongSelf.controller.configurator.documentManager.controller = weakSelf.controller;
-                            [strongSelf.controller.configurator.documentManager showOpenInMenuForResourceWithURL:location];
+                            if ([strongSelf.delegate respondsToSelector:@selector(hyperlinksManager:needShowOpenInMenuForLocalResourceFromURL:)]) {
+                                [strongSelf.delegate hyperlinksManager:strongSelf needShowOpenInMenuForLocalResourceFromURL:location];
+                            }
                         }
                     } else {
                         JMLog(@"There is no location of exported report");
@@ -199,17 +190,8 @@
 
 - (void)handleOpenReference:(JMHyperlink *)hyperlink
 {
-    NSURL *destinationURL = [NSURL URLWithString:hyperlink.href];
-    NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
-    if ([destinationURL.host isEqualToString:serverURL.host]) {
-        NSURLRequest *request = [NSURLRequest requestWithURL:destinationURL];
-        [self.controller.configurator.webEnvironment.webView loadRequest:request];
-        // TODO: come up with a better solution
-        [self.controller.configurator.stateManager setupPageForState:JMResourceViewerStateNestedResource];
-    } else {
-        if (destinationURL && [[UIApplication sharedApplication] canOpenURL:destinationURL]) {
-            [[UIApplication sharedApplication] openURL:destinationURL];
-        }
+    if ([self.delegate respondsToSelector:@selector(hyperlinksManager:willOpenURL:)]) {
+        [self.delegate hyperlinksManager:self willOpenURL:[NSURL URLWithString:hyperlink.href]];
     }
 }
 
@@ -236,15 +218,14 @@
     NSAssert(resourceURI != nil, @"Resource URI is nil");
     NSAssert(completion != nil, @"Completion is nil");
 
-    JMResourceViewerState activeState = self.controller.configurator.stateManager.activeState;
-    [self.controller.configurator.stateManager setupPageForState:JMResourceViewerStateLoading];
+    [self showLoading];
     __weak __typeof(self) weakSelf = self;
     [self.restClient resourceLookupForURI:resourceURI
                              resourceType:kJS_WS_TYPE_REPORT_UNIT
                                modelClass:[JSResourceLookup class]
                           completionBlock:^(JSOperationResult *result) {
                               __typeof(self) strongSelf = weakSelf;
-                              [strongSelf.controller.configurator.stateManager setupPageForState:activeState];
+                              [strongSelf hideLoading];
                               if (result.error) {
                                   completion(nil, result.error);
                               } else {
@@ -266,15 +247,14 @@
                                                             restClient:self.restClient];
 
     NSString *reportName = [self tempReportName];
-    JMResourceViewerState activeState = self.controller.configurator.stateManager.activeState;
-    [self.controller.configurator.stateManager setupPageForState:JMResourceViewerStateLoading];
+    [self showLoading];
     __weak __typeof(self) weakSelf = self;
     [reportSaver saveReportWithName:reportName
                              format:format
                          pagesRange:[JSReportPagesRange allPagesRange]
                          completion:^(NSURL * _Nullable savedReportURL, NSError * _Nullable error) {
                              __typeof(self) strongSelf = weakSelf;
-                             [strongSelf.controller.configurator.stateManager setupPageForState:activeState];
+                             [strongSelf hideLoading];
                              if (error) {
                                  completion(nil, error);
                              } else {
@@ -300,6 +280,20 @@
     NSString *directoryPath = [resourceURL.path stringByDeletingLastPathComponent];
     if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
         [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
+    }
+}
+
+- (void)showLoading
+{
+    if ([self.delegate respondsToSelector:@selector(hyperlinksManagerNeedShowLoading:)]) {
+        [self.delegate hyperlinksManagerNeedShowLoading:self];
+    }
+}
+
+- (void)hideLoading
+{
+    if ([self.delegate respondsToSelector:@selector(hyperlinksManagerNeedHideLoading:)]) {
+        [self.delegate hyperlinksManagerNeedHideLoading:self];
     }
 }
 
