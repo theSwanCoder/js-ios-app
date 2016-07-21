@@ -36,5 +36,6 @@
 @property (nonatomic, weak) UIViewController <JMResourceClientHolder>*controller;
 - (void)updateAppearence;
 - (void)updateFavoriteState;
+- (void)removeFavoriteBarButton;
 - (BOOL)shouldShowFavoriteBarButton;
 @end

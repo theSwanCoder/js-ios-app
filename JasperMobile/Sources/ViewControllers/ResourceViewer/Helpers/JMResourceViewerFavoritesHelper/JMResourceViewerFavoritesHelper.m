@@ -91,6 +91,12 @@
     [self favoriteAction];
 }
 
+- (void)removeFavoriteBarButton
+{
+    UIBarButtonItem *barButtonItem = [self findFavoriteBarButton];
+    [self removeFavoriteBarButton:barButtonItem];
+}
+
 #pragma mark - Actions
 
 - (void)favoriteAction
