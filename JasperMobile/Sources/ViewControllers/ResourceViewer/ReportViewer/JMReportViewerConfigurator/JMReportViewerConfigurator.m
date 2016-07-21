@@ -34,7 +34,7 @@
 #import "JMWebViewManager.h"
 #import "JMWebEnvironment.h"
 #import "JMVIZWebEnvironment.h"
-#import "JMResourceViewerStateManager.h"
+#import "JMReportViewerStateManager.h"
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerInfoPageManager.h"
 #import "JMResourceViewerShareManager.h"
@@ -81,7 +81,7 @@
         [self.reportLoader reset];
     }
     [self.webEnvironment reset];
-    [self.stateManager reset];
+    [self.stateManager setupPageForState:JMReportViewerStateDestroy];
 }
 
 #pragma mark - Helpers
@@ -105,12 +105,13 @@
     _infoPageManager = [self createInfoPageManager];
     _shareManager = [self createShareManager];
     _hyperlinksManager = [self createHyperlinksManager];
+    _hyperlinksManager.delegate = self.stateManager;
     _documentManager = [self createDocumentManager];
 }
 
-- (JMResourceViewerStateManager *)createStateManager
+- (JMReportViewerStateManager *)createStateManager
 {
-    return [JMResourceViewerStateManager new];
+    return [JMReportViewerStateManager new];
 }
 
 - (JMResourceViewerPrintManager *)createPrintManager

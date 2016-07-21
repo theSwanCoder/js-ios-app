@@ -31,38 +31,44 @@
 @since 2.6
 */
 
+#import "JMResourceViewerToolbarsHelper.h"
+
+@class JMResourceViewerMenuHelper;
+@class JMResourceViewerFavoritesHelper;
+
+@protocol JMResourceViewerStateManagerDelegate;
+@protocol JMMenuActionsViewDelegate;
 @protocol JMResourceClientHolder;
 @protocol JMResourceViewerProtocol;
 @protocol JMMenuActionsViewProtocol;
-@protocol JMMenuActionsViewDelegate;
-
-typedef NS_ENUM(NSInteger, JMResourceViewerState) {
-    JMResourceViewerStateInitial,
-    JMResourceViewerStateDestroy,
-    JMResourceViewerStateLoading,
-    JMResourceViewerStateResourceReady,
-    JMResourceViewerStateResourceFailed,
-    JMResourceViewerStateResourceNotExist,
-    JMResourceViewerStateNestedResource
-};
-
-typedef NS_ENUM(NSInteger, JMResourceViewerToolbarState) {
-    JMResourceViewerToolbarStateTopVisible,
-    JMResourceViewerToolbarStateTopHidden,
-    JMResourceViewerToolbarStateBottomVisible,
-    JMResourceViewerToolbarStateBottomHidden
-};
 
 @interface JMResourceViewerStateManager : NSObject
-@property (nonatomic, weak) UIViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol>*controller;
-@property (nonatomic, assign) JMResourceViewerState activeState;
+@property (nonatomic, weak) UIView *contentView;
+@property (nonatomic, weak) UIView *nonExistingResourceView;
+@property (nonatomic, strong) JMResourceViewerToolbarsHelper *toolbarsHelper;
+@property (nonatomic, strong) JMResourceViewerFavoritesHelper *favoritesHelper;
+@property (nonatomic, strong) JMResourceViewerMenuHelper *menuHelper;
 @property (nonatomic, copy) void(^openDocumentActionBlock)(void);
-@property (nonatomic, copy) void(^cancelOperationBlock)(void);
-@property (nonatomic, copy) void(^backActionBlock)(void);
-@property (nonatomic, copy) void(^backFromNestedResourceActionBlock)(void);
-- (void)setupPageForState:(JMResourceViewerState)state;
+@property (nonatomic, weak) UIViewController <JMResourceClientHolder, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol, JMResourceViewerProtocol>*controller;
+@property (nonatomic, weak) id <JMResourceViewerStateManagerDelegate> delegate;
 - (void)updatePageForToolbarState:(JMResourceViewerToolbarState)toolbarState;
 - (void)updatePageForChangingSizeClass;
 - (void)updateFavoriteState;
 - (void)reset;
+- (void)initialSetupNavigationItems;
+- (void)setupNavigationItems;
+- (void)setupNavigationItemsForNestedResource;
+- (void)showMainView;
+- (void)hideMainView;
+- (void)showProgress;
+- (void)hideProgress;
+- (void)showResourceNotExistView;
+- (void)hideResourceNotExistView;
+@end
+
+@protocol JMResourceViewerStateManagerDelegate <NSObject>
+@optional
+- (void)stateManagerWillExit:(JMResourceViewerStateManager *)stateManager;
+- (void)stateManagerWillCancel:(JMResourceViewerStateManager *)stateManager;
+- (void)stateManagerWillBackFromNestedResource:(JMResourceViewerStateManager *)stateManager;
 @end

@@ -34,7 +34,7 @@
 #import "JMAnalyticsManager.h"
 #import "JMBookmarksVC.h"
 #import "JMReportPartViewToolbar.h"
-#import "JMResourceViewerStateManager.h"
+#import "JMReportViewerStateManager.h"
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerInfoPageManager.h"
 #import "JMResourceViewerShareManager.h"
@@ -45,7 +45,7 @@
 #import "JMFiltersNetworkManager.h"
 
 
-@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate>
+@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
 @property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
 // TODO: temporary solution, remove in the next release
 @property (nonatomic, strong) JMFiltersNetworkManager *filtersNetworkManager;
@@ -145,17 +145,8 @@
 - (void)setupStateManager
 {
     [self stateManager].controller = self;
-    __weak __typeof(self) weakSelf = self;
-    [self stateManager].backActionBlock = ^{
-        [weakSelf exitAction];
-    };
-    [self stateManager].backFromNestedResourceActionBlock = ^{
-        [weakSelf backActionInWebView];
-    };
-    [self stateManager].cancelOperationBlock = ^{
-        [weakSelf exitAction];
-    };
-    [[self stateManager] setupPageForState:JMResourceViewerStateInitial];
+    [self stateManager].delegate = self;
+    [[self stateManager] setupPageForState:JMReportViewerStateInitial];
 }
 
 #pragma mark - Custom accessors
@@ -194,7 +185,7 @@
 - (void)reportDidUpdateCountOfPages
 {
     if ([self report].countOfPages == 0) {
-        [[self stateManager] setupPageForState:JMResourceViewerStateResourceNotExist];
+        [[self stateManager] setupPageForState:JMReportViewerStateResourceNotExist];
     }
 }
 
@@ -248,11 +239,27 @@
     return label;
 }
 
+#pragma mark - JMResourceViewerStateManagerDelegate
+- (void)stateManagerWillExit:(JMResourceViewerStateManager *)stateManager
+{
+    [self exitAction];
+}
+
+- (void)stateManagerWillCancel:(JMResourceViewerStateManager *)stateManager
+{
+    [self exitAction];
+}
+
+- (void)stateManagerWillBackFromNestedResource:(JMResourceViewerStateManager *)stateManager
+{
+    [self backActionInWebView];
+}
+
 #pragma mark - Actions
 - (void)exitAction
 {
     [self.filtersNetworkManager reset];
-    [[self stateManager] setupPageForState:JMResourceViewerStateDestroy];
+    [[self stateManager] setupPageForState:JMReportViewerStateDestroy];
     [[self reportLoader] destroy];
     [[self webEnvironment] reset];
     [self.navigationController popViewControllerAnimated:YES];
@@ -315,7 +322,7 @@
 #pragma mark - Resource Viewing methods
 - (void)startResourceViewing
 {
-    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
+    [[self stateManager] setupPageForState:JMReportViewerStateLoading];
     __weak typeof(self) weakSelf = self;
     [self fetchReportMetadataWithCompletion:^(JSResourceReportUnit *reportUnit, NSError *error) {
         typeof(self) strongSelf = weakSelf;
@@ -331,7 +338,7 @@
                 if (error) {
                     [strongSelf handleError:error];
                 } else {
-                    [[strongSelf stateManager] setupPageForState:JMResourceViewerStateInitial];
+                    [[strongSelf stateManager] setupPageForState:JMReportViewerStateInitial];
                     BOOL isAlwaysPrompt = reportUnit.alwaysPromptControls;
                     if (isAlwaysPrompt && inputControls.count > 0) {
                         strongSelf.shouldShowFiltersPage = YES;
@@ -358,13 +365,13 @@
                     kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
                     kJMAnalyticsLabelKey    : label
             }];
-            [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
+            [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
         } else {
             [strongSelf handleError:error];
         }
     };
 
-    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
+    [[self stateManager] setupPageForState:JMReportViewerStateLoading];
 
     JSReport *report = [self.resource modelOfResource];
     if ([[self reportLoader] respondsToSelector:@selector(runReport:initialDestination:initialParameters:completion:)]) {
@@ -382,7 +389,7 @@
 
 - (void)runReportWithReportURI:(NSString *)reportURI
 {
-    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
+    [[self stateManager] setupPageForState:JMReportViewerStateLoading];
 
     __weak typeof(self)weakSelf = self;
     [[self reportLoader] runReportWithReportURI:reportURI
@@ -398,7 +405,7 @@
                                                    kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
                                                    kJMAnalyticsLabelKey    : label
                                            }];
-                                           [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
+                                           [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
                                        } else {
                                            [strongSelf handleError:error];
                                        }
@@ -413,13 +420,13 @@
         [self runReportWithDestination:self.initialDestination];
     } else {
         if ([self reportLoader].state == JSReportLoaderStateReady) {
-            [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
+            [[self stateManager] setupPageForState:JMReportViewerStateLoading];
             __weak typeof(self)weakSelf = self;
             [[self reportLoader] applyReportParameters:reportParameters
                                           completion:^(BOOL success, NSError *error) {
                                               __strong typeof(self)strongSelf = weakSelf;
                                               if (success) {
-                                                  [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
+                                                  [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
                                               } else {
                                                   [strongSelf handleError:error];
                                               }
@@ -437,7 +444,7 @@
 {
     NSAssert(completion != nil, @"Completion is nil");
     if ([[self reportLoader] respondsToSelector:@selector(shouldDisplayLoadingView)] && [[self reportLoader] shouldDisplayLoadingView]) {
-        [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
+        [[self stateManager] setupPageForState:JMReportViewerStateLoading];
     }
     __weak typeof(self)weakSelf = self;
     [[self reportLoader] fetchPage:@(page)
@@ -446,7 +453,7 @@
                           if (success) {
                               completion(YES);
                               if ([[self reportLoader] respondsToSelector:@selector(shouldDisplayLoadingView)] && [[self reportLoader] shouldDisplayLoadingView]) {
-                                  [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
+                                  [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
                               }
                           } else {
                               [strongSelf handleError:error];
@@ -457,14 +464,14 @@
 - (void)navigateToBookmark:(JSReportBookmark *__nonnull)bookmark
 {
     if ([[self reportLoader] respondsToSelector:@selector(navigateToBookmark:completion:)]) {
-        [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
+        [[self stateManager] setupPageForState:JMReportViewerStateLoading];
         __weak __typeof(self) weakSelf = self;
         [[self reportLoader] navigateToBookmark:bookmark completion:^(BOOL success, NSError *error) {
             __typeof(self) strongSelf = weakSelf;
             if (error) {
                 [strongSelf handleError:error];
             } else {
-                [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
+                [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
             }
         }];
     }
@@ -472,13 +479,13 @@
 
 - (void)refreshReport
 {
-    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
+    [[self stateManager] setupPageForState:JMReportViewerStateLoading];
 
     __weak typeof(self)weakSelf = self;
     [[self reportLoader] refreshReportWithCompletion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         if (success) {
-            [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
+            [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
         } else {
             [strongSelf handleError:error];
         }
@@ -521,7 +528,7 @@
     return self.configurator.webEnvironment;
 }
 
-- (JMResourceViewerStateManager *)stateManager
+- (JMReportViewerStateManager *)stateManager
 {
     return self.configurator.stateManager;
 }
@@ -549,7 +556,7 @@
 {
     if ([[self reportLoader] respondsToSelector:@selector(navigateToPart:completion:)]) {
 
-        [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
+        [[self stateManager] setupPageForState:JMReportViewerStateLoading];
 
         __weak typeof(self)weakSelf = self;
         [[self reportLoader] navigateToPart:toolbar.currentPart completion:^(BOOL success, NSError *error) {
@@ -557,7 +564,7 @@
             if (error) {
                 [strongSelf handleError:error];
             } else {
-                [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
+                [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
             }
         }];
     }
@@ -567,7 +574,7 @@
 
 - (void)handleError:(NSError *)error
 {
-    [[self stateManager] setupPageForState:JMResourceViewerStateResourceFailed];
+    [[self stateManager] setupPageForState:JMReportViewerStateResourceFailed];
 
     switch (error.code) {
         case JSReportLoaderErrorTypeAuthentification:
@@ -605,7 +612,7 @@
         availableAction |= JMMenuActionsViewAction_Edit;
     }
 
-    if ([self stateManager].activeState != JMResourceViewerStateInitial) {
+    if ([self stateManager].state != JMReportViewerStateInitial) {
         availableAction |= JMMenuActionsViewAction_Refresh;
     }
     availableAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule;
@@ -615,6 +622,15 @@
 //    }
 
     return availableAction;
+}
+
+- (JMMenuActionsViewAction)disabledActions
+{
+    JMMenuActionsViewAction disabledAction = JMMenuActionsViewAction_None;
+    if ([self stateManager].state == JMReportViewerStateResourceNotExist) {
+        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ShowExternalDisplay;
+    }
+    return disabledAction;
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -649,8 +665,8 @@
             break;
         }
         case JMMenuActionsViewAction_Print: {
-            JMResourceViewerState currentState = [self stateManager].activeState;
-            [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
+            JMReportViewerState currentState = [self stateManager].state;
+            [[self stateManager] setupPageForState:JMReportViewerStateLoading];
             self.configurator.printManager.controller = self;
             [self.configurator.printManager printResource:self.resource completion:^{
                 [[self stateManager] setupPageForState:currentState];
@@ -695,7 +711,7 @@
                 break;
             }
             case JMFiltersVCResultTypeEmptyFilters : {
-                if ([strongSelf stateManager].activeState != JMResourceViewerStateResourceReady) {
+                if ([strongSelf stateManager].state != JMReportViewerStateResourceReady) {
                     [strongSelf runReportWithDestination:strongSelf.initialDestination];
                 }
                 break;

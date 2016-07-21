@@ -35,7 +35,7 @@
 @protocol JMReportLoaderProtocol, JMReportLoaderDelegate;
 @class JSReport;
 @class JMWebEnvironment;
-@class JMResourceViewerStateManager;
+@class JMReportViewerStateManager;
 @class JMResourceViewerPrintManager;
 @class JMResourceViewerInfoPageManager;
 @class JMResourceViewerShareManager;
@@ -45,7 +45,7 @@
 @interface JMReportViewerConfigurator : NSObject
 @property (nonatomic, strong, readonly) id <JMReportLoaderProtocol> __nonnull reportLoader;
 @property (nonatomic, strong, readonly) JMWebEnvironment * __nonnull webEnvironment;
-@property (nonatomic, strong) JMResourceViewerStateManager * __nonnull stateManager;
+@property (nonatomic, strong) JMReportViewerStateManager * __nonnull stateManager;
 @property (nonatomic, strong) JMResourceViewerPrintManager * __nonnull printManager;
 @property (nonatomic, strong) JMResourceViewerInfoPageManager * __nonnull infoPageManager;
 @property (nonatomic, strong) JMResourceViewerShareManager * __nonnull shareManager;
