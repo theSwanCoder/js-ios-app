@@ -33,6 +33,7 @@
 
 @protocol JMResourceViewerProtocol <NSObject>
 - (UIView *)contentView;
+@optional
 - (UIView *)topToolbarView;
 - (UIView *)bottomToolbarView;
 - (UIView *)nonExistingResourceView;
