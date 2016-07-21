@@ -58,6 +58,8 @@
 - (void)initialSetupNavigationItems;
 - (void)setupNavigationItems;
 - (void)setupNavigationItemsForNestedResource;
+- (void)removeMenuBarButton;
+- (UIBarButtonItem *)backBarButtonWithTitle:(NSString *)title action:(SEL)action;
 - (void)showMainView;
 - (void)hideMainView;
 - (void)showProgress;
