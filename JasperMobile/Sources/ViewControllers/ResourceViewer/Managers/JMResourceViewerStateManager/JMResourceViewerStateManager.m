@@ -77,6 +77,13 @@
 
 - (void)updatePageForToolbarState:(JMResourceViewerToolbarState)toolbarState
 {
+    if (toolbarState == JMResourceViewerToolbarStateTopHidden || toolbarState == JMResourceViewerToolbarStateTopVisible) {
+        NSAssert([self.controller respondsToSelector:@selector(topToolbarView)], @"Should be top toolbar view");
+    }
+    if (toolbarState == JMResourceViewerToolbarStateBottomHidden || toolbarState == JMResourceViewerToolbarStateBottomVisible) {
+        NSAssert([self.controller respondsToSelector:@selector(bottomToolbarView)], @"Should be bottom toolbar view");
+    }
+
     [self.toolbarsHelper updatePageForToolbarState:toolbarState];
 }
 
@@ -202,7 +209,7 @@
 - (void)initialSetupBackButton
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    UIBarButtonItem *backBarButton = [self backBarButton];
+    UIBarButtonItem *backBarButton = [self defaultBackBarButton];
     self.controller.navigationItem.leftBarButtonItem = backBarButton;
 }
 
@@ -231,9 +238,8 @@
 
 #pragma mark - Navigation Items Helpers
 
-- (UIBarButtonItem *)backBarButton
+- (UIBarButtonItem *)defaultBackBarButton
 {
-    UIBarButtonItem *item;
     NSString *backItemTitle = self.controller.title;
     if (!backItemTitle) {
         NSArray *viewControllers = self.controller.navigationController.viewControllers;
@@ -245,29 +251,27 @@
             backItemTitle = JMCustomLocalizedString(@"back_button_title", nil);
         }
     }
-
-    UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
-    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
-    item = [[UIBarButtonItem alloc] initWithTitle:[self croppedBackButtonTitle:backItemTitle]
-                                            style:UIBarButtonItemStylePlain
-                                           target:self
-                                           action:@selector(back)];
-    [item setBackgroundImage:resizebleBackButtonImage
-                    forState:UIControlStateNormal
-                  barMetrics:UIBarMetricsDefault];
+    UIBarButtonItem *item = [self backBarButtonWithTitle:backItemTitle
+                                                  action:@selector(back)];
     return item;
 }
 
 - (UIBarButtonItem *)backBarButtonForNestedResource
 {
+    UIBarButtonItem *item = [self backBarButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
+                                                  action:@selector(backFromNestedView)];
+    return item;
+}
+
+- (UIBarButtonItem *)backBarButtonWithTitle:(NSString *)title action:(SEL)action
+{
     UIBarButtonItem *item;
-    NSString *backItemTitle = JMCustomLocalizedString(@"back_button_title", nil);
     UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
     UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
-    item = [[UIBarButtonItem alloc] initWithTitle:[self croppedBackButtonTitle:backItemTitle]
+    item = [[UIBarButtonItem alloc] initWithTitle:[self croppedBackButtonTitle:title]
                                             style:UIBarButtonItemStylePlain
                                            target:self
-                                           action:@selector(backFromNestedView)];
+                                           action:action];
     [item setBackgroundImage:resizebleBackButtonImage
                     forState:UIControlStateNormal
                   barMetrics:UIBarMetricsDefault];
@@ -321,18 +325,21 @@
     [resourceView.contentView fillWithView:contentView];
     self.contentView = contentView;
 
-    //
-    UIView *topToolbarView = [self.controller topToolbarView];
-    [resourceView.topView fillWithView:topToolbarView];
+    if ([self.controller respondsToSelector:@selector(topToolbarView)]) {
+        UIView *topToolbarView = [self.controller topToolbarView];
+        [resourceView.topView fillWithView:topToolbarView];
+    }
 
-    //
-    UIView *bottomToolbarView = [self.controller bottomToolbarView];
-    [resourceView.bottomView fillWithView:bottomToolbarView];
+    if ([self.controller respondsToSelector:@selector(bottomToolbarView)]) {
+        UIView *bottomToolbarView = [self.controller bottomToolbarView];
+        [resourceView.bottomView fillWithView:bottomToolbarView];
+    }
 
-    //
-    UIView *nonExistingResourceView = [self.controller nonExistingResourceView];
-    [resourceView.contentView fillWithView:nonExistingResourceView];
-    self.nonExistingResourceView = nonExistingResourceView;
+    if ([self.controller respondsToSelector:@selector(nonExistingResourceView)]) {
+        UIView *nonExistingResourceView = [self.controller nonExistingResourceView];
+        [resourceView.contentView fillWithView:nonExistingResourceView];
+        self.nonExistingResourceView = nonExistingResourceView;
+    }
 }
 
 - (void)showMainView
@@ -366,11 +373,13 @@
 #pragma mark - Setup Resource Not Exist View
 - (void)showResourceNotExistView
 {
+    NSAssert(self.nonExistingResourceView != nil, @"Non existing resource view is nil");
     self.nonExistingResourceView.hidden = NO;
 }
 
 - (void)hideResourceNotExistView
 {
+    NSAssert(self.nonExistingResourceView != nil, @"Non existing resource view is nil");
     self.nonExistingResourceView.hidden = YES;
 }
 
@@ -390,7 +399,9 @@
 - (JMMenuActionsViewAction)disabledActions
 {
     JMMenuActionsViewAction disabledActions = JMMenuActionsViewAction_None;
-    disabledActions |= [self.controller disabledActions];
+    if ([self.controller respondsToSelector:@selector(disabledActions)]) {
+        disabledActions |= [self.controller disabledActions];
+    }
     return disabledActions;
 }
 
