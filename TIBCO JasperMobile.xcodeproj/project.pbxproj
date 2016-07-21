@@ -162,7 +162,6 @@
 		93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C4E3111C737DB300A19D64 /* JMUITestConstants.m */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
-		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
 		93DC8C341C6B71D4000DEADF /* JMScheduleManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DC8C331C6B71D4000DEADF /* JMScheduleManagerTests.m */; };
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
 		93F26A1C1C9BF85B0069CD5D /* JMHTMLParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F26A1B1C9BF85B0069CD5D /* JMHTMLParserTests.m */; };
@@ -584,8 +583,6 @@
 		93D8C6441AAC7E9200117306 /* JMWebViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMWebViewManager.m; sourceTree = "<group>"; };
 		93D8C6531AAD69CD00117306 /* JMDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboard.h; sourceTree = "<group>"; };
 		93D8C6541AAD69CD00117306 /* JMDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboard.m; sourceTree = "<group>"; };
-		93D8C6571AAD778400117306 /* JMVisualizeDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeDashboard.h; sourceTree = "<group>"; };
-		93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeDashboard.m; sourceTree = "<group>"; };
 		93DC8C331C6B71D4000DEADF /* JMScheduleManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleManagerTests.m; sourceTree = "<group>"; };
 		93DC8C391C6CCEEE000DEADF /* TIBCO JasperMobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TIBCO JasperMobileUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DC8C3D1C6CCEEE000DEADF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2186,7 +2183,6 @@
 			isa = PBXGroup;
 			children = (
 				0801DF961AAF2CC900DD072C /* CoreDataEntities */,
-				93D8C6561AAD777200117306 /* JMVisualizeDashboard */,
 				93D8C6521AAD69BE00117306 /* JMDashboard */,
 				A147857D5FCCB5723B672BD2 /* JMResourceLookup */,
 				A14784F3B9F734ECF7DA95AD /* JMSchedule */,
@@ -2277,15 +2273,6 @@
 				A14786EE67EACA9CE085FD53 /* JMDashboardParameter */,
 			);
 			path = JMDashboard;
-			sourceTree = "<group>";
-		};
-		93D8C6561AAD777200117306 /* JMVisualizeDashboard */ = {
-			isa = PBXGroup;
-			children = (
-				93D8C6571AAD778400117306 /* JMVisualizeDashboard.h */,
-				93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */,
-			);
-			path = JMVisualizeDashboard;
 			sourceTree = "<group>";
 		};
 		93DC8C3A1C6CCEEE000DEADF /* TIBCO JasperMobileUITests */ = {
@@ -3846,7 +3833,6 @@
 				089B15BA1AA756BD0021A915 /* JMServerOptionCell.m in Sources */,
 				08DD182D1B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel in Sources */,
 				089B15BD1AA756BD0021A915 /* JMServerOption.m in Sources */,
-				93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */,
 				087A71B91BD95FEE007B98A4 /* JMEULAViewController.m in Sources */,
 				089B15CF1AA756BD0021A915 /* JMSavedResourcesListLoader.m in Sources */,
 				08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */,
