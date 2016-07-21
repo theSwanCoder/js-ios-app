@@ -76,6 +76,9 @@
             [self handleOpenReference:hyperlink];
             break;
         }
+        case JMHyperlinkTypeAdHocExecution: {
+            break;
+        }
     }
 }
 
