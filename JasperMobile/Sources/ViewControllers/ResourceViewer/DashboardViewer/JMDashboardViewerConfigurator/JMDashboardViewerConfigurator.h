@@ -34,12 +34,17 @@
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;
 @class JMWebEnvironment;
+@class JMDashboardViewerStateManager;
 
 @interface JMDashboardViewerConfigurator : NSObject
-@property (nonatomic, strong) id<JMDashboardLoader> dashboardLoader;
+@property (nonatomic, strong, readonly, nonnull) id<JMDashboardLoader> dashboardLoader;
+@property (nonatomic, strong, readonly, nonnull) JMWebEnvironment *webEnvironment;
+@property (nonatomic, strong, nonnull) JMDashboardViewerStateManager *stateManager;
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
 
-- (instancetype)initWithDashboard:(JMDashboard *)dashboard webEnvironment:(JMWebEnvironment *)webEnvironment;
-+ (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard webEnvironment:(JMWebEnvironment *)webEnvironment;
-- (void)updateReportLoaderDelegateWithObject:(id <JMDashboardLoaderDelegate>)delegate;
+- (instancetype __nullable)initWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment;
++ (instancetype __nullable)configuratorWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment;
+
+- (void)setup;
+- (void)reset;
 @end

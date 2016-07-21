@@ -36,9 +36,11 @@
 #import "JMWebEnvironment.h"
 #import "JMResource.h"
 #import "JMVIZWebEnvironment.h"
+#import "JMDashboardViewerStateManager.h"
 
 @interface JMDashboardViewerConfigurator()
-@property (nonatomic, weak) JMDashboard *dashboard;
+@property (nonatomic, strong, readwrite) id <JMDashboardLoader> reportLoader;
+@property (nonatomic, strong, readwrite) JMWebEnvironment *webEnvironment;
 @end
 
 @implementation JMDashboardViewerConfigurator
@@ -49,32 +51,54 @@
 }
 
 #pragma mark - Initializers
-- (instancetype)initWithDashboard:(JMDashboard *)dashboard webEnvironment:(JMWebEnvironment *)webEnvironment
+- (instancetype __nullable)initWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment
 {
     self = [super init];
     if (self) {
-        _dashboard = dashboard;
-        if ([JMUtils isSupportVisualize] && self.dashboard.resource.type == JMResourceTypeDashboard) {
-            _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard
-                                                          webEnvironment:webEnvironment];
-            ((JMVIZWebEnvironment *)webEnvironment).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
-        } else {
-            _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard
-                                                           webEnvironment:webEnvironment];
-        }
+        [self configWithWebEnvironment:webEnvironment];
     }
     return self;
 }
 
-+ (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard webEnvironment:(JMWebEnvironment *)webEnvironment
++ (instancetype __nullable)configuratorWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment
 {
-    return [[self alloc] initWithDashboard:dashboard webEnvironment:webEnvironment];
+    return [[self alloc] initWithWebEnvironment:webEnvironment];
 }
 
 #pragma mark - Public API
+- (void)setup
+{
+    [self configWithWebEnvironment:self.webEnvironment];
+}
+
+- (void)reset
+{
+    [self.webEnvironment reset];
+    [self.stateManager setupPageForState:JMDashboardViewerStateDestroy];
+}
+
 - (void)updateReportLoaderDelegateWithObject:(id <JMDashboardLoaderDelegate>)delegate
 {
     [self dashboardLoader].delegate = delegate;
+}
+
+#pragma mark - Helpers
+
+- (void)configWithWebEnvironment:(JMWebEnvironment *)webEnvironment
+{
+    // TODO: detect legacy dashboards
+    if ([JMUtils isSupportVisualize]) {
+        _dashboardLoader = [JMVisDashboardLoader loaderWebEnvironment:webEnvironment];
+        ((JMVIZWebEnvironment *)webEnvironment).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
+    } else {
+        _dashboardLoader = [JMBaseDashboardLoader loaderWebEnvironment:webEnvironment];
+    }
+    _stateManager = [self createStateManager];
+}
+
+- (JMDashboardViewerStateManager *)createStateManager
+{
+    return [JMDashboardViewerStateManager new];
 }
 
 @end
