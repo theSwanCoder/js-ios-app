@@ -39,7 +39,7 @@
 #import "JMDashboardViewerStateManager.h"
 
 @interface JMDashboardViewerConfigurator()
-@property (nonatomic, strong, readwrite) id <JMDashboardLoader> reportLoader;
+@property (nonatomic, strong, readwrite) id <JMDashboardLoader> dashboardLoader;
 @property (nonatomic, strong, readwrite) JMWebEnvironment *webEnvironment;
 @end
 
@@ -55,7 +55,7 @@
 {
     self = [super init];
     if (self) {
-        [self configWithWebEnvironment:webEnvironment];
+        _webEnvironment = webEnvironment;
     }
     return self;
 }
@@ -86,12 +86,24 @@
 
 - (void)configWithWebEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    // TODO: detect legacy dashboards
-    if ([JMUtils isSupportVisualize]) {
-        _dashboardLoader = [JMVisDashboardLoader loaderWebEnvironment:webEnvironment];
-        ((JMVIZWebEnvironment *)webEnvironment).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
-    } else {
-        _dashboardLoader = [JMBaseDashboardLoader loaderWebEnvironment:webEnvironment];
+    _webEnvironment = webEnvironment;
+    JMResourceFlowType flowType = webEnvironment.flowType;
+    switch(flowType) {
+        case JMResourceFlowTypeUndefined: {
+            NSAssert(false, @"Should not be undefined flow type");
+            break;
+        }
+        case JMResourceFlowTypeREST: {
+            _dashboardLoader = [JMBaseDashboardLoader loaderWithRESTClient:self.restClient
+                                                            webEnvironment:webEnvironment];
+            break;
+        }
+        case JMResourceFlowTypeVIZ: {
+            _dashboardLoader = [JMVisDashboardLoader loaderWithRESTClient:self.restClient
+                                                           webEnvironment:webEnvironment];
+            ((JMVIZWebEnvironment *)webEnvironment).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
+            break;
+        }
     }
     _stateManager = [self createStateManager];
 }
