@@ -41,6 +41,7 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 @property (nonatomic, strong) WKWebView * __nullable webView;
 @property (nonatomic, copy) NSString * __nonnull identifier;
 @property (nonatomic, assign, getter=isReusable) BOOL reusable;
+@property (nonatomic, assign) JMResourceFlowType flowType;
 @property (nonatomic, assign, getter=isReady) BOOL ready;
 
 - (instancetype __nullable)initWithId:(NSString *__nonnull)identifier initialCookies:(NSArray *__nullable)cookies;

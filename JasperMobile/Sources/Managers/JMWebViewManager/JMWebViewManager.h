@@ -42,9 +42,7 @@ typedef NS_ENUM(NSInteger, JMResourceFlowType) {
 @property (nonatomic, strong) NSArray *__nullable cookies;
 + (instancetype __nonnull)sharedInstance;
 - (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier flowType:(JMResourceFlowType)flowType;
-- (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier;
 - (JMWebEnvironment * __nonnull)webEnvironmentForFlowType:(JMResourceFlowType)flowType;
 - (JMWebEnvironment * __nonnull)webEnvironment;
-- (void)removeWebEnvironmentWithId:(NSString *__nonnull)identifier;
 - (void)reset;
 @end

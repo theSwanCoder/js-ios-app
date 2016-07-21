@@ -122,14 +122,6 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
     return webEnvironment;
 }
 
-- (void)removeWebEnvironmentWithId:(NSString * __nonnull)identifier
-{
-    JMWebEnvironment *webEnvironment = [self findWebEnvironmentForId:identifier];
-    if (webEnvironment) {
-        [self.webEnvironments removeObject:webEnvironment];
-    }
-}
-
 #pragma mark - Private API
 
 - (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier flowType:(JMResourceFlowType)flowType needReuse:(BOOL)needReuse
@@ -154,6 +146,7 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         }
     }
     webEnvironment.reusable = needReuse;
+    webEnvironment.flowType = flowType;
     return webEnvironment;
 }
 
