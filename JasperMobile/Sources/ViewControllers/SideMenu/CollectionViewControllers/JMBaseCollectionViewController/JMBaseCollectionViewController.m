@@ -44,6 +44,7 @@
 #import "JMResource.h"
 #import "JMSchedule.h"
 #import "JMWebViewManager.h"
+#import "JMDashboardViewerVC.h"
 
 CGFloat const kJMBaseCollectionViewGridWidth = 310;
 
@@ -527,6 +528,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
                 JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
                 JSReport *report = [reportViewerVC report];
                 report.thumbnailImage = cell.thumbnailImage;
+            } else if (resource.type == JMResourceTypeDashboard) {
+                JMDashboardViewerVC *dashboardViewerVC = nextVC;
+                dashboardViewerVC.configurator = [JMUtils dashboardViewerConfiguratorReusableWebView];
+            } else if (resource.type == JMResourceTypeLegacyDashboard) {
+                JMDashboardViewerVC *dashboardViewerVC = nextVC;
+                dashboardViewerVC.configurator = [JMUtils dashboardViewerConfiguratorNonReusableWebView];
             }
         }
     }
