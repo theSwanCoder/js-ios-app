@@ -32,9 +32,12 @@
 */
 
 #import "JMResourceViewerViewController.h"
+#import "JMResourceViewerProtocol.h"
 
 @class JMDashboard;
+@class JMDashboardViewerConfigurator;
 
-@interface JMDashboardViewerVC : JMResourceViewerViewController
-@property (nonatomic, strong, readonly) JMDashboard *dashboard;
+@interface JMDashboardViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol>
+@property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
+- (JMDashboard *)dashboard;
 @end

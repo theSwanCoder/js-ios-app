@@ -40,14 +40,15 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerState) {
     JMDashboardViewerStateInitial,
     JMDashboardViewerStateLoading,
     JMDashboardViewerStateResourceReady,
-    JMDashboardViewerStateDashletActive,
     JMDashboardViewerStateResourceFailed,
     JMDashboardViewerStateResourceNotExist,
     JMDashboardViewerStateNestedResource,
+    JMDashboardViewerStateMaximizedDashlet,
     JMDashboardViewerStateDestroy
 };
 
 @interface JMDashboardViewerStateManager : JMResourceViewerStateManager <JMResourceViewerHyperlinksManagerDelegate>
 @property (nonatomic, assign, readonly) JMDashboardViewerState state;
+@property (nonatomic, copy, nullable) void(^minimizeDashletActionBlock)(void);
 - (void)setupPageForState:(JMDashboardViewerState)state;
 @end

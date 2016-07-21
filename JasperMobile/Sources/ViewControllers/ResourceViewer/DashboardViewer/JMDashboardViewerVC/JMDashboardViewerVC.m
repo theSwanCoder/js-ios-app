@@ -44,20 +44,17 @@
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
 #import "JMJavascriptRequest.h"
+#import "JMHyperlink.h"
+#import "JMDashboardViewerStateManager.h"
+#import "PopoverView.h"
 
-NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashboardViewerPrimaryWebEnvironmentIdentifier";
-
-@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
-@property (nonatomic, copy) NSArray *rightButtonItems;
-
-@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
-@property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
-@property (nonatomic) JMExternalWindowDashboardControlsVC *controlsViewController;
-@property (nonatomic, weak) UIBarButtonItem *currentBackButton;
+@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMResourceViewerStateManagerDelegate>
+//@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @end
 
 
 @implementation JMDashboardViewerVC
+@synthesize resource;
 
 #pragma mark - Life Cycle
 - (void)dealloc
@@ -67,414 +64,116 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 #pragma mark - UIViewController LifeCycle
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)loadView
 {
-    [super viewWillAppear:animated];
+    JMBaseResourceView *resourceView = [[[NSBundle mainBundle] loadNibNamed:@"JMBaseResourceView"
+                                                                      owner:self
+                                                                    options:nil] firstObject];
+    self.view = resourceView;
+}
 
-    [self configViewport];
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    self.title = self.resource.resourceLookup.label;
+
+    [self.configurator setup];
+    [self dashboardLoader].delegate = self;
+    [self setupStateManager];
+
+    [self startResourceViewing];
 }
 
 #pragma mark - Rotation
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
+    [coordinator animateAlongsideTransition:nil completion:^(id <UIViewControllerTransitionCoordinatorContext> context) {
+        [[self stateManager] updatePageForChangingSizeClass];
+    }];
+
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
-
-    if (![self isContentOnTV] && [self.webEnvironment respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        // TODO: fix this
-//        CGFloat initialScaleViewport = 0.75;
-//        BOOL isCompactWidth = newCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-//        if (isCompactWidth) {
-//            initialScaleViewport = 0.25;
-//        }
-//        [self.webEnvironment updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
-}
-
-#pragma mark - Print
-- (void)printResource
-{
-    [super printResource];
-    [self printItem:[self.contentView renderedImage] withName:self.dashboard.resource.resourceLookup.label completion:nil];
-}
-
-#pragma mark - Custom Accessors
-
-- (JMDashboard *)dashboard
-{
-    if (!_dashboard) {
-        _dashboard = [self.resource modelOfResource];
-    }
-    return _dashboard;
-}
-
-- (JMWebEnvironment *)currentWebEnvironment
-{
-    JMWebEnvironment *webEnvironment;
-    if (self.dashboard.resource.type == JMResourceTypeLegacyDashboard) {
-        webEnvironment = [[JMWebViewManager sharedInstance] webEnvironmentForFlowType:JMResourceFlowTypeREST];
-    } else {
-        webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]
-                                                                                flowType:JMResourceFlowTypeVIZ];
-    }
-    return webEnvironment;
-}
-
-- (NSString *)currentWebEnvironmentIdentifier
-{
-    NSString *webEnvironmentIdentifier = kJMDashboardViewerPrimaryWebEnvironmentIdentifier;
-    return webEnvironmentIdentifier;
-}
-
-- (id<JMDashboardLoader>)dashboardLoader
-{
-    return [self.configurator dashboardLoader];
-}
-
-- (JMDashboardViewerConfigurator *)configurator
-{
-    if (!_configurator) {
-        _configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard
-                                                                  webEnvironment:self.webEnvironment];
-        [_configurator updateReportLoaderDelegateWithObject:self];
-    }
-    return _configurator;
 }
 
 #pragma mark - Setups
-- (void)configViewport
+
+- (void)setupStateManager
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.webEnvironment resetZoom];
-    });
+    [self stateManager].controller = self;
+    [self stateManager].delegate = self;
+    __weak typeof(self)weakSelf = self;
+    [self stateManager].minimizeDashletActionBlock = ^{
+        [weakSelf minimizeDashlet];
+    };
+    [[self stateManager] setupPageForState:JMDashboardViewerStateInitial];
 }
 
-- (void)setupLeftBarButtonItems
+#pragma mark - Helpers
+
+- (id<JMDashboardLoader>)dashboardLoader
 {
-    if ([self isDashletShown]) {
-        if (!self.navigationItem.leftBarButtonItem) {
-            self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
-                                                                       target:self
-                                                                       action:@selector(minimizeDashlet)];
-        }
-    } else {
-        [super setupLeftBarButtonItems];
-    }
+    return self.configurator.dashboardLoader;
 }
 
-- (void)setupRightBarButtonItems
+- (JMWebEnvironment *)webEnvironment
 {
-    if (![self isDashletShown]) {
-        [super setupRightBarButtonItems];
-    }
+    return self.configurator.webEnvironment;
 }
 
-- (void)resetSubViews
+- (JMDashboard *)dashboard
 {
-    [self.dashboardLoader destroy];
-    [self.webEnvironment reset];
-
-    self.webEnvironment = nil;
+    return [self dashboardLoader].dashboard;
 }
 
-
-- (void)cancelResourceViewingAndExit:(BOOL)exit
+- (JMDashboardViewerStateManager *)stateManager
 {
-    if ([self isContentOnTV]) {
-        [self switchFromTV];
-    }
-    [super cancelResourceViewingAndExit:exit];
+    return self.configurator.stateManager;
+}
+
+#pragma mark - JMResourceViewProtocol
+- (UIView *)contentView
+{
+    return [self webEnvironment].webView;
+}
+
+#pragma mark - JMResourceViewerStateManagerDelegate
+
+- (void)stateManagerWillExit:(JMResourceViewerStateManager *)stateManager
+{
+    [self exitAction];
+}
+
+- (void)stateManagerWillCancel:(JMResourceViewerStateManager *)stateManager
+{
+    [self cancelAction];
+}
+
+- (void)stateManagerWillBackFromNestedResource:(JMResourceViewerStateManager *)stateManager
+{
+    [self backActionInWebView];
 }
 
 #pragma mark - Actions
-- (void)minimizeDashlet
+- (void)exitAction
 {
-    [self.webEnvironment resetZoom];
-
-    if ([self isContentOnTV]) {
-        [self.controlsViewController markComponentAsMinimized:self.dashboard.maximizedComponent];
-    }
-
-    __weak typeof(self)weakSelf = self;
-    [self startShowLoaderWithMessage:@"status_loading"];
-    [self.dashboardLoader minimizeDashletWithCompletion:^(BOOL success, NSError *error) {
-        __weak typeof(self)strongSelf = weakSelf;
-        [strongSelf stopShowLoader];
-        if (error) {
-            [strongSelf handleError:error];
-        } else {
-            strongSelf.navigationItem.title = strongSelf.resource.resourceLookup.label;
-            [strongSelf setupLeftBarButtonItems];
-            strongSelf.navigationItem.rightBarButtonItems = strongSelf.rightButtonItems;
-        }
-    }];
+    [[self dashboardLoader] destroy];
+    [self.webEnvironment reset];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)reloadDashboard
+- (void)cancelAction
 {
-    [self startShowLoaderWithMessage:@"status_loading"];
-    [self hideDashboardView];
-    __weak typeof(self)weakSelf = self;
-    [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
-        __weak typeof(self)strongSelf = weakSelf;
-        [strongSelf stopShowLoader];
-        [strongSelf showDashboardView];
-        if (error) {
-            [strongSelf handleError:error];
-        }
-    }];
-}
-
-- (void)reloadDashlet
-{
-    if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
-
-        [self startShowLoaderWithMessage:@"status_loading"];
-        __weak typeof(self)weakSelf = self;
-        [self.dashboardLoader reloadMaximizedDashletWithCompletion:^(BOOL success, NSError *error){
-            __weak typeof(self)strongSelf = weakSelf;
-            [strongSelf stopShowLoader];
-            if (error) {
-                [strongSelf handleError:error];
-            }
-        }];
-    } else {
-        [self minimizeDashlet];
-        [self reloadDashboard];
-    }
+    [[self dashboardLoader] cancel];
+    [self.webEnvironment reset];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)backActionInWebView
 {
-    [self startShowLoaderWithMessage:@"status_loading"];
-    __weak typeof(self) weakSelf = self;
-    [self.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
-        typeof(self) strongSelf = weakSelf;
-        [strongSelf stopShowLoader];
-        strongSelf.navigationItem.leftBarButtonItem = strongSelf.currentBackButton;
-    }];
+
 }
 
-#pragma mark - Overriden methods
-- (void)startResourceViewing
-{
-    [super setupSubviews];
-    if (self.resource.type != JMResourceTypeLegacyDashboard && [JMUtils isSupportVisualize]) {
-        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
-                                   cancelBlock:^(void) {
-                                       [self.dashboardLoader cancel];
-                                       [super cancelResourceViewingAndExit:YES];
-                                   }];
-
-        __weak __typeof(self) weakSelf = self;
-        [self fetchDashboardMetaDataWithCompletion:^(NSArray *components, NSArray *inputControls, NSError *error) {
-            __typeof(self) strongSelf = weakSelf;
-            [strongSelf stopShowLoader];
-
-            if (error) {
-                [JMUtils presentAlertControllerWithError:error
-                                              completion:^{
-                                                  [strongSelf cancelResourceViewingAndExit:YES];
-                                              }];
-            } else {
-                strongSelf.dashboard.components = components;
-                strongSelf.dashboard.inputControls = inputControls;
-                [strongSelf startShowDashboard];
-            }
-        }];
-    } else {
-        [self startShowDashboard];
-    }
-}
-
-- (void)startShowDashboard
-{
-    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources_loading_msg", nil)
-                               cancelBlock:^(void) {
-                                   [self.dashboardLoader cancel];
-                                   [super cancelResourceViewingAndExit:YES];
-                               }];
-    [self hideDashboardView];
-    __weak typeof(self)weakSelf = self;
-    [self.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
-        __weak typeof(self)strongSelf = weakSelf;
-        [strongSelf stopShowLoader];
-        [strongSelf showDashboardView];
-        if (success) {
-            // Analytics
-            NSString *label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceLabelDashboardVisualize : kJMAnalyticsResourceLabelDashboardFlow;
-            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
-                    kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
-                    kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
-                    kJMAnalyticsLabelKey    : label
-            }];
-
-            if ([strongSelf isContentOnTV]) {
-                strongSelf.controlsViewController.components = strongSelf.dashboard.components;
-            }
-        } else {
-            [strongSelf handleError:error];
-        }
-    }];
-}
-
-- (JMMenuActionsViewAction)availableAction
-{
-    JMMenuActionsViewAction menuActions = [super availableAction];
-
-    if (self.resource.type != JMResourceTypeLegacyDashboard) {
-        menuActions |= JMMenuActionsViewAction_Refresh;
-    }
-
-    if ([self isExternalScreenAvailable]) {
-        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
-    }
-
-    if ([self isInputControlsAvailable]) {
-        menuActions |= JMMenuActionsViewAction_EditFilters;
-    }
-    return menuActions;
-}
-
-#pragma mark - JMMenuActionsViewDelegate
-- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
-{
-    [super actionsView:view didSelectAction:action];
-
-    switch (action) {
-        case JMMenuActionsViewAction_Refresh: {
-            [self reloadDashboard];
-            break;
-        }
-        case JMMenuActionsViewAction_ShowExternalDisplay: {
-            [self showExternalWindowWithCompletion:^(BOOL success) {
-                if (success) {
-                    [self addControlsForExternalWindow];
-                } else {
-                    // TODO: add handling this situation
-                    JMLog(@"error of showing on tv");
-                }
-            }];
-            break;
-        }
-        case JMMenuActionsViewAction_HideExternalDisplay: {
-            [self switchFromTV];
-            break;
-        }
-        case JMMenuActionsViewAction_EditFilters: {
-            [self showInputControlsVC];
-            break;
-        }
-        default:{break;}
-    }
-}
-
-#pragma mark - JMDashboardLoaderDelegate
-- (void)dashboardLoaderDidStartMaximizeDashlet:(id<JMDashboardLoader> __nonnull)loader
-{
-    self.rightButtonItems = self.navigationItem.rightBarButtonItems;
-    [self startShowLoaderWithMessage:@"status_loading"];
-}
-
-- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didEndMaximazeDashletWithTitle:(NSString * __nonnull)title
-{
-    [self.webEnvironment resetZoom];
-
-    self.navigationItem.rightBarButtonItems = nil;
-    if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
-        UIBarButtonItem *refreshDashlet = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_action"]
-                                                                           style:UIBarButtonItemStylePlain
-                                                                          target:self
-                                                                          action:@selector(reloadDashlet)];
-        self.navigationItem.rightBarButtonItem = refreshDashlet;
-    }
-
-    self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
-                                                               target:self
-                                                               action:@selector(minimizeDashlet)];
-    self.navigationItem.title = title;
-    [self stopShowLoader];
-}
-
-- (void)dashboardLoader:(id <JMDashboardLoader>)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
-         resource:(JMResource *)resource
-             parameters:(NSArray *)parameters
-{
-    NSLog(@"Parameters = %@", parameters);
-
-    switch (hyperlinkType) {
-        case JMHyperlinkTypeLocalPage: {
-            break;
-        }
-        case JMHyperlinkTypeLocalAnchor: {
-            break;
-        }
-        case JMHyperlinkTypeRemotePage: {
-            break;
-        }
-        case JMHyperlinkTypeRemoteAnchor: {
-            break;
-        }
-        case JMHyperlinkTypeReference: {
-            NSURL *URL = parameters.firstObject;
-
-            NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
-            if ([URL.host isEqualToString:serverURL.host]) {
-                NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-                [self.webEnvironment.webView loadRequest:request];
-
-                UIBarButtonItem *backButton = [self backButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
-                                                                 target:self
-                                                                 action:@selector(backActionInWebView)];
-                self.currentBackButton = self.navigationItem.leftBarButtonItem;
-                self.navigationItem.leftBarButtonItem = backButton;
-            } else {
-                // TODO: open in safari view controller
-                if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
-                    [[UIApplication sharedApplication] openURL:URL];
-                }
-            }
-            break;
-        }
-        case JMHyperlinkTypeReportExecution: {
-
-            JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
-            reportViewController.resource = resource;
-            reportViewController.initialReportParameters = parameters;
-            [self.navigationController pushViewController:reportViewController animated:YES];
-
-            break;
-        }
-        case JMHyperlinkTypeAdHocExecution: {
-            // This case appears for JRS 6.0 - 6.0.1
-            // For JRS > 6.1 - in javascript wrapper will be a visualize handler
-            NSURL *URL = parameters.firstObject;
-            // TODO: open in safari view controller
-            if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
-                [[UIApplication sharedApplication] openURL:URL];
-            }
-            break;
-        }
-    }
-}
-
-- (void)dashboardLoaderDidReceiveAuthRequest:(id <JMDashboardLoader>)loader
-{
-    if ([self isDashletShown]) {
-        [self minimizeDashlet];
-    }
-
-    if ([self isContentOnTV]) {
-        [self switchFromTV];
-    }
-
-    [self handleAuthError];
-}
-
-#pragma mark - Helpers
-- (BOOL)isDashletShown
-{
-    return self.dashboard.maximizedComponent != nil;
-}
+#pragma mark - Network Helpers
 
 - (void)fetchDashboardMetaDataWithCompletion:(void(^)(NSArray <JSDashboardComponent *> *components, NSArray <JSInputControlDescriptor *> *inputControls, NSError *error))completion
 {
@@ -483,7 +182,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     }
 
     __weak __typeof(self) weakSelf = self;
-    [self.restClient fetchDashboardComponentsWithURI:self.dashboard.resourceURI
+    [self.restClient fetchDashboardComponentsWithURI:self.resource.resourceLookup.uri
                                           completion:^(JSOperationResult *result) {
                                               __typeof(self) strongSelf = weakSelf;
 
@@ -537,9 +236,286 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
                                           }];
 }
 
-- (BOOL)isInputControlsAvailable
+#pragma mark - Printing
+
+//#pragma mark - Print
+//- (void)printResource
+//{
+//    [super printResource];
+//    [self printItem:[self.contentView renderedImage] withName:self.dashboard.resource.resourceLookup.label completion:nil];
+//}
+
+#pragma mark - Resource Viewing methods
+
+- (void)startResourceViewing
 {
-    return self.dashboard.inputControls.count > 0;
+    JMDashboard *dashboard = [self.resource modelOfResource];
+    if (self.resource.type != JMResourceTypeLegacyDashboard && [JMUtils isSupportVisualize]) {
+        [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+
+        __weak __typeof(self) weakSelf = self;
+        [self fetchDashboardMetaDataWithCompletion:^(NSArray *components, NSArray *inputControls, NSError *error) {
+            __typeof(self) strongSelf = weakSelf;
+            if (error) {
+                [JMUtils presentAlertControllerWithError:error
+                                              completion:^{
+                                                  [strongSelf exitAction];
+                                              }];
+            } else {
+                [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateInitial];
+                dashboard.components = components;
+                dashboard.inputControls = inputControls;
+                [strongSelf startShowDashboard:dashboard];
+            }
+        }];
+    } else {
+        [self startShowDashboard:dashboard];
+    }
+}
+
+- (void)startShowDashboard:(JMDashboard *)dashboard
+{
+    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    __weak typeof(self)weakSelf = self;
+    [[self dashboardLoader] runDashboard:dashboard completion:^(BOOL success, NSError *error) {
+        __weak typeof(self)strongSelf = weakSelf;
+        if (success) {
+            [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+            // Analytics
+            NSString *label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceLabelDashboardVisualize : kJMAnalyticsResourceLabelDashboardFlow;
+            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                    kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
+                    kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
+                    kJMAnalyticsLabelKey    : label
+            }];
+        } else {
+            [strongSelf handleError:error];
+        }
+    }];
+}
+
+- (void)applyParameters
+{
+    NSMutableDictionary <NSString *, NSArray <NSString *>*> *parameters = [@{} mutableCopy];
+    for (JSInputControlDescriptor *inputControlDescriptor in self.dashboard.inputControls) {
+        NSString *componentID;
+        for (JSDashboardComponent *component in self.dashboard.components) {
+            if ([component.ownerResourceParameterName isEqualToString:inputControlDescriptor.uuid]) {
+                componentID = component.identifier;
+            }
+        }
+        NSArray <NSString *>*values = [inputControlDescriptor selectedValues];
+        if (componentID) {
+            parameters[componentID] = values;
+        }
+    }
+
+    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    __weak __typeof(self) weakSelf = self;
+    [self.dashboardLoader applyParameters:parameters completion:^(BOOL success, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (error) {
+            [strongSelf handleError:error];
+        } else {
+            [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+        }
+    }];
+}
+
+- (void)reloadDashboard
+{
+    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    __weak typeof(self)weakSelf = self;
+    [[self dashboardLoader] reloadWithCompletion:^(BOOL success, NSError *error) {
+        __weak typeof(self)strongSelf = weakSelf;
+        if (error) {
+            [strongSelf handleError:error];
+        } else {
+            [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+        }
+    }];
+}
+
+- (void)reloadDashlet
+{
+    NSAssert([self dashboard].maximizedComponent != nil, @"Should be maximized component");
+    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    __weak typeof(self)weakSelf = self;
+    [[self dashboardLoader] reloadDashboardComponent:[self dashboard].maximizedComponent
+                                          completion:^(BOOL success, NSError *error) {
+                                              __weak typeof(self)strongSelf = weakSelf;
+                                              if (error) {
+                                                  [strongSelf handleError:error];
+                                              } else {
+                                                  [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+                                              }
+                                          }];
+}
+
+- (void)minimizeDashlet
+{
+    [self.webEnvironment resetZoom];
+
+    __weak typeof(self)weakSelf = self;
+    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    [[self dashboardLoader] minimizeDashboardComponent:[self dashboard].maximizedComponent
+                                            completion:^(BOOL success, NSError *error) {
+                                                __weak typeof(self)strongSelf = weakSelf;
+                                                if (error) {
+                                                    [strongSelf handleError:error];
+                                                } else {
+                                                    strongSelf.navigationItem.title = strongSelf.resource.resourceLookup.label;
+                                                    [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+                                                }
+                                            }];
+}
+
+#pragma mark - Overriden methods
+
+- (JMMenuActionsViewAction)availableActions
+{
+    JMMenuActionsViewAction menuActions = JMMenuActionsViewAction_Info;
+
+    if (self.resource.type != JMResourceTypeLegacyDashboard) {
+        menuActions |= JMMenuActionsViewAction_Refresh;
+    }
+
+//    if ([self isExternalScreenAvailable]) {
+//        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+//    }
+
+    if ([self isFiltersAvailable]) {
+        menuActions |= JMMenuActionsViewAction_EditFilters;
+    }
+    return menuActions;
+}
+
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
+{
+    [view.popoverView dismiss];
+
+    switch (action) {
+        case JMMenuActionsViewAction_MakeFavorite:
+        case JMMenuActionsViewAction_MakeUnFavorite:
+            // TODO: find other solution
+            [[self stateManager] updateFavoriteState];
+            break;
+        case JMMenuActionsViewAction_Info: {
+//            self.configurator.infoPageManager.controller = self;
+//            [self.configurator.infoPageManager showInfoPageForResource:self.resource];
+            break;
+        }
+        case JMMenuActionsViewAction_Refresh: {
+            [self reloadDashboard];
+            break;
+        }
+        case JMMenuActionsViewAction_EditFilters: {
+            [self showFiltersVC];
+            break;
+        }
+        default:{break;}
+    }
+}
+
+#pragma mark - JMDashboardLoaderDelegate
+- (void)dashboardLoaderDidStartMaximizeDashlet:(id<JMDashboardLoader> __nonnull)loader
+{
+    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+}
+
+- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didEndMaximazeDashboardComponent:(JSDashboardComponent *__nonnull)component
+{
+    [self.webEnvironment resetZoom];
+
+    self.navigationItem.title = component.label;
+    [[self stateManager] setupPageForState:JMDashboardViewerStateMaximizedDashlet];
+}
+
+- (void)dashboardLoader:(id <JMDashboardLoader>)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
+         resource:(JMResource *)resource
+             parameters:(NSArray *)parameters
+{
+    NSLog(@"Parameters = %@", parameters);
+
+    switch (hyperlinkType) {
+        case JMHyperlinkTypeLocalPage: {
+            break;
+        }
+        case JMHyperlinkTypeLocalAnchor: {
+            break;
+        }
+        case JMHyperlinkTypeRemotePage: {
+            break;
+        }
+        case JMHyperlinkTypeRemoteAnchor: {
+            break;
+        }
+        case JMHyperlinkTypeReference: {
+            NSURL *URL = parameters.firstObject;
+
+            NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+            if ([URL.host isEqualToString:serverURL.host]) {
+                NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+                [self.webEnvironment.webView loadRequest:request];
+
+//                UIBarButtonItem *backButton = [self backButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
+//                                                                 target:self
+//                                                                 action:@selector(backActionInWebView)];
+//                self.currentBackButton = self.navigationItem.leftBarButtonItem;
+//                self.navigationItem.leftBarButtonItem = backButton;
+            } else {
+                // TODO: open in safari view controller
+                if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
+                    [[UIApplication sharedApplication] openURL:URL];
+                }
+            }
+            break;
+        }
+        case JMHyperlinkTypeReportExecution: {
+
+            JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+            reportViewController.resource = resource;
+            reportViewController.initialReportParameters = parameters;
+            [self.navigationController pushViewController:reportViewController animated:YES];
+
+            break;
+        }
+        case JMHyperlinkTypeAdHocExecution: {
+            // This case appears for JRS 6.0 - 6.0.1
+            // For JRS > 6.1 - in javascript wrapper will be a visualize handler
+            NSURL *URL = parameters.firstObject;
+            // TODO: open in safari view controller
+            if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
+                [[UIApplication sharedApplication] openURL:URL];
+            }
+            break;
+        }
+    }
+}
+
+- (void)dashboardLoaderDidReceiveAuthRequest:(id <JMDashboardLoader>)loader
+{
+    if ([self isDashletShown]) {
+        [self minimizeDashlet];
+    }
+
+    if ([self isContentOnTV]) {
+        [self switchFromTV];
+    }
+
+//    [self handleAuthError];
+}
+
+#pragma mark - Helpers
+- (BOOL)isDashletShown
+{
+    return self.dashboard.maximizedComponent != nil;
+}
+
+- (BOOL)isFiltersAvailable
+{
+    return [self dashboard].inputControls.count > 0;
 }
 
 - (void)hideDashboardView
@@ -555,16 +531,14 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 #pragma mark - Error handling
 - (void)handleError:(NSError *)error
 {
+    [[self stateManager] setupPageForState:JMDashboardViewerStateResourceFailed];
     switch (error.code) {
         case JMJavascriptRequestErrorTypeAuth: {
             if ([self isDashletShown]) {
                 self.dashboard.maximizedComponent = nil;
                 self.navigationItem.title = self.resource.resourceLookup.label;
-                [self setupLeftBarButtonItems];
-                self.navigationItem.rightBarButtonItems = self.rightButtonItems;
-                self.rightButtonItems = nil;
             }
-            [self handleAuthError];
+//            [self handleAuthError];
             break;
         }
         case JMJavascriptRequestErrorTypeUnexpected:
@@ -580,183 +554,17 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
     }
 }
 
-- (void)handleAuthError
-{
-    if ([self isContentOnTV]) {
-        [self switchFromTV];
-    }
-
-    if (self.restClient.keepSession) {
-        __weak typeof(self)weakSelf = self;
-        [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult *_Nullable result) {
-            __weak typeof(self)strongSelf = weakSelf;
-            if (!result.error) {
-                if (strongSelf.dashboard.resource.type == JMResourceTypeLegacyDashboard) {
-                    // reset state
-                    [strongSelf.webEnvironment reset];
-                    strongSelf.webEnvironment = nil;
-                    strongSelf.dashboard = nil;
-                    strongSelf.configurator = nil;
-                }
-                [strongSelf showSessionExpiredAlert];
-            } else {
-                __weak typeof(self)weakSelf = strongSelf;
-                [JMUtils showLoginViewAnimated:YES completion:^{
-                    __weak typeof(self)strongSelf = weakSelf;
-                    [strongSelf cancelResourceViewingAndExit:YES];
-                }];
-            }
-        }];
-    } else {
-        __weak typeof(self)weakSelf = self;
-        [JMUtils showLoginViewAnimated:YES completion:^{
-            __weak typeof(self)strongSelf = weakSelf;
-            [strongSelf cancelResourceViewingAndExit:YES];
-        }];
-    }
-}
-
-- (void)showSessionExpiredAlert
-{
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was expired"
-                                                                                      message:@"Reload?"
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
-                                                                      cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                                          [self cancelResourceViewingAndExit:YES];
-                                                                      }];
-    __weak typeof(self) weakSelf = self;
-    [alertController addActionWithLocalizedTitle:@"dialog_button_reload"
-                                           style:UIAlertActionStyleDefault
-                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                             __strong typeof(self) strongSelf = weakSelf;
-                                             [strongSelf startResourceViewing];
-                                         }];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
-#pragma mark - Work with external screen
-- (UIView *)viewToShowOnExternalWindow
-{
-    UIView *dashboardView = self.webEnvironment.webView;
-    dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
-    return dashboardView;
-}
-
-- (void)addControlsForExternalWindow
-{
-    self.controlsViewController = [JMExternalWindowDashboardControlsVC new];
-    self.controlsViewController.components = self.dashboard.components;
-    [self.view addSubview:self.controlsViewController.view];
-
-    self.controlsViewController.delegate = self;
-
-    self.controlsViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[controlsView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"controlsView": self.controlsViewController.view}]];
-
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[controlsView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"controlsView": self.controlsViewController.view}]];
-
-
-}
-
-- (void)switchFromTV
-{
-    [super setupSubviews];
-
-    [self.controlsViewController.view removeFromSuperview];
-    self.controlsViewController = nil;
-
-    [self hideExternalWindowWithCompletion:^(void) {
-        [self configViewport];
-        [self.webEnvironment.webView.scrollView setZoomScale:0.1 animated:YES];
-    }];
-}
-
-#pragma mark - JMExternalWindowDashboardControlsVCDelegate
-- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JSDashboardComponent *)component
-{
-    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashletForComponent:completion:)]) {
-        __weak __typeof(self) weakSelf = self;
-        [self.dashboardLoader maximizeDashletForComponent:component completion:^(BOOL success, NSError *error) {
-            __typeof(self) strongSelf = weakSelf;
-            if (error) {
-                [strongSelf handleError:error];
-            } else {
-                // TODO: move to separate method
-                strongSelf.navigationItem.rightBarButtonItems = nil;
-                if ([strongSelf.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
-                    UIBarButtonItem *refreshDashlet = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_action"]
-                                                                                       style:UIBarButtonItemStylePlain
-                                                                                      target:strongSelf
-                                                                                      action:@selector(reloadDashlet)];
-                    strongSelf.navigationItem.rightBarButtonItem = refreshDashlet;
-                }
-
-                strongSelf.navigationItem.leftBarButtonItem = [strongSelf backButtonWithTitle:strongSelf.title
-                                                                                       target:strongSelf
-                                                                                       action:@selector(minimizeDashlet)];
-                strongSelf.navigationItem.title = component.name;
-            }
-        }];
-    }
-}
-
-- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JSDashboardComponent *)component
-{
-    if ([self.dashboardLoader respondsToSelector:@selector(minimizeDashletForComponent:completion:)]) {
-        __weak __typeof(self) weakSelf = self;
-        [self.dashboardLoader minimizeDashletForComponent:component completion:^(BOOL success, NSError *error) {
-            __typeof(self) strongSelf = weakSelf;
-            if (error) {
-                [strongSelf handleError:error];
-            } else {
-                // TODO: move to separate method
-                strongSelf.navigationItem.title = strongSelf.resource.resourceLookup.label;
-                [strongSelf setupLeftBarButtonItems];
-                strongSelf.navigationItem.rightBarButtonItems = strongSelf.rightButtonItems;
-                strongSelf.rightButtonItems = nil;
-            }
-        }];
-    }
-}
-
-#pragma mark - Input Controls
-- (void)showInputControlsVC
+#pragma mark - Dashboard Filters
+- (void)showFiltersVC
 {
     JMDashboardInputControlsVC *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMDashboardInputControlsVC"];
     inputControlsViewController.dashboard = self.dashboard;
 
     __weak __typeof(self) weakSelf = self;
     inputControlsViewController.exitBlock = ^(BOOL inputControlsDidChanged) {
+        __typeof(self) strongSelf = weakSelf;
         if (inputControlsDidChanged) {
-            __typeof(self) strongSelf = weakSelf;
-            NSMutableDictionary *parameters = [@{} mutableCopy];
-            for (JSInputControlDescriptor *inputControlDescriptor in strongSelf.dashboard.inputControls) {
-                NSString *componentID;
-                for (JSDashboardComponent *component in strongSelf.dashboard.components) {
-                    if ([component.ownerResourceParameterName isEqualToString:inputControlDescriptor.uuid]) {
-                        componentID = component.identifier;
-                    }
-                }
-                NSArray *values = [inputControlDescriptor selectedValues];
-                if (componentID) {
-                    parameters[componentID] = values;                    
-                }
-            }
-            [self startShowLoaderWithMessage:@"status_loading"];
-            __weak __typeof(self) weakSelf = self;
-            [strongSelf.dashboardLoader applyParameters:parameters completion:^(BOOL success, NSError *error) {
-                __typeof(self) strongSelf = weakSelf;
-                [strongSelf stopShowLoader];
-                if (error) {
-                    [strongSelf handleError:error];
-                }
-            }];
+            [strongSelf applyParameters];
         }
     };
 

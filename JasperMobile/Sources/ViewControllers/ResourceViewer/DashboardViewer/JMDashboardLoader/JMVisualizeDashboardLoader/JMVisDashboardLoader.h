@@ -35,4 +35,5 @@
 #import "JMDashboardLoader.h"
 
 @interface JMVisDashboardLoader : NSObject <JMDashboardLoader>
+@property (nonatomic, strong, readonly) JMDashboard *dashboard;
 @end

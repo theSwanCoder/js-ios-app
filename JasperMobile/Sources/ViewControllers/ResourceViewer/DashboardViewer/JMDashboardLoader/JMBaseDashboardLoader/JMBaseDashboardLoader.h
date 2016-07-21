@@ -20,7 +20,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
 //  JMBaseDashboardLoader.h
 //  TIBCO JasperMobile
@@ -31,9 +30,8 @@
 @since 2.1
 */
 
-
 #import "JMDashboardLoader.h"
 
 @interface JMBaseDashboardLoader : NSObject <JMDashboardLoader>
-
+@property (nonatomic, strong, readonly) JMDashboard *dashboard;
 @end

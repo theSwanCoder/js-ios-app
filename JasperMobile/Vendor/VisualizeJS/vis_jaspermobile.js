@@ -1819,7 +1819,8 @@ JasperMobile.VIS.Dashboard.API = {
                 });
             });
     },
-    refreshDashlet: function() {
+    refreshDashlet: function(params) {
+        // TODO: use params["identifier"];
         JasperMobile.Callback.log("start refresh component");
         JasperMobile.Callback.log("dashboard object: " + JasperMobile.VIS.Dashboard.state.dashboardObject);
         JasperMobile.VIS.Dashboard.state.refreshedDashboardObject = JasperMobile.VIS.Dashboard.state.dashboardObject.refresh(JasperMobile.VIS.Dashboard.state.selectedComponent.id)

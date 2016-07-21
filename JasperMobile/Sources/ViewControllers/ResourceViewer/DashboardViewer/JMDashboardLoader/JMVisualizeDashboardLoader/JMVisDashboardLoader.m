@@ -38,13 +38,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #import "JMJavascriptRequest.h"
 
 @interface JMVisDashboardLoader()
-@property (nonatomic, weak) JMDashboard *dashboard;
+@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, weak) JMVIZWebEnvironment *webEnvironment;
-@property (nonatomic, assign, getter=isCancelLoad) BOOL cancelLoading;
+@property (nonatomic, assign, readwrite) JMDashboardLoaderState state;
+@property (nonatomic, copy, readwrite) JSRESTBase *restClient;
 @end
 
 @implementation JMVisDashboardLoader
-@synthesize delegate = _delegate;
+@synthesize delegate;
 
 - (void)dealloc
 {
@@ -52,57 +53,64 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 }
 
 #pragma mark - Initializers
-- (id<JMDashboardLoader> __nullable)initWithDashboard:(JMDashboard *__nonnull)dashboard
-                                       webEnvironment:(JMWebEnvironment *)webEnvironment
+- (id<JMDashboardLoader> __nullable)initWithRESTClient:(JSRESTBase *)restClient
+                                        webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment
 {
     self = [super init];
     if (self) {
+        NSAssert(restClient != nil, @"Parameter for rest client is nil");
         NSAssert([webEnvironment isKindOfClass:[JMVIZWebEnvironment class]], @"WebEnvironment isn't correct class");
-        _dashboard = dashboard;
         _webEnvironment = (JMVIZWebEnvironment *) webEnvironment;
+        _state = JMDashboardLoaderStateInitial;
+        _restClient = [restClient copy];
         [self addListenersForVisualizeEvents];
     }
     return self;
 }
 
-+ (id<JMDashboardLoader> __nullable)loaderWithDashboard:(JMDashboard *__nonnull)dashboard
-                                         webEnvironment:(JMWebEnvironment *)webEnvironment
++ (id<JMDashboardLoader> __nullable)loaderWithRESTClient:(JSRESTBase *)restClient
+                                          webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment
 {
-    return [[self alloc] initWithDashboard:dashboard
-                            webEnvironment:webEnvironment];
+    return [[self alloc] initWithRESTClient:restClient
+                             webEnvironment:webEnvironment];
 }
 
 
-#pragma mark - Public API
-- (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion
+#pragma mark - JMDashboardLoader required methods
+
+- (void)runDashboard:(JMDashboard *__nonnull)dashboard completion:(JMDashboardLoaderCompletion __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
-    NSAssert(self.dashboard != nil, @"Dashboard is nil");
-    if (self.isCancelLoad) {
+    NSAssert(dashboard != nil, @"Dashboard is nil");
+
+    if (self.state == JMDashboardLoaderStateCancel) {
         return;
     }
 
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-
+    self.state = JMDashboardLoaderStateLoading;
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.cancelLoading) {
+        if (strongSelf.state == JMDashboardLoaderStateCancel) {
             return;
         }
         if (isReady) {
-            [strongSelf runDashboardWithCompletion:heapBlock];
+            strongSelf.dashboard = dashboard;
+            strongSelf.state = JMDashboardLoaderStateConfigured;
+            [strongSelf freshRunDashboardWithCompletion:completion];
         } else {
-            heapBlock(NO, error);
+            strongSelf.state = JMDashboardLoaderStateFailed;
+            completion(NO, error);
         }
     }];
 }
 
-- (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion
+- (void)reloadWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.dashboard != nil, @"Dashboard is nil");
-    if (self.isCancelLoad) {
+
+    if (self.state == JMDashboardLoaderStateCancel) {
         return;
     }
 
@@ -111,190 +119,183 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.refresh"
                                                                inNamespace:JMJavascriptNamespaceVISDashboard
                                                                 parameters:nil];
+    self.state = JMDashboardLoaderStateLoading;
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.cancelLoading) {
+        if (strongSelf.state == JMDashboardLoaderStateCancel) {
             return;
         }
         if (error) {
+            strongSelf.state = JMDashboardLoaderStateFailed;
             heapBlock(NO, error);
         } else {
+            strongSelf.state = JMDashboardLoaderStateReady;
             heapBlock(YES, nil);
         }
     }];
-}
-
-- (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion) completion
-{
-    NSAssert(completion != nil, @"Completion is nil");
-    NSAssert(self.dashboard != nil, @"Dashboard is nil");
-    if (self.cancelLoading) {
-        return;
-    }
-
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.refreshDashlet"
-                                                               inNamespace:JMJavascriptNamespaceVISDashboard
-                                                                parameters:nil];
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.cancelLoading) {
-            return;
-        }
-        if (error) {
-            heapBlock(NO, error);
-        } else {
-            NSString *isFullReload = parameters[@"isFullReload"];
-            if ([isFullReload isEqualToString:@"true"]) {
-                if (strongSelf.dashboard.maximizedComponent) {
-                    [strongSelf maximizeDashletForComponent:strongSelf.dashboard.maximizedComponent
-                                                 completion:heapBlock];
-                }
-            }
-            heapBlock(YES, nil);
-        }
-    }];
-}
-
-- (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion) completion
-{
-    NSAssert(completion != nil, @"Completion is nil");
-    NSAssert(self.dashboard != nil, @"Dashboard is nil");
-    if (self.cancelLoading) {
-        return;
-    }
-
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-
-    JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest requestWithCommand:@"API.getDashboardParameters"
-                                                                          inNamespace:JMJavascriptNamespaceVISDashboard
-                                                                           parameters:nil];
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(NSDictionary *parameters, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.cancelLoading) {
-            return;
-        }
-        if (error) {
-            heapBlock(NO, error);
-        } else {
-            heapBlock(YES, nil);
-        }
-    }];
-}
-
-- (void)applyParameters:(NSDictionary *)parameters completion:(JMDashboardLoaderCompletion __nonnull) completion
-{
-    NSAssert(completion != nil, @"Completion is nil");
-    NSAssert(self.dashboard != nil, @"Dashboard is nil");
-    if (self.isCancelLoad) {
-        return;
-    }
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-
-    JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest requestWithCommand:@"API.applyParams"
-                                                                          inNamespace:JMJavascriptNamespaceVISDashboard
-                                                                           parameters:parameters];
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(NSDictionary *parameters, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.cancelLoading) {
-            return;
-        }
-        if (error) {
-            heapBlock(NO, error);
-        } else {
-            heapBlock(YES, nil);
-        }
-    }];
-}
-
-- (void)cancel
-{
-    self.cancelLoading = YES;
-    [self cancelDashboard];
 }
 
 - (void)destroy
 {
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+
     [self destroyDashboard];
+    self.state = JMDashboardLoaderStateDestroy;
 }
 
-- (void)maximizeDashletForComponent:(JSDashboardComponent *__nullable)component completion:(JMDashboardLoaderCompletion __nonnull) completion
+- (void)cancel
+{
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+
+    [self cancelDashboard];
+    self.state = JMDashboardLoaderStateCancel;
+}
+
+#pragma mark - JMDashboardLoader optional methods
+
+- (void)applyParameters:(NSDictionary <NSString *, NSArray <NSString *>*> *__nonnull)parameters
+             completion:(JMDashboardLoaderCompletion __nonnull) completion
 {
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.dashboard != nil, @"Dashboard is nil");
-    if (self.isCancelLoad) {
+
+    if (self.state == JMDashboardLoaderStateCancel) {
         return;
     }
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
+
+    JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest requestWithCommand:@"API.applyParams"
+                                                                          inNamespace:JMJavascriptNamespaceVISDashboard
+                                                                           parameters:parameters];
+    self.state = JMDashboardLoaderStateLoading;
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:applyParamsRequest completion:^(NSDictionary *resultParameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.state == JMDashboardLoaderStateCancel) {
+            return;
+        }
+        if (error) {
+            strongSelf.state = JMDashboardLoaderStateFailed;
+            completion(NO, error);
+        } else {
+
+            strongSelf.state = JMDashboardLoaderStateReady;
+            completion(YES, nil);
+        }
+    }];
+}
+
+- (void)reloadDashboardComponent:(JSDashboardComponent *__nonnull)component completion:(JMDashboardLoaderCompletion __nonnull)completion
+{
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+
+    if (self.state == JMDashboardLoaderStateCancel) {
+        return;
+    }
+
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.refreshDashlet"
+                                                               inNamespace:JMJavascriptNamespaceVISDashboard
+                                                                parameters:@{
+                                                                        @"identifier" : component.identifier
+                                                                }];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.state == JMDashboardLoaderStateCancel) {
+            return;
+        }
+        if (error) {
+            strongSelf.state = JMDashboardLoaderStateFailed;
+            completion(NO, error);
+        } else {
+            // TODO: investigate
+//            NSString *isFullReload = parameters[@"isFullReload"];
+//            if ([isFullReload isEqualToString:@"true"]) {
+//                if (strongSelf.dashboard.maximizedComponent) {
+//                    [strongSelf maximizeDashboardComponent:strongSelf.dashboard.maximizedComponent
+//                                                completion:completion];
+//                }
+//            }
+            strongSelf.state = JMDashboardLoaderStateReady;
+            completion(YES, nil);
+        }
+    }];
+}
+
+- (void)maximizeDashboardComponent:(JSDashboardComponent *__nonnull)component completion:(JMDashboardLoaderCompletion __nonnull)completion
+{
+    NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+    if (self.state == JMDashboardLoaderStateCancel) {
+        return;
+    }
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.maximizeDashlet"
                                                                inNamespace:JMJavascriptNamespaceVISDashboard
                                                                 parameters:@{
-                                                                        @"identifier" : component != nil ? component.identifier : @"null"
+                                                                        @"identifier" : component.identifier
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.cancelLoading) {
+        if (strongSelf.state == JMDashboardLoaderStateCancel) {
             return;
         }
         if (error) {
-            heapBlock(NO, error);
+            strongSelf.state = JMDashboardLoaderStateFailed;
+            completion(NO, error);
         } else {
             strongSelf.dashboard.maximizedComponent = component;
-            heapBlock(YES, nil);
+            strongSelf.state = JMDashboardLoaderStateReady;
+            completion(YES, nil);
         }
     }];
 }
 
-- (void)minimizeDashletForComponent:(JSDashboardComponent *__nullable)component completion:(JMDashboardLoaderCompletion __nonnull) completion
+- (void)minimizeDashboardComponent:(JSDashboardComponent *__nonnull)component completion:(JMDashboardLoaderCompletion __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
+    NSAssert(component != nil, @"Component is nil");
     NSAssert(self.dashboard != nil, @"Dashboard is nil");
-    if (self.isCancelLoad) {
+
+    if (self.state == JMDashboardLoaderStateCancel) {
         return;
     }
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
+
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.minimizeDashlet"
                                                                inNamespace:JMJavascriptNamespaceVISDashboard
                                                                 parameters:@{
-                                                                        @"identifier" : component != nil ? component.identifier : @"null"
+                                                                        @"identifier" : component.identifier
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.cancelLoading) {
+        if (strongSelf.state == JMDashboardLoaderStateCancel) {
             return;
         }
         if (error) {
-            heapBlock(NO, error);
+            strongSelf.state = JMDashboardLoaderStateFailed;
+            completion(NO, error);
         } else {
             strongSelf.dashboard.maximizedComponent = nil;
-            heapBlock(YES, nil);
+            strongSelf.state = JMDashboardLoaderStateReady;
+            completion(YES, nil);
         }
     }];
 }
 
-- (void)minimizeDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion
-{
-    [self minimizeDashletForComponent:self.dashboard.maximizedComponent completion:completion];
-}
-
 #pragma mark - Private API
-- (void)runDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
+
+- (void)freshRunDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.dashboard != nil, @"Dashboard is nil");
-    if (self.isCancelLoad) {
+
+    if (self.state == JMDashboardLoaderStateCancel) {
         return;
     }
 
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
     // run
     JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"API.run"
                                                                   inNamespace:JMJavascriptNamespaceVISDashboard
@@ -302,16 +303,18 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                                                            @"uri" : self.dashboard.resourceURI,
                                                                            @"is_for_6_0" : @([JMUtils isServerAmber])
                                                                    }];
+    self.state = JMDashboardLoaderStateLoading;
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.isCancelLoad) {
+        if (strongSelf.state == JMDashboardLoaderStateCancel) {
             return;
         }
         if (error) {
-            heapBlock(NO, error);
+            completion(NO, error);
         } else {
-            heapBlock(YES, nil);
+            strongSelf.state = JMDashboardLoaderStateReady;
+            completion(YES, nil);
         }
     }];
 }
@@ -359,8 +362,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(dashletWillMaximizeListenerId);
                                 __typeof(self) strongSelf = weakSelf;
-                                if ([strongSelf.delegate respondsToSelector:@selector(dashboardLoaderDidStartMaximizeDashlet:)]) {
-                                    [strongSelf.delegate dashboardLoaderDidStartMaximizeDashlet:strongSelf];
+                                if (error) {
+                                    [JMUtils presentAlertControllerWithError:error
+                                                                  completion:nil];
+                                } else {
+                                    [strongSelf handleDidStartMaximizeDashletWithParameters:params];
                                 }
                             }];
     NSString *dashletDidMaximizeListenerId = @"JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize";
@@ -408,34 +414,46 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 }
 
 #pragma mark - Handle JS callbacks
+
+- (void)handleDidStartMaximizeDashletWithParameters:(NSDictionary *)parameters
+{
+    if (self.state == JMDashboardLoaderStateCancel) {
+        return;
+    }
+
+    if ([self.delegate respondsToSelector:@selector(dashboardLoaderDidStartMaximizeDashlet:)]) {
+        [self.delegate dashboardLoaderDidStartMaximizeDashlet:self];
+    }
+}
+
 - (void)handleDidEndMaximazeDashletWithParameters:(NSDictionary *)parameters
 {
-    if (self.isCancelLoad) {
+    if (self.state == JMDashboardLoaderStateCancel) {
         return;
     }
 
     JMLog(@"parameters: %@", parameters);
-    NSString *title;
     if ([JMUtils isServerAmber]) {
-        title = parameters[@"componentId"];
+//        title = parameters[@"componentId"];
     } else {
-        title = parameters[@"component"][@"name"];
+//        title = parameters[@"component"][@"name"];
         NSString *componentId = parameters[@"component"][@"id"];
         for(JSDashboardComponent *component in self.dashboard.components) {
             if ([componentId isEqualToString:component.identifier]) {
                 self.dashboard.maximizedComponent = component;
+                break;
             }
         }
     }
 
-    if ([self.delegate respondsToSelector:@selector(dashboardLoader:didEndMaximazeDashletWithTitle:)]) {
-        [self.delegate dashboardLoader:self didEndMaximazeDashletWithTitle:title];
+    if ([self.delegate respondsToSelector:@selector(dashboardLoader:didEndMaximazeDashboardComponent:)]) {
+        [self.delegate dashboardLoader:self didEndMaximazeDashboardComponent:self.dashboard.maximizedComponent];
     }
 }
 
 - (void)handleOnReportExecution:(NSDictionary *)parameters
 {
-    if (self.isCancelLoad) {
+    if (self.state == JMDashboardLoaderStateCancel) {
         return;
     }
 
@@ -465,10 +483,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                           JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
 
                                           NSArray *reportParameters = [strongSelf createReportParametersFromParameters:params];
-                                          [strongSelf.delegate dashboardLoader:strongSelf
-                                                   didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
-                                                                      resource:resource
-                                                                    parameters:reportParameters];
+//                                          [strongSelf.delegate dashboardLoader:strongSelf
+//                                                   didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
+//                                                                      resource:resource
+//                                                                    parameters:reportParameters];
                                       }
                                   }
                               }];
@@ -495,26 +513,26 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         }
         if (urlString) {
 
-            [self.delegate dashboardLoader:self
-               didReceiveHyperlinkWithType:JMHyperlinkTypeAdHocExecution
-                                  resource:nil
-                                parameters:@[[NSURL URLWithString:urlString]]];
+//            [self.delegate dashboardLoader:self
+//               didReceiveHyperlinkWithType:JMHyperlinkTypeAdHocExecution
+//                                  resource:nil
+//                                parameters:@[[NSURL URLWithString:urlString]]];
         }
     }
 }
 
 - (void)handleOnReferenceClick:(NSDictionary *)parameters
 {
-    if (self.isCancelLoad) {
+    if (self.state == JMDashboardLoaderStateCancel) {
         return;
     }
 
     NSString *URLString = parameters[@"location"];
     if (URLString) {
-        [self.delegate dashboardLoader:self
-           didReceiveHyperlinkWithType:JMHyperlinkTypeReference
-                              resource:nil
-                            parameters:@[[NSURL URLWithString:URLString]]];
+//        [self.delegate dashboardLoader:self
+//           didReceiveHyperlinkWithType:JMHyperlinkTypeReference
+//                              resource:nil
+//                            parameters:@[[NSURL URLWithString:URLString]]];
     }
 }
 

@@ -31,6 +31,7 @@
 #import "JMResourceViewerFavoritesHelper.h"
 #import "JMBaseResourceView.h"
 #import "UIView+Additions.h"
+#import "JMResource.h"
 
 @interface JMDashboardViewerStateManager()
 @property (nonatomic, assign, readwrite) JMDashboardViewerState state;
@@ -52,6 +53,15 @@
         default: {
             break;
         }
+    }
+}
+
+#pragma mark - Actions
+
+- (void)minimizeDashletAction
+{
+    if (self.minimizeDashletActionBlock) {
+        self.minimizeDashletActionBlock();
     }
 }
 
@@ -77,7 +87,8 @@
         case JMDashboardViewerStateResourceNotExist: {
             break;
         }
-        case JMDashboardViewerStateDashletActive: {
+        case JMDashboardViewerStateMaximizedDashlet: {
+            [self setupNavigationItemsForMaximizedDashlet];
             break;
         }
         case JMDashboardViewerStateNestedResource: {
@@ -92,11 +103,10 @@
 
 - (void)setupMainViewForState:(JMDashboardViewerState)state
 {
-    [self hideResourceNotExistView];
     switch (state) {
         case JMDashboardViewerStateInitial: {
+            self.controller.title = self.controller.resource.resourceLookup.label;
             [self hideProgress];
-            [self showResourceNotExistView];
             break;
         }
         case JMDashboardViewerStateLoading: {
@@ -105,10 +115,7 @@
             break;
         }
         case JMDashboardViewerStateResourceFailed: {
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
             [self hideProgress];
-            [self showResourceNotExistView];
             break;
         }
         case JMDashboardViewerStateResourceReady: {
@@ -117,26 +124,29 @@
             break;
         }
         case JMDashboardViewerStateResourceNotExist: {
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
-            [self showResourceNotExistView];
             break;
         }
-        case JMDashboardViewerStateDashletActive: {
+        case JMDashboardViewerStateMaximizedDashlet: {
+            [self hideProgress];
+            [self showMainView];
             break;
         }
         case JMDashboardViewerStateNestedResource: {
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
             [self hideProgress];
             break;
         }
         case JMDashboardViewerStateDestroy: {
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
             [self hideProgress];
             break;
         }
+    }
+}
+
+- (void)setupNavigationItems
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    if ([self isNavigationItemsForMaximizedDashlet]) {
+        [self initialSetupNavigationItems];
     }
 }
 
@@ -184,6 +194,54 @@
 {
 //    ((JMDashboardViewerVC *)self.controller).configurator.documentManager.controller = self.controller;
 //    [((JMDashboardViewerVC *)self.controller).configurator.documentManager showOpenInMenuForResourceWithURL:URL];
+}
+
+#pragma mark - Helpers
+- (void)setupNavigationItemsForMaximizedDashlet
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    [self setupBackButtonForMaximizedDashlet];
+    [self removeMenuBarButton];
+    [self.favoritesHelper removeFavoriteBarButton];
+
+//    if (self.openDocumentActionBlock) {
+//        [self setupOpenDocumentBarButton];
+//    }
+}
+
+- (void)setupBackButtonForMaximizedDashlet
+{
+    UIBarButtonItem *backBarButton = [self backBarButtonForMaximizedDashlet];
+    self.controller.navigationItem.leftBarButtonItem = backBarButton;
+}
+
+- (UIBarButtonItem *)backBarButtonForMaximizedDashlet
+{
+    UIBarButtonItem *item = [self backBarButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
+                                                  action:@selector(minimizeDashletAction)];
+    return item;
+}
+
+- (BOOL)isNavigationItemsForMaximizedDashlet
+{
+    BOOL isNavigationItemsForNestedResource = NO;
+
+    // TODO: extend this logic
+    BOOL isBackButtonForNestedResource = [self isBackButtonForMaximizedDashlet];
+    if (isBackButtonForNestedResource) {
+        isNavigationItemsForNestedResource = YES;
+    }
+
+    return isNavigationItemsForNestedResource;
+}
+
+- (BOOL)isBackButtonForMaximizedDashlet
+{
+    BOOL isBackButtonForMaximizedDashlet = NO;
+    if (self.controller.navigationItem.leftBarButtonItem.action == @selector(minimizeDashletAction)) {
+        isBackButtonForMaximizedDashlet = YES;
+    }
+    return isBackButtonForMaximizedDashlet;
 }
 
 @end

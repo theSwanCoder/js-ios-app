@@ -32,13 +32,12 @@
 #import "JMJavascriptRequest.h"
 
 @interface JMBaseDashboardLoader()
-@property (nonatomic, weak) JMDashboard *dashboard;
+@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, weak) JMRESTWebEnvironment *webEnvironment;
 @property (nonatomic, assign, getter=isCancelLoad) BOOL cancelLoading;
 @end
 
-@implementation
-JMBaseDashboardLoader
+@implementation JMBaseDashboardLoader
 @synthesize delegate = _delegate;
 
 #pragma mark - Initializers
@@ -47,25 +46,20 @@ JMBaseDashboardLoader
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 }
 
-- (id<JMDashboardLoader> __nullable)initWithDashboard:(JMDashboard *__nonnull)dashboard
-                                       webEnvironment:(JMWebEnvironment *)webEnvironment
+- (id<JMDashboardLoader> __nullable)initWebEnvironment:(JMWebEnvironment * __nonnull)webEnvironment
 {
     self = [super init];
     if (self) {
-        NSAssert(dashboard != nil, @"Dashboard is nil");
         NSAssert(webEnvironment != nil, @"WebEnvironment is nil");
-        _dashboard = dashboard;
         _webEnvironment = (JMRESTWebEnvironment *) webEnvironment;
         [self addListenersForWebEnvironmentEvents];
     }
     return self;
 }
 
-+ (id<JMDashboardLoader> __nullable)loaderWithDashboard:(JMDashboard *__nonnull)dashboard
-                                         webEnvironment:(JMWebEnvironment *)webEnvironment
++ (id<JMDashboardLoader> __nullable)loaderWebEnvironment:(JMWebEnvironment * __nonnull)webEnvironment
 {
-    return [[self alloc] initWithDashboard:dashboard
-                            webEnvironment:webEnvironment];
+    return [[self alloc] initWebEnvironment:webEnvironment];
 }
 
 #pragma mark - Public API
@@ -142,7 +136,7 @@ JMBaseDashboardLoader
                                 if (!weakSelf) {
                                     return;
                                 }
-                                [weakSelf.delegate dashboardLoaderDidReceiveAuthRequest:weakSelf];
+//                                [weakSelf.delegate dashboardLoaderDidReceiveAuthRequest:weakSelf];
                             }];
 }
 

@@ -44,42 +44,45 @@ typedef NS_ENUM(NSInteger, JMDashboardLoaderErrorType) {
     JMDashboardLoaderErrorTypeAuthentification
 };
 
-typedef NS_ENUM(NSInteger, JMHyperlinkType) {
-    JMHyperlinkTypeLocalPage,
-    JMHyperlinkTypeLocalAnchor,
-    JMHyperlinkTypeRemotePage,
-    JMHyperlinkTypeRemoteAnchor,
-    JMHyperlinkTypeReference,
-    JMHyperlinkTypeReportExecution,
-    JMHyperlinkTypeAdHocExecution
+typedef NS_ENUM(NSInteger, JMDashboardLoaderState) {
+    JMDashboardLoaderStateInitial,    // Empty loader without dashboard
+    JMDashboardLoaderStateConfigured, // loader with dashboard and environment is ready
+    JMDashboardLoaderStateLoading,    //
+    JMDashboardLoaderStateReady,      // dashboard ready to interact
+    JMDashboardLoaderStateFailed,     //
+    JMDashboardLoaderStateDestroy,    //
+    JMDashboardLoaderStateCancel      //
 };
 
 @protocol JMDashboardLoader <NSObject>
 @property (nonatomic, weak, nullable) id<JMDashboardLoaderDelegate> delegate;
+@property (nonatomic, strong, readonly, nonnull) JMDashboard *dashboard;
+@property (nonatomic, assign, readonly) JMDashboardLoaderState state;
+@property (nonatomic, copy, readonly, nonnull) JSRESTBase *restClient;
 
-- (id<JMDashboardLoader> __nullable)initWithDashboard:(JMDashboard *__nonnull)dashboard webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
-+ (id<JMDashboardLoader> __nullable)loaderWithDashboard:(JMDashboard *__nonnull)dashboard webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
+- (id<JMDashboardLoader> __nullable)initWithRESTClient:(JSRESTBase *__nonnull)restClient
+                                        webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
++ (id<JMDashboardLoader> __nullable)loaderWithRESTClient:(JSRESTBase *__nonnull)restClient
+                                          webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
 
+- (void)runDashboard:(JMDashboard *__nonnull)dashboard completion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)reloadWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)destroy; // TODO: need completion?
+- (void)cancel; // TODO: need completion?
 @optional
-- (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)applyParameters:(NSDictionary *__nonnull)parameters completion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)maximizeDashletForComponent:(JSDashboardComponent *__nullable)component completion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)minimizeDashletForComponent:(JSDashboardComponent *__nullable)component completion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)minimizeDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)cancel;
-- (void)destroy;
-- (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)applyParameters:(NSDictionary <NSString *, NSArray <NSString *>*> *__nonnull)parameters completion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)reloadDashboardComponent:(JSDashboardComponent *__nonnull)component completion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)maximizeDashboardComponent:(JSDashboardComponent *__nonnull)component completion:(JMDashboardLoaderCompletion __nonnull) completion;
+- (void)minimizeDashboardComponent:(JSDashboardComponent *__nonnull)component completion:(JMDashboardLoaderCompletion __nonnull) completion;
 @end
 
 
 @protocol JMDashboardLoaderDelegate <NSObject>
 @optional
 - (void)dashboardLoaderDidStartMaximizeDashlet:(id<JMDashboardLoader> __nonnull)loader;
-- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didEndMaximazeDashletWithTitle:(NSString * __nonnull)title;
-- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
-               resource:(JMResource * __nullable)resource
-             parameters:(NSArray * __nullable)parameters;
-- (void)dashboardLoaderDidReceiveAuthRequest:(id<JMDashboardLoader> __nonnull)loader;
+- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didEndMaximazeDashboardComponent:(JSDashboardComponent *__nonnull)component;
+//- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
+//               resource:(JMResource * __nullable)resource
+//             parameters:(NSArray * __nullable)parameters;
+//- (void)dashboardLoaderDidReceiveAuthRequest:(id<JMDashboardLoader> __nonnull)loader;
 @end
