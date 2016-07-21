@@ -197,7 +197,7 @@
                                                       if ([component.type isEqualToString:@"inputControl"]) {
                                                           NSString *URI = component.ownerResourceURI;
                                                           if ([URI hasPrefix:@"/temp"]) {
-                                                              NSString *dashboardFilesURI = [NSString stringWithFormat:@"%@_files", strongSelf.dashboard.resourceURI];
+                                                              NSString *dashboardFilesURI = [NSString stringWithFormat:@"%@_files", strongSelf.resource.resourceLookup.uri];
                                                               URI = [URI stringByReplacingOccurrencesOfString:@"/temp" withString:dashboardFilesURI];
                                                           }
                                                           NSPredicate *filterPredicate = [NSPredicate predicateWithFormat:@"SELF.name == %@", URI];
@@ -297,9 +297,9 @@
 - (void)applyParameters
 {
     NSMutableDictionary <NSString *, NSArray <NSString *>*> *parameters = [@{} mutableCopy];
-    for (JSInputControlDescriptor *inputControlDescriptor in self.dashboard.inputControls) {
+    for (JSInputControlDescriptor *inputControlDescriptor in [self dashboard].inputControls) {
         NSString *componentID;
-        for (JSDashboardComponent *component in self.dashboard.components) {
+        for (JSDashboardComponent *component in [self dashboard].components) {
             if ([component.ownerResourceParameterName isEqualToString:inputControlDescriptor.uuid]) {
                 componentID = component.identifier;
             }
@@ -312,7 +312,7 @@
 
     [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
     __weak __typeof(self) weakSelf = self;
-    [self.dashboardLoader applyParameters:parameters completion:^(BOOL success, NSError *error) {
+    [[self dashboardLoader] applyParameters:parameters completion:^(BOOL success, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
         if (error) {
             [strongSelf handleError:error];
@@ -510,22 +510,12 @@
 #pragma mark - Helpers
 - (BOOL)isDashletShown
 {
-    return self.dashboard.maximizedComponent != nil;
+    return [self dashboard].maximizedComponent != nil;
 }
 
 - (BOOL)isFiltersAvailable
 {
     return [self dashboard].inputControls.count > 0;
-}
-
-- (void)hideDashboardView
-{
-    [self contentView].hidden = YES;
-}
-
-- (void)showDashboardView
-{
-    [self contentView].hidden = NO;
 }
 
 #pragma mark - Error handling
@@ -535,7 +525,7 @@
     switch (error.code) {
         case JMJavascriptRequestErrorTypeAuth: {
             if ([self isDashletShown]) {
-                self.dashboard.maximizedComponent = nil;
+                [self dashboard].maximizedComponent = nil;
                 self.navigationItem.title = self.resource.resourceLookup.label;
             }
 //            [self handleAuthError];
@@ -558,7 +548,7 @@
 - (void)showFiltersVC
 {
     JMDashboardInputControlsVC *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMDashboardInputControlsVC"];
-    inputControlsViewController.dashboard = self.dashboard;
+    inputControlsViewController.dashboard = [self dashboard];
 
     __weak __typeof(self) weakSelf = self;
     inputControlsViewController.exitBlock = ^(BOOL inputControlsDidChanged) {
