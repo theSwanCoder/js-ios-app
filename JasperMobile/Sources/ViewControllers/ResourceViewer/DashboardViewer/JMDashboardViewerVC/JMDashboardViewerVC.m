@@ -43,8 +43,7 @@
 #import "UIView+Additions.h"
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
-#import "JMJavascriptNativeBridge.h"
-
+#import "JMJavascriptRequest.h"
 
 NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashboardViewerPrimaryWebEnvironmentIdentifier";
 
@@ -557,7 +556,7 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 - (void)handleError:(NSError *)error
 {
     switch (error.code) {
-        case JMJavascriptNativeBridgeErrorAuthError: {
+        case JMJavascriptRequestErrorTypeAuth: {
             if ([self isDashletShown]) {
                 self.dashboard.maximizedComponent = nil;
                 self.navigationItem.title = self.resource.resourceLookup.label;
@@ -568,9 +567,9 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
             [self handleAuthError];
             break;
         }
-        case JMJavascriptNativeBridgeErrorTypeUnexpected:
-        case JMJavascriptNativeBridgeErrorTypeWindow:
-        case JMJavascriptNativeBridgeErrorTypeOther: {
+        case JMJavascriptRequestErrorTypeUnexpected:
+        case JMJavascriptRequestErrorTypeWindow:
+        case JMJavascriptRequestErrorTypeOther: {
             [JMUtils presentAlertControllerWithError:error
                                           completion:nil];
             break;

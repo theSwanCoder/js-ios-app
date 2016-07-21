@@ -22,22 +22,21 @@
 
 
 //
-//  JMJavascriptNativeBridge.m
+//  JMJavascriptRequestExecutor.m
 //  TIBCO JasperMobile
 //
 
-#import "JMJavascriptNativeBridge.h"
 #import "JMJavascriptEvent.h"
 
 NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
-NSString *JMJavascriptNativeBridgeErrorCodeKey = @"JMJavascriptNativeBridgeErrorCodeKey";
+NSString *JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestExecutorErrorCodeKey";
 
-@interface JMJavascriptNativeBridge() <WKNavigationDelegate, WKScriptMessageHandler>
+@interface JMJavascriptRequestExecutor() <WKNavigationDelegate, WKScriptMessageHandler>
 @property (nonatomic, strong) NSMutableDictionary <JMJavascriptRequest *, JMJavascriptRequestCompletion>*requestCompletions;
 @property (nonatomic, strong) NSMutableArray <JMJavascriptEvent *> *events;
 @end
 
-@implementation JMJavascriptNativeBridge
+@implementation JMJavascriptRequestExecutor
 @synthesize webView = _webView, delegate = _delegate;
 
 #pragma mark - Custom Initializers
@@ -51,7 +50,7 @@ NSString *JMJavascriptNativeBridgeErrorCodeKey = @"JMJavascriptNativeBridgeError
         _webView = webView;
         _webView.navigationDelegate = self;
         [_webView.configuration.userContentController addScriptMessageHandler:self
-                                                                         name:@"JMJavascriptNativeBridge"];
+                                                                         name:@"JMJavascriptRequestExecutor"];
         // add window.onerror listener
         __weak __typeof(self) weakSelf = self;
         JMJavascriptEvent *windowOnErrorEvent = [JMJavascriptEvent eventWithIdentifier:@"JasperMobile.Events.Window.OnError"
@@ -60,9 +59,9 @@ NSString *JMJavascriptNativeBridgeErrorCodeKey = @"JMJavascriptNativeBridgeError
                                                                                   if (!weakSelf) {
                                                                                       return;
                                                                                   }
-                                                                                  if ([weakSelf.delegate respondsToSelector:@selector(javascriptNativeBridge:didReceiveError:)]) {
-                                                                                      [weakSelf.delegate javascriptNativeBridge:weakSelf
-                                                                                                                didReceiveError:error];
+                                                                                  if ([weakSelf.delegate respondsToSelector:@selector(javascriptRequestExecutor:didReceiveError:)]) {
+                                                                                      [weakSelf.delegate javascriptRequestExecutor:weakSelf
+                                                                                                                   didReceiveError:error];
                                                                                   }
                                                                               }];
         [self addListenerWithEvent:windowOnErrorEvent];
@@ -70,7 +69,7 @@ NSString *JMJavascriptNativeBridgeErrorCodeKey = @"JMJavascriptNativeBridgeError
     return self;
 }
 
-+ (instancetype __nullable)bridgeWithWebView:(WKWebView * __nonnull)webView
++ (instancetype __nullable)executorWithWebView:(WKWebView * __nonnull)webView
 {
     return [[self alloc] initWithWebView:webView];
 }
@@ -138,7 +137,7 @@ NSString *JMJavascriptNativeBridgeErrorCodeKey = @"JMJavascriptNativeBridgeError
 {
     [self removeAllListeners];
     self.webView.navigationDelegate = nil;
-    [self.webView.configuration.userContentController removeScriptMessageHandlerForName:@"JMJavascriptNativeBridge"];
+    [self.webView.configuration.userContentController removeScriptMessageHandlerForName:@"JMJavascriptRequestExecutor"];
 }
 
 - (void)removeListener:(id)listener
@@ -191,8 +190,8 @@ NSString *JMJavascriptNativeBridgeErrorCodeKey = @"JMJavascriptNativeBridgeError
     if ([self isExternalRequest:navigationAction.request]) {
         BOOL shouldStartLoad = NO;
 
-        if ([self.delegate respondsToSelector:@selector(javascriptNativeBridge:shouldLoadExternalRequest:)]) {
-            shouldStartLoad = [self.delegate javascriptNativeBridge:self shouldLoadExternalRequest:navigationAction.request];
+        if ([self.delegate respondsToSelector:@selector(javascriptRequestExecutor:shouldLoadExternalRequest:)]) {
+            shouldStartLoad = [self.delegate javascriptRequestExecutor:self shouldLoadExternalRequest:navigationAction.request];
         }
         if (shouldStartLoad) {
             decisionHandler(WKNavigationActionPolicyAllow);
@@ -411,19 +410,19 @@ NSString *JMJavascriptNativeBridgeErrorCodeKey = @"JMJavascriptNativeBridgeError
 - (NSError *)makeErrorFromWebViewError:(NSDictionary *)errorJSON
 {
     NSString *visualizeErrorDomain = @"Visualize Error Domain";
-    NSInteger code = JMJavascriptNativeBridgeErrorTypeOther;
+    NSInteger code = JMJavascriptRequestErrorTypeOther;
 
     id errorCode = errorJSON[@"code"];
     NSString *errorCodeString;
     if (errorCode && [errorCode isKindOfClass:[NSString class]]) {
         errorCodeString = errorCode;
         if ([errorCodeString isEqualToString:@"window.onerror"]) {
-            code = JMJavascriptNativeBridgeErrorTypeWindow;
+            code = JMJavascriptRequestErrorTypeWindow;
             JMLog(@"window.onerror: %@", errorJSON);
         } else if ([errorCodeString isEqualToString:@"unexpected.error"]) {
-            code = JMJavascriptNativeBridgeErrorTypeUnexpected;
+            code = JMJavascriptRequestErrorTypeUnexpected;
         } else if ([errorCodeString isEqualToString:@"authentication.error"]) {
-            code = JMJavascriptNativeBridgeErrorAuthError;
+            code = JMJavascriptRequestErrorTypeAuth;
         }
     }
     // TODO: need add handle integer codes?
@@ -440,7 +439,7 @@ NSString *JMJavascriptNativeBridgeErrorCodeKey = @"JMJavascriptNativeBridgeError
         } mutableCopy];
     }
     if (errorCodeString) {
-        userInfo[JMJavascriptNativeBridgeErrorCodeKey] = errorCodeString;
+        userInfo[JMJavascriptRequestExecutorErrorCodeKey] = errorCodeString;
     }
     NSError *error = [NSError errorWithDomain:visualizeErrorDomain
                                          code:code

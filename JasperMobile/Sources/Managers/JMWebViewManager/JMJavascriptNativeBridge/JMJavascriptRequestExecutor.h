@@ -22,7 +22,7 @@
 
 
 //
-//  JMJavascriptNativeBridge.h
+//  JMJavascriptRequestExecutor.h
 //  TIBCO JasperMobile
 //
 
@@ -33,26 +33,19 @@
 
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptResponse.h"
-@protocol JMJavascriptNativeBridgeDelegate;
+@protocol JMJavascriptRequestExecutorDelegate;
 @class JMJavascriptEvent;
 
-typedef NS_ENUM(NSInteger, JMJavascriptNativeBrigdeErrorType) {
-    JMJavascriptNativeBridgeErrorTypeWindow,
-    JMJavascriptNativeBridgeErrorAuthError,
-    JMJavascriptNativeBridgeErrorTypeUnexpected,
-    JMJavascriptNativeBridgeErrorTypeOther,
-};
-
-extern NSString * __nonnull JMJavascriptNativeBridgeErrorCodeKey;
+extern NSString * __nonnull JMJavascriptRequestExecutorErrorCodeKey;
 
 typedef void(^JMJavascriptRequestCompletion)(JMJavascriptResponse *__nullable response, NSError * __nullable error);
 
-@interface JMJavascriptNativeBridge : NSObject
+@interface JMJavascriptRequestExecutor : NSObject
 @property (nonatomic, weak, readonly, nullable) WKWebView *webView;
-@property (nonatomic, weak, nullable) id <JMJavascriptNativeBridgeDelegate>delegate;
+@property (nonatomic, weak, nullable) id <JMJavascriptRequestExecutorDelegate>delegate;
 
 - (instancetype __nullable)initWithWebView:(WKWebView * __nonnull)webView;
-+ (instancetype __nullable)bridgeWithWebView:(WKWebView * __nonnull)webView;
++ (instancetype __nullable)executorWithWebView:(WKWebView * __nonnull)webView;
 
 - (void)startLoadHTMLString:(NSString *__nonnull)HTMLString
                     baseURL:(NSURL *__nonnull)baseURL;
@@ -65,9 +58,9 @@ typedef void(^JMJavascriptRequestCompletion)(JMJavascriptResponse *__nullable re
 - (void)reset;
 @end
 
-@protocol JMJavascriptNativeBridgeDelegate <NSObject>
+@protocol JMJavascriptRequestExecutorDelegate <NSObject>
 @optional
-- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveError:(NSError *__nonnull)error;
-- (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge shouldLoadExternalRequest:(NSURLRequest * __nonnull)request;
+- (void)javascriptRequestExecutor:(JMJavascriptRequestExecutor *__nonnull)executor didReceiveError:(NSError *__nonnull)error;
+- (BOOL)javascriptRequestExecutor:(JMJavascriptRequestExecutor *__nonnull)executor shouldLoadExternalRequest:(NSURLRequest * __nonnull)request;
 @end
 

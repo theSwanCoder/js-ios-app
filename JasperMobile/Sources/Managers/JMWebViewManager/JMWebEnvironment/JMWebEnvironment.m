@@ -27,12 +27,12 @@
 //
 
 #import "JMWebEnvironment.h"
-#import "JMJavascriptNativeBridge.h"
+#import "JMJavascriptRequestExecutor.h"
 #import "JMJavascriptEvent.h"
 #import "UIView+Additions.h"
 
-@interface JMWebEnvironment() <JMJavascriptNativeBridgeDelegate>
-@property (nonatomic, strong) JMJavascriptNativeBridge * __nonnull bridge;
+@interface JMWebEnvironment() <JMJavascriptRequestExecutorDelegate>
+@property (nonatomic, strong) JMJavascriptRequestExecutor * __nonnull requestExecutor;
 @property (nonatomic, strong) NSMutableArray <JMWebEnvironmentPendingBlock>*pendingBlocks;
 @end
 
@@ -115,9 +115,9 @@
     } else {
         UIView *webViewSuperview = self.webView.superview;
         [self.webView removeFromSuperview];
-        [self.bridge reset];
+        [self.requestExecutor reset];
         _webView = nil;
-        _bridge = nil;
+        _requestExecutor = nil;
         [self setupWebEnvironmentWithCookies:cookies];
         [webViewSuperview fillWithView:self.webView];
     }
@@ -137,8 +137,8 @@
                                                                  JMLog(@"Event was received: DOMContentLoaded");
                                                                  strongSelf.ready = YES;
                                                              }];
-    [self.bridge addListenerWithEvent:event];
-    [self.bridge startLoadHTMLString:HTMLString
+    [self.requestExecutor addListenerWithEvent:event];
+    [self.requestExecutor startLoadHTMLString:HTMLString
                              baseURL:baseURL];
 }
 
@@ -229,12 +229,12 @@
         if (completion) {
             JMWebEnvironmentRequestParametersCompletion heapBlock;
             heapBlock = [completion copy];
-            [strongSelf.bridge sendJavascriptRequest:request
+            [strongSelf.requestExecutor sendJavascriptRequest:request
                                           completion:^(JMJavascriptResponse *response, NSError *error) {
                                               heapBlock(response.parameters, error);
                                           }];
         } else {
-            [strongSelf.bridge sendJavascriptRequest:request
+            [strongSelf.requestExecutor sendJavascriptRequest:request
                                           completion:nil];
         }
     };
@@ -256,12 +256,12 @@
                                                              callback:^(JMJavascriptResponse *response, NSError *error) {
                                                                  callback(response.parameters, error);
                                                              }];
-    [self.bridge addListenerWithEvent:event];
+    [self.requestExecutor addListenerWithEvent:event];
 }
 
 - (void)removeListener:(id)listener
 {
-    [self.bridge removeListener:listener];
+    [self.requestExecutor removeListener:listener];
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
@@ -291,9 +291,9 @@
 {
     [self resetZoom];
     [self.webView removeFromSuperview];
-    // TODO: need reset bridge because will be leak
+    // TODO: need reset requestExecutor because will be leak
     if (!self.reusable) {
-        [self.bridge reset];
+        [self.requestExecutor reset];
     }
     self.pendingBlocks = [NSMutableArray array];
 }
@@ -304,8 +304,8 @@
 {
     NSAssert(cookies != nil, @"Cookies are nil");
     _webView = [self createWebViewWithCookies:cookies];
-    _bridge = [JMJavascriptNativeBridge bridgeWithWebView:_webView];
-    _bridge.delegate = self;
+    _requestExecutor = [JMJavascriptRequestExecutor executorWithWebView:_webView];
+    _requestExecutor.delegate = self;
 }
 
 - (WKWebView *)createWebViewWithCookies:(NSArray <NSHTTPCookie *>*)cookies
@@ -372,10 +372,10 @@
     }];
 }
 
-#pragma mark - JMJavascriptNativeBridgeDelegate
-- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge didReceiveError:(NSError *__nonnull)error
+#pragma mark - JMJavascriptRequestExecutorDelegate
+- (void)javascriptRequestExecutor:(JMJavascriptRequestExecutor *__nonnull)executor didReceiveError:(NSError *__nonnull)error
 {
-    JMLog(@"error from bridge: %@", error);
+    JMLog(@"error from requestExecutor: %@", error);
 #ifndef __RELEASE__
     // TODO: move to loader layer
 //    [JMUtils presentAlertControllerWithError:error
@@ -383,7 +383,7 @@
 #endif
 }
 
-- (BOOL)javascriptNativeBridge:(JMJavascriptNativeBridge *__nonnull)bridge shouldLoadExternalRequest:(NSURLRequest *__nonnull)request
+- (BOOL)javascriptRequestExecutor:(JMJavascriptRequestExecutor *__nonnull)executor shouldLoadExternalRequest:(NSURLRequest *__nonnull)request
 {
     // TODO: investigate cases.
     return YES;

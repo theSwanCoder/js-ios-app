@@ -30,7 +30,7 @@
 @since 2.6
 */
 
-#import "JMJavascriptNativeBridge.h"
+#import "JMJavascriptRequestExecutor.h"
 
 @interface JMJavascriptEvent : NSObject
 @property (nonatomic, copy, readonly) NSString *identifier;

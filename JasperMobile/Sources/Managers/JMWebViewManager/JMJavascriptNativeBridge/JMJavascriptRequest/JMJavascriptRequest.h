@@ -31,6 +31,13 @@
 @since 2.1
 */
 
+typedef NS_ENUM(NSInteger, JMJavascriptRequestErrorType) {
+    JMJavascriptRequestErrorTypeWindow,
+    JMJavascriptRequestErrorTypeAuth,
+    JMJavascriptRequestErrorTypeUnexpected,
+    JMJavascriptRequestErrorTypeOther,
+};
+
 typedef NS_ENUM(NSInteger, JMJavascriptNamespace) {
     JMJavascriptNamespaceDefault,
     JMJavascriptNamespaceVISReport,

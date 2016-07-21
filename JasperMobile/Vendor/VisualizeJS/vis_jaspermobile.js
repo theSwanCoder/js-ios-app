@@ -177,7 +177,7 @@ var JasperMobile = {
 // Callbacks
 JasperMobile.Callback = {
     createCallback: function(params) {
-        window.webkit.messageHandlers.JMJavascriptNativeBridge.postMessage(params);
+        window.webkit.messageHandlers.JMJavascriptRequestExecutor.postMessage(params);
     },
     log : function(message) {
         console.log("Log: " + message);

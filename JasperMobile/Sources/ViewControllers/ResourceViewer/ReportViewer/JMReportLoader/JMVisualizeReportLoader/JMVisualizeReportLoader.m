@@ -31,7 +31,7 @@
 #import "JMVIZWebEnvironment.h"
 #import "JMResource.h"
 #import "JMJavascriptRequest.h"
-#import "JMJavascriptNativeBridge.h"
+#import "JMJavascriptRequestExecutor.h"
 #import "JSReportDestination.h"
 #import "JSReportBookmark.h"
 #import "JSReportPart.h"
@@ -602,8 +602,8 @@ initialDestination:(nullable JSReportDestination *)destination
                                     return;
                                 }
                                 if (error) {
-                                    if (error.code == JMJavascriptNativeBridgeErrorTypeOther) {
-                                        NSString *javascriptErrorCode = error.userInfo[JMJavascriptNativeBridgeErrorCodeKey];
+                                    if (error.code == JMJavascriptRequestErrorTypeOther) {
+                                        NSString *javascriptErrorCode = error.userInfo[JMJavascriptRequestExecutorErrorCodeKey];
                                         if (javascriptErrorCode && [javascriptErrorCode isEqualToString:@"hyperlink.not.support.error"]) {
                                             if ([weakSelf.delegate respondsToSelector:@selector(reportLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
                                                 [weakSelf.delegate reportLoaderDidReceiveEventWithUnsupportedHyperlink:weakSelf];
@@ -794,15 +794,15 @@ initialDestination:(nullable JSReportDestination *)destination
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JSReportLoaderErrorType errorCode = JSReportLoaderErrorTypeUndefined;
     switch(error.code) {
-        case JMJavascriptNativeBridgeErrorAuthError: {
+        case JMJavascriptRequestErrorTypeAuth: {
             errorCode = JSReportLoaderErrorTypeAuthentification;
             break;
         }
-        case JMJavascriptNativeBridgeErrorTypeOther: {
+        case JMJavascriptRequestErrorTypeOther: {
             errorCode = JSReportLoaderErrorTypeUndefined;
             break;
         }
-        case JMJavascriptNativeBridgeErrorTypeWindow: {
+        case JMJavascriptRequestErrorTypeWindow: {
             errorCode = JSReportLoaderErrorTypeUndefined;
             break;
         }
