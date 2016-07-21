@@ -41,9 +41,12 @@
 #import "JMServerOptionsViewController.h"
 #import "JMReportViewerConfigurator.h"
 #import "JMWebViewManager.h"
+#import "JMDashboardViewerConfigurator.h"
 
-NSString *const JMReportViewerVisualizeWebEnvironmentIdentifier = @"JMReportViewerVisualizeWebEnvironmentIdentifier";
-NSString *const JMReportViewerRESTWebEnvironmentIdentifier = @"JMReportViewerRESTWebEnvironmentIdentifier";
+NSString *const JMReportViewerVisualizeWebEnvironmentIdentifier    = @"JMReportViewerVisualizeWebEnvironmentIdentifier";
+NSString *const JMReportViewerRESTWebEnvironmentIdentifier         = @"JMReportViewerRESTWebEnvironmentIdentifier";
+NSString *const JMDashboardViewerVisualizeWebEnvironmentIdentifier = @"JMDashboardViewerVisualizeWebEnvironmentIdentifier";
+NSString *const JMDashboardViewerRESTWebEnvironmentIdentifier      = @"JMDashboardViewerRESTWebEnvironmentIdentifier";
 
 void jmDebugLog(NSString *format, ...) {
 #ifndef __RELEASE__
@@ -479,10 +482,24 @@ void jmDebugLog(NSString *format, ...) {
 
 #pragma mark - Report Viewer Helpers
 
-+ (JMReportViewerConfigurator *)reportViewerConfiguratorReusableWebView
++ (JMReportViewerConfigurator *__nonnull)reportViewerConfiguratorReusableWebView
 {
-    JMReportViewerConfigurator *configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:[self reusableWebEnvironment]];
+    JMReportViewerConfigurator *configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:[self reusableWebEnvironmentForReportViewer]];
     return configurator;
+}
+
++ (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorNonReusableWebView
+{
+
+    JMReportViewerConfigurator *configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:[[JMWebViewManager sharedInstance] webEnvironmentForFlowType:[self flowTypeForReportViewer]]];
+    return configurator;
+}
+
++ (JMWebEnvironment *)reusableWebEnvironmentForReportViewer
+{
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self webEnvironmentIdentifierForReportViewer]
+                                                                                              flowType:[self flowTypeForReportViewer]];
+    return webEnvironment;
 }
 
 + (JMResourceFlowType)flowTypeForReportViewer
@@ -501,30 +518,45 @@ void jmDebugLog(NSString *format, ...) {
     return flowType;
 }
 
-+ (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorNonReusableWebView
++ (NSString *)webEnvironmentIdentifierForReportViewer
 {
+    NSString *webEnvironmentIdentifier;
+    switch([self flowTypeForReportViewer]) {
+        case JMResourceFlowTypeUndefined: {
+            break;
+        }
+        case JMResourceFlowTypeREST: {
+            webEnvironmentIdentifier = JMReportViewerRESTWebEnvironmentIdentifier;
+            break;
+        }
+        case JMResourceFlowTypeVIZ: {
+            webEnvironmentIdentifier = JMReportViewerVisualizeWebEnvironmentIdentifier;
+            break;
+        }
+    }
+    return webEnvironmentIdentifier;
+}
 
-    JMReportViewerConfigurator *configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:[[JMWebViewManager sharedInstance] webEnvironmentForFlowType:[self flowTypeForReportViewer]]];
+#pragma mark - Dashboard Viewer Helpers
+
++ (JMDashboardViewerConfigurator * __nonnull)dashboardViewerConfiguratorReusableWebView
+{
+    JMDashboardViewerConfigurator *configurator = [JMDashboardViewerConfigurator configuratorWithWebEnvironment:[self reusableWebEnvironmentForDashboardViewer]];
     return configurator;
 }
 
-+ (JMWebEnvironment *)reusableWebEnvironment
++ (JMDashboardViewerConfigurator * __nonnull)dashboardViewerConfiguratorNonReusableWebView
 {
-    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self currentWebEnvironmentIdentifier]
-                                                                                              flowType:[self flowTypeForReportViewer]];
-    return webEnvironment;
+
+    JMDashboardViewerConfigurator *configurator = [JMDashboardViewerConfigurator configuratorWithWebEnvironment:[[JMWebViewManager sharedInstance] webEnvironmentForFlowType:JMResourceFlowTypeREST]];
+    return configurator;
 }
 
-
-+ (NSString *)currentWebEnvironmentIdentifier
++ (JMWebEnvironment *)reusableWebEnvironmentForDashboardViewer
 {
-    NSString *webEnvironmentIdentifier;
-    if ([JMUtils isSupportVisualize]) {
-        webEnvironmentIdentifier = JMReportViewerVisualizeWebEnvironmentIdentifier;
-    } else {
-        webEnvironmentIdentifier = JMReportViewerRESTWebEnvironmentIdentifier;
-    }
-    return webEnvironmentIdentifier;
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:JMDashboardViewerVisualizeWebEnvironmentIdentifier
+                                                                                              flowType:JMResourceFlowTypeVIZ];
+    return webEnvironment;
 }
 
 @end

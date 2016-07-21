@@ -31,6 +31,7 @@
 #import "JMWebViewManager.h"
 
 @class JMReportViewerConfigurator;
+@class JMDashboardViewerConfigurator;
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
@@ -177,6 +178,10 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorReusableWebView;
 
 + (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorNonReusableWebView;
+
++ (JMDashboardViewerConfigurator * __nonnull)dashboardViewerConfiguratorReusableWebView;
+
++ (JMDashboardViewerConfigurator * __nonnull)dashboardViewerConfiguratorNonReusableWebView;
 
 + (BOOL)isCompactWidth;
 
