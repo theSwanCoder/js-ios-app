@@ -28,7 +28,6 @@
 
 #import "JMResource.h"
 #import "JMDashboard.h"
-#import "JMVisualizeDashboard.h"
 
 
 @implementation JMResource
@@ -65,11 +64,7 @@
         }
         case JMResourceTypeTempExportedReport: {break;}
         case JMResourceTypeDashboard: {
-            if ([JMUtils isSupportVisualize]) {
-                model = [JMVisualizeDashboard dashboardWithResource:self];
-            } else {
-                model = [JMDashboard dashboardWithResource:self];
-            }
+            model = [JMDashboard dashboardWithResource:self];
             break;
         }
         case JMResourceTypeLegacyDashboard: {

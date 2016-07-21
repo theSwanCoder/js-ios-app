@@ -7,7 +7,6 @@
 //
 
 #import "JSResourceLookup+Helpers.h"
-#import "JMVisualizeDashboard.h"
 #import "JMDashboard.h"
 #import "JMReport.h"
 
