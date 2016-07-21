@@ -53,7 +53,7 @@
     self = [super init];
     if (self) {
         JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-        _restClient = restClient;
+        _restClient = [restClient copy];
         _state = JSReportLoaderStateInitial;
     }
     return self;
@@ -284,9 +284,6 @@ initialDestination:(nullable JSReportDestination *)destination
         return;
     }
 
-    self.report = report;
-    self.report.reportParameters = initialParameters;
-
     self.state = JSReportLoaderStateLoading;
 
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
@@ -297,7 +294,9 @@ initialDestination:(nullable JSReportDestination *)destination
             return;
         }
         if (isReady) {
-            self.state = JSReportLoaderStateConfigured;
+            strongSelf.report = report;
+            strongSelf.report.reportParameters = initialParameters;
+            strongSelf.state = JSReportLoaderStateConfigured;
             [strongSelf freshLoadReportWithDestination:destination
                                             parameters:initialParameters
                                             completion:heapBlock];
