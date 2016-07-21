@@ -30,6 +30,7 @@
 #import "JMReportViewerConfigurator.h"
 #import "JMResourceViewerDocumentManager.h"
 #import "JMWebEnvironment.h"
+#import "JMResource.h"
 
 @interface JMReportViewerStateManager()
 @property (nonatomic, assign, readwrite) JMReportViewerState state;
@@ -91,6 +92,7 @@
     [self hideResourceNotExistView];
     switch (state) {
         case JMReportViewerStateInitial: {
+            self.controller.title = self.controller.resource.resourceLookup.label;
             [self hideProgress];
             [self showResourceNotExistView];
             break;

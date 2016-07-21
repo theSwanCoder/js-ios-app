@@ -75,8 +75,6 @@
 {
     [super viewDidLoad];
 
-    self.title = self.resource.resourceLookup.label;
-
     [self addObservers];
 
     self.filtersNetworkManager = [JMFiltersNetworkManager managerWithRestClient:self.restClient];
@@ -240,6 +238,7 @@
 }
 
 #pragma mark - JMResourceViewerStateManagerDelegate
+
 - (void)stateManagerWillExit:(JMResourceViewerStateManager *)stateManager
 {
     [self exitAction];
