@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
     JMHyperlinkTypeReference,
     JMHyperlinkTypeRemoteAnchor,
     JMHyperlinkTypeRemotePage,
+    JMHyperlinkTypeAdHocExecution
 };
 
 
