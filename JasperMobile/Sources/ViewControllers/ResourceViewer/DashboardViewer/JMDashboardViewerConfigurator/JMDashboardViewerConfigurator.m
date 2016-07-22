@@ -40,6 +40,8 @@
 #import "JMResourceViewerInfoPageManager.h"
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerShareManager.h"
+#import "JMResourceViewerHyperlinksManager.h"
+#import "JMResourceViewerDocumentManager.h"
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMDashboardLoader> dashboardLoader;
@@ -112,6 +114,9 @@
     _infoPageManager = [self createInfoPageManager];
     _printManager = [self createPrintManager];
     _shareManager = [self createShareManager];
+    _hyperlinksManager = [self createHyperlinksManager];
+    _hyperlinksManager.delegate = self.stateManager;
+    _documentManager = [self createDocumentManager];
 }
 
 - (JMDashboardViewerStateManager *)createStateManager
@@ -132,6 +137,16 @@
 - (JMResourceViewerShareManager *)createShareManager
 {
     return [JMResourceViewerShareManager new];
+}
+
+- (JMResourceViewerHyperlinksManager *)createHyperlinksManager
+{
+    return [JMResourceViewerHyperlinksManager new];
+}
+
+- (JMResourceViewerDocumentManager *)createDocumentManager
+{
+    return [JMResourceViewerDocumentManager new];
 }
 
 @end

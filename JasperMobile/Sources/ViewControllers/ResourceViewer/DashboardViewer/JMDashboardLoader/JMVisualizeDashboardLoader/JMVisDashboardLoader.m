@@ -26,16 +26,12 @@
 //  TIBCO JasperMobile
 //
 
-typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
-    JMDashboardViewerAlertViewTypeEmptyReport,
-    JMDashboardViewerAlertViewTypeErrorLoad
-};
-
 #import "JMVisDashboardLoader.h"
 #import "JMDashboard.h"
 #import "JMVIZWebEnvironment.h"
 #import "JMResource.h"
 #import "JMJavascriptRequest.h"
+#import "JMHyperlink.h"
 
 @interface JMVisDashboardLoader()
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
@@ -383,28 +379,40 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                             }];
 
     // Links
-    NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.VIS.Dashboard.API.run.linkOptions.events.ReportExecution";
+    NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.VIS.Event.Link.ReportExecution";
     [self.webEnvironment addListener:self
                           forEventId:reportExecutionLinkOptionListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(reportExecutionLinkOptionListenerId);
                                 __typeof(self) strongSelf = weakSelf;
-                                [strongSelf handleOnReportExecution:params];
+                                if (error) {
+                                    JMLog(@"error: %@", error);
+                                } else {
+                                    [strongSelf handleRunReportWithParameters:params];
+                                }
                             }];
-    NSString *referenceLinkOptionListenerId = @"JasperMobile.VIS.Dashboard.API.run.linkOptions.events.Reference";
+    NSString *referenceLinkOptionListenerId = @"JasperMobile.VIS.Event.Link.Reference";
     [self.webEnvironment addListener:self
                           forEventId:referenceLinkOptionListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(referenceLinkOptionListenerId);
                                 __typeof(self) strongSelf = weakSelf;
-                                [strongSelf handleOnReferenceClick:params];
+                                if (error) {
+                                    JMLog(@"error: %@", error);
+                                } else {
+                                    [strongSelf handleOnReferenceClick:params];
+                                }
                             }];
-    NSString *adHocExecutionLinkOptionListenerId = @"JasperMobile.VIS.Dashboard.API.run.linkOptions.events.AdHocExecution";
+    NSString *adHocExecutionLinkOptionListenerId = @"JasperMobile.VIS.Event.Link.AdHocExecution";
     [self.webEnvironment addListener:self forEventId:adHocExecutionLinkOptionListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(adHocExecutionLinkOptionListenerId);
                                 __typeof(self) strongSelf = weakSelf;
-                                [strongSelf handleOnAdHocExecution:params];
+                                if (error) {
+                                    JMLog(@"error: %@", error);
+                                } else {
+                                    [strongSelf handleOnAdHocExecution:params];
+                                }
                             }];
 }
 
@@ -451,47 +459,24 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     }
 }
 
-- (void)handleOnReportExecution:(NSDictionary *)parameters
+- (void)handleRunReportWithParameters:(NSDictionary *)parameters
 {
     if (self.state == JMDashboardLoaderStateCancel) {
         return;
     }
 
-    NSString *resourceURI = parameters[@"data"][@"resource"];
-    NSDictionary *params = parameters[@"data"][@"params"];
+    JMLog(@"parameters: %@", parameters);
+    NSDictionary *data = parameters[@"data"];
+    if (!data) {
+        return;
+    }
 
-    if (resourceURI) {
-        __weak typeof(self)weakSelf = self;
-        [self.restClient resourceLookupForURI:resourceURI
-                                 resourceType:kJS_WS_TYPE_REPORT_UNIT
-                                   modelClass:[JSResourceLookup class]
-                              completionBlock:^(JSOperationResult *result) {
-                                  __strong typeof(self)strongSelf = weakSelf;
-                                  NSError *error = result.error;
-                                  if (error) {
-                                      // TODO: add error handling
-//                                    NSString *errorString = error.localizedDescription;
-//                                    JMDashboardLoaderErrorType errorType = JMDashboardLoaderErrorTypeUndefined;
-//                                    if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
-//                                        errorType = JMDashboardLoaderErrorTypeAuthentification;
-//                                    }
-                                  } else {
-                                      JMLog(@"objects: %@", result.objects);
-                                      JSResourceLookup *resourceLookup = [result.objects firstObject];
-                                      if (resourceLookup) {
-                                          resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
-                                          JMResource *resource = [JMResource resourceWithResourceLookup:resourceLookup];
-
-                                          NSArray *reportParameters = [strongSelf createReportParametersFromParameters:params];
-//                                          [strongSelf.delegate dashboardLoader:strongSelf
-//                                                   didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
-//                                                                      resource:resource
-//                                                                    parameters:reportParameters];
-                                      }
-                                  }
-                              }];
-    } else {
-        JMLog(@"parameters: %@", parameters);
+    NSString *reportPath = data[@"resource"];
+    if (reportPath) {
+        if ([self.delegate respondsToSelector:@selector(dashboardLoader:didReceiveEventWithHyperlink:)]) {
+            JMHyperlink *hyperlink = [JMHyperlink hyperlinkWithHref:reportPath withRawData:data[@"params"]];
+            [self.delegate dashboardLoader:self didReceiveEventWithHyperlink:hyperlink];
+        }
     }
 }
 
@@ -527,12 +512,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         return;
     }
 
-    NSString *URLString = parameters[@"location"];
-    if (URLString) {
-//        [self.delegate dashboardLoader:self
-//           didReceiveHyperlinkWithType:JMHyperlinkTypeReference
-//                              resource:nil
-//                            parameters:@[[NSURL URLWithString:URLString]]];
+    NSString *locationString = parameters[@"location"];
+    if (locationString) {
+        if ([self.delegate respondsToSelector:@selector(dashboardLoader:didReceiveEventWithHyperlink:)]) {
+            JMHyperlink *hyperlink = [JMHyperlink new];
+            hyperlink.type = JMHyperlinkTypeReference;
+            hyperlink.href = locationString;
+            [self.delegate dashboardLoader:self didReceiveEventWithHyperlink:hyperlink];
+        }
     }
 }
 

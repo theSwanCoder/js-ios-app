@@ -32,6 +32,9 @@
 #import "JMBaseResourceView.h"
 #import "UIView+Additions.h"
 #import "JMResource.h"
+#import "JMDashboardViewerConfigurator.h"
+#import "JMWebEnvironment.h"
+#import "JMResourceViewerDocumentManager.h"
 
 @interface JMDashboardViewerStateManager()
 @property (nonatomic, assign, readwrite) JMDashboardViewerState state;
@@ -154,30 +157,30 @@
 
 - (void)hyperlinksManager:(JMResourceViewerHyperlinksManager *__nullable)manager willOpenURL:(NSURL *__nullable)URL
 {
-//    NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
-//    if ([URL.host isEqualToString:serverURL.host]) {
-//        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-//        [((JMDashboardViewerVC *)self.controller).configurator.webEnvironment.webView loadRequest:request];
-//        [self setupPageForState:JMDashboardViewerStateNestedResource];
-//    } else {
-//        if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
-//            [[UIApplication sharedApplication] openURL:URL];
-//        }
-//    }
+    NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+    if ([URL.host isEqualToString:serverURL.host]) {
+        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+        [((JMDashboardViewerVC *)self.controller).configurator.webEnvironment.webView loadRequest:request];
+        [self setupPageForState:JMDashboardViewerStateNestedResource];
+    } else {
+        if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
+            [[UIApplication sharedApplication] openURL:URL];
+        }
+    }
 }
 
 - (void)hyperlinksManager:(JMResourceViewerHyperlinksManager *__nullable)manager willOpenLocalResourceFromURL:(NSURL *__nullable)URL
 {
-//    __weak __typeof(self) weakSelf = self;
-//    ((JMDashboardViewerVC *)self.controller).configurator.stateManager.openDocumentActionBlock = ^{
-//        __typeof(self) strongSelf = weakSelf;
-//        ((JMDashboardViewerVC *)strongSelf.controller).configurator.documentManager.controller = weakSelf.controller;
-//        [((JMDashboardViewerVC *)strongSelf.controller).configurator.documentManager showOpenInMenuForResourceWithURL:URL];
-//    };
-//
-//    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-//    [((JMDashboardViewerVC *)self.controller).configurator.webEnvironment.webView loadRequest:request];
-//    [self setupPageForState:JMDashboardViewerStateNestedResource];
+    __weak __typeof(self) weakSelf = self;
+    ((JMDashboardViewerVC *)self.controller).configurator.stateManager.openDocumentActionBlock = ^{
+        __typeof(self) strongSelf = weakSelf;
+        ((JMDashboardViewerVC *)strongSelf.controller).configurator.documentManager.controller = weakSelf.controller;
+        [((JMDashboardViewerVC *)strongSelf.controller).configurator.documentManager showOpenInMenuForResourceWithURL:URL];
+    };
+
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    [((JMDashboardViewerVC *)self.controller).configurator.webEnvironment.webView loadRequest:request];
+    [self setupPageForState:JMDashboardViewerStateNestedResource];
 }
 
 - (void)hyperlinksManagerNeedShowLoading:(JMResourceViewerHyperlinksManager *__nullable)manager
@@ -187,13 +190,14 @@
 
 - (void)hyperlinksManagerNeedHideLoading:(JMResourceViewerHyperlinksManager *__nullable)manager
 {
-    [self setupPageForState:JMDashboardViewerStateResourceReady];
+    // TODO: investigate, does it posible navigate to hyperlink not from dashlet?
+    [self setupPageForState:JMDashboardViewerStateMaximizedDashlet];
 }
 
 - (void)hyperlinksManager:(JMResourceViewerHyperlinksManager *__nullable)manager needShowOpenInMenuForLocalResourceFromURL:(NSURL *__nullable)URL
 {
-//    ((JMDashboardViewerVC *)self.controller).configurator.documentManager.controller = self.controller;
-//    [((JMDashboardViewerVC *)self.controller).configurator.documentManager showOpenInMenuForResourceWithURL:URL];
+    ((JMDashboardViewerVC *)self.controller).configurator.documentManager.controller = self.controller;
+    [((JMDashboardViewerVC *)self.controller).configurator.documentManager showOpenInMenuForResourceWithURL:URL];
 }
 
 #pragma mark - Helpers

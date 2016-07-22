@@ -1239,20 +1239,20 @@ JasperMobile.VIS.Dashboard.Handlers.Hyperlinks = {
     handleReportExecution: function(link) {
         var data = {
             resource: link.parameters._report,
-            params: JasperMobile.Helper.collectReportParams(link)
+            params: JasperMobile.VIS.Report.Helpers.collectReportParams(link)
         };
-        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.run.linkOptions.events.ReportExecution", {
+        JasperMobile.Callback.listener("JasperMobile.VIS.Event.Link.ReportExecution", {
             "data" : data
         });
     },
     handleReference: function (link) {
         var href = link.href;
-        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.run.linkOptions.events.Reference", {
+        JasperMobile.Callback.listener("JasperMobile.VIS.Event.Link.Reference", {
             "location" : href
         });
     },
     handleAdhocExecution: function(link) {
-        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.run.linkOptions.events.AdHocExecution", {
+        JasperMobile.Callback.listener("JasperMobile.VIS.Event.Link.AdHocExecution", {
             "link" : link
         });
     }

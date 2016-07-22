@@ -449,80 +449,37 @@
     [[self stateManager] setupPageForState:JMDashboardViewerStateMaximizedDashlet];
 }
 
-- (void)dashboardLoader:(id <JMDashboardLoader>)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
-         resource:(JMResource *)resource
-             parameters:(NSArray *)parameters
+- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didReceiveEventWithHyperlink:(JMHyperlink *__nonnull)hyperlink
 {
-    NSLog(@"Parameters = %@", parameters);
-
-    switch (hyperlinkType) {
-        case JMHyperlinkTypeLocalPage: {
-            break;
-        }
-        case JMHyperlinkTypeLocalAnchor: {
-            break;
-        }
-        case JMHyperlinkTypeRemotePage: {
-            break;
-        }
-        case JMHyperlinkTypeRemoteAnchor: {
-            break;
-        }
-        case JMHyperlinkTypeReference: {
-            NSURL *URL = parameters.firstObject;
-
-            NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
-            if ([URL.host isEqualToString:serverURL.host]) {
-                NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-                [self.webEnvironment.webView loadRequest:request];
-
-//                UIBarButtonItem *backButton = [self backButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
-//                                                                 target:self
-//                                                                 action:@selector(backActionInWebView)];
-//                self.currentBackButton = self.navigationItem.leftBarButtonItem;
-//                self.navigationItem.leftBarButtonItem = backButton;
-            } else {
-                // TODO: open in safari view controller
-                if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
-                    [[UIApplication sharedApplication] openURL:URL];
-                }
-            }
-            break;
-        }
-        case JMHyperlinkTypeReportExecution: {
-
-            JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
-            reportViewController.resource = resource;
-            reportViewController.initialReportParameters = parameters;
-            [self.navigationController pushViewController:reportViewController animated:YES];
-
-            break;
-        }
-        case JMHyperlinkTypeAdHocExecution: {
-            // This case appears for JRS 6.0 - 6.0.1
-            // For JRS > 6.1 - in javascript wrapper will be a visualize handler
-            NSURL *URL = parameters.firstObject;
-            // TODO: open in safari view controller
-            if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
-                [[UIApplication sharedApplication] openURL:URL];
-            }
-            break;
-        }
-    }
+    self.configurator.hyperlinksManager.controller = self;
+    self.configurator.hyperlinksManager.errorBlock = ^(NSError *error) {
+        [JMUtils presentAlertControllerWithError:error completion:nil];
+    };
+    [self.configurator.hyperlinksManager handleHyperlink:hyperlink];
 }
 
-- (void)dashboardLoaderDidReceiveAuthRequest:(id <JMDashboardLoader>)loader
+- (void)dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:(id<JMDashboardLoader> __nonnull)loader
 {
-    if ([self isDashletShown]) {
-        [self minimizeDashlet];
-    }
-
-    if ([self isContentOnTV]) {
-        [self switchFromTV];
-    }
-
-//    [self handleAuthError];
+    // TODO: translate
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Visualize Message"
+                                                                                      message:@"The hyperlink could not be processed"
+                                                                            cancelButtonTitle:@"dialog_button_ok"
+                                                                      cancelCompletionHandler:nil];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
+
+//- (void)dashboardLoaderDidReceiveAuthRequest:(id <JMDashboardLoader>)loader
+//{
+//    if ([self isDashletShown]) {
+//        [self minimizeDashlet];
+//    }
+//
+//    if ([self isContentOnTV]) {
+//        [self switchFromTV];
+//    }
+//
+////    [self handleAuthError];
+//}
 
 #pragma mark - Helpers
 - (BOOL)isDashletShown
