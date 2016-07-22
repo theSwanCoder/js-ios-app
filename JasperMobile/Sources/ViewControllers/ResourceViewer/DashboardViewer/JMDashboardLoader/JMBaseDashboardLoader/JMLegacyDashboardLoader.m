@@ -22,23 +22,24 @@
 
 
 //
-//  JMBaseDashboardLoader.m
+//  JMLegacyDashboardLoader.m
 //  TIBCO JasperMobile
 //
 
-#import "JMBaseDashboardLoader.h"
+#import "JMLegacyDashboardLoader.h"
 #import "JMDashboard.h"
 #import "JMRESTWebEnvironment.h"
 #import "JMJavascriptRequest.h"
 
-@interface JMBaseDashboardLoader()
+@interface JMLegacyDashboardLoader()
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, weak) JMRESTWebEnvironment *webEnvironment;
-@property (nonatomic, assign, getter=isCancelLoad) BOOL cancelLoading;
+@property (nonatomic, assign, readwrite) JMDashboardLoaderState state;
+@property (nonatomic, copy, readwrite) JSRESTBase *restClient;
 @end
 
-@implementation JMBaseDashboardLoader
-@synthesize delegate = _delegate;
+@implementation JMLegacyDashboardLoader
+@synthesize delegate;
 
 #pragma mark - Initializers
 - (void)dealloc
@@ -46,64 +47,77 @@
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 }
 
-- (id<JMDashboardLoader> __nullable)initWebEnvironment:(JMWebEnvironment * __nonnull)webEnvironment
+- (id<JMDashboardLoader> __nullable)initWithRESTClient:(JSRESTBase *)restClient
+                                        webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment
 {
     self = [super init];
     if (self) {
+        NSAssert(restClient != nil, @"Parameter for rest client is nil");
         NSAssert(webEnvironment != nil, @"WebEnvironment is nil");
         _webEnvironment = (JMRESTWebEnvironment *) webEnvironment;
-        [self addListenersForWebEnvironmentEvents];
+        _state = JMDashboardLoaderStateInitial;
+        _restClient = [restClient copy];
     }
     return self;
 }
 
-+ (id<JMDashboardLoader> __nullable)loaderWebEnvironment:(JMWebEnvironment * __nonnull)webEnvironment
++ (id<JMDashboardLoader> __nullable)loaderWithRESTClient:(JSRESTBase *)restClient
+                                          webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment
 {
-    return [[self alloc] initWebEnvironment:webEnvironment];
+    return [[self alloc] initWithRESTClient:restClient
+                             webEnvironment:webEnvironment];
 }
 
-#pragma mark - Public API
-- (void)loadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
+#pragma mark - JMDashboardLoader required methods
+
+- (void)runDashboard:(JMDashboard *__nonnull)dashboard completion:(JMDashboardLoaderCompletion __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
-    NSAssert(self.dashboard != nil, @"Dashboard is nil");
-    if (self.isCancelLoad) {
+    NSAssert(dashboard != nil, @"Dashboard is nil");
+
+    if (self.state == JMDashboardLoaderStateCancel) {
         return;
     }
 
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-
+    self.state = JMDashboardLoaderStateLoading;
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.cancelLoading) {
+        if (strongSelf.state == JMDashboardLoaderStateCancel) {
             return;
         }
         if (isReady) {
-            [strongSelf runDashboardWithCompletion:heapBlock];
+            strongSelf.dashboard = dashboard;
+            strongSelf.state = JMDashboardLoaderStateConfigured;
+            [strongSelf freshRunDashboardWithCompletion:completion];
         } else {
-            heapBlock(NO, error);
+            strongSelf.state = JMDashboardLoaderStateFailed;
+            completion(NO, error);
         }
     }];
 }
 
-- (void)cancel
-{
-    self.cancelLoading = YES;
-}
-
 - (void)destroy
 {
-    [self removeListenersForVisualizeEvents];
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+
+    self.state = JMDashboardLoaderStateDestroy;
+}
+
+- (void)cancel
+{
+    NSAssert(self.dashboard != nil, @"Dashboard is nil");
+
+    self.state = JMDashboardLoaderStateCancel;
 }
 
 #pragma mark - Helpers
-- (void)runDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion {
+
+- (void)freshRunDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
+{
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.dashboard != nil, @"Dashboard is nil");
 
-    JMDashboardLoaderCompletion heapBlock = [completion copy];
-    // run
     JMJavascriptRequest *runRequest = [JMJavascriptRequest requestWithCommand:@"API.runDashboard"
                                                                   inNamespace:JMJavascriptNamespaceRESTDashboard
                                                                    parameters:@{
@@ -113,36 +127,15 @@
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:runRequest completion:^(NSDictionary *parameters, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.isCancelLoad) {
+        if (strongSelf.state == JMDashboardLoaderStateCancel) {
             return;
         }
         if (error) {
-            heapBlock(NO, error);
+            completion(NO, error);
         } else {
-            heapBlock(YES, nil);
+            completion(YES, nil);
         }
     }];
-}
-
-- (void)addListenersForWebEnvironmentEvents
-{
-    // Authorization
-    __weak __typeof(self) weakSelf = self;
-    NSString *unauthorizedListenerId = @"JasperMobile.VIS.Dashboard.API.unauthorized";
-    [self.webEnvironment addListener:self
-                          forEventId:unauthorizedListenerId
-                            callback:^(NSDictionary *params, NSError *error) {
-                                JMLog(unauthorizedListenerId);
-                                if (!weakSelf) {
-                                    return;
-                                }
-//                                [weakSelf.delegate dashboardLoaderDidReceiveAuthRequest:weakSelf];
-                            }];
-}
-
-- (void)removeListenersForVisualizeEvents
-{
-    [self.webEnvironment removeListener:self];
 }
 
 @end

@@ -21,7 +21,7 @@
  */
 
 //
-//  JMBaseDashboardLoader.h
+//  JMLegacyDashboardLoader.h
 //  TIBCO JasperMobile
 //
 
@@ -32,6 +32,6 @@
 
 #import "JMDashboardLoader.h"
 
-@interface JMBaseDashboardLoader : NSObject <JMDashboardLoader>
+@interface JMLegacyDashboardLoader : NSObject <JMDashboardLoader>
 @property (nonatomic, strong, readonly) JMDashboard *dashboard;
 @end

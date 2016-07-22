@@ -28,7 +28,7 @@
 
 #import "JMDashboardViewerConfigurator.h"
 #import "JMDashboardLoader.h"
-#import "JMBaseDashboardLoader.h"
+#import "JMLegacyDashboardLoader.h"
 #import "JMVisDashboardLoader.h"
 #import "JMWebViewManager.h"
 #import "JMVisualizeManager.h"
@@ -100,7 +100,7 @@
             break;
         }
         case JMResourceFlowTypeREST: {
-            _dashboardLoader = [JMBaseDashboardLoader loaderWithRESTClient:self.restClient
+            _dashboardLoader = [JMLegacyDashboardLoader loaderWithRESTClient:self.restClient
                                                             webEnvironment:webEnvironment];
             break;
         }

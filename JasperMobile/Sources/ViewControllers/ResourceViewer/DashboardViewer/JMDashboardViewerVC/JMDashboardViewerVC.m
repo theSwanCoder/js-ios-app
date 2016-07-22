@@ -53,7 +53,6 @@
 #import "JMResourceViewerSessionManager.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMResourceViewerStateManagerDelegate>
-//@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @end
 
 
@@ -267,15 +266,6 @@
                                               }
                                           }];
 }
-
-#pragma mark - Printing
-
-//#pragma mark - Print
-//- (void)printResource
-//{
-//    [super printResource];
-//    [self printItem:[self.contentView renderedImage] withName:self.dashboard.resource.resourceLookup.label completion:nil];
-//}
 
 #pragma mark - Resource Viewing methods
 
@@ -497,19 +487,6 @@
                                                                       cancelCompletionHandler:nil];
     [self presentViewController:alertController animated:YES completion:nil];
 }
-
-//- (void)dashboardLoaderDidReceiveAuthRequest:(id <JMDashboardLoader>)loader
-//{
-//    if ([self isDashletShown]) {
-//        [self minimizeDashlet];
-//    }
-//
-//    if ([self isContentOnTV]) {
-//        [self switchFromTV];
-//    }
-//
-////    [self handleAuthError];
-//}
 
 #pragma mark - Helpers
 - (BOOL)isDashletShown

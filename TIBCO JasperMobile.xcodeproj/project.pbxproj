@@ -244,7 +244,7 @@
 		A1478C9BE403FF4E85699FAE /* JMResourceViewerFavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A147805FAC7FFFB73585CF97 /* JMResourceViewerFavoritesHelper.m */; };
 		A1478CB871288029EE6A630D /* JMBookmarkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A147889C0F92771D412D2883 /* JMBookmarkTableViewCell.m */; };
 		A1478CD1C22576042B89B914 /* JMVIZWebEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = A14786251373534CAA2C6539 /* JMVIZWebEnvironment.m */; };
-		A1478D036A55DD99C14C456C /* JMBaseDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A14785C25103754A73E256B4 /* JMBaseDashboardLoader.m */; };
+		A1478D036A55DD99C14C456C /* JMLegacyDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A14785C25103754A73E256B4 /* JMLegacyDashboardLoader.m */; };
 		A1478D57003D95991B54B367 /* JMShareImageActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = A14782967D263864C79B3E76 /* JMShareImageActivityItemProvider.m */; };
 		A1478D6B609C61DEF3A3AC92 /* JMVisualizeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AE10405430D44256CA0 /* JMVisualizeManager.m */; };
 		A1478DE7E946DA1ECD90A6DC /* JMHTMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478A179131435F6FD7A74C /* JMHTMLParser.m */; };
@@ -670,7 +670,7 @@
 		A14785A126652E52E395CE0B /* JMServerProfile+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMServerProfile+Helpers.m"; sourceTree = "<group>"; };
 		A14785ABAB3DF7E0FD2962BD /* JMExternalWindowControlsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowControlsVC.h; sourceTree = "<group>"; };
 		A14785AF90B597E785B4A30A /* old_dashboard.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = old_dashboard.js; sourceTree = "<group>"; };
-		A14785C25103754A73E256B4 /* JMBaseDashboardLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseDashboardLoader.m; sourceTree = "<group>"; };
+		A14785C25103754A73E256B4 /* JMLegacyDashboardLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLegacyDashboardLoader.m; sourceTree = "<group>"; };
 		A14785D30B8F6DC68483AFD7 /* JMVisualizeReportLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeReportLoader.m; sourceTree = "<group>"; };
 		A14786251373534CAA2C6539 /* JMVIZWebEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVIZWebEnvironment.m; sourceTree = "<group>"; };
 		A147862FFC3E49F722AD9F18 /* JMJavascriptEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptEvent.h; sourceTree = "<group>"; };
@@ -752,7 +752,7 @@
 		A1478B758E018C4B68EDB8F3 /* JMMenuAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuAction.m; sourceTree = "<group>"; };
 		A1478B890A020A2A20D6ADA7 /* JMSchedulesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSchedulesListLoader.h; sourceTree = "<group>"; };
 		A1478B90B9D5A4E7D853B292 /* JMTextInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextInputControlCell.h; sourceTree = "<group>"; };
-		A1478B9528F3A65C78D75153 /* JMBaseDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseDashboardLoader.h; sourceTree = "<group>"; };
+		A1478B9528F3A65C78D75153 /* JMLegacyDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLegacyDashboardLoader.h; sourceTree = "<group>"; };
 		A1478BD1E1A3035E9129B382 /* JMBooleanInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBooleanInputControlCell.h; sourceTree = "<group>"; };
 		A1478BE421C2F228FFA2B6B8 /* zh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh; path = Localizable.strings; sourceTree = "<group>"; };
 		A1478BF83A6E4771071134F3 /* JMVisualizeReportLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeReportLoader.h; sourceTree = "<group>"; };
@@ -2535,8 +2535,8 @@
 		A1478391B9B6E9992CA6F836 /* JMBaseDashboardLoader */ = {
 			isa = PBXGroup;
 			children = (
-				A1478B9528F3A65C78D75153 /* JMBaseDashboardLoader.h */,
-				A14785C25103754A73E256B4 /* JMBaseDashboardLoader.m */,
+				A1478B9528F3A65C78D75153 /* JMLegacyDashboardLoader.h */,
+				A14785C25103754A73E256B4 /* JMLegacyDashboardLoader.m */,
 			);
 			path = JMBaseDashboardLoader;
 			sourceTree = "<group>";
@@ -3932,7 +3932,7 @@
 				A14783E11185871A5F96EF24 /* JMShareViewController.m in Sources */,
 				A147899C679143DE22D0749D /* JMSavedResourceViewerViewController.m in Sources */,
 				A1478BD2553BCE37A3DBFEBE /* JMDashboardViewerConfigurator.m in Sources */,
-				A1478D036A55DD99C14C456C /* JMBaseDashboardLoader.m in Sources */,
+				A1478D036A55DD99C14C456C /* JMLegacyDashboardLoader.m in Sources */,
 				A1478F629C5E3800AF28AF49 /* JMVisDashboardLoader.m in Sources */,
 				A1478AB3580B02743A75D9EA /* JMDashboardViewerVC.m in Sources */,
 				A1478C122CA5355FC8CAE2B2 /* JMDashboardInputControlsVC.m in Sources */,
