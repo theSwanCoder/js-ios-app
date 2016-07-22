@@ -48,6 +48,7 @@
 #import "JMDashboardViewerStateManager.h"
 #import "PopoverView.h"
 #import "JMResourceViewerInfoPageManager.h"
+#import "JMResourceViewerPrintManager.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMResourceViewerStateManagerDelegate>
 //@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
@@ -67,10 +68,9 @@
 
 - (void)loadView
 {
-    JMBaseResourceView *resourceView = [[[NSBundle mainBundle] loadNibNamed:@"JMBaseResourceView"
-                                                                      owner:self
-                                                                    options:nil] firstObject];
-    self.view = resourceView;
+    self.view = [[[NSBundle mainBundle] loadNibNamed:@"JMBaseResourceView"
+                                               owner:self
+                                             options:nil] firstObject];
 }
 
 - (void)viewDidLoad
@@ -375,20 +375,20 @@
 
 - (JMMenuActionsViewAction)availableActions
 {
-    JMMenuActionsViewAction menuActions = JMMenuActionsViewAction_Info;
-
+    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info;
     if (self.resource.type != JMResourceTypeLegacyDashboard) {
-        menuActions |= JMMenuActionsViewAction_Refresh;
+        availableAction |= JMMenuActionsViewAction_Refresh;
     }
+    availableAction |= JMMenuActionsViewAction_Share | JMMenuActionsViewAction_Print;
 
 //    if ([self isExternalScreenAvailable]) {
 //        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
 //    }
 
     if ([self isFiltersAvailable]) {
-        menuActions |= JMMenuActionsViewAction_EditFilters;
+        availableAction |= JMMenuActionsViewAction_EditFilters;
     }
-    return menuActions;
+    return availableAction;
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -413,6 +413,16 @@
         }
         case JMMenuActionsViewAction_EditFilters: {
             [self showFiltersVC];
+            break;
+        }
+        case JMMenuActionsViewAction_Print: {
+            self.configurator.printManager.controller = self;
+            UIImage *renderedImage = [[self contentView] renderedImage];
+            self.configurator.printManager.prepareBlock = (id)^{
+                return renderedImage;
+            };
+            [self.configurator.printManager printResource:self.resource
+                                               completion:nil];
             break;
         }
         default:{break;}

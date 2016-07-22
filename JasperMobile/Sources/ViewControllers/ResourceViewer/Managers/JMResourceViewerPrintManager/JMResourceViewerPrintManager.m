@@ -46,18 +46,18 @@
     self.printSettingsPreferredContentSize = CGSizeMake(540, 580);
 
     __weak __typeof(self) weakSelf = self;
-    [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
+    [self preparePreviewForPrintWithCompletion:^(id printItem) {
         if (completion) {
             completion();
         }
-        if (resourceURL) {
+        if (printItem) {
             __typeof(self) strongSelf = weakSelf;
             __weak __typeof(self) weakSelf = strongSelf;
-            [strongSelf printItem:resourceURL
+            [strongSelf printItem:printItem
                          withName:strongSelf.resource.resourceLookup.label
                        completion:^(BOOL completed, NSError *error){
                            __typeof(self) strongSelf = weakSelf;
-                           [strongSelf removeResourceWithURL:resourceURL];
+                           [strongSelf cleaningUpAfterPrintingItem:printItem];
                            if (completed) {
                                [strongSelf sendAnalyticsEvents];
                            }
@@ -71,10 +71,28 @@
 
 #pragma mark - Helpers
 
-- (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
+- (void)preparePreviewForPrintWithCompletion:(void(^)(id printItem))completion
+{
+    if (self.prepareBlock) {
+        completion(self.prepareBlock());
+    } else {
+        if (self.resource.type == JMResourceTypeReport) {
+            [self prepareReportForPrintingWithCompletion:completion];
+        } else if (self.resource.type == JMResourceTypeDashboard) {
+            // TODO: implement
+        } else {
+            // TODO: extend for other resources
+        }
+    }
+}
+
+- (void)cleaningUpAfterPrintingItem:(id)printItem
 {
     if (self.resource.type == JMResourceTypeReport) {
-        [self prepareReportForPrintingWithCompletion:completion];
+        if ([printItem isKindOfClass:[NSURL class]]) {
+            NSURL *resourceURL = printItem;
+            [self removeResourceWithURL:resourceURL];
+        }
     } else if (self.resource.type == JMResourceTypeDashboard) {
         // TODO: implement
     } else {
@@ -113,8 +131,8 @@
 {
     UIPrintInfo *printInfo = [UIPrintInfo printInfo];
     printInfo.jobName = itemName;
-    // TODO: we need this parameter?
-//    printInfo.duplex = UIPrintInfoDuplexLongEdge;
+    printInfo.outputType = UIPrintInfoOutputGeneral;
+    printInfo.duplex = UIPrintInfoDuplexLongEdge;
 
     UIPrintInteractionController *printInteractionController = [UIPrintInteractionController sharedPrintController];
     printInteractionController.printInfo = printInfo;
