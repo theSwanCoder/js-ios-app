@@ -49,6 +49,7 @@
 #import "PopoverView.h"
 #import "JMResourceViewerInfoPageManager.h"
 #import "JMResourceViewerPrintManager.h"
+#import "JMResourceViewerShareManager.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMResourceViewerStateManagerDelegate>
 //@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
@@ -423,6 +424,11 @@
             };
             [self.configurator.printManager printResource:self.resource
                                                completion:nil];
+            break;
+        }
+        case JMMenuActionsViewAction_Share:{
+            self.configurator.shareManager.controller = self;
+            [self.configurator.shareManager shareContentView:[self contentView]];
             break;
         }
         default:{break;}
