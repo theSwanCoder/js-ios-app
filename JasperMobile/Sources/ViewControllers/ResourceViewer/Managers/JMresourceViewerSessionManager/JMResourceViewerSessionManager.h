@@ -34,10 +34,10 @@
 @class JMReportViewerVC;
 
 @interface JMResourceViewerSessionManager : NSObject
-@property (nonatomic, weak) JMReportViewerVC * __nullable controller; // TODO: come up with general case
-@property (nonatomic, copy) void(^ __nullable cleanAction)(void);
-@property (nonatomic, copy) void(^ __nullable executeAction)(void);
-@property (nonatomic, copy) void(^ __nullable exitAction)(void);
+@property (nonatomic, weak, nullable) UIViewController *controller;
+@property (nonatomic, copy, nullable) void(^cleanAction)(void);
+@property (nonatomic, copy, nullable) void(^executeAction)(void);
+@property (nonatomic, copy, nullable) void(^exitAction)(void);
 - (void)handleSessionDidExpire;
 - (void)handleSessionDidChangeWithAlert:(BOOL)needAlert;
 @end
