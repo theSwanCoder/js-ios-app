@@ -67,10 +67,10 @@ typedef NS_ENUM(NSInteger, JMDashboardLoaderState) {
                                           webEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
 
 - (void)runDashboard:(JMDashboard *__nonnull)dashboard completion:(JMDashboardLoaderCompletion __nonnull) completion;
-- (void)reloadWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)destroy; // TODO: need completion?
 - (void)cancel; // TODO: need completion?
 @optional
+- (void)reloadWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)applyParameters:(NSDictionary <NSString *, NSArray <NSString *>*> *__nonnull)parameters completion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)reloadDashboardComponent:(JSDashboardComponent *__nonnull)component completion:(JMDashboardLoaderCompletion __nonnull) completion;
 - (void)maximizeDashboardComponent:(JSDashboardComponent *__nonnull)component completion:(JMDashboardLoaderCompletion __nonnull) completion;
