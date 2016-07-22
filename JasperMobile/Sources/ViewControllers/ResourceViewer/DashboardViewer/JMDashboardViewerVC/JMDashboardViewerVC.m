@@ -50,6 +50,7 @@
 #import "JMResourceViewerInfoPageManager.h"
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerShareManager.h"
+#import "JMResourceViewerSessionManager.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMResourceViewerStateManagerDelegate>
 //@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
@@ -80,8 +81,10 @@
 
     self.title = self.resource.resourceLookup.label;
 
+
     [self.configurator setup];
     [self dashboardLoader].delegate = self;
+    [self setupSessionManager];
     [self setupStateManager];
 
     [self startResourceViewing];
@@ -108,6 +111,33 @@
         [weakSelf minimizeDashlet];
     };
     [[self stateManager] setupPageForState:JMDashboardViewerStateInitial];
+}
+
+- (void)setupSessionManager
+{
+    self.configurator.sessionManager.controller = self;
+
+    __weak typeof(self) weakSelf = self;
+    self.configurator.sessionManager.cleanAction = ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf.configurator reset];
+        if ([strongSelf isDashletShown]) {
+            [strongSelf dashboard].maximizedComponent = nil;
+            strongSelf.navigationItem.title = strongSelf.resource.resourceLookup.label;
+        }
+    };
+    self.configurator.sessionManager.executeAction = ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf.configurator setup];
+        [[strongSelf dashboardLoader] setDelegate:strongSelf];
+        [strongSelf setupStateManager];
+
+        [strongSelf startResourceViewing];
+    };
+    self.configurator.sessionManager.exitAction = ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf exitAction];
+    };
 }
 
 #pragma mark - Helpers
@@ -498,11 +528,7 @@
     [[self stateManager] setupPageForState:JMDashboardViewerStateResourceFailed];
     switch (error.code) {
         case JMJavascriptRequestErrorTypeAuth: {
-            if ([self isDashletShown]) {
-                [self dashboard].maximizedComponent = nil;
-                self.navigationItem.title = self.resource.resourceLookup.label;
-            }
-//            [self handleAuthError];
+            [self.configurator.sessionManager handleSessionDidExpire];
             break;
         }
         case JMJavascriptRequestErrorTypeUnexpected:

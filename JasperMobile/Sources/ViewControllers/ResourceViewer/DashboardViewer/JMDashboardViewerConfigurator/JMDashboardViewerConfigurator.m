@@ -42,6 +42,7 @@
 #import "JMResourceViewerShareManager.h"
 #import "JMResourceViewerHyperlinksManager.h"
 #import "JMResourceViewerDocumentManager.h"
+#import "JMResourceViewerSessionManager.h"
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMDashboardLoader> dashboardLoader;
@@ -117,6 +118,7 @@
     _hyperlinksManager = [self createHyperlinksManager];
     _hyperlinksManager.delegate = self.stateManager;
     _documentManager = [self createDocumentManager];
+    _sessionManager = [self createSessionManager];
 }
 
 - (JMDashboardViewerStateManager *)createStateManager
@@ -147,6 +149,11 @@
 - (JMResourceViewerDocumentManager *)createDocumentManager
 {
     return [JMResourceViewerDocumentManager new];
+}
+
+- (JMResourceViewerSessionManager *)createSessionManager
+{
+    return [JMResourceViewerSessionManager new];
 }
 
 @end

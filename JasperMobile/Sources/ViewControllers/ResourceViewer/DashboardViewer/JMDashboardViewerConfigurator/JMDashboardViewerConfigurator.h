@@ -40,6 +40,7 @@
 @class JMResourceViewerShareManager;
 @class JMResourceViewerHyperlinksManager;
 @class JMResourceViewerDocumentManager;
+@class JMResourceViewerSessionManager;
 
 @interface JMDashboardViewerConfigurator : NSObject
 @property (nonatomic, strong, readonly, nonnull) id<JMDashboardLoader> dashboardLoader;
@@ -50,6 +51,7 @@
 @property (nonatomic, strong, nonnull) JMResourceViewerShareManager * shareManager;
 @property (nonatomic, strong, nonnull) JMResourceViewerHyperlinksManager * hyperlinksManager;
 @property (nonatomic, strong, nonnull) JMResourceViewerDocumentManager * documentManager;
+@property (nonatomic, strong, nonnull) JMResourceViewerSessionManager *sessionManager;
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
 
 - (instancetype __nullable)initWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment;
