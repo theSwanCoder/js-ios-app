@@ -37,6 +37,7 @@
 #import "JMResource.h"
 #import "JMVIZWebEnvironment.h"
 #import "JMDashboardViewerStateManager.h"
+#import "JMResourceViewerInfoPageManager.h"
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMDashboardLoader> dashboardLoader;
@@ -106,11 +107,17 @@
         }
     }
     _stateManager = [self createStateManager];
+    _infoPageManager = [self createInfoPageManager];
 }
 
 - (JMDashboardViewerStateManager *)createStateManager
 {
     return [JMDashboardViewerStateManager new];
+}
+
+- (JMResourceViewerInfoPageManager *)createInfoPageManager
+{
+    return [JMResourceViewerInfoPageManager new];
 }
 
 @end

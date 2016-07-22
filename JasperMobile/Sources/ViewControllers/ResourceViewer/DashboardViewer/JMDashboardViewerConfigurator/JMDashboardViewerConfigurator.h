@@ -35,11 +35,13 @@
 @class JMDashboard;
 @class JMWebEnvironment;
 @class JMDashboardViewerStateManager;
+@class JMResourceViewerInfoPageManager;
 
 @interface JMDashboardViewerConfigurator : NSObject
 @property (nonatomic, strong, readonly, nonnull) id<JMDashboardLoader> dashboardLoader;
 @property (nonatomic, strong, readonly, nonnull) JMWebEnvironment *webEnvironment;
 @property (nonatomic, strong, nonnull) JMDashboardViewerStateManager *stateManager;
+@property (nonatomic, strong) JMResourceViewerInfoPageManager * __nonnull infoPageManager;
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
 
 - (instancetype __nullable)initWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment;

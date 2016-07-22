@@ -47,6 +47,7 @@
 #import "JMHyperlink.h"
 #import "JMDashboardViewerStateManager.h"
 #import "PopoverView.h"
+#import "JMResourceViewerInfoPageManager.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMResourceViewerStateManagerDelegate>
 //@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
@@ -402,8 +403,8 @@
             [[self stateManager] updateFavoriteState];
             break;
         case JMMenuActionsViewAction_Info: {
-//            self.configurator.infoPageManager.controller = self;
-//            [self.configurator.infoPageManager showInfoPageForResource:self.resource];
+            self.configurator.infoPageManager.controller = self;
+            [self.configurator.infoPageManager showInfoPageForResource:self.resource];
             break;
         }
         case JMMenuActionsViewAction_Refresh: {
