@@ -89,7 +89,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 - (void)destroy
 {
-    if (self.webEnvironment.isReady) {
+    if (self.webEnvironment.state == JMWebEnvironmentStateReady) {
         if (self.webEnvironment.isReusable) {
             JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"API.injectContent"
                                                                                     inNamespace:JMJavascriptNamespaceRESTReport

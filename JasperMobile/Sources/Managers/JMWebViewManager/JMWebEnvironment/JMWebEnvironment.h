@@ -27,44 +27,17 @@
 //
 
 
-@class JMJavascriptRequest;
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.4
 */
 
-typedef void(^JMWebEnvironmentPendingBlock)(void);
-typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nullable params, NSError * __nullable error);
+#import "JMBaseWebEnvironment.h"
 
-@interface JMWebEnvironment : NSObject
-@property (nonatomic, strong) WKWebView * __nullable webView;
-@property (nonatomic, copy) NSString * __nonnull identifier;
-@property (nonatomic, assign, getter=isReusable) BOOL reusable;
+@interface JMWebEnvironment : JMBaseWebEnvironment
 @property (nonatomic, assign) JMResourceFlowType flowType;
-@property (nonatomic, assign, getter=isReady) BOOL ready;
 
-- (instancetype __nullable)initWithId:(NSString *__nonnull)identifier initialCookies:(NSArray *__nullable)cookies;
-+ (instancetype __nullable)webEnvironmentWithId:(NSString *__nullable)identifier initialCookies:(NSArray *__nullable)cookies;
 - (void)verifyJasperMobileEnableWithCompletion:(void (^ __nonnull)(BOOL isEnable))completion;
-- (void)updateCookiesWithCookies:(NSArray *__nullable)cookies;
-- (void)addPendingBlock:(JMWebEnvironmentPendingBlock __nonnull)pendingBlock;
-- (void)loadRequest:(NSURLRequest * __nonnull)request;
-- (void)loadHTML:(NSString * __nonnull)HTMLString
-         baseURL:(NSURL * __nullable)baseURL;
-- (void)loadLocalFileFromURL:(NSURL * __nonnull)fileURL
-                  fileFormat:(NSString * __nullable)fileFormat
-                     baseURL:(NSURL * __nullable)baseURL;
-
-- (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
-                   completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion;
-- (void)addListener:(id __nonnull)listener
-         forEventId:(NSString * __nonnull)eventId
-           callback:(JMWebEnvironmentRequestParametersCompletion __nonnull)callback;
-- (void)removeListener:(id __nonnull)listener;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
-- (void)cleanCache;
-- (void)resetZoom;
-- (void)clean;
-- (void)reset;
 @end
