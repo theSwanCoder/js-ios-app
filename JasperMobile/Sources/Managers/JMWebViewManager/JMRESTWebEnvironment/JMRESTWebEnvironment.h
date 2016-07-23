@@ -37,6 +37,5 @@
 
 @interface JMRESTWebEnvironment : JMWebEnvironment
 @property (nonatomic, strong) JMVisualizeManager *visualizeManager;
-- (void)prepareWithCompletion:(void (^)(BOOL isReady, NSError *error))completion;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end

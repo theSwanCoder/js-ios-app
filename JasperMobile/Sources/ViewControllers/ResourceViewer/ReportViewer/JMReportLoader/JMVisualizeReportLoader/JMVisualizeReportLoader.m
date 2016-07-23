@@ -284,27 +284,12 @@ initialDestination:(nullable JSReportDestination *)destination
         return;
     }
 
-    self.state = JSReportLoaderStateLoading;
-
-    JSReportLoaderCompletionBlock heapBlock = [completion copy];
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.state == JSReportLoaderStateCancel) {
-            return;
-        }
-        if (isReady) {
-            strongSelf.report = report;
-            strongSelf.report.reportParameters = initialParameters;
-            strongSelf.state = JSReportLoaderStateConfigured;
-            [strongSelf freshLoadReportWithDestination:destination
-                                            parameters:initialParameters
-                                            completion:heapBlock];
-        } else {
-            strongSelf.state = JSReportLoaderStateFailed;
-            heapBlock(NO, [strongSelf loaderErrorFromBridgeError:error]);
-        }
-    }];
+    self.report = report;
+    self.report.reportParameters = initialParameters;
+    self.state = JSReportLoaderStateConfigured;
+    [self freshLoadReportWithDestination:destination
+                              parameters:initialParameters
+                              completion:completion];
 }
 
 - (void)navigateToBookmark:(nonnull JSReportBookmark *)bookmark

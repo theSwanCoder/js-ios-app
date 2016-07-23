@@ -89,7 +89,7 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 
 - (void)destroy
 {
-    if (self.webEnvironment.state == JMWebEnvironmentStateReady) {
+    if (self.webEnvironment.state == JMWebEnvironmentStateEnvironmentReady) {
         if (self.webEnvironment.isReusable) {
             JMJavascriptRequest *injectContentRequest = [JMJavascriptRequest requestWithCommand:@"API.injectContent"
                                                                                     inNamespace:JMJavascriptNamespaceRESTReport
@@ -123,18 +123,11 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 #pragma mark - Private API
 - (void)startLoadReportHTML
 {
-    [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
-        if (isReady) {
-            [self renderReportWithCompletion:^(BOOL success, NSError *error) {
-                if (success) {
-                    [super startLoadReportHTML];
-                } else {
-                    JMLog(@"error of rendering report: %@", error.localizedDescription);
-                    // TODO: extend errors handling
-                    [self loadHTMLWithOldFlow];
-                }
-            }];
+    [self renderReportWithCompletion:^(BOOL success, NSError *error) {
+        if (success) {
+            [super startLoadReportHTML];
         } else {
+            JMLog(@"error of rendering report: %@", error.localizedDescription);
             // TODO: extend errors handling
             [self loadHTMLWithOldFlow];
         }
@@ -144,21 +137,19 @@ typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 - (void)loadHTMLWithOldFlow
 {
     [self.webEnvironment loadHTML:self.report.HTMLString
-                          baseURL:[NSURL URLWithString:self.report.baseURLString]];
-
-    // Pending block will call after page will be loaded into webview
-    [self.webEnvironment addPendingBlock:^{
-        JMJavascriptRequest *applyZoomRequest = [JMJavascriptRequest requestWithCommand:@"API.applyZoomForReport"
-                                                                            inNamespace:JMJavascriptNamespaceRESTReport
-                                                                             parameters:nil];
-        [self.webEnvironment sendJavascriptRequest:applyZoomRequest
-                                        completion:^(NSDictionary *params, NSError *error) {
-                                            if (error) {
-                                                JMLog(@"error of applying zoom: %@", error);
-                                            }
-                                            [super startLoadReportHTML];
-                                        }];
-    }];
+                          baseURL:[NSURL URLWithString:self.report.baseURLString]
+                       completion:^(BOOL isReady, NSError *error) {
+                           JMJavascriptRequest *applyZoomRequest = [JMJavascriptRequest requestWithCommand:@"API.applyZoomForReport"
+                                                                                               inNamespace:JMJavascriptNamespaceRESTReport
+                                                                                                parameters:nil];
+                           [self.webEnvironment sendJavascriptRequest:applyZoomRequest
+                                                           completion:^(NSDictionary *params, NSError *error) {
+                                                               if (error) {
+                                                                   JMLog(@"error of applying zoom: %@", error);
+                                                               }
+                                                               [super startLoadReportHTML];
+                                                           }];
+            }];
 }
 
 

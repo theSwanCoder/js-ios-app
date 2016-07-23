@@ -169,7 +169,7 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         self.cookies = restClient.cookies;
         // TODO: what need we do if cookies if nil?
         for (JMWebEnvironment *webEnvironment in self.webEnvironments) {
-            [webEnvironment updateCookiesWithCookies:self.cookies];
+            webEnvironment.state = JMWebEnvironmentStateSessionExpired;
         }
     } else {
         // TODO: need handle this case?

@@ -20,7 +20,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
 //  JMVIZWebEnvironment.m
 //  TIBCO JasperMobile
@@ -65,36 +64,16 @@
 }
 
 #pragma mark - Public API
-- (void)prepareWithCompletion:(void(^)(BOOL isReady, NSError *error))completion
+- (void)prepareWebViewWithCompletion:(void (^ __nonnull)(BOOL isReady, NSError *__nullable error))completion
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    __weak __typeof(self) weakSelf = self;
-    [self verifyJasperMobileEnableWithCompletion:^(BOOL isJasperMobileEnable) {
-        __typeof(self) strongSelf = weakSelf;
-        if (isJasperMobileEnable) {
-            [strongSelf verifyVisualizeLoadedWithCompletion:^(BOOL isVisualizeLoaded) {
-                if (isVisualizeLoaded) {
-                    completion(YES, nil);
-                } else {
-                    [strongSelf loadVisualizeWithCompletion:completion];
-                }
-            }];
-        } else {
-            [strongSelf loadJasperMobilePageWithCompletion:completion];
-        }
-    }];
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    [self loadJasperMobilePageWithCompletion:completion];
 }
 
-- (void)verifyVisualizeLoadedWithCompletion:(void(^ __nonnull)(BOOL isVisualizeLoaded))completion
+- (void)prepareEnvironmentWithCompletion:(void (^ __nonnull)(BOOL isReady, NSError *__nullable error))completion
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSAssert(completion != nil, @"Completion is nil");
-    NSString *jsCommand = @"typeof(visualize);";
-    [self.webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
-        BOOL isFunction = [result isEqualToString:@"function"];
-        BOOL isEnable = !error && isFunction;
-        completion(isEnable);
-    }];
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    [self loadVisualizeWithCompletion:completion];
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
@@ -114,6 +93,7 @@
     }
 }
 
+// delete
 - (void)cleanCache
 {
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"reset"
@@ -128,14 +108,8 @@
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self loadHTML:self.visualizeManager.htmlString
-           baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
-
-    __weak __typeof(self) weakSelf = self;
-    [self addPendingBlock:^{
-        JMLog(@"JasperMobile was loaded");
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf loadVisualizeWithCompletion:completion];
-    }];
+           baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
+        completion:completion];
 }
 
 - (void)loadVisualizeWithCompletion:(void(^)(BOOL isLoaded, NSError *error))completion

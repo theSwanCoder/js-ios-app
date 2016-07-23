@@ -79,22 +79,9 @@
         return;
     }
 
-    self.state = JMDashboardLoaderStateLoading;
-    __weak __typeof(self) weakSelf = self;
-    [self.webEnvironment prepareWithCompletion:^(BOOL isReady, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (strongSelf.state == JMDashboardLoaderStateCancel) {
-            return;
-        }
-        if (isReady) {
-            strongSelf.dashboard = dashboard;
-            strongSelf.state = JMDashboardLoaderStateConfigured;
-            [strongSelf freshRunDashboardWithCompletion:completion];
-        } else {
-            strongSelf.state = JMDashboardLoaderStateFailed;
-            completion(NO, error);
-        }
-    }];
+    self.dashboard = dashboard;
+    self.state = JMDashboardLoaderStateConfigured;
+    [self freshRunDashboardWithCompletion:completion];
 }
 
 - (void)destroy

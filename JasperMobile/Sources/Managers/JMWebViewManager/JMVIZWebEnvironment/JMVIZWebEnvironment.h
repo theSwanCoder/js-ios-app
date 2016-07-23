@@ -37,5 +37,4 @@
 
 @interface JMVIZWebEnvironment : JMWebEnvironment
 @property (nonatomic, strong) JMVisualizeManager *visualizeManager;
-- (void)prepareWithCompletion:(void (^)(BOOL isReady, NSError *error))completion;
 @end

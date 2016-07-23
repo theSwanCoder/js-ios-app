@@ -57,11 +57,9 @@
             htmlString = [htmlString stringByReplacingOccurrencesOfString:@"STATIC_DEPENDENCIES" withString:staticDependencies];
 
             [strongSelf loadHTML:htmlString
-                         baseURL:[NSURL URLWithString:strongSelf.restClient.serverProfile.serverUrl]];
+                         baseURL:[NSURL URLWithString:strongSelf.restClient.serverProfile.serverUrl]
+                      completion:completion];
 
-            [strongSelf addPendingBlock:^{
-                completion(YES, nil);
-            }];
         }
     }];
 }

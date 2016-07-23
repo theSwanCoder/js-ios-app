@@ -32,8 +32,8 @@
 
 @class JMJavascriptRequest;
 
-typedef void(^JMWebEnvironmentPendingBlock)(void);
 typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nullable params, NSError * __nullable error);
+typedef void(^JMWebEnvironmentLoadingCompletion)(BOOL isReady, NSError * __nullable error);
 
 @protocol JMJavascriptRequestExecutionProtocol <NSObject>
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
@@ -47,7 +47,8 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 @protocol JMWebEnvironmentLoadingProtocol <NSObject>
 - (void)loadRequest:(NSURLRequest * __nonnull)request;
 - (void)loadHTML:(NSString * __nonnull)HTMLString
-         baseURL:(NSURL * __nullable)baseURL;
+         baseURL:(NSURL * __nullable)baseURL
+      completion:(JMWebEnvironmentLoadingCompletion __nullable)completion;
 - (void)loadLocalFileFromURL:(NSURL * __nonnull)fileURL
                   fileFormat:(NSString * __nullable)fileFormat
                      baseURL:(NSURL * __nullable)baseURL;
@@ -55,26 +56,25 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 
 typedef NS_ENUM(NSInteger, JMWebEnvironmentState) {
     JMWebEnvironmentStateInitial,           // state without webview
-    JMWebEnvironmentStateWebViewConfiguted, // state when webview was created
-    JMWebEnvironmentStateEnvironmentReady,  // state when webview has scripts loaded
+    JMWebEnvironmentStateWebViewCreated,    // state when webview was created
+    JMWebEnvironmentStateWebViewConfigured, // state when webview has html loaded
     JMWebEnvironmentStateLoading,           // process loading page in webview
+    JMWebEnvironmentStateEnvironmentReady,  // state when webview has scripts loaded
     JMWebEnvironmentStateRequestExecution,  // sending javascript request
-    JMWebEnvironmentStateReady,             // waiting for next javascript request
     JMWebEnvironmentStateSessionExpired,    // cookies became not valid
     JMWebEnvironmentStateCancel             // cancel signal was sent
 };
 
 @interface JMBaseWebEnvironment : NSObject <JMJavascriptRequestExecutionProtocol, JMWebEnvironmentLoadingProtocol>
-@property (nonatomic, assign, readonly) JMWebEnvironmentState state;
+@property (nonatomic, assign) JMWebEnvironmentState state;
 @property (nonatomic, strong, readonly) WKWebView * __nullable webView;
 @property (nonatomic, copy, readonly) NSString * __nonnull identifier;
 @property (nonatomic, assign, getter=isReusable) BOOL reusable; // TODO: remove
 - (instancetype __nullable)initWithId:(NSString *__nonnull)identifier initialCookies:(NSArray *__nullable)cookies;
 + (instancetype __nullable)webEnvironmentWithId:(NSString *__nullable)identifier initialCookies:(NSArray *__nullable)cookies;
 // PUBLIC API
-- (void)addPendingBlock:(JMWebEnvironmentPendingBlock __nonnull)pendingBlock;
-- (void)updateCookiesWithCookies:(NSArray *__nullable)cookies;
-- (void)cleanCache;
+- (void)prepareWebViewWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion;
+- (void)prepareEnvironmentWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion;
 - (void)resetZoom;
 - (void)clean;
 - (void)reset;

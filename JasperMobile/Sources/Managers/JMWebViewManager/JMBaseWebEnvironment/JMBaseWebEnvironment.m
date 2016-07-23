@@ -31,11 +31,10 @@
 #import "UIView+Additions.h"
 
 @interface JMBaseWebEnvironment() <JMJavascriptRequestExecutorDelegate>
-@property (nonatomic, assign, readwrite) JMWebEnvironmentState state;
 @property (nonatomic, strong, readwrite) WKWebView * __nullable webView;
 @property (nonatomic, copy, readwrite) NSString * __nonnull identifier;
 @property (nonatomic, strong) JMJavascriptRequestExecutor * __nonnull requestExecutor;
-@property (nonatomic, strong) NSMutableArray <JMWebEnvironmentPendingBlock>*pendingBlocks;
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
 @end
 
 @implementation JMBaseWebEnvironment
@@ -51,7 +50,9 @@
     self = [super init];
     if (self) {
         _identifier = identifier;
-        _pendingBlocks = [NSMutableArray new];
+        _operationQueue = [NSOperationQueue new];
+        _operationQueue.name = @"WebEnvironment Queue";
+        _operationQueue.maxConcurrentOperationCount = 1;
         [self setupWebEnvironmentWithCookies:cookies];
     }
     return self;
@@ -67,18 +68,22 @@
 - (void)setState:(JMWebEnvironmentState)state
 {
     _state = state;
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     switch(_state) {
         case JMWebEnvironmentStateInitial: {
             JMLog(@"JMWebEnvironmentStateInitial");
             break;
         }
-        case JMWebEnvironmentStateWebViewConfiguted: {
-            JMLog(@"JMWebEnvironmentStateWebViewConfiguted");
+        case JMWebEnvironmentStateWebViewCreated: {
+            JMLog(@"JMWebEnvironmentStateWebViewCreated");
+            break;
+        }
+        case JMWebEnvironmentStateWebViewConfigured: {
+            JMLog(@"JMWebEnvironmentStateWebViewConfigured");
             break;
         }
         case JMWebEnvironmentStateEnvironmentReady: {
             JMLog(@"JMWebEnvironmentStateEnvironmentReady");
-            [self executePendingBlocks];
             break;
         }
         case JMWebEnvironmentStateLoading: {
@@ -87,11 +92,6 @@
         }
         case JMWebEnvironmentStateRequestExecution: {
             JMLog(@"JMWebEnvironmentStateRequestExecution");
-            break;
-        }
-        case JMWebEnvironmentStateReady: {
-            JMLog(@"JMWebEnvironmentStateReady");
-            [self executePendingBlocks];
             break;
         }
         case JMWebEnvironmentStateSessionExpired: {
@@ -109,21 +109,29 @@
 
 - (void)loadHTML:(NSString * __nonnull)HTMLString
          baseURL:(NSURL * __nullable)baseURL
+      completion:(JMWebEnvironmentLoadingCompletion)completion
 {
     NSAssert(HTMLString != nil, @"HTML should not be nil");
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    self.state = JMWebEnvironmentStateLoading;
-    __weak __typeof(self) weakSelf = self;
     JMJavascriptEvent *event = [JMJavascriptEvent eventWithIdentifier:@"DOMContentLoaded"
                                                              listener:self
                                                              callback:^(JMJavascriptResponse *response, NSError *error) {
-                                                                 __typeof(self) strongSelf = weakSelf;
                                                                  JMLog(@"Event was received: DOMContentLoaded");
-                                                                 strongSelf.state = JMWebEnvironmentStateEnvironmentReady;
+                                                                 if (error) {
+                                                                     completion(NO, error);
+                                                                 } else {
+                                                                     if (completion) {
+                                                                         completion(YES, nil);
+                                                                     }
+                                                                 }
                                                              }];
     [self.requestExecutor addListenerWithEvent:event];
-    [self.requestExecutor startLoadHTMLString:HTMLString
-                                      baseURL:baseURL];
+
+    NSBlockOperation *loadHTMLOperation = [NSBlockOperation blockOperationWithBlock:^{
+        [self.requestExecutor startLoadHTMLString:HTMLString
+                                          baseURL:baseURL];
+    }];
+    [self.operationQueue addOperation:loadHTMLOperation];
 }
 
 - (void)loadRequest:(NSURLRequest * __nonnull)request
@@ -163,21 +171,39 @@
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
 {
-    __weak __typeof(self) weakSelf = self;
-    JMWebEnvironmentPendingBlock pendingBlock = ^{
-        JMLog(@"request was sent");
-        __typeof(self) strongSelf = weakSelf;
-        strongSelf.state = JMWebEnvironmentStateRequestExecution;
-        [strongSelf.requestExecutor sendJavascriptRequest:request
-                                               completion:^(JMJavascriptResponse *response, NSError *error) {
-                                                   strongSelf.state = JMWebEnvironmentStateReady;
-                                                   if (completion) {
-                                                       completion(response.parameters, error);
-                                                   }
-                                               }];
-    };
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 
-    [self addPendingBlock:pendingBlock];
+    NSBlockOperation *executionRequestOperation = [NSBlockOperation blockOperationWithBlock:^{
+        JMLog(@"start execute operation");
+        self.state = JMWebEnvironmentStateRequestExecution;
+        [self.requestExecutor sendJavascriptRequest:request
+                                         completion:^(JMJavascriptResponse *response, NSError *error) {
+                                             JMLog(@"end execute operation");
+                                             self.state = JMWebEnvironmentStateEnvironmentReady;
+                                             if (completion) {
+                                                 completion(response.parameters, error);
+                                             }
+                                         }];
+    }];
+    executionRequestOperation.queuePriority = NSOperationQueuePriorityLow;
+
+    if (self.state == JMWebEnvironmentStateWebViewCreated) {
+        [self prepareWithCompletion:^{
+            [self.operationQueue addOperation:executionRequestOperation];
+        }];
+    } else if(self.state == JMWebEnvironmentStateWebViewConfigured) {
+        JMLog(@"try to send request when state is JMWebEnvironmentStateWebViewConfigured");
+    } else if(self.state == JMWebEnvironmentStateEnvironmentReady) {
+        [self.operationQueue addOperation:executionRequestOperation];
+    } else if(self.state == JMWebEnvironmentStateSessionExpired){
+        NSArray *cookies = [JMWebViewManager sharedInstance].cookies;
+        [self updateCookiesWithCookies:cookies completion:^{
+            [self.operationQueue addOperation:executionRequestOperation];
+        }];
+    } else {
+        JMLog(@"try to send request when state is %@", @(self.state));
+        [self.operationQueue addOperation:executionRequestOperation];
+    }
 }
 
 - (void)addListener:(id)listener
@@ -198,64 +224,21 @@
 
 #pragma mark - Public API
 
+- (void)prepareWebViewWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion
+{
+    // implement in childs
+    completion(YES, nil);
+}
+
+- (void)prepareEnvironmentWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion
+{
+    // implement in childs
+    completion(YES, nil);
+}
+
 - (void)cleanCache
 {
     // implement in childs
-}
-
-- (void)addPendingBlock:(JMWebEnvironmentPendingBlock)pendingBlock
-{
-    NSAssert(pendingBlock != nil, @"Pending block is nil");
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-
-    switch(self.state) {
-        case JMWebEnvironmentStateInitial: {
-            JMLog(@"JMWebEnvironmentStateInitial");
-            [self savePendingBlock:pendingBlock];
-            break;
-        }
-        case JMWebEnvironmentStateWebViewConfiguted: {
-            JMLog(@"JMWebEnvironmentStateWebViewConfiguted");
-            [self savePendingBlock:pendingBlock];
-            break;
-        }
-        case JMWebEnvironmentStateEnvironmentReady: {
-            JMLog(@"JMWebEnvironmentStateEnvironmentReady");
-            pendingBlock();
-            break;
-        }
-        case JMWebEnvironmentStateLoading: {
-            JMLog(@"JMWebEnvironmentStateLoading");
-            [self savePendingBlock:pendingBlock];
-            break;
-        }
-        case JMWebEnvironmentStateRequestExecution: {
-            JMLog(@"JMWebEnvironmentStateRequestExecution");
-            [self savePendingBlock:pendingBlock];
-            break;
-        }
-        case JMWebEnvironmentStateReady: {
-            JMLog(@"JMWebEnvironmentStateReady");
-            pendingBlock();
-            break;
-        }
-        case JMWebEnvironmentStateSessionExpired: {
-            JMLog(@"JMWebEnvironmentStateSessionExpired");
-            [self savePendingBlock:pendingBlock];
-            break;
-        }
-        case JMWebEnvironmentStateCancel: {
-            JMLog(@"JMWebEnvironmentStateCancel");
-            [self savePendingBlock:pendingBlock];
-            break;
-        }
-    }
-}
-
-- (void)savePendingBlock:(JMWebEnvironmentPendingBlock)pendingBlock
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [self.pendingBlocks addObject:pendingBlock];
 }
 
 - (void)resetZoom
@@ -267,8 +250,7 @@
 {
     NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]];
     [self.webView loadRequest:clearingRequest];
-    self.state = JMWebEnvironmentStateWebViewConfiguted;
-    self.pendingBlocks = [NSMutableArray array];
+    self.state = JMWebEnvironmentStateWebViewCreated;
 }
 
 - (void)reset
@@ -279,7 +261,6 @@
     if (!self.reusable) {
         [self.requestExecutor reset];
     }
-    self.pendingBlocks = [NSMutableArray array];
 }
 
 #pragma mark - WebView Helpers
@@ -290,6 +271,7 @@
     _webView = [self createWebViewWithCookies:cookies];
     _requestExecutor = [JMJavascriptRequestExecutor executorWithWebView:_webView];
     _requestExecutor.delegate = self;
+    self.state = JMWebEnvironmentStateWebViewCreated;
 }
 
 - (WKWebView *)createWebViewWithCookies:(NSArray <NSHTTPCookie *>*)cookies
@@ -346,11 +328,9 @@
 
 #pragma mark - Cookies Helpers
 
-- (void)updateCookiesWithCookies:(NSArray *)cookies
+- (void)updateCookiesWithCookies:(NSArray *)cookies completion:(void(^)(void))completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    self.state = JMWebEnvironmentStateSessionExpired;
-    [self cleanCache];
     __weak __typeof(self) weakSelf = self;
     if ([JMUtils isSystemVersion9]) {
         [self removeCookiesWithCompletion:^(BOOL success) {
@@ -366,7 +346,8 @@
                     if (error) {
                         // TODO: how handle this case?
                     } else {
-                        strongSelf.state = JMWebEnvironmentStateReady;
+                        strongSelf.state = JMWebEnvironmentStateEnvironmentReady;
+                        completion();
                     }
                 }];
             } else {
@@ -381,6 +362,10 @@
         _requestExecutor = nil;
         [self setupWebEnvironmentWithCookies:cookies];
         [webViewSuperview fillWithView:self.webView];
+        [self prepareWithCompletion:^{
+            self.state = JMWebEnvironmentStateEnvironmentReady;
+            completion();
+        }];
     }
 }
 
@@ -432,13 +417,38 @@
 
 #pragma mark - Helpers
 
-- (void)executePendingBlocks
+- (void)prepareWithCompletion:(void(^)(void))completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    for (JMWebEnvironmentPendingBlock pendingBlock in self.pendingBlocks) {
-        pendingBlock();
-    }
-    self.pendingBlocks = [NSMutableArray array];
+    self.state = JMWebEnvironmentStateLoading;
+    __weak __typeof(self) weakSelf = self;
+    [self prepareWebViewWithCompletion:^(BOOL isReady, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        if (isReady) {
+            if (strongSelf.state == JMWebEnvironmentStateSessionExpired) {
+                JMLog(@"session was expired");
+            } else {
+                strongSelf.state = JMWebEnvironmentStateWebViewConfigured;
+                __weak __typeof(self) weakSelf = strongSelf;
+                strongSelf.state = JMWebEnvironmentStateLoading;
+                [strongSelf prepareEnvironmentWithCompletion:^(BOOL isReady, NSError *error) {
+                    __typeof(self) strongSelf = weakSelf;
+                    if (isReady) {
+                        if (strongSelf.state == JMWebEnvironmentStateSessionExpired) {
+                            JMLog(@"session was expired");
+                        } else {
+                            strongSelf.state = JMWebEnvironmentStateEnvironmentReady;
+                            completion();
+                        }
+                    } else {
+                        JMLog(@"error of preparing environment: %@", error);
+                    }
+                }];
+            }
+        } else {
+            JMLog(@"error of preparing web view: %@", error);
+        }
+    }];
 }
 
 #pragma mark - JMJavascriptRequestExecutorDelegate
