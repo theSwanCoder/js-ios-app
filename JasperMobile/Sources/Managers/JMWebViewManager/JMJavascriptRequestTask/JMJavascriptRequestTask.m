@@ -59,11 +59,10 @@
                                       completion:completion];
 }
 
-#pragma mark - Overridded NSOperation
+#pragma mark - Overridden NSOperation
 
 - (void)main
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     NSString *commandString = self.request.fullCommand;
     JMLog(@"start execute operation: %@", commandString);
     __weak __typeof(self) weakSelf = self;
