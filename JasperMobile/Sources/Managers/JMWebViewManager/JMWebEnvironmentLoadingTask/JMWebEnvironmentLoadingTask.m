@@ -71,7 +71,9 @@
                                                              listener:self
                                                              callback:^(JMJavascriptResponse *response, NSError *error) {
                                                                  JMLog(@"Event was received: DOMContentLoaded");
-                                                                 weakSelf.state = JMAsyncTaskStateFinished;
+                                                                 __typeof(self) strongSelf = weakSelf;
+                                                                 strongSelf.state = JMAsyncTaskStateFinished;
+                                                                 [strongSelf.requestExecutor removeListener:strongSelf];
                                                              }];
     [self.requestExecutor addListenerWithEvent:event];
     [self.requestExecutor startLoadHTMLString:self.HTMLString

@@ -70,9 +70,10 @@
     [self.requestExecutor sendJavascriptRequest:self.request
                                          completion:^(JMJavascriptResponse *response, NSError *error) {
                                              JMLog(@"end execute operation: %@", commandString);
-                                             weakSelf.state = JMAsyncTaskStateFinished;
-                                             if (weakSelf.completion) {
-                                                 weakSelf.completion(response.parameters, error);
+                                             __typeof(self) strongSelf = weakSelf;
+                                             strongSelf.state = JMAsyncTaskStateFinished;
+                                             if (strongSelf.completion) {
+                                                 strongSelf.completion(response.parameters, error);
                                              }
                                          }];
 }
