@@ -128,11 +128,13 @@
     };
     self.sessionManager.executeAction = ^{
         __strong typeof(self) strongSelf = weakSelf;
-        [strongSelf.configurator setup];
-        [[strongSelf reportLoader] setDelegate:strongSelf];
-        [strongSelf setupStateManager];
+        [[strongSelf reportLoader] resetWithCompletion:^{
+            [strongSelf.configurator setup];
+            [[strongSelf reportLoader] setDelegate:strongSelf];
+            [strongSelf setupStateManager];
 
-        [strongSelf startResourceViewing];
+            [strongSelf startResourceViewing];
+        }];
     };
     self.sessionManager.exitAction = ^{
         __strong typeof(self) strongSelf = weakSelf;
@@ -259,7 +261,7 @@
 {
     [self.filtersNetworkManager reset];
     [[self stateManager] setupPageForState:JMReportViewerStateDestroy];
-    [[self reportLoader] destroy];
+    [[self reportLoader] destroyWithCompletion:nil];
     [[self webEnvironment] reset];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -576,9 +578,12 @@
     [[self stateManager] setupPageForState:JMReportViewerStateResourceFailed];
 
     switch (error.code) {
-        case JSReportLoaderErrorTypeAuthentification:
-        case JSSessionExpiredErrorCode: {
+        case JSReportLoaderErrorTypeSessionDidExpired: {
             [self.sessionManager handleSessionDidExpire];
+            break;
+        }
+        case JSReportLoaderErrorTypeSessionDidRestore: {
+            [self.sessionManager handleSessionDidChangeWithAlert:YES];
             break;
         }
         case JSReportLoaderErrorTypeEmtpyReport:
