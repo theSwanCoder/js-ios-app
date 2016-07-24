@@ -504,9 +504,16 @@ initialDestination:(nullable JSReportDestination *)destination
                                 if (!weakSelf) {
                                     return;
                                 }
-                                // TODO: move into separate method
-                                NSInteger countOfPages = ((NSNumber *)params[@"pages"]).integerValue;
-                                [weakSelf.report updateCountOfPages:countOfPages];
+                                if (error) {
+
+                                } else {
+                                    // TODO: move into separate method
+                                    NSInteger countOfPages = ((NSNumber *)params[@"pages"]).integerValue;
+                                    [weakSelf.report updateCountOfPages:countOfPages];
+                                    if (countOfPages > 1 && !weakSelf.report.isMultiPageReport) {
+                                        [weakSelf.report updateIsMultiPageReport:YES];
+                                    }
+                                }
                             }];
     NSString *changePagesStateListenerId = @"JasperMobile.Report.Event.changePagesState";
     [self.webEnvironment addListener:self
