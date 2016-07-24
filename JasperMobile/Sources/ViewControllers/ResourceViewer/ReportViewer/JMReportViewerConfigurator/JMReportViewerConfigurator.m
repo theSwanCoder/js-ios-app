@@ -77,9 +77,6 @@
 
 - (void)reset
 {
-    if ([JMUtils isSystemVersion9]) {
-        [self.reportLoader reset];
-    }
     [self.webEnvironment reset];
     [self.stateManager setupPageForState:JMReportViewerStateDestroy];
 }
