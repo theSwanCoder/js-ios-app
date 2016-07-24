@@ -37,11 +37,15 @@ var JasperMobile = {
             for (var i = 0; i < scriptURLs.length; i++) {
                 var scriptURL = scriptURLs[i];
                 (function(scriptURL) {
-                    JasperMobile.Helper.addScript(scriptURL, function() {
+                    var success = function() {
                         if (--callbacksCount == 0) {
                             JasperMobile.Callback.callback("JasperMobile.Helper.loadScripts", {});
                         }
-                    }, null);
+                    };
+                    var failed = function(error) {
+                        JasperMobile.Callback.log("Error of loading script: " + JSON.stringify(error));
+                    };
+                    JasperMobile.Helper.addScript(scriptURL, success, failed);
                 })(scriptURL);
             }
         },
