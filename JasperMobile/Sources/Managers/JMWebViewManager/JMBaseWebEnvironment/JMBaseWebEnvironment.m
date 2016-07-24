@@ -31,6 +31,7 @@
 #import "UIView+Additions.h"
 #import "JMAsyncTask.h"
 #import "JMJavascriptRequestTask.h"
+#import "JMWebEnvironmentLoadingTask.h"
 
 @interface JMBaseWebEnvironment() <JMJavascriptRequestExecutorDelegate>
 @property (nonatomic, strong, readwrite) WKWebView * __nullable webView;
@@ -106,25 +107,10 @@
 {
     NSAssert(HTMLString != nil, @"HTML should not be nil");
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    JMJavascriptEvent *event = [JMJavascriptEvent eventWithIdentifier:@"DOMContentLoaded"
-                                                             listener:self
-                                                             callback:^(JMJavascriptResponse *response, NSError *error) {
-                                                                 JMLog(@"Event was received: DOMContentLoaded");
-                                                                 if (error) {
-                                                                     completion(NO, error);
-                                                                 } else {
-                                                                     if (completion) {
-                                                                         completion(YES, nil);
-                                                                     }
-                                                                 }
-                                                             }];
-    [self.requestExecutor addListenerWithEvent:event];
-
-    NSBlockOperation *loadHTMLOperation = [NSBlockOperation blockOperationWithBlock:^{
-        [self.requestExecutor startLoadHTMLString:HTMLString
-                                          baseURL:baseURL];
-    }];
-    [self.operationQueue addOperation:loadHTMLOperation];
+    JMWebEnvironmentLoadingTask *loadingTask = [JMWebEnvironmentLoadingTask taskWithRequestExecutor:self.requestExecutor
+                                                                                         HTMLString:HTMLString
+                                                                                            baseURL:baseURL];
+    [self.operationQueue addOperation:loadingTask];
 }
 
 - (void)loadRequest:(NSURLRequest * __nonnull)request
