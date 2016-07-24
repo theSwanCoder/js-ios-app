@@ -63,13 +63,19 @@
 
 - (void)main
 {
+    if (self.isCancelled) {
+        return;
+    }
     NSString *commandString = self.request.fullCommand;
-    JMLog(@"start execute operation: %@", commandString);
+    JMLog(@"%@: start execute operation: %@", self, commandString);
     __weak __typeof(self) weakSelf = self;
     [self.requestExecutor sendJavascriptRequest:self.request
                                          completion:^(JMJavascriptResponse *response, NSError *error) {
-                                             JMLog(@"end execute operation: %@", commandString);
                                              __typeof(self) strongSelf = weakSelf;
+                                             JMLog(@"%@: end execute operation: %@", strongSelf, commandString);
+                                             if (strongSelf.isCancelled) {
+                                                 return;
+                                             }
                                              strongSelf.state = JMAsyncTaskStateFinished;
                                              if (strongSelf.completion) {
                                                  strongSelf.completion(response.parameters, error);

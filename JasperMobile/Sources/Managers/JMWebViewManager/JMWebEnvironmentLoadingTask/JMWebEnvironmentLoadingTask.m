@@ -87,12 +87,19 @@
 
 - (void)main
 {
+    if (self.isCancelled) {
+        return;
+    }
+    JMLog(@"%@: Start Loading", self);
     __weak __typeof(self) weakSelf = self;
     JMJavascriptEvent *event = [JMJavascriptEvent eventWithIdentifier:@"DOMContentLoaded"
                                                              listener:self
                                                              callback:^(JMJavascriptResponse *response, NSError *error) {
-                                                                 JMLog(@"Event was received: DOMContentLoaded");
                                                                  __typeof(self) strongSelf = weakSelf;
+                                                                 JMLog(@"%@: Event was received: DOMContentLoaded", strongSelf);
+                                                                 if (strongSelf.isCancelled) {
+                                                                     return;
+                                                                 }
                                                                  strongSelf.state = JMAsyncTaskStateFinished;
                                                                  [strongSelf.requestExecutor removeListener:strongSelf];
                                                                  if (strongSelf.completion) {

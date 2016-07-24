@@ -63,9 +63,17 @@
 
 - (void)main
 {
+    if (self.isCancelled) {
+        return;
+    }
+    JMLog(@"%@ - start updating cookies", self);
     __weak __typeof(self) weakSelf = self;
-    [self updateCookiesWithCookies:self.cookies completion:^{
+    [self updateCookiesWithCookies:self.cookies completion:^(BOOL success){
         __weak __typeof(self) strongSelf = weakSelf;
+        if (strongSelf.isCancelled) {
+            return;
+        }
+        JMLog(@"%@ - end updating cookies", self);
         strongSelf.state = JMAsyncTaskStateFinished;
         if (strongSelf.completion) {
             strongSelf.completion();
@@ -73,7 +81,7 @@
     }];
 }
 
-- (void)updateCookiesWithCookies:(NSArray *)cookies completion:(void(^)(void))completion
+- (void)updateCookiesWithCookies:(NSArray *)cookies completion:(void(^)(BOOL success))completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     __weak __typeof(self) weakSelf = self;
@@ -86,30 +94,16 @@
                 if (error) {
                     // TODO: how handle this case?
                     JMLog(@"error of updating cookies: %@", error);
+                    completion(NO);
                 } else {
                     JMLog(@"cookies: %@", o);
-                    completion();
+                    completion(YES);
                 }
             }];
         } else {
             // TODO: how handle this case?
         }
     }];
-//    if ([JMUtils isSystemVersion9]) {
-//
-//    } else {
-//        UIView *webViewSuperview = self.webView.superview;
-//        [self.webView removeFromSuperview];
-//        [self.requestExecutor reset];
-//        _webView = nil;
-//        _requestExecutor = nil;
-//        [self setupWebEnvironmentWithCookies:cookies];
-//        [webViewSuperview fillWithView:self.webView];
-//        [self prepareWithCompletion:^{
-//            self.state = JMWebEnvironmentStateEnvironmentReady;
-//            completion();
-//        }];
-//    }
 }
 
 
