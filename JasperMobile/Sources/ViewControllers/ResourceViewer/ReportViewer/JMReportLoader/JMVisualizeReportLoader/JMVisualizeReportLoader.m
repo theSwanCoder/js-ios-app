@@ -52,7 +52,6 @@
 {
     self = [super init];
     if (self) {
-        JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
         _restClient = [restClient copy];
         _state = JSReportLoaderStateInitial;
     }
@@ -257,10 +256,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
 
 - (void)reset
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [self cancel];
-    self.report = nil;
-    self.state = JSReportLoaderStateInitial;
+    // depricated method
 }
 
 // TODO: need this?
@@ -371,7 +367,19 @@ initialDestination:(nullable JSReportDestination *)destination
                                     }];
 }
 
-- (void)destroy
+- (void)resetWithCompletion:(JSReportLoaderBaseCompletionBlock)completion
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    [self destroyWithCompletion:^{
+        self.report = nil;
+        self.state = JSReportLoaderStateInitial;
+        if (completion) {
+            completion();
+        }
+    }];
+}
+
+- (void)destroyWithCompletion:(JSReportLoaderBaseCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     if (self.state == JSReportLoaderStateCancel) {
@@ -391,6 +399,9 @@ initialDestination:(nullable JSReportDestination *)destination
         } else {
             JMLog(@"callback: %@", parameters);
             self.state = JSReportLoaderStateInitial;
+        }
+        if (completion) {
+            completion();
         }
     }];
 }
@@ -706,7 +717,6 @@ initialDestination:(nullable JSReportDestination *)destination
 #pragma mark - Helpers
 - (NSDictionary *)configureParameters:(NSArray <JSReportParameter *>*)parameters
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     NSMutableDictionary *runParams = [@{} mutableCopy];
     for (JSReportParameter *parameter in parameters) {
         runParams[parameter.name] = parameter.value;
@@ -717,7 +727,6 @@ initialDestination:(nullable JSReportDestination *)destination
 #pragma mark - Hyperlinks handlers
 - (void)handleRunReportWithParameters:(NSDictionary *)parameters
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMLog(@"parameters: %@", parameters);
     NSDictionary *data = parameters[@"data"];
     if (!data) {
@@ -736,7 +745,6 @@ initialDestination:(nullable JSReportDestination *)destination
 #pragma mark - Bookmarks Handler
 - (NSArray *)mapBookmarksFromParams:(NSArray *__nonnull)params
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     NSAssert(params != nil, @"parameters is nil");
     NSAssert([params isKindOfClass:[NSArray class]], @"Parameters should be NSArray class");
 
@@ -762,7 +770,6 @@ initialDestination:(nullable JSReportDestination *)destination
 #pragma mark - Handle Report Parts (Workbooks)
 - (NSArray *)mapReportPartsFromParams:(NSArray *__nonnull)params
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     NSAssert(params != nil, @"parameters is nil");
     NSAssert([params isKindOfClass:[NSArray class]], @"Parameters should be NSArray class");
 
@@ -782,11 +789,14 @@ initialDestination:(nullable JSReportDestination *)destination
 #pragma mark - Errors handling
 - (NSError *)loaderErrorFromBridgeError:(NSError *)error
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JSReportLoaderErrorType errorCode = JSReportLoaderErrorTypeUndefined;
     switch(error.code) {
         case JMJavascriptRequestErrorTypeAuth: {
-            errorCode = JSReportLoaderErrorTypeAuthentification;
+            errorCode = JSReportLoaderErrorTypeSessionDidExpired;
+            break;
+        }
+        case JMJavascriptRequestErrorSessionDidRestore: {
+            errorCode = JSReportLoaderErrorTypeSessionDidRestore;
             break;
         }
         case JMJavascriptRequestErrorTypeOther: {
