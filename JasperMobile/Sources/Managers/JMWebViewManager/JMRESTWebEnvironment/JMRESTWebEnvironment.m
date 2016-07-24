@@ -27,82 +27,36 @@
 //
 
 #import "JMRESTWebEnvironment.h"
-#import "JMJavascriptResponse.h"
-#import "JMJavascriptRequest.h"
+#import "JMWebEnvironmentLoadingTask.h"
 
 
 @implementation JMRESTWebEnvironment
 
-- (void)prepareWithCompletion:(void (^)(BOOL isReady, NSError *error))completion
+- (NSOperation *__nullable)taskForPreparingWebView
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    __weak __typeof(self) weakSelf = self;
-    [self verifyEnvironmentReadyWithCompletion:^(BOOL isReady) {
-        __typeof(self) strongSelf = weakSelf;
-        if (isReady) {
-            completion(YES, nil);
-        } else {
-            NSString *htmlStringPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer_rest" ofType:@"html"];
-            NSString *htmlString = [NSString stringWithContentsOfFile:htmlStringPath encoding:NSUTF8StringEncoding error:nil];
+    NSString *htmlStringPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer_rest" ofType:@"html"];
+    NSString *htmlString = [NSString stringWithContentsOfFile:htmlStringPath encoding:NSUTF8StringEncoding error:nil];
 
-            // add static dependencies
-            // fusion chart dependencies need to be loaded first
-            NSString *jrsURI = self.restClient.serverProfile.serverUrl;
-            NSString *staticDependencies = @"";
-            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/FusionCharts.js\"></script>", jrsURI];
-            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/jquery.min.js\"></script>", jrsURI];
-            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/FusionCharts.HC.js\"></script>", jrsURI];
-            staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/../widgets/FusionCharts.HC.Widgets.js\"></script>", jrsURI];
+    // add static dependencies
+    // fusion chart dependencies need to be loaded first
+    NSString *jrsURI = self.restClient.serverProfile.serverUrl;
+    NSString *staticDependencies = @"";
+    staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/FusionCharts.js\"></script>", jrsURI];
+    staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/jquery.min.js\"></script>", jrsURI];
+    staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/FusionCharts.HC.js\"></script>", jrsURI];
+    staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/../widgets/FusionCharts.HC.Widgets.js\"></script>", jrsURI];
 
-            htmlString = [htmlString stringByReplacingOccurrencesOfString:@"STATIC_DEPENDENCIES" withString:staticDependencies];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"STATIC_DEPENDENCIES" withString:staticDependencies];
 
-            [strongSelf loadHTML:htmlString
-                         baseURL:[NSURL URLWithString:strongSelf.restClient.serverProfile.serverUrl]
-                      completion:completion];
-
-        }
-    }];
+    JMWebEnvironmentLoadingTask *loadingTask = [JMWebEnvironmentLoadingTask taskWithRequestExecutor:self.requestExecutor
+                                                                                         HTMLString:htmlString
+                                                                                            baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
+    return loadingTask;
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-}
-
-#pragma mark - Helpers
-
-- (void)verifyEnvironmentReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [self verifyJasperMobileEnableWithCompletion:^(BOOL isJasperMobileLoaded) {
-        JMLog(@"JasperMobile was loaded: %@", isJasperMobileLoaded ? @"YES" : @"NO");
-        if (isJasperMobileLoaded) {
-            [self isWebViewLoadedContentDiv:self.webView completion:^(BOOL isContantDivLoaded) {
-                completion(isContantDivLoaded);
-            }];
-        } else {
-            // TODO: need load html
-            completion(NO);
-        }
-    }];
-}
-
-- (void)isWebViewLoadedContentDiv:(WKWebView *)webView completion:(void(^ __nonnull)(BOOL isContantDivLoaded))completion
-{
-    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.isContainerLoaded"
-                                                               inNamespace:JMJavascriptNamespaceDefault
-                                                                parameters:nil];
-    [self sendJavascriptRequest:request
-                            completion:^(NSDictionary *parameters, NSError *error) {
-                                if (error) {
-                                    completion(NO);
-                                } else {
-                                    if (parameters) {
-                                        NSString *isContainerLoaded = parameters[@"isContainerLoaded"];
-                                        completion([isContainerLoaded isEqualToString:@"true"]);
-                                    }
-                                }
-                            }];
 }
 
 @end
