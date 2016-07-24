@@ -81,7 +81,7 @@
 
     self.dashboard = dashboard;
     self.state = JMDashboardLoaderStateConfigured;
-    [self freshRunDashboardWithCompletion:completion];
+    [self loadLegacyDashboardWithCompletion:completion];
 }
 
 - (void)destroy
@@ -120,6 +120,18 @@
         if (error) {
             completion(NO, error);
         } else {
+            completion(YES, nil);
+        }
+    }];
+}
+
+- (void)loadLegacyDashboardWithCompletion:(JMDashboardLoaderCompletion __nonnull)completion
+{
+    NSString *flowPath = [NSString stringWithFormat:@"%@flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=%@", self.restClient.baseURL.absoluteString, self.dashboard.resourceURI];
+    NSURL *url = [NSURL URLWithString:flowPath];
+    NSMutableURLRequest *request = [[NSURLRequest requestWithURL:url] mutableCopy];
+    [self.webEnvironment loadRequest:request completion:^(BOOL isReady, NSError *error) {
+        if (isReady) {
             completion(YES, nil);
         }
     }];
