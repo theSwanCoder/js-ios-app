@@ -72,6 +72,10 @@
     JMWebEnvironmentLoadingTask *loadingTask = [JMWebEnvironmentLoadingTask taskWithRequestExecutor:self.requestExecutor
                                                                                          HTMLString:self.visualizeManager.htmlString
                                                                                             baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
+    __weak __typeof(self) weakSelf = self;
+    loadingTask.completion = ^{
+        weakSelf.cookiesState = JMWebEnvironmentCookiesStateValid;
+    };
     return loadingTask;
 }
 
