@@ -207,6 +207,11 @@ NSString *JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestExecuto
     decisionHandler(WKNavigationActionPolicyAllow);
 }
 
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+{
+    [self handleDOMContentLoaded];
+}
+
 #pragma mark - WKScriptMessageHandler
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
 {
@@ -315,6 +320,7 @@ NSString *JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestExecuto
 
 - (void)handleUnauthRequest
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     NSString *unauthorizedListenerId = @"JasperMobile.VIS.Dashboard.API.unauthorized";
     for (JMJavascriptEvent *event in self.events) {
         if ([event.identifier isEqualToString:unauthorizedListenerId]) {
@@ -323,6 +329,18 @@ NSString *JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestExecuto
                     @"code" : @"authentication.error"
             }];
             completion(nil, error);
+            break;
+        }
+    }
+}
+
+- (void)handleDOMContentLoaded
+{
+    NSString *unauthorizedListenerId = @"DOMContentLoaded";
+    for (JMJavascriptEvent *event in self.events) {
+        if ([event.identifier isEqualToString:unauthorizedListenerId]) {
+            JMJavascriptRequestCompletion completion = event.callback;
+            completion(nil, nil);
             break;
         }
     }
