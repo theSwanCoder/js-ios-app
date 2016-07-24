@@ -206,18 +206,6 @@
 
 #pragma mark - Public API
 
-- (void)prepareWebViewWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion
-{
-    // implement in childs
-    completion(YES, nil);
-}
-
-- (void)prepareEnvironmentWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion
-{
-    // implement in childs
-    completion(YES, nil);
-}
-
 - (NSOperation *__nullable)taskForPreparingWebView
 {
     return nil;
@@ -226,11 +214,6 @@
 - (NSOperation *__nullable)taskForPreparingEnvironment
 {
     return nil;
-}
-
-- (void)cleanCache
-{
-    // implement in childs
 }
 
 - (void)resetZoom

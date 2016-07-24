@@ -74,8 +74,6 @@ typedef NS_ENUM(NSInteger, JMWebEnvironmentState) {
 - (instancetype __nullable)initWithId:(NSString *__nonnull)identifier initialCookies:(NSArray *__nullable)cookies;
 + (instancetype __nullable)webEnvironmentWithId:(NSString *__nullable)identifier initialCookies:(NSArray *__nullable)cookies;
 // PUBLIC API
-- (void)prepareWebViewWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion DEPRECATED_MSG_ATTRIBUTE("Use 'taskForPreparingWebView' instead.");
-- (void)prepareEnvironmentWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion DEPRECATED_MSG_ATTRIBUTE("Use 'taskForPreparingEnvironment' instead.");
 - (NSOperation *__nullable)taskForPreparingWebView;
 - (NSOperation *__nullable)taskForPreparingEnvironment;
 - (void)resetZoom;
