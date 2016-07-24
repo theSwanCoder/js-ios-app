@@ -28,11 +28,13 @@
 #import "JMWebEnvironmentLoadingTask.h"
 #import "JMJavascriptEvent.h"
 #import "JMJavascriptRequestExecutor.h"
+#import "JMWebViewFabric.h"
 
 @interface JMWebEnvironmentLoadingTask()
 @property (nonatomic, strong) JMJavascriptRequestExecutor *requestExecutor;
 @property (nonatomic, strong) NSString *HTMLString;
 @property (nonatomic, strong) NSURL *baseURL;
+@property (nonatomic, strong) NSURLRequest *URLRequest;
 @end
 
 @implementation JMWebEnvironmentLoadingTask
@@ -62,6 +64,25 @@
                                          baseURL:baseURL];
 }
 
+- (instancetype)initWithRequestExecutor:(JMJavascriptRequestExecutor *)requestExecutor
+                             URLRequest:(NSURLRequest *)URLRequest
+{
+    self = [super init];
+    if (self) {
+        _requestExecutor = requestExecutor;
+        _URLRequest = URLRequest;
+        self.state = JMAsyncTaskStateReady;
+    }
+    return self;
+}
+
++ (instancetype)taskWithRequestExecutor:(JMJavascriptRequestExecutor *)requestExecutor
+                             URLRequest:(NSURLRequest *)URLRequest
+{
+    return [[self alloc] initWithRequestExecutor:requestExecutor
+                                      URLRequest:URLRequest];
+}
+
 #pragma mark - Overridden methods NSOperation
 
 - (void)main
@@ -74,8 +95,32 @@
                                                                  __typeof(self) strongSelf = weakSelf;
                                                                  strongSelf.state = JMAsyncTaskStateFinished;
                                                                  [strongSelf.requestExecutor removeListener:strongSelf];
+                                                                 if (strongSelf.completion) {
+                                                                     strongSelf.completion();
+                                                                 }
                                                              }];
     [self.requestExecutor addListenerWithEvent:event];
+    // TODO: try other way to separate logic
+    if (self.URLRequest) {
+        [self operateURLRequest];
+    } else {
+        [self operateHTMLString];
+    }
+}
+
+#pragma mark - Helpers
+
+- (void)operateURLRequest
+{
+    NSMutableURLRequest *requestWithCookies = [NSMutableURLRequest requestWithURL:self.URLRequest.URL];
+    requestWithCookies.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
+    [requestWithCookies addValue:[[JMWebViewFabric sharedInstance] cookiesAsStringFromCookies:[JMWebViewManager sharedInstance].cookies]
+              forHTTPHeaderField:@"Cookie"];
+    [self.requestExecutor.webView loadRequest:requestWithCookies];
+}
+
+- (void)operateHTMLString
+{
     [self.requestExecutor startLoadHTMLString:self.HTMLString
                                       baseURL:self.baseURL];
 }

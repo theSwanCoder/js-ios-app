@@ -36,10 +36,10 @@
 @class JMJavascriptRequestExecutor;
 
 @interface JMWebEnvironmentLoadingTask : JMAsyncTask
-- (instancetype)initWithRequestExecutor:(JMJavascriptRequestExecutor *)requestExecutor
-                             HTMLString:(NSString *)HTMLString
-                                baseURL:(NSURL *)baseURL;
-+ (instancetype)taskWithRequestExecutor:(JMJavascriptRequestExecutor *)requestExecutor
-                             HTMLString:(NSString *)HTMLString
-                                baseURL:(NSURL *)baseURL;
+@property (nonatomic, copy, nullable) void(^completion)(void);
++ (instancetype __nullable)taskWithRequestExecutor:(JMJavascriptRequestExecutor *__nonnull)requestExecutor
+                             HTMLString:(NSString *__nonnull)HTMLString
+                                baseURL:(NSURL *__nonnull)baseURL;
++ (instancetype __nullable)taskWithRequestExecutor:(JMJavascriptRequestExecutor *__nonnull)requestExecutor
+                             URLRequest:(NSURLRequest *__nonnull)URLRequest;
 @end
