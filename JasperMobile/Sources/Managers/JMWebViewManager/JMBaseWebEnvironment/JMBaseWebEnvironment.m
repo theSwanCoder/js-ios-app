@@ -32,6 +32,7 @@
 #import "JMJavascriptRequestTask.h"
 #import "JMWebEnvironmentLoadingTask.h"
 #import "JMWebEnvironmentUpdateCookiesTask.h"
+#import "JMWebViewFabric.h"
 
 @interface JMBaseWebEnvironment() <JMJavascriptRequestExecutorDelegate>
 @property (nonatomic, strong, readwrite) WKWebView * __nullable webView;
@@ -259,62 +260,10 @@
 - (void)setupWebEnvironmentWithCookies:(NSArray <NSHTTPCookie *> *__nonnull)cookies
 {
     NSAssert(cookies != nil, @"Cookies are nil");
-    _webView = [self createWebViewWithCookies:cookies];
+    _webView = [[JMWebViewFabric sharedInstance] createWebViewWithCookies:cookies];
     _requestExecutor = [JMJavascriptRequestExecutor executorWithWebView:_webView];
     _requestExecutor.delegate = self;
     self.state = JMWebEnvironmentStateWebViewCreated;
-}
-
-- (WKWebView *)createWebViewWithCookies:(NSArray <NSHTTPCookie *>*)cookies
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    JMLog(@"cookies: %@", cookies);
-    WKWebViewConfiguration* webViewConfig = [WKWebViewConfiguration new];
-    WKUserContentController *contentController = [WKUserContentController new];
-
-    [contentController addUserScript:[self injectCookiesScriptWithCookies:cookies]];
-    [contentController addUserScript:[self jaspermobileScript]];
-
-    webViewConfig.userContentController = contentController;
-
-    WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webViewConfig];
-
-    // From for iOS9
-//    webView.customUserAgent = @"Mozilla/5.0 (Linux; Android 5.0.1; SCH-I545 Build/LRX22C) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.95 Mobile Safari/537.36";
-    return webView;
-}
-
-- (WKUserScript *)jaspermobileScript
-{
-    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"vis_jaspermobile" ofType:@"js"];
-    NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
-
-    WKUserScript *script = [[WKUserScript alloc] initWithSource:jaspermobileString
-                                                  injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-                                               forMainFrameOnly:YES];
-    return script;
-}
-
-- (WKUserScript *)injectCookiesScriptWithCookies:(NSArray <NSHTTPCookie *>*)cookies
-{
-    NSString *cookiesAsString = [self cookiesAsStringFromCookies:cookies];
-
-    WKUserScript *script = [[WKUserScript alloc] initWithSource:cookiesAsString
-                                                  injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-                                               forMainFrameOnly:YES];
-    return script;
-}
-
-- (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
-{
-    NSString *cookiesAsString = @"";
-    for (NSHTTPCookie *cookie in cookies) {
-        NSString *name = cookie.name;
-        NSString *value = cookie.value;
-        NSString *path = cookie.path;
-        cookiesAsString = [cookiesAsString stringByAppendingFormat:@"document.cookie = '%@=%@; expires=null, path=\\'%@\\''; ", name, value, path];
-    }
-    return cookiesAsString;
 }
 
 #pragma mark - JMJavascriptRequestExecutorDelegate
