@@ -33,6 +33,7 @@
 #import "JMWebEnvironmentLoadingTask.h"
 #import "JMWebEnvironmentUpdateCookiesTask.h"
 #import "JMWebViewFabric.h"
+#import "UIView+Additions.h"
 
 @interface JMBaseWebEnvironment() <JMJavascriptRequestExecutorDelegate>
 @property (nonatomic, strong, readwrite) WKWebView * __nullable webView;
@@ -71,33 +72,7 @@
 - (void)setState:(JMWebEnvironmentState)state
 {
     _state = state;
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    switch(_state) {
-        case JMWebEnvironmentStateInitial: {
-            JMLog(@"JMWebEnvironmentStateInitial");
-            break;
-        }
-        case JMWebEnvironmentStateWebViewCreated: {
-            JMLog(@"JMWebEnvironmentStateWebViewCreated");
-            break;
-        }
-        case JMWebEnvironmentStateWebViewConfigured: {
-            JMLog(@"JMWebEnvironmentStateWebViewConfigured");
-            break;
-        }
-        case JMWebEnvironmentStateEnvironmentReady: {
-            JMLog(@"JMWebEnvironmentStateEnvironmentReady");
-            break;
-        }
-        case JMWebEnvironmentStateSessionExpired: {
-            JMLog(@"JMWebEnvironmentStateSessionExpired");
-            break;
-        }
-        case JMWebEnvironmentStateCancel: {
-            JMLog(@"JMWebEnvironmentStateCancel");
-            break;
-        }
-    }
+    JMLog(@"%@ - %@:%@", self, NSStringFromSelector(_cmd), [self stateNameForState:_state]);
 }
 
 #pragma mark - JMWebEnvironmentLoadingProtocol
@@ -169,38 +144,25 @@
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMLog(@"request: %@", request.fullCommand);
+    JMLog(@"state: %@", [self stateNameForState:self.state]);
+    JMLog(@"cookies state: %@", [self stateNameForCookiesState:self.cookiesState]);
 
-    JMJavascriptRequestTask *requestTask = [JMJavascriptRequestTask taskWithRequestExecutor:self.requestExecutor
-                                                                                    request:request
-                                                                                 completion:completion];
+    if (self.state == JMWebEnvironmentStateCancel) {
+        return;
+    }
 
-    if (self.state == JMWebEnvironmentStateWebViewCreated) {
-        NSOperation *prepareWebViewTask = [self taskForPreparingWebView];
-        [self.operationQueue addOperation:prepareWebViewTask];
-        NSOperation *prepareEnvironmentTask = [self taskForPreparingEnvironment];
-        [self.operationQueue addOperation:prepareEnvironmentTask];
-        [self.operationQueue addOperation:requestTask];
-    } else if(self.state == JMWebEnvironmentStateWebViewConfigured) {
-        JMLog(@"try to send request when state is JMWebEnvironmentStateWebViewConfigured");
-        NSOperation *prepareEnvironmentTask = [self taskForPreparingEnvironment];
-        [self.operationQueue addOperation:prepareEnvironmentTask];
-        [self.operationQueue addOperation:requestTask];
-    } else if(self.state == JMWebEnvironmentStateEnvironmentReady) {
-        [self.operationQueue addOperation:requestTask];
-    } else if(self.state == JMWebEnvironmentStateSessionExpired){
-        NSArray *cookies = [JMWebViewManager sharedInstance].cookies;
+    if (self.cookiesState == JMWebEnvironmentCookiesStateNotValid) {
+        [self handleCookiesNotValidWithCompletion:completion];
+    } else if (self.cookiesState == JMWebEnvironmentCookiesStateNeedUpdate) {
         __weak __typeof(self) weakSelf = self;
-        NSOperation *updateCookiesTask = [JMWebEnvironmentUpdateCookiesTask taskWithRESTClient:self.restClient
-                                                                               requestExecutor:self.requestExecutor
-                                                                                       cookies:cookies
-                                                                                     competion:^{
-                                                                                         weakSelf.state = JMWebEnvironmentStateEnvironmentReady;
-                                                                                     }];
-        [self.operationQueue addOperation:updateCookiesTask];
-        [self.operationQueue addOperation:requestTask];
+        [self handleCookiesNeedUpdateWithCompletion:^{
+            __typeof(self) strongSelf = weakSelf;
+            [strongSelf processRequest:request
+                            completion:completion];
+        }];
     } else {
-        JMLog(@"try to send request when state is %@", @(self.state));
-        [self.operationQueue addOperation:requestTask];
+        [self processRequest:request
+                  completion:completion];
     }
 }
 
@@ -263,6 +225,198 @@
     _requestExecutor = [JMJavascriptRequestExecutor executorWithWebView:_webView];
     _requestExecutor.delegate = self;
     self.state = JMWebEnvironmentStateWebViewCreated;
+    self.cookiesState = JMWebEnvironmentCookiesStateEmpty;
+}
+
+- (void)recreateWebViewWithCookies:(NSArray <NSHTTPCookie *>*)cookies
+{
+    UIView *webViewSuperview = self.webView.superview;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (webViewSuperview) {
+            [self.webView removeFromSuperview];
+        }
+    });
+    [self.requestExecutor reset];
+    _webView = nil;
+    _requestExecutor = nil;
+    [self setupWebEnvironmentWithCookies:cookies];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (webViewSuperview) {
+            [webViewSuperview fillWithView:self.webView];
+        } else {
+            // TODO: in this case web view will be in 'air'
+        }
+    });
+}
+
+#pragma mark - Helpers
+
+- (void)processRequest:(JMJavascriptRequest *)request completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
+{
+    if (self.state == JMWebEnvironmentStateWebViewCreated) {
+        [self addOperationsForPreparingWebViewAndEnironment];
+    } else if(self.state == JMWebEnvironmentStateWebViewConfigured) {
+        [self.operationQueue addOperation:[self taskForPreparingEnvironment]];
+    } else {
+//            JMLog(@"try to send request when state is %@", [self stateNameForState:self.state]);
+    }
+
+    __weak __typeof(self) weakSelf = self;
+    [self.operationQueue addOperation:[JMJavascriptRequestTask taskWithRequestExecutor:self.requestExecutor
+                                                                               request:request
+                                                                            completion:^(NSDictionary *params, NSError *error) {
+                                                                                if (error.code == JMJavascriptRequestErrorTypeAuth) {
+                                                                                    JMLog(@"cookies are not valid");
+                                                                                    weakSelf.cookiesState = JMWebEnvironmentCookiesStateNeedUpdate;
+                                                                                }
+                                                                                if (completion) {
+                                                                                    completion(params, error);
+                                                                                }
+                                                                            }]];
+}
+
+- (void)handleCookiesNotValidWithCompletion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
+{
+    NSArray *cookies = [JMWebViewManager sharedInstance].cookies;
+    if ([JMUtils isSystemVersion9]) {
+        if (self.state == JMWebEnvironmentStateWebViewCreated) {
+            [self recreateWebViewWithCookies:cookies];
+            [self addOperationsForPreparingWebViewAndEnironment];
+            // Completion should be in point where preparing of env finished
+            [self.operationQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completion) {
+                        completion(nil, [self makeCookiesDidRestoreError]);
+                    }
+                });
+            }]];
+        } else if (self.state == JMWebEnvironmentStateWebViewConfigured || self.state == JMWebEnvironmentStateEnvironmentReady) {
+            __weak __typeof(self) weakSelf = self;
+            [self.operationQueue addOperation:[JMWebEnvironmentUpdateCookiesTask taskWithRESTClient:self.restClient
+                                                                                    requestExecutor:self.requestExecutor
+                                                                                            cookies:cookies
+                                                                                          competion:^{
+                                                                                              weakSelf.cookiesState = JMWebEnvironmentCookiesStateValid;
+                                                                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                                                                  if (completion) {
+                                                                                                      completion(nil, [weakSelf makeCookiesDidRestoreError]);
+                                                                                                  }
+                                                                                              });
+                                                                                          }]];
+        } else {
+            // TODO: how handle this case?
+        }
+    } else {
+        [self recreateWebViewWithCookies:cookies];
+        [self addOperationsForPreparingWebViewAndEnironment];
+        // Completion should be in point where preparing of env finished
+        [self.operationQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion(nil, [self makeCookiesDidRestoreError]);
+                }
+            });
+        }]];
+    }
+}
+
+- (void)handleCookiesNeedUpdateWithCompletion:(void(^)(void))completion
+{
+    NSArray *cookies = [JMWebViewManager sharedInstance].cookies;
+    if ([JMUtils isSystemVersion9]) {
+        __weak __typeof(self) weakSelf = self;
+        [self.operationQueue addOperation:[JMWebEnvironmentUpdateCookiesTask taskWithRESTClient:self.restClient
+                                                                                requestExecutor:self.requestExecutor
+                                                                                        cookies:cookies
+                                                                                      competion:^{
+                                                                                          __typeof(self) strongSelf = weakSelf;
+                                                                                          strongSelf.cookiesState = JMWebEnvironmentCookiesStateValid;
+                                                                                          if (completion) {
+                                                                                              completion();
+                                                                                          }
+                                                                                      }]];
+    } else {
+        [self recreateWebViewWithCookies:cookies];
+        [self addOperationsForPreparingWebViewAndEnironment];
+        [self.operationQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion();
+                }
+            });
+        }]];
+    }
+}
+
+- (void)addOperationsForPreparingWebViewAndEnironment
+{
+    [self.operationQueue addOperation:[self taskForPreparingWebView]];
+    [self.operationQueue addOperation:[self taskForPreparingEnvironment]];
+}
+
+- (NSError *)makeCookiesDidRestoreError
+{
+    NSString *visualizeErrorDomain = @"Visualize Error Domain";
+    NSInteger code = JMJavascriptRequestErrorSessionDidRestore;
+    NSDictionary *userInfo = @{
+            NSLocalizedDescriptionKey: @"Error"
+    };
+    NSError *error = [NSError errorWithDomain:visualizeErrorDomain
+                                         code:code
+                                     userInfo:userInfo];
+    return error;
+}
+
+- (NSString *)stateNameForState:(JMWebEnvironmentState)state
+{
+    NSString *stateName;
+    switch(state) {
+        case JMWebEnvironmentStateInitial: {
+            stateName = @"JMWebEnvironmentStateInitial";
+            break;
+        }
+        case JMWebEnvironmentStateWebViewCreated: {
+            stateName = @"JMWebEnvironmentStateWebViewCreated";
+            break;
+        }
+        case JMWebEnvironmentStateWebViewConfigured: {
+            stateName = @"JMWebEnvironmentStateWebViewConfigured";
+            break;
+        }
+        case JMWebEnvironmentStateEnvironmentReady: {
+            stateName = @"JMWebEnvironmentStateEnvironmentReady";
+            break;
+        }
+        case JMWebEnvironmentStateCancel: {
+            stateName = @"JMWebEnvironmentStateCancel";
+            break;
+        }
+    }
+    return stateName;
+}
+
+- (NSString *)stateNameForCookiesState:(JMWebEnvironmentCookiesState)state
+{
+    NSString *stateName;
+    switch(state) {
+        case JMWebEnvironmentCookiesStateEmpty: {
+            stateName = @"JMWebEnvironmentCookiesStateEmpty";
+            break;
+        }
+        case JMWebEnvironmentCookiesStateValid: {
+            stateName = @"JMWebEnvironmentCookiesStateValid";
+            break;
+        }
+        case JMWebEnvironmentCookiesStateNotValid: {
+            stateName = @"JMWebEnvironmentCookiesStateNotValid";
+            break;
+        }
+        case JMWebEnvironmentCookiesStateNeedUpdate: {
+            stateName = @"JMWebEnvironmentCookiesStateNeedUpdate";
+            break;
+        }
+    }
+    return stateName;
 }
 
 #pragma mark - JMJavascriptRequestExecutorDelegate

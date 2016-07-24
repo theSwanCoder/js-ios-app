@@ -167,9 +167,27 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         // We need set cookies from correct restClient
         JSRESTBase *restClient = notification.object;
         self.cookies = restClient.cookies;
+        JMLog(@"new cookies: %@", self.cookies);
         // TODO: what need we do if cookies if nil?
         for (JMWebEnvironment *webEnvironment in self.webEnvironments) {
-            webEnvironment.state = JMWebEnvironmentStateSessionExpired;
+            switch(webEnvironment.cookiesState) {
+                case JMWebEnvironmentCookiesStateEmpty: {
+                    // TODO: do not change this state
+                    break;
+                }
+                case JMWebEnvironmentCookiesStateValid: {
+                    webEnvironment.cookiesState = JMWebEnvironmentCookiesStateNotValid;
+                    break;
+                }
+                case JMWebEnvironmentCookiesStateNotValid: {
+                    webEnvironment.cookiesState = JMWebEnvironmentCookiesStateNotValid;
+                    break;
+                }
+                case JMWebEnvironmentCookiesStateNeedUpdate: {
+                    // TODO: do not change this state
+                    break;
+                }
+            }
         }
     } else {
         // TODO: need handle this case?

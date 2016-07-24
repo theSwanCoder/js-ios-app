@@ -61,12 +61,19 @@ typedef NS_ENUM(NSInteger, JMWebEnvironmentState) {
     JMWebEnvironmentStateWebViewCreated,    // state when webview was created
     JMWebEnvironmentStateWebViewConfigured, // state when webview has html loaded
     JMWebEnvironmentStateEnvironmentReady,  // state when webview has scripts loaded
-    JMWebEnvironmentStateSessionExpired,    // cookies became not valid
     JMWebEnvironmentStateCancel             // cancel signal was sent
+};
+
+typedef NS_ENUM(NSInteger, JMWebEnvironmentCookiesState) {
+    JMWebEnvironmentCookiesStateEmpty,
+    JMWebEnvironmentCookiesStateValid,     // This state means that cookies are valid
+    JMWebEnvironmentCookiesStateNotValid,  // This state means that some other code made cookies invalid
+    JMWebEnvironmentCookiesStateNeedUpdate // This state means that there is auth error (after some request)
 };
 
 @interface JMBaseWebEnvironment : NSObject <JMJavascriptRequestExecutionProtocol, JMWebEnvironmentLoadingProtocol>
 @property (nonatomic, assign) JMWebEnvironmentState state;
+@property (nonatomic, assign) JMWebEnvironmentCookiesState cookiesState;
 @property (nonatomic, strong, readonly) WKWebView * __nullable webView;
 @property (nonatomic, copy, readonly) NSString * __nonnull identifier;
 @property (nonatomic, assign, getter=isReusable) BOOL reusable; // TODO: remove
@@ -77,6 +84,7 @@ typedef NS_ENUM(NSInteger, JMWebEnvironmentState) {
 // PUBLIC API
 - (NSOperation *__nullable)taskForPreparingWebView;
 - (NSOperation *__nullable)taskForPreparingEnvironment;
+- (NSString *__nonnull)stateNameForState:(JMWebEnvironmentState)state;
 - (void)resetZoom;
 - (void)clean;
 - (void)reset;
