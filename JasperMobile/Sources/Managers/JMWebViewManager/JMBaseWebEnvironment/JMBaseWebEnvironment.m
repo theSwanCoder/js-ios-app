@@ -28,10 +28,10 @@
 #import "JMBaseWebEnvironment.h"
 #import "JMJavascriptRequestExecutor.h"
 #import "JMJavascriptEvent.h"
-#import "UIView+Additions.h"
 #import "JMAsyncTask.h"
 #import "JMJavascriptRequestTask.h"
 #import "JMWebEnvironmentLoadingTask.h"
+#import "JMWebEnvironmentUpdateCookiesTask.h"
 
 @interface JMBaseWebEnvironment() <JMJavascriptRequestExecutorDelegate>
 @property (nonatomic, strong, readwrite) WKWebView * __nullable webView;
@@ -153,7 +153,6 @@
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMLog(@"request: %@", request.fullCommand);
 
-//    __weak __typeof(self) weakSelf = self;
     JMJavascriptRequestTask *requestTask = [JMJavascriptRequestTask taskWithRequestExecutor:self.requestExecutor
                                                                                     request:request
                                                                                  completion:completion];
@@ -166,13 +165,22 @@
         [self.operationQueue addOperation:requestTask];
     } else if(self.state == JMWebEnvironmentStateWebViewConfigured) {
         JMLog(@"try to send request when state is JMWebEnvironmentStateWebViewConfigured");
+        NSOperation *prepareEnvironmentTask = [self taskForPreparingEnvironment];
+        [self.operationQueue addOperation:prepareEnvironmentTask];
+        [self.operationQueue addOperation:requestTask];
     } else if(self.state == JMWebEnvironmentStateEnvironmentReady) {
         [self.operationQueue addOperation:requestTask];
     } else if(self.state == JMWebEnvironmentStateSessionExpired){
         NSArray *cookies = [JMWebViewManager sharedInstance].cookies;
-        [self updateCookiesWithCookies:cookies completion:^{
-            [self.operationQueue addOperation:requestTask];
-        }];
+        __weak __typeof(self) weakSelf = self;
+        NSOperation *updateCookiesTask = [JMWebEnvironmentUpdateCookiesTask taskWithRESTClient:self.restClient
+                                                                               requestExecutor:self.requestExecutor
+                                                                                       cookies:cookies
+                                                                                     competion:^{
+                                                                                         weakSelf.state = JMWebEnvironmentStateEnvironmentReady;
+                                                                                     }];
+        [self.operationQueue addOperation:updateCookiesTask];
+        [self.operationQueue addOperation:requestTask];
     } else {
         JMLog(@"try to send request when state is %@", @(self.state));
         [self.operationQueue addOperation:requestTask];
@@ -307,129 +315,6 @@
         cookiesAsString = [cookiesAsString stringByAppendingFormat:@"document.cookie = '%@=%@; expires=null, path=\\'%@\\''; ", name, value, path];
     }
     return cookiesAsString;
-}
-
-#pragma mark - Cookies Helpers
-
-- (void)updateCookiesWithCookies:(NSArray *)cookies completion:(void(^)(void))completion
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    __weak __typeof(self) weakSelf = self;
-    if ([JMUtils isSystemVersion9]) {
-        [self removeCookiesWithCompletion:^(BOOL success) {
-            __typeof(self) strongSelf = weakSelf;
-            if (success) {
-                NSString *cookiesAsString = [strongSelf cookiesAsStringFromCookies:cookies];
-                __weak __typeof(self) weakSelf = strongSelf;
-                [strongSelf.webView evaluateJavaScript:cookiesAsString completionHandler:^(id o, NSError *error) {
-                    __typeof(self) strongSelf = weakSelf;
-                    JMLog(@"setting cookies");
-                    JMLog(@"error: %@", error);
-                    JMLog(@"o: %@", o);
-                    if (error) {
-                        // TODO: how handle this case?
-                    } else {
-                        strongSelf.state = JMWebEnvironmentStateEnvironmentReady;
-                        completion();
-                    }
-                }];
-            } else {
-                // TODO: how handle this case?
-            }
-        }];
-    } else {
-        UIView *webViewSuperview = self.webView.superview;
-        [self.webView removeFromSuperview];
-        [self.requestExecutor reset];
-        _webView = nil;
-        _requestExecutor = nil;
-        [self setupWebEnvironmentWithCookies:cookies];
-        [webViewSuperview fillWithView:self.webView];
-        [self prepareWithCompletion:^{
-            self.state = JMWebEnvironmentStateEnvironmentReady;
-            completion();
-        }];
-    }
-}
-
-
-- (void)removeCookiesWithCompletion:(void(^)(BOOL success))completion
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    if ([JMUtils isSystemVersion9]) {
-        NSSet *dataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
-        WKWebsiteDataStore *websiteDataStore = self.webView.configuration.websiteDataStore;
-        [websiteDataStore fetchDataRecordsOfTypes:dataTypes
-                                completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {
-                                    for (WKWebsiteDataRecord *record in records) {
-                                        NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
-                                        if ([record.displayName containsString:serverURL.host]) {
-                                            [websiteDataStore removeDataOfTypes:record.dataTypes
-                                                                 forDataRecords:@[record]
-                                                              completionHandler:^{
-                                                                  JMLog(@"record (%@) removed successfully", record);
-                                                              }];
-                                        }
-                                    }
-                                    if (completion) {
-                                        completion(YES);
-                                    }
-                                }];
-    } else {
-        [self removeCookiesForOldVersionWitchCompletion:completion];
-    }
-}
-
-- (void)removeCookiesForOldVersionWitchCompletion:(void(^)(BOOL success))completion
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    NSString *libraryPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject;
-    NSString *cookiesFolderPath = [libraryPath stringByAppendingString:@"/Cookies"];
-    NSError *error;
-    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:cookiesFolderPath error:&error];
-    for (NSString *contentPath in contents) {
-        error = nil;
-        NSString *fullContentPath = [cookiesFolderPath stringByAppendingFormat:@"/%@", contentPath];
-        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:fullContentPath error:&error];
-        if (!success) {
-            JMLog(@"error of removing cookies: %@", error);
-        }
-    }
-    completion(YES);
-}
-
-#pragma mark - Helpers
-
-- (void)prepareWithCompletion:(void(^)(void))completion
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    __weak __typeof(self) weakSelf = self;
-    [self prepareWebViewWithCompletion:^(BOOL isReady, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        if (isReady) {
-            if (strongSelf.state == JMWebEnvironmentStateSessionExpired) {
-                JMLog(@"session was expired");
-            } else {
-                strongSelf.state = JMWebEnvironmentStateWebViewConfigured;
-                __weak __typeof(self) weakSelf = strongSelf;
-                [strongSelf prepareEnvironmentWithCompletion:^(BOOL isReady, NSError *error) {
-                    __typeof(self) strongSelf = weakSelf;
-                    if (isReady) {
-                        if (strongSelf.state == JMWebEnvironmentStateSessionExpired) {
-                            JMLog(@"session was expired");
-                        } else {
-                            strongSelf.state = JMWebEnvironmentStateEnvironmentReady;
-                            completion();
-                        }
-                    } else {
-                        JMLog(@"error of preparing environment: %@", error);
-                    }
-                }];
-            }
-        } else {
-            JMLog(@"error of preparing web view: %@", error);
-        }
-    }];
 }
 
 #pragma mark - JMJavascriptRequestExecutorDelegate
