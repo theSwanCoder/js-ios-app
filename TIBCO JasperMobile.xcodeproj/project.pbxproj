@@ -2258,7 +2258,7 @@
 			children = (
 				93D8C6431AAC7E9200117306 /* JMWebViewManager.h */,
 				93D8C6441AAC7E9200117306 /* JMWebViewManager.m */,
-				A14783FA5EF075F23AAB5522 /* JMJavascriptNativeBridge */,
+				A14783FA5EF075F23AAB5522 /* JMJavascriptRequestExecutor */,
 				A1478CCC393A34728F2AFF05 /* JMWebEnvironment */,
 				A1478FF94E2F4E3A66112F24 /* JMHTMLParser */,
 				A1478B79C7B87D2CA61D0795 /* JMHTMLScript */,
@@ -2599,7 +2599,7 @@
 			path = JMScheduleManager;
 			sourceTree = "<group>";
 		};
-		A14783FA5EF075F23AAB5522 /* JMJavascriptNativeBridge */ = {
+		A14783FA5EF075F23AAB5522 /* JMJavascriptRequestExecutor */ = {
 			isa = PBXGroup;
 			children = (
 				A1478E4A78EBEA7E469DF795 /* JMJavascriptRequest */,
@@ -2608,7 +2608,7 @@
 				A14786A5622B2E985A799F21 /* JMJavascriptRequestExecutor.m */,
 				A147873239DA64D5FBF2C6CC /* JMJavascriptEvent */,
 			);
-			path = JMJavascriptNativeBridge;
+			path = JMJavascriptRequestExecutor;
 			sourceTree = "<group>";
 		};
 		A147841C37C44ED68BDB5575 /* JMresourceViewerSessionManager */ = {
