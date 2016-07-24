@@ -34,6 +34,7 @@
 typedef NS_ENUM(NSInteger, JMJavascriptRequestErrorType) {
     JMJavascriptRequestErrorTypeWindow,
     JMJavascriptRequestErrorTypeAuth,
+    JMJavascriptRequestErrorSessionDidRestore,
     JMJavascriptRequestErrorTypeUnexpected,
     JMJavascriptRequestErrorTypeOther,
 };
