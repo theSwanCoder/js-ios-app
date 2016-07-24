@@ -111,18 +111,34 @@
     JMWebEnvironmentLoadingTask *loadingTask = [JMWebEnvironmentLoadingTask taskWithRequestExecutor:self.requestExecutor
                                                                                          HTMLString:HTMLString
                                                                                             baseURL:baseURL];
+    loadingTask.completion = ^{
+        if (completion) {
+            completion(YES, nil);
+        }
+    };
     [self.operationQueue addOperation:loadingTask];
 }
 
-- (void)loadRequest:(NSURLRequest * __nonnull)request
+- (void)loadRequest:(NSURLRequest * __nonnull)request completion:(JMWebEnvironmentLoadingCompletion)completion
 {
     if ([request.URL isFileURL]) {
         // TODO: detect format of file for request
         [self loadLocalFileFromURL:request.URL
                         fileFormat:nil
                            baseURL:nil];
+        // TODO: implement completion
+        if (completion) {
+            completion(YES, nil);
+        }
     } else {
-        [self.webView loadRequest:request];
+        JMWebEnvironmentLoadingTask *loadingTask = [JMWebEnvironmentLoadingTask taskWithRequestExecutor:self.requestExecutor
+                                                                                             URLRequest:request];
+        loadingTask.completion = ^{
+            if (completion) {
+                completion(YES, nil);
+            }
+        };
+        [self.operationQueue addOperation:loadingTask];
     }
 }
 

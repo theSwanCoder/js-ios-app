@@ -46,7 +46,8 @@ typedef void(^JMWebEnvironmentLoadingCompletion)(BOOL isReady, NSError * __nulla
 @end
 
 @protocol JMWebEnvironmentLoadingProtocol <NSObject>
-- (void)loadRequest:(NSURLRequest * __nonnull)request;
+- (void)loadRequest:(NSURLRequest * __nonnull)request
+         completion:(JMWebEnvironmentLoadingCompletion __nullable)completion;
 - (void)loadHTML:(NSString * __nonnull)HTMLString
          baseURL:(NSURL * __nullable)baseURL
       completion:(JMWebEnvironmentLoadingCompletion __nullable)completion;
