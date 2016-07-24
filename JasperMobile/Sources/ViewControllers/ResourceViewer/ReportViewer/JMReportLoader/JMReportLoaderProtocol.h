@@ -41,6 +41,8 @@
 @class JSReportDestination;
 @class JMHyperlink;
 
+typedef void(^JSReportLoaderBaseCompletionBlock)();
+
 @protocol JMReportLoaderProtocol <JSReportLoaderProtocol>
 @optional
 - (void)setDelegate:(id<JMReportLoaderDelegate> __nullable)delegate;
@@ -57,8 +59,9 @@ initialDestination:(nullable JSReportDestination *)destination
                 completion:(nonnull JSReportLoaderCompletionBlock)completion; /** @since 2.6 */
 - (void)navigateToPart:(nonnull JSReportPart *)part
             completion:(nonnull JSReportLoaderCompletionBlock)completion; /** @since 2.6 */
-- (void)destroy;
+- (void)destroyWithCompletion:(nullable JSReportLoaderBaseCompletionBlock)completion;
 - (void)fitReportViewToScreen;
+- (void)resetWithCompletion:(nullable JSReportLoaderBaseCompletionBlock)completion;
 @end
 
 @protocol JMReportLoaderDelegate <NSObject>
