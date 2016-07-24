@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="16A238m" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="16A254g" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -12,19 +12,19 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ea-4g-rR4">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                    <rect key="frame" x="0.0" y="-44" width="600" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="VsZ-e4-H2l"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FA9-zE-MNt">
-                    <rect key="frame" x="0.0" y="44" width="600" height="512"/>
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                 </view>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Ngh-gR-Mej">
                     <rect key="frame" x="290" y="290" width="20" height="20"/>
                 </activityIndicatorView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8SV-3C-9i0">
-                    <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                    <rect key="frame" x="0.0" y="600" width="600" height="44"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="OxZ-UF-b2t"/>
@@ -36,9 +36,9 @@
                 <constraint firstAttribute="trailing" secondItem="8SV-3C-9i0" secondAttribute="trailing" id="ANN-Sx-mkS"/>
                 <constraint firstItem="FA9-zE-MNt" firstAttribute="top" secondItem="6Ea-4g-rR4" secondAttribute="bottom" id="GYl-dw-5e1"/>
                 <constraint firstItem="FA9-zE-MNt" firstAttribute="leading" secondItem="mik-OW-WC2" secondAttribute="leading" id="InQ-Eo-PnW"/>
-                <constraint firstAttribute="bottom" secondItem="8SV-3C-9i0" secondAttribute="bottom" id="J7B-Do-YSb"/>
+                <constraint firstAttribute="bottom" secondItem="8SV-3C-9i0" secondAttribute="bottom" constant="-44" id="J7B-Do-YSb"/>
                 <constraint firstItem="Ngh-gR-Mej" firstAttribute="centerX" secondItem="FA9-zE-MNt" secondAttribute="centerX" id="PBF-tn-2AB"/>
-                <constraint firstItem="6Ea-4g-rR4" firstAttribute="top" secondItem="mik-OW-WC2" secondAttribute="top" id="SXo-YZ-Azk"/>
+                <constraint firstItem="6Ea-4g-rR4" firstAttribute="top" secondItem="mik-OW-WC2" secondAttribute="top" constant="-44" id="SXo-YZ-Azk"/>
                 <constraint firstItem="6Ea-4g-rR4" firstAttribute="leading" secondItem="mik-OW-WC2" secondAttribute="leading" id="bqi-ms-9id"/>
                 <constraint firstItem="FA9-zE-MNt" firstAttribute="bottom" secondItem="8SV-3C-9i0" secondAttribute="top" id="lkd-kA-z2s"/>
                 <constraint firstAttribute="trailing" secondItem="FA9-zE-MNt" secondAttribute="trailing" id="lmX-ct-8vf"/>
