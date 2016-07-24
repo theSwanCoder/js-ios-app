@@ -72,9 +72,7 @@
 
 - (void)reportLoaderDidChangeCountOfPages:(NSNotification *)notification
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JSReport *report = notification.object;
-    JMLog(@"count of pages: %@", @(report.countOfPages));
     self.countOfPages = report.countOfPages;
 }
 
