@@ -31,6 +31,7 @@
 */
 
 @class JMJavascriptRequest;
+@class JMJavascriptRequestExecutor;
 
 typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nullable params, NSError * __nullable error);
 typedef void(^JMWebEnvironmentLoadingCompletion)(BOOL isReady, NSError * __nullable error);
@@ -68,11 +69,15 @@ typedef NS_ENUM(NSInteger, JMWebEnvironmentState) {
 @property (nonatomic, strong, readonly) WKWebView * __nullable webView;
 @property (nonatomic, copy, readonly) NSString * __nonnull identifier;
 @property (nonatomic, assign, getter=isReusable) BOOL reusable; // TODO: remove
+@property (nonatomic, strong) JMJavascriptRequestExecutor * __nonnull requestExecutor;
+
 - (instancetype __nullable)initWithId:(NSString *__nonnull)identifier initialCookies:(NSArray *__nullable)cookies;
 + (instancetype __nullable)webEnvironmentWithId:(NSString *__nullable)identifier initialCookies:(NSArray *__nullable)cookies;
 // PUBLIC API
-- (void)prepareWebViewWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion;
-- (void)prepareEnvironmentWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion;
+- (void)prepareWebViewWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion DEPRECATED_MSG_ATTRIBUTE("Use 'taskForPreparingWebView' instead.");
+- (void)prepareEnvironmentWithCompletion:(void (^__nonnull)(BOOL isReady, NSError *__nullable error))completion DEPRECATED_MSG_ATTRIBUTE("Use 'taskForPreparingEnvironment' instead.");
+- (NSOperation *__nullable)taskForPreparingWebView;
+- (NSOperation *__nullable)taskForPreparingEnvironment;
 - (void)resetZoom;
 - (void)clean;
 - (void)reset;

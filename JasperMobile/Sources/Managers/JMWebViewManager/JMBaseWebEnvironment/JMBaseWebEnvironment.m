@@ -35,7 +35,6 @@
 @interface JMBaseWebEnvironment() <JMJavascriptRequestExecutorDelegate>
 @property (nonatomic, strong, readwrite) WKWebView * __nullable webView;
 @property (nonatomic, copy, readwrite) NSString * __nonnull identifier;
-@property (nonatomic, strong) JMJavascriptRequestExecutor * __nonnull requestExecutor;
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
 @end
 
@@ -168,15 +167,17 @@
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMLog(@"request: %@", request.fullCommand);
 
-    __weak __typeof(self) weakSelf = self;
+//    __weak __typeof(self) weakSelf = self;
     JMJavascriptRequestTask *requestTask = [JMJavascriptRequestTask taskWithRequestExecutor:self.requestExecutor
                                                                                     request:request
                                                                                  completion:completion];
 
     if (self.state == JMWebEnvironmentStateWebViewCreated) {
-        [self prepareWithCompletion:^{
-            [weakSelf.operationQueue addOperation:requestTask];
-        }];
+        NSOperation *prepareWebViewTask = [self taskForPreparingWebView];
+        [self.operationQueue addOperation:prepareWebViewTask];
+        NSOperation *prepareEnvironmentTask = [self taskForPreparingEnvironment];
+        [self.operationQueue addOperation:prepareEnvironmentTask];
+        [self.operationQueue addOperation:requestTask];
     } else if(self.state == JMWebEnvironmentStateWebViewConfigured) {
         JMLog(@"try to send request when state is JMWebEnvironmentStateWebViewConfigured");
     } else if(self.state == JMWebEnvironmentStateEnvironmentReady) {
@@ -220,6 +221,16 @@
 {
     // implement in childs
     completion(YES, nil);
+}
+
+- (NSOperation *__nullable)taskForPreparingWebView
+{
+    return nil;
+}
+
+- (NSOperation *__nullable)taskForPreparingEnvironment
+{
+    return nil;
 }
 
 - (void)cleanCache

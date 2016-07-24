@@ -29,6 +29,8 @@
 #import "JMVisualizeManager.h"
 #import "JMJavascriptRequest.h"
 #import "JMServerOptionManager.h"
+#import "JMWebEnvironmentLoadingTask.h"
+#import "JMJavascriptRequestTask.h"
 
 
 @implementation JMVIZWebEnvironment
@@ -64,16 +66,41 @@
 }
 
 #pragma mark - Public API
-- (void)prepareWebViewWithCompletion:(void (^ __nonnull)(BOOL isReady, NSError *__nullable error))completion
+
+- (NSOperation *__nullable)taskForPreparingWebView
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [self loadJasperMobilePageWithCompletion:completion];
+    JMWebEnvironmentLoadingTask *loadingTask = [JMWebEnvironmentLoadingTask taskWithRequestExecutor:self.requestExecutor
+                                                                                         HTMLString:self.visualizeManager.htmlString
+                                                                                            baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
+    return loadingTask;
 }
 
-- (void)prepareEnvironmentWithCompletion:(void (^ __nonnull)(BOOL isReady, NSError *__nullable error))completion
+- (NSOperation *__nullable)taskForPreparingEnvironment
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [self loadVisualizeWithCompletion:completion];
+    NSString *vizPath = self.visualizeManager.visualizePath;
+    JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
+                                                                            inNamespace:JMJavascriptNamespaceDefault
+                                                                             parameters:@{
+                                                                                     @"scriptURLs" : @[
+                                                                                             vizPath,
+                                                                                             @"https://code.jquery.com/jquery.min.js"
+                                                                                     ]
+                                                                             }];
+    __weak  __typeof(self) weakSelf = self;
+    JMJavascriptRequestTask *requestTask = [JMJavascriptRequestTask taskWithRequestExecutor:self.requestExecutor
+                                                                                    request:requireJSLoadRequest
+                                                                                 completion:^(NSDictionary *params, NSError *error) {
+                                                                                     __typeof(self) strongSelf = weakSelf;
+                                                                                     if (error) {
+                                                                                         JMLog(@"Error of loading scripts: %@", error);
+                                                                                     } else {
+                                                                                         JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:strongSelf.restClient.serverProfile];
+                                                                                         if (activeProfile.cacheReports.boolValue) {
+                                                                                             [strongSelf createContainers];
+                                                                                         }
+                                                                                     }
+                                                                                 }];
+    return requestTask;
 }
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
@@ -104,13 +131,13 @@
 }
 
 #pragma mark - Helpers
-- (void)loadJasperMobilePageWithCompletion:(void(^)(BOOL isLoaded, NSError *error))completion
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self loadHTML:self.visualizeManager.htmlString
-           baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
-        completion:completion];
-}
+//- (void)loadJasperMobilePageWithCompletion:(void(^)(BOOL isLoaded, NSError *error))completion
+//{
+//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+//    [self loadHTML:self.visualizeManager.htmlString
+//           baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
+//        completion:completion];
+//}
 
 - (void)loadVisualizeWithCompletion:(void(^)(BOOL isLoaded, NSError *error))completion
 {

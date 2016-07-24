@@ -68,21 +68,18 @@
 - (BOOL)isReady
 {
     BOOL isReady = super.isReady && self.state == JMAsyncTaskStateReady;
-    JMLog(@"%@ - isReady: %@", self, isReady ? @"YES" : @"NO");
     return isReady;
 }
 
 - (BOOL)isExecuting
 {
     BOOL isExecuting = self.state == JMAsyncTaskStateExecuting;
-    JMLog(@"%@ - isExecuting: %@", self, isExecuting ? @"YES" : @"NO");
     return isExecuting;
 }
 
 - (BOOL)isFinished
 {
     BOOL isFinished = self.state == JMAsyncTaskStateFinished;
-    JMLog(@"%@ - isFinished: %@", self, isFinished ? @"YES" : @"NO");
     return isFinished;
 }
 
@@ -95,14 +92,12 @@
         return;
     }
 
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [self main];
     self.state = JMAsyncTaskStateExecuting;
 }
 
 - (void)cancel
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.state = JMAsyncTaskStateFinished;
 }
 
