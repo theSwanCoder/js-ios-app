@@ -104,9 +104,9 @@ NSString *JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestExecuto
     __weak __typeof(self) weakSelf = self;
     [self.webView evaluateJavaScript:[request fullJavascriptRequestString]
                    completionHandler:^(id result, NSError *error) {
-                       JMLog(@"request: %@", request);
-                       JMLog(@"error: %@", error);
-                       JMLog(@"result: %@", result);
+//                       JMLog(@"request: %@", request);
+//                       JMLog(@"error: %@", error);
+//                       JMLog(@"result: %@", result);
                        if (!weakSelf) {
                            return;
                        }

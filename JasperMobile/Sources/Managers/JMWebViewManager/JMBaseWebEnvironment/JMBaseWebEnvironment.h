@@ -58,9 +58,7 @@ typedef NS_ENUM(NSInteger, JMWebEnvironmentState) {
     JMWebEnvironmentStateInitial,           // state without webview
     JMWebEnvironmentStateWebViewCreated,    // state when webview was created
     JMWebEnvironmentStateWebViewConfigured, // state when webview has html loaded
-    JMWebEnvironmentStateLoading,           // process loading page in webview
     JMWebEnvironmentStateEnvironmentReady,  // state when webview has scripts loaded
-    JMWebEnvironmentStateRequestExecution,  // sending javascript request
     JMWebEnvironmentStateSessionExpired,    // cookies became not valid
     JMWebEnvironmentStateCancel             // cancel signal was sent
 };

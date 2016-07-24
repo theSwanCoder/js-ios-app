@@ -29,6 +29,8 @@
 #import "JMJavascriptRequestExecutor.h"
 #import "JMJavascriptEvent.h"
 #import "UIView+Additions.h"
+#import "JMAsyncTask.h"
+#import "JMJavascriptRequestTask.h"
 
 @interface JMBaseWebEnvironment() <JMJavascriptRequestExecutorDelegate>
 @property (nonatomic, strong, readwrite) WKWebView * __nullable webView;
@@ -84,14 +86,6 @@
         }
         case JMWebEnvironmentStateEnvironmentReady: {
             JMLog(@"JMWebEnvironmentStateEnvironmentReady");
-            break;
-        }
-        case JMWebEnvironmentStateLoading: {
-            JMLog(@"JMWebEnvironmentStateLoading");
-            break;
-        }
-        case JMWebEnvironmentStateRequestExecution: {
-            JMLog(@"JMWebEnvironmentStateRequestExecution");
             break;
         }
         case JMWebEnvironmentStateSessionExpired: {
@@ -172,37 +166,29 @@
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"request: %@", request.fullCommand);
 
-    NSBlockOperation *executionRequestOperation = [NSBlockOperation blockOperationWithBlock:^{
-        JMLog(@"start execute operation");
-        self.state = JMWebEnvironmentStateRequestExecution;
-        [self.requestExecutor sendJavascriptRequest:request
-                                         completion:^(JMJavascriptResponse *response, NSError *error) {
-                                             JMLog(@"end execute operation");
-                                             self.state = JMWebEnvironmentStateEnvironmentReady;
-                                             if (completion) {
-                                                 completion(response.parameters, error);
-                                             }
-                                         }];
-    }];
-    executionRequestOperation.queuePriority = NSOperationQueuePriorityLow;
+    __weak __typeof(self) weakSelf = self;
+    JMJavascriptRequestTask *requestTask = [JMJavascriptRequestTask taskWithRequestExecutor:self.requestExecutor
+                                                                                    request:request
+                                                                                 completion:completion];
 
     if (self.state == JMWebEnvironmentStateWebViewCreated) {
         [self prepareWithCompletion:^{
-            [self.operationQueue addOperation:executionRequestOperation];
+            [weakSelf.operationQueue addOperation:requestTask];
         }];
     } else if(self.state == JMWebEnvironmentStateWebViewConfigured) {
         JMLog(@"try to send request when state is JMWebEnvironmentStateWebViewConfigured");
     } else if(self.state == JMWebEnvironmentStateEnvironmentReady) {
-        [self.operationQueue addOperation:executionRequestOperation];
+        [self.operationQueue addOperation:requestTask];
     } else if(self.state == JMWebEnvironmentStateSessionExpired){
         NSArray *cookies = [JMWebViewManager sharedInstance].cookies;
         [self updateCookiesWithCookies:cookies completion:^{
-            [self.operationQueue addOperation:executionRequestOperation];
+            [self.operationQueue addOperation:requestTask];
         }];
     } else {
         JMLog(@"try to send request when state is %@", @(self.state));
-        [self.operationQueue addOperation:executionRequestOperation];
+        [self.operationQueue addOperation:requestTask];
     }
 }
 
@@ -420,7 +406,6 @@
 - (void)prepareWithCompletion:(void(^)(void))completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    self.state = JMWebEnvironmentStateLoading;
     __weak __typeof(self) weakSelf = self;
     [self prepareWebViewWithCompletion:^(BOOL isReady, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
@@ -430,7 +415,6 @@
             } else {
                 strongSelf.state = JMWebEnvironmentStateWebViewConfigured;
                 __weak __typeof(self) weakSelf = strongSelf;
-                strongSelf.state = JMWebEnvironmentStateLoading;
                 [strongSelf prepareEnvironmentWithCompletion:^(BOOL isReady, NSError *error) {
                     __typeof(self) strongSelf = weakSelf;
                     if (isReady) {
