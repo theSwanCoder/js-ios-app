@@ -160,7 +160,6 @@
 
 - (void)setupNavigationItems
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     if ([self isNavigationItemsForNestedResource]) {
         [self initialSetupNavigationItems];
     }
@@ -181,7 +180,6 @@
 
 - (void)setupNavigationItemsForNestedResource
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [self setupBackButtonForNestedResource];
     [self removeMenuBarButton];
     [self.favoritesHelper updateAppearence];
@@ -193,7 +191,6 @@
 
 - (void)addMenuBarButton
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     UIBarButtonItem *menuBarButton = [self menuBarButton];
     NSMutableArray *rightBarButtonItems = [NSMutableArray array];
     [rightBarButtonItems addObject:menuBarButton];
@@ -202,27 +199,23 @@
 
 - (void)removeMenuBarButton
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.controller.navigationItem.rightBarButtonItems = nil;
 }
 
 - (void)initialSetupBackButton
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     UIBarButtonItem *backBarButton = [self defaultBackBarButton];
     self.controller.navigationItem.leftBarButtonItem = backBarButton;
 }
 
 - (void)setupBackButtonForNestedResource
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     UIBarButtonItem *backBarButton = [self backBarButtonForNestedResource];
     self.controller.navigationItem.leftBarButtonItem = backBarButton;
 }
 
 - (void)setupOpenDocumentBarButton
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     UIBarButtonItem *openDocumentBarButton = [self openDocumentBarButton];
     self.controller.navigationItem.rightBarButtonItems = @[openDocumentBarButton];
 }
@@ -344,7 +337,6 @@
 
 - (void)showMainView
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.contentView.hidden = NO;
 }
 
