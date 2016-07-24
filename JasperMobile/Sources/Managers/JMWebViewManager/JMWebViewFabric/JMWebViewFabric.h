@@ -33,4 +33,5 @@
 @interface JMWebViewFabric : NSObject
 + (instancetype)sharedInstance;
 - (WKWebView *)createWebViewWithCookies:(NSArray <NSHTTPCookie *> *)cookies;
+- (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *> *)cookies;
 @end

@@ -63,6 +63,17 @@
     return webView;
 }
 
+- (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
+{
+    NSString *cookiesAsString = @"";
+    for (NSHTTPCookie *cookie in cookies) {
+        NSString *name = cookie.name;
+        NSString *value = cookie.value;
+        cookiesAsString = [cookiesAsString stringByAppendingFormat:@"%@=%@; ", name, value];
+    }
+    return cookiesAsString;
+}
+
 #pragma mark - Helpers
 
 - (WKUserScript *)jaspermobileScript
@@ -78,15 +89,15 @@
 
 - (WKUserScript *)injectCookiesScriptWithCookies:(NSArray <NSHTTPCookie *>*)cookies
 {
-    NSString *cookiesAsString = [self cookiesAsStringFromCookies:cookies];
+    NSString *cookiesScriptAsString = [self cookiesScriptAsStringFromCookies:cookies];
 
-    WKUserScript *script = [[WKUserScript alloc] initWithSource:cookiesAsString
+    WKUserScript *script = [[WKUserScript alloc] initWithSource:cookiesScriptAsString
                                                   injectionTime:WKUserScriptInjectionTimeAtDocumentStart
                                                forMainFrameOnly:YES];
     return script;
 }
 
-- (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
+- (NSString *)cookiesScriptAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
 {
     NSString *cookiesAsString = @"";
     for (NSHTTPCookie *cookie in cookies) {
