@@ -90,14 +90,17 @@
     JMJavascriptRequestTask *requestTask = [JMJavascriptRequestTask taskWithRequestExecutor:self.requestExecutor
                                                                                     request:requireJSLoadRequest
                                                                                  completion:^(NSDictionary *params, NSError *error) {
-                                                                                     __typeof(self) strongSelf = weakSelf;
+                                                                                     if (!weakSelf) {
+                                                                                         return;
+                                                                                     }
                                                                                      if (error) {
                                                                                          JMLog(@"Error of loading scripts: %@", error);
                                                                                      } else {
-                                                                                         JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:strongSelf.restClient.serverProfile];
+                                                                                         JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:weakSelf.restClient.serverProfile];
                                                                                          if (activeProfile.cacheReports.boolValue) {
-                                                                                             [strongSelf createContainers];
+                                                                                             [weakSelf createContainers];
                                                                                          }
+                                                                                         weakSelf.state = JMWebEnvironmentStateEnvironmentReady;
                                                                                      }
                                                                                  }];
     return requestTask;
@@ -131,42 +134,6 @@
 }
 
 #pragma mark - Helpers
-//- (void)loadJasperMobilePageWithCompletion:(void(^)(BOOL isLoaded, NSError *error))completion
-//{
-//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-//    [self loadHTML:self.visualizeManager.htmlString
-//           baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
-//        completion:completion];
-//}
-
-- (void)loadVisualizeWithCompletion:(void(^)(BOOL isLoaded, NSError *error))completion
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    // load vis into web environment
-    NSString *vizPath = self.visualizeManager.visualizePath;
-    JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
-                                                                            inNamespace:JMJavascriptNamespaceDefault
-                                                                             parameters:@{
-                                                                                     @"scriptURLs" : @[
-                                                                                             vizPath,
-                                                                                             @"https://code.jquery.com/jquery.min.js"
-                                                                                     ]
-                                                                             }];
-    __weak  __typeof(self) weakSelf = self;
-    [self sendJavascriptRequest:requireJSLoadRequest
-                     completion:^(NSDictionary *params, NSError *error) {
-                         __typeof(self) strongSelf = weakSelf;
-                         if (error) {
-                             completion(NO, error);
-                         } else {
-                             JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:strongSelf.restClient.serverProfile];
-                             if (activeProfile.cacheReports.boolValue) {
-                                 [strongSelf createContainers];
-                             }
-                             completion(YES, nil);
-                         }
-                     }];
-}
 
 - (void)removeContainers
 {
