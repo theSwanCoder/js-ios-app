@@ -31,6 +31,7 @@
 #import "JMResourceViewerDocumentManager.h"
 #import "JMWebEnvironment.h"
 #import "JMResource.h"
+#import "JMResourceViewerMenuHelper.h"
 
 @interface JMReportViewerStateManager()
 @property (nonatomic, assign, readwrite) JMReportViewerState state;
@@ -80,6 +81,12 @@
         case JMReportViewerStateResourceNotExist: {
             break;
         }
+        case JMReportViewerStateNotVisible: {
+            if (self.menuHelper.isMenuVisible) {
+                [self.menuHelper hideMenu];
+            }
+            break;
+        }
         case JMReportViewerStateNestedResource: {
             [self setupNavigationItemsForNestedResource];
             break;
@@ -125,6 +132,9 @@
             [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
             [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
             [self showResourceNotExistView];
+            break;
+        }
+        case JMReportViewerStateNotVisible: {
             break;
         }
         case JMReportViewerStateNestedResource: {
