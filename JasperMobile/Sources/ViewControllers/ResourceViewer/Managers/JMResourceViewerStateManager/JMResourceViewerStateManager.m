@@ -367,14 +367,16 @@
 #pragma mark - Setup Resource Not Exist View
 - (void)showResourceNotExistView
 {
-    NSAssert(self.nonExistingResourceView != nil, @"Non existing resource view is nil");
-    self.nonExistingResourceView.hidden = NO;
+    if (self.nonExistingResourceView) {
+        self.nonExistingResourceView.hidden = NO;
+    }
 }
 
 - (void)hideResourceNotExistView
 {
-    NSAssert(self.nonExistingResourceView != nil, @"Non existing resource view is nil");
-    self.nonExistingResourceView.hidden = YES;
+    if (self.nonExistingResourceView) {
+        self.nonExistingResourceView.hidden = YES;
+    }
 }
 
 
