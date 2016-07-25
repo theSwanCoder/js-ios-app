@@ -517,6 +517,10 @@
             [self.configurator.sessionManager handleSessionDidExpire];
             break;
         }
+        case JMJavascriptRequestErrorSessionDidRestore: {
+            [self.configurator.sessionManager handleSessionDidChangeWithAlert:YES];
+            break;
+        }
         case JMJavascriptRequestErrorTypeUnexpected:
         case JMJavascriptRequestErrorTypeWindow:
         case JMJavascriptRequestErrorTypeOther: {
