@@ -175,7 +175,7 @@
                         if ([strongSelf isFormatSupported:outputs.firstObject]) {
                             strongSelf.tempResourceURL = location;
                             if ([strongSelf.delegate respondsToSelector:@selector(hyperlinksManager:willOpenLocalResourceFromURL:)]) {
-                                [strongSelf.delegate hyperlinksManager:strongSelf willOpenURL:location];
+                                [strongSelf.delegate hyperlinksManager:strongSelf willOpenLocalResourceFromURL:location];
                             }
                         } else {
                             if ([strongSelf.delegate respondsToSelector:@selector(hyperlinksManager:needShowOpenInMenuForLocalResourceFromURL:)]) {
