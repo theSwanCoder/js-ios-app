@@ -119,10 +119,11 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                    failure:nil];
             } else {
                 if (cachedImage.size.width == CGSizeZero.width && cachedImage.size.height == CGSizeZero.height) {
-                    return;
+                    self.resourceImage.image = [UIImage imageNamed:@"res_type_report"];
+                } else {
+                    self.thumbnailImage = cachedImage;
+                    [self updateResourceImage:self.thumbnailImage thumbnails:YES];
                 }
-                self.thumbnailImage = cachedImage;
-                [self updateResourceImage:self.thumbnailImage thumbnails:YES];
             }
         }
     } else if (self.resource.type == JMResourceTypeSavedResource) {
