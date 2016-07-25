@@ -604,14 +604,7 @@ initialDestination:(nullable JSReportDestination *)destination
                                     return;
                                 }
                                 if (error) {
-                                    if (error.code == JMJavascriptRequestErrorTypeOther) {
-                                        NSString *javascriptErrorCode = error.userInfo[JMJavascriptRequestExecutorErrorCodeKey];
-                                        if (javascriptErrorCode && [javascriptErrorCode isEqualToString:@"hyperlink.not.support.error"]) {
-                                            if ([weakSelf.delegate respondsToSelector:@selector(reportLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
-                                                [weakSelf.delegate reportLoaderDidReceiveEventWithUnsupportedHyperlink:weakSelf];
-                                            }
-                                        }
-                                    }
+                                    [weakSelf handleHyperlinksError:error];
                                 } else {
                                     [weakSelf handleRunReportWithParameters:params];
                                 }
@@ -624,14 +617,21 @@ initialDestination:(nullable JSReportDestination *)destination
                                 if (!weakSelf) {
                                     return;
                                 }
-                                NSString *locationString = params[@"destination"];
-                                [weakSelf.report updateCurrentPage:locationString.integerValue];
+                                if (error) {
+                                    [weakSelf handleHyperlinksError:error];
+                                } else {
+                                    NSString *locationString = params[@"destination"];
+                                    [weakSelf.report updateCurrentPage:locationString.integerValue];
+                                }
                             }];
     NSString *localAnchorLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.LocalAnchor";
     [self.webEnvironment addListener:self
                           forEventId:localAnchorLinkOptionListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(localAnchorLinkOptionListenerId);
+                                if (error) {
+                                    [weakSelf handleHyperlinksError:error];
+                                }
                             }];
     NSString *referenceLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.Reference";
     [self.webEnvironment addListener:self
@@ -641,13 +641,17 @@ initialDestination:(nullable JSReportDestination *)destination
                                 if (!weakSelf) {
                                     return;
                                 }
-                                NSString *locationString = params[@"destination"];
-                                if (locationString) {
-                                    if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
-                                        JMHyperlink *hyperlink = [JMHyperlink new];
-                                        hyperlink.type = JMHyperlinkTypeReference;
-                                        hyperlink.href = locationString;
-                                        [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                if (error) {
+                                    [weakSelf handleHyperlinksError:error];
+                                } else {
+                                    NSString *locationString = params[@"destination"];
+                                    if (locationString) {
+                                        if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                            JMHyperlink *hyperlink = [JMHyperlink new];
+                                            hyperlink.type = JMHyperlinkTypeReference;
+                                            hyperlink.href = locationString;
+                                            [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                        }
                                     }
                                 }
                             }];
@@ -659,22 +663,26 @@ initialDestination:(nullable JSReportDestination *)destination
                                 if (!weakSelf) {
                                     return;
                                 }
-                                JMLog(@"parameters: %@", params);
-                                NSDictionary *link = params[@"link"];
-                                if (link && [link isKindOfClass:[NSDictionary class]]) {
-                                    NSString *href = link[@"href"];
-                                    if (href) {
-                                        NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
-                                        if ([prefix isEqualToString:@"."]) {
-                                            href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
-                                        }
-                                        NSString *fullURLString = [weakSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
-                                        JMLog(@"full url string: %@", fullURLString);
-                                        if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
-                                            JMHyperlink *hyperlink = [JMHyperlink new];
-                                            hyperlink.type = JMHyperlinkTypeRemoteAnchor;
-                                            hyperlink.href = fullURLString;
-                                            [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                if (error) {
+                                    [weakSelf handleHyperlinksError:error];
+                                } else {
+                                    JMLog(@"parameters: %@", params);
+                                    NSDictionary *link = params[@"link"];
+                                    if (link && [link isKindOfClass:[NSDictionary class]]) {
+                                        NSString *href = link[@"href"];
+                                        if (href) {
+                                            NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
+                                            if ([prefix isEqualToString:@"."]) {
+                                                href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
+                                            }
+                                            NSString *fullURLString = [weakSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
+                                            JMLog(@"full url string: %@", fullURLString);
+                                            if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                                JMHyperlink *hyperlink = [JMHyperlink new];
+                                                hyperlink.type = JMHyperlinkTypeRemoteAnchor;
+                                                hyperlink.href = fullURLString;
+                                                [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                            }
                                         }
                                     }
                                 }
@@ -687,22 +695,26 @@ initialDestination:(nullable JSReportDestination *)destination
                                 if (!weakSelf) {
                                     return;
                                 }
-                                JMLog(@"parameters: %@", params);
-                                NSDictionary *link = params[@"link"];
-                                if (link && [link isKindOfClass:[NSDictionary class]]) {
-                                    NSString *href = link[@"href"];
-                                    if (href) {
-                                        NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
-                                        if ([prefix isEqualToString:@"."]) {
-                                            href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
-                                        }
-                                        NSString *fullURLString = [weakSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
-                                        JMLog(@"full url string: %@", fullURLString);
-                                        if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
-                                            JMHyperlink *hyperlink = [JMHyperlink new];
-                                            hyperlink.type = JMHyperlinkTypeRemotePage;
-                                            hyperlink.href = fullURLString;
-                                            [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                if (error) {
+                                    [weakSelf handleHyperlinksError:error];
+                                } else {
+                                    JMLog(@"parameters: %@", params);
+                                    NSDictionary *link = params[@"link"];
+                                    if (link && [link isKindOfClass:[NSDictionary class]]) {
+                                        NSString *href = link[@"href"];
+                                        if (href) {
+                                            NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
+                                            if ([prefix isEqualToString:@"."]) {
+                                                href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
+                                            }
+                                            NSString *fullURLString = [weakSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
+                                            JMLog(@"full url string: %@", fullURLString);
+                                            if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                                JMHyperlink *hyperlink = [JMHyperlink new];
+                                                hyperlink.type = JMHyperlinkTypeRemotePage;
+                                                hyperlink.href = fullURLString;
+                                                [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                            }
                                         }
                                     }
                                 }
@@ -738,6 +750,18 @@ initialDestination:(nullable JSReportDestination *)destination
         if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
             JMHyperlink *hyperlink = [JMHyperlink hyperlinkWithHref:reportPath withRawData:data[@"params"]];
             [self.delegate reportLoader:self didReceiveEventWithHyperlink:hyperlink];
+        }
+    }
+}
+
+- (void)handleHyperlinksError:(NSError *)error
+{
+    if (error.code == JMJavascriptRequestErrorTypeOther) {
+        NSString *javascriptErrorCode = error.userInfo[JMJavascriptRequestExecutorErrorCodeKey];
+        if (javascriptErrorCode && [javascriptErrorCode isEqualToString:@"hyperlink.not.support.error"]) {
+            if ([self.delegate respondsToSelector:@selector(reportLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
+                [self.delegate reportLoaderDidReceiveEventWithUnsupportedHyperlink:self];
+            }
         }
     }
 }

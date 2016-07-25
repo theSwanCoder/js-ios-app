@@ -966,34 +966,52 @@ JasperMobile.VIS.Report.Handlers.Hyperlinks = {
         }
     },
     handleLocalAnchor: function(link) {
-        var parameters = {
-            "destination":{
-                anchor:link.anchor
-            }
-        };
-        JasperMobile.VIS.Report.privateAPI.executeOperation(undefined, "navigateTo", parameters,
-            function(data) {
-                JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.LocalAnchor", {
-                    "destination" : link.pages
-                });
-            },
-            function(error) {
-                JasperMobile.Callback.log(error);
+        if (link.anchor == undefined) {
+            JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.LocalAnchor", {
+                "error" : {
+                    "code" : "hyperlink.not.support.error",
+                    "message" : "Hyperlink doesn't support"
+                }
             });
+        } else {
+            var parameters = {
+                "destination":{
+                    anchor:link.anchor
+                }
+            };
+            JasperMobile.VIS.Report.privateAPI.executeOperation(undefined, "navigateTo", parameters,
+                function(data) {
+                    JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.LocalAnchor", {
+                        "destination" : link.pages
+                    });
+                },
+                function(error) {
+                    JasperMobile.Callback.log(error);
+                });
+        }
     },
     handleLocalPage: function(link) {
-        var parameters = {
-            "destination": link.pages
-        };
-        JasperMobile.VIS.Report.privateAPI.executeOperation(undefined, "navigateTo", parameters,
-            function(data) {
-                JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.LocalPage", {
-                    "destination" : link.pages
-                });
-            },
-            function(error) {
-                JasperMobile.Callback.log(error);
+        if (link.pages == undefined) {
+            JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.LocalPage", {
+                "error" : {
+                    "code" : "hyperlink.not.support.error",
+                    "message" : "Hyperlink doesn't support"
+                }
             });
+        } else {
+            var parameters = {
+                "destination": link.pages
+            };
+            JasperMobile.VIS.Report.privateAPI.executeOperation(undefined, "navigateTo", parameters,
+                function(data) {
+                    JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.LocalPage", {
+                        "destination" : link.pages
+                    });
+                },
+                function(error) {
+                    JasperMobile.Callback.log(error);
+                });
+        }
     },
     handleReference: function(link) {
         var href = link.href;
@@ -1002,14 +1020,32 @@ JasperMobile.VIS.Report.Handlers.Hyperlinks = {
         });
     },
     handleRemoteAnchor: function(link) {
-        JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.RemoteAnchor", {
-            "link" : link
-        });
+        if (JasperMobile.VIS.Report.Helpers.isAmber) {
+            JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.RemoteAnchor", {
+                "error" : {
+                    "code" : "hyperlink.not.support.error",
+                    "message" : "Hyperlink doesn't support"
+                }
+            });
+        } else {
+            JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.RemoteAnchor", {
+                "link": link
+            });
+        }
     },
     handleRemotePage: function (link) {
-        JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.RemotePage", {
-            "link" : link
-        });
+        if (JasperMobile.VIS.Report.Helpers.isAmber) {
+            JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.RemotePage", {
+                "error" : {
+                    "code" : "hyperlink.not.support.error",
+                    "message" : "Hyperlink doesn't support"
+                }
+            });
+        } else {
+            JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.RemotePage", {
+                "link" : link
+            });
+        }
     }
 };
 JasperMobile.VIS.Report.privateAPI = {
