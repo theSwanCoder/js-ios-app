@@ -267,7 +267,11 @@
 {
     [self.filtersNetworkManager reset];
     [[self stateManager] setupPageForState:JMReportViewerStateDestroy];
-    [[self reportLoader] destroyWithCompletion:nil];
+    if ([[self reportLoader] respondsToSelector:@selector(destroyWithCompletion:)]) {
+        [[self reportLoader] destroyWithCompletion:nil];
+    } else {
+        [[self reportLoader] reset];
+    }
     [[self webEnvironment] reset];
     [self.navigationController popViewControllerAnimated:YES];
 }
