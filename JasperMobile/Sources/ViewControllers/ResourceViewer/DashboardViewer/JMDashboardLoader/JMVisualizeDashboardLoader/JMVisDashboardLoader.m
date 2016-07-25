@@ -180,7 +180,7 @@
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.refreshDashlet"
                                                                inNamespace:JMJavascriptNamespaceVISDashboard
                                                                 parameters:@{
-                                                                        @"identifier" : component.identifier
+                                                                        @"identifier" : component.identifier ?: @""
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
@@ -217,7 +217,7 @@
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.maximizeDashlet"
                                                                inNamespace:JMJavascriptNamespaceVISDashboard
                                                                 parameters:@{
-                                                                        @"identifier" : component.identifier
+                                                                        @"identifier" : component.identifier ?: @""
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {
@@ -239,7 +239,7 @@
 - (void)minimizeDashboardComponent:(JSDashboardComponent *__nonnull)component completion:(JMDashboardLoaderCompletion __nonnull)completion
 {
     NSAssert(completion != nil, @"Completion is nil");
-    NSAssert(component != nil, @"Component is nil");
+//    NSAssert(component != nil, @"Component is nil");
     NSAssert(self.dashboard != nil, @"Dashboard is nil");
 
     if (self.state == JMDashboardLoaderStateCancel) {
@@ -249,7 +249,7 @@
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.minimizeDashlet"
                                                                inNamespace:JMJavascriptNamespaceVISDashboard
                                                                 parameters:@{
-                                                                        @"identifier" : component.identifier
+                                                                        @"identifier" : component.identifier ?: @""
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request completion:^(NSDictionary *parameters, NSError *error) {

@@ -1529,16 +1529,16 @@ JasperMobile.VIS.Dashboard.Helpers = {
             overlay.addEventListener("click", function(event) {
                 var maximizeButton = dashletWrapper.getElementsByClassName("maximizeDashletButton")[0];
                 if (maximizeButton != undefined &&  maximizeButton.nodeName == "BUTTON" && !maximizeButton.disabled) {
-                    JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.state.API.events.dashlet.didStartMaximize", {});
+                    JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didStartMaximize", {});
                     maximizeButton.click();
                     JasperMobile.VIS.Dashboard.Helpers._disableClicks();
                     setTimeout(function(){
-                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.state.API.events.dashlet.didEndMaximize", {
+                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
                             "componentId" : componentId
                         });
                     }, 3000);
                 } else {
-                    JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.state.API.events.dashlet.didEndMaximize", {
+                    JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
                         "error" : {
                             "code" : "maximize.button.error",
                             "message" : "Component is not ready"
