@@ -60,6 +60,7 @@
 
 - (void)setupNavigationItemForState:(JMReportViewerState)state
 {
+    self.needFavoriteButton = YES;
     switch (state) {
         case JMReportViewerStateInitial: {
             [self initialSetupNavigationItems];
@@ -88,6 +89,7 @@
             break;
         }
         case JMReportViewerStateNestedResource: {
+            self.needFavoriteButton = NO;
             [self setupNavigationItemsForNestedResource];
             break;
         }

@@ -47,6 +47,7 @@
 @property (nonatomic, weak) UIView *nonExistingResourceView;
 @property (nonatomic, strong) JMResourceViewerToolbarsHelper *toolbarsHelper;
 @property (nonatomic, strong) JMResourceViewerFavoritesHelper *favoritesHelper;
+@property (nonatomic, assign) BOOL needFavoriteButton;
 @property (nonatomic, strong) JMResourceViewerMenuHelper *menuHelper;
 @property (nonatomic, copy) void(^openDocumentActionBlock)(void);
 @property (nonatomic, weak) UIViewController <JMResourceClientHolder, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol, JMResourceViewerProtocol>*controller;

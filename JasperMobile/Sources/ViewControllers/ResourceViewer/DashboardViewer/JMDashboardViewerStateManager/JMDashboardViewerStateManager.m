@@ -72,6 +72,7 @@
 
 - (void)setupNavigationItemForState:(JMDashboardViewerState)state
 {
+    self.needFavoriteButton = YES;
     switch (state) {
         case JMDashboardViewerStateInitial: {
             [self initialSetupNavigationItems];
@@ -95,6 +96,7 @@
             break;
         }
         case JMDashboardViewerStateNestedResource: {
+            self.needFavoriteButton = NO;
             [self setupNavigationItemsForNestedResource];
             break;
         }

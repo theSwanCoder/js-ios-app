@@ -96,7 +96,9 @@
                                       disabledActions:[self disabledActions]];
     }
 
-    [self.favoritesHelper updateAppearence];
+    if (self.needFavoriteButton) {
+        [self.favoritesHelper updateAppearence];
+    }
 }
 
 - (void)updateFavoriteState
@@ -381,7 +383,7 @@
 - (JMMenuActionsViewAction)availableActions
 {
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_None;
-    if (![self.favoritesHelper shouldShowFavoriteBarButton]) {
+    if (![self.favoritesHelper shouldShowFavoriteBarButton] && self.needFavoriteButton) {
         availableAction |= [self favoriteMenuAction];
     }
     availableAction |= [self.controller availableActions];
