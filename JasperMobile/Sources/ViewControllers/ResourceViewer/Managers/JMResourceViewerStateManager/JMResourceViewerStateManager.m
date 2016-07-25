@@ -235,16 +235,14 @@
 
 - (UIBarButtonItem *)defaultBackBarButton
 {
-    NSString *backItemTitle = self.controller.title;
-    if (!backItemTitle) {
-        NSArray *viewControllers = self.controller.navigationController.viewControllers;
-        NSUInteger index = [viewControllers indexOfObject:self.controller];
-        if ((index != NSNotFound) && (viewControllers.count - 1) >= index) {
-            UIViewController *previousViewController = viewControllers[index - 1];
-            backItemTitle = previousViewController.title;
-        } else {
-            backItemTitle = JMCustomLocalizedString(@"back_button_title", nil);
-        }
+    NSString *backItemTitle;
+    NSArray *viewControllers = self.controller.navigationController.viewControllers;
+    NSUInteger index = [viewControllers indexOfObject:self.controller];
+    if ((index != NSNotFound) && (viewControllers.count - 1) >= index) {
+        UIViewController *previousViewController = viewControllers[index - 1];
+        backItemTitle = previousViewController.title;
+    } else {
+        backItemTitle = JMCustomLocalizedString(@"back_button_title", nil);
     }
     UIBarButtonItem *item = [self backBarButtonWithTitle:backItemTitle
                                                   action:@selector(back)];
