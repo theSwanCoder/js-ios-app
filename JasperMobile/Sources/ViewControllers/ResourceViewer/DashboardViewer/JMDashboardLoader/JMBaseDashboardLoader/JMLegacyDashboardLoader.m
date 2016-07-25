@@ -45,6 +45,7 @@
 - (void)dealloc
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    [self removeListenersForVisualizeEvents];
 }
 
 - (id<JMDashboardLoader> __nullable)initWithRESTClient:(JSRESTBase *)restClient
@@ -57,6 +58,7 @@
         _webEnvironment = (JMRESTWebEnvironment *) webEnvironment;
         _state = JMDashboardLoaderStateInitial;
         _restClient = [restClient copy];
+        [self addListenersForVisualizeEvents];
     }
     return self;
 }
@@ -135,6 +137,30 @@
             completion(YES, nil);
         }
     }];
+}
+
+#pragma mark - Helpers
+
+- (void)addListenersForVisualizeEvents
+{
+    __weak __typeof(self) weakSelf = self;
+    NSString *dashletWillMaximizeListenerId = @"JasperMobile.VIS.Dashboard.API.unauthorized";
+    [self.webEnvironment addListener:self
+                          forEventId:dashletWillMaximizeListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(dashletWillMaximizeListenerId);
+                                __typeof(self) strongSelf = weakSelf;
+                                if (error) {
+                                    if ([strongSelf.delegate respondsToSelector:@selector(dashboardLoader:didRecieveError:)]) {
+                                        [strongSelf.delegate dashboardLoader:strongSelf didRecieveError:error];
+                                    }
+                                }
+                            }];
+}
+
+- (void)removeListenersForVisualizeEvents
+{
+    [self.webEnvironment removeListener:self];
 }
 
 @end

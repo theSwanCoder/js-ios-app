@@ -84,4 +84,5 @@ typedef NS_ENUM(NSInteger, JMDashboardLoaderState) {
 - (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didEndMaximazeDashboardComponent:(JSDashboardComponent *__nonnull)component;
 - (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didReceiveEventWithHyperlink:(JMHyperlink *__nonnull)hyperlink;
 - (void)dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:(id<JMDashboardLoader> __nonnull)loader;
+- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didRecieveError:(NSError *__nonnull)error;
 @end

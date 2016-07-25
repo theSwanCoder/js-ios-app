@@ -127,6 +127,10 @@
     };
     self.configurator.sessionManager.executeAction = ^{
         __strong typeof(self) strongSelf = weakSelf;
+        if (strongSelf.resource.type == JMResourceTypeLegacyDashboard) {
+            JMDashboardViewerConfigurator *configurator = [JMDashboardViewerConfigurator configuratorWithWebEnvironment:[[JMWebViewManager sharedInstance] webEnvironmentForFlowType:JMResourceFlowTypeREST]];
+            strongSelf.configurator = configurator;
+        }
         [strongSelf.configurator setup];
         [[strongSelf dashboardLoader] setDelegate:strongSelf];
         [strongSelf setupStateManager];
@@ -486,6 +490,11 @@
                                                                             cancelButtonTitle:@"dialog_button_ok"
                                                                       cancelCompletionHandler:nil];
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didRecieveError:(NSError *__nonnull)error
+{
+    [self handleError:error];
 }
 
 #pragma mark - Helpers
