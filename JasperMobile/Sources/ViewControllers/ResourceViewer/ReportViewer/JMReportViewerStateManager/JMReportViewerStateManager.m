@@ -137,6 +137,7 @@
             break;
         }
         case JMReportViewerStateNotVisible: {
+            [self showResourceNotExistView];
             break;
         }
         case JMReportViewerStateNestedResource: {
