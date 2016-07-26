@@ -43,7 +43,7 @@
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidAppear:(BOOL)animated
 {
-    self.screenName = NSStringFromClass(self.class);
+    self.screenName = [[JMAnalyticsManager sharedManager] mapClassNameToReadableName:NSStringFromClass(self.class)];
 
     [super viewDidAppear:animated];
 

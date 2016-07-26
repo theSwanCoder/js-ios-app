@@ -37,4 +37,6 @@
 - (void)sendAnalyticsEventAboutLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
 - (void)sendAnalyticsEventAboutLogout;
 - (void)sendThumbnailEventIfNeed;
+
+- (NSString *)mapClassNameToReadableName:(NSString *)className;
 @end
