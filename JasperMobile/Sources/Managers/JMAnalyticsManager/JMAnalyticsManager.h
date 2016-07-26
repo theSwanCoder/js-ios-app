@@ -38,5 +38,5 @@
 - (void)sendAnalyticsEventAboutLogout;
 - (void)sendThumbnailEventIfNeed;
 
-- (NSString *)mapClassNameToReadableName:(NSString *)className;
+- (NSString * __nonnull)mapClassNameToReadableName:(NSString * __nonnull)className;
 @end

@@ -483,4 +483,17 @@
     return self.imageView;
 }
 
+#pragma mark - Analytics
+
+- (NSString *)additionalsToScreenName
+{
+    NSString *additinalString = @"";
+    if (self.resource.type == JMResourceTypeFile) {
+        additinalString = [NSString stringWithFormat:@" (Content Resource: %@)", [self.savedReports.format uppercaseString]];
+    } else {
+        additinalString = [NSString stringWithFormat:@" (Exported Resource: %@)", [self.savedReports.format uppercaseString]];
+    }
+    return additinalString;
+}
+
 @end

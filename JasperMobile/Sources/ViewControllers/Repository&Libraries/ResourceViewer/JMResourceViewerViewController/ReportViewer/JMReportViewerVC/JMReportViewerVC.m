@@ -34,6 +34,8 @@
 #import "JMWebEnvironment.h"
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
+#import "JMVisualizeReportLoader.h"
+#import "JMRestReportLoader.h"
 
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierViz    = @"kJMReportViewerPrimaryWebEnvironmentIdentifierViz";
 NSString * const kJMReportViewerPrimaryWebEnvironmentIdentifierREST   = @"kJMReportViewerPrimaryWebEnvironmentIdentifierREST";
@@ -942,6 +944,19 @@ NSString * const kJMReportViewerSecondaryWebEnvironmentIdentifierREST = @"kJMRep
     JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
     [newJobVC createNewScheduleMetadataWithResourceLookup:self.resource];
     [self.navigationController pushViewController:newJobVC animated:YES];
+}
+
+#pragma mark - Analytics
+
+- (NSString *)additionalsToScreenName
+{
+    NSString *additinalString = @"";
+    if ([[self reportLoader] isKindOfClass:[JMVisualizeReportLoader class]]) {
+        additinalString = @" (VIZ)";
+    } else if ([[self reportLoader] isKindOfClass:[JMRestReportLoader class]]) {
+        additinalString = @" (REST)";
+    }
+    return additinalString;
 }
 
 @end

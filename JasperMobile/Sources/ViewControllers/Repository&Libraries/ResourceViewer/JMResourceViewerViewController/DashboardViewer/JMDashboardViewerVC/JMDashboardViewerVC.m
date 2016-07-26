@@ -717,4 +717,21 @@ NSString * const kJMDashboardViewerPrimaryWebEnvironmentIdentifier = @"kJMDashbo
 
 }
 
+#pragma mark - Analytics
+
+- (NSString *)additionalsToScreenName
+{
+    NSString *additinalString = @"";
+    if (self.resource.type == JMResourceTypeDashboard) {
+        if ([JMUtils isSupportVisualize]) {
+            additinalString = @" (VIZ)";
+        } else {
+            additinalString = @" (Flow)";
+        }
+    } else if (self.resource.type == JMResourceTypeLegacyDashboard) {
+        additinalString = @" (Legacy)";
+    }
+    return additinalString;
+}
+
 @end

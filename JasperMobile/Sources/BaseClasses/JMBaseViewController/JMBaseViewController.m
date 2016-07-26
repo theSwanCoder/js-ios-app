@@ -43,7 +43,7 @@
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidAppear:(BOOL)animated
 {
-    self.screenName = [[JMAnalyticsManager sharedManager] mapClassNameToReadableName:NSStringFromClass(self.class)];
+    self.screenName = [self screenNameForAnalytics];
 
     [super viewDidAppear:animated];
 
@@ -239,6 +239,18 @@
         return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back_button_title", nil)];
     }
     return backButtonTitle;
+}
+
+#pragma mark - Analytics
+- (NSString *)screenNameForAnalytics
+{
+    NSString *screenName = [[JMAnalyticsManager sharedManager] mapClassNameToReadableName:NSStringFromClass(self.class)];
+    return [screenName stringByAppendingString:[self additionalsToScreenName]];
+}
+
+- (NSString *)additionalsToScreenName
+{
+    return @"";
 }
 
 @end
