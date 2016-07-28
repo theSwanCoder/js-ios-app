@@ -205,7 +205,9 @@
 
 - (void)backActionInWebView
 {
-
+    [[self webEnvironment].webView goBack];
+    [[self stateManager] setupPageForState:JMDashboardViewerStateMaximizedDashlet];
+    [self.configurator.hyperlinksManager reset];
 }
 
 #pragma mark - Network Helpers
