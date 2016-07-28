@@ -77,6 +77,7 @@
             break;
         }
         case JMHyperlinkTypeAdHocExecution: {
+            [self handleAdhocExecution:hyperlink];
             break;
         }
     }
@@ -192,6 +193,13 @@
 }
 
 - (void)handleOpenReference:(JMHyperlink *)hyperlink
+{
+    if ([self.delegate respondsToSelector:@selector(hyperlinksManager:willOpenURL:)]) {
+        [self.delegate hyperlinksManager:self willOpenURL:[NSURL URLWithString:hyperlink.href]];
+    }
+}
+
+- (void)handleAdhocExecution:(JMHyperlink *)hyperlink
 {
     if ([self.delegate respondsToSelector:@selector(hyperlinksManager:willOpenURL:)]) {
         [self.delegate hyperlinksManager:self willOpenURL:[NSURL URLWithString:hyperlink.href]];

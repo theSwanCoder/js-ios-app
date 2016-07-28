@@ -470,25 +470,32 @@
 - (void)handleOnAdHocExecution:(NSDictionary *)parameters
 {
     if (self.dashboard.maximizedComponent.dashletHyperlinkTarget == JSDashletHyperlinksTargetTypeBlank) {
-        NSDictionary *params = parameters[@"link"][@"parameters"];
+        NSDictionary *linkObject = parameters[@"linkObject"];
         NSString *urlString;
-        for(NSString *key in params) {
-            if([self.dashboard.maximizedComponent.dashletHyperlinkUrl containsString:key]) {
-                NSString *fullPlaceholder = [NSString stringWithFormat:@"$P{%@}", key];
-                urlString = [self.dashboard.maximizedComponent.dashletHyperlinkUrl stringByReplacingOccurrencesOfString:fullPlaceholder
-                                                                                                             withString:params[key]];
-                
-                NSMutableArray *urlComponents = [[urlString componentsSeparatedByString:@"?"] mutableCopy];
-                [urlComponents replaceObjectAtIndex:1 withObject:[[urlComponents lastObject] hostEncodedString]];
-                urlString = [urlComponents componentsJoinedByString:@"?"];
+        if (linkObject[@"URL"]) {
+            urlString = linkObject[@"URL"];
+        } else {
+            // Parse raw parameters (case for amber jrs)
+            NSDictionary *params = linkObject[@"parameters"];
+            for(NSString *key in params) {
+                if([self.dashboard.maximizedComponent.dashletHyperlinkUrl containsString:key]) {
+                    NSString *fullPlaceholder = [NSString stringWithFormat:@"$P{%@}", key];
+                    urlString = [self.dashboard.maximizedComponent.dashletHyperlinkUrl stringByReplacingOccurrencesOfString:fullPlaceholder
+                                                                                                                 withString:params[key]];
+
+                    NSMutableArray *urlComponents = [[urlString componentsSeparatedByString:@"?"] mutableCopy];
+                    urlComponents[1] = [[urlComponents lastObject] hostEncodedString];
+                    urlString = [urlComponents componentsJoinedByString:@"?"];
+                }
             }
         }
         if (urlString) {
-
-//            [self.delegate dashboardLoader:self
-//               didReceiveHyperlinkWithType:JMHyperlinkTypeAdHocExecution
-//                                  resource:nil
-//                                parameters:@[[NSURL URLWithString:urlString]]];
+            JMHyperlink *hyperlink = [JMHyperlink new];
+            hyperlink.type = JMHyperlinkTypeAdHocExecution;
+            hyperlink.href = urlString;
+            [self.delegate dashboardLoader:self didReceiveEventWithHyperlink:hyperlink];
+        } else {
+            // TODO: need handle this case?
         }
     }
 }

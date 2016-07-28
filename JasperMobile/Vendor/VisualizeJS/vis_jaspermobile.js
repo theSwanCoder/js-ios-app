@@ -1276,6 +1276,7 @@ JasperMobile.VIS.Dashboard = {
     API: {}
 };
 JasperMobile.VIS.Dashboard.Handlers.Hyperlinks = {
+    adhocExectionWasClicked: false,
     handleReportExecution: function(link) {
         var data = {
             resource: link.parameters._report,
@@ -1293,7 +1294,7 @@ JasperMobile.VIS.Dashboard.Handlers.Hyperlinks = {
     },
     handleAdhocExecution: function(link) {
         JasperMobile.Callback.listener("JasperMobile.VIS.Event.Link.AdHocExecution", {
-            "link" : link
+            "linkObject" : link
         });
     }
 };
@@ -1386,7 +1387,7 @@ JasperMobile.VIS.Dashboard.Setup = {
     },
     linkOptionsEventsClick : function(event, link, defaultHandler) {
         var type = link.type;
-        JasperMobile.Callback.log("link type: " + type);
+        JasperMobile.Callback.log("link: " + JSON.stringify(link));
         if (JasperMobile.VIS.Dashboard.state.isAmber) {
             // There are cases when the same event goes several times
             // It looks like a vis bug.
@@ -1426,9 +1427,10 @@ JasperMobile.VIS.Dashboard.Setup = {
                 break;
             }
             case "AdHocExecution": {
-                if (defaultHandler == undefined) {
+                if (typeof(defaultHandler) != "function") {
                     JasperMobile.VIS.Dashboard.Handlers.Hyperlinks.handleAdhocExecution(link);
                 } else {
+                    JasperMobile.VIS.Dashboard.Handlers.Hyperlinks.adhocExectionWasClicked = true;
                     defaultHandler.call();
                 }
                 break;
@@ -1968,6 +1970,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.reallySend(body);
     };
 }, false);
+
+var validWindowOpen = window.open;
+window.open = function(URL, name, specs, replace) {
+    if (JasperMobile.VIS.Dashboard.Handlers.Hyperlinks.adhocExectionWasClicked) {
+        JasperMobile.VIS.Dashboard.Handlers.Hyperlinks.adhocExectionWasClicked = false;
+        JasperMobile.Callback.listener("JasperMobile.VIS.Event.Link.AdHocExecution", {
+            "linkObject" : {
+                "URL" : URL
+            }
+        });
+    } else {
+        validWindowOpen(URL, name, specs, replace);
+    }
+};
 
 window.onerror = function myErrorHandler(message, source, lineno, colno, error) {
     JasperMobile.Callback.listener("JasperMobile.Events.Window.OnError", {
