@@ -88,7 +88,7 @@
     [self removeResourceWithURL:self.tempResourceURL];
 }
 
-#pragma mark - Helpers
+#pragma mark - Handlers
 
 - (void)handleReportExecution:(JMHyperlink *)hyperlink
 {
@@ -201,9 +201,47 @@
 
 - (void)handleAdhocExecution:(JMHyperlink *)hyperlink
 {
-    if ([self.delegate respondsToSelector:@selector(hyperlinksManager:willOpenURL:)]) {
-        [self.delegate hyperlinksManager:self willOpenURL:[NSURL URLWithString:hyperlink.href]];
+    NSString *href = hyperlink.href;
+    if ([self isLocalResource:[NSURL URLWithString:href]]) {
+        if ([self isViewerRequestWithURL:[NSURL URLWithString:href]]) {
+            href = [self constructNondecoratedURLStringFromURLString:href];
+        }
     }
+
+    NSURL *url = [NSURL URLWithString:href];
+
+    if ([self.delegate respondsToSelector:@selector(hyperlinksManager:willOpenURL:)]) {
+        [self.delegate hyperlinksManager:self willOpenURL:url];
+    }
+}
+
+#pragma mark - Helpers
+
+- (BOOL)isLocalResource:(NSURL *)URL
+{
+    BOOL isLocalResource = NO;
+    NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+    if ([URL.host isEqualToString:serverURL.host]) {
+        isLocalResource = YES;
+    }
+    return isLocalResource;
+}
+
+- (BOOL)isViewerRequestWithURL:(NSURL *)URL
+{
+    BOOL isViewerRequestWithURL = [URL.absoluteString containsString:@"viewer.html"];
+    return isViewerRequestWithURL;
+}
+
+- (NSString *)constructNondecoratedURLStringFromURLString:(NSString *)URLString
+{
+    NSString *result = URLString;
+    NSString *nondecorationParametersString = @"_opt=true&sessionDecorator=no&decorate=no";
+    NSURL *url = [NSURL URLWithString:URLString];
+    NSString *fragment = [NSString stringWithFormat:@"#%@", url.fragment];
+    result = [result stringByReplacingOccurrencesOfString:fragment withString:@""];
+    result = [result stringByAppendingFormat:@"&%@%@", nondecorationParametersString, fragment];
+    return result;
 }
 
 - (NSArray *)supportedFormats
