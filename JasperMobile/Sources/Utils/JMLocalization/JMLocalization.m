@@ -45,9 +45,27 @@ NSString * const JMLocalizationBundleType = @"lproj";
     return localizedString;
 }
 
++ (NSString *)localizedStringForTestsWithKey:(NSString *)key className:(NSString *)className
+{
+    NSString *localizedString = NSLocalizedString(key, nil);
+    if (![[NSLocale preferredLanguages][0] isEqualToString:JMPreferredLanguage] &&
+        [localizedString isEqualToString:key]) {
+        NSString *path = [[NSBundle bundleForClass:NSClassFromString(className)] pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
+        NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
+        localizedString = [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
+    }
+    
+    return localizedString;
+}
+
 @end
 
 NSString *JMCustomLocalizedString(NSString *key, NSString *comment)
 {
     return [JMLocalization localizedStringForKey:key];
+}
+
+NSString *JMCustomLocalizedStringForTests(NSString *key, NSString *className)
+{
+    return [JMLocalization localizedStringForTestsWithKey:key className:className];
 }

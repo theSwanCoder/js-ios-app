@@ -1699,4 +1699,17 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     return stringValue;
 }
 
+#pragma mark - Analytics
+
+- (NSString *)additionalsToScreenName
+{
+    NSString *additinalString = @"";
+    if (self.isNewScheduleMetadata) {
+        additinalString = @" (New)";
+    } else {
+        additinalString = @" (Edit)";
+    }
+    return additinalString;
+}
+
 @end

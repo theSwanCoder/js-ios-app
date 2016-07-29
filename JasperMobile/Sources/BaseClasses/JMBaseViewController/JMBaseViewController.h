@@ -47,4 +47,6 @@
 
 - (UIBarButtonItem *)backButtonWithTitle:(NSString *)title target:(id)target action:(SEL)action;
 - (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle;
+// Could be overridden subclasses to add analytics
+- (NSString *)additionalsToScreenName;
 @end

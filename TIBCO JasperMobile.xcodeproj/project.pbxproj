@@ -160,6 +160,24 @@
 		93A8B5CA1CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A8B5C91CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m */; };
 		93A8B5CE1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A8B5CD1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.m */; };
 		93C4E3121C737DB300A19D64 /* JMUITestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C4E3111C737DB300A19D64 /* JMUITestConstants.m */; };
+		93CA63BC1D115E1300265DE4 /* JMLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFA81AAF2CFB00DD072C /* JMLocalization.m */; };
+		93CA63BE1D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14780F9AC66CD181A7D4662 /* Localizable.strings */; };
+		93CA63BF1D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478DEB63BFB19C76EE0F51 /* Localizable.strings */; };
+		93CA63C01D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14785095AFB6CA6381BA957 /* Localizable.strings */; };
+		93CA63C11D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14782938D2027B3C7755AAB /* Localizable.strings */; };
+		93CA63C21D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478D318630E8E65F67373A /* Localizable.strings */; };
+		93CA63C31D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478507E7AB10737467AF01 /* Localizable.strings */; };
+		93CA63C41D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478B3040B5E554EBAD617D /* Localizable.strings */; };
+		93CA63C51D1160A800265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A147869D5A4968747665F846 /* Localizable.strings */; };
+		93CA63C71D11763600265DE4 /* JMLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFA81AAF2CFB00DD072C /* JMLocalization.m */; };
+		93CA63C81D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14780F9AC66CD181A7D4662 /* Localizable.strings */; };
+		93CA63C91D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478DEB63BFB19C76EE0F51 /* Localizable.strings */; };
+		93CA63CA1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14785095AFB6CA6381BA957 /* Localizable.strings */; };
+		93CA63CB1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A14782938D2027B3C7755AAB /* Localizable.strings */; };
+		93CA63CC1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478D318630E8E65F67373A /* Localizable.strings */; };
+		93CA63CD1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478507E7AB10737467AF01 /* Localizable.strings */; };
+		93CA63CE1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1478B3040B5E554EBAD617D /* Localizable.strings */; };
+		93CA63CF1D11923C00265DE4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A147869D5A4968747665F846 /* Localizable.strings */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
 		93DC8C341C6B71D4000DEADF /* JMScheduleManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DC8C331C6B71D4000DEADF /* JMScheduleManagerTests.m */; };
@@ -3673,6 +3691,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93CA63BE1D1160A800265DE4 /* Localizable.strings in Resources */,
+				93CA63BF1D1160A800265DE4 /* Localizable.strings in Resources */,
+				93CA63C01D1160A800265DE4 /* Localizable.strings in Resources */,
+				93CA63C11D1160A800265DE4 /* Localizable.strings in Resources */,
+				93CA63C21D1160A800265DE4 /* Localizable.strings in Resources */,
+				93CA63C31D1160A800265DE4 /* Localizable.strings in Resources */,
+				93CA63C41D1160A800265DE4 /* Localizable.strings in Resources */,
+				93CA63C51D1160A800265DE4 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3689,6 +3715,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93CA63C81D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63C91D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CA1D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CB1D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CC1D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CD1D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CE1D11923C00265DE4 /* Localizable.strings in Resources */,
+				93CA63CF1D11923C00265DE4 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3822,6 +3856,7 @@
 				930E18DE1CEC9A7B00CE5E10 /* JMUITestConstants.m in Sources */,
 				930E18DD1CEC9A7100CE5E10 /* JMBaseUITestCase.m in Sources */,
 				930E18DC1CEC98C600CE5E10 /* JMPerformanceUITests.m in Sources */,
+				93CA63BC1D115E1300265DE4 /* JMLocalization.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3841,6 +3876,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93CA63C71D11763600265DE4 /* JMLocalization.m in Sources */,
 				933CAFBE1C7770B600EF6F84 /* JMRecentlyViewedPageUITests.m in Sources */,
 				933CAFA91C776FCB00EF6F84 /* JMReportInfoDialogUITests.m in Sources */,
 				933CAFAC1C776FEC00EF6F84 /* JMSaveReportPageUITests.m in Sources */,
