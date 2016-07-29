@@ -43,6 +43,8 @@
 #import "JMFiltersVCResult.h"
 #import "JMResourceViewerSessionManager.h"
 #import "JMFiltersNetworkManager.h"
+#import "JMRestReportLoader.h"
+#import "JMVisualizeReportLoader.h"
 
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
@@ -816,6 +818,18 @@
 - (BOOL)reportHasParts
 {
     return [self report].parts && [self report].parts.count > 0;
+}
+
+#pragma mark - Analytics  
+- (NSString *)additionalsToScreenName
+{
+    NSString *additinalString = @"";
+    if ([[self reportLoader] isKindOfClass:[JMVisualizeReportLoader class]]) {
+        additinalString = @" (VIZ)";
+    } else if ([[self reportLoader] isKindOfClass:[JMRestReportLoader class]]) {
+        additinalString = @" (REST)";
+    }
+    return additinalString;
 }
 
 @end
