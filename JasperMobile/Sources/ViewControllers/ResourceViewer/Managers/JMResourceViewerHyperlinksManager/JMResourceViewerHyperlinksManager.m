@@ -69,11 +69,11 @@
             break;
         }
         case JMHyperlinkTypeRemoteAnchor: {
-            [self handleOpenReference:hyperlink];
+            [self handleOpenRemoteAnchor:hyperlink];
             break;
         }
         case JMHyperlinkTypeRemotePage: {
-            [self handleOpenReference:hyperlink];
+            [self handleOpenRemotePage:hyperlink];
             break;
         }
         case JMHyperlinkTypeAdHocExecution: {
@@ -192,6 +192,22 @@
     }];
 }
 
+- (void)handleOpenRemotePage:(JMHyperlink *)hypelink
+{
+    NSString *URLString = [self constructURLStringForFileViewWithURIString:hypelink.href];
+    if ([self.delegate respondsToSelector:@selector(hyperlinksManager:willOpenURL:)]) {
+        [self.delegate hyperlinksManager:self willOpenURL:[NSURL URLWithString:URLString]];
+    }
+}
+
+- (void)handleOpenRemoteAnchor:(JMHyperlink *)hypelink
+{
+    NSString *URLString = [self constructURLStringForFileViewWithURIString:hypelink.href];
+    if ([self.delegate respondsToSelector:@selector(hyperlinksManager:willOpenURL:)]) {
+        [self.delegate hyperlinksManager:self willOpenURL:[NSURL URLWithString:URLString]];
+    }
+}
+
 - (void)handleOpenReference:(JMHyperlink *)hyperlink
 {
     if ([self.delegate respondsToSelector:@selector(hyperlinksManager:willOpenURL:)]) {
@@ -242,6 +258,18 @@
     result = [result stringByReplacingOccurrencesOfString:fragment withString:@""];
     result = [result stringByAppendingFormat:@"&%@%@", nondecorationParametersString, fragment];
     return result;
+}
+
+- (NSString *)constructURLStringForFileViewWithURIString:(NSString *)URISting
+{
+    NSString *href = URISting;
+    NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
+    if ([prefix isEqualToString:@"."]) {
+        href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
+    }
+    NSString *fullURLString = [self.restClient.serverProfile.serverUrl stringByAppendingString:href];
+    JMLog(@"full url string: %@", fullURLString);
+    return fullURLString;
 }
 
 - (NSArray *)supportedFormats

@@ -667,23 +667,16 @@ initialDestination:(nullable JSReportDestination *)destination
                                     [weakSelf handleHyperlinksError:error];
                                 } else {
                                     JMLog(@"parameters: %@", params);
-                                    NSDictionary *link = params[@"link"];
-                                    if (link && [link isKindOfClass:[NSDictionary class]]) {
-                                        NSString *href = link[@"href"];
-                                        if (href) {
-                                            NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
-                                            if ([prefix isEqualToString:@"."]) {
-                                                href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
-                                            }
-                                            NSString *fullURLString = [weakSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
-                                            JMLog(@"full url string: %@", fullURLString);
-                                            if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
-                                                JMHyperlink *hyperlink = [JMHyperlink new];
-                                                hyperlink.type = JMHyperlinkTypeRemoteAnchor;
-                                                hyperlink.href = fullURLString;
-                                                [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
-                                            }
+                                    NSString *href = params[@"location"];
+                                    if (href) {
+                                        if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                            JMHyperlink *hyperlink = [JMHyperlink new];
+                                            hyperlink.type = JMHyperlinkTypeRemoteAnchor;
+                                            hyperlink.href = href;
+                                            [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
                                         }
+                                    } else {
+                                        // TODO: need handle this case?
                                     }
                                 }
                             }];
@@ -699,23 +692,16 @@ initialDestination:(nullable JSReportDestination *)destination
                                     [weakSelf handleHyperlinksError:error];
                                 } else {
                                     JMLog(@"parameters: %@", params);
-                                    NSDictionary *link = params[@"link"];
-                                    if (link && [link isKindOfClass:[NSDictionary class]]) {
-                                        NSString *href = link[@"href"];
-                                        if (href) {
-                                            NSString *prefix = [href substringWithRange:NSMakeRange(0, 1)];
-                                            if ([prefix isEqualToString:@"."]) {
-                                                href = [href stringByReplacingOccurrencesOfString:@"./" withString:@"/"];
-                                            }
-                                            NSString *fullURLString = [weakSelf.restClient.serverProfile.serverUrl stringByAppendingString:href];
-                                            JMLog(@"full url string: %@", fullURLString);
-                                            if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
-                                                JMHyperlink *hyperlink = [JMHyperlink new];
-                                                hyperlink.type = JMHyperlinkTypeRemotePage;
-                                                hyperlink.href = fullURLString;
-                                                [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
-                                            }
+                                    NSString *href = params[@"location"];
+                                    if (href) {
+                                        if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                            JMHyperlink *hyperlink = [JMHyperlink new];
+                                            hyperlink.type = JMHyperlinkTypeRemotePage;
+                                            hyperlink.href = href;
+                                            [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
                                         }
+                                    } else {
+                                        // TODO: need handle this case?
                                     }
                                 }
                             }];

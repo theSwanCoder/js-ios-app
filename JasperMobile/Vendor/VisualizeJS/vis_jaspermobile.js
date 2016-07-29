@@ -1029,7 +1029,7 @@ JasperMobile.VIS.Report.Handlers.Hyperlinks = {
             });
         } else {
             JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.RemoteAnchor", {
-                "link": link
+                "location": link.href
             });
         }
     },
@@ -1043,7 +1043,7 @@ JasperMobile.VIS.Report.Handlers.Hyperlinks = {
             });
         } else {
             JasperMobile.Callback.listener("JasperMobile.VIS.Report.Event.Link.RemotePage", {
-                "link" : link
+                "location" : link.href
             });
         }
     }
@@ -1296,6 +1296,18 @@ JasperMobile.VIS.Dashboard.Handlers.Hyperlinks = {
         JasperMobile.Callback.listener("JasperMobile.VIS.Event.Link.AdHocExecution", {
             "linkObject" : link
         });
+    },
+    handleRemotePage: function(link) {
+        var href = link.href;
+        JasperMobile.Callback.listener("JasperMobile.VIS.Event.Link.RemotePage", {
+            "location" : href
+        });
+    },
+    handleRemoteAnchor: function(link) {
+        var href = link.href;
+        JasperMobile.Callback.listener("JasperMobile.VIS.Event.Link.RemoteAnchor", {
+            "location" : href
+        });
     }
 };
 JasperMobile.VIS.Dashboard.Setup = {
@@ -1420,6 +1432,14 @@ JasperMobile.VIS.Dashboard.Setup = {
             }
             case "LocalPage": {
                 defaultHandler.call();
+                break;
+            }
+            case "RemotePage": {
+                JasperMobile.VIS.Dashboard.Handlers.Hyperlinks.handleRemotePage(link);
+                break;
+            }
+            case "RemoteAnchor": {
+                JasperMobile.VIS.Dashboard.Handlers.Hyperlinks.handleRemoteAnchor(link);
                 break;
             }
             case "Reference": {

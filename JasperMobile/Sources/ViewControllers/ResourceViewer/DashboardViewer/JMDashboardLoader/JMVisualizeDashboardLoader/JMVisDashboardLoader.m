@@ -32,6 +32,7 @@
 #import "JMResource.h"
 #import "JMJavascriptRequest.h"
 #import "JMHyperlink.h"
+#import "JMJavascriptRequestExecutor.h"
 
 @interface JMVisDashboardLoader()
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
@@ -401,6 +402,56 @@
                                     [strongSelf handleOnAdHocExecution:params];
                                 }
                             }];
+    NSString *remoteAnchorListenerId = @"JasperMobile.VIS.Event.Link.RemoteAnchor";
+    [self.webEnvironment addListener:self
+                          forEventId:remoteAnchorListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(remoteAnchorListenerId);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                if (error) {
+                                    [weakSelf handleHyperlinksError:error];
+                                } else {
+                                    JMLog(@"parameters: %@", params);
+                                    NSString *href = params[@"location"];
+                                    if (href) {
+                                        if ([weakSelf.delegate respondsToSelector:@selector(dashboardLoader:didReceiveEventWithHyperlink:)]) {
+                                            JMHyperlink *hyperlink = [JMHyperlink new];
+                                            hyperlink.type = JMHyperlinkTypeRemoteAnchor;
+                                            hyperlink.href = href;
+                                            [weakSelf.delegate dashboardLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                        }
+                                    } else {
+                                        // TODO: need handle this case?
+                                    }
+                                }
+                            }];
+    NSString *remotePageListenerId = @"JasperMobile.VIS.Event.Link.RemotePage";
+    [self.webEnvironment addListener:self
+                          forEventId:remotePageListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(remotePageListenerId);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                if (error) {
+                                    [weakSelf handleHyperlinksError:error];
+                                } else {
+                                    JMLog(@"parameters: %@", params);
+                                    NSString *href = params[@"location"];
+                                    if (href) {
+                                        if ([weakSelf.delegate respondsToSelector:@selector(dashboardLoader:didReceiveEventWithHyperlink:)]) {
+                                            JMHyperlink *hyperlink = [JMHyperlink new];
+                                            hyperlink.type = JMHyperlinkTypeRemotePage;
+                                            hyperlink.href = href;
+                                            [weakSelf.delegate dashboardLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                        }
+                                    } else {
+                                        // TODO: need handle this case?
+                                    }
+                                }
+                            }];
 }
 
 - (void)removeListenersForVisualizeEvents
@@ -513,6 +564,19 @@
             hyperlink.type = JMHyperlinkTypeReference;
             hyperlink.href = locationString;
             [self.delegate dashboardLoader:self didReceiveEventWithHyperlink:hyperlink];
+        }
+    }
+}
+
+
+- (void)handleHyperlinksError:(NSError *)error
+{
+    if (error.code == JMJavascriptRequestErrorTypeOther) {
+        NSString *javascriptErrorCode = error.userInfo[JMJavascriptRequestExecutorErrorCodeKey];
+        if (javascriptErrorCode && [javascriptErrorCode isEqualToString:@"hyperlink.not.support.error"]) {
+            if ([self.delegate respondsToSelector:@selector(reportLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
+                [self.delegate dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:self];
+            }
         }
     }
 }
