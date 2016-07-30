@@ -34,6 +34,7 @@
 */
 
 #import "JMBaseWebEnvironment.h"
+#import "JMWebViewManager.h"
 
 @interface JMWebEnvironment : JMBaseWebEnvironment
 @property (nonatomic, assign) JMResourceFlowType flowType;

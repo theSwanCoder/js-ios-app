@@ -24,6 +24,9 @@
 #import "JMRepositoryListLoader.h"
 #import "JMResource.h"
 #import "JMResourceLoaderOption.h"
+#import "NSObject+Additions.h"
+#import "JMUtils.h"
+#import "JMLocalization.h"
 
 @interface JMRepositoryListLoader ()
 @property (nonatomic, strong) NSMutableArray *rootFoldersURIs;

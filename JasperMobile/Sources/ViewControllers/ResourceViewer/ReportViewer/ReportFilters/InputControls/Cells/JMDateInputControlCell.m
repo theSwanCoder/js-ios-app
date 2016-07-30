@@ -27,6 +27,8 @@
 
 #import "JMDateInputControlCell.h"
 #import "UITableViewCell+Additions.h"
+#import "JMUtils.h"
+#import "JMLocalization.h"
 
 @interface JMDateInputControlCell()
 

@@ -32,25 +32,25 @@
 }
 
 #pragma mark - Tests Public API
-- (void)testThatNewScheduleWithSimpleTriggerCanBeCreatedFromTestMetadata
-{    
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Create New Schedule Expectation"];
-
-    [[JMScheduleManager sharedManager] createScheduleWithData:self.scheduleMetadata
-                                                   completion:^(JSScheduleMetadata *newScheduleMetadata, NSError *error) {
-                                                       [expectation fulfill];
-                                                       if (!newScheduleMetadata) {
-                                                           XCTAssertFalse(error, @"Create New Schedule Error");
-                                                       }
-                                                   }];
-
-    [self waitForExpectationsWithTimeout:120.0 handler:^(NSError *error) {
-        if (error) {
-            NSLog(@"Timeout Error: %@", error);
-            XCTAssertNil(error);
-        }
-    }];
-}
+//- (void)testThatNewScheduleWithSimpleTriggerCanBeCreatedFromTestMetadata
+//{
+//    XCTestExpectation *expectation = [self expectationWithDescription:@"Create New Schedule Expectation"];
+//
+//    [[JMScheduleManager sharedManager] createScheduleWithData:self.scheduleMetadata
+//                                                   completion:^(JSScheduleMetadata *newScheduleMetadata, NSError *error) {
+//                                                       [expectation fulfill];
+//                                                       if (!newScheduleMetadata) {
+//                                                           XCTAssertFalse(error, @"Create New Schedule Error");
+//                                                       }
+//                                                   }];
+//
+//    [self waitForExpectationsWithTimeout:120.0 handler:^(NSError *error) {
+//        if (error) {
+//            NSLog(@"Timeout Error: %@", error);
+//            XCTAssertNil(error);
+//        }
+//    }];
+//}
 
 #pragma mark - Helpers
 //- (JSScheduleMetadata *)createTestScheduleMetadata

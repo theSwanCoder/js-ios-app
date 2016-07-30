@@ -30,6 +30,8 @@
 
 #import "JMShareSettingsViewController.h"
 #import "JMPopupView.h"
+#import "JMLocalization.h"
+#import "JMUtils.h"
 
 #define JMShareSettingsAvailableColors @[[UIColor blackColor], [UIColor whiteColor], [UIColor grayColor], [UIColor redColor], [UIColor greenColor], [UIColor blueColor], [UIColor cyanColor], [UIColor yellowColor], [UIColor magentaColor], [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor]]
 

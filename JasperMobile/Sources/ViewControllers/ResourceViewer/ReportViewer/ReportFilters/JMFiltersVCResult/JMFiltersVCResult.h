@@ -30,6 +30,9 @@
 @since 2.6
 */
 
+@import Foundation;
+#import "JaspersoftSDK.h"
+
 typedef NS_ENUM(NSInteger, JMFiltersVCResultType) {
     JMFiltersVCResultTypeNotChange,
     JMFiltersVCResultTypeEmptyFilters,

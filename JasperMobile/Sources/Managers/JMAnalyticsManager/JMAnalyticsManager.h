@@ -30,6 +30,7 @@
  @since 2.5
  */
 
+#import <Foundation/Foundation.h>
 
 @interface JMAnalyticsManager : NSObject
 + (instancetype __nullable)sharedManager;

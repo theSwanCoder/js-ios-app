@@ -43,6 +43,8 @@
 #import "JMResourceViewerHyperlinksManager.h"
 #import "JMResourceViewerDocumentManager.h"
 #import "JMResourceViewerSessionManager.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMDashboardLoader> dashboardLoader;

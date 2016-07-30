@@ -28,6 +28,8 @@
 
 
 #import "JMSavedItemsCollectionViewController.h"
+#import "JMConstants.h"
+#import "JMLocalization.h"
 
 @interface JMSavedItemsCollectionViewController()
 @end

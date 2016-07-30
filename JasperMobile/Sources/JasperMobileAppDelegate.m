@@ -36,6 +36,12 @@
 #import "JMOnboardIntroViewController.h"
 #import "UIImage+Additions.h"
 #import "JMExportManager.h"
+#import "JMConstants.h"
+#import "GAI.h"
+#import "SWRevealViewController.h"
+#import "JMThemesManager.h"
+#import "NSObject+Additions.h"
+#import "JMCoreDataManager.h"
 
 static NSString * const kGAITrackingID      = @"UA-57445224-1";
 static NSString * const kGAITrackingDebugID = @"UA-76950527-1";

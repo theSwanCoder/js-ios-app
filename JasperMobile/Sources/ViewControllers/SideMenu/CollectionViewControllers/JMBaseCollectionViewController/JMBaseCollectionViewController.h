@@ -36,6 +36,7 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMResourcesListLoader.h"
 #import "JMBaseCollectionView.h"
+#import "JMBaseViewController.h"
 
 
 extern NSString * const kJMShowFolderContetnSegue;

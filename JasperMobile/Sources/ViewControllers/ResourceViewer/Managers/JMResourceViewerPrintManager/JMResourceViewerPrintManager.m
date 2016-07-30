@@ -29,6 +29,10 @@
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
 #import "JMMainNavigationController.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
+#import "JMThemesManager.h"
+#import "JMConstants.h"
 
 @interface JMResourceViewerPrintManager() <UIPrintInteractionControllerDelegate>
 @property (nonatomic, strong) JMResource *resource;

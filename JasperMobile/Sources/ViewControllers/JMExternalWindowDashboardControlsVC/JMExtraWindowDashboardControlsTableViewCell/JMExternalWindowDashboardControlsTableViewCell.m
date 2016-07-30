@@ -27,6 +27,7 @@
 //
 
 #import "JMExternalWindowDashboardControlsTableViewCell.h"
+#import "JMLocalization.h"
 
 typedef NS_ENUM(NSInteger, MaximazedButtonState) {
     MaximazedButtonStateMaximazed,

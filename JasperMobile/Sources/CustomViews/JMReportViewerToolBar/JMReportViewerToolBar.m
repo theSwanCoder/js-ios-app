@@ -21,6 +21,9 @@
  */
 
 #import "JMReportViewerToolBar.h"
+#import "JMThemesManager.h"
+#import "JaspersoftSDK.h"
+#import "JMLocalization.h"
 
 @interface JMReportViewerToolBar () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *pageCountLabel;

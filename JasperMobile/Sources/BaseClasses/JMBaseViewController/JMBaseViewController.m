@@ -28,6 +28,9 @@
 
 #import "JMBaseViewController.h"
 #import "JMAnalyticsManager.h"
+#import "JMUtils.h"
+#import "JMLocalization.h"
+#import "JMThemesManager.h"
 
 @interface JMBaseViewController()
 @property (nonatomic, strong) UIWindow *externalWindow;

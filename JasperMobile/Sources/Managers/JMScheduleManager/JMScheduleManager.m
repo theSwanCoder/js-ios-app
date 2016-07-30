@@ -28,6 +28,9 @@
 
 #import "JMScheduleManager.h"
 #import "JMResource.h"
+#import "NSObject+Additions.h"
+#import "JMLocalization.h"
+#import "JMUtils.h"
 
 @implementation JMScheduleManager
 

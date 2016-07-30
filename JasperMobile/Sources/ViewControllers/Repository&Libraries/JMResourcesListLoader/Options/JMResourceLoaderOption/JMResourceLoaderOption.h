@@ -30,7 +30,7 @@
  @author Aleksandr Dakhno odahno@tibco.com
  @since 2.5
  */
-
+#import <Foundation/Foundation.h>
 
 @interface JMResourceLoaderOption : NSObject
 @property (nonatomic, strong) NSString *title;

@@ -27,6 +27,8 @@
 //
 
 #import "JMEULAViewController.h"
+#import "JMUtils.h"
+#import "JMLocalization.h"
 
 @interface JMEULAViewController() <UIWebViewDelegate>
 @property (weak, nonatomic) IBOutlet UIWebView *webView;

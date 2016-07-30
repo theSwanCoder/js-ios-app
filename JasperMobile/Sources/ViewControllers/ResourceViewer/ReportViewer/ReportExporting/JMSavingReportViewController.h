@@ -33,8 +33,9 @@
  @since 1.9
  */
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 #import "JMEditabledViewController.h"
+#import "JaspersoftSDK.h"
 
 @protocol JMSaveReportViewControllerDelegate <NSObject>
 

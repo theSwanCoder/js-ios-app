@@ -30,6 +30,9 @@
 @since 2.6
 */
 
+#import <Foundation/Foundation.h>
+#import "JaspersoftSDK.h"
+
 @interface JMFiltersNetworkManager : NSObject
 - (instancetype __nullable)initWithRestClient:(JSRESTBase *__nonnull)restClient;
 + (instancetype __nullable)managerWithRestClient:(JSRESTBase *__nonnull)restClient;

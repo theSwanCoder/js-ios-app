@@ -20,7 +20,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
 //  JMBookmarkTableViewCell.h
 //  TIBCO JasperMobile
@@ -31,6 +30,7 @@
 @since 2.6
 */
 
+@import UIKit;
 @protocol JMBookmarkTableViewCellDelegate;
 
 @interface JMBookmarkTableViewCell : UITableViewCell

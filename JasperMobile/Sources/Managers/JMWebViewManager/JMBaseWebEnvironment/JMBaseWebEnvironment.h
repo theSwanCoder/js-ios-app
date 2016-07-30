@@ -30,6 +30,8 @@
 @since 2.6
 */
 
+#import <WebKit/WebKit.h>
+
 @class JMJavascriptRequest;
 @class JMJavascriptRequestExecutor;
 

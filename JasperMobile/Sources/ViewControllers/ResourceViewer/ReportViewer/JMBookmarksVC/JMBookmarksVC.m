@@ -20,7 +20,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
 //  JMBookmarksVC.m
 //  TIBCO JasperMobile
@@ -29,6 +28,7 @@
 #import "JMBookmarksVC.h"
 #import "JMBookmarkTableViewCell.h"
 #import "JSReportBookmark.h"
+#import "JMLocalization.h"
 
 static NSString *const kJMBookmarkTableViewCellId = @"JMBookmarkTableViewCell";
 

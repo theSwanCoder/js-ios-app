@@ -35,6 +35,12 @@
 #import "JasperMobileAppDelegate.h"
 #import "JMMenuViewController.h"
 #import "JMAnalyticsManager.h"
+#import "JMThemesManager.h"
+#import "JMLocalization.h"
+#import "NSObject+Additions.h"
+#import "JMUtils.h"
+#import "JMConstants.h"
+#import "JMCoreDataManager.h"
 
 @interface JMLoginViewController () <UITextFieldDelegate, JMServersGridViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;

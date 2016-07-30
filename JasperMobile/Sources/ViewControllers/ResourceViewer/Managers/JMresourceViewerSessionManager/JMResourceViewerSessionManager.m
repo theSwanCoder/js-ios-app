@@ -27,6 +27,9 @@
 
 #import "JMResourceViewerSessionManager.h"
 #import "JMReportViewerVC.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
+#import "UIAlertController+Additions.h"
 
 @implementation JMResourceViewerSessionManager
 

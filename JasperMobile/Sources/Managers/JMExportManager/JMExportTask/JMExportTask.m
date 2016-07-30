@@ -27,6 +27,7 @@
 //
 
 #import "JMExportTask.h"
+#import "JMUtils.h"
 
 @interface JMExportTask ()
 @property (nonatomic, strong, readwrite) JMExportResource *exportResource;

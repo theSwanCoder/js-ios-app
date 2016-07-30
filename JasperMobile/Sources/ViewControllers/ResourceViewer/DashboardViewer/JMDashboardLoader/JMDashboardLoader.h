@@ -31,6 +31,8 @@
 @since 2.1
 */
 
+#import "JaspersoftSDK.h"
+
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;
 @class JMWebEnvironment;

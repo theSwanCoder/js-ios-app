@@ -45,6 +45,8 @@
 #import "JMSchedule.h"
 #import "JMWebViewManager.h"
 #import "JMDashboardViewerVC.h"
+#import "JMLocalization.h"
+#import "JMUtils.h"
 
 CGFloat const kJMBaseCollectionViewGridWidth = 310;
 

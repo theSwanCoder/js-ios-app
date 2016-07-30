@@ -30,6 +30,8 @@
 @since 2.6
 */
 
+@import UIKit;
+
 @interface JMResourceViewerDocumentManager : NSObject
 @property (nonatomic, weak) UIViewController * __nullable controller;
 - (void)showOpenInMenuForResourceWithURL:(NSURL * __nonnull)URL;

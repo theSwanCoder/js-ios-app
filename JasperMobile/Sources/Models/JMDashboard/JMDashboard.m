@@ -29,6 +29,7 @@
 #import "JMDashboard.h"
 #import "JMDashboardParameter.h"
 #import "JMResource.h"
+#import "JMUtils.h"
 
 @interface JMDashboard()
 // setters

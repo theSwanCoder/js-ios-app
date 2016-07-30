@@ -31,7 +31,7 @@
  @since 2.2
  */
 
-#import <Foundation/Foundation.h>
+@import UIKit;
 
 @interface JMThemesManager : NSObject
 

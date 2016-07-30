@@ -31,6 +31,7 @@
  @since 1.9
  */
 
+@import UIKit;
 #import "JMMenuAction.h"
 
 @class JMMenuActionsView;

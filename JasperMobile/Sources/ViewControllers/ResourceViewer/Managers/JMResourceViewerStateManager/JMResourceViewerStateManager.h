@@ -31,6 +31,7 @@
 @since 2.6
 */
 
+#import <UIKit/UIKit.h>
 #import "JMResourceViewerToolbarsHelper.h"
 
 @class JMResourceViewerMenuHelper;

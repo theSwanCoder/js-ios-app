@@ -30,6 +30,8 @@
 @since 2.6
 */
 
+#import <Foundation/Foundation.h>
+
 @class JMBaseResourceView;
 
 typedef NS_ENUM(NSInteger, JMResourceViewerToolbarState) {

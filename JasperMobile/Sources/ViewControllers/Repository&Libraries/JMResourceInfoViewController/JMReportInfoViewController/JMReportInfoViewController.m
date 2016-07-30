@@ -29,6 +29,7 @@
 #import "JMScheduleVC.h"
 #import "JMResource.h"
 #import "JMReportViewerVC.h"
+#import "JMUtils.h"
 
 @interface JMReportInfoViewController ()
 

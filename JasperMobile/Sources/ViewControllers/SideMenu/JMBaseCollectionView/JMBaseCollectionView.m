@@ -31,6 +31,7 @@
 #import "JMResourceCollectionViewCell.h"
 #import "JMLoadingCollectionViewCell.h"
 #import "JMLocalization.h"
+#import "JMThemesManager.h"
 
 @implementation JMBaseCollectionView
 

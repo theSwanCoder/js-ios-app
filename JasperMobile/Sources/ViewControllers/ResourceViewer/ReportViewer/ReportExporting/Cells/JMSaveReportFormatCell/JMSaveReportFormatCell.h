@@ -33,6 +33,8 @@
  @since 1.9.1
 */
 
+@import UIKit;
+
 @interface JMSaveReportFormatCell : UITableViewCell
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 

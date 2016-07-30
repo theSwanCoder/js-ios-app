@@ -34,6 +34,8 @@
 #import "JMWebEnvironmentUpdateCookiesTask.h"
 #import "JMWebViewFabric.h"
 #import "UIView+Additions.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
 
 @interface JMBaseWebEnvironment() <JMJavascriptRequestExecutorDelegate>
 @property (nonatomic, strong, readwrite) WKWebView * __nullable webView;

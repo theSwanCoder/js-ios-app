@@ -35,7 +35,8 @@
 #import "UIView+Additions.h"
 #import "UIAlertController+Additions.h"
 #import "JMShareTextAnnotationView.h"
-
+#import "JMLocalization.h"
+#import "JMUtils.h"
 
 @interface JMShareViewController () <JMShareSettingsViewControllerDelegate>
 

@@ -30,6 +30,8 @@
 @since 2.6
 */
 
+@import Foundation;
+
 typedef NS_ENUM(NSInteger, JMAsyncTaskState) {
     JMAsyncTaskStateReady,
     JMAsyncTaskStateExecuting,

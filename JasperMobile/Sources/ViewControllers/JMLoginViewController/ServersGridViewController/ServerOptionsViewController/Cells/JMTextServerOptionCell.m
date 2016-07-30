@@ -25,6 +25,7 @@
 #import "UITableViewCell+Additions.h"
 #import "JMTextField.h"
 #import "UIColor+RGBComponent.h"
+#import "JMThemesManager.h"
 
 
 @interface JMTextServerOptionCell () <UITextFieldDelegate>

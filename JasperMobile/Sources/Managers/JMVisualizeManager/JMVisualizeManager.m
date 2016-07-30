@@ -27,6 +27,8 @@
 //
 
 #import "JMVisualizeManager.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
 
 @interface JMVisualizeManager()
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;

@@ -149,32 +149,32 @@ NSString * const kTestJMHTMLParserScriptContentPattern = @"<script\\s*.*>((\\s*.
 }
 
 #pragma mark - Tests of Scripts Content Extracting
-- (void)testThatOneKeyWithoutQuotesCanBeFound
-{
-    NSString *JSONString = @"{key: {\"key1\": \"value\"}}";
-    NSArray *allKeys = [self.parser findAllKeysInJSONString:JSONString];
-    NSLog(@"allKeys: %@", allKeys);
-    XCTAssert(allKeys.count == 1, @"should be array with 1 key, but we have: %@", @(allKeys.count));
-}
+//- (void)testThatOneKeyWithoutQuotesCanBeFound
+//{
+//    NSString *JSONString = @"{key: {\"key1\": \"value\"}}";
+//    NSArray *allKeys = [self.parser findAllKeysInJSONString:JSONString];
+//    NSLog(@"allKeys: %@", allKeys);
+//    XCTAssert(allKeys.count == 1, @"should be array with 1 key, but we have: %@", @(allKeys.count));
+//}
 
-- (void)testThatOneKeyWithoutQuotesCanBeFoundWithWhitespaces
-{
-    NSString *JSONString = @"{ \n\rkey: {\"key1\": \"value\"}}";
-    NSArray *allKeys = [self.parser findAllKeysInJSONString:JSONString];
-    NSLog(@"allKeys: %@", allKeys);
-    XCTAssert(allKeys.count == 1, @"should be array with 1 key, but we have: %@", @(allKeys.count));
-}
+//- (void)testThatOneKeyWithoutQuotesCanBeFoundWithWhitespaces
+//{
+//    NSString *JSONString = @"{ \n\rkey: {\"key1\": \"value\"}}";
+//    NSArray *allKeys = [self.parser findAllKeysInJSONString:JSONString];
+//    NSLog(@"allKeys: %@", allKeys);
+//    XCTAssert(allKeys.count == 1, @"should be array with 1 key, but we have: %@", @(allKeys.count));
+//}
 
-- (void)testThatAllKeysWithoutQuotesCanBeFoundFromTestJSON
-{
-    // should be 6 keys
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSString *jsonPath = [bundle pathForResource:@"testJSON" ofType:@""];
-    NSString *JSONString = [NSString stringWithContentsOfFile:jsonPath encoding:NSUTF8StringEncoding error:nil];
-    
-    NSArray *allKeys = [self.parser findAllKeysInJSONString:JSONString];
-    XCTAssert(allKeys.count == 6, @"should be array without keys, but we have: %@", @(allKeys.count));
-}
+//- (void)testThatAllKeysWithoutQuotesCanBeFoundFromTestJSON
+//{
+//    // should be 6 keys
+//    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+//    NSString *jsonPath = [bundle pathForResource:@"testJSON" ofType:@""];
+//    NSString *JSONString = [NSString stringWithContentsOfFile:jsonPath encoding:NSUTF8StringEncoding error:nil];
+//
+//    NSArray *allKeys = [self.parser findAllKeysInJSONString:JSONString];
+//    XCTAssert(allKeys.count == 6, @"should be array without keys, but we have: %@", @(allKeys.count));
+//}
 
 #pragma mark - Performance
 

@@ -33,6 +33,7 @@
 #import "JMJavascriptRequest.h"
 #import "JMHyperlink.h"
 #import "JMJavascriptRequestExecutor.h"
+#import "JMUtils.h"
 
 @interface JMVisDashboardLoader()
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
@@ -574,7 +575,7 @@
     if (error.code == JMJavascriptRequestErrorTypeOther) {
         NSString *javascriptErrorCode = error.userInfo[JMJavascriptRequestExecutorErrorCodeKey];
         if (javascriptErrorCode && [javascriptErrorCode isEqualToString:@"hyperlink.not.support.error"]) {
-            if ([self.delegate respondsToSelector:@selector(reportLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
+            if ([self.delegate respondsToSelector:@selector(dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
                 [self.delegate dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:self];
             }
         }

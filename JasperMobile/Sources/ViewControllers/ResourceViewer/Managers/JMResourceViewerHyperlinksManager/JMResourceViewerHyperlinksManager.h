@@ -30,6 +30,8 @@
 @since 2.6
 */
 
+#import <UIKit/UIKit.h>
+
 @class JMReportViewerVC;
 @class JMHyperlink;
 @protocol JMResourceViewerHyperlinksManagerDelegate;

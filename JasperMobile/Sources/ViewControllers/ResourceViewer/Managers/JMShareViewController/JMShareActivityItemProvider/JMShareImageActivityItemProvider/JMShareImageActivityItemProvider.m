@@ -27,6 +27,9 @@
 //
 
 #import "JMShareImageActivityItemProvider.h"
+#import "JMLocalization.h"
+#import "JMConstants.h"
+#import "JMUtils.h"
 
 NSString * const kGoogleDriveActivityType = @"com.google.Drive";
 

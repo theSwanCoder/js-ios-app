@@ -26,7 +26,11 @@
 #import "JMSingleSelectTableViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JSRESTBase+JSRESTDashboard.h"
-
+#import "JMLocalization.h"
+#import "JMThemesManager.h"
+#import "NSObject+Additions.h"
+#import "JMUtils.h"
+#import "JMInputControlCell.h"
 
 @interface JMDashboardInputControlsVC () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;

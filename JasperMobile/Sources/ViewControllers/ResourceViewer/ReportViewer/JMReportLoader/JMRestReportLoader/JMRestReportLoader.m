@@ -31,6 +31,8 @@
 #import "JMHTMLParser.h"
 #import "JMHTMLScript.h"
 #import "JMJavascriptRequest.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
 
 typedef void(^JMRestReportLoaderCompletion)(BOOL, NSError *);
 

@@ -31,6 +31,8 @@
  @author Alexey Gubarev ogubarie@tibco.com
  @since 2.0
  */
+
+#import "JMBaseViewController.h"
 #import "JMMenuItem.h"
 
 @interface JMMenuViewController : JMBaseViewController

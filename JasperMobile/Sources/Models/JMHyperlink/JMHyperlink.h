@@ -20,17 +20,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
 //  JMHyperlink.h
 //  TIBCO JasperMobile
 //
 
-
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.6
 */
+
+@import Foundation;
+#import "JaspersoftSDK.h"
 
 typedef NS_ENUM(NSInteger, JMHyperlinkType) {
     JMHyperlinkTypeReportExecution,

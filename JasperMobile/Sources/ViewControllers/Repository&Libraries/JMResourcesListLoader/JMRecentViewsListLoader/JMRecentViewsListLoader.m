@@ -28,6 +28,8 @@
 
 #import "JMRecentViewsListLoader.h"
 #import "JMResourceLoaderOption.h"
+#import "JMLocalization.h"
+#import "JMConstants.h"
 
 @implementation JMRecentViewsListLoader
 - (instancetype)init

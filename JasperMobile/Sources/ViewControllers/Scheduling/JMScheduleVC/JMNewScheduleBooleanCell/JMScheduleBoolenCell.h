@@ -32,6 +32,8 @@
 @since 2.3
 */
 
+@import UIKit;
+
 @protocol JMScheduleBoolenCellDelegate;
 
 @interface JMScheduleBoolenCell : UITableViewCell

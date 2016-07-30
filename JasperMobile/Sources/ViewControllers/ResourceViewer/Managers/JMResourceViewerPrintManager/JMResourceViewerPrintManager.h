@@ -32,6 +32,7 @@
 @since 2.6
 */
 
+@import UIKit;
 @class JMResource;
 
 @interface JMResourceViewerPrintManager : NSObject

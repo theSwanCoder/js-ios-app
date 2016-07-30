@@ -29,6 +29,8 @@
 @since 1.9
 */
 
+@import UIKit;
+
 @interface JMIntroModel : NSObject
 @property (nonatomic, copy) NSString *pageTitle;
 @property (nonatomic, copy) NSString *pageDescription;

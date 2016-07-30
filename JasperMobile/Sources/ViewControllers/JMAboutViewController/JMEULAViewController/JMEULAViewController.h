@@ -31,6 +31,8 @@
  @since 2.2
  */
 
+@import UIKit;
+
 @interface JMEULAViewController : UIViewController
 @property (nonatomic, copy) void(^ __nullable completion)(void);
 @property (nonatomic) BOOL shouldUserAccept;

@@ -31,6 +31,8 @@
 @since 2.6
 */
 
+@import UIKit;
+
 @class JMReportViewerVC;
 
 @interface JMResourceViewerSessionManager : NSObject

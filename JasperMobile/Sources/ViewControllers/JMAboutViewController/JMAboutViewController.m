@@ -32,6 +32,10 @@
 #import "JMOnboardIntroViewController.h"
 #import "JMEULAViewController.h"
 #import "UIColor+RGBComponent.h"
+#import "JMLocalization.h"
+#import "JMThemesManager.h"
+#import "JMConstants.h"
+#import "JMUtils.h"
 
 NSString * const kJMCommunitySiteURL = @"http://community.jaspersoft.com/project/jaspermobile-ios";
 NSString * const kJMWhatsNewURL = @"https://github.com/Jaspersoft/js-ios-app/wiki/What's-new";

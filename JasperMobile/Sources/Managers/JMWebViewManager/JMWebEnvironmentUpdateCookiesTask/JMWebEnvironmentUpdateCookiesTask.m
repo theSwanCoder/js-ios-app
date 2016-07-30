@@ -27,6 +27,7 @@
 
 #import "JMWebEnvironmentUpdateCookiesTask.h"
 #import "JMJavascriptRequestExecutor.h"
+#import "JMUtils.h"
 
 @interface JMWebEnvironmentUpdateCookiesTask()
 @property (nonatomic, strong) JMJavascriptRequestExecutor *requestExecutor;

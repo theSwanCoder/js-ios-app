@@ -29,7 +29,7 @@
 
 #import "JMRepositoryCollectionViewController.h"
 #import "JMBaseCollectionView.h"
-
+#import "JMLocalization.h"
 
 @implementation JMRepositoryCollectionViewController
 

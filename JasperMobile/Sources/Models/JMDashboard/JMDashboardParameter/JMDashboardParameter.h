@@ -31,6 +31,7 @@
  @since 2.3
  */
 
+@import Foundation;
 
 @interface JMDashboardParameter : NSObject
 @property (nonatomic, copy) NSString *identifier;

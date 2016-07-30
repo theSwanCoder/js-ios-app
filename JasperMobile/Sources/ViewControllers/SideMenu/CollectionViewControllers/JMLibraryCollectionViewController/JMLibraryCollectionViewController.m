@@ -29,6 +29,7 @@
 #import "JMLibraryCollectionViewController.h"
 #import "SWRevealViewController.h"
 #import "JMLibraryListLoader.h"
+#import "JMLocalization.h"
 
 NSString *const kJMLibraryCollectionViewFilterByIndexKey = @"kJMLibraryCollectionViewFilterByIndexKey";
 NSString *const kJMLibraryCollectionViewSortByIndexKey = @"kJMLibraryCollectionViewSortByIndexKey";

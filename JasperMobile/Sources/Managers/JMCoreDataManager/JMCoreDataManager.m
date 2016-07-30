@@ -28,6 +28,8 @@
 #import "JMCoreDataManager.h"
 #import "JMMigrationManager.h"
 #import "JMAppUpdater.h"
+#import "JMConstants.h"
+#import "JMUtils.h"
 
 static NSString * const kJMProductName = @"JasperMobile";
 

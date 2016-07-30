@@ -31,6 +31,7 @@
  @since 1.9
  */
 
+#import <Foundation/Foundation.h>
 #import "JMResourceClientHolder.h"
 
 extern NSString * const kJMResourceListLoaderOptionItemTitleKey;

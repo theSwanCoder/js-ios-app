@@ -33,6 +33,8 @@
  @since 1.9.1
 */
 
+@import Foundation;
+
 typedef NS_ENUM(NSInteger, JMSaveReportSectionType) {
     JMSaveReportSectionTypeName,
     JMSaveReportSectionTypeFormat,

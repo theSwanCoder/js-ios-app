@@ -27,6 +27,7 @@
 //
 
 #import "JMMenuItem.h"
+#import "JMLocalization.h"
 
 @implementation JMMenuItem
 

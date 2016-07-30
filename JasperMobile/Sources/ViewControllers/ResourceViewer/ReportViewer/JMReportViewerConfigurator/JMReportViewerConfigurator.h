@@ -32,6 +32,8 @@
 @since 2.1
 */
 
+#import <UIKit/UIKit.h>
+
 @protocol JMReportLoaderProtocol, JMReportLoaderDelegate;
 @class JSReport;
 @class JMWebEnvironment;

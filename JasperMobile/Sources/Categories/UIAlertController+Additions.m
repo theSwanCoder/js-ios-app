@@ -26,6 +26,7 @@
 //
 
 #import "UIAlertController+Additions.h"
+#import "JMLocalization.h"
 
 @interface UIAlertController (UITextFieldDelegate) <UITextFieldDelegate>
 

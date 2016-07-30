@@ -32,6 +32,8 @@
  @since 2.6
  */
 
+@import UIKit;
+
 @class JSReportPart;
 @protocol JMReportPartViewToolbarDelegate;
 

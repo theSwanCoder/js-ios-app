@@ -40,6 +40,9 @@
 #import "JMReportViewerVC.h"
 #import "JMResourceViewerFavoritesHelper.h"
 #import "JMResourceViewerMenuHelper.h"
+#import "JMUtils.h"
+#import "JMLocalization.h"
+#import "JMThemesManager.h"
 
 @interface JMResourceViewerStateManager()
 @end

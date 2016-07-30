@@ -24,6 +24,10 @@
 #import "JMMultiSelectTableViewController.h"
 #import "JMMenuActionsView.h"
 #import "PopoverView.h"
+#import "JMLocalization.h"
+#import "JMThemesManager.h"
+#import "JaspersoftSDK.h"
+#import "JMSingleSelectInputControlCell.h"
 
 @interface JMMultiSelectTableViewController () <JMMenuActionsViewDelegate, PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;

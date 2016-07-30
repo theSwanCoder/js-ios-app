@@ -37,6 +37,11 @@
 #import "JMCancelRequestPopup.h"
 #import "ALToastView.h"
 #import "JMResource.h"
+#import "JMThemesManager.h"
+#import "JMLocalization.h"
+#import "UIAlertController+Additions.h"
+#import "NSObject+Additions.h"
+#import "JMUtils.h"
 
 NSString *const kJMJobLabel              = @"kJMJobLabel";
 NSString *const kJMJobDescription        = @"kJMJobDescription";

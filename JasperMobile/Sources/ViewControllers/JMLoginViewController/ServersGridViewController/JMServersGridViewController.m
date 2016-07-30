@@ -27,6 +27,11 @@
 #import "JMServerCollectionViewCell.h"
 #import "JMServerOptionsViewController.h"
 #import "JMCancelRequestPopup.h"
+#import "JMLocalization.h"
+#import "JMThemesManager.h"
+#import "JMCoreDataManager.h"
+#import "JMConstants.h"
+#import "UIAlertController+Additions.h"
 
 NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";

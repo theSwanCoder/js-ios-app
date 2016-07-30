@@ -32,6 +32,7 @@
 */
 
 #import "JMEditabledViewController.h"
+#import "JaspersoftSDK.h"
 @class JMResource;
 
 typedef void(^JMScheduleCompletionBlock)(JSScheduleMetadata *__nullable);

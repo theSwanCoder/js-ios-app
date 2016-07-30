@@ -27,6 +27,7 @@
 //
 
 #import "JMRecentViewsCollectionViewController.h"
+#import "JMLocalization.h"
 
 @implementation JMRecentViewsCollectionViewController
 

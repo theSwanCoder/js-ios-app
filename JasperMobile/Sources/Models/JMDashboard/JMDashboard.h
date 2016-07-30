@@ -32,6 +32,8 @@
  @since 2.0
  */
 
+#import <Foundation/Foundation.h>
+#import "JaspersoftSDK.h"
 @class JMResource;
 
 @interface JMDashboard : NSObject

@@ -32,6 +32,10 @@
 #import "JMFavorites.h"
 #import "JMFavorites+Helpers.h"
 #import "JMResource.h"
+#import "JMConstants.h"
+#import "JMLocalization.h"
+#import "JMUtils.h"
+#import "UIAlertController+Additions.h"
 
 @interface JMSavedItemsInfoViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;

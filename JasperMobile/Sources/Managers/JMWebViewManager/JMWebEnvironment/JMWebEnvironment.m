@@ -27,6 +27,7 @@
 //
 
 #import "JMWebEnvironment.h"
+#import "JMUtils.h"
 
 @interface JMWebEnvironment()
 

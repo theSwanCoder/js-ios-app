@@ -25,6 +25,11 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JMResourceLoaderOption.h"
+#import "JMConstants.h"
+#import "JMCoreDataManager.h"
+#import "JMLocalization.h"
+#import "JMUtils.h"
+#import "JMSessionManager.h"
 
 @implementation JMFavoritesListLoader
 

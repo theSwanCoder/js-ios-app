@@ -26,6 +26,22 @@
 //
 
 #import "JMAnalyticsManager.h"
+#import "NSObject+Additions.h"
+#import "JMUtils.h"
+#import "JMConstants.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+// Google Analitycs
+#import "GAI.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAIEcommerceProduct.h"
+#import "GAIEcommerceProductAction.h"
+#import "GAIEcommercePromotion.h"
+#import "GAIFields.h"
+#import "GAILogger.h"
+#import "GAITrackedViewController.h"
+#import "GAITracker.h"
+
 @interface JMAnalyticsManager()
 @property (nonatomic, assign, getter=isNeedSendThumbnailEvent) BOOL needSendThumbnailEvent;
 @end

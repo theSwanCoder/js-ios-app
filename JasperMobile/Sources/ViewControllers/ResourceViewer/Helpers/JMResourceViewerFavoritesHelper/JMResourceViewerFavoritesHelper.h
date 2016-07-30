@@ -30,6 +30,8 @@
 @since 2.6
 */
 
+@import UIKit;
+
 @protocol JMResourceClientHolder;
 
 @interface JMResourceViewerFavoritesHelper : NSObject

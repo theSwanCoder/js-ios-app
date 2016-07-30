@@ -26,6 +26,7 @@
 //
 
 #import "JMServerProfile.h"
+#import "JaspersoftSDK.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com

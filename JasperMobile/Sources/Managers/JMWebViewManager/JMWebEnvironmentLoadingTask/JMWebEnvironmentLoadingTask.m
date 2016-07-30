@@ -29,6 +29,7 @@
 #import "JMJavascriptEvent.h"
 #import "JMJavascriptRequestExecutor.h"
 #import "JMWebViewFabric.h"
+#import "JMUtils.h"
 
 @interface JMWebEnvironmentLoadingTask()
 @property (nonatomic, strong) JMJavascriptRequestExecutor *requestExecutor;

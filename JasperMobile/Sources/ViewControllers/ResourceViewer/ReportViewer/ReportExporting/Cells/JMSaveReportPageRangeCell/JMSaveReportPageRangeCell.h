@@ -33,6 +33,7 @@
  @since 1.9.1
 */
 
+@import UIKit;
 
 @protocol JMSaveReportPageRangeCellDelegate;
 

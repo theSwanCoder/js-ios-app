@@ -23,7 +23,7 @@
 // THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+@import UIKit;
 
 
 @interface ALToastView : UIView {

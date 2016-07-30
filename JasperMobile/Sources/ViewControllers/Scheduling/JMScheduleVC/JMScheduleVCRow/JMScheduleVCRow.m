@@ -27,7 +27,7 @@
 //
 
 #import "JMScheduleVCRow.h"
-
+#import "JMLocalization.h"
 
 @implementation JMScheduleVCRow
 

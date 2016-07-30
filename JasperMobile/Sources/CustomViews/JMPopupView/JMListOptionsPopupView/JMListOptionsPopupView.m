@@ -24,6 +24,8 @@
 #import "JMListOptionsPopupView.h"
 #import "JMResourcesListLoader.h"
 #import "JMResourceLoaderOption.h"
+#import "JMThemesManager.h"
+#import "JMUtils.h"
 
 #define kJMList
 

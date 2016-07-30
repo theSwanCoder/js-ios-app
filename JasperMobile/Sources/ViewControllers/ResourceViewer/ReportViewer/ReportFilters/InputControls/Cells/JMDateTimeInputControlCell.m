@@ -27,6 +27,7 @@
 
 #import "JMDateTimeInputControlCell.h"
 #import "UITableViewCell+Additions.h"
+#import "JMLocalization.h"
 
 @implementation JMDateTimeInputControlCell
 - (NSArray *)rightInputAccessoryViewToolbarItems

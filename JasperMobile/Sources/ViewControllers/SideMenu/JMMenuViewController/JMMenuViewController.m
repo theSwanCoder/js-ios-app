@@ -40,6 +40,10 @@
 #import "JMConstants.h"
 #import "JMServerOptionsViewController.h"
 #import "JMAnalyticsManager.h"
+#import "JMThemesManager.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
+#import "JMLocalization.h"
 
 typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonStateNormal,

@@ -27,6 +27,7 @@
 
 #import "JMCancelRequestPopup.h"
 #import "JMUtils.h"
+#import "JMLocalization.h"
 #import <QuartzCore/QuartzCore.h>
 
 static NSInteger _cancelRequestPopupCounter = 0;

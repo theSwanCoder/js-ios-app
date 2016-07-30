@@ -31,6 +31,7 @@
 */
 
 #import "JMSaveReportFormatCell.h"
+#import "JMThemesManager.h"
 
 @implementation JMSaveReportFormatCell
 - (void)awakeFromNib

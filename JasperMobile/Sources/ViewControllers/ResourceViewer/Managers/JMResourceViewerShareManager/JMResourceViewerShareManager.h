@@ -32,6 +32,7 @@
 @since 2.6
 */
 
+#import <UIKit/UIKit.h>
 
 @interface JMResourceViewerShareManager : NSObject
 @property (nonatomic, weak) UIViewController * __nullable controller;

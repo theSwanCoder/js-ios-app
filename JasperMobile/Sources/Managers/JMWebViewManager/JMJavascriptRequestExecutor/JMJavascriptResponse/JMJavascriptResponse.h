@@ -31,6 +31,8 @@
 @since 2.1
 */
 
+@import Foundation;
+
 typedef NS_ENUM(NSInteger, JMJavascriptResponseType) {
     JMJavascriptCallbackTypeLog,
     JMJavascriptCallbackTypeListener,

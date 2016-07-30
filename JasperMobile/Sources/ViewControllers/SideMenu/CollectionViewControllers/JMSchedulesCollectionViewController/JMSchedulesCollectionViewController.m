@@ -34,7 +34,8 @@
 #import "JMCancelRequestPopup.h"
 #import "JMLibraryCollectionViewController.h"
 #import "JMLibraryListLoader.h"
-
+#import "JMLocalization.h"
+#import "JMUtils.h"
 
 @implementation JMSchedulesCollectionViewController
 

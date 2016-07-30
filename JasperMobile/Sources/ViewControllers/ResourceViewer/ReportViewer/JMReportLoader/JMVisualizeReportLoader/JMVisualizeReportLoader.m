@@ -36,6 +36,7 @@
 #import "JSReportBookmark.h"
 #import "JSReportPart.h"
 #import "JMHyperlink.h"
+#import "JMUtils.h"
 
 @interface JMVisualizeReportLoader()
 @property (nonatomic, assign, readwrite) JSReportLoaderState state;
@@ -470,7 +471,7 @@ initialDestination:(nullable JSReportDestination *)destination
                                             heapBlock(NO, vizError);
                                         } else {
                                             strongSelf.state = JSReportLoaderStateReady;
-                                            NSString *status = parameters[@"status"];
+//                                            NSString *status = parameters[@"status"];
                                             // TODO: investigate we need this in this point
                                             // I think it's better to set count of pages in one point from an event
 //                                            if ([status isEqualToString:@"ready"]) {

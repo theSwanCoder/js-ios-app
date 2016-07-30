@@ -27,9 +27,11 @@
 //
 
 #import "JMJavascriptEvent.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
 
 NSString *const kJMJavascriptNativeBridgeCallbackURL = @"jaspermobile.callback";
-NSString *JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestExecutorErrorCodeKey";
+NSString *const JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestExecutorErrorCodeKey";
 
 @interface JMJavascriptRequestExecutor() <WKNavigationDelegate, WKScriptMessageHandler>
 @property (nonatomic, strong) NSMutableDictionary <JMJavascriptRequest *, JMJavascriptRequestCompletion>*requestCompletions;

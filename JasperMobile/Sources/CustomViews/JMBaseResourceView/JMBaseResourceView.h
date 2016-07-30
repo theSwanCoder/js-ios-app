@@ -30,6 +30,8 @@
  @since 2.6
  */
 
+@import UIKit;
+
 @interface JMBaseResourceView : UIView
 @property(nonatomic, weak) IBOutlet UIView *topView;
 @property(nonatomic, weak) IBOutlet UIView *contentView;

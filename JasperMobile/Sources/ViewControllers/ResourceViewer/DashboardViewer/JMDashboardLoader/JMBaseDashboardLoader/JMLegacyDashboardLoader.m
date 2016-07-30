@@ -30,6 +30,7 @@
 #import "JMDashboard.h"
 #import "JMRESTWebEnvironment.h"
 #import "JMJavascriptRequest.h"
+#import "JMUtils.h"
 
 @interface JMLegacyDashboardLoader()
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;

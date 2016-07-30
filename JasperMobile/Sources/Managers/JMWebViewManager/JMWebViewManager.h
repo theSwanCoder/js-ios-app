@@ -30,6 +30,7 @@
  @since 2.0
  */
 
+@import Foundation;
 @class JMWebEnvironment;
 
 typedef NS_ENUM(NSInteger, JMResourceFlowType) {

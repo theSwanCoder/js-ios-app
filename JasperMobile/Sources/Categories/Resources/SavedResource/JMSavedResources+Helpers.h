@@ -31,10 +31,12 @@
  @since 1.9
  */
 
+@import UIKit;
 #import "JMSavedResources.h"
 
 @class JMExportResource;
 @class JMResource;
+
 
 extern NSString * const kJMSavedResources;
 

@@ -27,6 +27,8 @@
 //
 
 #import "JMSaveReportPagesCell.h"
+#import "JMThemesManager.h"
+#import "JMLocalization.h"
 
 @interface JMSaveReportPagesCell()
 @property (nonatomic, weak) IBOutlet UISwitch *pagesTypeSwitch;

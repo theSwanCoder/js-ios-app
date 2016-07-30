@@ -25,6 +25,11 @@
 #import "PopoverView.h"
 #import "UIViewController+Additions.h"
 #import "JMResource.h"
+#import "JMThemesManager.h"
+#import "JMUtils.h"
+#import "JMConstants.h"
+#import "JMLocalization.h"
+
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 

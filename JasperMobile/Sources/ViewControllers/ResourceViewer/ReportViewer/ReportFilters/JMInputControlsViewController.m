@@ -31,6 +31,11 @@
 #import "JSReportOption.h"
 #import "JMFiltersVCResult.h"
 #import "JMFiltersNetworkManager.h"
+#import "JMLocalization.h"
+#import "JMThemesManager.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
+#import "UIAlertController+Additions.h"
 
 @interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;

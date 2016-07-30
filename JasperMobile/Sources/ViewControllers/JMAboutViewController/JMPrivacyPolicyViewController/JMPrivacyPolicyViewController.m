@@ -25,6 +25,11 @@
 #import "ALToastView.h"
 #import "RNCachingURLProtocol.h"
 #import "Reachability.h"
+#import "JMLocalization.h"
+#import "JMConstants.h"
+#import "JaspersoftSDK.h"
+#import "JMUtils.h"
+#import "UIAlertController+Additions.h"
 
 @interface JMPrivacyPolicyViewController () <UIWebViewDelegate>
 @property (nonatomic, weak) IBOutlet UIWebView *webView;

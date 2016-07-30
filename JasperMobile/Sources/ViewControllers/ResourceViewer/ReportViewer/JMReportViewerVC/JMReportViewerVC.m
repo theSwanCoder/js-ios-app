@@ -45,7 +45,11 @@
 #import "JMFiltersNetworkManager.h"
 #import "JMRestReportLoader.h"
 #import "JMVisualizeReportLoader.h"
-
+#import "NSObject+Additions.h"
+#import "JMLocalization.h"
+#import "JMUtils.h"
+#import "JMConstants.h"
+#import "UIAlertController+Additions.h"
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
 @property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
@@ -822,7 +826,9 @@
     return [self report].parts && [self report].parts.count > 0;
 }
 
-#pragma mark - Analytics  
+#pragma mark - Analytics
+
+
 - (NSString *)additionalsToScreenName
 {
     NSString *additinalString = @"";

@@ -21,9 +21,14 @@
  */
 
 
+#import "JaspersoftSDK.h"
+#import "NSObject+Additions.h"
 #import "JMResourcesListLoader.h"
 #import "JMResource.h"
 #import "JMResourceLoaderOption.h"
+#import "JMConstants.h"
+#import "JMUtils.h"
+#import "JMLocalization.h"
 
 NSString * const kJMResourceListLoaderOptionItemTitleKey = @"JMResourceListLoaderFilterItemTitleKey";
 NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoaderFilterItemValueKey";

@@ -42,6 +42,11 @@
 #import "JMReportViewerConfigurator.h"
 #import "JMWebViewManager.h"
 #import "JMDashboardViewerConfigurator.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+#import "NSObject+Additions.h"
+#import "JMCoreDataManager.h"
+#import "UIAlertController+Additions.h"
 
 NSString *const JMReportViewerVisualizeWebEnvironmentIdentifier    = @"JMReportViewerVisualizeWebEnvironmentIdentifier";
 NSString *const JMReportViewerRESTWebEnvironmentIdentifier         = @"JMReportViewerRESTWebEnvironmentIdentifier";

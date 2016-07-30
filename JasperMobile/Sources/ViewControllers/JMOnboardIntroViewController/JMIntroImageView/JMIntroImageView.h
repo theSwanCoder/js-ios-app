@@ -31,6 +31,8 @@
  @since 2.0
  */
 
+@import UIKit;
+
 @interface JMIntroImageView : UIImageView
 - (void)setImageFrame:(CGRect)imageFrame forPageIdentifier:(NSString *)pageIdentifier;
 - (CGRect)imageFrameForPageIdentifier:(NSString *)pageIdentifier;

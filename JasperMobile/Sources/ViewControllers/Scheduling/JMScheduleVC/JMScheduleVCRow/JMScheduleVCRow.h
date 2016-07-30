@@ -32,6 +32,8 @@
 @since 2.5
 */
 
+@import Foundation;
+
 typedef NS_ENUM(NSInteger, JMScheduleVCRowType) {
     // Common field
     JMScheduleVCRowTypeLabel,

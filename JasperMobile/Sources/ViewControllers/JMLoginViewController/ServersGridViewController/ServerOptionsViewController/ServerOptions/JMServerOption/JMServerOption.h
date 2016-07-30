@@ -31,6 +31,8 @@
  @since 1.9
  */
 
+@import UIKit;
+
 @interface JMServerOption : NSObject
 
 @property (nonatomic, strong, readonly) NSString *titleString;

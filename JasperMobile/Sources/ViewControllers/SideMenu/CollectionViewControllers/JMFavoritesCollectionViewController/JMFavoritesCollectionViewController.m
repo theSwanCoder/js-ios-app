@@ -27,6 +27,7 @@
 //
 
 #import "JMFavoritesCollectionViewController.h"
+#import "JMLocalization.h"
 
 @interface JMFavoritesCollectionViewController()
 @property (nonatomic) JMResourcesRepresentationType repositoryRepresentationType;

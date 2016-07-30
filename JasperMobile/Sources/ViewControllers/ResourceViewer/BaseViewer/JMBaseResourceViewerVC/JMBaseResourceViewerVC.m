@@ -30,6 +30,8 @@
 #import "UIViewController+Additions.h"
 #import "JMResource.h"
 #import "JMBaseResourceView.h"
+#import "JMConstants.h"
+#import "JMThemesManager.h"
 
 NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
 NSString * const kJMShowMultiPageReportSegue = @"ShowMultiPageReport";

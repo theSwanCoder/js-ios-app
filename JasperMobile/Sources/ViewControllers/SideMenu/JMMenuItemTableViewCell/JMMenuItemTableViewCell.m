@@ -29,6 +29,8 @@
 #import "JMMenuItemTableViewCell.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+RGBComponent.h"
+#import "JMThemesManager.h"
+
 @implementation JMMenuItemTableViewCell
 
 - (void)awakeFromNib

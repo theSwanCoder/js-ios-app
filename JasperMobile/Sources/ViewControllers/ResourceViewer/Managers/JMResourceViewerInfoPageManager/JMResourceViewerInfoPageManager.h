@@ -20,18 +20,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
 //  JMResourceViewerInfoPageManager.h
 //  TIBCO JasperMobile
 //
-
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.6
 */
 
+@import UIKit;
 @class JMResource;
 
 @interface JMResourceViewerInfoPageManager : NSObject

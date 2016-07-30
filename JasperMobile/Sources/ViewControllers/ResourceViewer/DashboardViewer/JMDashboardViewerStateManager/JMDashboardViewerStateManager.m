@@ -35,6 +35,9 @@
 #import "JMDashboardViewerConfigurator.h"
 #import "JMWebEnvironment.h"
 #import "JMResourceViewerDocumentManager.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
+#import "JMLocalization.h"
 
 @interface JMDashboardViewerStateManager()
 @property (nonatomic, assign, readwrite) JMDashboardViewerState state;

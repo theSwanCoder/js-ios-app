@@ -31,6 +31,8 @@
  @since 2.0
  */
 
+@import UIKit;
+
 typedef NS_ENUM(NSInteger, JMOnboardIntroPage) {
     JMOnboardIntroPageWelcome,
     JMOnboardIntroPageStayConnected,

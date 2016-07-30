@@ -31,7 +31,9 @@
  @since 1.9
  */
 
-#import <UIKit/UIKit.h>
+@import UIKit;
+#import "JMBaseViewController.h"
+@class JMServerProfile;
 
 @protocol JMServersGridViewControllerDelegate <NSObject>
 

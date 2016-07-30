@@ -31,6 +31,7 @@
  @since 1.9
  */
 
+#import <WebKit/WebKit.h>
 #import "JMBaseResourceViewerVC.h"
 @class JMWebEnvironment;
 

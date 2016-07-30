@@ -29,6 +29,9 @@
 #import "JMServerOptionCell.h"
 
 #import "JMCancelRequestPopup.h"
+#import "JMLocalization.h"
+#import "JMThemesManager.h"
+#import "UIAlertController+Additions.h"
 
 
 @interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, JMServerOptionCellDelegate>

@@ -31,8 +31,10 @@
  @since 1.9
  */
 
-#import <UIKit/UIKit.h>
-#import "JMSingleSelectInputControlCell.h"
+@import UIKit;
+#import "JMBaseViewController.h"
+
+@class JMSingleSelectInputControlCell;
 
 @interface JMSingleSelectTableViewController : JMBaseViewController
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;

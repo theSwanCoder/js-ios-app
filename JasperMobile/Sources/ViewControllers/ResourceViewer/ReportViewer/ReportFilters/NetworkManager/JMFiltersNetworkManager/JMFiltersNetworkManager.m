@@ -28,28 +28,18 @@
 #import "JMFiltersNetworkManager.h"
 
 @interface JMFiltersNetworkManager()
-@property (nonatomic, strong) JSRESTBase *activeRestClient;
+@property (nonatomic, copy) JSRESTBase *activeRestClient;
 @end
 
 @implementation JMFiltersNetworkManager
 
 #pragma mark - Life Cycle
 
-+ (instancetype)sharedManager
-{
-    static JMFiltersNetworkManager *sharedManager;
-    static dispatch_once_t predicate;
-    dispatch_once(&predicate, ^{
-        sharedManager = [[self alloc] init];
-    });
-    return sharedManager;
-}
-
 - (instancetype)initWithRestClient:(JSRESTBase *)restClient
 {
     self = [super init];
     if (self) {
-        _activeRestClient = restClient;
+        _activeRestClient = [restClient copy];
     }
     return self;
 }
@@ -73,7 +63,7 @@
                        initialParameters:(NSArray <JSReportParameter *>*)initialParameters
                               completion:(void(^)(NSArray *inputControls, NSError *error))completion
 {
-    [self.restClient inputControlsForReport:resourceURI
+    [self.activeRestClient inputControlsForReport:resourceURI
                              selectedValues:initialParameters
                             completionBlock:^(JSOperationResult * _Nullable result) {
                                 if (result.error) {
@@ -101,7 +91,7 @@
 - (void)loadReportOptionsWithResourceURI:(NSString *)resourceURI
                               completion:(void(^)(NSArray *reportOptions, NSError *error))completion
 {
-    [self.restClient reportOptionsForReportURI:resourceURI
+    [self.activeRestClient reportOptionsForReportURI:resourceURI
                                     completion:^(JSOperationResult * _Nullable result) {
                                         if (result.error) {
                                             if (result.error.code == JSUnsupportedAcceptTypeErrorCode) {
@@ -128,7 +118,7 @@
                          updatedParameters:(NSArray <JSReportParameter *>*)updatedParameters
                                 completion:(void(^)(NSArray <JSInputControlState *> *resultStates, NSError *error))completion
 {
-    [self.restClient updatedInputControlsValues:resourceURI
+    [self.activeRestClient updatedInputControlsValues:resourceURI
                                             ids:inputControlsIds
                                  selectedValues:updatedParameters
                                 completionBlock:^(JSOperationResult *result) {
@@ -141,7 +131,7 @@
                          reportParameters:(NSArray <JSReportParameter *>*)reportParameters
                                completion:(void(^)(JSReportOption *reportOption, NSError *error))completion
 {
-    [self.restClient createReportOptionWithReportURI:resourceURI
+    [self.activeRestClient createReportOptionWithReportURI:resourceURI
                                          optionLabel:label
                                     reportParameters:reportParameters
                                           completion:^(JSOperationResult * _Nullable result) {
@@ -161,7 +151,7 @@
              withReportURI:(NSString *)reportURI
                 completion:(void(^)(BOOL success, NSError *error))completion
 {
-    [self.restClient deleteReportOption:reportOption
+    [self.activeRestClient deleteReportOption:reportOption
                           withReportURI:reportURI
                              completion:^(JSOperationResult * _Nullable result) {
                                  completion(result.error == nil, result.error);
@@ -170,7 +160,7 @@
 
 - (void)reset
 {
-    [self.restClient cancelAllRequests];
+    [self.activeRestClient cancelAllRequests];
 }
 
 

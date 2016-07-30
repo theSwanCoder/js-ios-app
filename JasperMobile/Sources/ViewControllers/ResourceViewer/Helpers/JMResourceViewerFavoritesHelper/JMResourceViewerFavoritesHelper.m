@@ -28,6 +28,9 @@
 #import "JMResourceViewerFavoritesHelper.h"
 #import "JMResourceClientHolder.h"
 #import "JMFavorites+Helpers.h"
+#import "JMUtils.h"
+#import "JMConstants.h"
+#import "JMThemesManager.h"
 
 @implementation JMResourceViewerFavoritesHelper
 

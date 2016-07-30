@@ -31,6 +31,7 @@
 */
 
 #import "JMAsyncTask.h"
+#import "JaspersoftSDK.h"
 
 @class JMJavascriptRequestExecutor;
 

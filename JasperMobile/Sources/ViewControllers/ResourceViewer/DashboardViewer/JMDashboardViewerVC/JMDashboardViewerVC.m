@@ -51,6 +51,10 @@
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerShareManager.h"
 #import "JMResourceViewerSessionManager.h"
+#import "NSObject+Additions.h"
+#import "JMUtils.h"
+#import "JMConstants.h"
+#import "UIAlertController+Additions.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMResourceViewerStateManagerDelegate>
 @end

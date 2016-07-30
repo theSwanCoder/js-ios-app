@@ -30,6 +30,9 @@
 @since 2.6
 */
 
+@import UIKit;
+@import WebKit;
+
 @interface JMWebViewFabric : NSObject
 + (instancetype)sharedInstance;
 - (WKWebView *)createWebViewWithCookies:(NSArray <NSHTTPCookie *> *)cookies;

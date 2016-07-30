@@ -31,12 +31,13 @@
 @since 2.1
 */
 
+@import WebKit;
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptResponse.h"
 @protocol JMJavascriptRequestExecutorDelegate;
 @class JMJavascriptEvent;
 
-extern NSString * __nonnull JMJavascriptRequestExecutorErrorCodeKey;
+extern NSString *const __nonnull JMJavascriptRequestExecutorErrorCodeKey;
 
 typedef void(^JMJavascriptRequestCompletion)(JMJavascriptResponse *__nullable response, NSError * __nullable error);
 

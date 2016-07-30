@@ -26,6 +26,7 @@
 //
 
 #import "JMAsyncTask.h"
+#import "JMUtils.h"
 
 @implementation JMAsyncTask
 

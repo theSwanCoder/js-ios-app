@@ -31,6 +31,8 @@
 #import "JMWebEnvironment.h"
 #import "JMVIZWebEnvironment.h"
 #import "JMRESTWebEnvironment.h"
+#import "JaspersoftSDK.h"
+#import "NSObject+Additions.h"
 
 NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManagerDidResetWebviewsNotification";
 

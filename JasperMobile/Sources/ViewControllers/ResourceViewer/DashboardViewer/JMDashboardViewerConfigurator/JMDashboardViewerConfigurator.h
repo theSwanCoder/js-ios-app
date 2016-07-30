@@ -30,6 +30,8 @@
 @since 2.1
 */
 
+#import <UIKit/UIKit.h>
+
 @protocol JMDashboardLoader;
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;

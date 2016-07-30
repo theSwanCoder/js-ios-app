@@ -25,13 +25,14 @@
 //  TIBCO JasperMobile
 //
 
-#import <UIKit/UIKit.h>
-
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @author Alexey Gubarev ogubarie@tibco.com
  @since 1.6
  */
+
+@import UIKit;
+#import "JaspersoftSDK.h"
 
 @class JMInputControlCell;
 @protocol JMInputControlCellDelegate <NSObject>

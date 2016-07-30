@@ -28,6 +28,7 @@
 
 #import "JMReportPartViewToolbar.h"
 #import "JSReportPart.h"
+#import "JaspersoftSDK.h"
 
 @interface JMReportPartViewToolbar()
 @property (nonatomic, strong, readwrite) JSReportPart *currentPart;

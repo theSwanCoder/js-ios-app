@@ -28,6 +28,7 @@
 
 #import "JMExternalWindowDashboardControlsVC.h"
 #import "JMExternalWindowDashboardControlsTableViewCell.h"
+#import "JMLocalization.h"
 
 @interface JMExternalWindowDashboardControlsVC () <UITableViewDelegate, UITableViewDataSource, JMExternalWindowDashboardControlsTableViewCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
