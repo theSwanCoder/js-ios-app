@@ -345,6 +345,7 @@
             // TODO: temporary solution, remove in the next release
             // the main reason for this - we don't have ideal UX solution for case, when 'always prompt' enabled
             // but there are any visible filters.
+            BOOL isAlwaysPrompt = reportUnit.alwaysPromptControls;
             __weak typeof(self) weakSelf = strongSelf;
             [strongSelf loadInputControlsWithCompletion:^(NSArray *inputControls, NSError *error) {
                 typeof(self) strongSelf = weakSelf;
@@ -352,9 +353,10 @@
                     [strongSelf handleError:error];
                 } else {
                     [[strongSelf stateManager] setupPageForState:JMReportViewerStateInitial];
-                    BOOL isAlwaysPrompt = reportUnit.alwaysPromptControls;
-                    if (isAlwaysPrompt && inputControls.count > 0) {
+                    if (inputControls.count > 0) {
                         strongSelf.shouldShowFiltersPage = YES;
+                    }
+                    if (isAlwaysPrompt && inputControls.count > 0) {
                         [strongSelf showFiltersVCWithInitialParameters:strongSelf.initialReportParameters];
                     } else {
                         [strongSelf runReportWithDestination:strongSelf.initialDestination];
