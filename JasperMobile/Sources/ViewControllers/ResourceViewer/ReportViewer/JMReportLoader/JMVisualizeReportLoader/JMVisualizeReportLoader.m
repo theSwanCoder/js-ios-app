@@ -471,10 +471,12 @@ initialDestination:(nullable JSReportDestination *)destination
                                         } else {
                                             strongSelf.state = JSReportLoaderStateReady;
                                             NSString *status = parameters[@"status"];
-                                            if ([status isEqualToString:@"ready"]) {
-                                                NSNumber *totalPages = parameters[@"totalPages"];
-                                                [strongSelf.report updateCountOfPages:totalPages.integerValue];
-                                            }
+                                            // TODO: investigate we need this in this point
+                                            // I think it's better to set count of pages in one point from an event
+//                                            if ([status isEqualToString:@"ready"]) {
+//                                                NSNumber *totalPages = parameters[@"totalPages"];
+//                                                [strongSelf.report updateCountOfPages:totalPages.integerValue];
+//                                            }
 
                                             id finishPages = parameters[@"pages"];
                                             if (finishPages) {
@@ -518,9 +520,25 @@ initialDestination:(nullable JSReportDestination *)destination
                                 if (error) {
 
                                 } else {
+                                    // In this point report is ready
+                                }
+                            }];
+    NSString *changeTotalPagesListenerId = @"JasperMobile.Report.Event.changeTotalPages";
+    [self.webEnvironment addListener:self
+                          forEventId:changeTotalPagesListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(changeTotalPagesListenerId);
+                                JMLog(@"parameters: %@", params);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                if (error) {
+
+                                } else {
                                     // TODO: move into separate method
                                     NSInteger countOfPages = ((NSNumber *)params[@"pages"]).integerValue;
                                     [weakSelf.report updateCountOfPages:countOfPages];
+                                    // We need this because sometimes an event 'MultipageReport' hasn't been received.
                                     if (countOfPages > 1 && !weakSelf.report.isMultiPageReport) {
                                         [weakSelf.report updateIsMultiPageReport:YES];
                                     }

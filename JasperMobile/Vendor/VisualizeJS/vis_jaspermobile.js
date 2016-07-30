@@ -806,6 +806,7 @@ JasperMobile.VIS.Report.Helpers = {
         };
     },
     success: function(reportData) {
+        JasperMobile.Callback.log("success of running report");
         var status = "undefined";
         if (JasperMobile.VIS.Report.activeReport == undefined) {
             JasperMobile.Callback.callback("JasperMobile.VIS.Report.API.run", {
@@ -848,7 +849,6 @@ JasperMobile.VIS.Report.Helpers = {
             if (status == "ready") {
                 JasperMobile.Callback.listener("JasperMobile.Report.Event.reportCompleted", {
                     "status" : status,
-                    "pages" : JasperMobile.VIS.Report.activeReport.totalPages()
                 });
             } else if (status == "failed") {
                 JasperMobile.Callback.log("Event: reportCompleted with error: " + JSON.stringify(error));
@@ -874,6 +874,13 @@ JasperMobile.VIS.Report.Helpers = {
         },
         pageFinal : function(html) {
             JasperMobile.Callback.log("Event: pageFinal");
+            JasperMobile.Callback.log("Total Pages:" + JasperMobile.VIS.Report.activeReport.totalPages());
+        },
+        changeTotalPages: function(totalPages) {
+            JasperMobile.Callback.log("Event: changeTotalPages: " + totalPages);
+            JasperMobile.Callback.listener("JasperMobile.Report.Event.changeTotalPages", {
+                "pages" : totalPages
+            });
         }
     },
     linkOptionsEventsClick: function(event, link) {
