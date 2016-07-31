@@ -50,6 +50,8 @@
 #import "JMUtils.h"
 #import "JMConstants.h"
 #import "UIAlertController+Additions.h"
+#import "JMReportChartType.h"
+#import "JMReportChartTypesVC.h"
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
 @property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
@@ -634,6 +636,11 @@
     }
     availableAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule;
     availableAction |= JMMenuActionsViewAction_Share | JMMenuActionsViewAction_Print;
+
+    // TODO: For now use for show chart types, but there could be other components
+    if ([self report].reportComponents.count) {
+        availableAction |= JMMenuActionsViewAction_ShowReportChartTypes;
+    }
 //    if ([self isExternalScreenAvailable]) {
 //        availableAction |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
 //    }
@@ -693,6 +700,10 @@
         case JMMenuActionsViewAction_Share:{
             self.configurator.shareManager.controller = self;
             [self.configurator.shareManager shareContentView:[self contentView]];
+            break;
+        }
+        case JMMenuActionsViewAction_ShowReportChartTypes: {
+            [self showReportChartTypesVC];
             break;
         }
         default:
@@ -833,6 +844,41 @@
         additinalString = @" (REST)";
     }
     return additinalString;
+}
+
+#pragma mark - Report Chart Types
+
+- (void)showReportChartTypesVC
+{
+    __weak __typeof(self) weakSelf = self;
+    [[self reportLoader] fetchAvailableChartTypesWithCompletion:^(NSArray<JMReportChartType *> *chartTypes, NSError *error) {
+        if (error) {
+            [weakSelf handleError:error];
+        } else {
+            JMReportChartTypesVC *chartTypesVC = [weakSelf.storyboard instantiateViewControllerWithIdentifier:@"JMReportChartTypesVC"];
+            chartTypesVC.chartTypes = chartTypes;
+            JMReportChartType *selectedChartType = [JMReportChartType new];
+            // TODO: extend to support several charts
+            JSReportComponent *reportComponent = [weakSelf report].reportComponents.firstObject;
+            JSReportComponentChartStructure *chartStructure = (JSReportComponentChartStructure *) reportComponent.structure;
+            selectedChartType.name = chartStructure.charttype;
+            chartTypesVC.selectedChartType = selectedChartType;
+            chartTypesVC.exitBlock = ^(JMReportChartType *chartType) {
+                [[weakSelf reportLoader] updateComponent:reportComponent
+                                        withNewChartType:chartType
+                                              completion:^(BOOL success, NSError *error) {
+                                                  if (error) {
+                                                      [weakSelf handleError:error];
+                                                  } else {
+                                                      JMLog(@"success of updating chart type");
+                                                  }
+                                              }];
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            };
+            [weakSelf.navigationController pushViewController:chartTypesVC
+                                                     animated:YES];
+        }
+    }];
 }
 
 @end

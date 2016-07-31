@@ -1250,6 +1250,11 @@ JasperMobile.VIS.Report.privateAPI = {
                 "message" : "Report Object isn't exist or 'resize' doesn't available"
             });
         }
+    },
+    updateChartType: function(report, parameters, success, fail) {
+        report.object.updateComponent(parameters.componentId, parameters.chart)
+            .done(success)
+            .fail(fail);
     }
 };
 JasperMobile.VIS.Report.API = {
@@ -1378,6 +1383,21 @@ JasperMobile.VIS.Report.API = {
         JasperMobile.Callback.callback("JasperMobile.VIS.Report.API.availableChartTypes", {
             "chart" : JasperMobile.VIS.Report.state.reportFunction.chart.types
         });
+    },
+    updateChartType: function(params, success) {
+        if (typeof(success) != "function") {
+            success = function(data) {
+                JasperMobile.Callback.callback("JasperMobile.VIS.Report.API.updateChartType", {
+                    "data" : data
+                });
+            };
+        }
+        JasperMobile.VIS.Report.privateAPI.executeOperation(
+            undefined,
+            "updateChartType",
+            params,
+            success
+        );
     }
 };
 

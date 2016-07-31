@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -20,41 +20,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
-//  JMWebEnvironment.m
+//  JMReportChartTypesVC.h
 //  TIBCO JasperMobile
 //
 
-#import "JMWebEnvironment.h"
-#import "JMUtils.h"
-#import "JMReportChartType.h"
+/**
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.6
+*/
 
-@interface JMWebEnvironment()
+@import UIKit;
+#import "JMBaseViewController.h"
+@class JMReportChartType;
 
-@end
-
-@implementation JMWebEnvironment
-
-#pragma mark - Public API
-
-- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
-{
-    // imlement in childs
-}
-
-#pragma mark - Helpers
-
-- (void)verifyJasperMobileEnableWithCompletion:(void(^ __nonnull)(BOOL isEnable))completion
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    NSAssert(completion != nil, @"Completion is nil");
-    NSString *jsCommand = @"typeof(JasperMobile);";
-    [self.webView evaluateJavaScript:jsCommand completionHandler:^(id result, NSError *error) {
-        BOOL isObject = [result isEqualToString:@"object"];
-        BOOL isEnable = !error && isObject;
-        completion(isEnable);
-    }];
-}
-
+@interface JMReportChartTypesVC : JMBaseViewController
+@property (nonatomic, copy, nonnull) NSArray <JMReportChartType *>*chartTypes;
+@property (nonatomic, strong) JMReportChartType *__nullable selectedChartType;
+@property (nonatomic, copy, nullable) void(^exitBlock)(JMReportChartType * __nonnull selectedChartType);
 @end

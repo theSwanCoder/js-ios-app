@@ -35,6 +35,7 @@
 #import "JMHyperlink.h"
 #import "JMUtils.h"
 #import "EKMapper.h"
+#import "JMReportChartType.h"
 
 @interface JMVisualizeReportLoader()
 @property (nonatomic, assign, readwrite) JSReportLoaderState state;
@@ -425,19 +426,43 @@ initialDestination:(nullable JSReportDestination *)destination
                                     completion:nil];
 }
 
-- (void)fetchAvailableChartTypesWithCompletion:(JSReportLoaderCompletionBlock __nonnull)completion
+- (void)fetchAvailableChartTypesWithCompletion:(void(^__nonnull)(NSArray <JMReportChartType *>*, NSError *))completion
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.availableChartTypes"
                                                                inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:nil];
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:^(NSDictionary *params, NSError *error) {
                                         if (error) {
-                                            completion(NO, error);
+                                            completion(nil, error);
                                         } else {
                                             NSArray *rawChartsData = params[@"chart"];
                                             JMLog(@"rawChartData: %@", rawChartsData);
+                                            if (rawChartsData) {
+                                                completion([weakSelf parseReportChartTypesFromRawData:rawChartsData], nil);
+                                            }
+                                        }
+                                    }];
+}
+
+- (void)updateComponent:(JSReportComponent *)component withNewChartType:(JMReportChartType *)chartType completion:(JSReportLoaderCompletionBlock __nullable)completion
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.updateChartType"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
+                                                                parameters:@{
+                                                                        @"componentId" : component.identifier,
+                                                                        @"chart" : @{
+                                                                            @"chartType" : chartType.name
+                                                                        }
+                                                                }];
+    __weak __typeof(self) weakSelf = self;
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:^(NSDictionary *params, NSError *error) {
+                                        JMLog(@"params: %@", params);
+                                        if (error) {
+                                            completion(NO, error);
+                                        } else {
                                             completion(YES, nil);
                                         }
                                     }];
@@ -793,6 +818,17 @@ initialDestination:(nullable JSReportDestination *)destination
         [components addObject:component];
     }
     return components;
+}
+
+- (NSArray <JMReportChartType *>*)parseReportChartTypesFromRawData:(NSArray <NSString *>*)rawData
+{
+    NSMutableArray *chartTypes = [NSMutableArray new];
+    for (NSString *chartName in rawData) {
+        JMReportChartType *chartType = [JMReportChartType new];
+        chartType.name = chartName;
+        [chartTypes addObject:chartType];
+    }
+    return chartTypes;
 }
 
 #pragma mark - Hyperlinks handlers

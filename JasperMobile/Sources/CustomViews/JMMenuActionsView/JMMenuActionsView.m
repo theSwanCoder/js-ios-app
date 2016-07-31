@@ -151,6 +151,9 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
                         @(JMMenuActionsViewAction_HideExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_HideExternalDisplay
                                                                                                   available:NO
                                                                                                     enabled:YES],
+                        @(JMMenuActionsViewAction_ShowReportChartTypes) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ShowReportChartTypes
+                                                                                                  available:NO
+                                                                                                    enabled:YES],
                         };
 }
 

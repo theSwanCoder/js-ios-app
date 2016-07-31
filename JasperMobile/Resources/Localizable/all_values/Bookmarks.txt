@@ -2,4 +2,4 @@
 [[Bookmarks]]
 	[bookmarks_view_title]
 		en = Bookmarks
-		tags = ios
+		tags = ios,new
