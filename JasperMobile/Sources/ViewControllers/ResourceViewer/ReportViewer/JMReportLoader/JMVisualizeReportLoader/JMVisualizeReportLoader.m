@@ -32,11 +32,9 @@
 #import "JMResource.h"
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptRequestExecutor.h"
-#import "JSReportDestination.h"
-#import "JSReportBookmark.h"
-#import "JSReportPart.h"
 #import "JMHyperlink.h"
 #import "JMUtils.h"
+#import "EKMapper.h"
 
 @interface JMVisualizeReportLoader()
 @property (nonatomic, assign, readwrite) JSReportLoaderState state;
@@ -427,6 +425,24 @@ initialDestination:(nullable JSReportDestination *)destination
                                     completion:nil];
 }
 
+- (void)fetchAvailableChartTypesWithCompletion:(JSReportLoaderCompletionBlock __nonnull)completion
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.availableChartTypes"
+                                                               inNamespace:JMJavascriptNamespaceVISReport
+                                                                parameters:nil];
+    [self.webEnvironment sendJavascriptRequest:request
+                                    completion:^(NSDictionary *params, NSError *error) {
+                                        if (error) {
+                                            completion(NO, error);
+                                        } else {
+                                            NSArray *rawChartsData = params[@"chart"];
+                                            JMLog(@"rawChartData: %@", rawChartsData);
+                                            completion(YES, nil);
+                                        }
+                                    }];
+}
+
 #pragma mark - Private
 - (void)freshLoadReportWithDestination:(JSReportDestination *)destination
                             parameters:(NSArray <JSReportParameter *>*)parameters
@@ -532,6 +548,10 @@ initialDestination:(nullable JSReportDestination *)destination
 
                                 } else {
                                     // In this point report is ready
+                                    if (params[@"components"]) {
+                                        NSArray <JSReportComponent *>*components = [weakSelf parseReportComponentsWithRawData:params[@"components"]];
+                                        weakSelf.report.reportComponents = components;
+                                    }
                                 }
                             }];
     NSString *changeTotalPagesListenerId = @"JasperMobile.Report.Event.changeTotalPages";
@@ -749,6 +769,30 @@ initialDestination:(nullable JSReportDestination *)destination
         runParams[parameter.name] = parameter.value;
     }
     return runParams;
+}
+
+#pragma mark - Components
+
+- (NSArray <JSReportComponent *>*)parseReportComponentsWithRawData:(NSArray <NSDictionary *>*)rawData
+{
+    NSMutableArray <JSReportComponent *>*components = [NSMutableArray new];
+    for (NSDictionary *rawComponentData in rawData) {
+        JSReportComponent *component = [JSReportComponent new];
+        [EKMapper fillObject:component
+  fromExternalRepresentation:rawComponentData
+                 withMapping:[JSReportComponent objectMappingForServerProfile:self.restClient.serverProfile]];
+        if (component.type == JSReportComponentTypeChart) {
+            JSReportComponentChartStructure *chartStructure = [JSReportComponentChartStructure new];
+            [EKMapper fillObject:chartStructure
+      fromExternalRepresentation:rawComponentData
+                     withMapping:[JSReportComponentChartStructure objectMappingForServerProfile:self.restClient.serverProfile]];
+            component.structure = chartStructure;
+        } else {
+            // For now skip other types
+        }
+        [components addObject:component];
+    }
+    return components;
 }
 
 #pragma mark - Hyperlinks handlers

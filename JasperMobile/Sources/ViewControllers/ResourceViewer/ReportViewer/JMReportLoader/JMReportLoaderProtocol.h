@@ -62,6 +62,7 @@ initialDestination:(nullable JSReportDestination *)destination
 - (void)destroyWithCompletion:(nullable JSReportLoaderBaseCompletionBlock)completion;
 - (void)fitReportViewToScreen;
 - (void)resetWithCompletion:(nullable JSReportLoaderBaseCompletionBlock)completion;
+- (void)fetchAvailableChartTypesWithCompletion:(JSReportLoaderCompletionBlock __nonnull)completion;
 @end
 
 @protocol JMReportLoaderDelegate <NSObject>
