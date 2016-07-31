@@ -1175,10 +1175,11 @@ JasperMobile.VIS.Report.API = {
     },
     refresh: function(success) {
         if (typeof(success) != "function") {
-            success = function(status) {
+            success = function(data) {
+                JasperMobile.Callback.log("success of refresh: " + JSON.stringify(data));
                 JasperMobile.Callback.callback("JasperMobile.VIS.Report.API.refresh", {
                     "status": status,
-                    "totalPages": JasperMobile.VIS.Report.activeReport.totalPages()
+                    "totalPages": data.totalPages
                 });
             };
         }

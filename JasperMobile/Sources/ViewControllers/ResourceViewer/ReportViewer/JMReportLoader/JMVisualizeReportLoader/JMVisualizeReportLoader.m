@@ -210,7 +210,9 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
         return;
     }
 
-    [self.report restoreDefaultState];
+    [self.report updateCurrentPage:NSNotFound];
+    [self.report updateCountOfPages:NSNotFound];
+    [self.report updateIsMultiPageReport:NO];
     JSReportLoaderCompletionBlock heapBlock = [completion copy];
 
     self.state = JSReportLoaderStateLoading;
@@ -231,6 +233,14 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
                                         } else {
                                             strongSelf.state = JSReportLoaderStateReady;
                                             [strongSelf.report updateCurrentPage:1];
+                                            // TODO: after refresh we don't have event 'JasperMobile.Report.Event.changeTotalPages'
+                                            // so we should to update count of pages here
+                                            NSInteger countOfPages = ((NSNumber *)parameters[@"totalPages"]).integerValue;
+                                            [strongSelf.report updateCountOfPages:countOfPages];
+                                            // we also don't get event 'JasperMobile.Report.Event.MultipageReport'
+                                            if (countOfPages > 1) {
+                                                [strongSelf.report updateIsMultiPageReport:YES];
+                                            }
                                             heapBlock(YES, nil);
                                         }
                                     }];
