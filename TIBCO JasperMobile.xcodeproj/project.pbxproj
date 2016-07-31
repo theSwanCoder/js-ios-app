@@ -247,6 +247,7 @@
 		93DB0CD01D4D12CC00B94469 /* JMResourceViewerToolbarsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A14783109A0C954B89784113 /* JMResourceViewerToolbarsHelper.m */; };
 		93DB0CD11D4D12D700B94469 /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B517BB1B15C60400B3F20A /* PopoverView.m */; };
 		93DB0CD21D4D130A00B94469 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */; };
+		93DB0CD41D4D222600B94469 /* libJaspersoftSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DB0CD31D4D222600B94469 /* libJaspersoftSDK.a */; };
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
 		93F26A1C1C9BF85B0069CD5D /* JMHTMLParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F26A1B1C9BF85B0069CD5D /* JMHTMLParserTests.m */; };
 		93F26A1F1C9BF9310069CD5D /* testPage.html in Resources */ = {isa = PBXBuildFile; fileRef = 93F26A1E1C9BF9310069CD5D /* testPage.html */; };
@@ -663,6 +664,7 @@
 		93D8C6441AAC7E9200117306 /* JMWebViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMWebViewManager.m; sourceTree = "<group>"; };
 		93D8C6531AAD69CD00117306 /* JMDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboard.h; sourceTree = "<group>"; };
 		93D8C6541AAD69CD00117306 /* JMDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboard.m; sourceTree = "<group>"; };
+		93DB0CD31D4D222600B94469 /* libJaspersoftSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libJaspersoftSDK.a; path = "../../../../../../Developer/Xcode/DerivedData/TIBCO_JasperMobile-ajnrkwhvwrcdgxbhepfzuppavoji/Build/Products/Debug-iphonesimulator/libJaspersoftSDK.a"; sourceTree = "<group>"; };
 		93DC8C391C6CCEEE000DEADF /* TIBCO JasperMobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TIBCO JasperMobileUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DC8C3D1C6CCEEE000DEADF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93EEB4651AC55430000718C7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -938,6 +940,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93DB0CD41D4D222600B94469 /* libJaspersoftSDK.a in Frameworks */,
 				93DB0CB11D4D0EDB00B94469 /* Crashlytics.framework in Frameworks */,
 				93DB0CB01D4D0ED500B94469 /* Fabric.framework in Frameworks */,
 				93DB0CD21D4D130A00B94469 /* libsqlite3.0.dylib in Frameworks */,
@@ -3569,6 +3572,7 @@
 		F55CC331174CFFCE00CEB39E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				93DB0CD31D4D222600B94469 /* libJaspersoftSDK.a */,
 				BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */,
 				93EEB4651AC55430000718C7 /* WebKit.framework */,
 				08DB3D931A891640006F9620 /* MessageUI.framework */,
