@@ -47,14 +47,7 @@
     self.state = state;
     [self setupNavigationItemForState:state];
     [self setupMainViewForState:state];
-    switch(state) {
-        case JMReportViewerStateInitial: {
-            [self.toolbarsHelper updatePageForToolbarState:JMResourceViewerToolbarStateInitial];
-        }
-        default: {
-            break;
-        }
-    }
+    [self setupToolbarsForState:state];
 }
 
 #pragma mark - Helpers
@@ -99,52 +92,84 @@
 
 - (void)setupMainViewForState:(JMReportViewerState)state
 {
-    [self hideResourceNotExistView];
     switch (state) {
         case JMReportViewerStateInitial: {
             self.controller.title = self.controller.resource.resourceLookup.label;
-            [self hideProgress];
             [self showResourceNotExistView];
+            [self hideProgress];
+            [self hideMainView];
             break;
         }
         case JMReportViewerStateDestroy: {
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
-            [self hideProgress];
             [self reset];
             break;
         }
         case JMReportViewerStateLoading: {
             [self showProgress];
+            [self hideResourceNotExistView];
             [self hideMainView];
             break;
         }
         case JMReportViewerStateResourceFailed: {
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
-            [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
             [self hideProgress];
             [self showResourceNotExistView];
             break;
         }
         case JMReportViewerStateResourceReady: {
-            [self hideProgress];
             [self showMainView];
+            [self hideProgress];
+            [self hideResourceNotExistView];
+            break;
+        }
+        case JMReportViewerStateResourceNotExist: {
+            [self hideProgress];
+            [self showResourceNotExistView];
+            break;
+        }
+        case JMReportViewerStateNotVisible: {
+            [self hideProgress];
+            break;
+        }
+        case JMReportViewerStateNestedResource: {
+            [self hideResourceNotExistView];
+            [self hideProgress];
+            break;
+        }
+    }
+}
+
+- (void)setupToolbarsForState:(JMReportViewerState)state
+{
+    switch (state) {
+        case JMReportViewerStateInitial: {
+            [self.toolbarsHelper updatePageForToolbarState:JMResourceViewerToolbarStateInitial];
+            break;
+        }
+        case JMReportViewerStateDestroy: {
+            break;
+        }
+        case JMReportViewerStateLoading: {
+            break;
+        }
+        case JMReportViewerStateResourceFailed: {
+            [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
+            [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
+            break;
+        }
+        case JMReportViewerStateResourceReady: {
             break;
         }
         case JMReportViewerStateResourceNotExist: {
             [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
             [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
-            [self showResourceNotExistView];
             break;
         }
         case JMReportViewerStateNotVisible: {
-            [self showResourceNotExistView];
             break;
         }
         case JMReportViewerStateNestedResource: {
             [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
             [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
-            [self hideProgress];
             break;
         }
     }
