@@ -76,6 +76,9 @@
         case JMReportViewerStateResourceNotExist: {
             break;
         }
+        case JMReportViewerStateResourceOnWExternalWindow: {
+            break;
+        }
         case JMReportViewerStateNotVisible: {
             if (self.menuHelper.isMenuVisible) {
                 [self.menuHelper hideMenu];
@@ -126,6 +129,9 @@
             [self showResourceNotExistView];
             break;
         }
+        case JMReportViewerStateResourceOnWExternalWindow: {
+            break;
+        }
         case JMReportViewerStateNotVisible: {
             [self hideProgress];
             break;
@@ -162,6 +168,9 @@
         case JMReportViewerStateResourceNotExist: {
             [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
             [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
+            break;
+        }
+        case JMReportViewerStateResourceOnWExternalWindow: {
             break;
         }
         case JMReportViewerStateNotVisible: {

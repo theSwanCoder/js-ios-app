@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerState) {
     JMReportViewerStateResourceFailed,
     JMReportViewerStateResourceNotExist,
     JMReportViewerStateNestedResource,
+    JMReportViewerStateResourceOnWExternalWindow,
     JMReportViewerStateNotVisible,
     JMReportViewerStateDestroy
 };

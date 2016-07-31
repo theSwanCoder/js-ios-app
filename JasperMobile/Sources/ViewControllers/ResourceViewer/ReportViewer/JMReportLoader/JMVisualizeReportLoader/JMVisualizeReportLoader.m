@@ -456,7 +456,6 @@ initialDestination:(nullable JSReportDestination *)destination
                                                                             @"chartType" : chartType.name
                                                                         }
                                                                 }];
-    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"params: %@", params);

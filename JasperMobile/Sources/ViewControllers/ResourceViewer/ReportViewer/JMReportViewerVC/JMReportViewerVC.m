@@ -20,7 +20,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 #import "JMReportViewerVC.h"
 #import "JMBaseResourceView.h"
 #import "JMReportViewerConfigurator.h"
@@ -38,7 +37,6 @@
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerInfoPageManager.h"
 #import "JMResourceViewerShareManager.h"
-#import "JMResourceViewerHyperlinksManager.h"
 #import "PopoverView.h"
 #import "JMFiltersVCResult.h"
 #import "JMResourceViewerSessionManager.h"
@@ -52,6 +50,7 @@
 #import "UIAlertController+Additions.h"
 #import "JMReportChartType.h"
 #import "JMReportChartTypesVC.h"
+#import "JasperMobileAppDelegate.h"
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
 @property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
@@ -641,9 +640,11 @@
     if ([self report].reportComponents.count) {
         availableAction |= JMMenuActionsViewAction_ShowReportChartTypes;
     }
-//    if ([self isExternalScreenAvailable]) {
-//        availableAction |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
-//    }
+    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    if ([appDelegate isExternalScreenAvailable]) {
+        // TODO: extend by considering other states
+        availableAction |= ([self stateManager].state == JMReportViewerStateResourceOnWExternalWindow) ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+    }
 
     return availableAction;
 }
@@ -704,6 +705,14 @@
         }
         case JMMenuActionsViewAction_ShowReportChartTypes: {
             [self showReportChartTypesVC];
+            break;
+        }
+        case JMMenuActionsViewAction_ShowExternalDisplay: {
+            [self showOnTV];
+            break;
+        }
+        case JMMenuActionsViewAction_HideExternalDisplay: {
+            [self switchFromTV];
             break;
         }
         default:
@@ -879,6 +888,19 @@
                                                      animated:YES];
         }
     }];
+}
+
+#pragma mark - Work with external window
+- (void)showOnTV
+{
+    [[self stateManager] setupPageForState:JMReportViewerStateResourceOnWExternalWindow];
+
+}
+
+- (void)switchFromTV
+{
+    [[self stateManager] setupPageForState:JMReportViewerStateResourceReady];
+
 }
 
 @end
