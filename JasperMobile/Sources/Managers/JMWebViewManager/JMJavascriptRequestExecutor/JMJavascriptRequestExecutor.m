@@ -354,7 +354,7 @@ NSString *const JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestE
 //    JMLog(@"%@", response);
     switch(response.type) {
         case JMJavascriptCallbackTypeLog: {
-            JMLog(@"Bridge Message: %@", response.parameters[@"message"]);
+            JMLog(@"Bridge Message:\n%@\nobject: %@", response.parameters[@"message"], response.parameters[@"object"]);
             break;
         }
         case JMJavascriptCallbackTypeListener: {

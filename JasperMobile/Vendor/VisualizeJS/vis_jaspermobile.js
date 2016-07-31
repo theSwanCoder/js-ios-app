@@ -194,6 +194,42 @@ JasperMobile.Callback = {
             }
         );
     },
+    logJSON: function(message, json) {
+        var jsonString = JSON.stringify(json);
+        console.log("Log: " + message + "; json: " + jsonString);
+        this.createCallback(
+            {
+                "command" : "logging",
+                "parameters" : {
+                    "message": message,
+                    "object" : JSON.parse(jsonString)
+                }
+            }
+        );
+    },
+    logObject: function(message, object) {
+        this.logJSON(message, this.jsonFromObject(object));
+    },
+    jsonFromObject: function(object) {
+        var listOfProperties = Object.getOwnPropertyNames(object);
+        var objectJSON = {};
+        for(var propertyIndex in listOfProperties) {
+            var propertyName = listOfProperties[propertyIndex];
+            var property = object[propertyName];
+            var propertyType = typeof property;
+            // construct structure
+            var structure = {
+                "type" : propertyType
+            };
+            if (propertyType === 'object') {
+                structure["object"] = this.jsonFromObject(property);
+            } else {
+                structure["value"] = property;
+            }
+            objectJSON[propertyName] = structure;
+        }
+        return objectJSON;
+    },
     callback: function(command, parameters) {
         this.createCallback(
             {
@@ -827,6 +863,7 @@ JasperMobile.VIS.Report.Helpers = {
         } else {
             status = "ready";
         }
+        JasperMobile.Callback.logObject("active report", JasperMobile.VIS.Report.activeReport);
         JasperMobile.Callback.callback("JasperMobile.VIS.Report.API.run", {
             "status"      : status,
             "pages"       : JasperMobile.VIS.Report.activeReport.pages(),
