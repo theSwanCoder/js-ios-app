@@ -35,16 +35,6 @@
 
 
 @interface JMBaseViewController : GAITrackedViewController
-- (BOOL)isExternalScreenAvailable;
-
-- (BOOL)createExternalWindow;
-- (void)showExternalWindowWithCompletion:(void(^)(BOOL success))completion;
-- (void)hideExternalWindowWithCompletion:(void(^)(void))completion;
-- (UIView *)viewToShowOnExternalWindow;
-
-- (BOOL)isContentOnTV;
-- (void)switchFromTV;
-
 - (UIBarButtonItem *)backButtonWithTitle:(NSString *)title target:(id)target action:(SEL)action;
 - (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle;
 // Could be overridden subclasses to add analytics

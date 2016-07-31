@@ -100,6 +100,7 @@ static const NSInteger kSplashViewTag = 100;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [self setupScreenConnectionNotifications];
     [self removeSplashView];
 
     [[JMThemesManager sharedManager] applyCurrentTheme];
@@ -140,6 +141,7 @@ static const NSInteger kSplashViewTag = 100;
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    [self discardScreenConnectionNotifications];
     [self addSplashView];
     [[JMExportManager sharedInstance] cancelAll];
 }
@@ -217,5 +219,75 @@ static const NSInteger kSplashViewTag = 100;
     }
 }
 
+#pragma mark - Work with external window
+
+- (BOOL)isExternalScreenAvailable
+{
+    return self.externalWindow != nil;
+}
+
+- (UIWindow *)createWindowWithScreen:(UIScreen *)screen
+{
+    UIWindow *window = [UIWindow new];
+    window.clipsToBounds = YES;
+    window.backgroundColor = [UIColor whiteColor];
+
+    UIScreenMode *desiredMode = screen.availableModes.firstObject;
+    CGRect rect = CGRectZero;
+    rect.size = desiredMode.size;
+    window.frame = rect;
+    window.screen = screen;
+    return window;
+}
+
+- (void)destroyExternalWindow
+{
+    self.externalWindow = nil;
+}
+
+#pragma mark - Notifications
+- (void)setupScreenConnectionNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+
+    [center addObserver:self
+               selector:@selector(handleScreenDidConnectNotification:)
+                   name:UIScreenDidConnectNotification
+                 object:nil];
+    [center addObserver:self
+               selector:@selector(handleScreenDidDisconnectNotification:)
+                   name:UIScreenDidDisconnectNotification
+                 object:nil];
+}
+
+- (void)discardScreenConnectionNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self
+                      name:UIScreenDidConnectNotification
+                    object:nil];
+    [center removeObserver:self
+                      name:UIScreenDidDisconnectNotification
+                    object:nil];
+}
+
+- (void)handleScreenDidConnectNotification:(NSNotification *)notification
+{
+    UIScreen *screen = notification.object;
+    if (!self.externalWindow) {
+        self.externalWindow = [self createWindowWithScreen:screen];
+    } else {
+        // TODO: how handle this case?
+        JMLog(@"external window already exists");
+    }
+}
+
+- (void)handleScreenDidDisconnectNotification:(NSNotification *)notification
+{
+    UIScreen *screen = notification.object;
+    if (screen == self.externalWindow.screen) {
+        [self destroyExternalWindow];
+    }
+}
 
 @end

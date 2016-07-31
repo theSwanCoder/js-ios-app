@@ -37,5 +37,6 @@
  @since 1.6
  */
 @interface JasperMobileAppDelegate : UIResponder <UIApplicationDelegate>
-
+@property (nonatomic, strong) UIWindow *externalWindow;
+- (BOOL)isExternalScreenAvailable;
 @end
