@@ -44,10 +44,10 @@ NSString *const kJMFiltersNetworkManagerTestReportWithoutReportOptions_URI = @"/
         JMFiltersNetworkManager *networkManager = [JMFiltersNetworkManager managerWithRestClient:self.testRestClient];
         [networkManager loadInputControlsWithResourceURI:kJMFiltersNetworkManagerTestReportWithFilters_URI
                                               completion:^(NSArray *inputControls, NSError *error) {
+                                                  [expectation fulfill];
                                                   if (error) {
-                                                      
+                                                      XCTFail(@"Error of fetching report's filters");
                                                   } else {
-                                                      [expectation fulfill];
                                                       XCTAssert(inputControls.count > 0, @"The test report should have some filters");
                                                   }
                                               }];    
@@ -68,13 +68,36 @@ NSString *const kJMFiltersNetworkManagerTestReportWithoutReportOptions_URI = @"/
         JMFiltersNetworkManager *networkManager = [JMFiltersNetworkManager managerWithRestClient:self.testRestClient];
         [networkManager loadInputControlsWithResourceURI:kJMFiltersNetworkManagerTestReportWithoutFilters_URI
                                               completion:^(NSArray *inputControls, NSError *error) {
+                                                  [expectation fulfill];
                                                   if (error) {
-                                                      
+                                                      XCTFail(@"Error of fetching report's filters");
                                                   } else {
-                                                      [expectation fulfill];
                                                       XCTAssert(inputControls.count == 0, @"The test report should not have any filters");
                                                   }
                                               }];    
+    }];    
+    [self waitForExpectationsWithTimeout:120.0 handler:^(NSError *error) {
+        if (error) {
+            NSLog(@"Timeout Error: %@", error);
+            XCTAssertNil(error);
+        }
+    }];
+}
+
+- (void)testThatManagerCanGetEmptyListOfReportOptions
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Get list of report options expectation"];
+    
+    [self.testRestClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult * _Nullable result) {
+        JMFiltersNetworkManager *networkManager = [JMFiltersNetworkManager managerWithRestClient:self.testRestClient];
+        [networkManager loadReportOptionsWithResourceURI:kJMFiltersNetworkManagerTestReportWithoutReportOptions_URI completion:^(NSArray * _Nullable reportOptions, NSError * _Nullable error) {
+            [expectation fulfill];
+            if (error) {
+                XCTFail(@"Error of fetching report's options");
+            } else {
+                XCTAssert(reportOptions.count == 0, @"The test report should not have any options");
+            }
+        }];    
     }];    
     [self waitForExpectationsWithTimeout:120.0 handler:^(NSError *error) {
         if (error) {
