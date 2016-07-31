@@ -69,9 +69,7 @@
     [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog_button_run_report", nil)
                           forState:UIControlStateNormal];
 
-    if (![JMUtils isServerProEdition]) {
-        self.navigationItem.rightBarButtonItem = nil;
-    }
+    [self setupNavigationItems];
 
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
 
@@ -123,6 +121,20 @@
                                              }
                                          }];
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+#pragma mark - Setup
+
+- (void)setupNavigationItems
+{
+    if (![JMUtils isServerProEdition]) {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
+
+    UIBarButtonItem *backButton = [self backButtonWithTitle:nil
+                                                     target:self
+                                                     action:@selector(backButtonTapped:)];
+    self.navigationItem.leftBarButtonItem = backButton;
 }
 
 #pragma mark - Actions
