@@ -56,6 +56,7 @@
 // TODO: temporary solution, remove in the next release
 @property (nonatomic, strong) JMFiltersNetworkManager *filtersNetworkManager;
 @property (nonatomic, assign) BOOL shouldShowFiltersPage;
+@property (nonatomic, copy) void(^runReportCompletion)(BOOL success, NSError *error);
 @end
 
 @implementation JMReportViewerVC
@@ -64,7 +65,7 @@
 #pragma mark - Lifecycle
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self removeObservers];
 }
 
 #pragma mark - UIViewController LifeCycle
@@ -81,8 +82,6 @@
 {
     [super viewDidLoad];
 
-    [self addObservers];
-
     self.filtersNetworkManager = [JMFiltersNetworkManager managerWithRestClient:self.restClient];
 
     [self setupSessionManager];
@@ -90,6 +89,24 @@
     [self.configurator setup];
     [[self reportLoader] setDelegate:self];
     [self setupStateManager];
+
+    __weak typeof(self)weakSelf = self;
+    self.runReportCompletion = ^(BOOL success, NSError *error) {
+        __strong typeof(self)strongSelf = weakSelf;
+        if (success) {
+            // Analytics
+            NSString *label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceLabelReportVisualize : kJMAnalyticsResourceLabelReportREST;
+            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                    kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
+                    kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
+                    kJMAnalyticsLabelKey    : label
+            }];
+            [strongSelf addObservers];
+            [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
+        } else {
+            [strongSelf handleError:error];
+        }
+    };
 
     [self startResourceViewing];
 }
@@ -192,6 +209,11 @@
                                              selector:@selector(reportDidUpdateParts)
                                                  name:JSReportPartsDidUpdateNotification
                                                object:[self report]];
+}
+
+- (void)removeObservers
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)reportDidUpdateCountOfPages
@@ -373,22 +395,8 @@
 
 - (void)runReportWithDestination:(JSReportDestination *)destination
 {
-    __weak typeof(self)weakSelf = self;
-    void(^completion)(BOOL , NSError *) = ^(BOOL success, NSError *error) {
-        __strong typeof(self)strongSelf = weakSelf;
-        if (success) {
-            // Analytics
-            NSString *label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceLabelReportVisualize : kJMAnalyticsResourceLabelReportREST;
-            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
-                    kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
-                    kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
-                    kJMAnalyticsLabelKey    : label
-            }];
-            [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
-        } else {
-            [strongSelf handleError:error];
-        }
-    };
+    // here we'll have a new instance of report
+    [self removeObservers];
 
     [[self stateManager] setupPageForState:JMReportViewerStateLoading];
 
@@ -397,38 +405,25 @@
         [[self reportLoader] runReport:report
                   initialDestination:destination
                    initialParameters:self.initialReportParameters
-                          completion:completion];
+                          completion:self.runReportCompletion];
     } else {
         [[self reportLoader] runReport:report
                          initialPage:@(destination.page)
                    initialParameters:self.initialReportParameters
-                          completion:completion];
+                          completion:self.runReportCompletion];
     }
 }
 
 - (void)runReportWithReportURI:(NSString *)reportURI
 {
-    [[self stateManager] setupPageForState:JMReportViewerStateLoading];
+    // here we'll have a new instance of report
+    [self removeObservers];
 
-    __weak typeof(self)weakSelf = self;
+    [[self stateManager] setupPageForState:JMReportViewerStateLoading];
     [[self reportLoader] runReportWithReportURI:reportURI
                                   initialPage:nil
                             initialParameters:nil
-                                   completion:^(BOOL success, NSError *error) {
-                                       __strong typeof(self)strongSelf = weakSelf;
-                                       if (success) {
-                                           // Analytics
-                                           NSString *label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceLabelReportVisualize : kJMAnalyticsResourceLabelReportREST;
-                                           [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
-                                                   kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
-                                                   kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
-                                                   kJMAnalyticsLabelKey    : label
-                                           }];
-                                           [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
-                                       } else {
-                                           [strongSelf handleError:error];
-                                       }
-                                   }];
+                                   completion:self.runReportCompletion];
 }
 
 - (void)updateReportWithParameters:(NSArray <JSReportParameter *> *)reportParameters
