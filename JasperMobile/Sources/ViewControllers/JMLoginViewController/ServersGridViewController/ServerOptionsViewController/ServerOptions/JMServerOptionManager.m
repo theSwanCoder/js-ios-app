@@ -92,7 +92,7 @@ NSString *const JMCacheReportsOptionDidChangeNotification = @"JMCacheReportsOpti
     JMServerOption *serverOption = self.availableOptions[@(JMServerOptionTypeAlias)];
     if (serverOption.optionValue && [[serverOption.optionValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
         // Check if alias is unique
-        if (![self.serverProfile isValidNameForServerProfile:serverOption.optionValue]) {
+        if (!self.isExistingServerProfile && ![self.serverProfile isValidNameForServerProfile:serverOption.optionValue]) {
             isValidData = NO;
             serverOption.errorString = JMCustomLocalizedString(@"servers_name_errmsg_exists", nil);
         }
