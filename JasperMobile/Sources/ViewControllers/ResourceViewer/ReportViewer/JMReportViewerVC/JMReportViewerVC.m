@@ -51,6 +51,7 @@
 #import "JMReportChartType.h"
 #import "JMReportChartTypesVC.h"
 #import "JasperMobileAppDelegate.h"
+#import "JMReportViewerExternalScreenManager.h"
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
 @property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
@@ -548,6 +549,11 @@
     return self.configurator.stateManager;
 }
 
+- (JMReportViewerExternalScreenManager *)externalScreenManager
+{
+    return self.configurator.externalScreenManager;
+}
+
 - (JMResourceViewerSessionManager *)createSessionManager
 {
     return [JMResourceViewerSessionManager new];
@@ -894,13 +900,13 @@
 - (void)showOnTV
 {
     [[self stateManager] setupPageForState:JMReportViewerStateResourceOnWExternalWindow];
-
+    [[self externalScreenManager] showContentOnTV];
 }
 
 - (void)switchFromTV
 {
     [[self stateManager] setupPageForState:JMReportViewerStateResourceReady];
-
+    [[self externalScreenManager] backContentOnDevice];
 }
 
 @end

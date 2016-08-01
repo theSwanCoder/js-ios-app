@@ -42,6 +42,7 @@
 #import "JMResourceViewerDocumentManager.h"
 #import "JMUtils.h"
 #import "NSObject+Additions.h"
+#import "JMReportViewerExternalScreenManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMReportLoaderProtocol> reportLoader;
@@ -106,6 +107,7 @@
     _hyperlinksManager = [self createHyperlinksManager];
     _hyperlinksManager.delegate = self.stateManager;
     _documentManager = [self createDocumentManager];
+    _externalScreenManager = [self createExternaScreenManager];
 }
 
 - (JMReportViewerStateManager *)createStateManager
@@ -136,6 +138,11 @@
 - (JMResourceViewerDocumentManager *)createDocumentManager
 {
     return [JMResourceViewerDocumentManager new];
+}
+
+- (JMReportViewerExternalScreenManager *)createExternaScreenManager
+{
+    return [JMReportViewerExternalScreenManager new];
 }
 
 @end
