@@ -43,6 +43,8 @@
 #import "NSObject+Additions.h"
 #import "JMCoreDataManager.h"
 
+NSString *const JMAppDelegateWillDestroyExternalWindowNotification = @"JMAppDelegateWillDestroyExternalWindowNotification";
+
 static NSString * const kGAITrackingID      = @"UA-57445224-1";
 static NSString * const kGAITrackingDebugID = @"UA-76950527-1";
 static const NSInteger kSplashViewTag = 100;
@@ -250,6 +252,8 @@ static const NSInteger kSplashViewTag = 100;
 - (void)destroyExternalWindow
 {
     JMLog(@"%@", NSStringFromSelector(_cmd));
+    [[NSNotificationCenter defaultCenter] postNotificationName:JMAppDelegateWillDestroyExternalWindowNotification
+                                                        object:nil];
     self.externalWindow = nil;
 }
 

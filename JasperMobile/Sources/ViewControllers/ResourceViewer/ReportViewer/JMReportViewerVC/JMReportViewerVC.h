@@ -44,4 +44,7 @@
 @property (nonatomic, strong) NSArray <JSReportParameter *> *initialReportParameters;
 @property (nonatomic, strong) JSReportDestination *initialDestination;
 - (JSReport *)report;
+
+- (void)showOnTV;
+- (void)switchFromTV;
 @end

@@ -28,7 +28,6 @@
 #import "JMReportViewerExternalScreenManager.h"
 #import "JMUtils.h"
 #import "JMExternalWindowControlsVC.h"
-#import "JMLocalization.h"
 #import "UIView+Additions.h"
 #import "JasperMobileAppDelegate.h"
 #import "JMBaseResourceView.h"
@@ -51,6 +50,23 @@
         [self externalScreenWindow].backgroundColor = [UIColor blackColor];
     }
     [self removeObservers];
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(externalScreenWindowWillBeDestroy:)
+                                                     name:JMAppDelegateWillDestroyExternalWindowNotification
+                                                   object:nil];
+    }
+    return self;
+}
+
+- (void)externalScreenWindowWillBeDestroy:(NSNotification *)notification
+{
+    [self.controller switchFromTV];
 }
 
 #pragma mark - Public API
