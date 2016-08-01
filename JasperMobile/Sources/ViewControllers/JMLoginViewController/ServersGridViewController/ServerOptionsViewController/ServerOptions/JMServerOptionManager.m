@@ -68,8 +68,8 @@ NSString *const JMCacheReportsOptionDidChangeNotification = @"JMCacheReportsOpti
     self.serverProfile.cacheReports = @(cacheReportsNewValue);
     if (cacheReportsCurrentValue != cacheReportsNewValue) {
         // POST notification
-        [[NSNotificationCenter defaultCenter] postNotificationName:JMCacheReportsOptionDidChangeNotification
-                                                            object:self.serverProfile];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:JMCacheReportsOptionDidChangeNotification
+//                                                            object:self.serverProfile];
     }
 #endif
     

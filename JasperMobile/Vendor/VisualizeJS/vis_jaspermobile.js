@@ -1259,9 +1259,26 @@ JasperMobile.VIS.Report.privateAPI = {
 };
 JasperMobile.VIS.Report.API = {
     run: function(params) {
+        JasperMobile.Callback.log("run report");
         JasperMobile.VIS.Report.Helpers.isAmber = params["is_for_6_0"]; // TODO: replace with switch
+        var shouldUseCache = params["shouldUseCache"];
+        if (shouldUseCache && JasperMobile.containerManager.containers == undefined) {
+            JasperMobile.containerManager.setContainers(
+                {
+                    "containers" : [
+                        {
+                            "name" : "container",
+                            "isActive" : false
+                        }
+                        ]
+                });
+        } else if (!shouldUseCache && JasperMobile.containerManager.containers != undefined) {
+            JasperMobile.containerManager.removeAllContainers();
+            JasperMobile.VIS.Report.manager.removeAllReports();
+        }
 
         if (JasperMobile.VIS.Report.manager.containsReport(params["uri"])) {
+            JasperMobile.Callback.log("from cache");
             JasperMobile.VIS.Report.manager.setActiveReport(params["uri"]);
             if (JasperMobile.VIS.Report.state.activeReport.pages() == 1) {
                 JasperMobile.VIS.Report.Helpers.success(JasperMobile.VIS.Report.state.activeReport.object.data());
@@ -1272,7 +1289,9 @@ JasperMobile.VIS.Report.API = {
                 );
             }
         } else {
+            JasperMobile.Callback.log("fresh run");
             if (JasperMobile.containerManager.shouldReuseContainers()) {
+                JasperMobile.Callback.log("save into cache");
                 // Choose other container
                 JasperMobile.containerManager.changeActiveContainer(function(container) {
                     if (container != undefined) {
@@ -1282,6 +1301,7 @@ JasperMobile.VIS.Report.API = {
                     }
                 });
             } else {
+                JasperMobile.Callback.log("without cache");
                 JasperMobile.containerManager.chooseDefaultContainer();
             }
             visualize(

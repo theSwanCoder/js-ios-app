@@ -36,6 +36,7 @@
 #import "JMUtils.h"
 #import "EKMapper.h"
 #import "JMReportChartType.h"
+#import "JMServerProfile+Helpers.h"
 
 @interface JMVisualizeReportLoader()
 @property (nonatomic, assign, readwrite) JSReportLoaderState state;
@@ -502,6 +503,13 @@ initialDestination:(nullable JSReportDestination *)destination
     }
 
     self.state = JSReportLoaderStateLoading;
+
+    BOOL shouldUseCache = NO;
+    JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    if (activeProfile.cacheReports.boolValue) {
+        shouldUseCache = YES;
+    }
+
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.run"
                                                                inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters: @{
@@ -509,6 +517,7 @@ initialDestination:(nullable JSReportDestination *)destination
                                                                         @"params"     : [self configureParameters:parameters],
                                                                         @"pages"      : pages,
                                                                         @"is_for_6_0" : @([JMUtils isServerAmber]),
+                                                                        @"shouldUseCache" : @(shouldUseCache),
                                                                 }];
     __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request

@@ -101,10 +101,10 @@
                                                                                      if (error) {
                                                                                          JMLog(@"Error of loading scripts: %@", error);
                                                                                      } else {
-                                                                                         JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:weakSelf.restClient.serverProfile];
-                                                                                         if (activeProfile.cacheReports.boolValue) {
-                                                                                             [weakSelf createContainers];
-                                                                                         }
+//                                                                                         JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:weakSelf.restClient.serverProfile];
+//                                                                                         if (activeProfile.cacheReports.boolValue) {
+//                                                                                             [weakSelf createContainers];
+//                                                                                         }
                                                                                          weakSelf.state = JMWebEnvironmentStateEnvironmentReady;
                                                                                      }
                                                                                  }];
