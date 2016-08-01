@@ -91,6 +91,7 @@
     [self.configurator setup];
     [[self reportLoader] setDelegate:self];
     [self setupStateManager];
+    [self setupExternalScreenManager];
 
     __weak typeof(self)weakSelf = self;
     self.runReportCompletion = ^(BOOL success, NSError *error) {
@@ -178,6 +179,11 @@
     [self stateManager].controller = self;
     [self stateManager].delegate = self;
     [[self stateManager] setupPageForState:JMReportViewerStateInitial];
+}
+
+- (void)setupExternalScreenManager
+{
+    [self externalScreenManager].controller = self;
 }
 
 #pragma mark - Custom accessors
@@ -659,7 +665,7 @@
 {
     JMMenuActionsViewAction disabledAction = JMMenuActionsViewAction_None;
     if ([self stateManager].state == JMReportViewerStateResourceNotExist) {
-        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ShowExternalDisplay;
+        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule | JMMenuActionsViewAction_Print;
     }
     return disabledAction;
 }

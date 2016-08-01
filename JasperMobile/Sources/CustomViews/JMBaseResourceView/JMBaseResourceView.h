@@ -32,9 +32,16 @@
 
 @import UIKit;
 
+extern NSString *const JMResourceContentViewDidMoveToSuperViewNotification;
+extern NSString *const JMResourceContentViewDidLayoutSubviewsNotification;
+
+@interface JMResourceContentView : UIView
+@end
+
 @interface JMBaseResourceView : UIView
 @property(nonatomic, weak) IBOutlet UIView *topView;
-@property(nonatomic, weak) IBOutlet UIView *contentView;
+@property(nonatomic, weak) IBOutlet UIView *container;
+@property(nonatomic, weak) IBOutlet JMResourceContentView *contentView;
 @property(nonatomic, weak) IBOutlet UIView *bottomView;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topViewTopConstraint;
