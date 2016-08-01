@@ -100,6 +100,10 @@ static const NSInteger kSplashViewTag = 100;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    if ([self isExternalScreenAvailable]) {
+        UIScreen *externalScreen = [UIScreen screens][1];
+        self.externalWindow = [self createWindowWithScreen:externalScreen];
+    }
     [self setupScreenConnectionNotifications];
     [self removeSplashView];
 
@@ -142,6 +146,7 @@ static const NSInteger kSplashViewTag = 100;
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [self discardScreenConnectionNotifications];
+    [self destroyExternalWindow];
     [self addSplashView];
     [[JMExportManager sharedInstance] cancelAll];
 }
@@ -223,11 +228,13 @@ static const NSInteger kSplashViewTag = 100;
 
 - (BOOL)isExternalScreenAvailable
 {
-    return self.externalWindow != nil;
+    // TODO: investigate a case when count more than 2
+    return [UIScreen screens].count == 2;
 }
 
 - (UIWindow *)createWindowWithScreen:(UIScreen *)screen
 {
+    JMLog(@"%@", NSStringFromSelector(_cmd));
     UIWindow *window = [UIWindow new];
     window.clipsToBounds = YES;
     window.backgroundColor = [UIColor whiteColor];
@@ -242,6 +249,7 @@ static const NSInteger kSplashViewTag = 100;
 
 - (void)destroyExternalWindow
 {
+    JMLog(@"%@", NSStringFromSelector(_cmd));
     self.externalWindow = nil;
 }
 
