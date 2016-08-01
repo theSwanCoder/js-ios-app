@@ -106,7 +106,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
     [self runReport:report
  initialDestination:destination
   initialParameters:initialParameters
-         completion:completion];
+         completion:[completion copy]];
 
 }
 
@@ -123,7 +123,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
     [self runReport:report
         initialPage:initialPage
   initialParameters:initialParameters
-         completion:completion];
+         completion:[completion copy]];
 }
 
 - (void)fetchPage:(nonnull NSNumber *)page
@@ -295,7 +295,7 @@ initialDestination:(nullable JSReportDestination *)destination
     self.state = JSReportLoaderStateConfigured;
     [self freshLoadReportWithDestination:destination
                               parameters:initialParameters
-                              completion:completion];
+                              completion:[completion copy]];
 }
 
 - (void)navigateToBookmark:(nonnull JSReportBookmark *)bookmark
@@ -380,11 +380,12 @@ initialDestination:(nullable JSReportDestination *)destination
 - (void)resetWithCompletion:(JSReportLoaderBaseCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JSReportLoaderBaseCompletionBlock heapBlock = [completion copy];
     [self destroyWithCompletion:^{
         self.report = nil;
         self.state = JSReportLoaderStateInitial;
-        if (completion) {
-            completion();
+        if (heapBlock) {
+            heapBlock();
         }
     }];
 }
@@ -397,6 +398,7 @@ initialDestination:(nullable JSReportDestination *)destination
     }
 
     [self removeListenersForVisualizeEvents];
+    JSReportLoaderBaseCompletionBlock heapBlock = [completion copy];
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.destroy"
                                                                inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:nil];
@@ -410,8 +412,8 @@ initialDestination:(nullable JSReportDestination *)destination
             JMLog(@"callback: %@", parameters);
             self.state = JSReportLoaderStateInitial;
         }
-        if (completion) {
-            completion();
+        if (heapBlock) {
+            heapBlock();
         }
     }];
 }
@@ -428,6 +430,7 @@ initialDestination:(nullable JSReportDestination *)destination
 
 - (void)fetchAvailableChartTypesWithCompletion:(void(^__nonnull)(NSArray <JMReportChartType *>*, NSError *))completion
 {
+    void(^heapBlock)(NSArray <JMReportChartType *>*, NSError *) = [completion copy];
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.availableChartTypes"
                                                                inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:nil];
@@ -435,12 +438,12 @@ initialDestination:(nullable JSReportDestination *)destination
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:^(NSDictionary *params, NSError *error) {
                                         if (error) {
-                                            completion(nil, error);
+                                            heapBlock(nil, error);
                                         } else {
                                             NSArray *rawChartsData = params[@"chart"];
                                             JMLog(@"rawChartData: %@", rawChartsData);
                                             if (rawChartsData) {
-                                                completion([weakSelf parseReportChartTypesFromRawData:rawChartsData], nil);
+                                                heapBlock([weakSelf parseReportChartTypesFromRawData:rawChartsData], nil);
                                             }
                                         }
                                     }];
@@ -448,6 +451,8 @@ initialDestination:(nullable JSReportDestination *)destination
 
 - (void)updateComponent:(JSReportComponent *)component withNewChartType:(JMReportChartType *)chartType completion:(JSReportLoaderCompletionBlock __nullable)completion
 {
+    JSReportLoaderCompletionBlock heapBlock = [completion copy];
+
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.updateChartType"
                                                                inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:@{
@@ -460,9 +465,9 @@ initialDestination:(nullable JSReportDestination *)destination
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"params: %@", params);
                                         if (error) {
-                                            completion(NO, error);
+                                            heapBlock(NO, error);
                                         } else {
-                                            completion(YES, nil);
+                                            heapBlock(YES, nil);
                                         }
                                     }];
 }

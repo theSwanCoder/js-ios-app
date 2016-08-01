@@ -30,8 +30,9 @@
 @since 2.6
 */
 
-@import Foundation;
+@import UIKit;
 
 @interface JMReportChartType : NSObject
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, strong, readonly) NSString *imageName;
 @end

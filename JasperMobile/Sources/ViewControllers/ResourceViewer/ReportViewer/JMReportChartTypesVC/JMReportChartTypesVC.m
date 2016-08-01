@@ -54,6 +54,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ReportChartTypeCell" forIndexPath:indexPath];
     JMReportChartType *chartType = self.chartTypes[indexPath.row];
     cell.textLabel.text = chartType.name;
+    cell.imageView.image = [UIImage imageNamed:chartType.imageName];
     return cell;
 }
 
