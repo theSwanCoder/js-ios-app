@@ -104,7 +104,6 @@
                     kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
                     kJMAnalyticsLabelKey    : label
             }];
-            [strongSelf addObservers];
             [[strongSelf stateManager] setupPageForState:JMReportViewerStateResourceReady];
         } else {
             [strongSelf handleError:error];
@@ -409,6 +408,8 @@
     [[self stateManager] setupPageForState:JMReportViewerStateLoading];
 
     JSReport *report = [self.resource modelOfResource];
+    // observers are tied to concrete report instance
+    [self addObservers];
     if ([[self reportLoader] respondsToSelector:@selector(runReport:initialDestination:initialParameters:completion:)]) {
         [[self reportLoader] runReport:report
                   initialDestination:destination
@@ -428,10 +429,16 @@
     [self removeObservers];
 
     [[self stateManager] setupPageForState:JMReportViewerStateLoading];
-    [[self reportLoader] runReportWithReportURI:reportURI
-                                  initialPage:nil
-                            initialParameters:nil
-                                   completion:self.runReportCompletion];
+
+    JSResourceLookup *resourceLookup = [JSResourceLookup new];
+    resourceLookup.uri = reportURI;
+    JSReport *report = [JSReport reportWithResourceLookup:resourceLookup];
+    // observers are tied to concrete report instance
+    [self addObservers];
+    [[self reportLoader] runReport:report
+                       initialPage:nil
+                 initialParameters:self.initialReportParameters
+                        completion:self.runReportCompletion];
 }
 
 - (void)updateReportWithParameters:(NSArray <JSReportParameter *> *)reportParameters
