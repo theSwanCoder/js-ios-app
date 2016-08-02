@@ -147,6 +147,18 @@
 		935415291D1437CB00A487D8 /* JMReportPartViewToolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 935415281D1437CB00A487D8 /* JMReportPartViewToolbar.xib */; };
 		9354152D1D17F1AD00A487D8 /* JMBaseResourceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9354152C1D17F1AD00A487D8 /* JMBaseResourceView.m */; };
 		9354152F1D17F47100A487D8 /* JMBaseResourceView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9354152E1D17F47100A487D8 /* JMBaseResourceView.xib */; };
+		935C33671D50C0B500C68CD7 /* JMDashboardViewerExternalScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478C6F08A763D5B558A7AC /* JMDashboardViewerExternalScreenManager.m */; };
+		935C33681D50C0C600C68CD7 /* JMReportViewerExternalScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478A4726DA8149ED49922B /* JMReportViewerExternalScreenManager.m */; };
+		935C33691D50C0D800C68CD7 /* JMResourceViewerExternalScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478199F934D98C845FEC41 /* JMResourceViewerExternalScreenManager.m */; };
+		935C336A1D50C0DF00C68CD7 /* JMReportChartType.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478F3668C948E07F11CB23 /* JMReportChartType.m */; };
+		935C336B1D50C0E200C68CD7 /* JMReportChartTypesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A147812C5A2218C0E412E42B /* JMReportChartTypesVC.m */; };
+		935C336C1D50C13100C68CD7 /* JasperMobileAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14BE1AA756BD0021A915 /* JasperMobileAppDelegate.m */; };
+		935C336D1D50C15700C68CD7 /* JMAppUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFA21AAF2CFB00DD072C /* JMAppUpdater.m */; };
+		935C336E1D50C16500C68CD7 /* JMExternalWindowDashboardControlsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */; };
+		935C336F1D50C16800C68CD7 /* JMExternalWindowDashboardControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93826C7C1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m */; };
+		935C33701D50C16A00C68CD7 /* JMExternalWindowControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478E3C1428657C98ECC2A2 /* JMExternalWindowControlsVC.m */; };
+		935C33711D50C18300C68CD7 /* JMSavedResources.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF9A1AAF2CC900DD072C /* JMSavedResources.m */; };
+		935C33721D50C1AA00C68CD7 /* JMBaseResourceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9354152C1D17F1AD00A487D8 /* JMBaseResourceView.m */; };
 		936A1B971C22B72C00559F16 /* EULA.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 936A1B961C22B72C00559F16 /* EULA.pdf */; };
 		93732E2D1C75F2050065B972 /* JMBaseUITestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */; };
 		93826C7E1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93826C7C1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m */; };
@@ -4002,6 +4014,7 @@
 				93DB0C8B1D4CC38C00B94469 /* JMFiltersNetworkManagerTests.m in Sources */,
 				93DB0CBD1D4D0FDA00B94469 /* JMVisualizeReportLoader.m in Sources */,
 				93DB0C911D4CCD3200B94469 /* JMLocalization.m in Sources */,
+				935C336F1D50C16800C68CD7 /* JMExternalWindowDashboardControlsVC.m in Sources */,
 				93DB0C8D1D4CCA3E00B94469 /* JMHTMLParser.m in Sources */,
 				93DB0CAA1D4CDBEE00B94469 /* JMResourceViewerShareManager.m in Sources */,
 				93DB0CB81D4D0F8800B94469 /* JMServerOption.m in Sources */,
@@ -4011,8 +4024,10 @@
 				93DB0CCE1D4D12AF00B94469 /* JMJavascriptResponse.m in Sources */,
 				93DB0CBB1D4D0FC000B94469 /* JMThemesManager.m in Sources */,
 				93DB0CBE1D4D0FE800B94469 /* JMWebViewManager.m in Sources */,
+				935C336A1D50C0DF00C68CD7 /* JMReportChartType.m in Sources */,
 				93DB0CAD1D4CDC0E00B94469 /* JMServerOptionManager.m in Sources */,
 				93DB0CD11D4D12D700B94469 /* PopoverView.m in Sources */,
+				935C33701D50C16A00C68CD7 /* JMExternalWindowControlsVC.m in Sources */,
 				93DB0C991D4CD1FC00B94469 /* JMResourceLoaderOption.m in Sources */,
 				93DB0CC91D4D124700B94469 /* JMVisualizeManager.m in Sources */,
 				93F26A1C1C9BF85B0069CD5D /* JMHTMLParserTests.m in Sources */,
@@ -4026,6 +4041,7 @@
 				93DB0CB61D4D0F7000B94469 /* JMResourceViewerMenuHelper.m in Sources */,
 				93DB0CA11D4CDB7100B94469 /* JMLegacyDashboardLoader.m in Sources */,
 				93DB0CA61D4CDBBB00B94469 /* JMResourceViewerHyperlinksManager.m in Sources */,
+				935C33691D50C0D800C68CD7 /* JMResourceViewerExternalScreenManager.m in Sources */,
 				93DB0CA91D4CDBE300B94469 /* JMResourceViewerSessionManager.m in Sources */,
 				93DB0CAB1D4CDBFC00B94469 /* JMResourceViewerStateManager.m in Sources */,
 				93DB0C9E1D4CD60000B94469 /* JMCancelRequestPopup.m in Sources */,
@@ -4035,11 +4051,15 @@
 				93DB0C9F1D4CD60C00B94469 /* JMDashboardViewerStateManager.m in Sources */,
 				93DB0CC51D4D11DF00B94469 /* JMBaseWebEnvironment.m in Sources */,
 				93DB0CA71D4CDBCD00B94469 /* JMResourceViewerInfoPageManager.m in Sources */,
+				935C33711D50C18300C68CD7 /* JMSavedResources.m in Sources */,
 				93DB0CAE1D4CDC1A00B94469 /* JMServerProfile.m in Sources */,
 				93DB0CC61D4D122F00B94469 /* JMJavascriptEvent.m in Sources */,
+				935C33671D50C0B500C68CD7 /* JMDashboardViewerExternalScreenManager.m in Sources */,
+				935C33681D50C0C600C68CD7 /* JMReportViewerExternalScreenManager.m in Sources */,
 				93DB0CB31D4D0F3B00B94469 /* JMJavascriptRequest.m in Sources */,
 				93DB0CC81D4D123C00B94469 /* JMJavascriptRequestTask.m in Sources */,
 				93DB0C8F1D4CCAD200B94469 /* JMResourcesListLoader.m in Sources */,
+				935C33721D50C1AA00C68CD7 /* JMBaseResourceView.m in Sources */,
 				93DB0CB41D4D0F4600B94469 /* JMMainNavigationController.m in Sources */,
 				93DB0CCD1D4D129D00B94469 /* JMAsyncTask.m in Sources */,
 				93DB0C941D4CD16800B94469 /* JMCoreDataManager.m in Sources */,
@@ -4048,9 +4068,13 @@
 				93DB0CC31D4D112500B94469 /* JMVIZWebEnvironment.m in Sources */,
 				93DB0C8C1D4CC77400B94469 /* JMFiltersNetworkManager.m in Sources */,
 				93DB0CA31D4CDB8600B94469 /* JMPopupView.m in Sources */,
+				935C336C1D50C13100C68CD7 /* JasperMobileAppDelegate.m in Sources */,
+				935C336D1D50C15700C68CD7 /* JMAppUpdater.m in Sources */,
 				93DB0C971D4CD1DC00B94469 /* JMLoginViewController.m in Sources */,
+				935C336E1D50C16500C68CD7 /* JMExternalWindowDashboardControlsTableViewCell.m in Sources */,
 				93DB0CCC1D4D127700B94469 /* JMWebViewFabric.m in Sources */,
 				93DB0CA51D4CDBAF00B94469 /* JMResourceViewerDocumentManager.m in Sources */,
+				935C336B1D50C0E200C68CD7 /* JMReportChartTypesVC.m in Sources */,
 				93DB0CAF1D4D0E9900B94469 /* JMFavorites.m in Sources */,
 				93DB0CBC1D4D0FCB00B94469 /* JMVisDashboardLoader.m in Sources */,
 				93DB0CC71D4D123200B94469 /* JMJavascriptRequestExecutor.m in Sources */,
