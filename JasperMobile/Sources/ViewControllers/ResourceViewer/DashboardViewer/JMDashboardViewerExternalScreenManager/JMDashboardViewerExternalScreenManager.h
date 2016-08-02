@@ -21,7 +21,7 @@
  */
 
 //
-//  JMDashboardViewerStateManager.h
+//  JMDashboardViewerExternalScreenManager.h
 //  TIBCO JasperMobile
 //
 
@@ -30,26 +30,9 @@
 @since 2.6
 */
 
-#import "JMResourceViewerToolbarsHelper.h"
-#import "JMResourceViewerStateManager.h"
-#import "JMResourceViewerHyperlinksManager.h"
-
+#import "JMResourceViewerExternalScreenManager.h"
 @class JMDashboardViewerVC;
 
-typedef NS_ENUM(NSInteger, JMDashboardViewerState) {
-    JMDashboardViewerStateInitial,
-    JMDashboardViewerStateLoading,
-    JMDashboardViewerStateResourceReady,
-    JMDashboardViewerStateResourceFailed,
-    JMDashboardViewerStateResourceNotExist,
-    JMDashboardViewerStateNestedResource,
-    JMDashboardViewerStateResourceOnWExternalWindow,
-    JMDashboardViewerStateMaximizedDashlet,
-    JMDashboardViewerStateDestroy
-};
-
-@interface JMDashboardViewerStateManager : JMResourceViewerStateManager <JMResourceViewerHyperlinksManagerDelegate>
-@property (nonatomic, assign, readonly) JMDashboardViewerState state;
-@property (nonatomic, copy, nullable) void(^minimizeDashletActionBlock)(void);
-- (void)setupPageForState:(JMDashboardViewerState)state;
+@interface JMDashboardViewerExternalScreenManager : JMResourceViewerExternalScreenManager
+@property (nonatomic, weak, nullable) JMDashboardViewerVC *controller;
 @end

@@ -45,6 +45,7 @@
 #import "JMResourceViewerSessionManager.h"
 #import "JMUtils.h"
 #import "NSObject+Additions.h"
+#import "JMDashboardViewerExternalScreenManager.h"
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMDashboardLoader> dashboardLoader;
@@ -121,6 +122,7 @@
     _hyperlinksManager.delegate = self.stateManager;
     _documentManager = [self createDocumentManager];
     _sessionManager = [self createSessionManager];
+    _externalScreenManager = [self createExternalScreenManager];
 }
 
 - (JMDashboardViewerStateManager *)createStateManager
@@ -156,6 +158,11 @@
 - (JMResourceViewerSessionManager *)createSessionManager
 {
     return [JMResourceViewerSessionManager new];
+}
+
+- (JMDashboardViewerExternalScreenManager *)createExternalScreenManager
+{
+    return [JMDashboardViewerExternalScreenManager new];
 }
 
 @end

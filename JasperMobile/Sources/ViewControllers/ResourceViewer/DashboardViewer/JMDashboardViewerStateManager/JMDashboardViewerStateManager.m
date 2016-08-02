@@ -103,6 +103,10 @@
             [self setupNavigationItemsForNestedResource];
             break;
         }
+        case JMDashboardViewerStateResourceOnWExternalWindow: {
+            [self setupNavigationItems];
+            break;
+        }
         case JMDashboardViewerStateDestroy: {
             break;
         }
@@ -141,6 +145,9 @@
         }
         case JMDashboardViewerStateNestedResource: {
             [self hideProgress];
+            break;
+        }
+        case JMDashboardViewerStateResourceOnWExternalWindow: {
             break;
         }
         case JMDashboardViewerStateDestroy: {

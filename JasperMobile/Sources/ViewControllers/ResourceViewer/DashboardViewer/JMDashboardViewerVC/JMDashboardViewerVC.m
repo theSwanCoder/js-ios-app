@@ -29,17 +29,13 @@
 #import "JMDashboardViewerVC.h"
 #import "JMDashboardViewerConfigurator.h"
 #import "JMDashboardLoader.h"
-#import "JMReportViewerVC.h"
 #import "JMDashboard.h"
 #import "JMWebViewManager.h"
-#import "JMExternalWindowDashboardControlsVC.h"
-#import "JMDashboardParameter.h"
 #import "JMInputControlsViewController.h"
 #import "JMDashboardInputControlsVC.h"
 #import "JSRESTBase+JSRESTDashboard.h"
 #import "JSDashboardComponent.h"
 #import "JMWebEnvironment.h"
-
 #import "UIView+Additions.h"
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
@@ -55,6 +51,9 @@
 #import "JMUtils.h"
 #import "JMConstants.h"
 #import "UIAlertController+Additions.h"
+#import "JasperMobileAppDelegate.h"
+#import "JMDashboardViewerExternalScreenManager.h"
+#import "JMExternalWindowDashboardControlsVC.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMResourceViewerStateManagerDelegate>
 @end
@@ -89,6 +88,7 @@
     [self dashboardLoader].delegate = self;
     [self setupSessionManager];
     [self setupStateManager];
+    [self setupExternalScreenManager];
 
     [self startResourceViewing];
 }
@@ -147,6 +147,11 @@
     };
 }
 
+- (void)setupExternalScreenManager
+{
+    [self externalScreenManager].controller = self;
+}
+
 #pragma mark - Helpers
 
 - (id<JMDashboardLoader>)dashboardLoader
@@ -167,6 +172,11 @@
 - (JMDashboardViewerStateManager *)stateManager
 {
     return self.configurator.stateManager;
+}
+
+- (JMDashboardViewerExternalScreenManager *)externalScreenManager
+{
+    return self.configurator.externalScreenManager;
 }
 
 #pragma mark - JMResourceViewProtocol
@@ -412,9 +422,11 @@
     }
     availableAction |= JMMenuActionsViewAction_Share | JMMenuActionsViewAction_Print;
 
-//    if ([self isExternalScreenAvailable]) {
-//        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
-//    }
+    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    if ([appDelegate isExternalScreenAvailable]) {
+        // TODO: extend by considering other states
+        availableAction |= ([self stateManager].state == JMDashboardViewerStateResourceOnWExternalWindow) ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+    }
 
     if ([self isFiltersAvailable]) {
         availableAction |= JMMenuActionsViewAction_EditFilters;
@@ -459,6 +471,14 @@
         case JMMenuActionsViewAction_Share:{
             self.configurator.shareManager.controller = self;
             [self.configurator.shareManager shareContentView:[self contentView]];
+            break;
+        }
+        case JMMenuActionsViewAction_ShowExternalDisplay: {
+            [self showOnTV];
+            break;
+        }
+        case JMMenuActionsViewAction_HideExternalDisplay: {
+            [self switchFromTV];
             break;
         }
         default:{break;}
@@ -573,6 +593,52 @@
         additinalString = @" (Legacy)";
     }
     return additinalString;
+}
+
+#pragma mark - Work with external window
+- (void)showOnTV
+{
+    [[self stateManager] setupPageForState:JMDashboardViewerStateResourceOnWExternalWindow];
+    [[self externalScreenManager] showContentOnTV];
+}
+
+- (void)switchFromTV
+{
+    [[self stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+    [[self externalScreenManager] backContentOnDevice];
+}
+
+#pragma mark - JMExternalWindowDashboardControlsVCDelegate
+
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JSDashboardComponent *)component
+{
+    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashboardComponent:completion:)]) {
+        __weak __typeof(self) weakSelf = self;
+        [self.dashboardLoader maximizeDashboardComponent:component completion:^(BOOL success, NSError *error) {
+            __typeof(self) strongSelf = weakSelf;
+            if (error) {
+                [strongSelf handleError:error];
+            } else {
+                [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateMaximizedDashlet];
+            }
+        }];
+    }
+}
+
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JSDashboardComponent *)component
+{
+    if ([self.dashboardLoader respondsToSelector:@selector(minimizeDashboardComponent:completion:)]) {
+        __weak __typeof(self) weakSelf = self;
+        [self.dashboardLoader minimizeDashboardComponent:component completion:^(BOOL success, NSError *error) {
+            __typeof(self) strongSelf = weakSelf;
+            if (error) {
+                [strongSelf handleError:error];
+            } else {
+                strongSelf.navigationItem.title = strongSelf.resource.resourceLookup.label;
+                [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceOnWExternalWindow];
+            }
+        }];
+    }
 }
 
 @end

@@ -33,11 +33,15 @@
 
 #import "JMResourceViewerViewController.h"
 #import "JMResourceViewerProtocol.h"
+#import "JMExternalWindowDashboardControlsVC.h"
 
 @class JMDashboard;
 @class JMDashboardViewerConfigurator;
 
-@interface JMDashboardViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol>
+@interface JMDashboardViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
 - (JMDashboard *)dashboard;
+
+- (void)showOnTV;
+- (void)switchFromTV;
 @end

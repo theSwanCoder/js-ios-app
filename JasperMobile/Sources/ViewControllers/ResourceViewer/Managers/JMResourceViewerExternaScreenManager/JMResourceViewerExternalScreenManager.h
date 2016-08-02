@@ -21,7 +21,7 @@
  */
 
 //
-//  JMDashboardViewerStateManager.h
+//  JMResourceViewerExternalScreenManager.h
 //  TIBCO JasperMobile
 //
 
@@ -30,26 +30,16 @@
 @since 2.6
 */
 
-#import "JMResourceViewerToolbarsHelper.h"
-#import "JMResourceViewerStateManager.h"
-#import "JMResourceViewerHyperlinksManager.h"
+@import UIKit;
 
-@class JMDashboardViewerVC;
+@class JMBaseResourceView;
 
-typedef NS_ENUM(NSInteger, JMDashboardViewerState) {
-    JMDashboardViewerStateInitial,
-    JMDashboardViewerStateLoading,
-    JMDashboardViewerStateResourceReady,
-    JMDashboardViewerStateResourceFailed,
-    JMDashboardViewerStateResourceNotExist,
-    JMDashboardViewerStateNestedResource,
-    JMDashboardViewerStateResourceOnWExternalWindow,
-    JMDashboardViewerStateMaximizedDashlet,
-    JMDashboardViewerStateDestroy
-};
-
-@interface JMDashboardViewerStateManager : JMResourceViewerStateManager <JMResourceViewerHyperlinksManagerDelegate>
-@property (nonatomic, assign, readonly) JMDashboardViewerState state;
-@property (nonatomic, copy, nullable) void(^minimizeDashletActionBlock)(void);
-- (void)setupPageForState:(JMDashboardViewerState)state;
+@interface JMResourceViewerExternalScreenManager : NSObject
+- (void)showContentOnTV;
+- (void)backContentOnDevice;
+// Methods for overriding in child
+- (JMBaseResourceView *)resourceView; // Should override
+- (void)handleExternalScreenWillBeDestroy;
+- (void)handleContentIsOnExternalScreen;
+- (void)handleContentIsOnDevice;
 @end
