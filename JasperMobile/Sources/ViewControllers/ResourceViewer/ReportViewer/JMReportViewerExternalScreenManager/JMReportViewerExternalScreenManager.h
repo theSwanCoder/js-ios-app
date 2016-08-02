@@ -30,11 +30,9 @@
 @since 2.6
 */
 
-@import UIKit;
+#import "JMResourceViewerExternalScreenManager.h"
 #import "JMReportViewerVC.h"
 
-@interface JMReportViewerExternalScreenManager : NSObject
+@interface JMReportViewerExternalScreenManager : JMResourceViewerExternalScreenManager
 @property (nonatomic, weak, nullable) JMReportViewerVC *controller;
-- (void)showContentOnTV;
-- (void)backContentOnDevice;
 @end

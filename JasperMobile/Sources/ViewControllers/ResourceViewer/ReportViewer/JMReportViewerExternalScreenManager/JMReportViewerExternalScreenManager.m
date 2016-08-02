@@ -28,8 +28,6 @@
 #import "JMReportViewerExternalScreenManager.h"
 #import "JMUtils.h"
 #import "JMExternalWindowControlsVC.h"
-#import "UIView+Additions.h"
-#import "JasperMobileAppDelegate.h"
 #import "JMBaseResourceView.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMReportViewerConfigurator.h"
@@ -40,42 +38,13 @@
 
 @implementation JMReportViewerExternalScreenManager
 
-#pragma mark - Life Cycle
-
-- (void)dealloc
-{
-    if ([self externalScreenWindow].subviews.count > 0) {
-        UIView *contentView = [self externalScreenWindow].subviews.firstObject;
-        [contentView removeFromSuperview];
-        [self externalScreenWindow].backgroundColor = [UIColor blackColor];
-    }
-    [self removeObservers];
-}
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(externalScreenWindowWillBeDestroy:)
-                                                     name:JMAppDelegateWillDestroyExternalWindowNotification
-                                                   object:nil];
-    }
-    return self;
-}
-
-- (void)externalScreenWindowWillBeDestroy:(NSNotification *)notification
-{
-    [self.controller switchFromTV];
-}
-
 #pragma mark - Public API
 
 - (void)showContentOnTV
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 
-    [self showResourceViewOnTV];
+    [super showContentOnTV];
     [self showControlsViewOnDevice];
 }
 
@@ -83,31 +52,35 @@
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 
-    [self removeResourceViewFromTV];
+    [super backContentOnDevice];
     [self removeControlsViewFromDevice];
 }
 
+#pragma mark - Overridden
+
+- (JMBaseResourceView *)resourceView
+{
+    return (JMBaseResourceView *) self.controller.view;
+}
+
+- (void)handleExternalScreenWillBeDestroy
+{
+    [self.controller switchFromTV];
+}
+
+- (void)handleContentIsOnExternalScreen
+{
+    JMVisualizeReportLoader *reportLoader = self.controller.configurator.reportLoader;
+    [reportLoader fitReportViewToScreen];
+}
+
+- (void)handleContentIsOnDevice
+{
+    JMVisualizeReportLoader *reportLoader = self.controller.configurator.reportLoader;
+    [reportLoader fitReportViewToScreen];
+}
+
 #pragma mark - Helpers
-
-- (UIWindow *)externalScreenWindow
-{
-    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    UIWindow *externalScreenWindow = appDelegate.externalWindow;
-    return externalScreenWindow;
-}
-
-- (void)removeObservers
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)showResourceViewOnTV
-{
-    JMBaseResourceView *resourceView = (JMBaseResourceView *) self.controller.view;
-    UIView *contentView = resourceView.contentView;
-    [self addObserverForContentViewDidAddToExternalWindow:contentView];
-    [contentView removeFromSuperview];
-}
 
 - (void)showControlsViewOnDevice
 {
@@ -120,132 +93,10 @@
     [self.controller.view addSubview:self.controlsVC.view];
 }
 
-- (void)removeResourceViewFromTV
-{
-    UIView *contentView = [self externalScreenWindow].subviews.firstObject;
-    [self addObserverForContentViewDidAddToReportView:contentView];
-    [contentView removeFromSuperview];
-}
-
 - (void)removeControlsViewFromDevice
 {
     [self.controlsVC.view removeFromSuperview];
     self.controlsVC = nil;
-}
-
-#pragma mark - Notification Content View move into external window
-
-- (void)addObserverForContentViewDidAddToExternalWindow:(UIView *)contentView
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(contentViewDidAddToExternalWindow:)
-                                                 name:JMResourceContentViewDidMoveToSuperViewNotification
-                                               object:contentView];
-}
-
-- (void)removeObserverForContentViewDidAddToExternalWindow:(UIView *)contentView
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:JMResourceContentViewDidMoveToSuperViewNotification
-                                                  object:contentView];
-}
-
-- (void)contentViewDidAddToExternalWindow:(NSNotification *)notification
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    UIView *contentView = notification.object;
-    [self removeObserverForContentViewDidAddToExternalWindow:contentView];
-    [[self externalScreenWindow] fillWithView:contentView];
-    [self addObserverForContentViewDidLayoutInExternalWindow:contentView];
-}
-
-- (void)addObserverForContentViewDidLayoutInExternalWindow:(UIView *)contentView
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(contentViewDidLayoutInExternalWindow:)
-                                                 name:JMResourceContentViewDidLayoutSubviewsNotification
-                                               object:contentView];
-}
-
-- (void)removeObserverForContentViewDidLayoutInExternalWindow:(UIView *)contentView
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:JMResourceContentViewDidLayoutSubviewsNotification
-                                                  object:contentView];
-}
-
-- (void)contentViewDidLayoutInExternalWindow:(NSNotification *)notification
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    UIView *contentView = notification.object;
-    [self removeObserverForContentViewDidLayoutInExternalWindow:contentView];
-
-    // TODO: find other solution
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        JMLog(@"Show external window");
-        [self externalScreenWindow].backgroundColor = [UIColor whiteColor];
-        [self externalScreenWindow].hidden = NO;
-        JMVisualizeReportLoader *reportLoader = self.controller.configurator.reportLoader;
-        [reportLoader fitReportViewToScreen];
-    });
-}
-
-#pragma mark - Notification Content View move into report viewer
-
-- (void)addObserverForContentViewDidAddToReportView:(UIView *)contentView
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(contentViewDidAddToReportView:)
-                                                 name:JMResourceContentViewDidMoveToSuperViewNotification
-                                               object:contentView];
-}
-
-- (void)removeObserverForContentViewDidAddToReportView:(UIView *)contentView
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:JMResourceContentViewDidMoveToSuperViewNotification
-                                                  object:contentView];
-}
-
-- (void)contentViewDidAddToReportView:(NSNotification *)notification
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    UIView *contentView = notification.object;
-    [self removeObserverForContentViewDidAddToReportView:contentView];
-    JMBaseResourceView *resourceView = (JMBaseResourceView *) self.controller.view;
-    [resourceView.container fillWithView:contentView];
-    [self addObserverForContentViewDidLayoutInReportView:contentView];
-}
-
-- (void)addObserverForContentViewDidLayoutInReportView:(UIView *)contentView
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(contentViewDidLayoutInReportView:)
-                                                 name:JMResourceContentViewDidLayoutSubviewsNotification
-                                               object:contentView];
-}
-
-- (void)removeObserverForContentViewDidLayoutInReportView:(UIView *)contentView
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:JMResourceContentViewDidLayoutSubviewsNotification
-                                                  object:contentView];
-}
-
-- (void)contentViewDidLayoutInReportView:(NSNotification *)notification
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    UIView *contentView = notification.object;
-    [self removeObserverForContentViewDidLayoutInReportView:contentView];
-
-    // TODO: find other solution
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        JMLog(@"Hide external window");
-        [self externalScreenWindow].hidden = YES;
-        [self externalScreenWindow].backgroundColor = [UIColor blackColor];
-        JMVisualizeReportLoader *reportLoader = self.controller.configurator.reportLoader;
-        [reportLoader fitReportViewToScreen];
-    });
 }
 
 @end
