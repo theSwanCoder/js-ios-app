@@ -67,7 +67,7 @@
 #pragma mark - Lifecycle
 - (void)dealloc
 {
-    [self removeObservers];
+    [self removeAllObservers];
 }
 
 #pragma mark - UIViewController LifeCycle
@@ -90,6 +90,7 @@
 
     [self.configurator setup];
     [[self reportLoader] setDelegate:self];
+    [self addObservers];
     [self setupStateManager];
     [self setupExternalScreenManager];
 
@@ -201,6 +202,19 @@
 - (void)addObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportLoaderDidSetReport:)
+                                                 name:JSReportLoaderDidSetReportNotification
+                                               object:nil];
+}
+
+- (void)removeAllObservers
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)addReportPropertiesObservers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportDidUpdateCountOfPages)
                                                  name:JSReportCountOfPagesDidChangeNotification
                                                object:[self report]];
@@ -218,9 +232,20 @@
                                                object:[self report]];
 }
 
-- (void)removeObservers
+- (void)removeReportPropertiesObservers
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:JSReportCountOfPagesDidChangeNotification
+                                                  object:[self report]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:JSReportIsMutlipageDidChangedNotification
+                                                  object:[self report]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:JSReportBookmarksDidUpdateNotification
+                                                  object:[self report]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:JSReportPartsDidUpdateNotification
+                                                  object:[self report]];
 }
 
 - (void)reportDidUpdateCountOfPages
@@ -249,6 +274,11 @@
     if ([self reportHasParts]) {
         [[self stateManager] updatePageForToolbarState:JMResourceViewerToolbarStateTopVisible];
     }
+}
+
+- (void)reportLoaderDidSetReport:(NSNotification *)notification
+{
+    [self addReportPropertiesObservers];
 }
 
 #pragma mark - JMResourceViewProtocol
@@ -403,13 +433,10 @@
 - (void)runReportWithDestination:(JSReportDestination *)destination
 {
     // here we'll have a new instance of report
-    [self removeObservers];
+    [self removeReportPropertiesObservers];
 
     [[self stateManager] setupPageForState:JMReportViewerStateLoading];
-
     JSReport *report = [self.resource modelOfResource];
-    // observers are tied to concrete report instance
-    [self addObservers];
     if ([[self reportLoader] respondsToSelector:@selector(runReport:initialDestination:initialParameters:completion:)]) {
         [[self reportLoader] runReport:report
                   initialDestination:destination
@@ -426,19 +453,13 @@
 - (void)runReportWithReportURI:(NSString *)reportURI
 {
     // here we'll have a new instance of report
-    [self removeObservers];
+    [self removeReportPropertiesObservers];
 
     [[self stateManager] setupPageForState:JMReportViewerStateLoading];
-
-    JSResourceLookup *resourceLookup = [JSResourceLookup new];
-    resourceLookup.uri = reportURI;
-    JSReport *report = [JSReport reportWithResourceLookup:resourceLookup];
-    // observers are tied to concrete report instance
-    [self addObservers];
-    [[self reportLoader] runReport:report
-                       initialPage:nil
-                 initialParameters:self.initialReportParameters
-                        completion:self.runReportCompletion];
+    [[self reportLoader] runReportWithReportURI:reportURI
+                                    initialPage:nil
+                              initialParameters:nil
+                                     completion:self.runReportCompletion];
 }
 
 - (void)updateReportWithParameters:(NSArray <JSReportParameter *> *)reportParameters

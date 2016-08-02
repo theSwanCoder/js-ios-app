@@ -88,6 +88,15 @@
                              webEnvironment:webEnvironment];
 }
 
+#pragma mark - Custom Accessors
+
+- (void)setReport:(JSReport *)report
+{
+    _report = report;
+    [[NSNotificationCenter defaultCenter] postNotificationName:JSReportLoaderDidSetReportNotification
+                                                        object:report];
+}
+
 #pragma mark - JSReportLoaderProtocol Public API
 - (void)runReport:(nonnull JSReport *)report
       initialPage:(nullable NSNumber *)initialPage
