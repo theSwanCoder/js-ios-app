@@ -1917,7 +1917,8 @@ JasperMobile.VIS.Dashboard.PrivateAPI = {
             JasperMobile.Callback.log("Trying maximize dashelt without 'id'");
         }
     },
-    maximizeDashletForAmber: function (dashletId) {
+    maximizeDashletForAmber: function (parameters) {
+        var dashletId = parameters["identifier"];
         var maximizeButton = JasperMobile.VIS.Dashboard.Helpers._findDashletMaximizeButtonWithDashletId(dashletId);
         if (maximizeButton != null) {
             if (maximizeButton.disabled) {
@@ -1962,9 +1963,9 @@ JasperMobile.VIS.Dashboard.API = {
     },
     maximizeDashlet: function(parameters) {
         if (JasperMobile.VIS.Dashboard.state.isAmber) {
-            JasperMobile.VIS.Dashboard.PrivateAPI.maximizeDashletForAmber(dashletId);
+            JasperMobile.VIS.Dashboard.PrivateAPI.maximizeDashletForAmber(parameters);
         } else {
-            JasperMobile.VIS.Dashboard.PrivateAPI.maximizeDashlet(dashletId);
+            JasperMobile.VIS.Dashboard.PrivateAPI.maximizeDashlet(parameters);
         }
     },
     refresh: function() {
