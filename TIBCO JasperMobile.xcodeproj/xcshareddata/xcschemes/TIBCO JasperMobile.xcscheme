@@ -21,11 +21,11 @@
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
-            buildForTesting = "YES"
+            buildForTesting = "NO"
             buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9356EC961A30752800ACE2C6"
@@ -35,7 +35,7 @@
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
-            buildForTesting = "YES"
+            buildForTesting = "NO"
             buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
@@ -49,7 +49,7 @@
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
-            buildForTesting = "YES"
+            buildForTesting = "NO"
             buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
@@ -71,36 +71,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9356EC961A30752800ACE2C6"
-               BuildableName = "TIBCO JasperMobile Tests.xctest"
-               BlueprintName = "TIBCO JasperMobile Tests"
-               ReferencedContainer = "container:TIBCO JasperMobile.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "93DC8C381C6CCEEE000DEADF"
-               BuildableName = "TIBCO JasperMobileUITests.xctest"
-               BlueprintName = "TIBCO JasperMobileUITests"
-               ReferencedContainer = "container:TIBCO JasperMobile.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "930E18CD1CEC988C00CE5E10"
-               BuildableName = "TIBCO JasperMobile Performance UITests.xctest"
-               BlueprintName = "TIBCO JasperMobile Performance UITests"
-               ReferencedContainer = "container:TIBCO JasperMobile.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
