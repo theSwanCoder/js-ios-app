@@ -1255,6 +1255,13 @@ JasperMobile.VIS.Report.privateAPI = {
         report.object.updateComponent(parameters.componentId, parameters.chart)
             .done(success)
             .fail(fail);
+    },
+    searchText: function(report, parameters, success, fail) {
+        setTimeout(function(){
+                   report.object.search(parameters["text"])
+                   .done(success)
+                   .fail(fail);
+                   }, 200); // Bug fixed according to http://stackoverflow.com/questions/33240275/ios-9-wkwebview-yields-failed-to-load-resource-cancelled-where-ios-8-doesnt
     }
 };
 JasperMobile.VIS.Report.API = {
@@ -1415,6 +1422,22 @@ JasperMobile.VIS.Report.API = {
         JasperMobile.VIS.Report.privateAPI.executeOperation(
             undefined,
             "updateChartType",
+            params,
+            success
+        );
+    },
+    searchText: function(params, success) {
+        if (typeof(success) != "function") {
+        success = function(data) {
+            JasperMobile.Callback.log("success of searchText: " + JSON.stringify(data));
+            JasperMobile.Callback.callback("JasperMobile.VIS.Report.API.searchText", {
+                                           "data" : data
+                                           });
+            };
+        }
+        JasperMobile.VIS.Report.privateAPI.executeOperation(
+            undefined,
+            "searchText",
             params,
             success
         );

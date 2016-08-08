@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A254g" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gNe-8U-f8m">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gNe-8U-f8m">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -2653,6 +2653,7 @@ your business wherever you are.</string>
                         <segue destination="r1t-0l-AbT" kind="show" identifier="SaveReportViewControllerSegue" id="y8h-Nv-5bi"/>
                         <segue destination="mZ5-qt-wbc" kind="show" identifier="showBookmarks" id="ts6-X2-xMi"/>
                         <segue destination="s2j-R7-Avr" kind="show" identifier="showChartTypes" id="vc3-Jp-lW6"/>
+                        <segue destination="OzL-z9-Emz" kind="show" identifier="showReportSearch" id="UOG-JH-vVz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ofm-F6-HRL" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3084,7 +3085,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xkR-0b-GHJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1145" y="2051"/>
+            <point key="canvasLocation" x="1145" y="2080"/>
         </scene>
         <!--Report Options View Controller-->
         <scene sceneID="5QR-ji-3gc">
@@ -3410,7 +3411,76 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I7m-MV-4lJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-330" y="2080"/>
+            <point key="canvasLocation" x="-490" y="2080"/>
+        </scene>
+        <!--Report SearchVC-->
+        <scene sceneID="C8a-Em-zbW">
+            <objects>
+                <viewController storyboardIdentifier="JMReportSearchVC" id="OzL-z9-Emz" customClass="JMReportSearchVC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0j0-KF-mcN"/>
+                        <viewControllerLayoutGuide type="bottom" id="e7u-pR-1OU"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1jR-LL-Nc0">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar opaque="NO" contentMode="redraw" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jr1-cb-ChZ">
+                                <rect key="frame" x="5" y="10" width="590" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="X06-pE-0g7"/>
+                                </constraints>
+                                <color key="barTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="OzL-z9-Emz" id="y2o-1t-oQC"/>
+                                </connections>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="N8q-Ho-wVi">
+                                <rect key="frame" x="12" y="54" width="576" height="472"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="OzL-z9-Emz" id="PIf-7v-4GX"/>
+                                    <outlet property="delegate" destination="OzL-z9-Emz" id="by5-yh-MZz"/>
+                                </connections>
+                            </tableView>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results. Please Make Another Selection..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="vZp-Jp-2At" userLabel="Label">
+                                <rect key="frame" x="80" y="218" width="441" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="5ZZ-Pd-C1c"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="vZp-Jp-2At" firstAttribute="centerX" secondItem="1jR-LL-Nc0" secondAttribute="centerX" id="96C-lx-I7g"/>
+                            <constraint firstItem="jr1-cb-ChZ" firstAttribute="top" secondItem="0j0-KF-mcN" secondAttribute="bottom" constant="10" id="Lmt-Bc-MLu"/>
+                            <constraint firstAttribute="trailing" secondItem="jr1-cb-ChZ" secondAttribute="trailing" constant="5" id="Ubn-xZ-0Yz"/>
+                            <constraint firstItem="e7u-pR-1OU" firstAttribute="top" secondItem="N8q-Ho-wVi" secondAttribute="bottom" constant="10" id="VS7-7i-bl5"/>
+                            <constraint firstItem="N8q-Ho-wVi" firstAttribute="top" secondItem="jr1-cb-ChZ" secondAttribute="bottom" id="YZx-4V-ZFc"/>
+                            <constraint firstItem="vZp-Jp-2At" firstAttribute="leading" secondItem="1jR-LL-Nc0" secondAttribute="leadingMargin" constant="60" id="ejc-iG-t3D">
+                                <variation key="widthClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="N8q-Ho-wVi" firstAttribute="leading" secondItem="1jR-LL-Nc0" secondAttribute="leading" constant="12" id="exf-W6-DtZ"/>
+                            <constraint firstItem="N8q-Ho-wVi" firstAttribute="top" secondItem="jr1-cb-ChZ" secondAttribute="bottom" id="ext-Cg-gRk"/>
+                            <constraint firstItem="jr1-cb-ChZ" firstAttribute="leading" secondItem="1jR-LL-Nc0" secondAttribute="leading" constant="5" id="hbx-M5-FUs"/>
+                            <constraint firstItem="vZp-Jp-2At" firstAttribute="centerY" secondItem="1jR-LL-Nc0" secondAttribute="centerY" id="xy9-Sm-gqC"/>
+                            <constraint firstAttribute="trailing" secondItem="N8q-Ho-wVi" secondAttribute="trailing" constant="12" id="y4b-oN-jo4"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="noResultLabel" destination="vZp-Jp-2At" id="wKE-7P-FB0"/>
+                        <outlet property="searchBar" destination="jr1-cb-ChZ" id="tbt-WI-6UD"/>
+                        <outlet property="tableView" destination="N8q-Ho-wVi" id="PYb-LO-TEA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8HJ-nh-FRM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1941" y="2080"/>
         </scene>
     </scenes>
     <resources>

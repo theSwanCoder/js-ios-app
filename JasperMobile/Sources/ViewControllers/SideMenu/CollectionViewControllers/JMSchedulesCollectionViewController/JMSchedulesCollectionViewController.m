@@ -54,7 +54,7 @@
 #pragma mark - Overloaded methods
 - (BOOL)needShowSearchBar
 {
-    return [JMUtils isSupportSearchInSchedules];
+    return [JMUtils isServerVersionUpOrEqualJADE_6_2_0];
 }
 
 - (NSString *)defaultRepresentationTypeKey

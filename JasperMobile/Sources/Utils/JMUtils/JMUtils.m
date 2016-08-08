@@ -364,7 +364,7 @@ void jmDebugLog(NSString *format, ...) {
     return [self isServerVersionUpOrEqual6] && [self isServerProEdition];
 }
 
-+ (BOOL)isSupportSearchInSchedules
++ (BOOL)isServerVersionUpOrEqualJADE_6_2_0
 {
     return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_JADE_6_2_0;
 }

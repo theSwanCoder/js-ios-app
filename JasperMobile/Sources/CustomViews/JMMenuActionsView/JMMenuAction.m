@@ -95,6 +95,8 @@
             return @"action_title_hideExternalDisplay";
         case JMMenuActionsViewAction_ShowReportChartTypes:
             return @"action_title_report_chart_types";
+        case JMMenuActionsViewAction_Search:
+            return @"action_title_search";
     }
 }
 
@@ -147,6 +149,8 @@
             return @"tv_action";
         case JMMenuActionsViewAction_ShowReportChartTypes:
             return @"change_chart_type_action";
+        case JMMenuActionsViewAction_Search:
+            return @"search_action";
     }
 }
 

@@ -52,6 +52,9 @@
 #import "JMReportChartTypesVC.h"
 #import "JasperMobileAppDelegate.h"
 #import "JMReportViewerExternalScreenManager.h"
+#import "JMReportSearchVC.h"
+#import "JSReportSearch.h"
+
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
 @property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
@@ -666,6 +669,12 @@
 {
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info;
 
+    if ([JMUtils isSupportVisualize] &&
+        [JMUtils isServerVersionUpOrEqualJADE_6_2_0] &&
+        self.report.isMultiPageReport) {
+        availableAction |= JMMenuActionsViewAction_Search;
+    }
+    
     if (self.shouldShowFiltersPage) {
         availableAction |= JMMenuActionsViewAction_Edit;
     }
@@ -693,7 +702,7 @@
 {
     JMMenuActionsViewAction disabledAction = JMMenuActionsViewAction_None;
     if ([self stateManager].state == JMReportViewerStateResourceNotExist) {
-        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule | JMMenuActionsViewAction_Print;
+        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_Search;
     }
     return disabledAction;
 }
@@ -715,6 +724,7 @@
             break;
         }
         case JMMenuActionsViewAction_Refresh:
+            self.report.currentSearch = nil;
             [self refreshReport];
             break;
         case JMMenuActionsViewAction_Edit: {
@@ -755,6 +765,9 @@
             [self switchFromTV];
             break;
         }
+        case JMMenuActionsViewAction_Search:
+            [self showReportSearch];
+            break;
         default:
             break;
     }
@@ -805,6 +818,11 @@
                 [strongSelf.sessionManager handleSessionDidChangeWithAlert:NO];
                 break;
             }
+        }
+        if (result.type == JMFiltersVCResultTypeReportParameters ||
+            result.type == JMFiltersVCResultTypeFilterOption ||
+            result.type == JMFiltersVCResultTypeSessionExpired) {
+            self.report.currentSearch = nil;
         }
         [strongSelf.navigationController popViewControllerAnimated:YES];
     };
@@ -942,5 +960,28 @@
     [[self stateManager] setupPageForState:JMReportViewerStateResourceReady];
     [[self externalScreenManager] backContentOnDevice];
 }
+
+#pragma mark - Report search
+- (void)showReportSearch
+{
+    JMReportSearchVC *reportSearchVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMReportSearchVC"];
+    reportSearchVC.webEnvironment = [self webEnvironment];
+    reportSearchVC.currentSearch = [self report].currentSearch;
+    __weak __typeof(self) weekSelf = self;
+    reportSearchVC.exitBlock = ^(JSReportSearch *resultSearch) {
+        __typeof(self) strongSelf = weekSelf;
+        [strongSelf.navigationController popToViewController:strongSelf animated:YES];
+        
+        self.report.currentSearch = resultSearch;
+        
+        JMBaseResourceView *resourceView = (JMBaseResourceView *)strongSelf.view;
+        resourceView.bottomView.userInteractionEnabled = NO;
+        [strongSelf navigateToPage:resultSearch.selectedResult.page completion:^(BOOL success) {
+            resourceView.bottomView.userInteractionEnabled = YES;
+        }];
+    };
+    [self.navigationController pushViewController:reportSearchVC animated:YES];
+}
+
 
 @end

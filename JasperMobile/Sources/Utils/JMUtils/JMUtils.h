@@ -146,7 +146,7 @@ void jmDebugLog(NSString * __nonnull format, ...);
  */
 + (BOOL)isSupportVisualize;
 
-+ (BOOL)isSupportSearchInSchedules;
++ (BOOL)isServerVersionUpOrEqualJADE_6_2_0;
 
 /**
  Returns YES if JRS instance has Pro Edition

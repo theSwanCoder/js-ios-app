@@ -46,3 +46,15 @@
 	[report_viewer_wrongNumberOfCurrentPage]
 		en = The requested page is out of range (%@).
 		tags = ios,unused
+    [report_viewer_report_search]
+        en = Report Search
+        tags = ios,new
+    [report_viewer_report_search_value_placeholder]
+        en = Report Search
+        tags = ios,new
+    [report_viewer_report_search_hitCount_format]
+        en = Found %zd results
+        tags = ios,new
+    [report_viewer_report_search_page_format]
+        en = On page: #%zd
+        tags = ios,new

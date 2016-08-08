@@ -368,6 +368,8 @@
 		A1478F7F59A95B7799E6A06B /* JMReportViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478D77000B2562E8901475 /* JMReportViewerConfigurator.m */; };
 		A1478FE0C1BA9728771F8D12 /* JMTextInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A14786ACB64611C058536F28 /* JMTextInputControlCell.m */; };
 		BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */; };
+		BD5372461D58568600442361 /* JMReportSearchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BD5372451D58568600442361 /* JMReportSearchVC.m */; };
+		BD53724D1D585A8A00442361 /* JMReportSearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD53724C1D585A8A00442361 /* JMReportSearchTableViewCell.m */; };
 		BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */; };
 		BD6DB2A01C981E5F002DEFDF /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
@@ -933,6 +935,10 @@
 		A1478FC1575C6C75266BDB48 /* JMReportOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportOptionsViewController.h; sourceTree = "<group>"; };
 		A1478FF2E87954F5F6AF096E /* JMScheduleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleCell.m; sourceTree = "<group>"; };
 		BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		BD5372441D58568600442361 /* JMReportSearchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportSearchVC.h; sourceTree = "<group>"; };
+		BD5372451D58568600442361 /* JMReportSearchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportSearchVC.m; sourceTree = "<group>"; };
+		BD53724B1D585A8A00442361 /* JMReportSearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportSearchTableViewCell.h; sourceTree = "<group>"; };
+		BD53724C1D585A8A00442361 /* JMReportSearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportSearchTableViewCell.m; sourceTree = "<group>"; };
 		BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -2679,6 +2685,7 @@
 				A1478BFF120DD8ED9BDA0BE1 /* JMReportViewerConfigurator */,
 				A14785D3F2D0D5AB92B0124F /* JMReportViewerVC */,
 				A1478CBC61DACDE835797DB8 /* JMBookmarksVC */,
+				BD5372431D58568600442361 /* JMReportSearchVC */,
 				A1478D3194BB7741827948A0 /* JMReportViewerStateManager */,
 				A14783EE4F8ED749FF9E4329 /* JMReportChartTypesVC */,
 				A1478A7D3777E985D8D1CF69 /* JMReportViewerExternalScreenManager */,
@@ -3575,6 +3582,25 @@
 			path = JMHTMLParser;
 			sourceTree = "<group>";
 		};
+		BD5372431D58568600442361 /* JMReportSearchVC */ = {
+			isa = PBXGroup;
+			children = (
+				BD53724A1D585A8A00442361 /* JMReportSearchTableViewCell */,
+				BD5372441D58568600442361 /* JMReportSearchVC.h */,
+				BD5372451D58568600442361 /* JMReportSearchVC.m */,
+			);
+			path = JMReportSearchVC;
+			sourceTree = "<group>";
+		};
+		BD53724A1D585A8A00442361 /* JMReportSearchTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				BD53724B1D585A8A00442361 /* JMReportSearchTableViewCell.h */,
+				BD53724C1D585A8A00442361 /* JMReportSearchTableViewCell.m */,
+			);
+			path = JMReportSearchTableViewCell;
+			sourceTree = "<group>";
+		};
 		BDABBD231A41D8CC00EDA100 /* RNCachingURLProtocol */ = {
 			isa = PBXGroup;
 			children = (
@@ -4159,6 +4185,7 @@
 				0801DFAC1AAF2CFB00DD072C /* JMAppUpdater.m in Sources */,
 				0801DF9E1AAF2CC900DD072C /* JMSavedResources.m in Sources */,
 				089B15B71AA756BD0021A915 /* JMServerCollectionViewCell.m in Sources */,
+				BD53724D1D585A8A00442361 /* JMReportSearchTableViewCell.m in Sources */,
 				0801DFAE1AAF2CFB00DD072C /* JMLocalization.m in Sources */,
 				089B15BE1AA756BD0021A915 /* JMServerOptionManager.m in Sources */,
 				089B15BA1AA756BD0021A915 /* JMServerOptionCell.m in Sources */,
@@ -4238,6 +4265,7 @@
 				A14789CD0B67973BFC52912E /* JMResourceLoaderOption.m in Sources */,
 				A1478EAB974E0D8B2645494C /* JMScheduleInfoViewController.m in Sources */,
 				A1478E66B18F94A3429C68CE /* JMSchedule.m in Sources */,
+				BD5372461D58568600442361 /* JMReportSearchVC.m in Sources */,
 				A1478400E0886EC9F854A170 /* JMScheduleManager.m in Sources */,
 				A1478DE7E946DA1ECD90A6DC /* JMHTMLParser.m in Sources */,
 				A147823B71F9BE372E2D53FE /* JMHTMLScript.m in Sources */,
