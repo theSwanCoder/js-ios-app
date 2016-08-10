@@ -972,13 +972,18 @@
         __typeof(self) strongSelf = weekSelf;
         [strongSelf.navigationController popToViewController:strongSelf animated:YES];
         
-        self.report.currentSearch = resultSearch;
-        
-        JMBaseResourceView *resourceView = (JMBaseResourceView *)strongSelf.view;
-        resourceView.bottomView.userInteractionEnabled = NO;
-        [strongSelf navigateToPage:resultSearch.selectedResult.page completion:^(BOOL success) {
-            resourceView.bottomView.userInteractionEnabled = YES;
-        }];
+        if(resultSearch.selectedResult.page < 1 && resultSearch.selectedResult.page > self.report.countOfPages) {
+            self.report.currentSearch = nil;
+            JMLog(@"Selected result can't be applied!"); // The bug http://jira.jaspersoft.com/browse/JRS-10385
+        } else {
+            self.report.currentSearch = resultSearch;
+            
+            JMBaseResourceView *resourceView = (JMBaseResourceView *)strongSelf.view;
+            resourceView.bottomView.userInteractionEnabled = NO;
+            [strongSelf navigateToPage:resultSearch.selectedResult.page completion:^(BOOL success) {
+                resourceView.bottomView.userInteractionEnabled = YES;
+            }];
+        }
     };
     [self.navigationController pushViewController:reportSearchVC animated:YES];
 }
