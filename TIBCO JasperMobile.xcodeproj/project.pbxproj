@@ -676,7 +676,7 @@
 		93A8B5C91CFBFD0A00B313FC /* JMSavedItemInfoScreenUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedItemInfoScreenUITests.m; sourceTree = "<group>"; };
 		93A8B5CC1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardPrintDialogUITests.h; sourceTree = "<group>"; };
 		93A8B5CD1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardPrintDialogUITests.m; sourceTree = "<group>"; };
-		93AE1B471D33876C00B4742B /* JasperMobile_v_2_ 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "JasperMobile_v_2_ 7.xcdatamodel"; sourceTree = "<group>"; };
+		93AE1B471D33876C00B4742B /* JasperMobile_v_2_6_1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "JasperMobile_v_2_6_1.xcdatamodel"; sourceTree = "<group>"; };
 		93BC5BA01D098E7C0068387F /* JasperMobile_v_2_6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile_v_2_6.xcdatamodel; sourceTree = "<group>"; };
 		93C4E3101C737DB300A19D64 /* JMUITestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMUITestConstants.h; sourceTree = "<group>"; };
 		93C4E3111C737DB300A19D64 /* JMUITestConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUITestConstants.m; sourceTree = "<group>"; };
@@ -5071,14 +5071,14 @@
 		08DD18231B135BE500856112 /* JasperMobile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				93AE1B471D33876C00B4742B /* JasperMobile_v_2_ 7.xcdatamodel */,
+				93AE1B471D33876C00B4742B /* JasperMobile_v_2_6_1.xcdatamodel */,
 				93BC5BA01D098E7C0068387F /* JasperMobile_v_2_6.xcdatamodel */,
 				08DD18241B135BE500856112 /* JasperMobile.xcdatamodel */,
 				08DD18251B135BE500856112 /* JasperMobile_v_1_9.xcdatamodel */,
 				08DD18261B135BE500856112 /* JasperMobile_v_2_0.xcdatamodel */,
 				08DD18271B135BE500856112 /* JasperMobile_v_2_1.xcdatamodel */,
 			);
-			currentVersion = 93AE1B471D33876C00B4742B /* JasperMobile_v_2_ 7.xcdatamodel */;
+			currentVersion = 93AE1B471D33876C00B4742B /* JasperMobile_v_2_6_1.xcdatamodel */;
 			path = JasperMobile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
