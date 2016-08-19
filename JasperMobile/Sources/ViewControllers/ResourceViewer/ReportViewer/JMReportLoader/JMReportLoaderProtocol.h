@@ -41,6 +41,7 @@
 @class JSReportDestination;
 @class JMHyperlink;
 @class JMReportChartType;
+@class JMReportChartTypeGroup;
 
 typedef void(^JSReportLoaderBaseCompletionBlock)();
 
@@ -63,7 +64,7 @@ initialDestination:(nullable JSReportDestination *)destination
 - (void)destroyWithCompletion:(nullable JSReportLoaderBaseCompletionBlock)completion;
 - (void)fitReportViewToScreen;
 - (void)resetWithCompletion:(nullable JSReportLoaderBaseCompletionBlock)completion;
-- (void)fetchAvailableChartTypesWithCompletion:(void(^__nonnull)(NSArray <JMReportChartType *>*__nullable, NSError *__nullable ))completion;
+- (void)fetchAvailableChartTypesWithCompletion:(void(^__nonnull)(NSArray <JMReportChartTypeGroup *>*__nullable, NSError *__nullable ))completion;
 - (void)updateComponent:(JSReportComponent *__nonnull)component withNewChartType:(JMReportChartType *__nonnull)chartType completion:(JSReportLoaderCompletionBlock __nullable)completion;
 @end
 

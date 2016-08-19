@@ -21,20 +21,28 @@
  */
 
 //
-//  JMReportChartType.h
+//  JMReportChartTypeGroup.m
 //  TIBCO JasperMobile
 //
 
-/**
-@author Aleksandr Dakhno odahno@tibco.com
-@since 2.6
-*/
+#import "JMReportChartTypeGroup.h"
+#import "JMReportChartType.h"
 
-@import UIKit;
+@implementation JMReportChartTypeGroup
 
-@interface JMReportChartType : NSObject
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, strong, readonly) NSString *imageName;
-- (instancetype)initWithName:(NSString *)name;
-+ (instancetype)typeWithName:(NSString *)name;
+- (instancetype)initWithTitle:(NSString *)title chartTypes:(NSArray *)chatTypes
+{
+    self = [super init];
+    if (self) {
+        _title = [title copy];
+        _chartTypes = [chatTypes copy];
+    }
+    return self;
+}
+
++ (instancetype)groupWithTitle:(NSString *)title chartTypes:(NSArray *)chatTypes
+{
+    return [[self alloc] initWithTitle:title chartTypes:chatTypes];
+}
+
 @end

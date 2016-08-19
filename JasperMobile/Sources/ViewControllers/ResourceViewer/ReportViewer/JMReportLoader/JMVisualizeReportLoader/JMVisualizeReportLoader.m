@@ -37,6 +37,7 @@
 #import "EKMapper.h"
 #import "JMReportChartType.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMReportChartTypeGroup.h"
 
 @interface JMVisualizeReportLoader()
 @property (nonatomic, assign, readwrite) JSReportLoaderState state;
@@ -438,9 +439,9 @@ initialDestination:(nullable JSReportDestination *)destination
                                     completion:nil];
 }
 
-- (void)fetchAvailableChartTypesWithCompletion:(void(^__nonnull)(NSArray <JMReportChartType *>*, NSError *))completion
+- (void)fetchAvailableChartTypesWithCompletion:(void(^__nonnull)(NSArray <JMReportChartTypeGroup *>*, NSError *))completion
 {
-    void(^heapBlock)(NSArray <JMReportChartType *>*, NSError *) = [completion copy];
+    void(^heapBlock)(NSArray <JMReportChartTypeGroup *>*, NSError *) = [completion copy];
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.availableChartTypes"
                                                                inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:nil];
@@ -842,15 +843,68 @@ initialDestination:(nullable JSReportDestination *)destination
     return components;
 }
 
-- (NSArray <JMReportChartType *>*)parseReportChartTypesFromRawData:(NSArray <NSString *>*)rawData
+- (NSArray <JMReportChartTypeGroup *>*)parseReportChartTypesFromRawData:(NSArray <NSString *>*)rawData
 {
-    NSMutableArray *chartTypes = [NSMutableArray new];
-    for (NSString *chartName in rawData) {
-        JMReportChartType *chartType = [JMReportChartType new];
-        chartType.name = chartName;
-        [chartTypes addObject:chartType];
-    }
-    return chartTypes;
+    // TODO: temporary solution, we need api for getting groups (at the moment there isn't such api).
+    NSArray *groups = @[
+            [JMReportChartTypeGroup groupWithTitle:@"Column and Bar" chartTypes:@[
+                    [JMReportChartType typeWithName:@"Column"],
+                    [JMReportChartType typeWithName:@"StackedColumn"],
+//                    [JMReportChartType typeWithName:@"PercentColumn"],
+                    [JMReportChartType typeWithName:@"Bar"],
+                    [JMReportChartType typeWithName:@"StackedBar"],
+//                    [JMReportChartType typeWithName:@"PercentBar"],
+                    [JMReportChartType typeWithName:@"SpiderColumn"],
+            ]],
+            [JMReportChartTypeGroup groupWithTitle:@"Line and Area" chartTypes:@[
+                    [JMReportChartType typeWithName:@"Line"],
+                    [JMReportChartType typeWithName:@"Spline"],
+                    [JMReportChartType typeWithName:@"Area"],
+                    [JMReportChartType typeWithName:@"StackedArea"],
+//                    [JMReportChartType typeWithName:@"PercentArea"],
+                    [JMReportChartType typeWithName:@"AreaSpline"],
+                    [JMReportChartType typeWithName:@"SpiderLine"],
+                    [JMReportChartType typeWithName:@"SpiderArea"],
+            ]],
+            [JMReportChartTypeGroup groupWithTitle:@"Dual and Multi-Axis" chartTypes:@[
+                    [JMReportChartType typeWithName:@"ColumnLine"],
+                    [JMReportChartType typeWithName:@"ColumnSpline"],
+                    [JMReportChartType typeWithName:@"StackedColumnLine"],
+                    [JMReportChartType typeWithName:@"StackedColumnSpline"],
+                    [JMReportChartType typeWithName:@"MultiAxisLine"],
+                    [JMReportChartType typeWithName:@"MultiAxisSpline"],
+                    [JMReportChartType typeWithName:@"MultiAxisColumn"],
+            ]],
+            [JMReportChartTypeGroup groupWithTitle:@"Time Series" chartTypes:@[
+                    [JMReportChartType typeWithName:@"TimeSeriesLine"],
+                    [JMReportChartType typeWithName:@"TimeSeriesSpline"],
+                    [JMReportChartType typeWithName:@"TimeSeriesArea"],
+                    [JMReportChartType typeWithName:@"TimeSeriesAreaSpline"],
+            ]],
+            [JMReportChartTypeGroup groupWithTitle:@"Scatter and Bubble" chartTypes:@[
+                    [JMReportChartType typeWithName:@"Scatter"],
+                    [JMReportChartType typeWithName:@"Bubble"],
+            ]],
+            [JMReportChartTypeGroup groupWithTitle:@"Pie" chartTypes:@[
+                    [JMReportChartType typeWithName:@"Pie"],
+                    [JMReportChartType typeWithName:@"DualLevelPie"],
+                    [JMReportChartType typeWithName:@"SemiPie"],
+            ]],
+            [JMReportChartTypeGroup groupWithTitle:@"Range" chartTypes:@[
+                    [JMReportChartType typeWithName:@"HeatMap"],
+                    [JMReportChartType typeWithName:@"TimeSeriesHeatMap"],
+                    [JMReportChartType typeWithName:@"DualMeasureTreeMap"],
+                    [JMReportChartType typeWithName:@"TreeMap"],
+                    [JMReportChartType typeWithName:@"ParentTreeMap"],
+            ]],
+    ];
+//    NSMutableArray <JMReportChartTypeGroup *>*chartTypes = [NSMutableArray new];
+//    for (NSString *chartName in rawData) {
+//        JMReportChartType *chartType = [JMReportChartType new];
+//        chartType.name = chartName;
+//        [chartTypes addObject:chartType];
+//    }
+    return groups;
 }
 
 #pragma mark - Hyperlinks handlers

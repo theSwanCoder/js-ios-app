@@ -650,14 +650,21 @@
             break;
         }
         default: {
-            __weak typeof(self) weakSelf = self;
-            [JMUtils presentAlertControllerWithError:error completion:^{
-                __strong typeof(self) strongSelf = weakSelf;
-                [strongSelf exitAction];
-            }];
+            [self showError:error needExit:YES];
             break;
         }
     }
+}
+
+- (void)showError:(NSError *)error needExit:(BOOL)needExit
+{
+    __weak typeof(self) weakSelf = self;
+    [JMUtils presentAlertControllerWithError:error completion:^{
+        __strong typeof(self) strongSelf = weakSelf;
+        if (needExit) {
+            [strongSelf exitAction];
+        }
+    }];
 }
 
 #pragma mark - JMMenuActionsViewProtocol
@@ -900,12 +907,12 @@
 - (void)showReportChartTypesVC
 {
     __weak __typeof(self) weakSelf = self;
-    [[self reportLoader] fetchAvailableChartTypesWithCompletion:^(NSArray<JMReportChartType *> *chartTypes, NSError *error) {
+    [[self reportLoader] fetchAvailableChartTypesWithCompletion:^(NSArray<JMReportChartTypeGroup *> *chartTypeGroups, NSError *error) {
         if (error) {
             [weakSelf handleError:error];
         } else {
             JMReportChartTypesVC *chartTypesVC = [weakSelf.storyboard instantiateViewControllerWithIdentifier:@"JMReportChartTypesVC"];
-            chartTypesVC.chartTypes = chartTypes;
+            chartTypesVC.chartTypeGroups = chartTypeGroups;
             JMReportChartType *selectedChartType = [JMReportChartType new];
             // TODO: extend to support several charts
             JSReportComponent *reportComponent = [weakSelf report].reportComponents.firstObject;
@@ -917,7 +924,7 @@
                                         withNewChartType:chartType
                                               completion:^(BOOL success, NSError *error) {
                                                   if (error) {
-                                                      [weakSelf handleError:error];
+                                                      [self showError:error needExit:NO];
                                                   } else {
                                                       JMLog(@"success of updating chart type");
                                                   }

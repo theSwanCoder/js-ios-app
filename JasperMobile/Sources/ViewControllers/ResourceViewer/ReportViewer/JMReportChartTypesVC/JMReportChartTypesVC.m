@@ -28,6 +28,7 @@
 #import "JMReportChartTypesVC.h"
 #import "JMLocalization.h"
 #import "JMReportChartType.h"
+#import "JMReportChartTypeGroup.h"
 
 @interface JMReportChartTypesVC() <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, weak) IBOutlet UITableView *tableView;
@@ -44,25 +45,39 @@
 }
 
 #pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return self.chartTypeGroups.count;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.chartTypes.count;
+    JMReportChartTypeGroup *group = self.chartTypeGroups[section];
+    return group.chartTypes.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ReportChartTypeCell" forIndexPath:indexPath];
-    JMReportChartType *chartType = self.chartTypes[indexPath.row];
+    JMReportChartTypeGroup *group = self.chartTypeGroups[indexPath.section];
+    JMReportChartType *chartType = group.chartTypes[indexPath.row];
     cell.textLabel.text = chartType.name;
     cell.imageView.image = [UIImage imageNamed:chartType.imageName];
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    JMReportChartTypeGroup *group = self.chartTypeGroups[section];
+    return group.title;
 }
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    JMReportChartType *chartType = self.chartTypes[indexPath.row];
+    JMReportChartTypeGroup *group = self.chartTypeGroups[indexPath.section];
+    JMReportChartType *chartType = group.chartTypes[indexPath.row];
     if (self.exitBlock) {
         self.exitBlock(chartType);
     } else {
@@ -72,7 +87,8 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMReportChartType *chartType = self.chartTypes[indexPath.row];
+    JMReportChartTypeGroup *group = self.chartTypeGroups[indexPath.section];
+    JMReportChartType *chartType = group.chartTypes[indexPath.row];
     if ([chartType.name isEqualToString:self.selectedChartType.name]) {
         [cell setSelected:YES animated:YES];
     }

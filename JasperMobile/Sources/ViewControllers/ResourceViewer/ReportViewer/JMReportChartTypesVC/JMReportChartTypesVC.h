@@ -33,9 +33,10 @@
 @import UIKit;
 #import "JMBaseViewController.h"
 @class JMReportChartType;
+@class JMReportChartTypeGroup;
 
 @interface JMReportChartTypesVC : JMBaseViewController
-@property (nonatomic, copy, nonnull) NSArray <JMReportChartType *>*chartTypes;
+@property (nonatomic, copy, nonnull) NSArray <JMReportChartTypeGroup *>*chartTypeGroups;
 @property (nonatomic, strong) JMReportChartType *__nullable selectedChartType;
 @property (nonatomic, copy, nullable) void(^exitBlock)(JMReportChartType * __nonnull selectedChartType);
 @end

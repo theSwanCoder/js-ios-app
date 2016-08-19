@@ -21,7 +21,7 @@
  */
 
 //
-//  JMReportChartType.h
+//  JMReportChartTypeGroup.h
 //  TIBCO JasperMobile
 //
 
@@ -30,11 +30,13 @@
 @since 2.6
 */
 
-@import UIKit;
+@import Foundation;
 
-@interface JMReportChartType : NSObject
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, strong, readonly) NSString *imageName;
-- (instancetype)initWithName:(NSString *)name;
-+ (instancetype)typeWithName:(NSString *)name;
+@class JMReportChartType;
+
+@interface JMReportChartTypeGroup : NSObject
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSArray *chartTypes;
+- (instancetype)initWithTitle:(NSString *)title chartTypes:(NSArray *)chatTypes;
++ (instancetype)groupWithTitle:(NSString *)title chartTypes:(NSArray *)chatTypes;
 @end

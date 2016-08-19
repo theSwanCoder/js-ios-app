@@ -33,6 +33,20 @@
 
 @implementation JMReportChartType
 
+- (instancetype)initWithName:(NSString *)name
+{
+    self = [super init];
+    if (self) {
+        _name = [name copy];
+    }
+    return self;
+}
+
++ (instancetype)typeWithName:(NSString *)name
+{
+    return [[self alloc] initWithName:name];
+}
+
 - (NSString *)imageName
 {
     if (!_imageName) {
