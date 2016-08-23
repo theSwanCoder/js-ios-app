@@ -85,7 +85,7 @@
 - (NSArray *)leftInputAccessoryViewToolbarItems
 {
     NSMutableArray *items = [NSMutableArray arrayWithArray:[super leftInputAccessoryViewToolbarItems]];
-    UIBarButtonItem *unset = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"report_viewer_options_ic_title_unset", nil) style:UIBarButtonItemStylePlain target:self action:@selector(unset:)];
+    UIBarButtonItem *unset = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"report_viewer_options_ic_title_unset") style:UIBarButtonItemStylePlain target:self action:@selector(unset:)];
     [items addObject:unset];
     return items;
 }

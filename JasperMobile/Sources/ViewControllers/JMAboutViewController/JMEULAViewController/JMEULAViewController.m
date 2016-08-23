@@ -47,10 +47,10 @@
 {
     [super viewDidLoad];
 
-    self.title = JMCustomLocalizedString(@"about_eula_title", nil);
+    self.title = JMLocalizedString(@"about_eula_title");
 
     if (self.shouldUserAccept) {
-        UIBarButtonItem *acceptButton = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"action_title_accept", nil)
+        UIBarButtonItem *acceptButton = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"action_title_accept")
                                                                          style:UIBarButtonItemStyleDone
                                                                         target:self
                                                                         action:@selector(agreeAction:)];

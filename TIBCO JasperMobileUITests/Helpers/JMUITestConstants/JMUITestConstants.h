@@ -13,6 +13,7 @@ extern NSString *const kJMTestLibrarySearchTextExample;
 extern NSString *const kJMTestProfileName;
 extern NSString *const kJMTestProfileURL;
 extern NSString *const kJMTestProfileCredentialsUsername;
+extern NSString *const kJMTestProfileCredentialsOrganization;
 extern NSString *const kJMTestProfileCredentialsPassword;
 
 //NSString *const kJMTestProfileURL = @"http://192.168.88.55:8088/jasperserver-pro-62";

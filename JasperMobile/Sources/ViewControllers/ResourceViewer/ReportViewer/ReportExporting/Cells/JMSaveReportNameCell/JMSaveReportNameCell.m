@@ -42,7 +42,7 @@
     
     self.errorLabel.font = [[JMThemesManager sharedManager] tableViewCellErrorFont];
     self.errorLabel.textColor = [[JMThemesManager sharedManager] tableViewCellErrorColor];
-    self.textField.placeholder = JMCustomLocalizedString(@"report_viewer_save_name", nil);
+    self.textField.placeholder = JMLocalizedString(@"report_viewer_save_name");
 }
 
 #pragma mark - UITextFieldDelegate

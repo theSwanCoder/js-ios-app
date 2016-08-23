@@ -210,7 +210,7 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
         cell.selectedBackgroundView.backgroundColor = [UIColor darkGrayColor];
     }
     JMMenuAction *currentMenuAction = self.availableMenuActions[indexPath.row];
-    cell.textLabel.text = JMCustomLocalizedString(currentMenuAction.actionTitle, nil);
+    cell.textLabel.text = JMLocalizedString(currentMenuAction.actionTitle);
     
     cell.imageView.image = [UIImage imageNamed:currentMenuAction.actionImageName];
     cell.imageView.alpha = currentMenuAction.actionEnabled ? 1.0f : 0.5f;
@@ -261,7 +261,7 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
 {
     CGFloat maxTextWidth = .0f;
     for (JMMenuAction *menuAction in self.availableMenuActions) {
-        NSString *titleAction = JMCustomLocalizedString(menuAction.actionTitle, nil);
+        NSString *titleAction = JMLocalizedString(menuAction.actionTitle);
         NSDictionary *titleTextAttributes = @{NSFontAttributeName : [[JMThemesManager sharedManager] navigationBarTitleFont]};
         CGSize titleActionContainerSize = [titleAction sizeWithAttributes:titleTextAttributes];
         if (maxTextWidth < titleActionContainerSize.width) {

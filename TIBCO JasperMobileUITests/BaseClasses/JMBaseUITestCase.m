@@ -27,7 +27,10 @@
     if (!isLoginPageOnScreen) {
         [self logout];
     }
-    [self loginWithTestProfile];
+    
+    if ([self shouldLoginBeforeStartTest]) {
+        [self loginWithTestProfile];
+    }
 }
 
 - (void)tearDown {
@@ -87,7 +90,7 @@
         XCUIElement *menu = self.application.menuItems[@"Delete"];
         if (menu) {
             [menu tap];
-            XCUIElement *deleteButton = self.application.alerts[@"Confirmation"].collectionViews.buttons[@"Delete"];
+            XCUIElement *deleteButton = self.application.alerts[@"Confirmation"].buttons[@"Delete"];
             if (deleteButton) {
                 [deleteButton tap];
             } else {
@@ -180,6 +183,23 @@
         XCTFail(@"Done button on keyboard doesn't exist.");
     }
     
+    // Find Organization TextField
+    XCUIElement *organizationTextFieldElement = tablesQuery.textFields[@"Organization ID"];
+    if (organizationTextFieldElement.exists) {
+        [organizationTextFieldElement tap];
+        [organizationTextFieldElement typeText:kJMTestProfileCredentialsOrganization];
+    } else {
+        XCTFail(@"Organization text field doesn't exist.");
+    }
+    
+    // Close keyboard
+    doneButton = self.application.toolbars.buttons[@"Done"];
+    if (doneButton.exists) {
+        [doneButton tap];
+    } else {
+        XCTFail(@"Done button on keyboard doesn't exist.");
+    }
+    
     // Save a new created profile
     XCUIElement *saveButton = self.application.buttons[@"Save"];
     if (saveButton.exists) {
@@ -191,9 +211,9 @@
     // Confirm if need http end point
     XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
     if (securityWarningAlert.exists) {
-        NSString *okButtonTitle = JMCustomLocalizedStringForTests(@"dialog_button_ok", NSStringFromClass(self.class));
+        NSString *okButtonTitle = JMLocalizedString(@"dialog_button_ok");
         NSLog(@"okButtonTitle: %@", okButtonTitle);
-        XCUIElement *securityWarningAlertOkButton = securityWarningAlert.collectionViews.buttons[okButtonTitle];
+        XCUIElement *securityWarningAlertOkButton = securityWarningAlert.buttons[okButtonTitle];
         if (securityWarningAlertOkButton.exists) {
             [securityWarningAlertOkButton tap];
         } else {
@@ -221,7 +241,7 @@
         // TODO: how better to use this case
         //        XCUIElement *unknownServerAlert = self.application.alerts[@"Unknown server"];
         //        if (unknownServerAlert.exists) {
-        //            XCUIElement *okButton = unknownServerAlert.collectionViews.buttons[@"OK"];
+        //            XCUIElement *okButton = unknownServerAlert.buttons[@"OK"];
         //            if (okButton.exists) {
         //                [okButton tap];
         //            }
@@ -358,7 +378,7 @@
     sleep(2);
     XCUIElement *rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
     if (rateAlert.exists) {
-        XCUIElement *rateAppLateButton = rateAlert.collectionViews.buttons[@"No, thanks"];
+        XCUIElement *rateAppLateButton = rateAlert.buttons[@"No, thanks"];
         if (rateAppLateButton.exists) {
             [rateAppLateButton tap];
         }
@@ -396,17 +416,15 @@
 
 - (void)tryOpenPageWithName:(NSString *)pageName
 {
-    [self tryOpenSideApplicationMenu];
-    
+    [self givenSideMenuVisible];
     XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
-    if (menuView.exists) {
-        XCUIElement *pageMenuItem = menuView.cells.staticTexts[pageName];
-        if (pageMenuItem.exists) {
-            [pageMenuItem tap];
-        }
+    XCUIElement *pageMenuItem = menuView.cells.staticTexts[pageName];
+    if (pageMenuItem.exists) {
+        [pageMenuItem tap];
     } else {
-        XCTFail(@"'Menu' isn't visible.");
+        XCTFail(@"'Menu Item' isn't visible.");
     }
+    
 }
 
 #pragma mark - Helpers - Side (App) Menu
@@ -430,11 +448,14 @@
 - (void)tryOpenSideApplicationMenu
 {
     XCUIElement *menuButton = self.application.buttons[@"menu icon"];
-    if (menuButton.exists) {
-        [menuButton tap];
-    } else {
-        XCTFail(@"'Menu' button doesn't exist.");
-    }
+    NSPredicate *menuPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+    
+    [self expectationForPredicate:menuPagePredicate
+              evaluatedWithObject:menuButton
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:2 handler:nil];
+    
+    [menuButton tap];
 }
 
 #pragma mark - Helpers - Menu
@@ -497,5 +518,9 @@
     [self waitForExpectationsWithTimeout:30 handler:nil];
 }
 
-
+#pragma mark - JMBaseUITestProtocol
+- (BOOL) shouldLoginBeforeStartTest
+{
+    return YES;
+}
 @end

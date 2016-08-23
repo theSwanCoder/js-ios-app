@@ -243,7 +243,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     }
         
     NSDictionary *item = self.resourceProperties[indexPath.row];
-    cell.textLabel.text = JMCustomLocalizedString([NSString stringWithFormat:@"resource_%@_title", item[kJMTitleKey]], nil);
+    cell.textLabel.text = JMLocalizedString([NSString stringWithFormat:@"resource_%@_title", item[kJMTitleKey]]);
     cell.detailTextLabel.text = item[kJMValueKey];
     return cell;
 }

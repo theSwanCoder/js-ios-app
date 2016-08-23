@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, MaximazedButtonState) {
     switch (self.maximazedButtonState) {
         case MaximazedButtonStateMaximazed: {
             self.maximazedButtonState = MaximazedButtonStateMinimized;
-            [sender setTitle:JMCustomLocalizedString(@"min_value_title", nil) 
+            [sender setTitle:JMLocalizedString(@"min_value_title")
                     forState:UIControlStateNormal];
             if ([self.delegate respondsToSelector:@selector(externalWindowDashboardControlsTableViewCellDidMaximize:)]) {
                 [self.delegate externalWindowDashboardControlsTableViewCellDidMaximize:self];
@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, MaximazedButtonState) {
         }
         case MaximazedButtonStateMinimized: {
             self.maximazedButtonState = MaximazedButtonStateMaximazed;
-            [sender setTitle:JMCustomLocalizedString(@"max_value_title", nil) 
+            [sender setTitle:JMLocalizedString(@"max_value_title") 
                     forState:UIControlStateNormal];
             if ([self.delegate respondsToSelector:@selector(externalWindowDashboardControlsTableViewCellDidMinimize:)]) {
                 [self.delegate externalWindowDashboardControlsTableViewCellDidMinimize:self];

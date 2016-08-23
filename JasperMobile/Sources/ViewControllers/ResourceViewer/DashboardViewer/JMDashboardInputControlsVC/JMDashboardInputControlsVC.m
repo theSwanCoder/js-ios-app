@@ -46,7 +46,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"report_viewer_options_title", nil);
+    self.title = JMLocalizedString(@"report_viewer_options_title");
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     // Remove extra separators
@@ -56,7 +56,7 @@
     self.applyButton.backgroundColor = [[JMThemesManager sharedManager] reportOptionsRunReportButtonBackgroundColor];
     [self.applyButton setTitleColor:[[JMThemesManager sharedManager] reportOptionsRunReportButtonTextColor]
                            forState:UIControlStateNormal];
-    [self.applyButton setTitle:JMCustomLocalizedString(@"dialog_button_applyUpdate", nil)
+    [self.applyButton setTitle:JMLocalizedString(@"dialog_button_applyUpdate")
                       forState:UIControlStateNormal];
 
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
@@ -120,7 +120,7 @@
     titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
     titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     titleLabel.backgroundColor = [UIColor clearColor];
-    NSString *sectionTitle = JMCustomLocalizedString(@"report_viewer_options_title", nil);
+    NSString *sectionTitle = JMLocalizedString(@"report_viewer_options_title");
 
     titleLabel.text = [sectionTitle uppercaseString];
     [titleLabel sizeToFit];

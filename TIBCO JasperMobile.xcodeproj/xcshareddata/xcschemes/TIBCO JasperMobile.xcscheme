@@ -75,9 +75,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9356EC961A30752800ACE2C6"
-               BuildableName = "TIBCO JasperMobile Tests.xctest"
-               BlueprintName = "TIBCO JasperMobile Tests"
+               BlueprintIdentifier = "93DC8C381C6CCEEE000DEADF"
+               BuildableName = "TIBCO JasperMobileUITests.xctest"
+               BlueprintName = "TIBCO JasperMobileUITests"
                ReferencedContainer = "container:TIBCO JasperMobile.xcodeproj">
             </BuildableReference>
          </TestableReference>

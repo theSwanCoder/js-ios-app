@@ -50,14 +50,14 @@
 -(void)awakeFromNib
 {
     [super awakeFromNib];
-    self.title = JMCustomLocalizedString(@"menuitem_saveditems_label", nil);
+    self.title = JMLocalizedString(@"menuitem_saveditems_label");
 }
 
 #pragma mark - UIViewController Life Cycle
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"menuitem_saveditems_label", nil);
+    self.title = JMLocalizedString(@"menuitem_saveditems_label");
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(exportedResourceDidLoad:)
@@ -84,7 +84,7 @@
 
 - (NSString *)noResultText
 {
-    return JMCustomLocalizedString(@"resources_noresults_saveditems_msg", nil);
+    return JMLocalizedString(@"resources_noresults_saveditems_msg");
 }
 
 #pragma mark - Exported Resource Notifications

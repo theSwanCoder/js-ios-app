@@ -227,7 +227,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             kJS_CONTENT_TYPE_XLS
     ];
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_outputFormat", nil)
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMLocalizedString(@"schedules_new_job_outputFormat")
                                                                                       message:nil
                                                                             cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
@@ -261,7 +261,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             @(JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek)
     ];
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_recurrenceIntervalUnit", nil)
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMLocalizedString(@"schedules_new_job_recurrenceIntervalUnit")
                                                                                       message:nil
                                                                             cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
@@ -300,7 +300,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             @(JSScheduleTriggerTypeCalendar),
     ];
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules_new_job_repeat_type_alert_title", nil)
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMLocalizedString(@"schedules_new_job_repeat_type_alert_title")
                                                                                       message:nil
                                                                             cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:nil];
@@ -657,7 +657,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
                 [strongSelf.navigationController popViewControllerAnimated:YES];
                 NSString *toastMessageKey = self.isNewScheduleMetadata ? @"schedules_created_success" : @"schedules_updated_success";
                 [ALToastView toastInView:self.navigationController.view
-                                withText:JMCustomLocalizedString(toastMessageKey, nil)];
+                                withText:JMLocalizedString(toastMessageKey)];
             } else {
                 [JMUtils presentAlertControllerWithError:error completion:nil];
             }
@@ -711,7 +711,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             row.errorMessage = nil;
         } else {
             // show error message in cell
-            row.errorMessage = JMCustomLocalizedString(@"schedules_error_repeat_count_invalid_characters", nil);
+            row.errorMessage = JMLocalizedString(@"schedules_error_repeat_count_invalid_characters");
         }
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     } else if (row.type == JMScheduleVCRowTypeNumberOfRuns) {
@@ -723,7 +723,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             row.errorMessage = nil;
         } else {
             // show error message in cell
-            row.errorMessage = JMCustomLocalizedString(@"schedules_error_repeat_count_invalid_characters", nil);
+            row.errorMessage = JMLocalizedString(@"schedules_error_repeat_count_invalid_characters");
         }
         NSIndexSet *sectionIndecies = [NSIndexSet indexSetWithIndex:JMNewScheduleVCSectionTypeScheduleEnd];
         [self.tableView reloadSections:sectionIndecies
@@ -1158,13 +1158,13 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         isValid = NO;
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeMain];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeLabel];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_label", nil);
+        row.errorMessage = JMLocalizedString(@"schedules_error_empty_label");
     }
     if (self.scheduleMetadata.label.length > 100) {
         isValid = NO;
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeMain];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeLabel];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_length", nil);
+        row.errorMessage = JMLocalizedString(@"schedules_error_length");
     }
     return isValid;
 }
@@ -1176,20 +1176,20 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         isValid = NO;
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename", nil);
+        row.errorMessage = JMLocalizedString(@"schedules_error_empty_filename");
     } else {
         NSArray *parts = [self.scheduleMetadata.baseOutputFilename componentsSeparatedByString:@" "];
         if (parts.count > 1) {
             isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
-            row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_filename_invalid_characters", nil);
+            row.errorMessage = JMLocalizedString(@"schedules_error_empty_filename_invalid_characters");
         }
         if (self.scheduleMetadata.baseOutputFilename.length > 100) {
             isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFileURI];
-            row.errorMessage = JMCustomLocalizedString(@"schedules_error_length", nil);
+            row.errorMessage = JMLocalizedString(@"schedules_error_length");
         }
     }
     return isValid;
@@ -1202,7 +1202,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         isValid = NO;
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeOutputOptions];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeOutputFolderURI];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_output_folder", nil);
+        row.errorMessage = JMLocalizedString(@"schedules_error_empty_output_folder");
     }
     return isValid;
 }
@@ -1217,7 +1217,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeRepeatCount];
-            row.errorMessage = JMCustomLocalizedString(@"schedules_error_repeat_count_empty", nil);
+            row.errorMessage = JMLocalizedString(@"schedules_error_repeat_count_empty");
         }
     }
     return isValid;
@@ -1233,7 +1233,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleEnd];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeNumberOfRuns];
-            row.errorMessage = JMCustomLocalizedString(@"schedules_error_occurrence_count_empty", nil);
+            row.errorMessage = JMLocalizedString(@"schedules_error_occurrence_count_empty");
         }
     }
     return isValid;
@@ -1249,7 +1249,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         isValid = NO;
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleStart];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeStartDate];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+        row.errorMessage = JMLocalizedString(@"schedules_error_date_past");
     }
 
     return isValid;
@@ -1265,7 +1265,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         isValid = NO;
         JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeScheduleEnd];
         JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeEndDate];
-        row.errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+        row.errorMessage = JMLocalizedString(@"schedules_error_date_past");
     }
 
     return isValid;
@@ -1283,7 +1283,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeCalendarHours];
-            row.errorMessage = JMCustomLocalizedString(@"schedules_error_wrong_hours", nil);
+            row.errorMessage = JMLocalizedString(@"schedules_error_wrong_hours");
         }
     }
 
@@ -1302,7 +1302,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeCalendarMinutes];
-            row.errorMessage = JMCustomLocalizedString(@"schedules_error_wrong_minutes", nil);
+            row.errorMessage = JMLocalizedString(@"schedules_error_wrong_minutes");
         }
     }
 
@@ -1319,7 +1319,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeCalendarSelectedDays];
-            row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_weekdays", nil);
+            row.errorMessage = JMLocalizedString(@"schedules_error_empty_weekdays");
         }
     }
     return isValid;
@@ -1335,7 +1335,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             isValid = NO;
             JMScheduleVCSection *section = [self sectionWithType:JMNewScheduleVCSectionTypeRecurrence];
             JMScheduleVCRow *row = [section rowWithType:JMScheduleVCRowTypeCalendarSelectedMonths];
-            row.errorMessage = JMCustomLocalizedString(@"schedules_error_empty_months", nil);
+            row.errorMessage = JMLocalizedString(@"schedules_error_empty_months");
         }
     }
     return isValid;

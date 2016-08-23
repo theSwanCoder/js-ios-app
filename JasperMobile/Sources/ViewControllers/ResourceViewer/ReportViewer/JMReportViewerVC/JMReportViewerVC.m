@@ -304,7 +304,7 @@
 - (UIView *)nonExistingResourceView
 {
     UILabel *label = [UILabel new];
-    label.text = JMCustomLocalizedString(@"report_viewer_emptyreport_title", nil);
+    label.text = JMLocalizedString(@"report_viewer_emptyreport_title");
     label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 0;
     return label;
@@ -680,7 +680,7 @@
     if ([self report].reportComponents.count) {
         availableAction |= JMMenuActionsViewAction_ShowReportChartTypes;
     }
-    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate *)[UIApplication sharedApplication].delegate;
     if ([appDelegate isExternalScreenAvailable]) {
         // TODO: extend by considering other states
         availableAction |= ([self stateManager].state == JMReportViewerStateResourceOnWExternalWindow) ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
@@ -764,7 +764,7 @@
 - (void)reportDidSavedSuccessfully
 {
     [ALToastView toastInView:self.navigationController.view
-                    withText:JMCustomLocalizedString(@"report_viewer_save_addedToQueue", nil)];
+                    withText:JMLocalizedString(@"report_viewer_save_addedToQueue")];
 }
 
 #pragma mark - Input Controls

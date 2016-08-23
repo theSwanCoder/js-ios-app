@@ -41,7 +41,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"about_privacy_policy_title", nil);
+    self.title = JMLocalizedString(@"about_privacy_policy_title");
     
     self.webView.scrollView.bounces = NO;
     
@@ -71,7 +71,7 @@
     
     NSString *cachePath = [[RNCachingURLProtocol new] cachePathForRequest:ppRequest];
     if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath] && [[Reachability reachabilityWithHostName:[ppURL host]] currentReachabilityStatus] == NotReachable) {
-        NSString *errorMessage = JMCustomLocalizedString(@"error_noconnection_dialog_msg", nil);
+        NSString *errorMessage = JMLocalizedString(@"error_noconnection_dialog_msg");
         NSError *error = [NSError errorWithDomain:@"error_noconnection_dialog_title" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         __weak typeof(self) weakSelf = self;
         [JMUtils presentAlertControllerWithError:error completion:^{
@@ -98,7 +98,7 @@
             }];
             [self presentViewController:alertController animated:YES completion:nil];
         } else {
-            [ALToastView toastInView:webView withText:JMCustomLocalizedString(@"resource_viewer_can_not_open_link", nil)];
+            [ALToastView toastInView:webView withText:JMLocalizedString(@"resource_viewer_can_not_open_link")];
         }
         return NO;
     }

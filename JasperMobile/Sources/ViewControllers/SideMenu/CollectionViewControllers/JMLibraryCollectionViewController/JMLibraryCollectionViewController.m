@@ -49,7 +49,7 @@ NSString *const kJMLibraryCollectionViewSortByIndexKey = @"kJMLibraryCollectionV
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"menuitem_library_label", nil);
+    self.title = JMLocalizedString(@"menuitem_library_label");
 }
 
 #pragma mark - Overloaded methods

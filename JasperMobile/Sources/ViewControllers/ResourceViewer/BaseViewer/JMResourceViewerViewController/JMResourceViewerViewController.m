@@ -266,7 +266,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
             [self presentViewController:alertController animated:YES completion:nil];
         } else {
             [ALToastView toastInView:webView
-                            withText:JMCustomLocalizedString(@"resource_viewer_can_not_open_link", nil)];
+                            withText:JMLocalizedString(@"resource_viewer_can_not_open_link")];
         }
         decisionHandler(WKNavigationActionPolicyCancel);
     }
@@ -295,7 +295,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self resetSubViews];
 
-    NSString *errorMessage = JMCustomLocalizedString(@"resource_viewer_memory_warning", nil);
+    NSString *errorMessage = JMLocalizedString(@"resource_viewer_memory_warning");
     NSError *error = [NSError errorWithDomain:@"dialod_title_attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
     __weak typeof(self) weakSelf = self;
     [JMUtils presentAlertControllerWithError:error completion:^{

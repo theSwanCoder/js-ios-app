@@ -65,11 +65,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = JMCustomLocalizedString(@"resource_viewer_share_settings_title", nil);
-    self.opacityTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_opacity", nil);
-    self.brushTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_brush", nil);
-    self.borderTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_border", nil);
-    self.fontSizeTitleLabel.text = JMCustomLocalizedString(@"resource_viewer_share_settings_font_size", nil);
+    self.title = JMLocalizedString(@"resource_viewer_share_settings_title");
+    self.opacityTitleLabel.text = JMLocalizedString(@"resource_viewer_share_settings_opacity");
+    self.brushTitleLabel.text = JMLocalizedString(@"resource_viewer_share_settings_brush");
+    self.borderTitleLabel.text = JMLocalizedString(@"resource_viewer_share_settings_border");
+    self.fontSizeTitleLabel.text = JMLocalizedString(@"resource_viewer_share_settings_font_size");
 
     self.brushSlider.value = self.brushWidth;
     [self sliderValueChanged:self.brushSlider];

@@ -72,7 +72,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = [JMCustomLocalizedString(@"report_viewer_save_title", nil) capitalizedString];
+    self.title = JMLocalizedString(@"report_viewer_save_title");
     self.reportName = self.report.resourceLookup.label;
     self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] firstObject];
 
@@ -87,7 +87,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     self.saveReportButton.backgroundColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
     [self.saveReportButton setTitleColor:[[JMThemesManager sharedManager] saveReportSaveReportButtonTextColor]
                                 forState:UIControlStateNormal];
-    [self.saveReportButton setTitle:JMCustomLocalizedString(@"dialog_button_save", nil)
+    [self.saveReportButton setTitle:JMLocalizedString(@"dialog_button_save")
                            forState:UIControlStateNormal];
 
     [self setupSections];
@@ -129,16 +129,16 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     if (!self.sections) {
         self.sections = [@[
                            [JMSaveReportSection sectionWithType:JMSaveReportSectionTypeName
-                                                          title:JMCustomLocalizedString(@"report_viewer_save_name", nil)],
+                                                          title:JMLocalizedString(@"report_viewer_save_name")],
                            [JMSaveReportSection sectionWithType:JMSaveReportSectionTypeFormat
-                                                          title:JMCustomLocalizedString(@"report_viewer_save_format", nil)],
+                                                          title:JMLocalizedString(@"report_viewer_save_format")],
                            ]mutableCopy];
     }
     
     if (self.report.isMultiPageReport) {
         if (![self sectionForType:JMSaveReportSectionTypePageRange]) {
             [self.sections addObject: [JMSaveReportSection sectionWithType:JMSaveReportSectionTypePageRange
-                                                                     title:JMCustomLocalizedString(@"report_viewer_save_pages", nil)]];
+                                                                     title:JMLocalizedString(@"report_viewer_save_pages")]];
         }
     } else {
         if ([self sectionForType:JMSaveReportSectionTypePageRange]) {
@@ -244,10 +244,10 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                 pageRangeCell.cellDelegate = self;
                 
                 if (indexPath.row == 1) {
-                    pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"report_viewer_save_pages_range_fromPage", nil);
+                    pageRangeCell.titleLabel.text = JMLocalizedString(@"report_viewer_save_pages_range_fromPage");
                     pageRangeCell.currentPage = self.pagesRange.startPage;
                 } else if (indexPath.row == 2) {
-                    pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"report_viewer_save_pages_range_toPage", nil);
+                    pageRangeCell.titleLabel.text = JMLocalizedString(@"report_viewer_save_pages_range_toPage");
                     pageRangeCell.currentPage = self.pagesRange.endPage;
                 }
                 return pageRangeCell;
@@ -330,7 +330,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                 JMExportResource *exportResource = [JMExportManager exportResourceWithName:strongSelf.reportName format:strongSelf.selectedReportFormat];
 
                 if (savedResource) {
-                    strongSelf.errorString = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_notunique", nil);
+                    strongSelf.errorString = JMLocalizedString(@"report_viewer_save_name_errmsg_notunique");
                     
                     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
                                                                                                       message:@"report_viewer_save_name_errmsg_notunique_rewrite"
@@ -346,7 +346,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                     }];
                     [strongSelf presentViewController:alertController animated:YES completion:nil];
                 } else  if (exportResource) {
-                    self.errorString = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_notunique", nil);
+                    self.errorString = JMLocalizedString(@"report_viewer_save_name_errmsg_notunique");
                     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
                                                                                                       message:@"report_viewer_save_name_errmsg_notunique_rewrite"
                                                                                             cancelButtonTitle:@"dialog_button_cancel"
@@ -373,7 +373,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     BOOL isNotPDF = ![self.selectedReportFormat isEqualToString:kJS_CONTENT_TYPE_PDF];
     if (isNotPDF) {
         if ((self.pagesRange.endPage - self.pagesRange.startPage) + 1 > kJMSaveReportMaxRangePages ) {
-            NSString *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_tooBigRange", nil), @(kJMSaveReportMaxRangePages), [self.selectedReportFormat uppercaseString]];
+            NSString *errorMessage = [NSString stringWithFormat:JMLocalizedString(@"report_viewer_save_name_errmsg_tooBigRange"), @(kJMSaveReportMaxRangePages), [self.selectedReportFormat uppercaseString]];
             
             UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
                                                                                               message:errorMessage

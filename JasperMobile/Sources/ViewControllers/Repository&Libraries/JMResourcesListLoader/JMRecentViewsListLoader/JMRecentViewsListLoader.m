@@ -46,12 +46,12 @@
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Sort: {
 //            NSDictionary *optionForSortByAccessTime = @{
-//                    kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.accessTime", nil),
+//                    kJMResourceListLoaderOptionItemTitleKey: JMLocalizedString(@"resources.sortby.accessTime"),
 //                    kJMResourceListLoaderOptionItemValueKey: @"accessTime"
 //            };
 //            NSArray *optionsArray = @[optionForSortByAccessTime];
             return @[
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_sortby_accessTime", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_accessTime")
                                                       value:@"accessTime"]
             ];
         }

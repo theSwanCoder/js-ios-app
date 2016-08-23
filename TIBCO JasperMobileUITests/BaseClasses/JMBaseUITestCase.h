@@ -10,7 +10,13 @@
 #import "JMUITestConstants.h"
 #import "JMLocalization.h"
 
-@interface JMBaseUITestCase : XCTestCase
+@protocol JMBaseUITestProtocol <NSObject>
+@required
+- (BOOL) shouldLoginBeforeStartTest;
+
+@end
+
+@interface JMBaseUITestCase : XCTestCase <JMBaseUITestProtocol>
 @property(nonatomic, strong) XCUIApplication *application;
 - (void)selectTestProfile;
 - (void)loginWithTestProfile;
@@ -42,4 +48,5 @@
 //
 - (void)verifyThatLoadingPopupVisible;
 - (void)verifyThatLoadingPopupNotVisible;
+
 @end

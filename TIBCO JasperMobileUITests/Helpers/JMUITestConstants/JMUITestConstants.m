@@ -13,6 +13,7 @@ NSString *const kJMTestLibrarySearchTextExample = @"sales mix";
 NSString *const kJMTestProfileName = @"Test Profile";
 NSString *const kJMTestProfileURL = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
 NSString *const kJMTestProfileCredentialsUsername = @"phoneuser";
+NSString *const kJMTestProfileCredentialsOrganization = @"organization_1";
 NSString *const kJMTestProfileCredentialsPassword = @"phoneuser";
 
 @implementation JMUITestConstants

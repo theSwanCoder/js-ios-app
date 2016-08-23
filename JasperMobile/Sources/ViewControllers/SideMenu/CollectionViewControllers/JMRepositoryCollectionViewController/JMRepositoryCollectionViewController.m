@@ -38,7 +38,7 @@
 {
     [super awakeFromNib];
 
-    self.title = JMCustomLocalizedString(@"menuitem_repository_label", nil);
+    self.title = JMLocalizedString(@"menuitem_repository_label");
 }
 
 #pragma mark - Overloaded methods

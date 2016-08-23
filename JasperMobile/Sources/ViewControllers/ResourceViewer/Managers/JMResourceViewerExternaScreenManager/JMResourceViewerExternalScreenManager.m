@@ -77,7 +77,7 @@
 
 - (UIWindow *)externalScreenWindow
 {
-    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate *)[UIApplication sharedApplication].delegate;
     UIWindow *externalScreenWindow = appDelegate.externalWindow;
     return externalScreenWindow;
 }

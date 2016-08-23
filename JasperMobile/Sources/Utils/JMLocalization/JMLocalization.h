@@ -37,5 +37,4 @@
 
 @end
 
-NSString *JMCustomLocalizedString(NSString *key, NSString *comment);
-NSString *JMCustomLocalizedStringForTests(NSString *key, NSString *className);
+NSString *JMLocalizedString(NSString *key);

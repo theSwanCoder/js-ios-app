@@ -48,8 +48,8 @@
 {
     [super viewDidLoad];
     
-    self.title = JMCustomLocalizedString(@"report_viewer_report_options_title", nil);
-    self.noResultLabel.text = JMCustomLocalizedString(@"resources_noresults_msg", nil);
+    self.title = JMLocalizedString(@"report_viewer_report_options_title");
+    self.noResultLabel.text = JMLocalizedString(@"resources_noresults_msg");
     
     self.noResultLabel.textColor = [[JMThemesManager sharedManager] reportOptionsNoResultLabelTextColor];
     
@@ -65,7 +65,7 @@
     
     self.searchBar.tintColor = [UIColor darkGrayColor];
     [self.searchBar setBackgroundImage:[UIImage new]];
-    self.searchBar.placeholder = JMCustomLocalizedString(@"report_viewer_options_search_value_placeholder", nil);
+    self.searchBar.placeholder = JMLocalizedString(@"report_viewer_options_search_value_placeholder");
 }
 
 #pragma mark - Accessors
