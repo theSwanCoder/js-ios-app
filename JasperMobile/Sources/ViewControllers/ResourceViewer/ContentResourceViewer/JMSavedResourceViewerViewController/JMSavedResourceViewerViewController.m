@@ -132,7 +132,7 @@
                                                                                                       message:nil
                                                                                 textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
                                                                                     __strong typeof(self) strongSelf = weakSelf;
-                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport_viewer_modify_reportname", nil);
+                                                                                    textField.placeholder = JMLocalizedString(@"savedreport_viewer_modify_reportname");
                                                                                     textField.text = [strongSelf.resource.resourceLookup.label copy];
                                                                                 } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                     NSString *errorMessage = nil;
@@ -140,7 +140,7 @@
                                                                                     if (strongSelf) {
                                                                                         [JMUtils validateReportName:text errorMessage:&errorMessage];
                                                                                         if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
-                                                                                            errorMessage = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_notunique", nil);
+                                                                                            errorMessage = JMLocalizedString(@"report_viewer_save_name_errmsg_notunique");
                                                                                         }
                                                                                     }
                                                                                     return errorMessage;
@@ -187,7 +187,7 @@
         
         BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
         if (!canOpen) {
-            NSString *errorMessage = JMCustomLocalizedString(@"error_openIn_message", nil);
+            NSString *errorMessage = JMLocalizedString(@"error_openIn_message");
             NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
@@ -283,7 +283,7 @@
                                                                                            }];
                                                     } else {
                                                         // TODO: add showing with ...
-                                                        [strongSelf showErrorWithMessage:JMCustomLocalizedString(@"savedreport_viewer_format_not_supported", nil)
+                                                        [strongSelf showErrorWithMessage:JMLocalizedString(@"savedreport_viewer_format_not_supported")
                                                                               completion:^{
                                                                                   [strongSelf cancelResourceViewingAndExit:YES];
                                                                               }];

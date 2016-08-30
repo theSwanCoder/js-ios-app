@@ -42,7 +42,7 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
     self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
-    self.titleLabel.text = JMCustomLocalizedString(@"report_viewer_save_pages_all", nil);
+    self.titleLabel.text = JMLocalizedString(@"report_viewer_save_pages_all");
     self.pagesTypeSwitch.onTintColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
 }
 

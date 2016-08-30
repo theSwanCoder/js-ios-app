@@ -77,11 +77,11 @@ void jmDebugLog(NSString *format, ...) {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
     reportName = [reportName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (reportName.length < kJMNameMin) {
-        *errorMessage = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_empty", nil);
+        *errorMessage = JMLocalizedString(@"report_viewer_save_name_errmsg_empty");
     } else if (reportName.length > kJMNameMax) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_maxlength", nil), kJMNameMax];
+        *errorMessage = [NSString stringWithFormat:JMLocalizedString(@"report_viewer_save_name_errmsg_maxlength"), kJMNameMax];
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_characters", nil), kJMInvalidCharacters];
+        *errorMessage = [NSString stringWithFormat:JMLocalizedString(@"report_viewer_save_name_errmsg_characters"), kJMInvalidCharacters];
     }
     return [*errorMessage length] == 0;
 }

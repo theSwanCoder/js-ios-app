@@ -422,7 +422,7 @@
     }
     availableAction |= JMMenuActionsViewAction_Share | JMMenuActionsViewAction_Print;
 
-    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate *)[UIApplication sharedApplication].delegate;
     if ([appDelegate isExternalScreenAvailable]) {
         // TODO: extend by considering other states
         availableAction |= ([self stateManager].state == JMDashboardViewerStateResourceOnWExternalWindow) ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;

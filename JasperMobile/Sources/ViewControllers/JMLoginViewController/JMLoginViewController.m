@@ -68,9 +68,9 @@
 
     UIColor *placeholderColor = [[JMThemesManager sharedManager] loginViewTextFieldsTextColor];
     NSDictionary *attributes = @{NSForegroundColorAttributeName:[placeholderColor colorWithAlphaComponent: 0.5f]};
-    self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login_username_label", nil) attributes:attributes];
-    self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login_password_label", nil) attributes:attributes];
-    self.serverProfileTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"settings_item_server", nil) attributes:attributes];
+    self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMLocalizedString(@"login_username_label") attributes:attributes];
+    self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMLocalizedString(@"login_password_label") attributes:attributes];
+    self.serverProfileTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMLocalizedString(@"settings_item_server") attributes:attributes];
 
     // setup "Login" button
     self.loginButton.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -78,7 +78,7 @@
 
     self.loginButton.backgroundColor = [[JMThemesManager sharedManager] loginViewLoginButtonBackgroundColor];
     [self.loginButton setTitleColor:[[JMThemesManager sharedManager] loginViewLoginButtonTextColor] forState:UIControlStateNormal];
-    [self.loginButton setTitle:JMCustomLocalizedString(@"login_button_login", nil) forState:UIControlStateNormal];
+    [self.loginButton setTitle:JMLocalizedString(@"login_button_login") forState:UIControlStateNormal];
     
     self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
     [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
@@ -131,7 +131,7 @@
         }
     }
     
-    NSString *tryDemoButtonTitle = self.showForRestoreSession ? JMCustomLocalizedString(@"dialog_button_cancel", nil) : JMCustomLocalizedString(@"login_button_try_demo", nil);
+    NSString *tryDemoButtonTitle = self.showForRestoreSession ? JMLocalizedString(@"dialog_button_cancel") : JMLocalizedString(@"login_button_try_demo");
     SEL tryDemoButtonAction = self.showForRestoreSession ? @selector(cancelButtonTapped:) : @selector(tryDemoButtonTapped:);
     
     [self.tryDemoButton setTitle:tryDemoButtonTitle forState:UIControlStateNormal];
@@ -160,19 +160,19 @@
 {
     NSMutableString *errorMessage = [NSMutableString string];
     if (![self.userNameTextField.text length]) {
-        [errorMessage appendString:JMCustomLocalizedString(@"login_username_errmsg_empty", nil)];
+        [errorMessage appendString:JMLocalizedString(@"login_username_errmsg_empty")];
     }
     if (![self.passwordTextField.text length]) {
         if ([errorMessage length]) {
             [errorMessage appendString:@"\n"];
         }
-        [errorMessage appendString:JMCustomLocalizedString(@"login_password_errmsg_empty", nil)];
+        [errorMessage appendString:JMLocalizedString(@"login_password_errmsg_empty")];
     }
     if (!self.selectedServerProfile) {
         if ([errorMessage length]) {
             [errorMessage appendString:@"\n"];
         }
-        [errorMessage appendString:JMCustomLocalizedString(@"login_server_profile_errmsg_empty", nil)];
+        [errorMessage appendString:JMLocalizedString(@"login_server_profile_errmsg_empty")];
     }
     
     if ([errorMessage length]) {
@@ -282,8 +282,8 @@
             }
         } else {
             if ([error.domain isEqualToString:JSAuthErrorDomain]) {
-                NSString *errorTitle = JMCustomLocalizedString(@"error_authenication_dialog_title", nil);
-                NSString *errorMessage = JMCustomLocalizedString(@"error_authenication_dialog_msg", nil);
+                NSString *errorTitle = JMLocalizedString(@"error_authenication_dialog_title");
+                NSString *errorMessage = JMLocalizedString(@"error_authenication_dialog_msg");
                 error = [NSError errorWithDomain:errorTitle code:JSInvalidCredentialsErrorCode userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
             }
             [JMUtils presentAlertControllerWithError:error completion:nil];

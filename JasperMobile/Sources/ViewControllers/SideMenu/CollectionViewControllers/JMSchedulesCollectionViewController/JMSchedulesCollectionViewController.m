@@ -43,7 +43,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"menuitem_schedules_label", nil);
+    self.title = JMLocalizedString(@"menuitem_schedules_label");
     self.shouldShowButtonForChangingViewPresentation = NO;
     self.shouldShowRightNavigationItems = NO;
     self.needLayoutUI = YES;
@@ -71,7 +71,7 @@
 
 - (NSString *)noResultText
 {
-    return JMCustomLocalizedString(@"resources_noresults_schedules_msg", nil);
+    return JMLocalizedString(@"resources_noresults_schedules_msg");
 }
 
 - (Class)resourceLoaderClass

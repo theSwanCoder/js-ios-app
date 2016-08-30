@@ -193,7 +193,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         [self closeMenu];
 
         JMServerOptionsViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-        settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"dialog_button_cancel", nil)
+        settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"dialog_button_cancel")
                                                                                         style:UIBarButtonItemStyleDone
                                                                                        target:settingsVC
                                                                                        action:@selector(cancel)];
@@ -390,7 +390,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
         [self presentViewController:mc animated:YES completion:NULL];
     } else {
-        NSString *errorMessage = JMCustomLocalizedString(@"settings_feedback_errorShowClient", nil);
+        NSString *errorMessage = JMLocalizedString(@"settings_feedback_errorShowClient");
         NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         [JMUtils presentAlertControllerWithError:error completion:nil];
     }

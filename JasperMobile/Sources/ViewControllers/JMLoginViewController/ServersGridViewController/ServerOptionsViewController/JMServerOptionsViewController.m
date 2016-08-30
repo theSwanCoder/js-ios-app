@@ -54,7 +54,7 @@
     if (self.serverOptionManager.isExistingServerProfile) {
         self.title = self.serverProfile.alias;
     } else {
-        self.title = JMCustomLocalizedString(@"servers_title_new", nil);
+        self.title = JMLocalizedString(@"servers_title_new");
     }
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
@@ -87,7 +87,7 @@
 
 - (void)setupSaveButton
 {
-    [self.saveButton setTitle:JMCustomLocalizedString(@"dialog_button_save", nil) forState:UIControlStateNormal];
+    [self.saveButton setTitle:JMLocalizedString(@"dialog_button_save") forState:UIControlStateNormal];
     [self.saveButton setTitleColor:[[JMThemesManager sharedManager] serverProfileSaveButtonTextColor] forState:UIControlStateNormal];
     self.saveButton.backgroundColor = [[JMThemesManager sharedManager] serverProfileSaveButtonBackgroundColor];
 }

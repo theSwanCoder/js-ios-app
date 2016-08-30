@@ -40,7 +40,7 @@
 {
     [super viewDidLoad];
 
-    self.title = JMCustomLocalizedString(@"report_chart_type_view_title", nil);
+    self.title = JMLocalizedString(@"report_chart_type_view_title");
 }
 
 #pragma mark - UITableViewDataSource

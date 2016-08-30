@@ -46,7 +46,7 @@
     BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.controller.navigationItem.rightBarButtonItem
                                                                       animated:YES];
     if (!canOpen) {
-        NSString *errorMessage = JMCustomLocalizedString(@"error_openIn_message", nil);
+        NSString *errorMessage = JMLocalizedString(@"error_openIn_message");
         NSError *error = [NSError errorWithDomain:@"dialod_title_error"
                                              code:NSNotFound
                                          userInfo:@{NSLocalizedDescriptionKey : errorMessage}];

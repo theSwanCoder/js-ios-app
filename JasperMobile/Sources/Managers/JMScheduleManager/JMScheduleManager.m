@@ -135,7 +135,7 @@
                 fullMessage = @"General error of creating a new schedule.";
 
             }
-            NSError *createScheduledJobError = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules_error_domain", nil)
+            NSError *createScheduledJobError = [[NSError alloc] initWithDomain:JMLocalizedString(@"schedules_error_domain")
                                                                           code:0
                                                                       userInfo:@{NSLocalizedDescriptionKey: fullMessage}];
             completion(nil, createScheduledJobError);
@@ -177,7 +177,7 @@
     
     if (errorMessage.length && field.length) {
         NSString *fieldLocalizedKey = [NSString stringWithFormat:@"schedules_new_job_%@", field];
-        NSString *localizedField = JMCustomLocalizedString(fieldLocalizedKey, nil);
+        NSString *localizedField = JMLocalizedString(fieldLocalizedKey);
         if (localizedField.length == 0 || [localizedField isEqualToString:fieldLocalizedKey]) {
             NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:@"([a-z])([A-Z])" options:0 error:NULL];
             NSString *dividedFieldName = [regexp stringByReplacingMatchesInString:field options:0 range:NSMakeRange(0, field.length) withTemplate:@"$1 $2"];
@@ -195,17 +195,17 @@
 {
     NSString *message;
     if ([errorCode isEqualToString:@"error.duplicate.report.job.output.filename"]) {
-        message = JMCustomLocalizedString(@"schedules_error_duplicate_filename", nil);
+        message = JMLocalizedString(@"schedules_error_duplicate_filename");
     } else if ([errorCode isEqualToString:@"error.length"]) {
-        message = JMCustomLocalizedString(@"schedules_error_length", nil);
+        message = JMLocalizedString(@"schedules_error_length");
     } else if ([errorCode isEqualToString:@"error.invalid.chars"]) {
-        message = JMCustomLocalizedString(@"schedules_error_general_invalid_chars", nil);
+        message = JMLocalizedString(@"schedules_error_general_invalid_chars");
     } else if ([errorCode isEqualToString:@"error.report.job.output.folder.inexistent"]) {
-        message = JMCustomLocalizedString(@"schedules_error_output_folder_inexistent", nil);
+        message = JMLocalizedString(@"schedules_error_output_folder_inexistent");
     } else if ([errorCode isEqualToString:@"error.before.current.date"]) {
-        message = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+        message = JMLocalizedString(@"schedules_error_date_past");
     } else if ([errorCode isEqualToString:@"error.report.job.output.folder.notwriteable"]) {
-        message = JMCustomLocalizedString(@"schedules_error_notwriteable_output_folder", nil);
+        message = JMLocalizedString(@"schedules_error_notwriteable_output_folder");
     }
     return message;
 }

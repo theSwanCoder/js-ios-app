@@ -34,23 +34,13 @@ NSString * const JMLocalizationBundleType = @"lproj";
 
 + (NSString *)localizedStringForKey:(NSString *)key
 {
-    NSString *localizedString = NSLocalizedString(key, nil);
-    if (![[NSLocale preferredLanguages][0] isEqualToString:JMPreferredLanguage] &&
-        [localizedString isEqualToString:key]) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
-        NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
-        localizedString = [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
-    }
+    NSURL *localizationBundleURL = [[NSBundle bundleForClass:[self class]] bundleURL];
+    NSBundle *localizationBundle = localizationBundleURL ? [NSBundle bundleWithURL:localizationBundleURL] : [NSBundle mainBundle];
     
-    return localizedString;
-}
-
-+ (NSString *)localizedStringForTestsWithKey:(NSString *)key className:(NSString *)className
-{
-    NSString *localizedString = NSLocalizedString(key, nil);
-    if (![[NSLocale preferredLanguages][0] isEqualToString:JMPreferredLanguage] &&
-        [localizedString isEqualToString:key]) {
-        NSString *path = [[NSBundle bundleForClass:NSClassFromString(className)] pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
+    NSString *localizedString = NSLocalizedStringFromTableInBundle(key, nil, localizationBundle, comment);
+    
+    if (![[NSLocale preferredLanguages][0] isEqualToString:JMPreferredLanguage] && [localizedString isEqualToString:key]) {
+        NSString *path = [localizationBundle pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
         NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
         localizedString = [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
     }
@@ -60,12 +50,7 @@ NSString * const JMLocalizationBundleType = @"lproj";
 
 @end
 
-NSString *JMCustomLocalizedString(NSString *key, NSString *comment)
+NSString *JMLocalizedString(NSString *key)
 {
     return [JMLocalization localizedStringForKey:key];
-}
-
-NSString *JMCustomLocalizedStringForTests(NSString *key, NSString *className)
-{
-    return [JMLocalization localizedStringForTestsWithKey:key className:className];
 }

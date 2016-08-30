@@ -33,7 +33,7 @@
 - (NSArray *)rightInputAccessoryViewToolbarItems
 {
     NSMutableArray *items = [NSMutableArray arrayWithArray:[super rightInputAccessoryViewToolbarItems]];
-    UIBarButtonItem *datePickerSwitcher = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"report_viewer_options_ic_title_time", nil) style:UIBarButtonItemStylePlain target:self action:@selector(datePickerSwitched:)];
+    UIBarButtonItem *datePickerSwitcher = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"report_viewer_options_ic_title_time") style:UIBarButtonItemStylePlain target:self action:@selector(datePickerSwitched:)];
     [items insertObject:datePickerSwitcher atIndex:items.count - 1];
     return items;
 }
@@ -44,10 +44,10 @@
 {
     if (self.datePicker.datePickerMode == UIDatePickerModeDate) {
         self.datePicker.datePickerMode = UIDatePickerModeTime;
-        sender.title = JMCustomLocalizedString(@"report_viewer_options_ic_title_date", nil);
+        sender.title = JMLocalizedString(@"report_viewer_options_ic_title_date");
     } else {
         self.datePicker.datePickerMode = UIDatePickerModeDate;
-        sender.title = JMCustomLocalizedString(@"report_viewer_options_ic_title_time", nil);
+        sender.title = JMLocalizedString(@"report_viewer_options_ic_title_time");
     }
 }
 

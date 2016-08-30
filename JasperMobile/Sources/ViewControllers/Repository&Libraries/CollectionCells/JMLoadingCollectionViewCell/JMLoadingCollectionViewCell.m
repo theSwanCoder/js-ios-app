@@ -40,7 +40,7 @@ NSString * kJMGridLoadingCell = @"JMGridLoadingCollectionViewCell";
 {
     [super awakeFromNib];
     self.titleLabel.font = [[JMThemesManager sharedManager] collectionLoadingFont];
-    self.titleLabel.text = JMCustomLocalizedString(@"resources_loading_msg", nil);
+    self.titleLabel.text = JMLocalizedString(@"resources_loading_msg");
     self.titleLabel.textColor = [[JMThemesManager sharedManager] resourceViewLoadingCellTitleTextColor];
     self.activityIndicator.color = [[JMThemesManager sharedManager] resourceViewLoadingCellActivityIndicatorColor];
 }

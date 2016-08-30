@@ -233,7 +233,7 @@
 
 - (UIBarButtonItem *)backBarButtonForMaximizedDashlet
 {
-    UIBarButtonItem *item = [self backBarButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
+    UIBarButtonItem *item = [self backBarButtonWithTitle:JMLocalizedString(@"back_button_title")
                                                   action:@selector(minimizeDashletAction)];
     return item;
 }
