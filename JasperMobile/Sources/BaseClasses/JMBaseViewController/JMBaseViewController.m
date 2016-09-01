@@ -75,6 +75,7 @@
                                                                 target:target
                                                                 action:action];
     [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    backItem.accessibilityIdentifier = @"JMBackButtonAccessibilityId";
     return backItem;
 }
 
