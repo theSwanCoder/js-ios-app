@@ -10,6 +10,10 @@
 #import "JMUITestConstants.h"
 #import "JMLocalization.h"
 
+extern NSTimeInterval kUITestsBaseTimeout;
+extern NSTimeInterval kUITestsResourceWaitingTimeout;
+extern NSTimeInterval kUITestsElementAvailableTimeout;
+
 @protocol JMBaseUITestProtocol <NSObject>
 @required
 - (BOOL) shouldLoginBeforeStartTest;
@@ -25,7 +29,6 @@
 - (void)tryOpenServerProfilesPage;
 - (void)tryOpenNewServerProfilePage;
 - (void)tryCreateNewTestServerProfile;
-- (void)tryBackToLoginPageFromProfilesPage;
 - (void)trySelectNewTestServerProfile;
 - (void)tryEnterTestCredentials;
 - (void)tryTapLoginButton;
@@ -41,12 +44,16 @@
 - (void)tryOpenFavoritePage;
 - (void)givenSideMenuVisible;
 - (void)givenSideMenuNotVisible;
-- (void)tryOpenSideApplicationMenu;
+- (void)tryTapSideApplicationMenu;
 - (BOOL)isShareButtonExists;
 - (void)verifyThatCurrentPageIsLibrary;
 - (void)verifyThatCurrentPageIsRepository;
 //
 - (void)verifyThatLoadingPopupVisible;
 - (void)verifyThatLoadingPopupNotVisible;
+
+- (void)closeKeyboardWithDoneButton;
+- (void)openMenuActions;
+- (void)openMenuActionsOnNavBarWithLabel:(NSString *)label;
 
 @end

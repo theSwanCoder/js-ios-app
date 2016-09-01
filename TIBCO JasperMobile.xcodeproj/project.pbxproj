@@ -110,6 +110,7 @@
 		08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19D1B0CF27200BFBFE5 /* Images.xcassets */; };
 		08E62C8319922B0B0081CA83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E62C8019922B0B0081CA83 /* main.m */; };
 		08F2D1701CB268C500C6E4EF /* Resource_Viewer_Share.txt in Resources */ = {isa = PBXBuildFile; fileRef = 08F2D16F1CB268C500C6E4EF /* Resource_Viewer_Share.txt */; };
+		2C6DB53CB7905EA4ABEAA07A /* libPods-TIBCO JasperMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C52898077E823DDE80F7776 /* libPods-TIBCO JasperMobile.a */; };
 		93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */; };
 		930E18DC1CEC98C600CE5E10 /* JMPerformanceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E18DB1CEC98C600CE5E10 /* JMPerformanceUITests.m */; };
 		930E18DD1CEC9A7100CE5E10 /* JMBaseUITestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */; };
@@ -333,6 +334,7 @@
 		A1478AB3580B02743A75D9EA /* JMDashboardViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A147883539C7483AD0DF6A0A /* JMDashboardViewerVC.m */; };
 		A1478ADC873776525892DB0C /* JMReportPartViewToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = A14781FDD3FB5DC7AEEEE6C0 /* JMReportPartViewToolbar.m */; };
 		A1478AF726712130E4DF974A /* JMServerProfile+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A14785A126652E52E395CE0B /* JMServerProfile+Helpers.m */; };
+		A1478B09AC7D73A8A7C1ED0F /* JMBaseUITestCase+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A14788401BA1D2920245C060 /* JMBaseUITestCase+Helpers.m */; };
 		A1478B39992C5DB04E62DA9E /* JMSaveReportPageRangeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A147877304D696FD47EE639C /* JMSaveReportPageRangeCell.m */; };
 		A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = A147833F01EC956738C2E56A /* JMReportViewerToolBar.xib */; };
 		A1478B50A9644938412A6AE2 /* JMReportViewerStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A147808078AEC753A21992B3 /* JMReportViewerStateManager.m */; };
@@ -361,6 +363,7 @@
 		A1478E66B18F94A3429C68CE /* JMSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = A147871821CD8ABB3C768A36 /* JMSchedule.m */; };
 		A1478EA141F5E47A66C9DEE2 /* JMResourceViewerInfoPageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A14787D1DA75BA2DF22DDFFE /* JMResourceViewerInfoPageManager.m */; };
 		A1478EAB974E0D8B2645494C /* JMScheduleInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478F1B487DC5022B5356F7 /* JMScheduleInfoViewController.m */; };
+		A1478EF960BFA32891915C0C /* JMBaseUITestCase+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A14788401BA1D2920245C060 /* JMBaseUITestCase+Helpers.m */; };
 		A1478EFBFF648E171A39F2BF /* JMReportViewerToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */; };
 		A1478F045F384BB4ABAD61E4 /* JMWebViewFabric.m in Sources */ = {isa = PBXBuildFile; fileRef = A14783B9ABFF086D1936EB73 /* JMWebViewFabric.m */; };
 		A1478F26D551B8C701158B3C /* JMAsyncTask.m in Sources */ = {isa = PBXBuildFile; fileRef = A14781E4BB58C3DEAE8E7B3E /* JMAsyncTask.m */; };
@@ -375,7 +378,6 @@
 		BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8B9ED1B57D90B00758441 /* JMThemesManager.m */; };
 		BDB8B9F41B57EB0A00758441 /* DefaultTheme.plist in Resources */ = {isa = PBXBuildFile; fileRef = BDB8B9F31B57EB0A00758441 /* DefaultTheme.plist */; };
 		BDE6A0861B5A891000A7FDEC /* JMTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BDE6A0851B5A891000A7FDEC /* JMTextField.m */; };
-		D7A1767653D950BF0A559EE5 /* libPods-TIBCO JasperMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A796A9A2F4339E4D450AD /* libPods-TIBCO JasperMobile.a */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
 		F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */; };
@@ -585,7 +587,9 @@
 		08E62C7F19922B0B0081CA83 /* TIBCO JasperMobile.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile.pch"; sourceTree = "<group>"; };
 		08E62C8019922B0B0081CA83 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		08F2D16F1CB268C500C6E4EF /* Resource_Viewer_Share.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Resource_Viewer_Share.txt; sourceTree = "<group>"; };
-		3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1365E0F6F34165BC4BA2D5A0 /* Pods-TIBCO JasperMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIBCO JasperMobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-TIBCO JasperMobile/Pods-TIBCO JasperMobile.release.xcconfig"; sourceTree = "<group>"; };
+		56D46DC358CC2396615F34E2 /* Pods-TIBCO JasperMobile.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIBCO JasperMobile.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-TIBCO JasperMobile/Pods-TIBCO JasperMobile.adhoc.xcconfig"; sourceTree = "<group>"; };
+		7C52898077E823DDE80F7776 /* libPods-TIBCO JasperMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TIBCO JasperMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93047D511AB6F5750047C982 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		93047D521AB6F5750047C982 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
 		93047D531AB6F5750047C982 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceFields.h; sourceTree = "<group>"; };
@@ -821,6 +825,7 @@
 		A147881C0E37E81C792F08DF /* JMFiltersVCResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFiltersVCResult.m; sourceTree = "<group>"; };
 		A1478834CA2A3B817815165F /* JMSingleSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSingleSelectTableViewController.m; sourceTree = "<group>"; };
 		A147883539C7483AD0DF6A0A /* JMDashboardViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardViewerVC.m; sourceTree = "<group>"; };
+		A14788401BA1D2920245C060 /* JMBaseUITestCase+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMBaseUITestCase+Helpers.m"; sourceTree = "<group>"; };
 		A1478859F96142945CD0B9F5 /* JMSavedResources+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMSavedResources+Helpers.h"; sourceTree = "<group>"; };
 		A147887C2ACE2CC1BEB39AFE /* JMScheduleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMScheduleCell.h; sourceTree = "<group>"; };
 		A147887E37A4E798CB6C1D6F /* JMResourceViewerMenuHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceViewerMenuHelper.m; sourceTree = "<group>"; };
@@ -906,6 +911,7 @@
 		A1478DAD836BF0D06561BCAB /* Settings_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Settings_View.txt; sourceTree = "<group>"; };
 		A1478DB085E57E2AAFA392A1 /* Resource_Views.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Resource_Views.txt; sourceTree = "<group>"; };
 		A1478E1BA0CDD2DEBCFE22D8 /* JMRESTWebEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRESTWebEnvironment.h; sourceTree = "<group>"; };
+		A1478E1D1AB30DEF4244D12C /* JMBaseUITestCase+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMBaseUITestCase+Helpers.h"; sourceTree = "<group>"; };
 		A1478E1EEE6B448244A33391 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A1478E3C1428657C98ECC2A2 /* JMExternalWindowControlsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowControlsVC.m; sourceTree = "<group>"; };
 		A1478E3F10E32D07026FE5E3 /* JMMultiSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMultiSelectTableViewController.h; sourceTree = "<group>"; };
@@ -931,7 +937,7 @@
 		A1478FAD8EB48565DBF9892F /* JMResourceViewerDocumentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceViewerDocumentManager.h; sourceTree = "<group>"; };
 		A1478FC1575C6C75266BDB48 /* JMReportOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportOptionsViewController.h; sourceTree = "<group>"; };
 		A1478FF2E87954F5F6AF096E /* JMScheduleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleCell.m; sourceTree = "<group>"; };
-		A215613BF2A733696ECA4806 /* Pods-TIBCO JasperMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIBCO JasperMobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-TIBCO JasperMobile/Pods-TIBCO JasperMobile.release.xcconfig"; sourceTree = "<group>"; };
+		B1697EF6CCD1E6A8ED09A3A4 /* Pods-TIBCO JasperMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIBCO JasperMobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TIBCO JasperMobile/Pods-TIBCO JasperMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -944,8 +950,6 @@
 		BDB8B9F31B57EB0A00758441 /* DefaultTheme.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultTheme.plist; sourceTree = "<group>"; };
 		BDE6A0841B5A891000A7FDEC /* JMTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextField.h; sourceTree = "<group>"; };
 		BDE6A0851B5A891000A7FDEC /* JMTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextField.m; sourceTree = "<group>"; };
-		DB6A796A9A2F4339E4D450AD /* libPods-TIBCO JasperMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TIBCO JasperMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E3A2D7022D03D9E40F8BCAE7 /* Pods-TIBCO JasperMobile.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIBCO JasperMobile.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-TIBCO JasperMobile/Pods-TIBCO JasperMobile.adhoc.xcconfig"; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -957,7 +961,6 @@
 		F55CC334174CFFCE00CEB39E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F5663A321752FA5C007978BE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		FA58C44AEA07DCF27556E5EC /* Pods-TIBCO JasperMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIBCO JasperMobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TIBCO JasperMobile/Pods-TIBCO JasperMobile.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1010,7 +1013,7 @@
 				F55CC333174CFFCE00CEB39E /* UIKit.framework in Frameworks */,
 				F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */,
 				F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */,
-				D7A1767653D950BF0A559EE5 /* libPods-TIBCO JasperMobile.a in Frameworks */,
+				2C6DB53CB7905EA4ABEAA07A /* libPods-TIBCO JasperMobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1864,6 +1867,16 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		4D2E1C5D762563F98C9D4D77 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B1697EF6CCD1E6A8ED09A3A4 /* Pods-TIBCO JasperMobile.debug.xcconfig */,
+				1365E0F6F34165BC4BA2D5A0 /* Pods-TIBCO JasperMobile.release.xcconfig */,
+				56D46DC358CC2396615F34E2 /* Pods-TIBCO JasperMobile.adhoc.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		93047D4E1AB6F5750047C982 /* GoogleAnalyticsServices */ = {
 			isa = PBXGroup;
 			children = (
@@ -2306,6 +2319,8 @@
 			children = (
 				93732E2B1C75F2050065B972 /* JMBaseUITestCase.h */,
 				93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */,
+				A14788401BA1D2920245C060 /* JMBaseUITestCase+Helpers.m */,
+				A1478E1D1AB30DEF4244D12C /* JMBaseUITestCase+Helpers.h */,
 			);
 			path = BaseClasses;
 			sourceTree = "<group>";
@@ -3616,16 +3631,6 @@
 			path = JMTextField;
 			sourceTree = "<group>";
 		};
-		C29D4E3B2FABEFC512F0762C /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				FA58C44AEA07DCF27556E5EC /* Pods-TIBCO JasperMobile.debug.xcconfig */,
-				A215613BF2A733696ECA4806 /* Pods-TIBCO JasperMobile.release.xcconfig */,
-				E3A2D7022D03D9E40F8BCAE7 /* Pods-TIBCO JasperMobile.adhoc.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		F55CC326174CFFCE00CEB39E = {
 			isa = PBXGroup;
 			children = (
@@ -3638,7 +3643,7 @@
 				F55CC331174CFFCE00CEB39E /* Frameworks */,
 				F55CC330174CFFCE00CEB39E /* Products */,
 				F5663A141752F9D0007978BE /* Vendor */,
-				C29D4E3B2FABEFC512F0762C /* Pods */,
+				4D2E1C5D762563F98C9D4D77 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -3673,10 +3678,9 @@
 				F55CC332174CFFCE00CEB39E /* UIKit.framework */,
 				F55CC334174CFFCE00CEB39E /* Foundation.framework */,
 				F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */,
-				3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */,
 				93F54FD91BD7975E00355A30 /* Fabric.framework */,
 				93F54FDA1BD7975E00355A30 /* Crashlytics.framework */,
-				DB6A796A9A2F4339E4D450AD /* libPods-TIBCO JasperMobile.a */,
+				7C52898077E823DDE80F7776 /* libPods-TIBCO JasperMobile.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3754,15 +3758,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F55CC375174CFFCF00CEB39E /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile" */;
 			buildPhases = (
-				6F5F5E6592158193EE742D9E /* [CP] Check Pods Manifest.lock */,
+				68BB2809CBC462767D51EE7B /* [CP] Check Pods Manifest.lock */,
 				93B2D7EA1CAD4B7100F60BF7 /* Run Script Generate Localizations */,
 				F55CC32B174CFFCE00CEB39E /* Sources */,
 				F55CC32C174CFFCE00CEB39E /* Frameworks */,
 				0844F14019F694730082C6E5 /* Run Update Build Version Script */,
 				F55CC32D174CFFCE00CEB39E /* Resources */,
-				9D3415DC47E90FD0EB7D031E /* [CP] Copy Pods Resources */,
 				935E06761BD7969C007F8DDA /* Run Script (Fabric) */,
-				C170B3C5F82D1A3096A62126 /* [CP] Embed Pods Frameworks */,
+				2AB04D4F231FAF1088FD3FCA /* [CP] Embed Pods Frameworks */,
+				309658A288FAA0C30D2A514F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3941,7 +3945,37 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\n# Auto Increment Version Script\n# set CFBundleVersion to 1.0.1 first!!!\n# the perl regex splits out the last part of a build number (ie: 1.1.1) and increments it by one\n# if you have a build number that is more than 3 components, add a '\\.\\d+' into the first part of the regex.\n# Increment build number for release builds only!!!.\n\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\nbuildPlist=${INFOPLIST_FILE}\nappVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$buildPlist\"`\nbuildAppVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(.+\\d+)\\.\\d+/$1/eg'`\n\n\nif [ \"${appVersion}\" = \"${buildAppVersion}\" ]; then\nbuildVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/.+\\.(\\d+)/($1+1)/eg'`\nelse\nbuildVersion=1\nfi\n\nnewBuildVersion=${appVersion}.${buildVersion}\necho $newBuildVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $newBuildVersion\" \"$buildPlist\"\nfi";
 		};
-		6F5F5E6592158193EE742D9E /* [CP] Check Pods Manifest.lock */ = {
+		2AB04D4F231FAF1088FD3FCA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TIBCO JasperMobile/Pods-TIBCO JasperMobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		309658A288FAA0C30D2A514F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TIBCO JasperMobile/Pods-TIBCO JasperMobile-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		68BB2809CBC462767D51EE7B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3953,7 +3987,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		935E06761BD7969C007F8DDA /* Run Script (Fabric) */ = {
@@ -3984,36 +4018,6 @@
 			shellPath = /bin/sh;
 			shellScript = "echo \"Start compiling localizations\"\nlocalizationFolderPath=${SRCROOT}/JasperMobile/Resources/Localizable\nallLocalizationsFolderPath=$localizationFolderPath/all_values\nallLocalizationsFileName=locales.txt\noutputPathNewStrings=$localizationFolderPath/New_Strings\noutputPath=$localizationFolderPath/Localizable.strings\ncat \"$allLocalizationsFolderPath/\"*.txt > $localizationFolderPath/$allLocalizationsFileName\n\nif [ -d \"$outputPath\" ]; then\n    echo \"$outputPath exist\"\n    rm -r \"$outputPath\"\n    rm -r \"$outputPathNewStrings\"\nfi\n\necho \"$outputPath doesn't exist\"\n#localizable strings\nmkdir \"$outputPath\"\nmkdir \"$outputPath/de.lproj\"\nmkdir \"$outputPath/en.lproj\"\nmkdir \"$outputPath/es.lproj\"\nmkdir \"$outputPath/fr.lproj\"\nmkdir \"$outputPath/it.lproj\"\nmkdir \"$outputPath/ja.lproj\"\nmkdir \"$outputPath/pt.lproj\"\nmkdir \"$outputPath/zh.lproj\"\n#new strings\nmkdir \"$outputPathNewStrings\"\nmkdir \"$outputPathNewStrings/en.lproj\"\n#create new localizables\n/usr/local/bin/twine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPathNewStrings/\" --tags new\n/usr/local/bin/twine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPath/\"\n\nrm \"$localizationFolderPath/$allLocalizationsFileName\"\necho \"Finish compiling localizations\"";
 		};
-		9D3415DC47E90FD0EB7D031E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TIBCO JasperMobile/Pods-TIBCO JasperMobile-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C170B3C5F82D1A3096A62126 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TIBCO JasperMobile/Pods-TIBCO JasperMobile-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -4025,6 +4029,7 @@
 				930E18DD1CEC9A7100CE5E10 /* JMBaseUITestCase.m in Sources */,
 				930E18DC1CEC98C600CE5E10 /* JMPerformanceUITests.m in Sources */,
 				93CA63BC1D115E1300265DE4 /* JMLocalization.m in Sources */,
+				A1478EF960BFA32891915C0C /* JMBaseUITestCase+Helpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4149,6 +4154,7 @@
 				93732E2D1C75F2050065B972 /* JMBaseUITestCase.m in Sources */,
 				933CAFA31C776F9700EF6F84 /* JMFiltersPageUITests.m in Sources */,
 				93A8B5CE1CFC00BA00B313FC /* JMDashboardPrintDialogUITests.m in Sources */,
+				A1478B09AC7D73A8A7C1ED0F /* JMBaseUITestCase+Helpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4466,7 +4472,7 @@
 		};
 		08DD18211B13519000856112 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E3A2D7022D03D9E40F8BCAE7 /* Pods-TIBCO JasperMobile.adhoc.xcconfig */;
+			baseConfigurationReference = 56D46DC358CC2396615F34E2 /* Pods-TIBCO JasperMobile.adhoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -4905,7 +4911,7 @@
 		};
 		F55CC376174CFFCF00CEB39E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA58C44AEA07DCF27556E5EC /* Pods-TIBCO JasperMobile.debug.xcconfig */;
+			baseConfigurationReference = B1697EF6CCD1E6A8ED09A3A4 /* Pods-TIBCO JasperMobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -4957,7 +4963,7 @@
 		};
 		F55CC377174CFFCF00CEB39E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A215613BF2A733696ECA4806 /* Pods-TIBCO JasperMobile.release.xcconfig */;
+			baseConfigurationReference = 1365E0F6F34165BC4BA2D5A0 /* Pods-TIBCO JasperMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

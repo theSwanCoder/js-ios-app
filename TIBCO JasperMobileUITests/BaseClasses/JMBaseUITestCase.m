@@ -7,6 +7,11 @@
 //
 
 #import "JMBaseUITestCase.h"
+#import "JMBaseUITestCase+Helpers.h"
+
+NSTimeInterval kUITestsBaseTimeout = 10;
+NSTimeInterval kUITestsResourceWaitingTimeout = 30;
+NSTimeInterval kUITestsElementAvailableTimeout = 1;
 
 @implementation JMBaseUITestCase
 
@@ -19,10 +24,9 @@
     self.continueAfterFailure = NO;
     // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
     
-    self.application = [[XCUIApplication alloc] init];
     [self.application launch];
     
-    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
+    XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
     BOOL isLoginPageOnScreen = loginPageView.exists;
     if (!isLoginPageOnScreen) {
         [self logout];
@@ -34,7 +38,7 @@
 }
 
 - (void)tearDown {
-    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
+    XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
     BOOL isLoginPageOnScreen = loginPageView.exists;
     if (!isLoginPageOnScreen) {
         [self logout];
@@ -90,7 +94,8 @@
         XCUIElement *menu = self.application.menuItems[@"Delete"];
         if (menu) {
             [menu tap];
-            XCUIElement *deleteButton = self.application.alerts[@"Confirmation"].buttons[@"Delete"];
+            XCUIElement *deleteButton = [self findButtonWithAccessibilityId:@"Delete"
+                                                              parentElement:self.application.alerts[@"Confirmation"]];
             if (deleteButton) {
                 [deleteButton tap];
             } else {
@@ -124,98 +129,57 @@
 #pragma mark - Helpers Test Profile
 - (void)tryOpenServerProfilesPage
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *serverProfileTextField = self.application.textFields[@"JMLoginPageServerProfileTextFieldAccessibilityId"];
-    NSLog(@"serverProfileTextField: %@", serverProfileTextField);
-    NSLog(@"serverProfileTextField exist: %@", serverProfileTextField.exists ? @"YES" : @"NO");
-    if (serverProfileTextField.exists) {
-        [serverProfileTextField tap];
-    } else {
-        XCTFail(@"Server profile text field doesn't exist.");
-    }
+    XCUIElement *serverProfileTextField = [self waitTextFieldWithAccessibilityId:@"JMLoginPageServerProfileTextFieldAccessibilityId"
+                                                                         timeout:kUITestsBaseTimeout];
+    [serverProfileTextField tap];
 }
 
 - (void)tryOpenNewServerProfilePage
 {
-    XCUIElement *addProfileButton = self.application.buttons[@"JMServerProfilesPageAddNewProfileButtonAccessibilityId"];
-    if (addProfileButton.exists) {
-        [addProfileButton tap];
-    } else {
-        XCTFail(@"Add new profile button doesn't exist.");
-    }
+    XCUIElement *addProfileButton = [self waitButtonWithAccessibilityId:@"JMServerProfilesPageAddNewProfileButtonAccessibilityId"
+                                                                timeout:kUITestsBaseTimeout];
+    [addProfileButton tap];
 }
 
 - (void)tryCreateNewTestServerProfile
 {
-    XCUIElementQuery *tablesQuery = self.application.tables;
-    
-    // Find Profile Name TextField
-    XCUIElement *profileNameTextFieldElement = tablesQuery.textFields[@"Profile name"];
-    if (profileNameTextFieldElement.exists) {
-        [profileNameTextFieldElement tap];
-        [profileNameTextFieldElement typeText:kJMTestProfileName];
-    } else {
-        XCTFail(@"Profile Name text field doesn't exist.");
-    }
-    
-    // Close keyboard
-    XCUIElement *doneButton = self.application.toolbars.buttons[@"Done"];
-    if (doneButton.exists) {
-        [doneButton tap];
-    } else {
-        XCTFail(@"Done button on keyboard doesn't exist.");
-    }
-    
-    // Find Profile URL TextField
-    XCUIElement *profileURLTextFieldElement = tablesQuery.textFields[@"Server address"];
-    if (profileURLTextFieldElement.exists) {
-        [profileURLTextFieldElement tap];
-        [profileURLTextFieldElement typeText:kJMTestProfileURL];
-    } else {
-        XCTFail(@"Profile URL text field doesn't exist.");
-    }
-    
-    // Close keyboard
-    doneButton = self.application.toolbars.buttons[@"Done"];
-    if (doneButton.exists) {
-        [doneButton tap];
-    } else {
-        XCTFail(@"Done button on keyboard doesn't exist.");
-    }
-    
-    // Find Organization TextField
-    XCUIElement *organizationTextFieldElement = tablesQuery.textFields[@"Organization ID"];
-    if (organizationTextFieldElement.exists) {
-        [organizationTextFieldElement tap];
-        [organizationTextFieldElement typeText:kJMTestProfileCredentialsOrganization];
-    } else {
-        XCTFail(@"Organization text field doesn't exist.");
-    }
-    
-    // Close keyboard
-    doneButton = self.application.toolbars.buttons[@"Done"];
-    if (doneButton.exists) {
-        [doneButton tap];
-    } else {
-        XCTFail(@"Done button on keyboard doesn't exist.");
-    }
-    
+    XCUIApplication *app = self.application;
+    XCUIElement *table = [app.tables elementBoundByIndex:0];
+
+    // Profile Name TextField
+    [self enterText:kJMTestProfileName intoTextFieldWithAccessibilityId:@"Profile name"
+      parentElement:table
+      isSecureField:false];
+
+    // Profile URL TextField
+    [self enterText:kJMTestProfileURL intoTextFieldWithAccessibilityId:@"Server address"
+      parentElement:table
+      isSecureField:false];
+
+    // Organization TextField
+    [self enterText:kJMTestProfileCredentialsOrganization intoTextFieldWithAccessibilityId:@"Organization ID"
+      parentElement:table
+      isSecureField:false];
+
     // Save a new created profile
-    XCUIElement *saveButton = self.application.buttons[@"Save"];
-    if (saveButton.exists) {
-        [saveButton tap];
-    } else {
-        XCTFail(@"Create new profile button doesn't exist.");
-    }
+    XCUIElement *saveButton = [self waitButtonWithAccessibilityId:@"Save"
+                                                          timeout:kUITestsBaseTimeout];
+    [saveButton tap];
     
     // Confirm if need http end point
+    [self closeSecurityWarningAlert];
+}
+
+- (void)closeSecurityWarningAlert
+{
     XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
     if (securityWarningAlert.exists) {
-        NSString *okButtonTitle = JMLocalizedString(@"dialog_button_ok");
-        NSLog(@"okButtonTitle: %@", okButtonTitle);
-        XCUIElement *securityWarningAlertOkButton = securityWarningAlert.buttons[okButtonTitle];
-        if (securityWarningAlertOkButton.exists) {
-            [securityWarningAlertOkButton tap];
+        XCUIElement *okButton = [self findButtonWithAccessibilityId:JMLocalizedString(@"dialog_button_ok")
+                                                      parentElement:securityWarningAlert];
+        if (okButton.exists) {
+            // HACK - We need add sleep here, because sometimes the button isn't 'tappable', right after getting it
+            sleep(kUITestsElementAvailableTimeout);
+            [okButton tap];
         } else {
             XCTFail(@"'Ok' button on security warning alert doesn't exist.");
         }
@@ -224,12 +188,7 @@
 
 - (void)tryBackToLoginPageFromProfilesPage
 {
-    XCUIElement *backButton = [[[self.application.navigationBars[@"Server Profiles"] childrenMatchingType:XCUIElementTypeButton] matchingIdentifier:@"Back"] elementBoundByIndex:0];
-    if (backButton.exists) {
-        [backButton tap];
-    } else {
-        XCTFail(@"'Back' button on Profiles page doesn't exist.");
-    }
+    [self tryBackToPreviousPage];
 }
 
 - (void)trySelectNewTestServerProfile
@@ -237,16 +196,6 @@
     XCUIElement *testProfile = self.application.collectionViews.staticTexts[@"Test Profile"];
     if (testProfile.exists) {
         [testProfile tap];
-        
-        // TODO: how better to use this case
-        //        XCUIElement *unknownServerAlert = self.application.alerts[@"Unknown server"];
-        //        if (unknownServerAlert.exists) {
-        //            XCUIElement *okButton = unknownServerAlert.buttons[@"OK"];
-        //            if (okButton.exists) {
-        //                [okButton tap];
-        //            }
-        //            XCTFail(@"Server Profile doesn't be select (maybe it turned off)");
-        //        }
     } else {
         XCTFail(@"Test profile doesn't visible or exist");
     }
@@ -254,95 +203,46 @@
 
 - (void)tryEnterTestCredentials
 {
-    XCUIElement *usernameTextField = self.application.textFields[@"JMLoginPageUserNameTextFieldAccessibilityId"];
-    if (usernameTextField.exists) {
-        [usernameTextField tap];
-        
-        NSString *oldValueString = usernameTextField.value;
-        if (![oldValueString isEqualToString:kJMTestProfileCredentialsUsername]) {
-            if (oldValueString.length > 0) {
-                XCUIElement *deleteSymbolButton = self.application.keys[@"delete"];
-                if (deleteSymbolButton.exists) {
-                    for (int i = 0; i < oldValueString.length; ++i) {
-                        [deleteSymbolButton tap];
-                    }
-                }
-            }            
-            [usernameTextField typeText:kJMTestProfileCredentialsUsername];
-        }
-        
-    } else {
-        XCTFail(@"User name text field doesn't exist");
-    }
-    
-    // Close keyboard
-    XCUIElement *doneButton = self.application.buttons[@"Done"];
-    if (doneButton.exists) {
-        [doneButton tap];
-    } else {
-        XCTFail(@"Done button on keyboard doesn't exist.");
-    }
-    
-    XCUIElement *passwordSecureTextField = self.application.secureTextFields[@"JMLoginPagePasswordTextFieldAccessibilityId"];
-    if (passwordSecureTextField.exists) {
-        [passwordSecureTextField tap];
-        [passwordSecureTextField typeText:kJMTestProfileCredentialsPassword];
-    } else {
-        XCTFail(@"Password text field doesn't exist");
-    }
-    
-    // Close keyboard
-    doneButton = self.application.buttons[@"Done"];
-    if (doneButton.exists) {
-        [doneButton tap];
-    } else {
-        XCTFail(@"Done button on keyboard doesn't exist.");
-    }
+    // Enter username
+    [self enterText:kJMTestProfileCredentialsUsername intoTextFieldWithAccessibilityId:@"JMLoginPageUserNameTextFieldAccessibilityId"
+      parentElement:nil
+      isSecureField:false];
+
+    // Enter password
+    [self enterText:kJMTestProfileCredentialsPassword intoTextFieldWithAccessibilityId:@"JMLoginPagePasswordTextFieldAccessibilityId"
+      parentElement:nil
+      isSecureField:true];
 }
 
 - (void)tryTapLoginButton
 {
-    XCUIElement *loginButton = self.application.buttons[@"JMLoginPageLoginButtonAccessibilityId"];
-    if (loginButton.exists) {
-        [loginButton tap];
-    } else {
-        XCTFail(@"'Login' button doesn't exist.");
-    }
+    XCUIElement *loginButton = [self waitButtonWithAccessibilityId:@"JMLoginPageLoginButtonAccessibilityId"
+                                                           visible:true
+                                                           timeout:kUITestsBaseTimeout];
+    [loginButton tap];
 }
 
 
 #pragma mark - Helpers
 - (void)givenThatLoginPageOnScreen
 {
-    XCUIElement *loginPageView = self.application.otherElements[@"JMLoginPageAccessibilityId"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
-    
-    [self expectationForPredicate:predicate
-              evaluatedWithObject:loginPageView
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
+    [self waitElementWithAccessibilityId:@"JMLoginPageAccessibilityId"
+                                 visible:true
+                                 timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenThatServerProfilesPageOnScreen
 {
-    XCUIElement *serverProfilesPageView = self.application.otherElements[@"JMServerProfilesPageAccessibilityId"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
-    
-    [self expectationForPredicate:predicate
-              evaluatedWithObject:serverProfilesPageView
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:20 handler:nil];
+    [self waitElementWithAccessibilityId:@"JMServerProfilesPageAccessibilityId"
+                                 visible:true
+                                 timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenThatNewProfilePageOnScreen
 {
-    XCUIElement *newServerProfilePageView = self.application.otherElements[@"JMNewServerProfilePageAccessibilityId"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
-    
-    [self expectationForPredicate:predicate
-              evaluatedWithObject:newServerProfilePageView
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
+    [self waitElementWithAccessibilityId:@"JMNewServerProfilePageAccessibilityId"
+                                 visible:true
+                                 timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenThatLibraryPageOnScreen
@@ -361,12 +261,13 @@
     [self expectationForPredicate:cellsCountPredicate
               evaluatedWithObject:self.application
                           handler:nil];
-    [self waitForExpectationsWithTimeout:20 handler:nil];
+    [self waitForExpectationsWithTimeout:kUITestsBaseTimeout
+                                 handler:nil];
 }
 
 - (void)verifyIntroPageIsOnScreen
 {
-    sleep(2);
+    sleep(kUITestsElementAvailableTimeout);
     XCUIElement *skipIntroButton = self.application.buttons[@"Skip Intro"];
     if (skipIntroButton.exists) {
         [skipIntroButton tap];
@@ -375,7 +276,7 @@
 
 - (void)verifyRateAlertIsShown
 {
-    sleep(2);
+    sleep(kUITestsElementAvailableTimeout);
     XCUIElement *rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
     if (rateAlert.exists) {
         XCUIElement *rateAppLateButton = rateAlert.buttons[@"No, thanks"];
@@ -388,12 +289,9 @@
 #pragma mark - Helper Actions
 - (void)tryBackToPreviousPage
 {
-    XCUIElement *backButton = self.application.buttons[@"Back"];
-    if (backButton.exists) {
-        [backButton tap];
-    } else {
-        XCTFail(@"'Back' item isn't visible");
-    }
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Back"
+                                                              timeout:kUITestsBaseTimeout];
+    [backButton tap];
 }
 
 - (void)tryOpenRepositoryPage
@@ -417,71 +315,55 @@
 - (void)tryOpenPageWithName:(NSString *)pageName
 {
     [self givenSideMenuVisible];
-    XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
+    XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
+                                                         visible:true
+                                                         timeout:kUITestsBaseTimeout];
     XCUIElement *pageMenuItem = menuView.cells.staticTexts[pageName];
-    if (pageMenuItem.exists) {
-        [pageMenuItem tap];
-    } else {
-        XCTFail(@"'Menu Item' isn't visible.");
-    }
-    
+    [self waitElement:pageMenuItem
+              visible:true
+              timeout:kUITestsBaseTimeout];
+    [pageMenuItem tap];
 }
 
 #pragma mark - Helpers - Side (App) Menu
 
 - (void)givenSideMenuVisible
 {
-    XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
-    if (!menuView.exists) {
-        [self tryOpenSideApplicationMenu];
-    }
+    // Verify that side bar isn't visible yet
+    [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
+                                 visible:false
+                                 timeout:kUITestsBaseTimeout];
+    [self tryTapSideApplicationMenu];
 }
 
 - (void)givenSideMenuNotVisible
 {
-    XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
-    if (menuView.exists) {
-        [self tryOpenSideApplicationMenu];
-    }
+    // Verify that side bar is already visible
+    [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
+                                 visible:true
+                                 timeout:kUITestsBaseTimeout];
+    [self tryTapSideApplicationMenu];
 }
 
-- (void)tryOpenSideApplicationMenu
+- (void)tryTapSideApplicationMenu
 {
-    XCUIElement *menuButton = self.application.buttons[@"menu icon"];
-    NSPredicate *menuPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
-    
-    [self expectationForPredicate:menuPagePredicate
-              evaluatedWithObject:menuButton
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:2 handler:nil];
-    
+    XCUIElement *menuButton = [self waitMenuButtonWithTimeout:kUITestsBaseTimeout];
     [menuButton tap];
 }
 
 #pragma mark - Helpers - Menu
 - (BOOL)isShareButtonExists
 {
-    BOOL isShareButtonExists = NO;
-    XCUIElement *navBar = [self.application.navigationBars elementBoundByIndex:0];
-    if (navBar.exists) {
-        XCUIElement *menuActionsButton = navBar.buttons[@"Share"];
-        if (menuActionsButton.exists) {
-            isShareButtonExists = YES;
-        }
-    }
-    return isShareButtonExists;
+    XCUIElement *actionsButton = [self findActionsButton];
+    return actionsButton.exists;
 }
 
 #pragma mark - Verifies
 - (void)verifyThatCurrentPageIsLibrary
 {
-    XCUIElement *libraryPageView = self.application.otherElements[@"JMLibraryPageAccessibilityId"];
-    NSPredicate *libraryPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
-    
-    [self expectationForPredicate:libraryPagePredicate
-              evaluatedWithObject:libraryPageView
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
+    [self waitElementWithAccessibilityId:@"JMLibraryPageAccessibilityId"
+                                 visible:true
+                                 timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatCurrentPageIsRepository
@@ -492,30 +374,23 @@
     [self expectationForPredicate:repositoryPagePredicate
               evaluatedWithObject:repositoryNavBar
                           handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
+    [self waitForExpectationsWithTimeout:kUITestsBaseTimeout
+                                 handler:nil];
 }
 
 #pragma mark - Verifies - Loading Popup
 - (void)verifyThatLoadingPopupVisible
 {
-    XCUIElement *loadingPopup = [self.application.otherElements elementMatchingType:XCUIElementTypeAny identifier:@"JMCancelRequestPopupAccessibilityId"];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
-    [self expectationForPredicate:predicate
-              evaluatedWithObject:loadingPopup
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:30 handler:nil];
+    [self waitElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"
+                                 visible:true
+                                 timeout:kUITestsResourceWaitingTimeout];
 }
 
 - (void)verifyThatLoadingPopupNotVisible
 {
-    XCUIElement *loadingPopup = [self.application.otherElements elementMatchingType:XCUIElementTypeAny identifier:@"JMCancelRequestPopupAccessibilityId"];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == false"];
-    [self expectationForPredicate:predicate
-              evaluatedWithObject:loadingPopup
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:30 handler:nil];
+    [self waitElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"
+                                 visible:false
+                                 timeout:kUITestsResourceWaitingTimeout];
 }
 
 #pragma mark - JMBaseUITestProtocol
@@ -523,4 +398,54 @@
 {
     return YES;
 }
+
+#pragma - Utils
+- (void)closeKeyboardWithDoneButton
+{
+    XCUIElement *doneButton = [self waitDoneButtonWithTimeout:kUITestsBaseTimeout];
+    [doneButton tap];
+}
+
+- (void)openMenuActions
+{
+    [self openMenuActionsOnNavBarWithLabel:nil];
+}
+
+- (void)openMenuActionsOnNavBarWithLabel:(NSString *)label
+{
+    XCUIElement *actionsButton = [self waitActionsButtonOnNavBarWithLabel:label
+                                                                  timeout:kUITestsBaseTimeout];
+    [actionsButton tap];
+}
+
+- (void)enterText:(NSString *)text intoTextFieldWithAccessibilityId:(NSString *)accessibilityId
+    parentElement:(XCUIElement *)parentElement
+    isSecureField:(BOOL)isSecureField
+{
+    XCUIElement *textField;
+    if (isSecureField) {
+        textField = [self waitSecureTextFieldWithAccessibilityId:accessibilityId
+                                                   parentElement:parentElement
+                                                         timeout:kUITestsBaseTimeout];
+    } else {
+        textField = [self waitTextFieldWithAccessibilityId:accessibilityId
+                                             parentElement:parentElement
+                                                   timeout:kUITestsBaseTimeout];
+    }
+
+    NSString *oldValueString = textField.value;
+    if (oldValueString.length > 0 && [oldValueString isEqualToString:text]) {
+        XCUIElement *deleteSymbolButton = self.application.keys[@"delete"];
+        if (deleteSymbolButton.exists) {
+            for (int i = 0; i < oldValueString.length; ++i) {
+                [deleteSymbolButton tap];
+            }
+        }
+    }
+
+    [textField tap];
+    [textField typeText:text];
+    [self closeKeyboardWithDoneButton];
+}
+
 @end
