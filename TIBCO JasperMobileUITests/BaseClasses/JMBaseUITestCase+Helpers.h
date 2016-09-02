@@ -65,4 +65,8 @@
 // Other buttons
 - (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout;
 - (XCUIElement *)waitDoneButtonWithTimeout:(NSTimeInterval)timeout;
+
+// Cells
+- (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId;
+- (XCUIElement *)cellWithAccessibilityId:(NSString *)accessibilityId forIndex:(NSUInteger)index;
 @end

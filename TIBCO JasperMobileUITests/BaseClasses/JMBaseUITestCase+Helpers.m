@@ -135,12 +135,12 @@
 {
     XCUIElement *button = [self findButtonWithAccessibilityId:accessibilityId
                                                 parentElement:parentElement];
-    if (!button.isHittable) {
-        return nil;
-    }
     [self waitElement:button
               visible:visible
               timeout:timeout];
+    if (!button.isHittable) {
+        return nil;
+    }
     // HACK - We need add sleep here, because sometimes the button isn't 'tappable', right after getting it
     sleep(kUITestsElementAvailableTimeout);
     return button;
@@ -291,6 +291,29 @@
     return [self waitButtonWithAccessibilityId:@"Done"
                                        visible:true
                                        timeout:timeout];
+}
+
+#pragma mark - Cells
+
+- (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId
+{
+    NSString *predicateFormat = [NSString stringWithFormat:@"self.identifier == '%@' && (self.hittable == true)", accessibilityId];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
+    NSArray *allCells = self.application.cells.allElementsBoundByAccessibilityElement;
+    NSInteger count = [allCells filteredArrayUsingPredicate:predicate].count;
+    return count;
+}
+
+- (XCUIElement *)cellWithAccessibilityId:(NSString *)accessibilityId forIndex:(NSUInteger)index
+{
+    NSString *predicateFormat = [NSString stringWithFormat:@"self.identifier == '%@' && (self.hittable == true)", accessibilityId];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
+    NSArray *allCells = self.application.cells.allElementsBoundByAccessibilityElement;
+    NSArray *filteredCells = [allCells filteredArrayUsingPredicate:predicate];
+    if (index < filteredCells.count) {
+        return filteredCells[index];
+    }
+    return nil;
 }
 
 @end
