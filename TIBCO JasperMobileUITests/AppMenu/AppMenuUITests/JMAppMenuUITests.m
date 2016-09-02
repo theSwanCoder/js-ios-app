@@ -15,7 +15,7 @@
 {
     // try to open side menu by tapping on button
     [self givenThatLibraryPageOnScreen];
-    [self tryOpenSideApplicationMenu];
+    [self tryTapSideApplicationMenu];
     [self verifyThatSideMenuVisible];
     [self tryCloseSideApplicationMenuByButtonTap];
     [self givenThatLibraryPageOnScreen];
@@ -31,7 +31,7 @@
 {
     // try to open side menu by tapping on button
     [self givenThatLibraryPageOnScreen];
-    [self tryOpenSideApplicationMenu];
+    [self tryTapSideApplicationMenu];
     [self verifyThatSideMenuVisible];
 
     XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
@@ -47,7 +47,7 @@
 {
     // try to open side menu by tapping on button
     [self givenThatLibraryPageOnScreen];
-    [self tryOpenSideApplicationMenu];
+    [self tryTapSideApplicationMenu];
     [self verifyThatSideMenuVisible];
 
     XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
@@ -59,7 +59,7 @@
             if (pageMenuItem.exists) {
                 [pageMenuItem tap];
             }
-            [self tryOpenSideApplicationMenu];
+            [self tryTapSideApplicationMenu];
             [self verifyThatSideMenuVisible];
         }
         
@@ -76,7 +76,7 @@
         }
 
         // Check Settings item
-        [self tryOpenSideApplicationMenu];
+        [self tryTapSideApplicationMenu];
         [self verifyThatSideMenuVisible];
         
         XCUIElement *settingsMenuItem = menuView.cells.staticTexts[@"Settings"];
@@ -96,7 +96,7 @@
 {
     // try to open side menu by tapping on button
     [self givenThatLibraryPageOnScreen];
-    [self tryOpenSideApplicationMenu];
+    [self tryTapSideApplicationMenu];
     [self verifyThatSideMenuVisible];
     
     XCUIElement *userNameLabel = self.application.staticTexts[kJMTestProfileCredentialsUsername];
@@ -113,14 +113,6 @@
     if (!organizationLabel.exists) {
         XCTFail(@"'Organization' label doesn't exist.");
     }
-    
-//    NSString *bundleVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
-//    NSString *buildVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
-//    NSString *fullBuildVersion = [NSString stringWithFormat:@"v. %@ (%@)", bundleVersion, buildVersion];
-//    XCUIElement *buildVersionLabel = self.application.staticTexts[fullBuildVersion];
-//    if (!buildVersionLabel.exists) {
-//        XCTFail(@"'Build Version' label doesn't exist.");
-//    }
 }
 
 

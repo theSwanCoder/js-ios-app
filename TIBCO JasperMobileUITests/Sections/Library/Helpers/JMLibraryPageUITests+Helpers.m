@@ -141,29 +141,31 @@
 
 - (void)tryOpenMenuActions
 {
-    XCUIElement *navBar = self.application.navigationBars[@"Library"];
-    if (navBar.exists) {
-        XCUIElement *menuActionsButton = navBar.buttons[@"Share"];
-        if (menuActionsButton.exists) {
-            [menuActionsButton tap];
+    [self openMenuActionsOnNavBarWithLabel:@"Library"];
 
-            // Wait until menu actions appears
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
-            [self expectationForPredicate:predicate
-                      evaluatedWithObject:self.application
-                                  handler:nil];
-            [self waitForExpectationsWithTimeout:5 handler:nil];
-
-            XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
-            if (!menuActionsElement.exists) {
-                XCTFail(@"Menu Actions isn't visible");
-            }
-        } else {
-            XCTFail(@"Menu Actions button isn't visible");
-        }
-    } else {
-        XCTFail(@"Navigation bar isn't visible");
-    }
+//    XCUIElement *navBar = self.application.navigationBars[@"Library"];
+//    if (navBar.exists) {
+//        XCUIElement *menuActionsButton = navBar.buttons[@"Share"];
+//        if (menuActionsButton.exists) {
+//            [menuActionsButton tap];
+//
+//            // Wait until menu actions appears
+//            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
+//            [self expectationForPredicate:predicate
+//                      evaluatedWithObject:self.application
+//                                  handler:nil];
+//            [self waitForExpectationsWithTimeout:5 handler:nil];
+//
+//            XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
+//            if (!menuActionsElement.exists) {
+//                XCTFail(@"Menu Actions isn't visible");
+//            }
+//        } else {
+//            XCTFail(@"Menu Actions button isn't visible");
+//        }
+//    } else {
+//        XCTFail(@"Navigation bar isn't visible");
+//    }
 }
 
 - (void)tryOpenFilterMenuFromMenuActions

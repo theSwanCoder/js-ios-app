@@ -7,6 +7,7 @@
 //
 
 #import "JMLibraryInfoPageUITests.h"
+#import "JMBaseUITestCase+Helpers.h"
 
 NSInteger static kJMReportInfoPageTestCellIndex = 0;
 
@@ -17,7 +18,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 {
     [self givenThatLibraryPageOnScreen];
     [self givenThatCellsAreVisible];
-    
+
+    // open info page
     [self givenThatReportInfoPageOnScreen];
     
     [self tryBackToPreviousPage];
@@ -29,18 +31,15 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     [self givenThatCellsAreVisible];
     
     // get label of first report
-    XCUIElement *testCell = [self testCell];
+    XCUIElement *testCell = [self waitTestCell];
     XCUIElement *reportNameLabel = testCell.staticTexts[@"JMResourceCellResourceNameLabelAccessibilityId"];
     NSString *reportInfoLabel = reportNameLabel.label;
     
     [self givenThatReportInfoPageOnScreen];
     
-    // verify that title is equal of the label
-    XCUIElement *reportInfoNavBar = self.application.navigationBars[reportInfoLabel];
-    if (!reportInfoNavBar.exists) {
-        XCTFail(@"'Info Page' has wrong title");
-    }
-    
+    [self waitNavigationBarWithLabel:reportInfoLabel
+                             timeout:kUITestsBaseTimeout];
+
     [self tryBackToPreviousPage];
 }
 
@@ -48,6 +47,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 {
     [self givenThatLibraryPageOnScreen];
     [self givenThatCellsAreVisible];
+
+    // open info page
     [self givenThatReportInfoPageOnScreen];
     
     [self verifyThatReportInfoPageContainsFullReportInfo];
@@ -78,6 +79,7 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     // verify report is favorite
     [self tryBackToPreviousPage];
     [self givenThatLibraryPageOnScreen];
+    [self tryOpenFavoritePage];
     if (![self isReportMarkAsFavorite:reportInfoLabel]) {
         XCTFail(@"Test report isn't marked as favorite.");
     }
@@ -108,6 +110,15 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     } else {
         XCTFail(@"'Info' button isn't visible.");
     }
+}
+
+- (XCUIElement *)waitTestCell
+{
+    XCUIElement *testCell = [self testCell];
+    [self waitElement:testCell
+              visible:true
+              timeout:kUITestsBaseTimeout];
+    return testCell;
 }
 
 - (XCUIElement *)testCell
@@ -147,7 +158,7 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 
 - (void)tryMarkTestReportAsFavorite
 {
-    [self tryOpenMenu];
+    [self openMenuActions];
     
     XCUIElement *menu = [self.application.otherElements elementMatchingType:XCUIElementTypeAny identifier:@"JMMenuActionsViewAccessibilityId"];
     XCUIElement *markAsFavoriteElement = menu.staticTexts[@"Mark as Favorite"];
@@ -160,7 +171,7 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 
 - (void)tryUnMarkTestReportAsFavorite
 {
-    [self tryOpenMenu];
+    [self openMenuActions];
     
     XCUIElement *menu = [self.application.otherElements elementMatchingType:XCUIElementTypeAny identifier:@"JMMenuActionsViewAccessibilityId"];
     XCUIElement *unmarkAsFavoriteElement = menu.staticTexts[@"Remove From Favorites"];
@@ -168,47 +179,6 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
         [unmarkAsFavoriteElement tap];
     } else {
         XCTFail(@"'Remove From Favorites' item isn't visible");
-    }
-}
-
-- (void)tryOpenMenu
-{
-    BOOL isShareButtonExists = [self isShareButtonExists];
-    if (isShareButtonExists) {
-        [self tryOpenMenuActions];        
-    } else {
-//        [self tryOpenSortMenuFromNavBar];
-    }
-}
-
-- (void)tryCloseMenu
-{
-    BOOL isShareButtonExists = [self isShareButtonExists];
-    if (isShareButtonExists) {
-        XCUIElement *menuActionsButton = self.application.buttons[@"Share"];
-        if (menuActionsButton.exists) {
-            [menuActionsButton tap];
-        } else {
-            XCTFail(@"Menu Actions button isn't visible");
-        }
-    }
-}
-
-- (void)tryOpenMenuActions
-{
-    XCUIElement *menuActionsButton = self.application.buttons[@"Share"];
-    if (menuActionsButton.exists) {
-        [menuActionsButton tap];
-        
-        // Wait until menu actions appears
-        XCUIElement *menuActions = [self.application.otherElements elementMatchingType:XCUIElementTypeAny identifier:@"JMMenuActionsViewAccessibilityId"];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
-        [self expectationForPredicate:predicate
-                  evaluatedWithObject:menuActions
-                              handler:nil];
-        [self waitForExpectationsWithTimeout:5 handler:nil];
-    } else {
-        XCTFail(@"Menu Actions button isn't visible");
     }
 }
 
