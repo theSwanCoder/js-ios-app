@@ -318,7 +318,8 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 
 - (void)tryOpenPageWithName:(NSString *)pageName
 {
-    [self givenSideMenuVisible];
+    [self givenSideMenuNotVisible];
+    [self tryTapSideApplicationMenu];
     XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
                                                          visible:true
                                                          timeout:kUITestsBaseTimeout];
@@ -333,20 +334,18 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 
 - (void)givenSideMenuVisible
 {
-    // Verify that side bar isn't visible yet
-    [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                 visible:false
-                                 timeout:kUITestsBaseTimeout];
-    [self tryTapSideApplicationMenu];
-}
-
-- (void)givenSideMenuNotVisible
-{
     // Verify that side bar is already visible
     [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
                                  visible:true
                                  timeout:kUITestsBaseTimeout];
-    [self tryTapSideApplicationMenu];
+}
+
+- (void)givenSideMenuNotVisible
+{
+    // Verify that side bar isn't visible yet
+    [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
+                                 visible:false
+                                 timeout:kUITestsBaseTimeout];
 }
 
 - (void)tryTapSideApplicationMenu

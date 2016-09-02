@@ -9,7 +9,7 @@
 #import "JMReportPageUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
 
-NSInteger static kJMRunReportTestCellIndex = 1;
+NSInteger static kJMRunReportTestCellIndex = 0;
 
 @implementation JMReportPageUITests
 
@@ -348,14 +348,12 @@ NSInteger static kJMRunReportTestCellIndex = 1;
 
 - (void)cancelLoading
 {
-    XCUIElement *loadingPopup = [self.application.otherElements elementMatchingType:XCUIElementTypeAny identifier:@"JMCancelRequestPopupAccessibilityId"];
-    
-    XCUIElement *cancelButton = loadingPopup.buttons[@"Cancel"];
-    if (cancelButton) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"'Cancel' button doesn't exist.");
-    }
+    XCUIElement *loadingPopup = [self findElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"];
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                      parentElement:loadingPopup
+                                                            visible:true
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
 }
 
 #pragma mark - Verifies

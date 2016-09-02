@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A254g" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gNe-8U-f8m">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gNe-8U-f8m">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -457,6 +457,10 @@
                                             <constraint firstItem="a0f-Y6-rnY" firstAttribute="top" secondItem="82C-GT-gxn" secondAttribute="top" constant="5" id="yVy-RX-BL1"/>
                                             <constraint firstAttribute="trailing" secondItem="icm-m7-bF0" secondAttribute="trailing" constant="5" id="zeu-MM-SDQ"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="JMCollectionViewServerGridAccessibilityId"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="titleImage" destination="4hb-1H-1ir" id="qND-If-kMq"/>
                                             <outlet property="titleLabel" destination="a0f-Y6-rnY" id="wpC-kf-ayz"/>

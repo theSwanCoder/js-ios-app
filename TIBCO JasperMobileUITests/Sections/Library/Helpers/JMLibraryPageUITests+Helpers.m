@@ -4,6 +4,7 @@
 //
 
 #import "JMLibraryPageUITests+Helpers.h"
+#import "JMBaseUITestCase+Helpers.h"
 
 
 @implementation JMLibraryPageUITests (Helpers)
@@ -361,16 +362,12 @@
 #pragma mark -
 - (NSInteger)countOfGridCells
 {
-    NSPredicate *predicateForGrid = [NSPredicate predicateWithFormat:@"self.hittable == true && (self.identifier == 'JMCollectionViewGridCellAccessibilityId')"];
-    NSInteger filtredResultCount = [[self.application.cells allElementsBoundByIndex] filteredArrayUsingPredicate:predicateForGrid].count;
-    return filtredResultCount;
+    return [self countCellsWithAccessibilityId:@"JMCollectionViewGridCellAccessibilityId"];
 }
 
 - (NSInteger)countOfListCells
 {
-    NSPredicate *predicateForList = [NSPredicate predicateWithFormat:@"self.hittable == true && (self.identifier == 'JMCollectionViewListCellAccessibilityId')"];
-    NSInteger filtredResultCount = [[self.application.cells allElementsBoundByIndex] filteredArrayUsingPredicate:predicateForList].count;
-    return filtredResultCount;
+    return [self countCellsWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"];
 }
 
 @end

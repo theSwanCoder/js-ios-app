@@ -7,6 +7,7 @@
 //
 
 #import "JMServerProfilesUITests.h"
+#import "JMBaseUITestCase+Helpers.h"
 
 @implementation JMServerProfilesUITests
 
@@ -35,42 +36,34 @@
             [serverProfileCell tap];
         }
     } else {
-        [self tryOpenNewServerProfilePage];
-        [self givenThatNewProfilePageOnScreen];
-        [self tryCreateNewTestServerProfile];
-        
+        [self createTestProfile];
         [self givenThatServerProfilesPageOnScreen];
     }
-    [self tryBackToPreviousPage];
+    
+    // verify server profile field has value that equal demo profile
+    XCUIElement *serverProfileTextField = [self waitTextFieldWithAccessibilityId:@"JMLoginPageServerProfileTextFieldAccessibilityId"
+                                                                         timeout:kUITestsBaseTimeout];
+    NSString *stringValueInServerField = serverProfileTextField.value;
+    BOOL hasTestProfileName = [stringValueInServerField isEqualToString:@"Test Profile"];
+    XCTAssert(hasTestProfileName, @"Value in 'Sever' field doesn't equal 'Test Profile'");
 }
 
 - (void)testThatServerProfileCanBeAdded
 {
     [self tryOpenServerProfilesPage];
+        
     XCUIElement *testProfile = self.application.collectionViews.staticTexts[@"Test Profile"];
     if (testProfile.exists) {
-        [testProfile pressForDuration:1.0];
-        [testProfile pressForDuration:1.1];
-        XCUIElement *menu = self.application.menuItems[@"Delete"];
-        if (menu) {
-            [menu tap];
-            XCUIElement *deleteButton = self.application.alerts[@"Confirmation"].collectionViews.buttons[@"Delete"];
-            if (deleteButton) {
-                [deleteButton tap];
-            } else {
-                XCTFail(@"Delete button doesn't exist.");
-            }
-        } else {
-            XCTFail(@"Delete menu item doesn't exist.");
-        }
+        [self removeTestProfile];
     }
-    
-    NSInteger startCellsCount = self.application.collectionViews.cells.count;
-    [self tryOpenNewServerProfilePage];
-    [self givenThatNewProfilePageOnScreen];
-    [self tryCreateNewTestServerProfile];
-    NSInteger endCellsCount = self.application.collectionViews.cells.count;
-    XCTAssertTrue(endCellsCount > startCellsCount);
+
+    [self givenThatServerProfilesPageOnScreen];
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+
+    [self createTestProfile];
+
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    XCTAssertTrue(endCellsCount > startCellsCount, @"Start Cells Count: %@, but End Cells Count: %@", @(startCellsCount), @(endCellsCount));
     [self tryBackToPreviousPage];
 }
 
@@ -78,35 +71,19 @@
 {
     [self tryOpenServerProfilesPage];
     
-    NSInteger cellsCount = self.application.collectionViews.cells.count;
+    NSInteger cellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
     if (!cellsCount) {
-        [self tryOpenNewServerProfilePage];
-        [self givenThatNewProfilePageOnScreen];
-        [self tryCreateNewTestServerProfile];
-        
+        [self createTestProfile];
         [self givenThatServerProfilesPageOnScreen];
     }
-    
-    NSInteger startCellsCount = self.application.collectionViews.cells.count;
-    XCUIElement *serverProfile = self.application.collectionViews.cells.allElementsBoundByIndex.firstObject;
-    if (serverProfile.exists) {
-        [serverProfile pressForDuration:1.0];
-        [serverProfile pressForDuration:1.1];
-        XCUIElement *menu = self.application.menuItems[@"Delete"];
-        if (menu) {
-            [menu tap];
-            XCUIElement *deleteButton = self.application.alerts[@"Confirmation"].collectionViews.buttons[@"Delete"];
-            if (deleteButton) {
-                [deleteButton tap];
-            } else {
-                XCTFail(@"Delete button doesn't exist.");
-            }
-        } else {
-            XCTFail(@"Delete menu item doesn't exist.");
-        }
-    }
 
-    NSInteger endCellsCount = self.application.collectionViews.cells.count;
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
+                                                             forIndex:0];
+    if (serverProfileElement && serverProfileElement.exists) {
+        [self removeProfileWithElement:serverProfileElement];
+    }
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
     XCTAssertTrue(endCellsCount < startCellsCount);
     [self tryBackToPreviousPage];
 }
@@ -117,49 +94,56 @@
     
     NSInteger cellsCount = self.application.collectionViews.cells.count;
     if (!cellsCount) {
-        [self tryOpenNewServerProfilePage];
-        [self givenThatNewProfilePageOnScreen];
-        [self tryCreateNewTestServerProfile];
-        
+        [self createTestProfile];
         [self givenThatServerProfilesPageOnScreen];
     }
-    
-    NSInteger startCellsCount = self.application.collectionViews.cells.count;
-    XCUIElement *serverProfile = self.application.collectionViews.cells.allElementsBoundByIndex.firstObject;
-    if (serverProfile.exists) {
-        [serverProfile pressForDuration:1.0];
-        [serverProfile pressForDuration:1.1];
-        XCUIElement *menu = self.application.menuItems[@"Clone"];
-        if (menu) {
-            [menu tap];
-            [self givenThatNewProfilePageOnScreen];
-            // Save a new created profile
-            XCUIElement *saveButton = self.application.buttons[@"Save"];
-            if (saveButton.exists) {
-                [saveButton tap];
-            } else {
-                XCTFail(@"Create new profile button doesn't exist.");
-            }
-            
-            // Confirm if need http end point
-            XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
-            if (securityWarningAlert.exists) {
-                NSString *okButtonTitle = JMLocalizedString(@"dialog_button_ok");
-                NSLog(@"okButtonTitle: %@", okButtonTitle);
-                XCUIElement *securityWarningAlertOkButton = securityWarningAlert.collectionViews.buttons[okButtonTitle];
-                if (securityWarningAlertOkButton.exists) {
-                    [securityWarningAlertOkButton tap];
-                } else {
-                    XCTFail(@"'Ok' button on security warning alert doesn't exist.");
-                }
-            }
+
+    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
+                                                             forIndex:0];
+    if (!serverProfileElement) {
+        [self createTestProfile];
+        [self givenThatServerProfilesPageOnScreen];
+    }
+
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    serverProfileElement = [self cellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
+                                                             forIndex:0];
+
+    [serverProfileElement pressForDuration:1.0];
+    [serverProfileElement pressForDuration:1.1];
+    XCUIElement *menu = self.application.menuItems[@"Clone Profile"];
+    if (menu) {
+        [menu tap];
+        [self givenThatNewProfilePageOnScreen];
+        // Save a new created profile
+        XCUIElement *saveButton = self.application.buttons[@"Save"];
+        if (saveButton.exists) {
+            [saveButton tap];
         } else {
-            XCTFail(@"Delete menu item doesn't exist.");
+            XCTFail(@"Create new profile button doesn't exist.");
         }
+
+        // Confirm if need http end point
+        XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
+        if (securityWarningAlert.exists) {
+            NSString *okButtonTitle = JMLocalizedString(@"dialog_button_ok");
+            NSLog(@"okButtonTitle: %@", okButtonTitle);
+            XCUIElement *securityWarningAlertOkButton = securityWarningAlert.collectionViews.buttons[okButtonTitle];
+            if (securityWarningAlertOkButton.exists) {
+                [securityWarningAlertOkButton tap];
+            } else {
+                XCTFail(@"'Ok' button on security warning alert doesn't exist.");
+            }
+        }
+    } else {
+        XCTFail(@"Delete menu item doesn't exist.");
     }
     
     NSInteger endCellsCount = self.application.collectionViews.cells.count;
     XCTAssertTrue(endCellsCount > startCellsCount);
+    
+    // TODO: remove cloned profile.
+    
     [self tryBackToPreviousPage];
 }
 
@@ -168,6 +152,39 @@
 - (BOOL) shouldLoginBeforeStartTest
 {
     return NO;
+}
+
+#pragma mark - Utils
+
+- (void)createTestProfile
+{
+    [self tryOpenNewServerProfilePage];
+    [self givenThatNewProfilePageOnScreen];
+    [self tryCreateNewTestServerProfile];
+}
+
+- (void)removeTestProfile
+{
+    XCUIElement *testProfileElement = self.application.collectionViews.staticTexts[@"Test Profile"];
+    [self removeProfileWithElement:testProfileElement];
+}
+
+- (void)removeProfileWithElement:(XCUIElement *)element
+{
+    [element pressForDuration:1.0];
+    [element pressForDuration:1.1];
+    XCUIElement *menu = self.application.menuItems[@"Delete"];
+    if (menu) {
+        [menu tap];
+        XCUIElement *deleteButton = self.application.alerts[@"Confirmation"].collectionViews.buttons[@"Delete"];
+        if (deleteButton) {
+            [deleteButton tap];
+        } else {
+            XCTFail(@"Delete button doesn't exist.");
+        }
+    } else {
+        XCTFail(@"Delete menu item doesn't exist.");
+    }
 }
 
 @end

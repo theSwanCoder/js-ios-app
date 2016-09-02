@@ -8,6 +8,7 @@
 
 #import "JMLibraryPageUITests.h"
 #import "JMLibraryPageUITests+Helpers.h"
+#import "JMBaseUITestCase+Helpers.h"
 
 @implementation JMLibraryPageUITests
 
@@ -41,23 +42,14 @@
 {
     [self givenThatLibraryPageOnScreen];
     [self givenSideMenuNotVisible];
-    
-    XCUIElement *menuButton = self.application.navigationBars[@"Library"].buttons[@"menu icon"];
-    if (menuButton.exists) {
-        [menuButton tap];
-        
-        [self givenSideMenuVisible];
-    } else {
-        XCTFail(@"'Menu' button doesn't exist.");
-    }
-    
-    if (menuButton.exists) {
-        [menuButton tap];
-        
-        [self givenSideMenuNotVisible];
-    } else {
-        XCTFail(@"'Menu' button doesn't exist.");
-    }
+
+    // Open side menu
+    [self tryTapSideApplicationMenu];
+    [self givenSideMenuVisible];
+
+    // Close side menu
+    [self tryTapSideApplicationMenu];
+    [self givenSideMenuNotVisible];
 }
 
 - (void)testThatUserCanPullDownToRefresh
