@@ -291,6 +291,10 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 {
     XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Back"
                                                               timeout:kUITestsBaseTimeout];
+    if (!backButton) {
+        backButton = [self waitBackButtonWithAccessibilityId:@"Library"
+                                                     timeout:kUITestsBaseTimeout];
+    }
     [backButton tap];
 }
 

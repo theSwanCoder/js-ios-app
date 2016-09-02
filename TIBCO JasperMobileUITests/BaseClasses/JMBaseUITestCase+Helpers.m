@@ -135,6 +135,9 @@
 {
     XCUIElement *button = [self findButtonWithAccessibilityId:accessibilityId
                                                 parentElement:parentElement];
+    if (!button.isHittable) {
+        return nil;
+    }
     [self waitElement:button
               visible:visible
               timeout:timeout];
