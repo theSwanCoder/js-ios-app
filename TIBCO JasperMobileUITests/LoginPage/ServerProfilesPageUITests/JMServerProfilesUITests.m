@@ -116,12 +116,9 @@
         [menu tap];
         [self givenThatNewProfilePageOnScreen];
         // Save a new created profile
-        XCUIElement *saveButton = self.application.buttons[@"Save"];
-        if (saveButton.exists) {
-            [saveButton tap];
-        } else {
-            XCTFail(@"Create new profile button doesn't exist.");
-        }
+        XCUIElement *saveButton = [self waitButtonWithAccessibilityId:@"Save" 
+                                                              timeout:kUITestsBaseTimeout];
+        [saveButton tap];
 
         // Confirm if need http end point
         XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
@@ -176,12 +173,13 @@
     XCUIElement *menu = self.application.menuItems[@"Delete"];
     if (menu) {
         [menu tap];
-        XCUIElement *deleteButton = self.application.alerts[@"Confirmation"].collectionViews.buttons[@"Delete"];
-        if (deleteButton) {
-            [deleteButton tap];
-        } else {
-            XCTFail(@"Delete button doesn't exist.");
-        }
+        XCUIElement *alertView = [self.application.alerts[@"Confirmation"].collectionViews elementBoundByIndex:0];
+        XCUIElement *deleteButton = [self waitButtonWithAccessibilityId:@"Delete" 
+                                                          parentElement:alertView 
+                                                                visible:true 
+                                                                timeout:kUITestsBaseTimeout];
+        
+        [deleteButton tap];
     } else {
         XCTFail(@"Delete menu item doesn't exist.");
     }
