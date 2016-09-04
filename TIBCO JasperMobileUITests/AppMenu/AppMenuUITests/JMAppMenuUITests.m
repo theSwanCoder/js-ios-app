@@ -7,6 +7,7 @@
 //
 
 #import "JMAppMenuUITests.h"
+#import "JMBaseUITestCase+Helpers.h"
 
 @implementation JMAppMenuUITests
 
@@ -16,13 +17,13 @@
     // try to open side menu by tapping on button
     [self givenThatLibraryPageOnScreen];
     [self tryTapSideApplicationMenu];
-    [self verifyThatSideMenuVisible];
-    [self tryCloseSideApplicationMenuByButtonTap];
+    [self givenSideMenuVisible];
+    [self tryTapSideApplicationMenu];
     [self givenThatLibraryPageOnScreen];
 
     // try to open side menu by swipe
     [self tryOpenSideApplicationMenuBySwipe];
-    [self verifyThatSideMenuVisible];
+    [self givenSideMenuVisible];
     [self tryCloseSideApplicationMenuBySwipe];
     [self givenThatLibraryPageOnScreen];
 }
@@ -32,14 +33,14 @@
     // try to open side menu by tapping on button
     [self givenThatLibraryPageOnScreen];
     [self tryTapSideApplicationMenu];
-    [self verifyThatSideMenuVisible];
+    [self givenSideMenuVisible];
 
-    XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
+    XCUIElement *menuView = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];;
     if (menuView.exists) {
         [menuView swipeUp];
         [menuView swipeDown];
     }
-    [self tryCloseSideApplicationMenuByButtonTap];
+    [self tryTapSideApplicationMenu];
     [self givenThatLibraryPageOnScreen];
 }
 
@@ -48,9 +49,9 @@
     // try to open side menu by tapping on button
     [self givenThatLibraryPageOnScreen];
     [self tryTapSideApplicationMenu];
-    [self verifyThatSideMenuVisible];
+    [self givenSideMenuVisible];
 
-    XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
+    XCUIElement *menuView = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];;
     if (menuView.exists) {
         // Check all collection screen items
         NSArray *itemsArray = @[@"Library", @"Repository", @"Recently Viewed", @"Saved Items", @"Favorites", @"Schedules"];
@@ -60,7 +61,7 @@
                 [pageMenuItem tap];
             }
             [self tryTapSideApplicationMenu];
-            [self verifyThatSideMenuVisible];
+            [self givenSideMenuVisible];
         }
         
         // Check About item
@@ -77,7 +78,7 @@
 
         // Check Settings item
         [self tryTapSideApplicationMenu];
-        [self verifyThatSideMenuVisible];
+        [self givenSideMenuVisible];
         
         XCUIElement *settingsMenuItem = menuView.cells.staticTexts[@"Settings"];
         if (settingsMenuItem.exists) {
@@ -97,14 +98,14 @@
     // try to open side menu by tapping on button
     [self givenThatLibraryPageOnScreen];
     [self tryTapSideApplicationMenu];
-    [self verifyThatSideMenuVisible];
+    [self givenSideMenuVisible];
     
     XCUIElement *userNameLabel = self.application.staticTexts[kJMTestProfileCredentialsUsername];
     if (!userNameLabel.exists) {
         XCTFail(@"'Username' label doesn't exist.");
     }
     
-    NSString *fullServerNameString = [NSString stringWithFormat:@"%@ (v.%@)", kJMTestProfileName, @"6.2.0"];
+    NSString *fullServerNameString = [NSString stringWithFormat:@"%@ (v.%@)", kJMTestProfileName, @"6.3.0"];
     XCUIElement *serverAliasLabel = self.application.staticTexts[fullServerNameString];
     if (!serverAliasLabel.exists) {
         XCTFail(@"'Server Alias' label doesn't exist.");
@@ -113,30 +114,13 @@
     if (!organizationLabel.exists) {
         XCTFail(@"'Organization' label doesn't exist.");
     }
+    
+    [self tryTapSideApplicationMenu];
+    [self givenSideMenuNotVisible];
 }
 
 
 #pragma mark - Helpers
-
-- (void)verifyThatSideMenuVisible
-{
-    XCUIElement *menuView = self.application.otherElements[@"JMSideApplicationMenuAccessibilityId"];
-    if (menuView.exists) {
-        [self givenThatCellsAreVisible];
-    } else {
-        XCTFail(@"'Side Menu' doesn't exist.");
-    }
-}
-
-- (void)tryCloseSideApplicationMenuByButtonTap
-{
-    XCUIElement *menuButton = self.application.buttons[@"menu icon"];
-    if (menuButton.exists) {
-        [menuButton tap];
-    } else {
-        XCTFail(@"'Menu' button doesn't exist.");
-    }
-}
 
 - (void)tryOpenSideApplicationMenuBySwipe
 {
