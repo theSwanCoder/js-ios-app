@@ -27,8 +27,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
     [self.application launch];
     
     XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    BOOL isLoginPageOnScreen = loginPageView.exists;
-    if (!isLoginPageOnScreen) {
+    if (!loginPageView) {
         [self logout];
     }
     
@@ -39,8 +38,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 
 - (void)tearDown {
     XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    BOOL isLoginPageOnScreen = loginPageView.exists;
-    if (!isLoginPageOnScreen) {
+    if (!loginPageView) {
         [self logout];
     }
     self.application = nil;
@@ -343,9 +341,10 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 - (void)givenSideMenuNotVisible
 {
     // Verify that side bar isn't visible yet
-    [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                 visible:false
-                                 timeout:kUITestsBaseTimeout];
+    XCUIElement *sideMenu = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];
+    if (sideMenu) {
+        XCTFail(@"Side menu should not be visible");
+    }
 }
 
 - (void)tryTapSideApplicationMenu

@@ -56,6 +56,9 @@
     } else {
         element = parentElement.otherElements[accessibilityId];
     }
+    if (!element.exists) {
+        return nil;
+    }
     return element;
 }
 
@@ -84,6 +87,9 @@
 {
     XCUIElement *element = [self findElementWithAccessibilityId:accessibilityId
                                                   parentElement:parentElement];
+    if (!element) {
+        XCTFail(@"Element doesn't exist with accessibility id: %@", accessibilityId);
+    }
     [self waitElement:element
               visible:visible
               timeout:timeout];
@@ -101,13 +107,18 @@
 - (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId
                                  parentElement:(XCUIElement *)parentElement
 {
-    XCUIElement *element;
+    // HACK - We need add sleep here, because sometimes the button isn't available right away.
+    sleep(kUITestsElementAvailableTimeout);
+    XCUIElement *button;
     if (parentElement == nil) {
-        element = self.application.buttons[accessibilityId];
+        button = self.application.buttons[accessibilityId];
     } else {
-        element = parentElement.buttons[accessibilityId];
+        button = parentElement.buttons[accessibilityId];
     }
-    return element;
+    if (!button.exists) {
+        return nil;
+    }
+    return button;
 }
 
 - (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
@@ -135,11 +146,14 @@
 {
     XCUIElement *button = [self findButtonWithAccessibilityId:accessibilityId
                                                 parentElement:parentElement];
+    if (!button) {
+        XCTFail(@"Button doesn't exist with accessibility id: %@", accessibilityId);
+    }
     [self waitElement:button
               visible:visible
               timeout:timeout];
     if (!button.isHittable) {
-        return nil;
+        XCTFail(@"Button doesn't exist with accessibility id: %@", accessibilityId);
     }
     // HACK - We need add sleep here, because sometimes the button isn't 'tappable', right after getting it
     sleep(kUITestsElementAvailableTimeout);
