@@ -7,37 +7,39 @@
 
 @interface JMBaseUITestCase (Helpers)
 - (void)waitElement:(XCUIElement *)element
+            timeout:(NSTimeInterval)timeout;
+- (void)waitElement:(XCUIElement *)element
             visible:(BOOL)visible
             timeout:(NSTimeInterval)timeout;
 
+// NavigationBars
+- (XCUIElement *)findNavigationBarWithLabel:(NSString *)label;
 - (XCUIElement *)waitNavigationBarWithLabel:(NSString *)label
                                     timeout:(NSTimeInterval)timeout;
 
 // Other elements
 - (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId;
+- (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
+                                        timeout:(NSTimeInterval)timeout;
+
 - (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId
                                   parentElement:(XCUIElement *)parentElement;
 - (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
+                                  parentElement:(XCUIElement *)parentElement
                                         timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
-                                        visible:(BOOL)visible
-                                        timeout:(NSTimeInterval)timeout;
+
 - (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
                                   parentElement:(XCUIElement *)parentElement
                                         visible:(BOOL)visible
                                         timeout:(NSTimeInterval)timeout;
 // Buttons
 - (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId;
+- (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
+                                       timeout:(NSTimeInterval)timeout;
 - (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId
                                  parentElement:(XCUIElement *)parentElement;
 - (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
-                                       timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
-                                       visible:(BOOL)visible
-                                       timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
                                  parentElement:(XCUIElement *)parentElement
-                                       visible:(BOOL)visible
                                        timeout:(NSTimeInterval)timeout;
 // Back buttons
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId

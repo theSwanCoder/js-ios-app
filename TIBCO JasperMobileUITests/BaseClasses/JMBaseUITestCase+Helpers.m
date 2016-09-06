@@ -8,10 +8,19 @@
 @implementation JMBaseUITestCase (Helpers)
 
 - (void)waitElement:(XCUIElement *)element
+            timeout:(NSTimeInterval)timeout
+{
+    [self waitElement:element
+            visible:true
+              timeout:timeout];
+}
+
+- (void)waitElement:(XCUIElement *)element
             visible:(BOOL)visible
             timeout:(NSTimeInterval)timeout
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == %@", visible ? @1 : @0];
+    NSString *predicateFormat = [NSString stringWithFormat:@"exists == %@", visible ? @1 : @0];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
     [self expectationForPredicate:predicate
               evaluatedWithObject:element
                           handler:nil];
@@ -19,27 +28,46 @@
     [self waitForExpectationsWithTimeout:timeout
                                  handler:^(NSError *error) {
                                      NSLog(@"\nElement: %@, \nError of waiting: %@", element, error);
+                                     if (error) {
+                                         XCTFail(@"Error of waiting: %@", error);
+                                     }
                                  }];
 }
 
-- (XCUIElement *)waitNavigationBarWithLabel:(NSString *)label
-                                    timeout:(NSTimeInterval)timeout
+- (XCUIElement *)findNavigationBarWithLabel:(NSString *)label
 {
     XCUIApplication *app = self.application;
     XCUIElement *navBar;
     if (label == nil) {
         navBar = [app.navigationBars elementBoundByIndex:0];
     } else {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@", label];
-        navBar = [app.navigationBars elementMatchingPredicate:predicate];
+        navBar = [app.navigationBars elementMatchingType:XCUIElementTypeNavigationBar
+                                              identifier:label];
     }
+    return navBar;
+}
+
+- (XCUIElement *)waitNavigationBarWithLabel:(NSString *)label
+                                    timeout:(NSTimeInterval)timeout
+{
+    XCUIElement *navBar = [self findNavigationBarWithLabel:label];
     [self waitElement:navBar
-              visible:true
               timeout:timeout];
     return navBar;
 }
 
 #pragma mark - General Elements
+- (XCUIElement *)elementWithAccessibilityId:(NSString *)accessibilityId
+                              parentElement:(XCUIElement *)parentElement
+{
+    XCUIElement *element;
+    if (!parentElement) {
+        parentElement = self.application;
+    }
+    element = [parentElement.otherElements elementMatchingType:XCUIElementTypeOther
+                                                    identifier:accessibilityId];
+    return element;
+}
 
 - (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId
 {
@@ -47,15 +75,19 @@
                                   parentElement:nil];
 }
 
+- (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
+                                        timeout:(NSTimeInterval)timeout
+{
+    return [self waitElementWithAccessibilityId:accessibilityId
+                                  parentElement:nil
+                                        timeout:timeout];
+}
+
 - (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId
                                   parentElement:(XCUIElement *)parentElement
 {
-    XCUIElement *element;
-    if (parentElement == nil) {
-        element = self.application.otherElements[accessibilityId];
-    } else {
-        element = parentElement.otherElements[accessibilityId];
-    }
+    XCUIElement *element = [self elementWithAccessibilityId:accessibilityId
+                                              parentElement:parentElement];
     if (!element.exists) {
         return nil;
     }
@@ -63,20 +95,12 @@
 }
 
 - (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
+                                  parentElement:(XCUIElement *)parentElement
                                         timeout:(NSTimeInterval)timeout
 {
     return [self waitElementWithAccessibilityId:accessibilityId
+                                  parentElement:parentElement
                                         visible:true
-                                        timeout:timeout];
-}
-
-- (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
-                                        visible:(BOOL)visible
-                                        timeout:(NSTimeInterval)timeout
-{
-    return [self waitElementWithAccessibilityId:accessibilityId
-                                  parentElement:nil
-                                        visible:visible
                                         timeout:timeout];
 }
 
@@ -85,11 +109,8 @@
                                         visible:(BOOL)visible
                                         timeout:(NSTimeInterval)timeout
 {
-    XCUIElement *element = [self findElementWithAccessibilityId:accessibilityId
-                                                  parentElement:parentElement];
-    if (!element) {
-        XCTFail(@"Element doesn't exist with accessibility id: %@", accessibilityId);
-    }
+    XCUIElement *element = [self elementWithAccessibilityId:accessibilityId
+                                              parentElement:parentElement];
     [self waitElement:element
               visible:visible
               timeout:timeout];
@@ -104,17 +125,33 @@
                                  parentElement:nil];
 }
 
+- (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
+                                       timeout:(NSTimeInterval)timeout
+{
+    return [self waitButtonWithAccessibilityId:accessibilityId
+                                 parentElement:nil
+                                       timeout:timeout];
+}
+
+- (XCUIElement *)buttonWithAccessibilityId:(NSString *)accessibilityId
+                             parentElement:(XCUIElement *)parentElement
+{
+    XCUIElement *button;
+    if (parentElement == nil) {
+        button = [self.application.buttons elementMatchingType:XCUIElementTypeButton
+                                                    identifier:accessibilityId];
+    } else {
+        button = [parentElement.buttons elementMatchingType:XCUIElementTypeButton
+                                                 identifier:accessibilityId];
+    }
+    return button;
+}
+
 - (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId
                                  parentElement:(XCUIElement *)parentElement
 {
-    // HACK - We need add sleep here, because sometimes the button isn't available right away.
-    sleep(kUITestsElementAvailableTimeout);
-    XCUIElement *button;
-    if (parentElement == nil) {
-        button = self.application.buttons[accessibilityId];
-    } else {
-        button = parentElement.buttons[accessibilityId];
-    }
+    XCUIElement *button = [self buttonWithAccessibilityId:accessibilityId
+                                            parentElement:parentElement];
     if (!button.exists) {
         return nil;
     }
@@ -122,42 +159,35 @@
 }
 
 - (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
-                                       timeout:(NSTimeInterval)timeout
-{
-    return [self waitButtonWithAccessibilityId:accessibilityId
-                                       visible:true
-                                       timeout:timeout];
-}
-
-- (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
-                                       visible:(BOOL)visible
-                                       timeout:(NSTimeInterval)timeout
-{
-    return [self waitButtonWithAccessibilityId:accessibilityId
-                                 parentElement:nil
-                                       visible:visible
-                                       timeout:timeout];
-}
-
-- (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
                                  parentElement:(XCUIElement *)parentElement
-                                       visible:(BOOL)visible
                                        timeout:(NSTimeInterval)timeout
 {
-    XCUIElement *button = [self findButtonWithAccessibilityId:accessibilityId
-                                                parentElement:parentElement];
-    if (!button) {
-        XCTFail(@"Button doesn't exist with accessibility id: %@", accessibilityId);
-    }
+    XCUIElement *button = [self buttonWithAccessibilityId:accessibilityId
+                                            parentElement:parentElement];
     [self waitElement:button
-              visible:visible
               timeout:timeout];
-    if (!button.isHittable) {
-        XCTFail(@"Button doesn't exist with accessibility id: %@", accessibilityId);
-    }
-    // HACK - We need add sleep here, because sometimes the button isn't 'tappable', right after getting it
     sleep(kUITestsElementAvailableTimeout);
+    [self waitButtonIsHittable:button];
     return button;
+}
+
+- (void)waitButtonIsHittable:(XCUIElement *)button
+{
+    NSString *predicateFormat = [NSString stringWithFormat:@"hittable == 1"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
+    XCTestExpectation *expectation = [self expectationForPredicate:predicate
+                                               evaluatedWithObject:button
+                                                           handler:^BOOL {
+                                                               NSLog(@"\nElement %@ was fulfilled", button);
+                                                               return YES;
+                                                           }];
+    [self waitForExpectationsWithTimeout:kUITestsBaseTimeout
+                                 handler:^(NSError *error) {
+                                     NSLog(@"\nElement: %@, \nError of waiting: %@", button, error);
+                                     if (error) {
+                                         XCTFail(@"Error of waiting: %@", error);
+                                     }
+                                 }];
 }
 
 #pragma mark - Back buttons
@@ -178,10 +208,7 @@
                                                    timeout:timeout];
     XCUIElement *button = [self waitButtonWithAccessibilityId:accessibilityId
                                                 parentElement:navBar
-                                                      visible:true
                                                       timeout:timeout];
-    // HACK - We need add sleep here, because sometimes the button isn't 'tappable', right after getting it
-    sleep(kUITestsElementAvailableTimeout);
     return button;
 }
 
@@ -226,7 +253,6 @@
     XCUIElement *textField = [self findTextFieldWithAccessibilityId:accessibilityId
                                                       parentElement:parentElement];
     [self waitElement:textField
-              visible:true
               timeout:timeout];
     return textField;
 }
@@ -246,7 +272,6 @@
     XCUIElement *textField = [self findSecureTextFieldWithAccessibilityId:accessibilityId
                                                             parentElement:parentElement];
     [self waitElement:textField
-              visible:true
               timeout:timeout];
     return textField;
 }
@@ -255,17 +280,18 @@
 
 - (XCUIElement *)findActionsButton
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:nil
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *actionsButton = navBar.buttons[@"Share"];
-    return actionsButton;
+    return [self findActionsButtonOnNavBarWithLabel:nil];
 }
 
 - (XCUIElement *)findActionsButtonOnNavBarWithLabel:(NSString *)label
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:label
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *actionsButton = navBar.buttons[@"Share"];
+    XCUIElement *navBar;
+    if (label) {
+        navBar = [self waitNavigationBarWithLabel:label
+                                          timeout:kUITestsBaseTimeout];
+    }
+    XCUIElement *actionsButton = [self findButtonWithAccessibilityId:@"Share"
+                                                       parentElement:navBar];
     return actionsButton;
 }
 
@@ -280,10 +306,9 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:label
                                                    timeout:timeout];
-    XCUIElement *actionsButton = navBar.buttons[@"Share"];
-    [self waitElement:actionsButton
-              visible:true
-              timeout:timeout];
+    XCUIElement *actionsButton = [self waitButtonWithAccessibilityId:@"Share"
+                                                       parentElement:navBar
+                                                             timeout:timeout];
     return actionsButton;
 }
 
@@ -293,17 +318,15 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:nil
                                                    timeout:timeout];
-    XCUIElement *menuButton = navBar.buttons[@"menu icon"];
-    [self waitElement:menuButton
-              visible:true
-              timeout:timeout];
+    XCUIElement *menuButton = [self waitButtonWithAccessibilityId:@"menu icon"
+                                                    parentElement:navBar
+                                                          timeout:timeout];
     return menuButton;
 }
 
 - (XCUIElement *)waitDoneButtonWithTimeout:(NSTimeInterval)timeout
 {
     return [self waitButtonWithAccessibilityId:@"Done"
-                                       visible:true
                                        timeout:timeout];
 }
 

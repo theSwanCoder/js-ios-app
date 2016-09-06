@@ -28,29 +28,34 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)tryBackToPreviousPage;
 - (void)tryOpenServerProfilesPage;
 - (void)tryOpenNewServerProfilePage;
+- (void)tryOpenRepositoryPage;
+- (void)tryOpenLibraryPage;
+- (void)tryOpenFavoritePage;
 - (void)tryCreateNewTestServerProfile;
 - (void)trySelectNewTestServerProfile;
 - (void)tryEnterTestCredentials;
 - (void)tryTapLoginButton;
+//
 - (void)givenThatLoginPageOnScreen;
 - (void)givenThatServerProfilesPageOnScreen;
 - (void)givenThatNewProfilePageOnScreen;
 - (void)givenThatLibraryPageOnScreen;
 - (void)givenThatCellsAreVisible;
-- (void)verifyIntroPageIsOnScreen;
-- (void)verifyRateAlertIsShown;
-- (void)tryOpenRepositoryPage;
-- (void)tryOpenLibraryPage;
-- (void)tryOpenFavoritePage;
+- (void)givenThatReportCellsOnScreen;
+- (void)givenThatDashboardCellsOnScreen;
+//
+- (void)skipIntroPageIfNeed;
+- (void)skipRateAlertIfNeed;
+//
 - (void)givenSideMenuVisible;
 - (void)givenSideMenuNotVisible;
 - (void)tryTapSideApplicationMenu;
 - (BOOL)isShareButtonExists;
-- (void)verifyThatCurrentPageIsLibrary;
-- (void)verifyThatCurrentPageIsRepository;
+//- (void)verifyThatCurrentPageIsLibrary;
+//- (void)verifyThatCurrentPageIsRepository;
 //
-- (void)verifyThatLoadingPopupVisible;
-- (void)verifyThatLoadingPopupNotVisible;
+- (void)givenLoadingPopupVisible;
+- (void)givenLoadingPopupNotVisible;
 
 - (void)closeKeyboardWithDoneButton;
 - (void)openMenuActions;

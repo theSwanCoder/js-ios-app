@@ -11,7 +11,7 @@
 
 NSTimeInterval kUITestsBaseTimeout = 10;
 NSTimeInterval kUITestsResourceWaitingTimeout = 30;
-NSTimeInterval kUITestsElementAvailableTimeout = 1;
+NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 @implementation JMBaseUITestCase
 
@@ -28,11 +28,14 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
     
     XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
     if (!loginPageView) {
+        [self skipIntroPageIfNeed];
+        [self skipRateAlertIfNeed];
         [self logout];
     }
     
     if ([self shouldLoginBeforeStartTest]) {
         [self loginWithTestProfile];
+        [self givenThatLibraryPageOnScreen];
     }
 }
 
@@ -172,15 +175,10 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 {
     XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
     if (securityWarningAlert.exists) {
-        XCUIElement *okButton = [self findButtonWithAccessibilityId:JMLocalizedString(@"dialog_button_ok")
-                                                      parentElement:securityWarningAlert];
-        if (okButton.exists) {
-            // HACK - We need add sleep here, because sometimes the button isn't 'tappable', right after getting it
-            sleep(kUITestsElementAvailableTimeout);
-            [okButton tap];
-        } else {
-            XCTFail(@"'Ok' button on security warning alert doesn't exist.");
-        }
+        XCUIElement *okButton = [self waitButtonWithAccessibilityId:JMLocalizedString(@"dialog_button_ok")
+                                                      parentElement:securityWarningAlert
+                                                            timeout:kUITestsBaseTimeout];
+        [okButton tap];
     }
 }
 
@@ -215,7 +213,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 - (void)tryTapLoginButton
 {
     XCUIElement *loginButton = [self waitButtonWithAccessibilityId:@"JMLoginPageLoginButtonAccessibilityId"
-                                                           visible:true
                                                            timeout:kUITestsBaseTimeout];
     [loginButton tap];
 }
@@ -225,28 +222,25 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 - (void)givenThatLoginPageOnScreen
 {
     [self waitElementWithAccessibilityId:@"JMLoginPageAccessibilityId"
-                                 visible:true
                                  timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenThatServerProfilesPageOnScreen
 {
     [self waitElementWithAccessibilityId:@"JMServerProfilesPageAccessibilityId"
-                                 visible:true
                                  timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenThatNewProfilePageOnScreen
 {
     [self waitElementWithAccessibilityId:@"JMNewServerProfilePageAccessibilityId"
-                                 visible:true
                                  timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenThatLibraryPageOnScreen
 {
-    [self verifyRateAlertIsShown];
-    [self verifyIntroPageIsOnScreen];
+    [self skipIntroPageIfNeed];
+    [self skipRateAlertIfNeed];
     
     // Verify Library Page
     [self verifyThatCurrentPageIsLibrary];
@@ -263,7 +257,86 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
                                  handler:nil];
 }
 
-- (void)verifyIntroPageIsOnScreen
+- (void)givenThatReportCellsOnScreen
+{
+    [self tryOpenFilterMenu];
+
+    [self trySelectFilterBy:@"Reports"];
+    [self givenThatCellsAreVisible];
+}
+
+- (void)givenThatDashboardCellsOnScreen
+{
+    [self tryOpenFilterMenu];
+
+    [self trySelectFilterBy:@"Dashboards"];
+    [self givenThatCellsAreVisible];
+}
+
+- (void)tryOpenFilterMenu
+{
+    BOOL isShareButtonExists = [self isShareButtonExists];
+    if (isShareButtonExists) {
+
+        XCUIElement *actionsButton = [self waitActionsButtonWithTimeout:kUITestsBaseTimeout];
+        [actionsButton tap];
+
+        [self tryOpenFilterMenuFromMenuActions];
+    } else {
+        [self tryOpenFilterMenuFromNavBar];
+    }
+}
+
+- (void)tryOpenFilterMenuFromMenuActions
+{
+    XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
+    XCUIElement *filterActionElement = menuActionsElement.staticTexts[@"Filter by"];
+    if (filterActionElement.exists) {
+        [filterActionElement tap];
+
+        // Wait until sort view appears
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
+        [self expectationForPredicate:predicate
+                  evaluatedWithObject:self.application
+                              handler:nil];
+        [self waitForExpectationsWithTimeout:5 handler:nil];
+
+    } else {
+        XCTFail(@"Sort Action isn't visible");
+    }
+}
+
+- (void)tryOpenFilterMenuFromNavBar
+{
+    XCUIElement *navBar = self.application.navigationBars[@"Library"];
+    if (navBar.exists) {
+        XCUIElement *filterButton = navBar.buttons[@"filter action"];
+        if (filterButton.exists) {
+            [filterButton tap];
+        } else {
+            XCTFail(@"Filter Button isn't visible");
+        }
+    } else {
+        XCTFail(@"Navigation bar isn't visible");
+    }
+}
+
+- (void)trySelectFilterBy:(NSString *)filterTypeString
+{
+    XCUIElement *filterOptionsViewElement = [self.application.tables elementBoundByIndex:0];
+    if (filterOptionsViewElement.exists) {
+        XCUIElement *filterOptionElement = filterOptionsViewElement.staticTexts[filterTypeString];
+        if (filterOptionElement.exists) {
+            [filterOptionElement tap];
+        } else {
+            XCTFail(@"'%@' Filter Option isn't visible", filterTypeString);
+        }
+    } else {
+        XCTFail(@"Filter Options View isn't visible");
+    }
+}
+
+- (void)skipIntroPageIfNeed
 {
     sleep(kUITestsElementAvailableTimeout);
     XCUIElement *skipIntroButton = self.application.buttons[@"Skip Intro"];
@@ -272,7 +345,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
     }
 }
 
-- (void)verifyRateAlertIsShown
+- (void)skipRateAlertIfNeed
 {
     sleep(kUITestsElementAvailableTimeout);
     XCUIElement *rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
@@ -319,11 +392,9 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
     [self givenSideMenuNotVisible];
     [self tryTapSideApplicationMenu];
     XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                                         visible:true
                                                          timeout:kUITestsBaseTimeout];
     XCUIElement *pageMenuItem = menuView.cells.staticTexts[pageName];
     [self waitElement:pageMenuItem
-              visible:true
               timeout:kUITestsBaseTimeout];
     [pageMenuItem tap];
 }
@@ -334,7 +405,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 {
     // Verify that side bar is already visible
     [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                 visible:true
                                  timeout:kUITestsBaseTimeout];
 }
 
@@ -364,7 +434,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 - (void)verifyThatCurrentPageIsLibrary
 {
     [self waitElementWithAccessibilityId:@"JMLibraryPageAccessibilityId"
-                                 visible:true
                                  timeout:kUITestsBaseTimeout];
 }
 
@@ -381,16 +450,20 @@ NSTimeInterval kUITestsElementAvailableTimeout = 1;
 }
 
 #pragma mark - Verifies - Loading Popup
-- (void)verifyThatLoadingPopupVisible
+- (void)givenLoadingPopupVisible
 {
+    NSLog(@"%@", NSStringFromSelector(_cmd));
     [self waitElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"
+                           parentElement:nil
                                  visible:true
                                  timeout:kUITestsResourceWaitingTimeout];
 }
 
-- (void)verifyThatLoadingPopupNotVisible
+- (void)givenLoadingPopupNotVisible
 {
+    NSLog(@"%@", NSStringFromSelector(_cmd));
     [self waitElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"
+                           parentElement:nil
                                  visible:false
                                  timeout:kUITestsResourceWaitingTimeout];
 }
