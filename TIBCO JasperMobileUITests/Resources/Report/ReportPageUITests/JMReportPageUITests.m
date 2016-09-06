@@ -16,26 +16,21 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 #pragma mark - Tests - Main
 - (void)testThatReportCanBeRun
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
-    
-    [self waitTestCell];
+    [self givenThatReportCanBeRun];
     [self runTestReport];
+
     [self tryBackToPreviousPage];
 }
 
 - (void)testThatUserCanCancelLoadingReport
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
-    
-    [self waitTestCell];
+    [self givenThatReportCanBeRun];
     [self tryRunReport];
 
-    [self verifyThatLoadingPopupVisible];
+    [self givenLoadingPopupVisible];
     [self cancelLoading];
 
-    [self verifyThatCurrentPageIsLibrary];
+    [self givenThatLibraryPageOnScreen];
 }
 
 // Title like name of the report
@@ -43,30 +38,15 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 
 - (void)testThatReportCanBeMarkAsFavorite
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
-    
-    [self waitTestCell];
+    [self givenThatReportCanBeRun];
     [self runTestReport];
 
     [self openMenuActions];
+    [self selectActionWithName:@"Mark as Favorite"];
 
-    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:@"JMMenuActionsViewAccessibilityId"
-                                                                visible:true
-                                                                timeout:5];
+    [self openMenuActions];
+    [self selectActionWithName:@"Remove From Favorites"];
 
-    XCUIElement *removeFromFavoriteButton = menuActionsView.staticTexts[@"Remove From Favorites"];
-    if (removeFromFavoriteButton.exists) {
-        [removeFromFavoriteButton tap];
-    } else {
-        XCUIElement *markAsFavoriteButton = menuActionsView.staticTexts[@"Mark as Favorite"];
-        if (markAsFavoriteButton.exists) {
-            [markAsFavoriteButton tap];
-
-            // Verify that report is mark as favorite
-            // TODO: verify in 'Favorite' section
-        }
-    }
 
     [self tryBackToPreviousPage];
 }
@@ -80,26 +60,14 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     // tap 'refresh' button
     // wait until report has being refreshed
     // back to the 'library' page
-    
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
-    
-    [self waitTestCell];
+
+    [self givenThatReportCanBeRun];
     [self runTestReport];
 
     [self openMenuActions];
+    [self selectActionWithName:@"Refresh"];
 
-    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:@"JMMenuActionsViewAccessibilityId"
-                                                                visible:true
-                                                                timeout:5];
-    XCUIElement *refreshButton = menuActionsView.staticTexts[@"Refresh"];
-    if (refreshButton.exists) {
-        [refreshButton tap];
-    } else {
-        XCTFail(@"'Refresh' button isn't visible");
-    }
-    sleep(2);
-    [self verifyThatLoadingPopupNotVisible];
+    [self givenLoadingPopupNotVisible];
     [self tryBackToPreviousPage];
 }
 
@@ -113,33 +81,20 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     // wait until 'filters' page appears
     // verify that 'filters' page on screen
     // back to report page
-    
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
-    
-    [self waitTestCell];
+
+    [self givenThatReportCanBeRun];
     [self runTestReport];
 
     [self openMenuActions];
+    [self selectActionWithName:@"Edit Values"];
 
-    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:@"JMMenuActionsViewAccessibilityId"
-                                                                visible:true
-                                                                timeout:5];
-
-    XCUIElement *editValuesButton = menuActionsView.staticTexts[@"Edit Values"];
-    if (editValuesButton) {
-        [editValuesButton tap];
-    } else {
-        XCTFail(@"'Refresh' button isn't visible");
-    }
     // verify that 'edit values' page is on the screen
     [self waitElementWithAccessibilityId:@"JMInputControlsViewControllerAccessibilityIdentifier"
-                                 visible:true
-                                 timeout:5];
+                                 timeout:kUITestsBaseTimeout];
     // back from edit values page
     XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"JMBackButtonAccessibilityId"
                                                     onNavBarWithLabel:@"Filters"
-                                                              timeout:5];
+                                                              timeout:kUITestsBaseTimeout];
     [backButton tap];
 
     // back from report view page
@@ -159,28 +114,15 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     // verify that 'save report' page on screen
     // back to report page
     // back to the 'library' page
-    
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
-    
-    [self waitTestCell];
+
+    [self givenThatReportCanBeRun];
     [self runTestReport];
 
     [self openMenuActions];
+    [self selectActionWithName:@"Save"];
 
-    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:@"JMMenuActionsViewAccessibilityId"
-                                                                visible:true
-                                                                timeout:5];
-
-    XCUIElement *saveButton = menuActionsView.staticTexts[@"Save"];
-    if (saveButton) {
-        [saveButton tap];
-    } else {
-        XCTFail(@"'Refresh' button isn't visible");
-    }
     // verify that 'save report' page is on the screen
     [self waitElementWithAccessibilityId:@"JMSaveReportViewControllerAccessibilityIdentifier"
-                                 visible:true
                                  timeout:kUITestsBaseTimeout];
     // back from save report page
     [self tryBackToPreviousPage];
@@ -201,32 +143,19 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     // back to report page
     // back to the 'library' page
 
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
-    
-    [self waitTestCell];
+    [self givenThatReportCanBeRun];
     [self runTestReport];
 
     [self openMenuActions];
+    [self selectActionWithName:@"Print"];
 
-    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:@"JMMenuActionsViewAccessibilityId"
-                                                                visible:true
-                                                                timeout:5];
+    [self givenLoadingPopupNotVisible];
 
-    XCUIElement *printButton = menuActionsView.staticTexts[@"Print"];
-    if (printButton) {
-        [printButton tap];
-    } else {
-        XCTFail(@"'Refresh' button isn't visible");
-    }
-    sleep(kUITestsElementAvailableTimeout);
-    [self verifyThatLoadingPopupNotVisible];
     // verify that 'print report' page is on the screen
     XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
                                                         timeout:kUITestsBaseTimeout];
     XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
                                                       parentElement:printNavBar
-                                                            visible:true
                                                             timeout:kUITestsBaseTimeout];
     [cancelButton tap];
 
@@ -245,25 +174,15 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     // back to report page
     // back to the 'library' page
 
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
-    
-    [self waitTestCell];
+    [self givenThatReportCanBeRun];
     [self runTestReport];
 
     [self openMenuActions];
+    [self selectActionWithName:@"Info"];
 
-    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:@"JMMenuActionsViewAccessibilityId"
-                                                                visible:true
-                                                                timeout:5];
-
-    XCUIElement *infoButton = menuActionsView.staticTexts[@"Info"];
-    if (infoButton) {
-        [infoButton tap];
-    } else {
-        XCTFail(@"'Refresh' button isn't visible");
-    }
     [self verifyThatReportInfoPageOnScreen];
+    [self closeReportInfoPage];
+
     [self tryBackToPreviousPage];
 }
 
@@ -301,26 +220,31 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 
 #pragma mark - Helpers
 
+- (void)givenThatReportCanBeRun
+{
+    [self givenThatLibraryPageOnScreen];
+    [self givenThatCellsAreVisible];
+    [self givenThatReportCellsOnScreen];
+}
+
 - (void)runTestReport
 {
-    XCUIElement *testCell = [self testCell];
+    XCUIElement *testCell = [self waitTestCell];
     XCUIElement *reportNameLabel = testCell.staticTexts[@"JMResourceCellResourceNameLabelAccessibilityId"];
     NSString *reportInfoLabel = reportNameLabel.label;
 
     [self tryRunReport];
 
-    sleep(2);
-    [self verifyThatLoadingPopupNotVisible];
-
+    [self givenLoadingPopupNotVisible];
+    
     if ([self verifyIfReportFiltersPageOnScreen]) {
         // Run report
         XCUIElement *runReportButton = [self waitButtonWithAccessibilityId:@"Run Report"
                                                                    timeout:kUITestsBaseTimeout];
         [runReportButton tap];
-
-        sleep(2);
-        [self verifyThatLoadingPopupNotVisible];
     }
+
+    [self givenLoadingPopupNotVisible];
 
     [self verifyThatReportPageOnScreenWithReportName:reportInfoLabel];
 }
@@ -335,7 +259,6 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 {
     XCUIElement *testCell = [self testCell];
     [self waitElement:testCell
-              visible:true
               timeout:kUITestsBaseTimeout];
     return testCell;
 }
@@ -351,7 +274,6 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     XCUIElement *loadingPopup = [self findElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"];
     XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
                                                       parentElement:loadingPopup
-                                                            visible:true
                                                             timeout:kUITestsBaseTimeout];
     [cancelButton tap];
 }
@@ -359,38 +281,45 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 #pragma mark - Verifies
 - (BOOL)verifyIfReportFiltersPageOnScreen
 {
+    [self givenLoadingPopupNotVisible];
+
     BOOL isFilterPage = NO;
-    XCUIElement *filtersNavBar = [self.application.navigationBars elementMatchingType:XCUIElementTypeAny identifier:@"Filters"];
+    XCUIElement *filtersNavBar = [self findNavigationBarWithLabel:@"Filters"];
     isFilterPage = filtersNavBar.exists;
     return isFilterPage;
 }
 
 - (void)verifyThatReportPageOnScreenWithReportName:(NSString *)reportName
 {
-    XCUIElement *reportNavBar = [self.application.navigationBars elementMatchingType:XCUIElementTypeAny identifier:reportName];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
-    [self expectationForPredicate:predicate
-              evaluatedWithObject:reportNavBar
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
+    [self waitNavigationBarWithLabel:reportName
+                             timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatReportInfoPageOnScreen
 {
-    XCUIElement *reportInfoPageElement = [self waitElementWithAccessibilityId:@"JMReportInfoViewControllerAccessibilityId"
-                                                                      visible:true
-                                                                      timeout:kUITestsBaseTimeout];
-    NSPredicate *cellsCountPredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
-    [self expectationForPredicate:cellsCountPredicate
-              evaluatedWithObject:reportInfoPageElement
-                          handler:nil];
-    [self waitForExpectationsWithTimeout:kUITestsBaseTimeout
-                                 handler:nil];
+    [self waitElementWithAccessibilityId:@"JMReportInfoViewControllerAccessibilityId"
+                                 timeout:kUITestsBaseTimeout];
+}
 
-    XCUIElement *navBar = [self.application.navigationBars elementBoundByIndex:0];
-    XCUIElement *cancelButton = navBar.buttons[@"Cancel"];
-    if (cancelButton.exists) {
-        [cancelButton tap];
+- (void)closeReportInfoPage
+{
+    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                      parentElement:navBar
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
+}
+
+- (void)selectActionWithName:(NSString *)actionName
+{
+    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:@"JMMenuActionsViewAccessibilityId"
+                                                                timeout:kUITestsBaseTimeout];
+
+    XCUIElement *saveButton = menuActionsView.staticTexts[actionName];
+    if (saveButton) {
+        [saveButton tap];
+    } else {
+        XCTFail(@"'%@' button isn't visible", actionName);
     }
 }
 
