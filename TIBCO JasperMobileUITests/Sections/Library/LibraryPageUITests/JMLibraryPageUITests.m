@@ -17,8 +17,6 @@
 - (void)testThatLibraryPageHasTitleLibrary
 {
     [self givenThatLibraryPageOnScreen];
-
-    [self verifyThatCurrentPageIsLibrary];
 }
 
 - (void)testThatLibraryContainsListOfCells
@@ -175,11 +173,11 @@
         
         // Change Page to Repository
         [self tryOpenRepositoryPage];
-        [self verifyThatCurrentPageIsRepository];
+        [self givenThatLibraryPageOnScreen];
         
         // Change Page to Library
         [self tryOpenLibraryPage];
-        [self verifyThatCurrentPageIsLibrary];
+        [self givenThatLibraryPageOnScreen];
         [self givenThatCellsAreVisible];
         
         [self verifyThatCollectionViewContainsGridOfCells];

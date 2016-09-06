@@ -175,8 +175,7 @@
         [menu tap];
         XCUIElement *alertView = [self.application.alerts[@"Confirmation"].collectionViews elementBoundByIndex:0];
         XCUIElement *deleteButton = [self waitButtonWithAccessibilityId:@"Delete" 
-                                                          parentElement:alertView 
-                                                                visible:true 
+                                                          parentElement:alertView
                                                                 timeout:kUITestsBaseTimeout];
         
         [deleteButton tap];

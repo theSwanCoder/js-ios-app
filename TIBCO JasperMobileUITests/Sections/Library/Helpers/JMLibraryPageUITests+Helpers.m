@@ -129,78 +129,9 @@
 
 #pragma mark - Helpers - Menu Filter By
 
-- (void)tryOpenFilterMenu
-{
-    BOOL isShareButtonExists = [self isShareButtonExists];
-    if (isShareButtonExists) {
-        [self tryOpenMenuActions];
-        [self tryOpenFilterMenuFromMenuActions];
-    } else {
-        [self tryOpenFilterMenuFromNavBar];
-    }
-}
-
 - (void)tryOpenMenuActions
 {
     [self openMenuActionsOnNavBarWithLabel:@"Library"];
-
-//    XCUIElement *navBar = self.application.navigationBars[@"Library"];
-//    if (navBar.exists) {
-//        XCUIElement *menuActionsButton = navBar.buttons[@"Share"];
-//        if (menuActionsButton.exists) {
-//            [menuActionsButton tap];
-//
-//            // Wait until menu actions appears
-//            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
-//            [self expectationForPredicate:predicate
-//                      evaluatedWithObject:self.application
-//                                  handler:nil];
-//            [self waitForExpectationsWithTimeout:5 handler:nil];
-//
-//            XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
-//            if (!menuActionsElement.exists) {
-//                XCTFail(@"Menu Actions isn't visible");
-//            }
-//        } else {
-//            XCTFail(@"Menu Actions button isn't visible");
-//        }
-//    } else {
-//        XCTFail(@"Navigation bar isn't visible");
-//    }
-}
-
-- (void)tryOpenFilterMenuFromMenuActions
-{
-    XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
-    XCUIElement *filterActionElement = menuActionsElement.staticTexts[@"Filter by"];
-    if (filterActionElement.exists) {
-        [filterActionElement tap];
-
-        // Wait until sort view appears
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
-        [self expectationForPredicate:predicate
-                  evaluatedWithObject:self.application
-                              handler:nil];
-        [self waitForExpectationsWithTimeout:5 handler:nil];
-
-    } else {
-        XCTFail(@"Sort Action isn't visible");
-    }
-}
-
-- (void)tryOpenFilterMenuFromNavBar
-{
-    XCUIElement *navBar = self.application.navigationBars[@"Library"];
-    if (navBar.exists) {
-        XCUIElement *filterButton = navBar.buttons[@"filter action"];
-        if (filterButton.exists) {
-            [filterButton tap];
-        } else {
-            XCTFail(@"Filter Button isn't visible");
-        }
-    } else {
-        XCTFail(@"Navigation bar isn't visible");
-    }
 }
 
 #pragma mark - Helpers - Sort By
@@ -240,37 +171,15 @@
 
 #pragma mark - Helpers - Filter By
 
-- (void)tryFilterByAll
-{
-    [self tryOpenFilterMenu];
-    [self trySelectFilterBy:@"All"];
-}
 
 - (void)tryFilterByReports
 {
-    [self tryOpenFilterMenu];
-    [self trySelectFilterBy:@"Reports"];
+    [self givenThatReportCellsOnScreen];
 }
 
 - (void)tryFilterByDashboards
 {
-    [self tryOpenFilterMenu];
-    [self trySelectFilterBy:@"Dashboards"];
-}
-
-- (void)trySelectFilterBy:(NSString *)filterTypeString
-{
-    XCUIElement *filterOptionsViewElement = [self.application.tables elementBoundByIndex:0];
-    if (filterOptionsViewElement.exists) {
-        XCUIElement *filterOptionElement = filterOptionsViewElement.staticTexts[filterTypeString];
-        if (filterOptionElement.exists) {
-            [filterOptionElement tap];
-        } else {
-            XCTFail(@"'%@' Filter Option isn't visible", filterTypeString);
-        }
-    } else {
-        XCTFail(@"Filter Options View isn't visible");
-    }
+    [self givenThatDashboardCellsOnScreen];
 }
 
 #pragma mark - Verfies
