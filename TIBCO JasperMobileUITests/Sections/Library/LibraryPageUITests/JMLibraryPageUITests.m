@@ -173,7 +173,7 @@
         
         // Change Page to Repository
         [self tryOpenRepositoryPage];
-        [self givenThatLibraryPageOnScreen];
+        [self givenThatRepositoryPageOnScreen];
         
         // Change Page to Library
         [self tryOpenLibraryPage];
