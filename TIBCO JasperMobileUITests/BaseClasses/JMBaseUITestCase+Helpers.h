@@ -42,8 +42,11 @@
                                  parentElement:(XCUIElement *)parentElement
                                        timeout:(NSTimeInterval)timeout;
 // Back buttons
+- (XCUIElement *)findBackbuttonWithAccessibilityId:(NSString *)accessibilityId;
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                            timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)findBackbuttonWithAccessibilityId:(NSString *)accessibilityId
+                                 onNavBarWithLabel:(NSString *)label;
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                  onNavBarWithLabel:(NSString *)label
                                            timeout:(NSTimeInterval)timeout;
@@ -58,6 +61,17 @@
 - (XCUIElement *)waitSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
                                           parentElement:(XCUIElement *)parentElement
                                                 timeout:(NSTimeInterval)timeout;
+// Static Text
+- (XCUIElement *)findStaticTextWithAccessibilityId:(NSString *)accessibilityId;
+- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
+                                           timeout:(NSTimeInterval)timeout;
+
+- (XCUIElement *)findStaticTextWithAccessibilityId:(NSString *)accessibilityId
+                                     parentElement:(XCUIElement *)parentElement;
+- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
+                                     parentElement:(XCUIElement *)parentElement
+                                           timeout:(NSTimeInterval)timeout;
+
 // Menu Actions
 - (XCUIElement *)findActionsButton;
 - (XCUIElement *)findActionsButtonOnNavBarWithLabel:(NSString *)label;
@@ -71,4 +85,9 @@
 // Cells
 - (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId;
 - (XCUIElement *)cellWithAccessibilityId:(NSString *)accessibilityId forIndex:(NSUInteger)index;
+- (XCUIElement *)findCellWithAccessibilityId:(NSString *)accessibilityId
+            containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
+                                   labelText:(NSString *)labelText;
+// Search
+- (void)searchResourceWithName:(NSString *)resourceName inSection:(NSString *)sectionName;
 @end

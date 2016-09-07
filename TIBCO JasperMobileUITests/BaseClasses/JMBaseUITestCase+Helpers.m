@@ -152,7 +152,7 @@
 {
     XCUIElement *button = [self buttonWithAccessibilityId:accessibilityId
                                             parentElement:parentElement];
-    if (!button.exists) {
+    if (!button.exists || !button.isHittable) {
         return nil;
     }
     return button;
@@ -175,12 +175,12 @@
 {
     NSString *predicateFormat = [NSString stringWithFormat:@"hittable == 1"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
-    XCTestExpectation *expectation = [self expectationForPredicate:predicate
-                                               evaluatedWithObject:button
-                                                           handler:^BOOL {
-                                                               NSLog(@"\nElement %@ was fulfilled", button);
-                                                               return YES;
-                                                           }];
+    [self expectationForPredicate:predicate
+              evaluatedWithObject:button
+                          handler:^BOOL {
+                              NSLog(@"\nElement %@ was fulfilled", button);
+                              return YES;
+                          }];
     [self waitForExpectationsWithTimeout:kUITestsBaseTimeout
                                  handler:^(NSError *error) {
                                      NSLog(@"\nElement: %@, \nError of waiting: %@", button, error);
@@ -191,6 +191,11 @@
 }
 
 #pragma mark - Back buttons
+- (XCUIElement *)findBackbuttonWithAccessibilityId:(NSString *)accessibilityId
+{
+    return [self findBackbuttonWithAccessibilityId:accessibilityId
+                                 onNavBarWithLabel:nil];
+}
 
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                            timeout:(NSTimeInterval)timeout
@@ -198,6 +203,16 @@
     return [self waitBackButtonWithAccessibilityId:accessibilityId
                                  onNavBarWithLabel:nil
                                            timeout:timeout];
+}
+
+- (XCUIElement *)findBackbuttonWithAccessibilityId:(NSString *)accessibilityId
+                                 onNavBarWithLabel:(NSString *)label
+{
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:label
+                                                   timeout:kUITestsBaseTimeout];
+    XCUIElement *button = [self findButtonWithAccessibilityId:accessibilityId
+                                                parentElement:navBar];
+    return button;
 }
 
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
@@ -276,6 +291,43 @@
     return textField;
 }
 
+#pragma mark - Static Text
+
+- (XCUIElement *)findStaticTextWithAccessibilityId:(NSString *)accessibilityId
+{
+    return [self findStaticTextWithAccessibilityId:accessibilityId
+                                     parentElement:nil];
+}
+
+- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
+                                           timeout:(NSTimeInterval)timeout
+{
+    return [self waitStaticTextWithAccessibilityId:accessibilityId
+                                     parentElement:nil
+                                           timeout:timeout];
+}
+
+- (XCUIElement *)findStaticTextWithAccessibilityId:(NSString *)accessibilityId
+                                     parentElement:(XCUIElement *)parentElement
+{
+    if (parentElement == nil) {
+        parentElement = self.application;
+    }
+    XCUIElement *element = parentElement.staticTexts[accessibilityId];
+    return element;
+}
+
+- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
+                                     parentElement:(XCUIElement *)parentElement
+                                           timeout:(NSTimeInterval)timeout
+{
+    XCUIElement *element = [self findStaticTextWithAccessibilityId:accessibilityId
+                                                     parentElement:parentElement];
+    [self waitElement:element
+              timeout:timeout];
+    return element;
+}
+
 #pragma mark - Actions View
 
 - (XCUIElement *)findActionsButton
@@ -351,6 +403,44 @@
         return filteredCells[index];
     }
     return nil;
+}
+
+- (XCUIElement *)findCellWithAccessibilityId:(NSString *)accessibilityId
+            containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
+                                   labelText:(NSString *)labelText
+{
+    NSArray *allCells = self.application.collectionViews.cells.allElementsBoundByAccessibilityElement;
+
+    NSString *format = [NSString stringWithFormat:@"self.identifier == '%@' && (self.hittable == true)", accessibilityId];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:format];
+    NSArray *cells = [allCells filteredArrayUsingPredicate:predicate];
+    if (cells.count > 1) {
+        return nil;
+    }
+    XCUIElement *testCell = cells.firstObject;
+    XCUIElement *label = [self waitStaticTextWithAccessibilityId:labelAccessibilityId
+                                                       parentElement:testCell
+                                                             timeout:kUITestsBaseTimeout];
+    if (![label.label isEqualToString:labelText]) {
+        return nil;
+    }
+    return testCell;
+}
+
+#pragma mark - Search
+- (void)searchResourceWithName:(NSString *)resourceName inSection:(NSString *)sectionName
+{
+    // TODO: add support of sections. for now we consider that active 'library' section
+    XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
+    [self waitElement:searchResourcesSearchField
+              timeout:kUITestsBaseTimeout];
+
+    [searchResourcesSearchField tap];
+    [searchResourcesSearchField typeText:resourceName];
+
+    XCUIElement *searchButton = [self waitButtonWithAccessibilityId:@"Search"
+                                                            timeout:kUITestsBaseTimeout];
+    [searchButton tap];
 }
 
 @end

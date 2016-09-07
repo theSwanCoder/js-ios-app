@@ -272,6 +272,34 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
                                  handler:nil];
 }
 
+- (void)givenThatListCellsAreVisible
+{
+    [self tryTapGridButton];
+    [self givenThatCellsAreVisible];
+}
+
+- (void)tryTapGridButton
+{
+    XCUIElement *button = [self findButtonWithAccessibilityId:@"horizontal list button"];
+    if (button) {
+        [button tap];
+    }
+}
+
+- (void)givenThatGridCellsAreVisible
+{
+    [self tryTapListButton];
+    [self givenThatCellsAreVisible];
+}
+
+- (void)tryTapListButton
+{
+    XCUIElement *button = [self findButtonWithAccessibilityId:@"grid button"];
+    if (button) {
+        [button tap];
+    }
+}
+
 - (void)givenThatReportCellsOnScreen
 {
     [self tryOpenFilterMenu];
@@ -375,11 +403,9 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 #pragma mark - Helper Actions
 - (void)tryBackToPreviousPage
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Back"
-                                                              timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self findBackbuttonWithAccessibilityId:@"Back"];
     if (!backButton) {
-        backButton = [self waitBackButtonWithAccessibilityId:@"Library"
-                                                     timeout:kUITestsBaseTimeout];
+        backButton = [self findBackbuttonWithAccessibilityId:@"Library"];
     }
     [backButton tap];
 }
@@ -494,18 +520,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 {
     XCUIElement *doneButton = [self waitDoneButtonWithTimeout:kUITestsBaseTimeout];
     [doneButton tap];
-}
-
-- (void)openMenuActions
-{
-    [self openMenuActionsOnNavBarWithLabel:nil];
-}
-
-- (void)openMenuActionsOnNavBarWithLabel:(NSString *)label
-{
-    XCUIElement *actionsButton = [self waitActionsButtonOnNavBarWithLabel:label
-                                                                  timeout:kUITestsBaseTimeout];
-    [actionsButton tap];
 }
 
 - (void)enterText:(NSString *)text intoTextFieldWithAccessibilityId:(NSString *)accessibilityId

@@ -15,9 +15,7 @@ extern NSTimeInterval kUITestsResourceWaitingTimeout;
 extern NSTimeInterval kUITestsElementAvailableTimeout;
 
 @protocol JMBaseUITestProtocol <NSObject>
-@required
 - (BOOL) shouldLoginBeforeStartTest;
-
 @end
 
 @interface JMBaseUITestCase : XCTestCase <JMBaseUITestProtocol>
@@ -41,7 +39,10 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)givenThatNewProfilePageOnScreen;
 - (void)givenThatLibraryPageOnScreen;
 - (void)givenThatRepositoryPageOnScreen;
+
 - (void)givenThatCellsAreVisible;
+- (void)givenThatListCellsAreVisible;
+- (void)givenThatGridCellsAreVisible;
 - (void)givenThatReportCellsOnScreen;
 - (void)givenThatDashboardCellsOnScreen;
 //
@@ -59,7 +60,5 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)givenLoadingPopupNotVisible;
 
 - (void)closeKeyboardWithDoneButton;
-- (void)openMenuActions;
-- (void)openMenuActionsOnNavBarWithLabel:(NSString *)label;
 
 @end
