@@ -5,6 +5,7 @@
 
 #import "JMLibraryPageUITests+Helpers.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+ActionsMenu.h"
 
 
 @implementation JMLibraryPageUITests (Helpers)

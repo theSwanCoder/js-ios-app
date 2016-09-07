@@ -8,6 +8,7 @@
 
 #import "JMLibraryInfoPageUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+ActionsMenu.h"
 
 NSInteger static kJMReportInfoPageTestCellIndex = 0;
 

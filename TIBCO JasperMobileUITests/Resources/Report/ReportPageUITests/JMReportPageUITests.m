@@ -8,6 +8,7 @@
 
 #import "JMReportPageUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+ActionsMenu.h"
 
 NSInteger static kJMRunReportTestCellIndex = 0;
 
@@ -308,19 +309,6 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                                                       parentElement:navBar
                                                             timeout:kUITestsBaseTimeout];
     [cancelButton tap];
-}
-
-- (void)selectActionWithName:(NSString *)actionName
-{
-    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:@"JMMenuActionsViewAccessibilityId"
-                                                                timeout:kUITestsBaseTimeout];
-
-    XCUIElement *saveButton = menuActionsView.staticTexts[actionName];
-    if (saveButton) {
-        [saveButton tap];
-    } else {
-        XCTFail(@"'%@' button isn't visible", actionName);
-    }
 }
 
 @end
