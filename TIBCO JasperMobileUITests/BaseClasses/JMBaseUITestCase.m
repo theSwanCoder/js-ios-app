@@ -23,8 +23,16 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     // In UI tests it is usually best to stop immediately when a failure occurs.
     self.continueAfterFailure = NO;
     // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-    
-    [self.application launch];
+    XCUIApplication *app = self.application;
+    NSLog(@"Launch Environment: %@", app.launchEnvironment);
+    NSLog(@"Launch Arguments: %@", app.launchArguments);
+    @try {
+        [app launch];
+    } @catch(NSException *exception) {
+        NSLog(@"Exception: %@", exception);
+        XCTFail(@"Failed to launch application");
+    }
+    NSLog(@"isEnabled: %@", app.isEnabled ? @"YES" : @"NO");
     
     XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
     if (!loginPageView) {
@@ -44,6 +52,8 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     if (!loginPageView) {
         [self logout];
     }
+    XCUIApplication *app = self.application;
+    [app terminate];
     self.application = nil;
     
     [super tearDown];
@@ -244,6 +254,11 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     
     // Verify Library Page
     [self verifyThatCurrentPageIsLibrary];
+}
+
+- (void)givenThatRepositoryPageOnScreen
+{
+    [self verifyThatCurrentPageIsRepository];
 }
 
 - (void)givenThatCellsAreVisible

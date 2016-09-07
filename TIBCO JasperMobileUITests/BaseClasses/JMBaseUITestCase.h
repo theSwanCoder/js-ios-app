@@ -40,6 +40,7 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)givenThatServerProfilesPageOnScreen;
 - (void)givenThatNewProfilePageOnScreen;
 - (void)givenThatLibraryPageOnScreen;
+- (void)givenThatRepositoryPageOnScreen;
 - (void)givenThatCellsAreVisible;
 - (void)givenThatReportCellsOnScreen;
 - (void)givenThatDashboardCellsOnScreen;
