@@ -7,6 +7,8 @@
 //
 
 #import "JMDashboardPageUITests.h"
+#import "JMBaseUITestCase+Dashboard.h"
+#import "JMBaseUITestCase+Helpers.h"
 
 @implementation JMDashboardPageUITests
 
@@ -19,7 +21,9 @@
 //    > User should see dashboard
 - (void)testThatUserCanSeeDashboardPage
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+    [self verifyDashboardPageOnScreen];
+    [self closeTestDashboardPage];
 }
 
 //Loader (Canceling Dashboard)
@@ -29,9 +33,11 @@
 //    > User should see loader
 //    < Tap Cancel button on the loader dialog
 //    > Dashboard shouldn't run. Library screen should appear
-- (void)testThatUserCanLoaderVisibleBeforeDashboard
+- (void)testThatUserCanCancelLoadingDashboard
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPageWithWaitingFinish:NO];
+    [self cancelOpeningTestDashboardPage];
+    [self givenThatLibraryPageOnScreen];
 }
 
 //Back button like title of the previous screen
@@ -42,7 +48,9 @@
 //    > Library screen should appears
 - (void)testThatBackButtonHasCorrectTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+    [self verifyBackButtonHasCorrectTitle];
+    [self closeTestDashboardPage];
 }
 
 //Title like name of the dashboard
@@ -52,7 +60,9 @@
 //    > User should see title like name of the dashboard
 - (void)testThatPageHasCorrectTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+    [self verifyDashboardPageHasCorrectTitle];
+    [self closeTestDashboardPage];
 }
 
 //Favorite button
@@ -65,7 +75,12 @@
 //    > Star should be empty after removing the dashboard from favorites
 - (void)testThatFavoriteButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+
+    [self markDashboardAsFavoriteFromActionsMenu];
+    [self unmarkDashboardFromFavoriteFromActionsMenu];
+
+    [self closeTestDashboardPage];
 }
 
 //Refresh button
@@ -76,7 +91,9 @@
 //    > Dashboard view screen should refresh
 - (void)testThatRefreshButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+    [self refreshDashboard];
+    [self closeTestDashboardPage];
 }
 
 //Print button
@@ -87,7 +104,12 @@
 //    > Print Options dialog (screen for iPhone) should appear
 - (void)testThatPrintButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+
+    [self openPrintDashboardPage];
+    [self closePrintDashboardPage];
+
+    [self closeTestDashboardPage];
 }
 
 //Info button
@@ -98,7 +120,12 @@
 //    > User should see info dialog (screen for iPhone) about the dashboard
 - (void)testThatInfoButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+
+    [self openDashboardInfoPage];
+    [self closeDashboardInfoPage];
+
+    [self closeTestDashboardPage];
 }
 
 //Zoom on Dashboard View screen
@@ -116,6 +143,28 @@
 - (void)testThatZoomWorkCorrectly
 {
 //    XCTFail(@"Not implemented tests");
+}
+
+#pragma mark - Verifying
+
+- (void)verifyDashboardPageOnScreen
+{
+    // TODO: may be need other case
+    [self waitNavigationBarWithLabel:kTestDashboardName
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyDashboardPageHasCorrectTitle
+{
+    [self waitNavigationBarWithLabel:kTestDashboardName
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyBackButtonHasCorrectTitle
+{
+    [self waitBackButtonWithAccessibilityId:@"Library"
+                          onNavBarWithLabel:kTestDashboardName
+                                    timeout:kUITestsBaseTimeout];
 }
 
 @end
