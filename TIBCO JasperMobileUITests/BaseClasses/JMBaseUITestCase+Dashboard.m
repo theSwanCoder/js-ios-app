@@ -15,16 +15,34 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (void)openTestDashboardPage
 {
+    [self openTestDashboardPageWithWaitingFinish:YES];
+}
+
+- (void)openTestDashboardPageWithWaitingFinish:(BOOL)waitingFinish
+{
     [self givenThatLibraryPageOnScreen];
     [self givenThatListCellsAreVisible];
 
     [self searchTestDashboard];
     [self tryOpenTestDashboard];
+
+    if (waitingFinish) {
+        [self givenLoadingPopupNotVisible];
+    }
 }
 
 - (void)closeTestDashboardPage
 {
     [self tryBackToPreviousPage];
+}
+
+- (void)cancelOpeningTestDashboardPage
+{
+    XCUIElement *loadingPopup = [self findElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"];
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                      parentElement:loadingPopup
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
 }
 
 - (void)openDashboardInfoPage
@@ -63,6 +81,54 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [favoriteButton tap];
 }
 
+
+- (void)markDashboardAsFavoriteFromActionsMenu
+{
+    [self openMenuActions];
+    [self selectActionWithName:@"Mark as Favorite"];
+}
+
+- (void)unmarkDashboardFromFavoriteFromActionsMenu
+{
+    [self openMenuActions];
+    [self selectActionWithName:@"Remove From Favorites"];
+}
+
+- (void)markDashboardAsFavoriteFromNavigationBar
+{
+
+}
+
+- (void)unmarkDashboardFromFavoriteFromNavigationBar
+{
+
+}
+
+- (void)refreshDashboard
+{
+    [self openMenuActions];
+    [self selectActionWithName:@"Refresh"];
+
+    [self givenLoadingPopupNotVisible];
+}
+
+- (void)openPrintDashboardPage
+{
+    [self openMenuActions];
+    [self selectActionWithName:@"Print"];
+}
+
+- (void)closePrintDashboardPage
+{
+    // verify that 'print report' page is on the screen
+    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
+                                                        timeout:kUITestsBaseTimeout];
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                      parentElement:printNavBar
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
+}
+
 #pragma mark - Helpers
 
 - (void)searchTestDashboard
@@ -75,8 +141,6 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 {
     XCUIElement *testCell = [self testDashboardCell];
     [testCell tap];
-
-    [self givenLoadingPopupNotVisible];
 }
 
 - (XCUIElement *)testDashboardCell
