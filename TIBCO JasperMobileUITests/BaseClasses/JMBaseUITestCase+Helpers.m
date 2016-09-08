@@ -23,7 +23,10 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
     [self expectationForPredicate:predicate
               evaluatedWithObject:element
-                          handler:nil];
+                          handler:^BOOL {
+                              NSLog(@"\nElement %@ was fulfilled", element);
+                              return YES;
+                          }];
 
     [self waitForExpectationsWithTimeout:timeout
                                  handler:^(NSError *error) {
@@ -166,7 +169,7 @@
                                             parentElement:parentElement];
     [self waitElement:button
               timeout:timeout];
-    sleep(kUITestsElementAvailableTimeout);
+//    sleep(kUITestsElementAvailableTimeout);
     [self waitButtonIsHittable:button];
     return button;
 }
@@ -414,15 +417,13 @@
     NSString *format = [NSString stringWithFormat:@"self.identifier == '%@' && (self.hittable == true)", accessibilityId];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:format];
     NSArray *cells = [allCells filteredArrayUsingPredicate:predicate];
-    if (cells.count > 1) {
-        return nil;
-    }
-    XCUIElement *testCell = cells.firstObject;
-    XCUIElement *label = [self waitStaticTextWithAccessibilityId:labelAccessibilityId
-                                                       parentElement:testCell
-                                                             timeout:kUITestsBaseTimeout];
-    if (![label.label isEqualToString:labelText]) {
-        return nil;
+    XCUIElement *testCell;
+    for (XCUIElement *cell in cells) {
+        XCUIElement *label = [self findStaticTextWithAccessibilityId:labelAccessibilityId
+                                                       parentElement:cell];        
+        if ([label.label isEqualToString:labelText]) {
+            testCell = cell;
+        }
     }
     return testCell;
 }
