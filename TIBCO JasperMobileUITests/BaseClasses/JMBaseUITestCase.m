@@ -98,20 +98,18 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)removeFirstServerProfile
 {
-    XCUIElement *profile = [self.application.collectionViews.cells elementBoundByIndex:0];
+    XCUIApplication *app = self.application;
+    XCUIElement *profile = [app.collectionViews.cells elementBoundByIndex:0];
     if (profile) {
-        [profile pressForDuration:1.0];
         [profile pressForDuration:1.1];
-        XCUIElement *menu = self.application.menuItems[@"Delete"];
+        XCUIElement *menu = app.menuItems[@"Delete"];
         if (menu) {
             [menu tap];
-            XCUIElement *deleteButton = [self findButtonWithAccessibilityId:@"Delete"
-                                                              parentElement:self.application.alerts[@"Confirmation"]];
-            if (deleteButton) {
-                [deleteButton tap];
-            } else {
-                XCTFail(@"Delete button doesn't exist.");
-            }
+            XCUIElement *deleteButton = [self waitButtonWithAccessibilityId:@"Delete"
+                                                              parentElement:app.alerts[@"Confirmation"]
+                                                                    timeout:kUITestsBaseTimeout];
+            
+            [deleteButton tap];
         } else {
             XCTFail(@"Delete menu item doesn't exist.");
         }
@@ -130,6 +128,8 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     
     [self givenThatLoginPageOnScreen];
     [self tryTapLoginButton];
+    
+    [self givenLoadingPopupNotVisible];
 }
 
 - (void)logout
