@@ -139,6 +139,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (void)tryOpenTestDashboard
 {
+    [self givenThatCellsAreVisible];
     XCUIElement *testCell = [self testDashboardCell];
     [testCell tap];
 }
