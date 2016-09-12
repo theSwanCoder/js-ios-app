@@ -331,6 +331,19 @@
     return element;
 }
 
+- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
+                                     parentElement:(XCUIElement *)parentElement
+                                           visible:(BOOL)visible
+                                           timeout:(NSTimeInterval)timeout
+{
+    XCUIElement *element = [self findStaticTextWithAccessibilityId:accessibilityId
+                                                     parentElement:parentElement];
+    [self waitElement:element
+              visible:visible
+              timeout:timeout];
+    return element;
+}
+
 #pragma mark - Actions View
 
 - (XCUIElement *)findActionsButton

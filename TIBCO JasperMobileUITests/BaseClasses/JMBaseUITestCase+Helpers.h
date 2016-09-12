@@ -71,6 +71,10 @@
 - (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
                                      parentElement:(XCUIElement *)parentElement
                                            timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
+                                     parentElement:(XCUIElement *)parentElement
+                                           visible:(BOOL)visible
+                                           timeout:(NSTimeInterval)timeout;
 
 // Menu Actions
 - (XCUIElement *)findActionsButton;
