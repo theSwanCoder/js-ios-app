@@ -498,4 +498,18 @@
     [searchButton tap];
 }
 
+- (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText
+{
+    XCUIElement *searchField = self.application.searchFields[@"Search Values"];
+    [self waitElement:searchField
+              timeout:kUITestsBaseTimeout];
+
+    [searchField tap];
+    [searchField typeText:searchText];
+
+    XCUIElement *searchButton = [self waitButtonWithAccessibilityId:@"Search"
+                                                            timeout:kUITestsBaseTimeout];
+    [searchButton tap];
+}
+
 @end

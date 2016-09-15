@@ -96,4 +96,5 @@
                                 containsLabelWithText:(NSString *)labelText;
 // Search
 - (void)searchResourceWithName:(NSString *)resourceName inSection:(NSString *)sectionName;
+- (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText;
 @end
