@@ -1,10 +1,14 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, "8.0"
+platform :ios, '8.0'
 
-target 'TIBCO JasperMobile' do
+abstract_target 'AppPods' do
 	pod 'Appirater', '2.0.5'
 	pod 'SWRevealViewController', '2.3.0'
 	pod 'JaspersoftSDK', :git => 'https://github.com/Jaspersoft/js-ios-sdk.git',  :branch => 'other_improvements', :subspecs => ['JSCore', 'JSSecurity', 'JSReportExtention']
+	target 'TIBCO JasperMobile'
+    target 'TIBCO JasperMobile Tests'
+    target 'TIBCO JasperMobileUITests'
+    target 'TIBCO JasperMobile Performance UITests'
 end
 
 post_install do |installer_representation|
