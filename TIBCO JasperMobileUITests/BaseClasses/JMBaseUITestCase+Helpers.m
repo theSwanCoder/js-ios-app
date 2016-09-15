@@ -421,24 +421,65 @@
     return nil;
 }
 
-- (XCUIElement *)findCellWithAccessibilityId:(NSString *)accessibilityId
-            containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
-                                   labelText:(NSString *)labelText
+- (XCUIElement *)findCollectionViewCellWithAccessibilityId:(NSString *)accessibilityId
+                          containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
+                                                 labelText:(NSString *)labelText
 {
-    NSArray *allCells = self.application.collectionViews.cells.allElementsBoundByAccessibilityElement;
+    XCUIApplication *app = self.application;
+    XCUIElement *collectionView = [app.collectionViews elementBoundByIndex:0]; // TODO: replace with explicit accessibilityId
+    NSArray *allCells;
 
-    NSString *format = [NSString stringWithFormat:@"self.identifier == '%@' && (self.hittable == true)", accessibilityId];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:format];
-    NSArray *cells = [allCells filteredArrayUsingPredicate:predicate];
-    XCUIElement *testCell;
-    for (XCUIElement *cell in cells) {
-        XCUIElement *label = [self findStaticTextWithAccessibilityId:labelAccessibilityId
-                                                       parentElement:cell];        
-        if ([label.label isEqualToString:labelText]) {
-            testCell = cell;
-        }
+    if (accessibilityId) {
+        NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
+        XCUIElementQuery *cellsQuery = [[collectionView childrenMatchingType:XCUIElementTypeCell] matchingPredicate:identifierPredicate];
+        allCells = cellsQuery.allElementsBoundByAccessibilityElement;
+    } else {
+        XCUIElementQuery *cellsQuery = [collectionView childrenMatchingType:XCUIElementTypeCell];
+        allCells = cellsQuery.allElementsBoundByAccessibilityElement;
     }
-    return testCell;
+
+    NSPredicate *labelPredicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *cell, NSDictionary<NSString *, id> *bindings) {
+        XCUIElement *label = [self findStaticTextWithAccessibilityId:labelAccessibilityId
+                                                       parentElement:cell];
+        return [label.label isEqualToString:labelText];
+    }];
+
+    allCells = [allCells filteredArrayUsingPredicate:labelPredicate];
+
+    NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
+    allCells = [allCells filteredArrayUsingPredicate:hittablePredicate];
+
+    return allCells.firstObject;
+}
+
+- (XCUIElement *)findTableViewCellWithAccessibilityId:(NSString *)accessibilityId
+                                containsLabelWithText:(NSString *)labelText
+{
+    XCUIApplication *app = self.application;
+    XCUIElement *tableView = [app.tables elementBoundByIndex:0]; // TODO: replace with explicit accessibilityId
+    NSArray *allCells;
+
+    if (accessibilityId) {
+        NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
+        XCUIElementQuery *cellsQuery = [[tableView childrenMatchingType:XCUIElementTypeCell] matchingPredicate:identifierPredicate];
+        allCells = cellsQuery.allElementsBoundByAccessibilityElement;
+    } else {
+        XCUIElementQuery *cellsQuery = [tableView childrenMatchingType:XCUIElementTypeCell];
+        allCells = cellsQuery.allElementsBoundByAccessibilityElement;
+    }
+
+    NSPredicate *labelPredicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *cell, NSDictionary<NSString *, id> *bindings) {
+        XCUIElement *labelElement = [self findStaticTextWithAccessibilityId:labelText
+                                                       parentElement:cell];
+        return labelElement.exists;
+    }];
+
+    allCells = [allCells filteredArrayUsingPredicate:labelPredicate];
+
+    NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
+    allCells = [allCells filteredArrayUsingPredicate:hittablePredicate];
+
+    return allCells.firstObject;
 }
 
 #pragma mark - Search

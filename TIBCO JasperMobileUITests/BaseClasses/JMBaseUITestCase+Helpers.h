@@ -89,9 +89,11 @@
 // Cells
 - (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId;
 - (XCUIElement *)cellWithAccessibilityId:(NSString *)accessibilityId forIndex:(NSUInteger)index;
-- (XCUIElement *)findCellWithAccessibilityId:(NSString *)accessibilityId
-            containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
-                                   labelText:(NSString *)labelText;
+- (XCUIElement *)findCollectionViewCellWithAccessibilityId:(NSString *)accessibilityId
+                          containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
+                                                 labelText:(NSString *)labelText;
+- (XCUIElement *)findTableViewCellWithAccessibilityId:(NSString *)accessibilityId
+                                containsLabelWithText:(NSString *)labelText;
 // Search
 - (void)searchResourceWithName:(NSString *)resourceName inSection:(NSString *)sectionName;
 @end

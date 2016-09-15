@@ -21,7 +21,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)openTestDashboardPageWithWaitingFinish:(BOOL)waitingFinish
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatListCellsAreVisible];
+    [self givenThatDashboardCellsOnScreen];
 
     [self searchTestDashboard];
     [self tryOpenTestDashboard];
@@ -168,9 +168,9 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (XCUIElement *)testDashboardCell
 {
-    XCUIElement *testCell = [self findCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
-                             containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
-                                                    labelText:kTestDashboardName];
+    XCUIElement *testCell = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
+                                           containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
+                                                                  labelText:kTestDashboardName];
     if (!testCell) {
         XCTFail(@"There isn't test cell");
     }
