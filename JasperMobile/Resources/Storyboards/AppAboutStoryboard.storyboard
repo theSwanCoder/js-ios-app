@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="r16-zl-pnE">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Main Navigation Controller-->
+        <scene sceneID="Gdr-BJ-lRu">
+            <objects>
+                <navigationController storyboardIdentifier="JMAboutNavigationViewController" definesPresentationContext="YES" id="r16-zl-pnE" customClass="JMMainNavigationController" sceneMemberID="viewController">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="hST-kB-oHP">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="wEA-Vb-4Ky" kind="relationship" relationship="rootViewController" id="nXD-Er-ifs"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="njD-6m-qzm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1247" y="2792"/>
+        </scene>
+        <!--About View Controller-->
+        <scene sceneID="IKR-wc-Mwq">
+            <objects>
+                <viewController id="wEA-Vb-4Ky" customClass="JMAboutViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="mzj-6L-OhT"/>
+                        <viewControllerLayoutGuide type="bottom" id="Rg8-qs-DTJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Mky-P1-7P3">
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView autoresizesSubviews="NO" multipleTouchEnabled="YES" contentMode="scaleAspectFit" bounces="NO" showsHorizontalScrollIndicator="NO" editable="NO" text="App About" translatesAutoresizingMaskIntoConstraints="NO" id="gH8-9L-pQq">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="wEA-Vb-4Ky" id="CZI-SY-ulz"/>
+                                </connections>
+                            </textView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Rg8-qs-DTJ" firstAttribute="top" secondItem="gH8-9L-pQq" secondAttribute="bottom" constant="15" id="MPT-hp-9qw"/>
+                            <constraint firstItem="gH8-9L-pQq" firstAttribute="top" secondItem="mzj-6L-OhT" secondAttribute="bottom" constant="15" id="djk-cg-jbv"/>
+                            <constraint firstAttribute="trailing" secondItem="gH8-9L-pQq" secondAttribute="trailing" id="u1Y-u5-WO9"/>
+                            <constraint firstAttribute="leading" secondItem="gH8-9L-pQq" secondAttribute="leading" id="yYH-E8-KjD"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="D4H-X9-Y5w"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="aboutAppTextView" destination="gH8-9L-pQq" id="rgQ-Oy-rmg"/>
+                        <segue destination="LIw-YN-WwC" kind="show" identifier="showPrivacyPolicy" id="UtP-Ok-49W"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7hL-FQ-7H5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-490" y="2792"/>
+        </scene>
+        <!--Privacy Policy View Controller-->
+        <scene sceneID="lhG-YV-6bg">
+            <objects>
+                <viewController id="LIw-YN-WwC" customClass="JMPrivacyPolicyViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TBT-Sv-fWW"/>
+                        <viewControllerLayoutGuide type="bottom" id="kZd-t2-ZYg"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="s0V-EP-0ec">
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tvh-qk-jQR">
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="LIw-YN-WwC" id="GWM-0o-0c6"/>
+                                </connections>
+                            </webView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="q6S-L9-evz"/>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Tvh-qk-jQR" secondAttribute="trailing" id="DO3-ZD-bWl"/>
+                            <constraint firstItem="kZd-t2-ZYg" firstAttribute="top" secondItem="Tvh-qk-jQR" secondAttribute="bottom" id="L9s-5J-6La"/>
+                            <constraint firstItem="Tvh-qk-jQR" firstAttribute="leading" secondItem="s0V-EP-0ec" secondAttribute="leading" id="O9i-aW-XWv"/>
+                            <constraint firstAttribute="centerX" secondItem="q6S-L9-evz" secondAttribute="centerX" id="W3z-wM-X9C"/>
+                            <constraint firstItem="Tvh-qk-jQR" firstAttribute="top" secondItem="TBT-Sv-fWW" secondAttribute="bottom" id="lbB-5L-oSH"/>
+                            <constraint firstAttribute="centerY" secondItem="q6S-L9-evz" secondAttribute="centerY" id="rQ4-Vh-Wdj"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="sxq-IU-POL"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="q6S-L9-evz" id="x42-QK-Bdk"/>
+                        <outlet property="webView" destination="Tvh-qk-jQR" id="lUR-Ob-5UP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zms-df-vx0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="315" y="2792"/>
+        </scene>
+    </scenes>
+</document>

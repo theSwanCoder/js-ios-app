@@ -105,6 +105,13 @@
 		08DD183A1B136B8A00856112 /* JMReportInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18341B136B8A00856112 /* JMReportInfoViewController.m */; };
 		08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08DD18351B136B8A00856112 /* JMResourceInfoViewController.xib */; };
 		08DD183C1B136B8A00856112 /* JMSavedItemsInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18381B136B8A00856112 /* JMSavedItemsInfoViewController.m */; };
+		08DEB6E91D8BE08F00759EA8 /* LoginStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08DEB6E81D8BE08F00759EA8 /* LoginStoryboard.storyboard */; };
+		08DEB6EB1D8BE8F900759EA8 /* AppAboutStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08DEB6EA1D8BE8F900759EA8 /* AppAboutStoryboard.storyboard */; };
+		08DEB6ED1D8BE99D00759EA8 /* EULAStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08DEB6EC1D8BE99D00759EA8 /* EULAStoryboard.storyboard */; };
+		08DEB6EF1D8C2F5300759EA8 /* OnboardingIntroStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08DEB6EE1D8C2F5300759EA8 /* OnboardingIntroStoryboard.storyboard */; };
+		08DEB6F11D8C323100759EA8 /* SchedulingStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08DEB6F01D8C323100759EA8 /* SchedulingStoryboard.storyboard */; };
+		08DEB6F31D8C32AB00759EA8 /* SharingStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08DEB6F21D8C32AB00759EA8 /* SharingStoryboard.storyboard */; };
+		08DEB6F51D8C3C3000759EA8 /* ResourceViewingStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08DEB6F41D8C3C3000759EA8 /* ResourceViewingStoryboard.storyboard */; };
 		08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19A1B0CF27200BFBFE5 /* AppIcon120x120.png */; };
 		08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19B1B0CF27200BFBFE5 /* Icon-1024.png */; };
 		08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19C1B0CF27200BFBFE5 /* Icon-512.png */; };
@@ -590,6 +597,13 @@
 		08DD18351B136B8A00856112 /* JMResourceInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMResourceInfoViewController.xib; sourceTree = "<group>"; };
 		08DD18371B136B8A00856112 /* JMSavedItemsInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedItemsInfoViewController.h; sourceTree = "<group>"; };
 		08DD18381B136B8A00856112 /* JMSavedItemsInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedItemsInfoViewController.m; sourceTree = "<group>"; };
+		08DEB6E81D8BE08F00759EA8 /* LoginStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoginStoryboard.storyboard; sourceTree = "<group>"; };
+		08DEB6EA1D8BE8F900759EA8 /* AppAboutStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AppAboutStoryboard.storyboard; sourceTree = "<group>"; };
+		08DEB6EC1D8BE99D00759EA8 /* EULAStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EULAStoryboard.storyboard; sourceTree = "<group>"; };
+		08DEB6EE1D8C2F5300759EA8 /* OnboardingIntroStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OnboardingIntroStoryboard.storyboard; sourceTree = "<group>"; };
+		08DEB6F01D8C323100759EA8 /* SchedulingStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SchedulingStoryboard.storyboard; sourceTree = "<group>"; };
+		08DEB6F21D8C32AB00759EA8 /* SharingStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SharingStoryboard.storyboard; sourceTree = "<group>"; };
+		08DEB6F41D8C3C3000759EA8 /* ResourceViewingStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ResourceViewingStoryboard.storyboard; sourceTree = "<group>"; };
 		08E0D19A1B0CF27200BFBFE5 /* AppIcon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon120x120.png; sourceTree = "<group>"; };
 		08E0D19B1B0CF27200BFBFE5 /* Icon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024.png"; sourceTree = "<group>"; };
 		08E0D19C1B0CF27200BFBFE5 /* Icon-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-512.png"; sourceTree = "<group>"; };
@@ -1905,6 +1919,13 @@
 			isa = PBXGroup;
 			children = (
 				BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */,
+				08DEB6F41D8C3C3000759EA8 /* ResourceViewingStoryboard.storyboard */,
+				08DEB6F21D8C32AB00759EA8 /* SharingStoryboard.storyboard */,
+				08DEB6F01D8C323100759EA8 /* SchedulingStoryboard.storyboard */,
+				08DEB6EE1D8C2F5300759EA8 /* OnboardingIntroStoryboard.storyboard */,
+				08DEB6EC1D8BE99D00759EA8 /* EULAStoryboard.storyboard */,
+				08DEB6EA1D8BE8F900759EA8 /* AppAboutStoryboard.storyboard */,
+				08DEB6E81D8BE08F00759EA8 /* LoginStoryboard.storyboard */,
 				BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */,
 			);
 			path = Storyboards;
@@ -3994,12 +4015,14 @@
 				087634031CB28322000F0667 /* Localizable.strings in Resources */,
 				087634041CB28322000F0667 /* Localizable.strings in Resources */,
 				087634051CB28323000F0667 /* Localizable.strings in Resources */,
+				08DEB6EF1D8C2F5300759EA8 /* OnboardingIntroStoryboard.storyboard in Resources */,
 				087634061CB28323000F0667 /* Localizable.strings in Resources */,
 				938E1F991C1EEF6C009E1B79 /* vis_jaspermobile.js in Resources */,
 				939917321BC67737006CC2A7 /* old_dashboard.js in Resources */,
 				08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */,
 				9348F4EA1A35D103006F5677 /* profiles.json in Resources */,
 				9354152F1D17F47100A487D8 /* JMBaseResourceView.xib in Resources */,
+				08DEB6F11D8C323100759EA8 /* SchedulingStoryboard.storyboard in Resources */,
 				089B15C11AA756BD0021A915 /* JMGridLoadingCollectionViewCell.xib in Resources */,
 				BDB8B9F41B57EB0A00758441 /* DefaultTheme.plist in Resources */,
 				BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */,
@@ -4009,9 +4032,12 @@
 				08F2D1701CB268C500C6E4EF /* Resource_Viewer_Share.txt in Resources */,
 				089B15FC1AA756BD0021A915 /* JMBaseCollectionView.xib in Resources */,
 				08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */,
+				08DEB6F51D8C3C3000759EA8 /* ResourceViewingStoryboard.storyboard in Resources */,
+				08DEB6E91D8BE08F00759EA8 /* LoginStoryboard.storyboard in Resources */,
 				08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */,
 				089B15C61AA756BD0021A915 /* JMGridResourceCollectionViewCell.xib in Resources */,
 				08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */,
+				08DEB6F31D8C32AB00759EA8 /* SharingStoryboard.storyboard in Resources */,
 				935415291D1437CB00A487D8 /* JMReportPartViewToolbar.xib in Resources */,
 				BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */,
 				089B15C81AA756BD0021A915 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
@@ -4023,10 +4049,12 @@
 				936A1B971C22B72C00559F16 /* EULA.pdf in Resources */,
 				A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */,
 				93826C7F1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib in Resources */,
+				08DEB6EB1D8BE8F900759EA8 /* AppAboutStoryboard.storyboard in Resources */,
 				A1478208EF52280BF30EDEEE /* JMExternalWindowControlsVC.xib in Resources */,
 				A14781F70628D2FE3607A35B /* resource_viewer.html in Resources */,
 				A14782EF44D786A211C72336 /* resource_viewer_rest.html in Resources */,
 				A147877E71B6CA6419514694 /* ReportChartTypesVC.txt in Resources */,
+				08DEB6ED1D8BE99D00759EA8 /* EULAStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
