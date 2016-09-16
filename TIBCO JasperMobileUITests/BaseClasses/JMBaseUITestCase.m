@@ -403,9 +403,9 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 #pragma mark - Helper Actions
 - (void)tryBackToPreviousPage
 {
-    XCUIElement *backButton = [self findBackbuttonWithAccessibilityId:@"Back"];
+    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"];
     if (!backButton) {
-        backButton = [self findBackbuttonWithAccessibilityId:@"Library"];
+        backButton = [self findBackButtonWithAccessibilityId:@"Library"];
     }
     [backButton tap];
 }

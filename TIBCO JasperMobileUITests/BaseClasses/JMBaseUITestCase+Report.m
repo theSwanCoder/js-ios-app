@@ -47,6 +47,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self tryOpenTestReport];
 
     if (waitingFinish) {
+        // We can have two times when loading up and down
+        // first time loading 'report info' and second one - loading report
+        [self givenLoadingPopupNotVisible];
         [self givenLoadingPopupNotVisible];
     }
 }
@@ -75,6 +78,19 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 }
 
 - (void)closeReportFiltersPage
+{
+    [self tryBackToPreviousPage];
+}
+
+#pragma mark - Saving
+
+- (void)openSaveReportPage
+{
+    [self openMenuActions];
+    [self selectActionWithName:@"Save"];
+}
+
+- (void)closeSaveReportPage
 {
     [self tryBackToPreviousPage];
 }

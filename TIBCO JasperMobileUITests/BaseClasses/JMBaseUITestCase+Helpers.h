@@ -42,10 +42,10 @@
                                  parentElement:(XCUIElement *)parentElement
                                        timeout:(NSTimeInterval)timeout;
 // Back buttons
-- (XCUIElement *)findBackbuttonWithAccessibilityId:(NSString *)accessibilityId;
+- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId;
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                            timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)findBackbuttonWithAccessibilityId:(NSString *)accessibilityId
+- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                  onNavBarWithLabel:(NSString *)label;
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                  onNavBarWithLabel:(NSString *)label

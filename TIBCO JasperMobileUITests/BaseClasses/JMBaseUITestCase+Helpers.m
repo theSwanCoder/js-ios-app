@@ -19,8 +19,7 @@
             visible:(BOOL)visible
             timeout:(NSTimeInterval)timeout
 {
-    NSString *predicateFormat = [NSString stringWithFormat:@"exists == %@", visible ? @1 : @0];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", @"exists", visible ? @1 : @0];
     [self expectationForPredicate:predicate
               evaluatedWithObject:element
                           handler:^BOOL {
@@ -63,13 +62,19 @@
 - (XCUIElement *)elementWithAccessibilityId:(NSString *)accessibilityId
                               parentElement:(XCUIElement *)parentElement
 {
-    XCUIElement *element;
     if (!parentElement) {
         parentElement = self.application;
     }
-    element = [parentElement.otherElements elementMatchingType:XCUIElementTypeOther
-                                                    identifier:accessibilityId];
-    return element;
+    XCUIElementQuery *elementsQuery = [parentElement.otherElements matchingType:XCUIElementTypeOther
+                                                                     identifier:accessibilityId];
+    NSArray *allMatchingElements = elementsQuery.allElementsBoundByAccessibilityElement;
+    if (allMatchingElements.count == 0) {
+        return nil;
+    } else if (allMatchingElements.count > 1) {
+        // TODO: should this be interpreted as an error?
+        NSLog(@"Several other elements with id: %@", accessibilityId);
+    }
+    return allMatchingElements.firstObject;
 }
 
 - (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId
@@ -114,6 +119,9 @@
 {
     XCUIElement *element = [self elementWithAccessibilityId:accessibilityId
                                               parentElement:parentElement];
+    if (!element) {
+        return nil;
+    }
     [self waitElement:element
               visible:visible
               timeout:timeout];
@@ -139,15 +147,19 @@
 - (XCUIElement *)buttonWithAccessibilityId:(NSString *)accessibilityId
                              parentElement:(XCUIElement *)parentElement
 {
-    XCUIElement *button;
     if (parentElement == nil) {
-        button = [self.application.buttons elementMatchingType:XCUIElementTypeButton
-                                                    identifier:accessibilityId];
-    } else {
-        button = [parentElement.buttons elementMatchingType:XCUIElementTypeButton
-                                                 identifier:accessibilityId];
+        parentElement = self.application;
     }
-    return button;
+    XCUIElementQuery *buttonsQuery = [parentElement.buttons matchingType:XCUIElementTypeButton 
+                                                              identifier:accessibilityId];
+    NSArray *allMatchingButtons = buttonsQuery.allElementsBoundByAccessibilityElement;
+    if (allMatchingButtons.count == 0) {
+        return nil;
+    } else if (allMatchingButtons.count > 1) {
+        // TODO: should this be interpreted as an error?
+        NSLog(@"Several button with id: %@", accessibilityId);
+    }
+    return allMatchingButtons.firstObject;
 }
 
 - (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId
@@ -169,16 +181,14 @@
                                             parentElement:parentElement];
     [self waitElement:button
               timeout:timeout];
-//    sleep(kUITestsElementAvailableTimeout);
     [self waitButtonIsHittable:button];
     return button;
 }
 
 - (void)waitButtonIsHittable:(XCUIElement *)button
 {
-    NSString *predicateFormat = [NSString stringWithFormat:@"hittable == 1"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
-    [self expectationForPredicate:predicate
+    NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
+    [self expectationForPredicate:hittablePredicate
               evaluatedWithObject:button
                           handler:^BOOL {
                               NSLog(@"\nElement %@ was fulfilled", button);
@@ -194,9 +204,9 @@
 }
 
 #pragma mark - Back buttons
-- (XCUIElement *)findBackbuttonWithAccessibilityId:(NSString *)accessibilityId
+- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
 {
-    return [self findBackbuttonWithAccessibilityId:accessibilityId
+    return [self findBackButtonWithAccessibilityId:accessibilityId
                                  onNavBarWithLabel:nil];
 }
 
@@ -208,7 +218,7 @@
                                            timeout:timeout];
 }
 
-- (XCUIElement *)findBackbuttonWithAccessibilityId:(NSString *)accessibilityId
+- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                  onNavBarWithLabel:(NSString *)label
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:label
@@ -234,26 +244,38 @@
 
 - (XCUIElement *)findTextFieldWithAccessibilityId:(NSString *)accessibilityId
                                     parentElement:(XCUIElement *)parentElement
-{
-    XCUIElement *element;
+{   
     if (parentElement == nil) {
-        element = self.application.textFields[accessibilityId];
-    } else {
-        element = parentElement.textFields[accessibilityId];
+        parentElement = self.application;
     }
-    return element;
+    XCUIElementQuery *textFieldsQuery = [parentElement.textFields matchingType:XCUIElementTypeTextField 
+                                                                    identifier:accessibilityId];
+    NSArray *allMatchingTextFields = textFieldsQuery.allElementsBoundByAccessibilityElement;
+    if (allMatchingTextFields.count == 0) {
+        return nil;
+    } else if (allMatchingTextFields.count > 1) {
+        // TODO: should this be interpreted as an error?
+        NSLog(@"Several text fields with id: %@", accessibilityId);
+    }
+    return allMatchingTextFields.firstObject;
 }
 
 - (XCUIElement *)findSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
                                           parentElement:(XCUIElement *)parentElement
 {
-    XCUIElement *element;
     if (parentElement == nil) {
-        element = self.application.secureTextFields[accessibilityId];
-    } else {
-        element = parentElement.secureTextFields[accessibilityId];
+        parentElement = self.application;
     }
-    return element;
+    XCUIElementQuery *textFieldsQuery = [parentElement.secureTextFields matchingType:XCUIElementTypeSecureTextField 
+                                                         identifier:accessibilityId];
+    NSArray *allMatchingTextFields = textFieldsQuery.allElementsBoundByAccessibilityElement;
+    if (allMatchingTextFields.count == 0) {
+        return nil;
+    } else if (allMatchingTextFields.count > 1) {
+        // TODO: should this be interpreted as an error?
+        NSLog(@"Several text fields with id: %@", accessibilityId);
+    }
+    return allMatchingTextFields.firstObject;
 }
 
 - (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
@@ -402,21 +424,24 @@
 
 - (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId
 {
-    NSString *predicateFormat = [NSString stringWithFormat:@"self.identifier == '%@' && (self.hittable == true)", accessibilityId];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
-    NSArray *allCells = self.application.cells.allElementsBoundByAccessibilityElement;
-    NSInteger count = [allCells filteredArrayUsingPredicate:predicate].count;
-    return count;
+    NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
+    NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
+    NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[identifierPredicate, hittablePredicate]];
+    XCUIElementQuery *cellsQuery = [[self.application childrenMatchingType:XCUIElementTypeCell] matchingPredicate:predicate];
+    NSArray *allCells = cellsQuery.allElementsBoundByAccessibilityElement;
+
+    return allCells.count;
 }
 
 - (XCUIElement *)cellWithAccessibilityId:(NSString *)accessibilityId forIndex:(NSUInteger)index
 {
-    NSString *predicateFormat = [NSString stringWithFormat:@"self.identifier == '%@' && (self.hittable == true)", accessibilityId];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
-    NSArray *allCells = self.application.cells.allElementsBoundByAccessibilityElement;
-    NSArray *filteredCells = [allCells filteredArrayUsingPredicate:predicate];
-    if (index < filteredCells.count) {
-        return filteredCells[index];
+    NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
+    NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
+    NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[identifierPredicate, hittablePredicate]];
+    XCUIElementQuery *cellsQuery = [[self.application childrenMatchingType:XCUIElementTypeCell] matchingPredicate:predicate];
+    NSArray *allCells = cellsQuery.allElementsBoundByAccessibilityElement;
+    if (index < allCells.count) {
+        return allCells[index];
     }
     return nil;
 }
