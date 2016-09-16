@@ -8,6 +8,7 @@
 
 #import "JMBaseUITestCase.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+SideMenu.h"
 
 NSTimeInterval kUITestsBaseTimeout = 10;
 NSTimeInterval kUITestsResourceWaitingTimeout = 30;
@@ -134,7 +135,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)logout
 {
-    [self tryOpenPageWithName:@"Log Out"];
+    [self selectLogOut];
 }
 
 #pragma mark - Helpers Test Profile
@@ -408,60 +409,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
         backButton = [self findBackButtonWithAccessibilityId:@"Library"];
     }
     [backButton tap];
-}
-
-- (void)tryOpenRepositoryPage
-{
-    NSString *libraryPageName = @"Repository";
-    [self tryOpenPageWithName:libraryPageName];
-}
-
-- (void)tryOpenLibraryPage
-{
-    NSString *libraryPageName = @"Library";
-    [self tryOpenPageWithName:libraryPageName];
-}
-
-- (void)tryOpenFavoritePage
-{
-    NSString *libraryPageName = @"Favorites";
-    [self tryOpenPageWithName:libraryPageName];
-}
-
-- (void)tryOpenPageWithName:(NSString *)pageName
-{
-    [self givenSideMenuNotVisible];
-    [self tryTapSideApplicationMenu];
-    XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                                         timeout:kUITestsBaseTimeout];
-    XCUIElement *pageMenuItem = menuView.cells.staticTexts[pageName];
-    [self waitElement:pageMenuItem
-              timeout:kUITestsBaseTimeout];
-    [pageMenuItem tap];
-}
-
-#pragma mark - Helpers - Side (App) Menu
-
-- (void)givenSideMenuVisible
-{
-    // Verify that side bar is already visible
-    [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
-}
-
-- (void)givenSideMenuNotVisible
-{
-    // Verify that side bar isn't visible yet
-    XCUIElement *sideMenu = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];
-    if (sideMenu) {
-        XCTFail(@"Side menu should not be visible");
-    }
-}
-
-- (void)tryTapSideApplicationMenu
-{
-    XCUIElement *menuButton = [self waitMenuButtonWithTimeout:kUITestsBaseTimeout];
-    [menuButton tap];
 }
 
 #pragma mark - Helpers - Menu
