@@ -7,17 +7,17 @@
 
 @implementation JMBaseUITestCase (Helpers)
 
-- (void)waitElement:(XCUIElement *)element
-            timeout:(NSTimeInterval)timeout
+- (void)waitElementReady:(XCUIElement *)element
+                 timeout:(NSTimeInterval)timeout
 {
-    [self waitElement:element
-            visible:true
-              timeout:timeout];
+    [self waitElementReady:element
+                   visible:true
+                   timeout:timeout];
 }
 
-- (void)waitElement:(XCUIElement *)element
-            visible:(BOOL)visible
-            timeout:(NSTimeInterval)timeout
+- (void)waitElementReady:(XCUIElement *)element
+                 visible:(BOOL)visible
+                 timeout:(NSTimeInterval)timeout
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", @"exists", visible ? @1 : @0];
     [self expectationForPredicate:predicate
@@ -34,6 +34,68 @@
                                          XCTFail(@"Error of waiting: %@", error);
                                      }
                                  }];
+}
+
+- (XCUIElement *)waitButtonInHierarchyWithAccessiblitiyId:(NSString *)accessibilityId
+                                                  timeout:(NSTimeInterval)timeout
+{
+    NSTimeInterval remain = timeout;
+    XCUIElement *button;
+    do {
+        remain -= kUITestsElementAvailableTimeout;
+        sleep(kUITestsElementAvailableTimeout);
+        XCUIElementQuery *elementQuery = [self.application.buttons matchingIdentifier:accessibilityId];
+        NSArray *allElements = elementQuery.allElementsBoundByAccessibilityElement;
+        NSLog(@"For id '%@' all found elements: %@", accessibilityId, allElements);
+        button = allElements.firstObject;
+    } while (button == nil && remain >= 0);
+
+    if (button == nil) {
+        XCTFail(@"Button with id '%@' not found", accessibilityId);
+    }
+    return button;
+}
+
+- (XCUIElement *)waitButtonInHierarchyWithTitle:(NSString *)title
+                                        timeout:(NSTimeInterval)timeout
+{
+    NSTimeInterval remain = timeout;
+    XCUIElement *button;
+    do {
+        remain -= kUITestsElementAvailableTimeout;
+        sleep(kUITestsElementAvailableTimeout);
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K like %@", @"label", title];
+        XCUIElementQuery *elementQuery = [self.application.buttons matchingPredicate:predicate];
+        NSArray *allElements = elementQuery.allElementsBoundByAccessibilityElement;
+        NSLog(@"For title '%@' all found elements: %@", title, allElements);
+        button = allElements.firstObject;
+    } while (button == nil && remain >= 0);
+
+    if (button == nil) {
+        XCTFail(@"Button with title '%@' not found", title);
+    }
+    return button;
+}
+
+- (XCUIElement *)waitAlertInHierarchyWithTitle:(NSString *)title
+                              timeout:(NSTimeInterval)timeout
+{
+    NSTimeInterval remain = timeout;
+    XCUIElement *alert;
+    do {
+        remain -= kUITestsElementAvailableTimeout;
+        sleep(kUITestsElementAvailableTimeout);
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title like %@", title];
+        XCUIElementQuery *elementQuery = [self.application.alerts matchingPredicate:predicate];
+        NSArray *allElements = elementQuery.allElementsBoundByAccessibilityElement;
+        NSLog(@"All found alerts with title '%@': %@", title, allElements);
+        alert = allElements.firstObject;
+    } while (alert == nil && remain >= 0);
+
+    if (alert == nil) {
+        XCTFail(@"Alert with title '%@' not found", title);
+    }
+    return alert;
 }
 
 - (XCUIElement *)findNavigationBarWithLabel:(NSString *)label
@@ -53,8 +115,8 @@
                                     timeout:(NSTimeInterval)timeout
 {
     XCUIElement *navBar = [self findNavigationBarWithLabel:label];
-    [self waitElement:navBar
-              timeout:timeout];
+    [self waitElementReady:navBar
+                   timeout:timeout];
     return navBar;
 }
 
@@ -122,9 +184,9 @@
     if (!element) {
         return nil;
     }
-    [self waitElement:element
-              visible:visible
-              timeout:timeout];
+    [self waitElementReady:element
+                   visible:visible
+                   timeout:timeout];
     return element;
 }
 
@@ -176,13 +238,82 @@
 - (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
                                  parentElement:(XCUIElement *)parentElement
                                        timeout:(NSTimeInterval)timeout
-{
+{    
     XCUIElement *button = [self buttonWithAccessibilityId:accessibilityId
                                             parentElement:parentElement];
-    [self waitElement:button
-              timeout:timeout];
+    if (!button) {
+        button = [self waitButtonInHierarchyWithAccessiblitiyId:accessibilityId
+                                                        timeout:timeout];
+    }
+    [self waitElementReady:button
+                   timeout:timeout];
     [self waitButtonIsHittable:button];
     return button;
+}
+
+- (XCUIElement *)findButtonWithTitle:(NSString *)title
+{
+    return [self findButtonWithTitle:title
+                       parentElement:nil];
+}
+
+- (XCUIElement *)waitButtonWithTitle:(NSString *)title
+                             timeout:(NSTimeInterval)timeout
+{
+    return [self waitButtonWithTitle:title
+                       parentElement:nil
+                             timeout:timeout];
+}
+
+- (XCUIElement *)findButtonWithTitle:(NSString *)title
+                       parentElement:(XCUIElement *)parentElement
+{
+    XCUIElement *button = [self buttonWithTitle:title
+                                  parentElement:parentElement];
+    if (!button) {
+        return nil;
+    }
+    if (!button.exists || !button.isHittable) {
+        // API looks like it is sync, but we need this here because an element has to be prepeared before return
+        [self waitElementReady:button
+                       timeout:kUITestsBaseTimeout];
+        [self waitButtonIsHittable:button];
+    }
+    return button;
+}
+
+- (XCUIElement *)waitButtonWithTitle:(NSString *)title
+                       parentElement:(XCUIElement *)parentElement
+                             timeout:(NSTimeInterval)timeout
+{
+    XCUIElement *button = [self buttonWithTitle:title
+                                  parentElement:parentElement];
+    if (!button) {
+        button = [self waitButtonInHierarchyWithTitle:title
+                                              timeout:timeout];
+    }
+    [self waitElementReady:button
+                   timeout:timeout];
+    [self waitButtonIsHittable:button];
+    return button;
+}
+
+- (XCUIElement *)buttonWithTitle:(NSString *)title
+                   parentElement:(XCUIElement *)parentElement
+{
+    if (parentElement == nil) {
+        parentElement = self.application;
+    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K like %@", @"label", title];
+    XCUIElementQuery *buttonsQuery = [parentElement.buttons matchingPredicate:predicate];
+    NSArray *allMatchingButtons = buttonsQuery.allElementsBoundByAccessibilityElement;
+    if (allMatchingButtons.count == 0) {
+        return nil;
+    } else if (allMatchingButtons.count > 1) {
+        // TODO: should this be interpreted as an error?
+        NSLog(@"Several button with the same title: %@", title);
+    }
+    return allMatchingButtons.firstObject;
 }
 
 - (void)waitButtonIsHittable:(XCUIElement *)button
@@ -292,8 +423,8 @@
 {
     XCUIElement *textField = [self findTextFieldWithAccessibilityId:accessibilityId
                                                       parentElement:parentElement];
-    [self waitElement:textField
-              timeout:timeout];
+    [self waitElementReady:textField
+                   timeout:timeout];
     return textField;
 }
 
@@ -311,8 +442,8 @@
 {
     XCUIElement *textField = [self findSecureTextFieldWithAccessibilityId:accessibilityId
                                                             parentElement:parentElement];
-    [self waitElement:textField
-              timeout:timeout];
+    [self waitElementReady:textField
+                   timeout:timeout];
     return textField;
 }
 
@@ -348,8 +479,8 @@
 {
     XCUIElement *element = [self findStaticTextWithAccessibilityId:accessibilityId
                                                      parentElement:parentElement];
-    [self waitElement:element
-              timeout:timeout];
+    [self waitElementReady:element
+                   timeout:timeout];
     return element;
 }
 
@@ -360,9 +491,52 @@
 {
     XCUIElement *element = [self findStaticTextWithAccessibilityId:accessibilityId
                                                      parentElement:parentElement];
-    [self waitElement:element
-              visible:visible
-              timeout:timeout];
+    [self waitElementReady:element
+                   visible:visible
+                   timeout:timeout];
+    return element;
+}
+
+- (XCUIElement *)findStaticTextWithText:(NSString *)text
+{
+    return [self findStaticTextWithText:text
+                          parentElement:nil];
+}
+
+- (XCUIElement *)findStaticTextWithText:(NSString *)text
+                          parentElement:(XCUIElement *)parentElement
+{
+    if (parentElement == nil) {
+        parentElement = self.application;
+    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"label CONTAINS %@", text];
+    XCUIElementQuery *query = [parentElement.staticTexts matchingPredicate:predicate];
+    NSArray *elements = query.allElementsBoundByAccessibilityElement;
+    XCUIElement *element = elements.firstObject;
+    return element;
+}
+
+- (XCUIElement *)waitStaticTextWithText:(NSString *)text
+                          parentElement:(XCUIElement *)parentElement
+                                timeout:(NSTimeInterval)timeout
+{
+    XCUIElement *element = [self findStaticTextWithText:text
+                                          parentElement:parentElement];
+    [self waitElementReady:element
+                   timeout:timeout];
+    return element;
+}
+
+- (XCUIElement *)waitStaticTextWithText:(NSString *)text
+                          parentElement:(XCUIElement *)parentElement
+                                visible:(BOOL)visible
+                                timeout:(NSTimeInterval)timeout
+{
+    XCUIElement *element = [self findStaticTextWithText:text
+                                          parentElement:parentElement];
+    [self waitElementReady:element
+                   visible:visible
+                   timeout:timeout];
     return element;
 }
 
@@ -408,9 +582,14 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:nil
                                                    timeout:timeout];
-    XCUIElement *menuButton = [self waitButtonWithAccessibilityId:@"menu icon"
-                                                    parentElement:navBar
-                                                          timeout:timeout];
+    XCUIElement *menuButton = [self findButtonWithAccessibilityId:@"menu icon"
+                                                    parentElement:navBar];
+    if (!menuButton) {
+        menuButton = [self findButtonWithAccessibilityId:@"menu icon note"
+                                           parentElement:navBar];
+    }
+    [self waitElementReady:menuButton
+                   timeout:timeout];
     return menuButton;
 }
 
@@ -425,20 +604,15 @@
 - (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId
 {
     NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
-    NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
-    NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[identifierPredicate, hittablePredicate]];
-    XCUIElementQuery *cellsQuery = [[self.application childrenMatchingType:XCUIElementTypeCell] matchingPredicate:predicate];
+    XCUIElementQuery *cellsQuery = [self.application.cells matchingPredicate:identifierPredicate];
     NSArray *allCells = cellsQuery.allElementsBoundByAccessibilityElement;
-
     return allCells.count;
 }
 
 - (XCUIElement *)cellWithAccessibilityId:(NSString *)accessibilityId forIndex:(NSUInteger)index
 {
     NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
-    NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
-    NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[identifierPredicate, hittablePredicate]];
-    XCUIElementQuery *cellsQuery = [[self.application childrenMatchingType:XCUIElementTypeCell] matchingPredicate:predicate];
+    XCUIElementQuery *cellsQuery = [self.application.cells matchingPredicate:identifierPredicate];
     NSArray *allCells = cellsQuery.allElementsBoundByAccessibilityElement;
     if (index < allCells.count) {
         return allCells[index];
@@ -512,10 +686,17 @@
 {
     // TODO: add support of sections. for now we consider that active 'library' section
     XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
-    [self waitElement:searchResourcesSearchField
-              timeout:kUITestsBaseTimeout];
-
+    [self waitElementReady:searchResourcesSearchField
+                   timeout:kUITestsBaseTimeout];
     [searchResourcesSearchField tap];
+
+    XCUIElement *clearTextButton = [self findButtonWithTitle:@"Clear text"
+                                               parentElement:searchResourcesSearchField];
+    if (clearTextButton) {
+        [clearTextButton tap];
+        [self givenThatCellsAreVisible];
+    }
+    
     [searchResourcesSearchField typeText:resourceName];
 
     XCUIElement *searchButton = [self waitButtonWithAccessibilityId:@"Search"
@@ -526,8 +707,8 @@
 - (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText
 {
     XCUIElement *searchField = self.application.searchFields[@"Search Values"];
-    [self waitElement:searchField
-              timeout:kUITestsBaseTimeout];
+    [self waitElementReady:searchField
+                   timeout:kUITestsBaseTimeout];
 
     [searchField tap];
     [searchField typeText:searchText];
@@ -535,6 +716,29 @@
     XCUIElement *searchButton = [self waitButtonWithAccessibilityId:@"Search"
                                                             timeout:kUITestsBaseTimeout];
     [searchButton tap];
+}
+
+#pragma mark - Alerts
+
+- (XCUIElement *)findAlertWithTitle:(NSString *)title
+{
+    XCUIElementQuery *alertsQuery = self.application.alerts;
+    NSArray *allAlerts = alertsQuery.allElementsBoundByAccessibilityElement;
+    XCUIElement *firtsAlert = allAlerts.firstObject;
+    XCUIElement *alert = [alertsQuery matchingIdentifier:title].element;
+    return alert;
+}
+
+- (XCUIElement *)waitAlertWithTitle:(NSString *)title timeout:(NSTimeInterval)timeout
+{
+    XCUIElement *alert = [self findAlertWithTitle:title];
+    if (!alert) {
+        alert = [self waitAlertInHierarchyWithTitle:title
+                                            timeout:timeout];
+    }
+    [self waitElementReady:alert
+                   timeout:timeout];
+    return alert;
 }
 
 @end

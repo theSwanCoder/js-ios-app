@@ -6,9 +6,10 @@
 #import <Foundation/Foundation.h>
 #import "JMBaseUITestCase.h"
 
-@interface JMBaseUITestCase (ExportedResource)
+@interface JMBaseUITestCase (SavedItems)
 
+- (void)removeAllExportedResourcesIfNeed;
 - (void)removeExportedResourceWithAccessibilityId:(NSString *)accessibilityId;
-- (void)verifyExistExportedResourceWithAccessibilityId:(NSString *)accessibilityId;
+- (void)verifyExistExportedResourceWithName:(NSString *)resourceName format:(NSString *)format;
 
 @end

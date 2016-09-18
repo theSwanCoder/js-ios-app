@@ -11,6 +11,8 @@
 - (void)showSideMenu;
 - (void)hideSideMenu;
 
+- (void)waitNotificationOnMenuButtonWithTimeout:(NSTimeInterval)timeout;
+
 - (void)openLibrarySection;
 - (void)openRepositorySection;
 - (void)openRecentlyViewedSection;

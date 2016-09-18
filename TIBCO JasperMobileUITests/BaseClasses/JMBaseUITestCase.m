@@ -484,8 +484,16 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
                                                    timeout:kUITestsBaseTimeout];
     }
 
+    [self enterText:text
+      intoTextField:textField];
+}
+
+- (void)enterText:(NSString *)text
+    intoTextField:(XCUIElement *)textField
+{
+    [textField tap];
     NSString *oldValueString = textField.value;
-    if (oldValueString.length > 0 && [oldValueString isEqualToString:text]) {
+    if (oldValueString.length > 0) {
         XCUIElement *deleteSymbolButton = self.application.keys[@"delete"];
         if (deleteSymbolButton.exists) {
             for (int i = 0; i < oldValueString.length; ++i) {
@@ -494,7 +502,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
         }
     }
 
-    [textField tap];
     [textField typeText:text];
     [self closeKeyboardWithDoneButton];
 }

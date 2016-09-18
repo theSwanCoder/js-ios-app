@@ -9,7 +9,7 @@
 
 @implementation JMBaseUITestCase (SideMenu)
 
-- (void)showSideMenu;
+- (void)showSideMenu
 {
     [self givenSideMenuNotVisible];
     [self tryTapSideApplicationMenu];
@@ -21,6 +21,15 @@
     [self givenSideMenuVisible];
     [self tryTapSideApplicationMenu];
     [self givenSideMenuNotVisible];
+}
+
+- (void)waitNotificationOnMenuButtonWithTimeout:(NSTimeInterval)timeout
+{
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:nil
+                                                   timeout:timeout];
+    [self waitButtonWithAccessibilityId:@"menu icon note"
+                          parentElement:navBar
+                                timeout:timeout];
 }
 
 - (void)openLibrarySection
@@ -87,9 +96,17 @@
     [self tryTapSideApplicationMenu];
     XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
                                                          timeout:kUITestsBaseTimeout];
+
+    NSArray *allStaticTexts = menuView.cells.staticTexts.allElementsBoundByAccessibilityElement;
+    NSLog(@"all static texts: %@", allStaticTexts);
+
     XCUIElement *pageMenuItem = menuView.cells.staticTexts[pageName];
-    [self waitElement:pageMenuItem
-              timeout:kUITestsBaseTimeout];
+    if (!pageMenuItem) {
+        NSString *pageNameWithNote = [NSString stringWithFormat:@"%@ note", pageName];
+        pageMenuItem = menuView.cells.staticTexts[pageNameWithNote];
+    }
+    [self waitElementReady:pageMenuItem
+                   timeout:kUITestsBaseTimeout];
     [pageMenuItem tap];
 }
 

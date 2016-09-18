@@ -259,8 +259,8 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 - (XCUIElement *)waitTestCell
 {
     XCUIElement *testCell = [self testCell];
-    [self waitElement:testCell
-              timeout:kUITestsBaseTimeout];
+    [self waitElementReady:testCell
+                   timeout:kUITestsBaseTimeout];
     return testCell;
 }
 

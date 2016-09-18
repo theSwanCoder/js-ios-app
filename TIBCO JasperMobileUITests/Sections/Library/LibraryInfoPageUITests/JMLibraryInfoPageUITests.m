@@ -117,8 +117,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 - (XCUIElement *)waitTestCell
 {
     XCUIElement *testCell = [self testCell];
-    [self waitElement:testCell
-              timeout:kUITestsBaseTimeout];
+    [self waitElementReady:testCell
+                   timeout:kUITestsBaseTimeout];
     return testCell;
 }
 
@@ -161,7 +161,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 {
     [self openMenuActions];
     
-    XCUIElement *menu = [self.application.otherElements elementMatchingType:XCUIElementTypeAny identifier:@"JMMenuActionsViewAccessibilityId"];
+    XCUIElement *menu = [self.application.otherElements elementMatchingType:XCUIElementTypeAny
+                                                                 identifier:@"JMMenuActionsViewAccessibilityId"];
     XCUIElement *markAsFavoriteElement = menu.staticTexts[@"Mark as Favorite"];
     if (markAsFavoriteElement.exists) {
         [markAsFavoriteElement tap];
