@@ -147,20 +147,41 @@
     [self givenLoadingPopupNotVisible];
 }
 
+- (void)openTestSavedItemFromInfoPage
+{
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Run"];
+}
+
 - (void)closeTestSavedItem
 {
     [self tryBackToPreviousPage];
 }
 
-- (void)showInfoPageSavedItemFromViewer
+- (void)showInfoPageTestSavedItemFromViewer
 {
     [self openMenuActions];
     [self selectActionWithName:@"Info"];
 }
 
-- (void)closeInfoPageSavedItemFromViewer
+- (void)closeInfoPageTestSavedItemFromViewer
 {
     [self closeInfoPageWithCancelButton];
+}
+
+- (void)showInfoPageTestSavedItemFromSavedItemsSection
+{
+    [self openSavedItemsSection];
+    
+    XCUIElement *testItem = [self savedItemWithName:kTestReportName
+                                             format:@"html"];
+
+    [self openInfoPageForResource:testItem];
+}
+
+- (void)closeInfoPageTestSavedItemFromSavedItemsSection
+{
+    [self closeInfoPageWithBackButton];
 }
 
 - (void)markSavedAsFavoriteFromInfoPage
@@ -181,6 +202,18 @@
                                                         parentElement:navBar
                                                               timeout:kUITestsBaseTimeout];
     [favoriteButton tap];
+}
+
+- (void)markSavedAsFavoriteFromMenuOnInfoPage
+{
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Mark as Favorite"];
+}
+
+- (void)unmarkSavedAsFavoriteFromMenuOnInfoPage
+{
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Remove From Favorites"];
 }
 
 #pragma mark - Helpers

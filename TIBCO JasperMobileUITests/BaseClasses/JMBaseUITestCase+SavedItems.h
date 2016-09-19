@@ -29,11 +29,17 @@
 
 - (void)openTestSavedItemInHTMLFormat;
 - (void)openTestSavedItemInPDFFormat;
+- (void)openTestSavedItemFromInfoPage;
 - (void)closeTestSavedItem;
 
-- (void)showInfoPageSavedItemFromViewer;
-- (void)closeInfoPageSavedItemFromViewer;
+- (void)showInfoPageTestSavedItemFromViewer;
+- (void)closeInfoPageTestSavedItemFromViewer;
+
+- (void)showInfoPageTestSavedItemFromSavedItemsSection;
+- (void)closeInfoPageTestSavedItemFromSavedItemsSection;
 
 - (void)markSavedAsFavoriteFromInfoPage;
 - (void)unmarkSavedAsFavoriteFromInfoPage;
+- (void)markSavedAsFavoriteFromMenuOnInfoPage;
+- (void)unmarkSavedAsFavoriteFromMenuOnInfoPage;
 @end

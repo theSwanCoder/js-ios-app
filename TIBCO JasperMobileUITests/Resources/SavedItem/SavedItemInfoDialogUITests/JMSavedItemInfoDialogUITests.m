@@ -27,11 +27,11 @@
 - (void)testThatUserCanSeeInfoDialog
 {
     [self createAndOpenTestSavedItemInHTMLFormat];
-    [self showInfoPageSavedItemFromViewer];
+    [self showInfoPageTestSavedItemFromViewer];
     
     [self verifyThatInfoPageOnScreen];
-    
-    [self closeInfoPageSavedItemFromViewer];
+
+    [self closeInfoPageTestSavedItemFromViewer];
     [self closeAndDeleteTestSavedItem];
 }
 
@@ -45,11 +45,11 @@
 - (void)testThatCancelButtonWorkCorrectly
 {
     [self createAndOpenTestSavedItemInHTMLFormat];
-    [self showInfoPageSavedItemFromViewer];
+    [self showInfoPageTestSavedItemFromViewer];
     
-    [self verifyThatInfoPageHasCancelButton];  
-    
-    [self closeInfoPageSavedItemFromViewer];
+    [self verifyThatInfoPageHasCancelButton];
+
+    [self closeInfoPageTestSavedItemFromViewer];
     [self closeAndDeleteTestSavedItem];
 }
 
@@ -62,11 +62,11 @@
 - (void)testThatDialogHasCorrectTitle
 {
     [self createAndOpenTestSavedItemInHTMLFormat];
-    [self showInfoPageSavedItemFromViewer];
+    [self showInfoPageTestSavedItemFromViewer];
     
-    [self verifyThatInfoPageHasCorrectTitle];  
-    
-    [self closeInfoPageSavedItemFromViewer];
+    [self verifyThatInfoPageHasCorrectTitle];
+
+    [self closeInfoPageTestSavedItemFromViewer];
     [self closeAndDeleteTestSavedItem];
 }
 
@@ -91,11 +91,11 @@
 - (void)testThatDialogHasNeededFieldsForHTMLfile
 {
     [self createAndOpenTestSavedItemInHTMLFormat];
-    [self showInfoPageSavedItemFromViewer];
+    [self showInfoPageTestSavedItemFromViewer];
     
-    [self verifyThatInfoPageHasNeededFieldsForHTMLFile];  
-    
-    [self closeInfoPageSavedItemFromViewer];
+    [self verifyThatInfoPageHasNeededFieldsForHTMLFile];
+
+    [self closeInfoPageTestSavedItemFromViewer];
     [self closeAndDeleteTestSavedItem];
 }
 
@@ -120,11 +120,11 @@
 - (void)testThatDialogHasNeededFieldsForPDFfile
 {
     [self createAndOpenTestSavedItemInPDFFormat];
-    [self showInfoPageSavedItemFromViewer];
+    [self showInfoPageTestSavedItemFromViewer];
     
-    [self verifyThatInfoPageHasNeededFieldsForPDFFile];  
-    
-    [self closeInfoPageSavedItemFromViewer];
+    [self verifyThatInfoPageHasNeededFieldsForPDFFile];
+
+    [self closeInfoPageTestSavedItemFromViewer];
     [self closeAndDeleteTestSavedItem];
 }
 
@@ -140,12 +140,12 @@
 - (void)testThatFavoriteButtonWorkCorrectly
 {
     [self createAndOpenTestSavedItemInHTMLFormat];
-    [self showInfoPageSavedItemFromViewer];
+    [self showInfoPageTestSavedItemFromViewer];
     
     [self markSavedAsFavoriteFromInfoPage];
     [self unmarkSavedAsFavoriteFromInfoPage];
-    
-    [self closeInfoPageSavedItemFromViewer];
+
+    [self closeInfoPageTestSavedItemFromViewer];
     [self closeAndDeleteTestSavedItem];
 }
 
