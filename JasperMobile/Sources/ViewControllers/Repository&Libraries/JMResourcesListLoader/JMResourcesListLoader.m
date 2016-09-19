@@ -40,12 +40,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 @property (nonatomic, strong) NSMutableArray <JMResource *>*allResources;
 
 @property (nonatomic, assign) BOOL needUpdateData;
-@property (nonatomic, assign) BOOL isLoadingNow;
 @property (nonatomic, assign) NSInteger totalCount;
 @end
 
 @implementation JMResourcesListLoader
 @synthesize resource = _resource;
+@synthesize isLoadingNow = _isLoadingNow;
 
 #pragma mark - LifeCycle
 

@@ -39,7 +39,19 @@
 {
     self = [super init];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setNeedsUpdate) name:kJMSavedResourcesDidChangedNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(exportedResourceDidLoad:)
+                                                     name:kJMExportedResourceDidLoadNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(exportedResourceDidCancel:)
+                                                     name:kJMExportedResourceDidCancelNotification
+                                                   object:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(setNeedsUpdate)
+                                                     name:kJMSavedResourcesDidChangedNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -149,6 +161,19 @@
         return sortDescriptor;
     }
     return nil;
+}
+
+#pragma mark - Exported Resource Notifications
+- (void)exportedResourceDidLoad:(NSNotification *)notification
+{
+    [self setNeedsUpdate];
+    [self updateIfNeeded];
+}
+
+- (void)exportedResourceDidCancel:(NSNotification *)notification
+{
+    [self setNeedsUpdate];
+    [self updateIfNeeded];
 }
 
 @end

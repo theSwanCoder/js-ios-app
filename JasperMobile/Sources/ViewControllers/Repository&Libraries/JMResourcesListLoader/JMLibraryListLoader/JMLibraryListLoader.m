@@ -23,6 +23,34 @@
 
 #import "JMLibraryListLoader.h"
 
+NSString *const kJMLibraryListLoaderFilterByIndexKey = @"kJMLibraryListLoaderFilterByIndexKey";
+NSString *const kJMLibraryListLoaderSortByIndexKey = @"kJMLibraryListLoaderSortByIndexKey";
+
 @implementation JMLibraryListLoader
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+#warning HERE NEED CHANGE INITIALIZATION!!!!!
+    }
+    return self;
+}
+
+- (void)setFilterBySelectedIndex:(NSInteger)filterBySelectedIndex
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:filterBySelectedIndex
+                                               forKey:kJMLibraryListLoaderFilterByIndexKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [super setFilterBySelectedIndex:filterBySelectedIndex];
+}
+
+- (void)setSortBySelectedIndex:(NSInteger)sortBySelectedIndex
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:sortBySelectedIndex
+                                               forKey:kJMLibraryListLoaderSortByIndexKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [super setSortBySelectedIndex:sortBySelectedIndex];
+}
 
 @end

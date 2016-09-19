@@ -66,6 +66,7 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
 @property (nonatomic, strong) NSString *accessType;
 @property (nonatomic, assign) NSInteger filterBySelectedIndex;
 @property (nonatomic, assign) NSInteger sortBySelectedIndex;
+@property (nonatomic, assign) BOOL isLoadingNow;
 
 - (NSInteger)limitOfLoadingResources;
 

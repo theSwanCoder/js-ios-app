@@ -31,7 +31,7 @@
  @since 2.5
  */
 
-#import "JMBaseCollectionViewController.h"
+#import "JMResourceCollectionViewController.h"
 
-@interface JMSchedulesCollectionViewController : JMBaseCollectionViewController
+@interface JMSchedulesCollectionViewController : JMResourceCollectionViewController
 @end

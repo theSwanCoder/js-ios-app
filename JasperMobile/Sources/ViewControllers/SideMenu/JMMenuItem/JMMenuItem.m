@@ -63,31 +63,16 @@
     return self.showNotes ? [self selectedIconWithNoteWithResourceType] : [self selectedIconWithResourceType];
 }
 
-#pragma mark - Private API
-- (NSString *) vcIdentifierForSelectedItem
+- (JMMenuItemControllerPresentationStyle)presentationStyle
 {
-    switch (self.sectionType) {
-        case JMSectionTypeLibrary:
-            return @"JMLibraryNavigationViewController";
-        case JMSectionTypeRecentViews:
-            return @"JMRecentViewsNavigationViewController";
-        case JMSectionTypeSavedItems:
-            return @"JMSavedItemsNavigationViewController";
-        case JMSectionTypeFavorites:
-            return @"JMFavoritesNavigationViewController";
-        case JMSectionTypeScheduling:
-            return @"JMSchedulingListNC";
-        case JMSectionTypeRepository:
-            return @"JMRepositoryNavigationViewController";
-        case JMSectionTypeAbout:
-            return @"JMAboutNavigationViewController";
-        case JMSectionTypeSettings:
-            return @"JMServerOptionsViewController";
-        default:
-            return nil;
+    if (self.sectionType == JMSectionTypeAbout ||
+        self.sectionType == JMSectionTypeSettings) {
+        return JMMenuItemControllerPresentationStyle_Modal;
     }
+    return JMMenuItemControllerPresentationStyle_Navigate;
 }
 
+#pragma mark - Private API
 - (NSString *) titleWithResourceType
 {
     switch (self.sectionType) {

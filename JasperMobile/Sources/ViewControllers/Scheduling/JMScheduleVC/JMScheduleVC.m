@@ -117,12 +117,11 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     [super viewDidLoad];
 
-    self.title = @"Schedule";
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     [self createSections];
 
-    [self.createJobButton setTitle:@"Apply"
+    [self.createJobButton setTitle:JMLocalizedString(@"dialog_button_apply")
                           forState:UIControlStateNormal];
 
     // TODO: need make this copy?

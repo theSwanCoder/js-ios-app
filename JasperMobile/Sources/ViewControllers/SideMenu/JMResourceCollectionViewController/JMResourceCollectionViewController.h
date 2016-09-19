@@ -22,39 +22,43 @@
 
 
 //
-//  JMBaseCollectionViewController.h
+//  JMResourceCollectionViewController.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Aleksandr Dakhno odahno@tibco.com
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.0
+ @since 2.6
  */
 
 #import "JMMenuActionsView.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMResourcesListLoader.h"
-#import "JMBaseCollectionView.h"
 #import "JMBaseViewController.h"
 
+typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
+    JMResourcesRepresentationType_HorizontalList = 0,
+    JMResourcesRepresentationType_Grid = 1
+};
 
-extern NSString * const kJMShowFolderContetnSegue;
+static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationType_HorizontalList; }
+static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationType_Grid; }
+
 extern NSString * const kJMRepresentationTypeDidChangeNotification;
 
-@interface JMBaseCollectionViewController : JMBaseViewController
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *menuButton;
+@interface JMResourceCollectionViewController : JMBaseViewController <JMResourcesListLoaderDelegate>
+
+@property (nonatomic, strong) NSString *noResultString;
+@property (nonatomic, strong) NSString *representationTypeKey;
 @property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
-@property (nonatomic, assign) BOOL needReloadData;
-@property (nonatomic, assign) BOOL needLayoutUI;
+@property (nonatomic, assign) JMMenuActionsViewAction availableAction;
+
 @property (nonatomic, assign) BOOL shouldShowButtonForChangingViewPresentation;
 @property (nonatomic, assign) BOOL shouldShowRightNavigationItems;
-@property (nonatomic, assign) JMResourcesRepresentationType representationType;
-@property (nonatomic, strong) NSString *representationTypeKey;
+
 @property (nonatomic, copy) void(^actionBlock)(JMResource *);
 
 - (BOOL)needShowSearchBar;
-- (NSString *)noResultText;
 - (void)actionForResource:(JMResource *)resource;
-- (JMMenuActionsViewAction)availableAction;
+
 @end

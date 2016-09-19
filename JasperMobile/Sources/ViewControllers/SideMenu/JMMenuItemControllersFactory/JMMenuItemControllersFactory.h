@@ -22,17 +22,20 @@
 
 
 //
-//  JMSavedItemsCollectionViewController.h
+//  JMMenuItemControllersFactory.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Aleksandr Dakhno odahno@tibco.com
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.0
+ @since 2.6
  */
 
-#import "JMBaseCollectionViewController.h"
+#import <Foundation/Foundation.h>
+#import "JMMenuViewController.h"
 
-@interface JMSavedItemsCollectionViewController : JMBaseCollectionViewController
+@interface JMMenuItemControllersFactory : NSObject
+
++ (UIViewController *)viewControllerWithMenuItem:(JMMenuItem *)menuItem;
+
 @end

@@ -30,15 +30,12 @@
 #import "JMMenuViewController.h"
 #import "SWRevealViewController.h"
 #import "JMMenuItemTableViewCell.h"
+#import "JMMenuItemControllersFactory.h"
 #import "JMMainNavigationController.h"
-#import "JMLibraryCollectionViewController.h"
-#import "JMSavedItemsCollectionViewController.h"
-#import "JMFavoritesCollectionViewController.h"
-#import "JMAboutViewController.h"
+#import "JMResourceCollectionViewController.h"
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
-#import "JMServerOptionsViewController.h"
 #import "JMAnalyticsManager.h"
 #import "JMThemesManager.h"
 #import "JMUtils.h"
@@ -180,74 +177,51 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     if (itemIndex > self.menuItems.count) {
         return;
     }
-
+    
     JMMenuItem *currentSelectedItem = self.selectedItem;
     JMMenuItem *item = self.menuItems[itemIndex];
-    item.showNotes = NO;
-
-    if (item.sectionType == JMSectionTypeLogout) {
-        [[JMSessionManager sharedManager] logout];
-        [JMUtils showLoginViewAnimated:YES completion:nil];
-        self.menuItems = nil;
-    } else if (item.sectionType == JMSectionTypeSettings) {
-        [self closeMenu];
-
-        JMServerOptionsViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-        settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"dialog_button_cancel")
-                                                                                        style:UIBarButtonItemStyleDone
-                                                                                       target:settingsVC
-                                                                                       action:@selector(cancel)];
-        settingsVC.serverProfile = [JMUtils activeServerProfile];
-        __weak __typeof(settingsVC) weakSettingVC = settingsVC;
-        settingsVC.exitBlock = ^{
-            __typeof(settingsVC) strongSettingVC = weakSettingVC;
-            [strongSettingVC dismissViewControllerAnimated:YES completion:nil];
-        };
-        JMMainNavigationController *navController = [[JMMainNavigationController alloc] initWithRootViewController:settingsVC];
-        navController.modalPresentationStyle = UIModalPresentationFormSheet;
-
-        [self.revealViewController.frontViewController presentViewController:navController
-                                                                    animated:YES
-                                                                  completion:nil];
-
-    } else if (item.sectionType == JMSectionTypeAbout) {
-        [self closeMenu];
-
-        JMMainNavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-        navController.modalPresentationStyle = UIModalPresentationFormSheet;
-
-        [self.revealViewController.frontViewController presentViewController:navController
-                                                                    animated:YES
-                                                                  completion:nil];
-    } else if (item.sectionType == JMSectionTypeFeedback) {
-        [self showFeedback];
-    } else {
-        if (!currentSelectedItem || currentSelectedItem != item) {
-            [self unselectItems];
-            item.selected = YES;
-
-            [self.tableView reloadData];
-
-            id nextVC;
-            if([item vcIdentifierForSelectedItem]) {
-                // Analytics
-                [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
-                        kJMAnalyticsCategoryKey : kJMAnalyticsRepositoryEventCategoryTitle,
-                        kJMAnalyticsActionKey : kJMAnalyticsRepositoryEventActionOpen,
-                        kJMAnalyticsLabelKey : [item nameForAnalytics]
-                }];
-
-                nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-                UIBarButtonItem *bbi = [self barButtonItemForState:JMMenuButtonStateNormal];
-                [nextVC topViewController].navigationItem.leftBarButtonItem = bbi;
-                [[nextVC topViewController].view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-            } else {
-                nextVC = [JMUtils launchScreenViewController];
-            }
-            self.revealViewController.frontViewController = nextVC;
+    
+    if (!currentSelectedItem || currentSelectedItem != item) {
+        if ([item nameForAnalytics]) {
+            // Analytics
+            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                                                                             kJMAnalyticsCategoryKey : kJMAnalyticsRepositoryEventCategoryTitle,
+                                                                             kJMAnalyticsActionKey : kJMAnalyticsRepositoryEventActionOpen,
+                                                                             kJMAnalyticsLabelKey : [item nameForAnalytics]
+                                                                             }];
         }
-        [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
-                                               animated:YES];
+        
+        if (item.sectionType == JMSectionTypeLogout) {
+            [[JMSessionManager sharedManager] logout];
+            [JMUtils showLoginViewAnimated:YES completion:nil];
+            self.menuItems = nil;
+        } else if (item.sectionType == JMSectionTypeFeedback) {
+            [self showFeedback];
+        } else {
+            [self closeMenu];
+            id nextVC = [JMMenuItemControllersFactory viewControllerWithMenuItem:item];
+            if ([nextVC isKindOfClass:[JMMainNavigationController class]]) {
+                JMMainNavigationController *navigationVC = nextVC;
+                if (item.presentationStyle == JMMenuItemControllerPresentationStyle_Modal) {
+                    navigationVC.modalPresentationStyle = UIModalPresentationFormSheet;
+                    [self.revealViewController.frontViewController presentViewController:navigationVC
+                                                                                animated:YES
+                                                                              completion:nil];
+                } else {
+                    [self unselectItems];
+                    item.selected = YES;
+                    item.showNotes = NO;
+                    [self.tableView reloadData];
+
+                    UIBarButtonItem *bbi = [self barButtonItemForState:JMMenuButtonStateNormal];
+                    [navigationVC topViewController].navigationItem.leftBarButtonItem = bbi;
+                    [[navigationVC topViewController].view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+                    self.revealViewController.frontViewController = navigationVC;
+                }
+            } else {
+                self.revealViewController.frontViewController = nextVC;
+            }
+        }
     }
 }
 
@@ -346,7 +320,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 {
     UINavigationController *navController = (UINavigationController *) self.revealViewController.frontViewController;
     for (UIViewController *viewController in navController.viewControllers) {
-        if ([viewController isKindOfClass:[JMBaseCollectionViewController class]]) {
+        if ([viewController isKindOfClass:[JMResourceCollectionViewController class]]) {
             UIButton *button = (UIButton *) viewController.navigationItem.leftBarButtonItem.customView;
             [button setImage:[UIImage imageNamed:@"menu_icon_note"] forState:UIControlStateNormal];
         }
@@ -357,7 +331,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 {
     UINavigationController *navController = (UINavigationController *) self.revealViewController.frontViewController;
     for (UIViewController *viewController in navController.viewControllers) {
-        if ([viewController isKindOfClass:[JMBaseCollectionViewController class]]) {
+        if ([viewController isKindOfClass:[JMResourceCollectionViewController class]]) {
             UIButton *button = (UIButton *) viewController.navigationItem.leftBarButtonItem.customView;
             [button setImage:[UIImage imageNamed:@"menu_icon"] forState:UIControlStateNormal];
         }
@@ -378,7 +352,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         // Email Subject
         NSString *emailTitle = @"JasperMobile (iOS)";
         // Email Content
-        NSString *messageBody = [NSString stringWithFormat:@"Send from build version: %@", [JMUtils buildVersion]];
+        NSString *messageBody = [NSString stringWithFormat:@"Send from build version: %@, JRS version: %@", [JMUtils buildVersion], self.restClient.serverProfile.serverInfo.version];
         // To address
         NSArray *toRecipents = @[kFeedbackPrimaryEmail, kFeedbackSecondaryEmail];
 
@@ -418,8 +392,6 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     }
 
     [self dismissViewControllerAnimated:YES completion:NULL];
-
-    [self closeMenu];
 }
 
 #pragma mark - Notifications

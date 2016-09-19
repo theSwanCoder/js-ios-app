@@ -47,7 +47,14 @@ typedef NS_ENUM(NSInteger, JMSectionType){
     JMSectionTypeNone
 };
 
+typedef NS_ENUM(NSInteger, JMMenuItemControllerPresentationStyle){
+    JMMenuItemControllerPresentationStyle_Modal,
+    JMMenuItemControllerPresentationStyle_Navigate
+};
+
+
 @interface JMMenuItem : NSObject
+@property (nonatomic, readonly) JMMenuItemControllerPresentationStyle presentationStyle;
 @property (nonatomic, readonly) JMSectionType sectionType;
 @property (nonatomic, readonly) NSString *itemTitle;
 @property (nonatomic, readonly) UIImage  *itemIcon;
@@ -59,6 +66,5 @@ typedef NS_ENUM(NSInteger, JMSectionType){
 - (instancetype)initWithSectionType:(JMSectionType)sectionType;
 + (instancetype)menuItemWithSectionType:(JMSectionType)sectionType;
 
-- (NSString *) vcIdentifierForSelectedItem;
 - (NSString *) nameForAnalytics;
 @end

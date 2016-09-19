@@ -27,12 +27,12 @@
 //
 
 #import "JMSchedulesCollectionViewController.h"
+#import "JMMenuItemControllersFactory.h"
 #import "ALToastView.h"
 #import "JMScheduleManager.h"
 #import "JMSchedule.h"
 #import "JMScheduleVC.h"
 #import "JMCancelRequestPopup.h"
-#import "JMLibraryCollectionViewController.h"
 #import "JMLibraryListLoader.h"
 #import "JMLocalization.h"
 #import "JMUtils.h"
@@ -43,10 +43,9 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMLocalizedString(@"menuitem_schedules_label");
     self.shouldShowButtonForChangingViewPresentation = NO;
     self.shouldShowRightNavigationItems = NO;
-    self.needLayoutUI = YES;
+//    self.needLayoutUI = YES;
 
     [self addButtonForCreatingNewSchedule];
 }
@@ -128,19 +127,18 @@
 #pragma mark - Actions
 - (void)createNewSchedule
 {
-    JMLibraryCollectionViewController *libraryVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMLibraryCollectionViewController"];
-    libraryVC.representationTypeKey = self.representationTypeKey;
-    libraryVC.representationType = self.representationType;
-    libraryVC.shouldShowButtonForChangingViewPresentation = NO;
-    libraryVC.shouldShowRightNavigationItems = NO;
-    libraryVC.navigationItem.leftBarButtonItem = nil;
-    libraryVC.filterByIndex = JMLibraryListLoaderFilterIndexByReport;
+    JMMenuItem *menuItem = [JMMenuItem menuItemWithSectionType:JMSectionTypeLibrary];
+    JMResourceCollectionViewController *libraryViewController = (JMResourceCollectionViewController *)[JMMenuItemControllersFactory viewControllerWithMenuItem:menuItem];
+    libraryViewController.shouldShowButtonForChangingViewPresentation = NO;
+    libraryViewController.shouldShowRightNavigationItems = NO;
+    libraryViewController.navigationItem.leftBarButtonItem = nil;
+    libraryViewController.resourceListLoader.filterBySelectedIndex = JMLibraryListLoaderFilterIndexByReport;
     __weak __typeof(self) weakSelf = self;
-    libraryVC.actionBlock = ^(JMResource *resource) {
+    libraryViewController.actionBlock = ^(JMResource *resource) {
         __typeof(self) strongSelf = weakSelf;
         [strongSelf scheduleReportWithResource:resource];
     };
-    [self.navigationController pushViewController:libraryVC animated:YES];
+    [self.navigationController pushViewController:libraryViewController animated:YES];
 }
 
 - (void)scheduleReportWithResource:(JMResource *)resource

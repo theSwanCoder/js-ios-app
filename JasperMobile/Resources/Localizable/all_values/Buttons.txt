@@ -1,5 +1,8 @@
 
 [[Buttons]]
+    [dialog_button_apply]
+        en = Apply
+        tags = ios, new
 	[dialog_button_applyUpdate]
 		en = Run Dashboard
 		de = Bedieneroberfläche ausführen

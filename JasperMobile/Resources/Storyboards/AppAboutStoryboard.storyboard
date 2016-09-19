@@ -1,38 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="r16-zl-pnE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="wEA-Vb-4Ky">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Main Navigation Controller-->
-        <scene sceneID="Gdr-BJ-lRu">
-            <objects>
-                <navigationController storyboardIdentifier="JMAboutNavigationViewController" definesPresentationContext="YES" id="r16-zl-pnE" customClass="JMMainNavigationController" sceneMemberID="viewController">
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="hST-kB-oHP">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="wEA-Vb-4Ky" kind="relationship" relationship="rootViewController" id="nXD-Er-ifs"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="njD-6m-qzm" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1247" y="2792"/>
-        </scene>
         <!--About View Controller-->
         <scene sceneID="IKR-wc-Mwq">
             <objects>
-                <viewController id="wEA-Vb-4Ky" customClass="JMAboutViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMAboutViewController" id="wEA-Vb-4Ky" customClass="JMAboutViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mzj-6L-OhT"/>
                         <viewControllerLayoutGuide type="bottom" id="Rg8-qs-DTJ"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Mky-P1-7P3">
-                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView autoresizesSubviews="NO" multipleTouchEnabled="YES" contentMode="scaleAspectFit" bounces="NO" showsHorizontalScrollIndicator="NO" editable="NO" text="App About" translatesAutoresizingMaskIntoConstraints="NO" id="gH8-9L-pQq">
