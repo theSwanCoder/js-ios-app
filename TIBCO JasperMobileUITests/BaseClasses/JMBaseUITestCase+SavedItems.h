@@ -40,6 +40,8 @@
 
 - (void)markSavedAsFavoriteFromInfoPage;
 - (void)unmarkSavedAsFavoriteFromInfoPage;
-- (void)markSavedAsFavoriteFromMenuOnInfoPage;
-- (void)unmarkSavedAsFavoriteFromMenuOnInfoPage;
+- (void)markTestSavedItemAsFavoriteFromMenuOnInfoPage;
+- (void)unmarkTestSavedItemAsFavoriteFromMenuOnInfoPage;
+- (void)markTestSavedItemAsFavoriteFromViewerPage;
+- (void)unmarkTestSavedItemAsFavoriteFromViewerPage;
 @end

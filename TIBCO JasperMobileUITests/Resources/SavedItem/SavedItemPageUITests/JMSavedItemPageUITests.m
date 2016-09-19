@@ -7,6 +7,11 @@
 //
 
 #import "JMSavedItemPageUITests.h"
+#import "JMBaseUITestCase+SavedItems.h"
+#import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+Resource.h"
 
 @implementation JMSavedItemPageUITests
 
@@ -19,7 +24,13 @@
 //    > User should see Saved Report View Screen
 - (void)testThatUserCanSeeSavedItemAsHTML
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+
+    [self openTestSavedItemInHTMLFormat];
+    [self closeTestSavedItem];
+    
+    [self deleteTestReportInHTMLFormat];
 }
 
 //User should see the saved report as PDF
@@ -29,7 +40,13 @@
 //    > User should see Saved Report View Screen
 - (void)testThatUserCanSeeSavedItemAsPDF
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInPDFFormat];
+    
+    [self openTestSavedItemInPDFFormat];
+    [self closeTestSavedItem];
+    
+    [self deleteTestReportInPDFFormat];
 }
 
 //Back button like "Saved Items"
@@ -40,7 +57,14 @@
 //    > Saved Items screen should appears
 - (void)testThatBackButtonHasCorrectTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    
+    [self openTestSavedItemInHTMLFormat];
+    [self verifyThatBackButtonHasCorrectTitle];
+    [self closeTestSavedItem];
+    
+    [self deleteTestReportInHTMLFormat];
 }
 
 //Saved Report View title
@@ -50,7 +74,14 @@
 //        > User should see title like name of the saved report
 - (void)testThatPageHasCorrectTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    
+    [self openTestSavedItemInHTMLFormat];
+    [self verifyThatSavedItemPageHasCorrectTitle];
+    [self closeTestSavedItem];
+    
+    [self deleteTestReportInHTMLFormat];
 }
 
 //Favorite button
@@ -62,7 +93,17 @@
 //    > Star should be empty after removing the item from favorites
 - (void)testThatFavoriteButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    
+    [self openTestSavedItemInHTMLFormat];
+
+    [self markTestSavedItemAsFavoriteFromViewerPage];
+    [self unmarkTestSavedItemAsFavoriteFromViewerPage];
+    
+    [self closeTestSavedItem];
+    
+    [self deleteTestReportInHTMLFormat];
 }
 
 //Cancel deleting
@@ -74,7 +115,16 @@
 //    > Report isn't deleted
 - (void)testThatDeletingCanBeCanceled
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    [self openTestSavedItemInHTMLFormat];
+
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Delete"];
+    [self cancelDeletingAction];
+
+    [self closeTestSavedItem];
+    [self deleteTestReportInHTMLFormat];
 }
 
 //Cancel rename
@@ -87,7 +137,16 @@
 //    > Report isn't renamed
 - (void)testThatRenamingCanBeCanceled
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    [self openTestSavedItemInHTMLFormat];
+    
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Rename"];
+    [self cancelRenamingAction];
+    
+    [self closeTestSavedItem];
+    [self deleteTestReportInHTMLFormat];
 }
 
 //Rename the saved file
@@ -100,7 +159,16 @@
 //    > Rename report dialog should disappear and Saved Item View screen should be displayed
 - (void)testThatRenameWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    [self openTestSavedItemInHTMLFormat];
+    
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Rename"];
+    [self performRenameAction];
+    
+    [self closeTestSavedItem];
+    [self deleteTestReportInHTMLFormat];
 }
 
 //Try to rename the saved file with empty name
@@ -112,8 +180,17 @@
 //    < Tap "OK" button
 //    > "OK" button disabled. Report is not saved.
 - (void)testThatRenameNotWorkWithEmptyName
-{
-//    XCTFail(@"Not implemented tests");
+{ 
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    [self openTestSavedItemInHTMLFormat];
+    
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Rename"];
+    [self performRenameActionWithEmptyName];
+    
+    [self closeTestSavedItem];
+    [self deleteTestReportInHTMLFormat];
 }
 
 //Try to rename the saved file if saved file name includes only spaces
@@ -126,7 +203,16 @@
 //    > "OK" button disabled. Report is not saved.
 - (void)testThatRenameNotWorkWithSpacesInName
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    [self openTestSavedItemInHTMLFormat];
+    
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Rename"];
+    [self performRenameActionWithSpacesInName];
+    
+    [self closeTestSavedItem];
+    [self deleteTestReportInHTMLFormat];
 }
 
 //Try to rename the saved file if report name already exist
@@ -138,7 +224,16 @@
 //    > Report is not saved. User should see error message "This name has been already taken, please choose different name"
 - (void)testThatRenameNotWorkForExistingName
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    [self openTestSavedItemInHTMLFormat];
+    
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Rename"];
+    [self performRenameActionWithTheSameName];
+    
+    [self closeTestSavedItem];
+    [self deleteTestReportInHTMLFormat];
 }
 
 //Rename the saved item with same name in different output formats
@@ -161,7 +256,14 @@
 //    > Info dialog (screen for iPhone) about the report should appear
 - (void)testThatInfoButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    
+    [self showInfoPageTestSavedItemFromSavedItemsSection];
+    [self verifyThatInfoPageOnScreen];
+    [self closeInfoPageTestSavedItemFromSavedItemsSection];
+    
+    [self deleteTestReportInHTMLFormat];
 }
 
 //Zoom on Report View screen
@@ -176,7 +278,125 @@
 //    > Report shouldn't be scalled
 - (void)testThatZoomWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    [self saveTestReportInHTMLFormat];
+    [self openTestSavedItemInHTMLFormat];
+    
+    XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
+    [self waitElementReady:webView
+                   timeout:kUITestsBaseTimeout];
+    [webView pinchWithScale:2
+                   velocity:1];
+    sleep(kUITestsElementAvailableTimeout);
+    
+    [self closeTestSavedItem];
+    [self deleteTestReportInHTMLFormat];
+}
+
+#pragma mark - Helpers
+
+- (void)cancelDeletingAction
+{
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
+}
+
+- (void)cancelRenamingAction
+{
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
+}
+
+- (void)performRenameAction
+{
+    XCUIElement *textField = [self.application.textFields elementBoundByIndex:0];
+    [self waitElementReady:textField
+                   timeout:kUITestsBaseTimeout];
+    [textField typeText:@"1"];
+    
+    XCUIElement *okButton = [self waitButtonWithAccessibilityId:@"OK"
+                                                        timeout:kUITestsBaseTimeout];
+    [okButton tap];
+}
+
+- (void)performRenameActionWithEmptyName
+{
+    XCUIElement *alert = [self.application.alerts elementBoundByIndex:0];
+    XCUIElement *textField = [alert.textFields elementBoundByIndex:0];
+    // This is a hack because tapping delete button on keyboard causes tapping 'Cancel' button.
+    [textField typeText:@"1"]; 
+    [self deleteTextFromTextField:textField];
+
+    XCUIElement *okButton = [self findButtonWithAccessibilityId:@"OK"];
+    if (okButton.isEnabled) {
+        XCTFail(@"OK button should be inactive");
+    }
+    
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
+}
+
+- (void)performRenameActionWithSpacesInName
+{
+    XCUIElement *alert = [self.application.alerts elementBoundByIndex:0];
+    XCUIElement *textField = [alert.textFields elementBoundByIndex:0];
+    // This is a hack because tapping delete button on keyboard causes tapping 'Cancel' button.
+    [textField typeText:@"1"]; 
+    [self deleteTextFromTextField:textField];
+    [textField typeText:@"  "];
+    
+    XCUIElement *okButton = [self findButtonWithAccessibilityId:@"OK"];
+    if (okButton.isEnabled) {
+        XCTFail(@"OK button should be inactive");
+    }
+    
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
+
+}
+
+- (void)performRenameActionWithTheSameName
+{
+    XCUIElement *alert = [self.application.alerts elementBoundByIndex:0];
+    XCUIElement *textField = [alert.textFields elementBoundByIndex:0];
+    // This is a hack because tapping delete button on keyboard causes tapping 'Cancel' button.
+    [textField typeText:@"1"]; 
+    [self deleteTextFromTextField:textField];
+    [textField typeText:kTestReportName];
+    
+    XCUIElement *okButton = [self findButtonWithAccessibilityId:@"OK"];
+    if (okButton.isEnabled) {
+        XCTFail(@"OK button should be inactive");
+    }
+    
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
+    
+}
+
+#pragma mark - Verifying
+
+- (void)verifyThatBackButtonHasCorrectTitle
+{
+    [self waitBackButtonWithAccessibilityId:@"Back"
+                          onNavBarWithLabel:kTestReportName
+                                    timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatSavedItemPageHasCorrectTitle
+{
+    [self waitNavigationBarWithLabel:kTestReportName 
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatInfoPageOnScreen
+{
+    [self verifyInfoPageOnScreenForPageWithAccessibilityId:@"JMSavedItemsInfoViewControllerAccessibilityId"];
 }
 
 @end

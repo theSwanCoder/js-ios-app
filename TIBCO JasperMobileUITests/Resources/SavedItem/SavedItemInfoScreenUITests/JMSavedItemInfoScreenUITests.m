@@ -124,8 +124,8 @@
 {
     [self createTestSavedItemInHTMLFormatAndOpenInfoPage];
 
-    [self markSavedAsFavoriteFromMenuOnInfoPage];
-    [self unmarkSavedAsFavoriteFromMenuOnInfoPage];
+    [self markTestSavedItemAsFavoriteFromMenuOnInfoPage];
+    [self unmarkTestSavedItemAsFavoriteFromMenuOnInfoPage];
 
     [self closeInfoPageAndDeleteTestSavedItem];
 }

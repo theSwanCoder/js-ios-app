@@ -56,6 +56,9 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
     isSecureField:(BOOL)isSecureField;
 - (void)enterText:(NSString *)text
     intoTextField:(XCUIElement *)textField;
+
+- (void)deleteTextFromTextField:(XCUIElement *)textField;
+
 - (void)closeKeyboardWithDoneButton;
 
 @end

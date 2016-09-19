@@ -236,7 +236,7 @@
     
     [self verifyThatReportDidSaveWithReportName:kTestReportName
                                          format:@"html"];
-    [self openLibrarySection]
+    [self openLibrarySection];
 }
 
 //Save the report as html-file

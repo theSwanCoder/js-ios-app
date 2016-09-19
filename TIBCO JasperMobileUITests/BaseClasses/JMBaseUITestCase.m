@@ -520,7 +520,8 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 - (void)deleteTextFromTextField:(XCUIElement *)textField
 {
     NSString *oldValueString = textField.value;
-    XCUIElement *deleteSymbolButton = self.application.keys[@"delete"];
+    XCUIElement *keyboard = [self.application.keyboards elementBoundByIndex:0];
+    XCUIElement *deleteSymbolButton = keyboard.keys[@"delete"];
     if (deleteSymbolButton.exists) {
         for (int i = 0; i < oldValueString.length; ++i) {
             [deleteSymbolButton tap];

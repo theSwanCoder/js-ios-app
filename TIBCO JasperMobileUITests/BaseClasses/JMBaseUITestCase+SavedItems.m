@@ -204,13 +204,25 @@
     [favoriteButton tap];
 }
 
-- (void)markSavedAsFavoriteFromMenuOnInfoPage
+- (void)markTestSavedItemAsFavoriteFromMenuOnInfoPage
 {
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Mark as Favorite"];
 }
 
-- (void)unmarkSavedAsFavoriteFromMenuOnInfoPage
+- (void)unmarkTestSavedItemAsFavoriteFromMenuOnInfoPage
+{
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Remove From Favorites"];
+}
+
+- (void)markTestSavedItemAsFavoriteFromViewerPage
+{
+    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self selectActionWithName:@"Mark as Favorite"];
+}
+
+- (void)unmarkTestSavedItemAsFavoriteFromViewerPage
 {
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Remove From Favorites"];
