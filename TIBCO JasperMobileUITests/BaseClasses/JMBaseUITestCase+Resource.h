@@ -7,9 +7,8 @@
 #import "JMBaseUITestCase.h"
 
 @interface JMBaseUITestCase (Resource)
-
 - (void)openInfoPageForResource:(XCUIElement *)resource;
-- (void)closeInfoPage;
+- (void)closeInfoPageWithBackButton;
+- (void)closeInfoPageWithCancelButton;
 - (void)verifyInfoPageOnScreenForPageWithAccessibilityId:(NSString *)accessibilityId;
-
 @end

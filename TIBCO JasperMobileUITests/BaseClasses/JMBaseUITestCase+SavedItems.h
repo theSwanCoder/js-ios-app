@@ -8,8 +8,32 @@
 
 @interface JMBaseUITestCase (SavedItems)
 
-- (void)removeAllExportedResourcesIfNeed;
-- (void)removeExportedResourceWithAccessibilityId:(NSString *)accessibilityId;
-- (void)verifyExistExportedResourceWithName:(NSString *)resourceName format:(NSString *)format;
+- (void)givenThatSavedItemsEmpty;
 
+- (void)deleteAllExportedResourcesIfNeed;
+- (void)deleteSavedItemWithName:(NSString *)itemName
+                         format:(NSString *)format;
+- (void)verifyExistSavedItemWithName:(NSString *)itemName
+                              format:(NSString *)format;
+
+- (void)verifyThatReportDidSaveWithReportName:(NSString *)reportName format:(NSString *)format;
+
+- (void)saveTestReportInHTMLFormat;
+- (void)deleteTestReportInHTMLFormat;
+
+- (void)saveTestReportInPDFFormat;
+- (void)deleteTestReportInPDFFormat;
+
+- (void)saveTestReportInXMLFormat;
+- (void)deleteTestReportInXMLFormat;
+
+- (void)openTestSavedItemInHTMLFormat;
+- (void)openTestSavedItemInPDFFormat;
+- (void)closeTestSavedItem;
+
+- (void)showInfoPageSavedItemFromViewer;
+- (void)closeInfoPageSavedItemFromViewer;
+
+- (void)markSavedAsFavoriteFromInfoPage;
+- (void)unmarkSavedAsFavoriteFromInfoPage;
 @end

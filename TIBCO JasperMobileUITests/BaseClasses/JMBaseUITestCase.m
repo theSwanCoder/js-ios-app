@@ -493,17 +493,39 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 {
     [textField tap];
     NSString *oldValueString = textField.value;
-    if (oldValueString.length > 0) {
-        XCUIElement *deleteSymbolButton = self.application.keys[@"delete"];
-        if (deleteSymbolButton.exists) {
-            for (int i = 0; i < oldValueString.length; ++i) {
-                [deleteSymbolButton tap];
-            }
+    BOOL isTextFieldContainText = oldValueString.length > 0;
+    BOOL isTextFieldContainTheSameText = [oldValueString isEqualToString:text];
+    
+    if (isTextFieldContainText) {
+        if (isTextFieldContainTheSameText) {
+            [self closeKeyboardWithDoneButton];
+        } else {
+            [self replaceTextInTextField:textField 
+                                withText:text];                        
         }
+    } else {
+        [textField typeText:text];
+        [self closeKeyboardWithDoneButton];        
     }
+}
 
+- (void)replaceTextInTextField:(XCUIElement *)textField 
+                      withText:(NSString *)text
+{
+    [self deleteTextFromTextField:textField];
     [textField typeText:text];
     [self closeKeyboardWithDoneButton];
+}
+
+- (void)deleteTextFromTextField:(XCUIElement *)textField
+{
+    NSString *oldValueString = textField.value;
+    XCUIElement *deleteSymbolButton = self.application.keys[@"delete"];
+    if (deleteSymbolButton.exists) {
+        for (int i = 0; i < oldValueString.length; ++i) {
+            [deleteSymbolButton tap];
+        }
+    }
 }
 
 @end

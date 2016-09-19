@@ -17,9 +17,18 @@
     [infoButton tap];
 }
 
-- (void)closeInfoPage
+- (void)closeInfoPageWithBackButton
 {
     [self tryBackToPreviousPage];
+}
+
+- (void)closeInfoPageWithCancelButton
+{
+    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                      parentElement:navBar
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
 }
 
 - (void)verifyInfoPageOnScreenForPageWithAccessibilityId:(NSString *)accessibilityId

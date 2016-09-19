@@ -236,6 +236,7 @@
     
     [self verifyThatReportDidSaveWithReportName:kTestReportName
                                          format:@"html"];
+    [self openLibrarySection];
 }
 
 //Save the report as html-file
@@ -327,55 +328,6 @@
 
 #pragma mark - Helpers
 
-- (void)saveTestReportInHTMLFormat
-{
-    [self openTestReportPage];    
-    [self openSaveReportPage];
-    
-    [self saveTestReportWithName:kTestReportName
-                          format:@"html"];
-    
-    [self closeTestReportPage];
-    
-    [self verifyThatReportDidSaveWithReportName:kTestReportName
-                                         format:@"html"];
-}
-
-- (void)saveTestReportInPDFFormat
-{
-    [self openTestReportPage];    
-    [self openSaveReportPage];
-    
-    [self saveTestReportWithName:kTestReportName
-                          format:@"pdf"];
-    
-    [self closeTestReportPage];
-    
-    [self verifyThatReportDidSaveWithReportName:kTestReportName 
-                                         format:@"pdf"];
-}
-
-- (void)saveTestReportInXMLFormat
-{
-    [self openTestReportPage];    
-    [self openSaveReportPage];
-    
-    [self saveTestReportWithName:kTestReportName
-                          format:@"xls"];
-    
-    [self closeTestReportPage];
-    
-    [self verifyThatReportDidSaveWithReportName:kTestReportName 
-                                         format:@"xls"];
-}
-
-- (void)givenThatSavedItemsEmpty
-{
-    [self openSavedItemsSection];
-    [self removeAllExportedResourcesIfNeed];
-    [self openLibrarySection];
-}
-
 - (void)cancelSavingTestReport
 {
     XCUIElement *alert = [self waitAlertWithTitle:@"Error"
@@ -409,16 +361,6 @@
 {
     [self waitNavigationBarWithLabel:@"Save Report"
                              timeout:kUITestsBaseTimeout];
-}
-
-- (void)verifyThatReportDidSaveWithReportName:(NSString *)reportName 
-                                       format:(NSString *)format
-{
-    [self waitNotificationOnMenuButtonWithTimeout:kUITestsBaseTimeout];
-    [self openSavedItemsSection];
-    [self verifyExistExportedResourceWithName:reportName 
-                                       format:format];
-    [self openLibrarySection];
 }
 
 - (void)verifyThatSaveReportPageHasCorrectBackButtonName
