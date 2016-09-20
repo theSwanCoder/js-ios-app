@@ -4226,7 +4226,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Start compiling localizations\"\nlocalizationFolderPath=${SRCROOT}/JasperMobile/Resources/Localizable\nallLocalizationsFolderPath=$localizationFolderPath/all_values\nallLocalizationsFileName=locales.txt\noutputPathNewStrings=$localizationFolderPath/New_Strings\noutputPath=$localizationFolderPath/Localizable.strings\ncat \"$allLocalizationsFolderPath/\"*.txt > $localizationFolderPath/$allLocalizationsFileName\n\nif [ -d \"$outputPath\" ]; then\n    echo \"$outputPath exist\"\n    rm -r \"$outputPath\"\n    rm -r \"$outputPathNewStrings\"\nfi\n\necho \"$outputPath doesn't exist\"\n#localizable strings\nmkdir \"$outputPath\"\nmkdir \"$outputPath/de.lproj\"\nmkdir \"$outputPath/en.lproj\"\nmkdir \"$outputPath/es.lproj\"\nmkdir \"$outputPath/fr.lproj\"\nmkdir \"$outputPath/it.lproj\"\nmkdir \"$outputPath/ja.lproj\"\nmkdir \"$outputPath/pt.lproj\"\nmkdir \"$outputPath/zh.lproj\"\n#new strings\nmkdir \"$outputPathNewStrings\"\nmkdir \"$outputPathNewStrings/en.lproj\"\n#create new localizables\n/usr/local/bin/twine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPathNewStrings/\" --tags new\n/usr/local/bin/twine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPath/\"\n\nrm \"$localizationFolderPath/$allLocalizationsFileName\"\necho \"Finish compiling localizations\"";
+			shellScript = "echo \"Start compiling localizations\"\nPATH=$PATH:~/bin\nlocalizationFolderPath=${SRCROOT}/JasperMobile/Resources/Localizable\nallLocalizationsFolderPath=$localizationFolderPath/all_values\nallLocalizationsFileName=locales.txt\noutputPathNewStrings=$localizationFolderPath/New_Strings\noutputPath=$localizationFolderPath/Localizable.strings\ncat \"$allLocalizationsFolderPath/\"*.txt > $localizationFolderPath/$allLocalizationsFileName\n\nif [ -d \"$outputPath\" ]; then\n    echo \"$outputPath exist\"\n    rm -r \"$outputPath\"\n    rm -r \"$outputPathNewStrings\"\nfi\n\necho \"$outputPath doesn't exist\"\n#localizable strings\nmkdir \"$outputPath\"\nmkdir \"$outputPath/de.lproj\"\nmkdir \"$outputPath/en.lproj\"\nmkdir \"$outputPath/es.lproj\"\nmkdir \"$outputPath/fr.lproj\"\nmkdir \"$outputPath/it.lproj\"\nmkdir \"$outputPath/ja.lproj\"\nmkdir \"$outputPath/pt.lproj\"\nmkdir \"$outputPath/zh.lproj\"\n#new strings\nmkdir \"$outputPathNewStrings\"\nmkdir \"$outputPathNewStrings/en.lproj\"\n#create new localizables\necho \"Start generating strings\"\necho $PATH\ntwine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPathNewStrings/\" --tags new\ntwine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPath/\"\n\nrm \"$localizationFolderPath/$allLocalizationsFileName\"\necho \"Finish compiling localizations\"";
 		};
 		9AC653E20BAE12D1A8587696 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4764,6 +4764,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = U54E52GZ8M;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5233,6 +5234,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = U54E52GZ8M;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5281,6 +5283,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = U54E52GZ8M;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
