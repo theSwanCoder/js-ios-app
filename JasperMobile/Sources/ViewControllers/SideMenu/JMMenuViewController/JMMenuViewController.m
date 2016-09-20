@@ -339,7 +339,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
 - (JMMenuItem *)menuItemWithType:(JMMenuItemType)itemType
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sectionType == %@", @(itemType)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"itemType == %@", @(itemType)];
     return [self.menuItems filteredArrayUsingPredicate:predicate].firstObject;
 }
 
