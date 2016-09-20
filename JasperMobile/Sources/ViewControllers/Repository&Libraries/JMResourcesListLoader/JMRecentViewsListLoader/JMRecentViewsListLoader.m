@@ -45,18 +45,17 @@
 {
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Sort: {
-//            NSDictionary *optionForSortByAccessTime = @{
-//                    kJMResourceListLoaderOptionItemTitleKey: JMLocalizedString(@"resources.sortby.accessTime"),
-//                    kJMResourceListLoaderOptionItemValueKey: @"accessTime"
-//            };
-//            NSArray *optionsArray = @[optionForSortByAccessTime];
             return @[
                     [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_accessTime")
                                                       value:@"accessTime"]
             ];
         }
-        case JMResourcesListLoaderOptionType_Filter:
-            return [super listItemsWithOption:optionType];
+        case JMResourcesListLoaderOptionType_Filter: {
+            JMResourceLoaderOption *filterOption = [[super listItemsWithOption:optionType] firstObject];
+            return @[
+                     filterOption
+                     ];
+        }
     }
 }
 

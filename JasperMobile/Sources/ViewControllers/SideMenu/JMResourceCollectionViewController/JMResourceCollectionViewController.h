@@ -51,14 +51,12 @@ extern NSString * const kJMRepresentationTypeDidChangeNotification;
 @property (nonatomic, strong) NSString *noResultString;
 @property (nonatomic, strong) NSString *representationTypeKey;
 @property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
+
+@property (nonatomic, assign) BOOL shouldShowButtonForChangingViewPresentation;     // YES by default
+@property (nonatomic, assign) BOOL needShowSearchBar;                               // YES by default
+
 @property (nonatomic, assign) JMMenuActionsViewAction availableAction;
 
-@property (nonatomic, assign) BOOL shouldShowButtonForChangingViewPresentation;
-@property (nonatomic, assign) BOOL shouldShowRightNavigationItems;
-
 @property (nonatomic, copy) void(^actionBlock)(JMResource *);
-
-- (BOOL)needShowSearchBar;
-- (void)actionForResource:(JMResource *)resource;
 
 @end

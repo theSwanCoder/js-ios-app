@@ -160,7 +160,6 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self setSelectedItemIndex:indexPath.row];
 }
 

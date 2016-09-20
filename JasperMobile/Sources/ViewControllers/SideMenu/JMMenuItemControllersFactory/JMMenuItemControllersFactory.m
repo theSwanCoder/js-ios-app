@@ -35,6 +35,7 @@
 #import "JMFavoritesListLoader.h"
 #import "JMLibraryListLoader.h"
 #import "JMRepositoryListLoader.h"
+#import "JMSchedulesListLoader.h"
 
 #import "JMLocalization.h"
 #import "JMConstants.h"
@@ -65,7 +66,6 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             repositoryVC.representationTypeKey = @"RepositoryRepresentationTypeKey";
             repositoryVC.resourceListLoader = [JMRepositoryListLoader new];
             repositoryVC.resourceListLoader.delegate = repositoryVC;
-            repositoryVC.availableAction = JMMenuActionsViewAction_None;
             menuItemViewController = repositoryVC;
             break;
         }
@@ -74,7 +74,6 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             recentViewsVC.representationTypeKey = @"RecentViewsRepresentationTypeKey";
             recentViewsVC.resourceListLoader = [JMRecentViewsListLoader new];
             recentViewsVC.resourceListLoader.delegate = recentViewsVC;
-            recentViewsVC.availableAction = JMMenuActionsViewAction_None;
             menuItemViewController = recentViewsVC;
             break;
         }
@@ -98,7 +97,13 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         }
         case JMSectionTypeScheduling: {
             JMResourceCollectionViewController *scheduleVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
-            
+            scheduleVC.noResultString = JMLocalizedString(@"resources_noresults_schedules_msg");
+            scheduleVC.representationTypeKey = @"SchedulesRepresentationTypeKey";
+            scheduleVC.resourceListLoader = [JMSchedulesListLoader new];
+            scheduleVC.resourceListLoader.delegate = scheduleVC;
+            scheduleVC.availableAction = JMMenuActionsViewAction_Schedule;
+            scheduleVC.shouldShowButtonForChangingViewPresentation = NO;
+            scheduleVC.needShowSearchBar = [JMUtils isSupportSearchInSchedules];
             menuItemViewController = scheduleVC;
             break;
         }
@@ -126,6 +131,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     }
     
     if (menuItemViewController) {
+        menuItemViewController.title = menuItem.itemTitle;
         return [[JMMainNavigationController alloc] initWithRootViewController:menuItemViewController];
     }
     return [JMUtils launchScreenViewController];

@@ -49,6 +49,10 @@
 #import "JMUtils.h"
 #import "JMThemesManager.h"
 
+#import "JMScheduleManager.h"
+#import "JMScheduleVC.h"
+#import "JMLibraryListLoader.h"
+
 
 CGFloat const kJMResourceCollectionViewGridWidth = 310;
 
@@ -78,6 +82,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 @end
 
 @implementation JMResourceCollectionViewController
+@synthesize availableAction = _availableAction;
 
 #pragma mark - LifeCycle
 
@@ -85,7 +90,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     [super awakeFromNib];
     self.shouldShowButtonForChangingViewPresentation = YES;
-    self.shouldShowRightNavigationItems = YES;
+    self.needShowSearchBar = YES;
+    self.availableAction = JMMenuActionsViewAction_None;
 }
 
 - (void)dealloc
@@ -174,25 +180,25 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 }
 
 #pragma mark - Setup
-- (BOOL)needShowSearchBar
-{
-    return YES;
-}
-
 - (void)makeSearchBarVisible:(BOOL)visible
 {
     self.searchBarPlaceholderTopConstraint.constant = visible ? 0 : (- CGRectGetHeight(self.searchBarPlaceholder.frame));
 }
 
 #pragma mark - Custom accessors
-- (void)setResourceListLoader:(JMResourcesListLoader *)resourceListLoader
+- (JMMenuActionsViewAction)availableAction
 {
-    _resourceListLoader = resourceListLoader;
-    self.availableAction = JMMenuActionsViewAction_Sort;
+    JMMenuActionsViewAction availableAction = _availableAction;
+    NSArray *sortItems = [self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOptionType_Sort];
+    if ([sortItems count] > 1) {
+        availableAction |= JMMenuActionsViewAction_Sort;
+    }
+    
     NSArray *filterItems = [self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOptionType_Filter];
     if ([filterItems count] > 1) {
-        self.availableAction |= JMMenuActionsViewAction_Filter;
+        availableAction |= JMMenuActionsViewAction_Filter;
     }
+    return availableAction;
 }
 
 - (void)setNeedReloadData:(BOOL)needReloadData
@@ -252,6 +258,42 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     filterPopup.selectedIndex = self.resourceListLoader.filterBySelectedIndex;
     filterPopup.optionType = JMResourcesListLoaderOptionType_Filter;
     [filterPopup show];
+}
+
+- (void)createNewScheduleTapped:(id)sender
+{
+    JMMenuItem *menuItem = [JMMenuItem menuItemWithSectionType:JMSectionTypeLibrary];
+    UINavigationController *navigationVC = (UINavigationController *)[JMMenuItemControllersFactory viewControllerWithMenuItem:menuItem];
+    JMResourceCollectionViewController *libraryViewController = (JMResourceCollectionViewController *)navigationVC.topViewController;
+    libraryViewController.shouldShowButtonForChangingViewPresentation = NO;
+    libraryViewController.availableAction = JMMenuActionsViewAction_None;
+    libraryViewController.navigationItem.leftBarButtonItem = nil;
+    libraryViewController.resourceListLoader.filterBySelectedIndex = JMLibraryListLoaderFilterIndexByReport;
+    __weak __typeof(self) weakSelf = self;
+    libraryViewController.actionBlock = ^(JMResource *resource) {
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf scheduleReportWithResource:resource];
+    };
+    [self.navigationController pushViewController:libraryViewController animated:YES];
+}
+
+- (void)scheduleReportWithResource:(JMResource *)resource
+{
+    JMScheduleVC *newJobVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+    [newJobVC createNewScheduleMetadataWithResourceLookup:resource];
+    newJobVC.backButtonTitle = self.title;
+    __weak __typeof(self) weakSelf = self;
+    newJobVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata){
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf.resourceListLoader setNeedsUpdate];
+        [strongSelf.resourceListLoader updateIfNeeded];
+    };
+    [UIView beginAnimations:nil context:nil];
+    NSMutableArray *controllers = [self.navigationController.viewControllers mutableCopy];
+    [controllers removeLastObject];
+    [controllers addObject:newJobVC];
+    self.navigationController.viewControllers = controllers;
+    [UIView commitAnimations];
 }
 
 - (void)refershControlAction:(id)sender
@@ -382,42 +424,46 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void) showNavigationItemsForTraitCollection:(UITraitCollection *)traitCollection
 {
     if (traitCollection) {
-        if (self.shouldShowRightNavigationItems) {
-            NSMutableArray *navBarItems = [NSMutableArray array];
-            JMMenuActionsViewAction availableAction = [self availableAction];
-            if (availableAction & JMMenuActionsViewAction_Filter) {
-                UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"]
-                                                                               style:UIBarButtonItemStylePlain
-                                                                              target:self
-                                                                              action:@selector(filterByButtonTapped:)];
-                [navBarItems addObject:filterItem];
-            }
-            if (availableAction & JMMenuActionsViewAction_Sort) {
-                UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"]
-                                                                             style:UIBarButtonItemStylePlain
-                                                                            target:self
-                                                                            action:@selector(sortByButtonTapped:)];
-                [navBarItems addObject:sortItem];
-            }
-
-            UIUserInterfaceSizeClass horizontalSizeClass = traitCollection.horizontalSizeClass;
-            if (horizontalSizeClass == UIUserInterfaceSizeClassUnspecified && [JMUtils isIphone] && UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-                horizontalSizeClass = UIUserInterfaceSizeClassCompact;
-            }
-
-            BOOL shouldConcateItems = (navBarItems.count > 1) && (horizontalSizeClass == UIUserInterfaceSizeClassCompact) &&
-                                                                 (traitCollection.verticalSizeClass != UIUserInterfaceSizeClassCompact);
-
-            if (shouldConcateItems) {
-                navBarItems = [@[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                                               target:self
-                                                                               action:@selector(actionButtonClicked:)]] mutableCopy];
-            }
-            if (self.shouldShowButtonForChangingViewPresentation) {
-                [navBarItems addObject:[self resourceRepresentationItem]];
-            }
-            self.navigationItem.rightBarButtonItems = navBarItems;
+        NSMutableArray *navBarItems = [NSMutableArray array];
+        JMMenuActionsViewAction availableAction = [self availableAction];
+        if (availableAction & JMMenuActionsViewAction_Filter) {
+            UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"]
+                                                                           style:UIBarButtonItemStylePlain
+                                                                          target:self
+                                                                          action:@selector(filterByButtonTapped:)];
+            [navBarItems addObject:filterItem];
         }
+        if (availableAction & JMMenuActionsViewAction_Sort) {
+            UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"]
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:self
+                                                                        action:@selector(sortByButtonTapped:)];
+            [navBarItems addObject:sortItem];
+        }
+        if (availableAction & JMMenuActionsViewAction_Schedule) {
+            UIBarButtonItem *scheduleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                                          target:self
+                                                                                          action:@selector(createNewScheduleTapped:)];
+            [navBarItems addObject:scheduleItem];
+        }
+        
+        UIUserInterfaceSizeClass horizontalSizeClass = traitCollection.horizontalSizeClass;
+        if (horizontalSizeClass == UIUserInterfaceSizeClassUnspecified && [JMUtils isIphone] && UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+            horizontalSizeClass = UIUserInterfaceSizeClassCompact;
+        }
+        
+        BOOL shouldConcateItems = (navBarItems.count > 1) && (horizontalSizeClass == UIUserInterfaceSizeClassCompact) &&
+        (traitCollection.verticalSizeClass != UIUserInterfaceSizeClassCompact);
+        
+        if (shouldConcateItems) {
+            navBarItems = [@[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                           target:self
+                                                                           action:@selector(actionButtonClicked:)]] mutableCopy];
+        }
+        if (self.shouldShowButtonForChangingViewPresentation) {
+            [navBarItems addObject:[self resourceRepresentationItem]];
+        }
+        self.navigationItem.rightBarButtonItems = navBarItems;
     } else {
         self.needLayoutUI = YES;
     }
@@ -453,10 +499,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     self.activityIndicator.hidden = YES;
     self.collectionView.hidden = NO;
     
-    self.noResultsViewTitleLabel.hidden = [self collectionViewNotEmpty];
+    self.noResultsViewTitleLabel.hidden = ![self collectionViewIsEmpty];
 }
 
-- (BOOL) collectionViewNotEmpty
+- (BOOL) collectionViewIsEmpty
 {
     NSInteger sectionsCount = self.collectionView.numberOfSections;
     for (NSInteger section = 0; section < sectionsCount; section ++) {
@@ -511,14 +557,33 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
     if (resource.type == JMResourceTypeFolder) {
         JMMenuItem *menuItem = [JMMenuItem menuItemWithSectionType:JMSectionTypeRepository];
-        JMResourceCollectionViewController *repositoryViewController = (JMResourceCollectionViewController *)[JMMenuItemControllersFactory viewControllerWithMenuItem:menuItem];
+        UINavigationController *navigationVC = (UINavigationController *)[JMMenuItemControllersFactory viewControllerWithMenuItem:menuItem];
+        JMResourceCollectionViewController *repositoryViewController = (JMResourceCollectionViewController *)navigationVC.topViewController;
         repositoryViewController.resourceListLoader.resource = resource;
         repositoryViewController.navigationItem.leftBarButtonItem = nil;
         repositoryViewController.navigationItem.title = resource.resourceLookup.label;
         nextVC = repositoryViewController;
     } else if (resource.type == JMResourceTypeSchedule) {
-        [self actionForResource:resource];
-        return;
+        JMSchedule *schedule = (JMSchedule *) resource;
+        [JMCancelRequestPopup presentWithMessage:@"status_loading"];
+
+        __weak __typeof(self) weakSelf = self;
+        [[JMScheduleManager sharedManager] loadScheduleMetadataForScheduleWithId:schedule.scheduleLookup.jobIdentifier completion:^(JSScheduleMetadata *metadata, NSError *error) {
+            __typeof(self) strongSelf = weakSelf;
+            [JMCancelRequestPopup dismiss];
+            if (metadata) {
+                JMScheduleVC *newScheduleVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+                [newScheduleVC updateScheduleMetadata:metadata];
+                newScheduleVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata) {
+                    [strongSelf.resourceListLoader setNeedsUpdate];
+                    [strongSelf.resourceListLoader updateIfNeeded];
+                };
+                [strongSelf.navigationController pushViewController:newScheduleVC animated:YES];
+            } else {
+                [JMUtils presentAlertControllerWithError:error
+                                              completion:nil];
+            }
+        }];
     } else if (resource.type == JMResourceTypeTempExportedReport) {
         // TODO: add canceling task
 //        [[JMExportManager sharedInstance] cancelAll];
@@ -553,11 +618,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     if (nextVC) {
         [self.navigationController pushViewController:nextVC animated:YES];
     }
-}
-
-- (void)actionForResource:(JMResource *)resource
-{
-    // override in children
 }
 
 - (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem

@@ -29,7 +29,7 @@
 #import "JMResourceViewerShareManager.h"
 #import "JMShareViewController.h"
 #import "UIView+Additions.h"
-
+#import "JMUtils.h"
 
 @implementation JMResourceViewerShareManager
 
@@ -37,7 +37,7 @@
 
 - (void)shareContentView:(UIView *)contentView
 {
-    JMShareViewController *shareViewController = [self.controller.storyboard instantiateViewControllerWithIdentifier:@"JMShareViewController"];
+    JMShareViewController *shareViewController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMShareViewController"];
     shareViewController.imageForSharing = [contentView renderedImage];
     [self.controller.navigationController pushViewController:shareViewController animated:YES];
 }

@@ -221,6 +221,12 @@
 		pt = Todo Mês
 		zh = 每月
 		tags = ios
+    [schedules_new_job_select_months]
+        en = Select Months
+        tags = ios, new
+    [schedules_new_job_select_weekDays]
+        en = Select Days
+        tags = ios, new
 	[schedules_new_job_months]
 		en = Selected Months
 		de = Ausgewählte Monate
