@@ -44,8 +44,6 @@ typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationType_HorizontalList; }
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationType_Grid; }
 
-extern NSString * const kJMRepresentationTypeDidChangeNotification;
-
 @interface JMResourceCollectionViewController : JMBaseViewController <JMResourcesListLoaderDelegate>
 
 @property (nonatomic, strong) NSString *noResultString;

@@ -52,8 +52,8 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 + (UIViewController *)viewControllerWithMenuItem:(JMMenuItem *)menuItem
 {
     UIViewController *menuItemViewController;
-    switch (menuItem.sectionType) {
-        case JMSectionTypeLibrary:{
+    switch (menuItem.itemType) {
+        case JMMenuItemType_Library:{
             JMResourceCollectionViewController *libraryVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
             libraryVC.representationTypeKey = @"LibraryRepresentationTypeKey";
             libraryVC.resourceListLoader = [JMLibraryListLoader new];
@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             menuItemViewController = libraryVC;
             break;
         }
-        case JMSectionTypeRepository:{
+        case JMMenuItemType_Repository:{
             JMResourceCollectionViewController *repositoryVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
             repositoryVC.representationTypeKey = @"RepositoryRepresentationTypeKey";
             repositoryVC.resourceListLoader = [JMRepositoryListLoader new];
@@ -69,7 +69,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             menuItemViewController = repositoryVC;
             break;
         }
-        case JMSectionTypeRecentViews:{
+        case JMMenuItemType_RecentViews:{
             JMResourceCollectionViewController *recentViewsVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
             recentViewsVC.representationTypeKey = @"RecentViewsRepresentationTypeKey";
             recentViewsVC.resourceListLoader = [JMRecentViewsListLoader new];
@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             menuItemViewController = recentViewsVC;
             break;
         }
-        case JMSectionTypeSavedItems:{
+        case JMMenuItemType_SavedItems:{
             JMResourceCollectionViewController *savedItemsVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
             savedItemsVC.noResultString = JMLocalizedString(@"resources_noresults_saveditems_msg");
             savedItemsVC.representationTypeKey = @"SavedItemsRepresentationTypeKey";
@@ -86,7 +86,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             menuItemViewController = savedItemsVC;
             break;
         }
-        case JMSectionTypeFavorites:{
+        case JMMenuItemType_Favorites:{
             JMResourceCollectionViewController *favoriteItemsVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
             favoriteItemsVC.noResultString = JMLocalizedString(@"resources_noresults_favorites_msg");
             favoriteItemsVC.representationTypeKey = @"FavoritesRepresentationTypeKey";
@@ -95,7 +95,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             menuItemViewController = favoriteItemsVC;
             break;
         }
-        case JMSectionTypeScheduling: {
+        case JMMenuItemType_Scheduling: {
             JMResourceCollectionViewController *scheduleVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
             scheduleVC.noResultString = JMLocalizedString(@"resources_noresults_schedules_msg");
             scheduleVC.representationTypeKey = @"SchedulesRepresentationTypeKey";
@@ -107,7 +107,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             menuItemViewController = scheduleVC;
             break;
         }
-        case JMSectionTypeSettings: {
+        case JMMenuItemType_Settings: {
             JMServerOptionsViewController *settingsVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMServerOptionsViewController"];
             settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"dialog_button_cancel")
                                                                                             style:UIBarButtonItemStyleDone
@@ -122,19 +122,19 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             menuItemViewController = settingsVC;
             break;
         }
-        case JMSectionTypeAbout: {
+        case JMMenuItemType_About: {
             menuItemViewController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMAboutViewController"];
             break;
         }
-        default:
+        case JMMenuItemType_Feedback:
+        case JMMenuItemType_Logout:
             break;
     }
     
-    if (menuItemViewController) {
-        menuItemViewController.title = menuItem.itemTitle;
-        return [[JMMainNavigationController alloc] initWithRootViewController:menuItemViewController];
-    }
-    return [JMUtils launchScreenViewController];
+    NSAssert(menuItemViewController, @"MenuItemViewController not initialized. Item Title: %@", menuItem.itemTitle);
+    
+    menuItemViewController.title = menuItem.itemTitle;
+    return [[JMMainNavigationController alloc] initWithRootViewController:menuItemViewController];
 }
 
 @end

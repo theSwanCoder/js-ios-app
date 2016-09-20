@@ -262,7 +262,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 - (void)createNewScheduleTapped:(id)sender
 {
-    JMMenuItem *menuItem = [JMMenuItem menuItemWithSectionType:JMSectionTypeLibrary];
+    JMMenuItem *menuItem = [JMMenuItem menuItemWithItemType:JMMenuItemType_Library];
     UINavigationController *navigationVC = (UINavigationController *)[JMMenuItemControllersFactory viewControllerWithMenuItem:menuItem];
     JMResourceCollectionViewController *libraryViewController = (JMResourceCollectionViewController *)navigationVC.topViewController;
     libraryViewController.shouldShowButtonForChangingViewPresentation = NO;
@@ -556,7 +556,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     __block id nextVC = nil;
 
     if (resource.type == JMResourceTypeFolder) {
-        JMMenuItem *menuItem = [JMMenuItem menuItemWithSectionType:JMSectionTypeRepository];
+        JMMenuItem *menuItem = [JMMenuItem menuItemWithItemType:JMMenuItemType_Repository];
         UINavigationController *navigationVC = (UINavigationController *)[JMMenuItemControllersFactory viewControllerWithMenuItem:menuItem];
         JMResourceCollectionViewController *repositoryViewController = (JMResourceCollectionViewController *)navigationVC.topViewController;
         repositoryViewController.resourceListLoader.resource = resource;

@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
 @implementation JMMenuViewController
 + (NSInteger)defaultItemIndex {
-    return JMSectionTypeLibrary;
+    return JMMenuItemType_Library;
 }
 
 #pragma mark - LifeCycle
@@ -181,20 +181,11 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuItem *item = self.menuItems[itemIndex];
     
     if (!currentSelectedItem || currentSelectedItem != item) {
-        if ([item nameForAnalytics]) {
-            // Analytics
-            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
-                                                                             kJMAnalyticsCategoryKey : kJMAnalyticsRepositoryEventCategoryTitle,
-                                                                             kJMAnalyticsActionKey : kJMAnalyticsRepositoryEventActionOpen,
-                                                                             kJMAnalyticsLabelKey : [item nameForAnalytics]
-                                                                             }];
-        }
-        
-        if (item.sectionType == JMSectionTypeLogout) {
+        if (item.itemType == JMMenuItemType_Logout) {
             [[JMSessionManager sharedManager] logout];
             [JMUtils showLoginViewAnimated:YES completion:nil];
             self.menuItems = nil;
-        } else if (item.sectionType == JMSectionTypeFeedback) {
+        } else if (item.itemType == JMMenuItemType_Feedback) {
             [self showFeedback];
         } else {
             [self closeMenu];
@@ -220,6 +211,15 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             } else {
                 self.revealViewController.frontViewController = nextVC;
             }
+        }
+        
+        if ([item nameForAnalytics]) {
+            // Analytics
+            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                                                                             kJMAnalyticsCategoryKey : kJMAnalyticsRepositoryEventCategoryTitle,
+                                                                             kJMAnalyticsActionKey : kJMAnalyticsRepositoryEventActionOpen,
+                                                                             kJMAnalyticsLabelKey : [item nameForAnalytics]
+                                                                             }];
         }
     }
 }
@@ -266,20 +266,20 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 - (NSArray *)createMenuItems
 {
     NSMutableArray *menuItems = [@[
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeLibrary],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeRepository],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeSavedItems],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeFavorites],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeScheduling],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeAbout],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeSettings],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeFeedback],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeLogout]
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Library],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Repository],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_SavedItems],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Favorites],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Scheduling],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_About],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Settings],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Feedback],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Logout]
     ] mutableCopy];
 
     if ([JMUtils isServerProEdition]) {
-        NSUInteger indexOfRepository = [menuItems indexOfObject:[JMMenuItem menuItemWithSectionType:JMSectionTypeRepository]];
-        [menuItems insertObject:[JMMenuItem menuItemWithSectionType:JMSectionTypeRecentViews] atIndex:indexOfRepository + 1];
+        NSUInteger indexOfRepository = [menuItems indexOfObject:[JMMenuItem menuItemWithItemType:JMMenuItemType_Repository]];
+        [menuItems insertObject:[JMMenuItem menuItemWithItemType:JMMenuItemType_RecentViews] atIndex:indexOfRepository + 1];
     }
 
     return [menuItems copy];
@@ -337,9 +337,9 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     }
 }
 
-- (JMMenuItem *)menuItemWithType:(JMSectionType)sectionType
+- (JMMenuItem *)menuItemWithType:(JMMenuItemType)itemType
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sectionType == %@", @(sectionType)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sectionType == %@", @(itemType)];
     return [self.menuItems filteredArrayUsingPredicate:predicate].firstObject;
 }
 
@@ -396,9 +396,9 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 #pragma mark - Notifications
 - (void)exportedResouceDidLoad:(NSNotification *)notification
 {
-    if (self.selectedItem.sectionType != JMSectionTypeSavedItems) {
+    if (self.selectedItem.itemType != JMMenuItemType_SavedItems) {
         [self showNoteInMenuButton];
-        JMMenuItem *savedItem = [self menuItemWithType:JMSectionTypeSavedItems];
+        JMMenuItem *savedItem = [self menuItemWithType:JMMenuItemType_SavedItems];
         savedItem.showNotes = YES;
     }
 }
