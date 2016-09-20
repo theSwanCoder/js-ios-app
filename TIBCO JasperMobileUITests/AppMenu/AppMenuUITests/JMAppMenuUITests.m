@@ -8,97 +8,115 @@
 
 #import "JMAppMenuUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+SideMenu.h"
 
 @implementation JMAppMenuUITests
 
-#pragma mark - Tests
-- (void)testThatMenuViewCanBeViewed
+- (void)setUp
 {
-    // try to open side menu by tapping on button
-    [self givenThatLibraryPageOnScreen];
-    [self tryTapSideApplicationMenu];
-    [self givenSideMenuVisible];
-    [self tryTapSideApplicationMenu];
-    [self givenThatLibraryPageOnScreen];
+    [super setUp];
 
-    // try to open side menu by swipe
-    [self tryOpenSideApplicationMenuBySwipe];
-    [self givenSideMenuVisible];
-    [self tryCloseSideApplicationMenuBySwipe];
     [self givenThatLibraryPageOnScreen];
+}
+
+- (void)tearDown
+{
+
+    [super tearDown];
+}
+
+#pragma mark - Tests
+- (void)testThatMenuViewCanBeViewedByTappingMenuButton
+{
+    [self showSideMenu];
+    [self verifySideMenuVisible];
+
+    [self hideSideMenu];
+    [self verifySideMenuNotVisible];
+}
+
+- (void)testThatMenuViewCanBeViewedBySwipping
+{
+    [self tryOpenSideApplicationMenuBySwipe];
+    [self verifySideMenuVisible];
+
+    [self tryCloseSideApplicationMenuBySwipe];
+    [self verifySideMenuNotVisible];
 }
 
 - (void)testThatMenuViewIsScrollable
 {
-    // try to open side menu by tapping on button
-    [self givenThatLibraryPageOnScreen];
-    [self tryTapSideApplicationMenu];
-    [self givenSideMenuVisible];
+    [self showSideMenu];
+    [self verifySideMenuVisible];
 
-    XCUIElement *menuView = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];;
-    if (menuView.exists) {
-        [menuView swipeUp];
-        [menuView swipeDown];
+    XCUIElement *menuView = [self sideMenuElement];
+    [menuView swipeUp];
+    [menuView swipeDown];
+
+    [self hideSideMenu];
+    [self verifySideMenuNotVisible];
+}
+
+- (void)verifySideMenuVisible
+{
+    XCUIElement *menuView = [self sideMenuElement];
+    if (!menuView.exists) {
+        XCTFail(@"Menu Should be visible");
     }
-    [self tryTapSideApplicationMenu];
-    [self givenThatLibraryPageOnScreen];
+}
+
+- (void)verifySideMenuNotVisible
+{
+    XCUIElement *menuView = [self sideMenuElement];
+    if (menuView.exists) {
+        XCTFail(@"Menu Should not be visible");
+    }
 }
 
 - (void)testThatMenuViewCanSelectItems
 {
-    // try to open side menu by tapping on button
-    [self givenThatLibraryPageOnScreen];
-    [self tryTapSideApplicationMenu];
-    [self givenSideMenuVisible];
+    [self showSideMenu];
+    [self verifySideMenuVisible];
 
-    XCUIElement *menuView = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];;
-    if (menuView.exists) {
-        // Check all collection screen items
-        NSArray *itemsArray = @[@"Library", @"Repository", @"Recently Viewed", @"Saved Items", @"Favorites", @"Schedules"];
-        for (NSString *itemName in itemsArray) {
-            XCUIElement *pageMenuItem = menuView.cells.staticTexts[itemName];
-            if (pageMenuItem.exists) {
-                [pageMenuItem tap];
-            }
-            [self tryTapSideApplicationMenu];
-            [self givenSideMenuVisible];
-        }
-        
-        // Check About item
-        XCUIElement *aboutMenuItem = menuView.cells.staticTexts[@"About"];
-        if (aboutMenuItem.exists) {
-            [aboutMenuItem tap];
-        }
-        XCUIElement *doneButton = self.application.buttons[@"Done"];
-        if (doneButton.exists) {
-            [doneButton tap];
-        } else {
-            XCTFail(@"'Done' button doesn't exist.");
-        }
+    XCUIElement *menuView = [self sideMenuElement];
 
-        // Check Settings item
-        [self tryTapSideApplicationMenu];
-        [self givenSideMenuVisible];
-        
-        XCUIElement *settingsMenuItem = menuView.cells.staticTexts[@"Settings"];
-        if (settingsMenuItem.exists) {
-            [settingsMenuItem tap];
+    // Check all collection screen items
+    NSArray *itemsArray = @[@"Library", @"Repository", @"Recently Viewed", @"Saved Items", @"Favorites", @"Schedules"];
+    for (NSString *itemName in itemsArray) {
+        XCUIElement *pageMenuItem = menuView.cells.staticTexts[itemName];
+        if (pageMenuItem.exists) {
+            [pageMenuItem tap];
         }
-        XCUIElement *cancelButton = self.application.buttons[@"Cancel"];
-        if (cancelButton.exists) {
-            [cancelButton tap];
-        } else {
-            XCTFail(@"'Settings' button doesn't exist.");
-        }
+        [self showSideMenu];
     }
+
+    // Check About item
+    [self selectAbout];
+    // Close About page
+    XCUIElement *doneButton = self.application.buttons[@"Done"];
+    if (doneButton.exists) {
+        [doneButton tap];
+    } else {
+        XCTFail(@"'Done' button doesn't exist.");
+    }
+
+    // Check Settings item
+    [self selectSettings];
+    // Close Settings page
+    XCUIElement *cancelButton = self.application.buttons[@"Cancel"];
+    if (cancelButton.exists) {
+        [cancelButton tap];
+    } else {
+        XCTFail(@"'Settings' button doesn't exist.");
+    }
+
+    [self hideSideMenu];
 }
 
 - (void)testThatServerProfileInfoIsAppeared
 {
-    // try to open side menu by tapping on button
-    [self givenThatLibraryPageOnScreen];
-    [self tryTapSideApplicationMenu];
-    [self givenSideMenuVisible];
+    [self showSideMenu];
+    [self verifySideMenuVisible];
     
     XCUIElement *userNameLabel = self.application.staticTexts[kJMTestProfileCredentialsUsername];
     if (!userNameLabel.exists) {
@@ -114,9 +132,7 @@
     if (!organizationLabel.exists) {
         XCTFail(@"'Organization' label doesn't exist.");
     }
-    
-    [self tryTapSideApplicationMenu];
-    [self givenSideMenuNotVisible];
+    [self hideSideMenu];
 }
 
 

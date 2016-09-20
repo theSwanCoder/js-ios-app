@@ -19,20 +19,15 @@
 - (void)tryOpenSortMenuFromMenuActions;
 - (void)tryOpenSortMenuFromNavBar;
 // Helpers - Menu Filter By
-- (void)tryOpenFilterMenu;
 - (void)tryOpenMenuActions;
-- (void)tryOpenFilterMenuFromMenuActions;
-- (void)tryOpenFilterMenuFromNavBar;
 // Helpers - Sort By
 - (void)trySortByName;
 - (void)trySortByCreationDate;
 - (void)trySortByModifiedDate;
 - (void)trySelectSortBy:(NSString *)sortTypeString;
 // Helpers - Filter By
-- (void)tryFilterByAll;
 - (void)tryFilterByReports;
 - (void)tryFilterByDashboards;
-- (void)trySelectFilterBy:(NSString *)filterTypeString;
 // Verfies
 - (void)verifyThatCollectionViewContainsListOfCells;
 - (void)verifyThatCollectionViewContainsGridOfCells;

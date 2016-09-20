@@ -9,21 +9,33 @@
 #import "JMLibraryPageUITests.h"
 #import "JMLibraryPageUITests+Helpers.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+SideMenu.h"
 
 @implementation JMLibraryPageUITests
 
+- (void)setUp
+{
+    [super setUp];
+
+    [self givenThatLibraryPageOnScreen];
+    [self givenThatCellsAreVisible];
+}
+
+- (void)tearDown
+{
+
+    [super tearDown];
+}
+
 #pragma mark - Test 'Main' features
 
-- (void)testThatLibraryPageHasTitleLibrary
+- (void)testThatLibraryPageHasCorrectTitle
 {
-    [self givenThatLibraryPageOnScreen];
+    // verify that library page has correct title
 }
 
 - (void)testThatLibraryContainsListOfCells
 {
-    [self givenThatLibraryPageOnScreen];
-    
-    [self givenThatCellsAreVisible];
     [self givenThatCollectionViewContainsListOfCells];
     
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
@@ -38,25 +50,12 @@
 
 - (void)testMenuButton
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-
-    // Open side menu
-    [self tryTapSideApplicationMenu];
-    [self givenSideMenuVisible];
-
-    // Close side menu
-    [self tryTapSideApplicationMenu];
-    [self givenSideMenuNotVisible];
+    [self showSideMenu];
+    [self hideSideMenu];
 }
 
 - (void)testThatUserCanPullDownToRefresh
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    
-    [self givenThatCellsAreVisible];
-    
     XCUIElement *collectionViewElement = [self.application.collectionViews elementBoundByIndex:0];
     XCUIElement *firstCellElement = [collectionViewElement.cells elementBoundByIndex:0];
     XCUIElement *secondCellElement = [collectionViewElement.cells elementBoundByIndex:4];
@@ -69,11 +68,6 @@
 
 - (void)testThatUserCanScrollDown
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    
-    [self givenThatCellsAreVisible];
-    
     XCUIElement *collectionViewElement = [self.application.collectionViews elementBoundByIndex:0];
     XCUIElement *cellElement = [collectionViewElement.cells elementBoundByIndex:2];
     [cellElement swipeUp];
@@ -85,10 +79,6 @@
 
 - (void)testThatSearchWorkWithCorrectWords
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    [self givenThatCellsAreVisible];
-    
     // start find some text
     [self trySearchText:kJMTestLibrarySearchTextExample];
     // verify result
@@ -104,10 +94,6 @@
 
 - (void)testThatSearchShowsNoResults
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    [self givenThatCellsAreVisible];
-    
     // start find wrong text
     XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
     if (searchResourcesSearchField.exists) {
@@ -136,10 +122,6 @@
 
 - (void)testThatViewTypeButtonChangeViewPresentation
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    [self givenThatCellsAreVisible];
-    
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
         
@@ -158,10 +140,6 @@
 
 - (void)testThatViewPresentationNotChangeAfterChangingPages
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    [self givenThatCellsAreVisible];
-    
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
         
@@ -172,11 +150,11 @@
         [self verifyThatCollectionViewContainsGridOfCells];
         
         // Change Page to Repository
-        [self tryOpenRepositoryPage];
+        [self openRepositorySection];
         [self givenThatRepositoryPageOnScreen];
         
         // Change Page to Library
-        [self tryOpenLibraryPage];
+        [self openLibrarySection];
         [self givenThatLibraryPageOnScreen];
         [self givenThatCellsAreVisible];
         
@@ -189,9 +167,6 @@
 
 - (void)testThatViewPresentationNotChangeWhenUserUseSearch
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    [self givenThatCellsAreVisible];
     [self givenThatCollectionViewContainsListOfCells];
 
     [self tryChangeViewPresentationFromListToGrid];
@@ -207,19 +182,14 @@
 #pragma mark - Test 'Sort' feature
 - (void)testThatUserCanSortListItemsByName
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
+    [self trySortByName];
     [self givenThatCellsAreVisible];
-    
+
     [self verifyThatCellsSortedByName];
 }
 
 - (void)testThatUserCanSortListItemsByCreationDate
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    [self givenThatCellsAreVisible];
-    
     [self trySortByCreationDate];
     [self givenThatCellsAreVisible];
     
@@ -228,11 +198,9 @@
 
 - (void)testThatUserCanSortListItemsByModifiedDate
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    [self givenThatCellsAreVisible];
-    
     [self trySortByModifiedDate];
+    [self givenThatCellsAreVisible];
+
     [self verifyThatCellsSortedByModifiedDate];
 }
 
@@ -240,7 +208,6 @@
 - (void)testThatUserCanFilterByAllItems
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
     [self givenThatCellsAreVisible];
     
     [self verifyThatCellsFiltredByAll];
@@ -248,21 +215,15 @@
 
 - (void)testThatUserCanFilterByReports
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    [self givenThatCellsAreVisible];
-    
     [self tryFilterByReports];
+    [self givenThatCellsAreVisible];
     [self verifyThatCellsFiltredByReports];
 }
 
 - (void)testThatUserCanFilterByDashboards
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenSideMenuNotVisible];
-    [self givenThatCellsAreVisible];
-    
     [self tryFilterByDashboards];
+    [self givenThatCellsAreVisible];
     [self verifyThatCellsFiltredByDashboards];
 }
 

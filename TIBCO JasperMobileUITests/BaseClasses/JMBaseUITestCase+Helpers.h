@@ -6,11 +6,11 @@
 #import "JMBaseUITestCase.h"
 
 @interface JMBaseUITestCase (Helpers)
-- (void)waitElement:(XCUIElement *)element
-            timeout:(NSTimeInterval)timeout;
-- (void)waitElement:(XCUIElement *)element
-            visible:(BOOL)visible
-            timeout:(NSTimeInterval)timeout;
+- (void)waitElementReady:(XCUIElement *)element
+                 timeout:(NSTimeInterval)timeout;
+- (void)waitElementReady:(XCUIElement *)element
+                 visible:(BOOL)visible
+                 timeout:(NSTimeInterval)timeout;
 
 // NavigationBars
 - (XCUIElement *)findNavigationBarWithLabel:(NSString *)label;
@@ -41,11 +41,19 @@
 - (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
                                  parentElement:(XCUIElement *)parentElement
                                        timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)findButtonWithTitle:(NSString *)title;
+- (XCUIElement *)waitButtonWithTitle:(NSString *)title
+                             timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)findButtonWithTitle:(NSString *)title
+                       parentElement:(XCUIElement *)parentElement;
+- (XCUIElement *)waitButtonWithTitle:(NSString *)title
+                       parentElement:(XCUIElement *)parentElement
+                             timeout:(NSTimeInterval)timeout;
 // Back buttons
-- (XCUIElement *)findBackbuttonWithAccessibilityId:(NSString *)accessibilityId;
+- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId;
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                            timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)findBackbuttonWithAccessibilityId:(NSString *)accessibilityId
+- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                  onNavBarWithLabel:(NSString *)label;
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                  onNavBarWithLabel:(NSString *)label
@@ -76,6 +84,17 @@
                                            visible:(BOOL)visible
                                            timeout:(NSTimeInterval)timeout;
 
+- (XCUIElement *)findStaticTextWithText:(NSString *)text;
+- (XCUIElement *)findStaticTextWithText:(NSString *)text
+                          parentElement:(XCUIElement *)parentElement;
+- (XCUIElement *)waitStaticTextWithText:(NSString *)text
+                          parentElement:(XCUIElement *)parentElement
+                                timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)waitStaticTextWithText:(NSString *)text
+                          parentElement:(XCUIElement *)parentElement
+                                visible:(BOOL)visible
+                                timeout:(NSTimeInterval)timeout;
+
 // Menu Actions
 - (XCUIElement *)findActionsButton;
 - (XCUIElement *)findActionsButtonOnNavBarWithLabel:(NSString *)label;
@@ -97,4 +116,8 @@
 // Search
 - (void)searchResourceWithName:(NSString *)resourceName inSection:(NSString *)sectionName;
 - (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText;
+
+// Alerts
+- (XCUIElement *)findAlertWithTitle:(NSString *)title;
+- (XCUIElement *)waitAlertWithTitle:(NSString *)title timeout:(NSTimeInterval)timeout;
 @end

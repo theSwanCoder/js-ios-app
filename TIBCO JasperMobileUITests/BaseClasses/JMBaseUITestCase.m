@@ -8,6 +8,7 @@
 
 #import "JMBaseUITestCase.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+SideMenu.h"
 
 NSTimeInterval kUITestsBaseTimeout = 10;
 NSTimeInterval kUITestsResourceWaitingTimeout = 30;
@@ -134,7 +135,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)logout
 {
-    [self tryOpenPageWithName:@"Log Out"];
+    [self selectLogOut];
 }
 
 #pragma mark - Helpers Test Profile
@@ -403,65 +404,11 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 #pragma mark - Helper Actions
 - (void)tryBackToPreviousPage
 {
-    XCUIElement *backButton = [self findBackbuttonWithAccessibilityId:@"Back"];
+    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"];
     if (!backButton) {
-        backButton = [self findBackbuttonWithAccessibilityId:@"Library"];
+        backButton = [self findBackButtonWithAccessibilityId:@"Library"];
     }
     [backButton tap];
-}
-
-- (void)tryOpenRepositoryPage
-{
-    NSString *libraryPageName = @"Repository";
-    [self tryOpenPageWithName:libraryPageName];
-}
-
-- (void)tryOpenLibraryPage
-{
-    NSString *libraryPageName = @"Library";
-    [self tryOpenPageWithName:libraryPageName];
-}
-
-- (void)tryOpenFavoritePage
-{
-    NSString *libraryPageName = @"Favorites";
-    [self tryOpenPageWithName:libraryPageName];
-}
-
-- (void)tryOpenPageWithName:(NSString *)pageName
-{
-    [self givenSideMenuNotVisible];
-    [self tryTapSideApplicationMenu];
-    XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                                         timeout:kUITestsBaseTimeout];
-    XCUIElement *pageMenuItem = menuView.cells.staticTexts[pageName];
-    [self waitElement:pageMenuItem
-              timeout:kUITestsBaseTimeout];
-    [pageMenuItem tap];
-}
-
-#pragma mark - Helpers - Side (App) Menu
-
-- (void)givenSideMenuVisible
-{
-    // Verify that side bar is already visible
-    [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
-}
-
-- (void)givenSideMenuNotVisible
-{
-    // Verify that side bar isn't visible yet
-    XCUIElement *sideMenu = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];
-    if (sideMenu) {
-        XCTFail(@"Side menu should not be visible");
-    }
-}
-
-- (void)tryTapSideApplicationMenu
-{
-    XCUIElement *menuButton = [self waitMenuButtonWithTimeout:kUITestsBaseTimeout];
-    [menuButton tap];
 }
 
 #pragma mark - Helpers - Menu
@@ -537,19 +484,49 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
                                                    timeout:kUITestsBaseTimeout];
     }
 
-    NSString *oldValueString = textField.value;
-    if (oldValueString.length > 0 && [oldValueString isEqualToString:text]) {
-        XCUIElement *deleteSymbolButton = self.application.keys[@"delete"];
-        if (deleteSymbolButton.exists) {
-            for (int i = 0; i < oldValueString.length; ++i) {
-                [deleteSymbolButton tap];
-            }
-        }
-    }
+    [self enterText:text
+      intoTextField:textField];
+}
 
+- (void)enterText:(NSString *)text
+    intoTextField:(XCUIElement *)textField
+{
     [textField tap];
+    NSString *oldValueString = textField.value;
+    BOOL isTextFieldContainText = oldValueString.length > 0;
+    BOOL isTextFieldContainTheSameText = [oldValueString isEqualToString:text];
+    
+    if (isTextFieldContainText) {
+        if (isTextFieldContainTheSameText) {
+            [self closeKeyboardWithDoneButton];
+        } else {
+            [self replaceTextInTextField:textField 
+                                withText:text];                        
+        }
+    } else {
+        [textField typeText:text];
+        [self closeKeyboardWithDoneButton];        
+    }
+}
+
+- (void)replaceTextInTextField:(XCUIElement *)textField 
+                      withText:(NSString *)text
+{
+    [self deleteTextFromTextField:textField];
     [textField typeText:text];
     [self closeKeyboardWithDoneButton];
+}
+
+- (void)deleteTextFromTextField:(XCUIElement *)textField
+{
+    NSString *oldValueString = textField.value;
+    XCUIElement *keyboard = [self.application.keyboards elementBoundByIndex:0];
+    XCUIElement *deleteSymbolButton = keyboard.keys[@"delete"];
+    if (deleteSymbolButton.exists) {
+        for (int i = 0; i < oldValueString.length; ++i) {
+            [deleteSymbolButton tap];
+        }
+    }
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "JMLibraryInfoPageUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+SideMenu.h"
 
 NSInteger static kJMReportInfoPageTestCellIndex = 0;
 
@@ -80,12 +81,12 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
     // verify report is favorite
     [self tryBackToPreviousPage];
     [self givenThatLibraryPageOnScreen];
-    [self tryOpenFavoritePage];
+    [self openFavoritesSection];
     if (![self isReportMarkAsFavorite:reportInfoLabel]) {
         XCTFail(@"Test report isn't marked as favorite.");
     }
-    [self tryOpenLibraryPage];
-    
+    [self openLibrarySection];
+
     // Clean Up
     [self givenThatLibraryPageOnScreen];
     [self givenThatCellsAreVisible];
@@ -116,8 +117,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 - (XCUIElement *)waitTestCell
 {
     XCUIElement *testCell = [self testCell];
-    [self waitElement:testCell
-              timeout:kUITestsBaseTimeout];
+    [self waitElementReady:testCell
+                   timeout:kUITestsBaseTimeout];
     return testCell;
 }
 
@@ -130,16 +131,16 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 #pragma mark - Helpers - Menu
 - (void)givenThatReportNotMarkAsFavorite:(NSString *)reportLabel
 {
-    [self tryOpenFavoritePage];
-    
+    [self openFavoritesSection];
+
     if ( [self isReportMarkAsFavorite:reportLabel] ) {
         // unmark
         [self givenThatReportInfoPageOnScreen];
         [self tryUnMarkTestReportAsFavorite];
         [self tryBackToPreviousPage];
     }
-    
-    [self tryOpenLibraryPage];
+
+    [self openLibrarySection];
     [self givenThatCellsAreVisible];
 }
 
@@ -160,7 +161,8 @@ NSInteger static kJMReportInfoPageTestCellIndex = 0;
 {
     [self openMenuActions];
     
-    XCUIElement *menu = [self.application.otherElements elementMatchingType:XCUIElementTypeAny identifier:@"JMMenuActionsViewAccessibilityId"];
+    XCUIElement *menu = [self.application.otherElements elementMatchingType:XCUIElementTypeAny
+                                                                 identifier:@"JMMenuActionsViewAccessibilityId"];
     XCUIElement *markAsFavoriteElement = menu.staticTexts[@"Mark as Favorite"];
     if (markAsFavoriteElement.exists) {
         [markAsFavoriteElement tap];

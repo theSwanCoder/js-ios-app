@@ -47,6 +47,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self tryOpenTestReport];
 
     if (waitingFinish) {
+        // We can have two times when loading up and down
+        // first time loading 'report info' and second one - loading report
+        [self givenLoadingPopupNotVisible];
         [self givenLoadingPopupNotVisible];
     }
 }
@@ -77,6 +80,36 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)closeReportFiltersPage
 {
     [self tryBackToPreviousPage];
+}
+
+#pragma mark - Saving
+
+- (void)openSaveReportPage
+{
+    [self openMenuActions];
+    [self selectActionWithName:@"Save"];
+}
+
+- (void)closeSaveReportPage
+{
+    [self tryBackToPreviousPage];
+}
+
+- (void)saveTestReportWithName:(NSString *)name format:(NSString *)format
+{
+    // TODO: may be move into separate category for saved report
+
+    XCUIElement *textField = [self findNameFieldOnSaveReportPage];
+    [self enterText:name
+      intoTextField:textField];
+
+    XCUIElement *htmlCell = [self findTableViewCellWithAccessibilityId:nil
+                                                 containsLabelWithText:format];
+    [htmlCell tap];
+
+    XCUIElement *saveButton = [self waitButtonWithAccessibilityId:@"Save"
+                                                          timeout:kUITestsBaseTimeout];
+    [saveButton tap];
 }
 
 #pragma mark - Helpers
@@ -157,6 +190,19 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
         XCTFail(@"There isn't test cell");
     }
     return testCell;
+}
+
+#pragma mark - Saving Report
+
+- (XCUIElement *)findNameFieldOnSaveReportPage
+{
+    // TODO: replace with accessibility ids
+    XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
+    XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
+    XCUIElement *textField = [nameCell childrenMatchingType:XCUIElementTypeTextField].element;
+    [self waitElementReady:textField
+                   timeout:kUITestsBaseTimeout];
+    return textField;
 }
 
 @end

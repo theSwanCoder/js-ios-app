@@ -26,9 +26,6 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)tryBackToPreviousPage;
 - (void)tryOpenServerProfilesPage;
 - (void)tryOpenNewServerProfilePage;
-- (void)tryOpenRepositoryPage;
-- (void)tryOpenLibraryPage;
-- (void)tryOpenFavoritePage;
 - (void)tryCreateNewTestServerProfile;
 - (void)trySelectNewTestServerProfile;
 - (void)tryEnterTestCredentials;
@@ -49,15 +46,18 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)skipIntroPageIfNeed;
 - (void)skipRateAlertIfNeed;
 //
-- (void)givenSideMenuVisible;
-- (void)givenSideMenuNotVisible;
-- (void)tryTapSideApplicationMenu;
 - (BOOL)isShareButtonExists;
-//- (void)verifyThatCurrentPageIsLibrary;
-//- (void)verifyThatCurrentPageIsRepository;
 //
 - (void)givenLoadingPopupVisible;
 - (void)givenLoadingPopupNotVisible;
+
+- (void)enterText:(NSString *)text intoTextFieldWithAccessibilityId:(NSString *)accessibilityId
+    parentElement:(XCUIElement *)parentElement
+    isSecureField:(BOOL)isSecureField;
+- (void)enterText:(NSString *)text
+    intoTextField:(XCUIElement *)textField;
+
+- (void)deleteTextFromTextField:(XCUIElement *)textField;
 
 - (void)closeKeyboardWithDoneButton;
 

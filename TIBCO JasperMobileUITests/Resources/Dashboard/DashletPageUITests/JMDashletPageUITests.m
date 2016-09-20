@@ -85,8 +85,8 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     [self openTestDashletWithHyperlinks];
     
     XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
-    [self waitElement:webView
-              timeout:kUITestsBaseTimeout];
+    [self waitElementReady:webView
+                   timeout:kUITestsBaseTimeout];
     [webView pinchWithScale:2
                    velocity:1];
     sleep(kUITestsElementAvailableTimeout);
