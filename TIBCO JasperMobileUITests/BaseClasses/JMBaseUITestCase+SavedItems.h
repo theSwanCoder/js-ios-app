@@ -44,4 +44,6 @@
 - (void)unmarkTestSavedItemAsFavoriteFromMenuOnInfoPage;
 - (void)markTestSavedItemAsFavoriteFromViewerPage;
 - (void)unmarkTestSavedItemAsFavoriteFromViewerPage;
+
+- (XCUIElement *)savedItemWithName:(NSString *)itemName format:(NSString *)format;
 @end

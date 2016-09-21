@@ -10,6 +10,7 @@
 #import "JMLibraryPageUITests+Helpers.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+SideMenu.h"
+#import "JMBaseUITestCase+Section.h"
 
 @implementation JMLibraryPageUITests
 
@@ -126,11 +127,11 @@
     if (contentView.exists) {
         
         [self givenThatCollectionViewContainsListOfCells];
-        
-        [self tryChangeViewPresentationFromListToGrid];
+
+        [self switchViewFromListToGridInSectionWithTitle:@"Library"];
         [self verifyThatCollectionViewContainsGridOfCells];
-        
-        [self tryChangeViewPresentationFromGridToList];
+
+        [self switchViewFromGridToListInSectionWithTitle:@"Library"];
         [self verifyThatCollectionViewContainsListOfCells];
         
     } else {
@@ -144,8 +145,8 @@
     if (contentView.exists) {
         
         [self givenThatCollectionViewContainsListOfCells];
-        
-        [self tryChangeViewPresentationFromListToGrid];
+
+        [self switchViewFromListToGridInSectionWithTitle:@"Library"];
         [self givenThatCellsAreVisible];
         [self verifyThatCollectionViewContainsGridOfCells];
         
@@ -169,7 +170,7 @@
 {
     [self givenThatCollectionViewContainsListOfCells];
 
-    [self tryChangeViewPresentationFromListToGrid];
+    [self switchViewFromListToGridInSectionWithTitle:@"Library"];
     [self verifyThatCollectionViewContainsGridOfCells];
     
     // start find some text

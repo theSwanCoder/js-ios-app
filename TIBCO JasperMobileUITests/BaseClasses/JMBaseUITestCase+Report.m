@@ -9,6 +9,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+Section.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";
@@ -27,6 +28,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self givenThatReportCellsOnScreen];
 
     [self tryOpenTestReportWithMandatoryFilters];
+    // We can have two times when loading up and down
+    // first time loading 'report info' and second one - loading report
+    [self givenLoadingPopupNotVisible];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -36,6 +40,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self givenThatReportCellsOnScreen];
     
     [self tryOpenTestReportWithSingleSelectedControl];
+    // We can have two times when loading up and down
+    // first time loading 'report info' and second one - loading report
+    [self givenLoadingPopupNotVisible];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -117,7 +124,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)searchTestReport
 {
     [self searchResourceWithName:kTestReportName
-                       inSection:@"Library"];
+    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
 }
 
 - (void)tryOpenTestReport
@@ -152,7 +159,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)searchTestReportWithMandatoryFilters
 {
     [self searchResourceWithName:kTestReportWithMandatoryFiltersName
-                       inSection:@"Library"];
+    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
 }
 
 - (XCUIElement *)testReportWithMandatoryFiltersCell
@@ -178,7 +185,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)searchTestReportWithSingleSelectedControl
 {
     [self searchResourceWithName:kTestReportWithSingleSelectedControlName
-                       inSection:@"Library"];
+    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
 }
 
 - (XCUIElement *)testReportWithSingleSelectedControl

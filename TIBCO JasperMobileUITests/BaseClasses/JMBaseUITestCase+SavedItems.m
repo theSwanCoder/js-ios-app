@@ -9,6 +9,7 @@
 #import "JMBaseUITestCase+Resource.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+Section.h"
 
 
 @implementation JMBaseUITestCase (SavedItems)
@@ -73,6 +74,7 @@
 {
     [self givenThatLibraryPageOnScreen];
     [self openSavedItemsSection];
+    [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
     [self deleteSavedItemWithName:kTestReportName
                            format:@"html"];
     [self openLibrarySection];
@@ -97,6 +99,7 @@
 {
     [self givenThatLibraryPageOnScreen];
     [self openSavedItemsSection];
+    [self selectFilterBy:@"PDF" inSectionWithTitle:@"Saved Items"];
     [self deleteSavedItemWithName:kTestReportName
                            format:@"pdf"];
     [self openLibrarySection];

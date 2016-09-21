@@ -9,6 +9,46 @@
 
 @implementation JMBaseUITestCase (ActionsMenu)
 
+- (BOOL)isShareButtonExists
+{
+    XCUIElement *actionsButton = [self findActionsButton];
+    return actionsButton.exists;
+}
+
+- (XCUIElement *)findActionsButton
+{
+    return [self findActionsButtonOnNavBarWithLabel:nil];
+}
+
+- (XCUIElement *)findActionsButtonOnNavBarWithLabel:(NSString *)label
+{
+    XCUIElement *navBar;
+    if (label) {
+        navBar = [self waitNavigationBarWithLabel:label
+                                          timeout:kUITestsBaseTimeout];
+    }
+    XCUIElement *actionsButton = [self findButtonWithAccessibilityId:@"Share"
+                                                       parentElement:navBar];
+    return actionsButton;
+}
+
+- (XCUIElement *)waitActionsButtonWithTimeout:(NSTimeInterval)timeout
+{
+    return [self waitActionsButtonOnNavBarWithLabel:nil
+                                            timeout:timeout];
+}
+
+- (XCUIElement *)waitActionsButtonOnNavBarWithLabel:(NSString *)label
+                                            timeout:(NSTimeInterval)timeout
+{
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:label
+                                                   timeout:timeout];
+    XCUIElement *actionsButton = [self waitButtonWithAccessibilityId:@"Share"
+                                                       parentElement:navBar
+                                                             timeout:timeout];
+    return actionsButton;
+}
+
 - (void)openMenuActions
 {
     [self openMenuActionsOnNavBarWithLabel:nil];

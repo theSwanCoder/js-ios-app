@@ -6,6 +6,7 @@
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+Section.h"
 
 NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
@@ -156,7 +157,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)searchTestDashboard
 {
     [self searchResourceWithName:kTestDashboardName
-                       inSection:@"Library"];
+    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
 }
 
 - (void)tryOpenTestDashboard

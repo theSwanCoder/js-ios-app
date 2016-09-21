@@ -46,8 +46,6 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)skipIntroPageIfNeed;
 - (void)skipRateAlertIfNeed;
 //
-- (BOOL)isShareButtonExists;
-//
 - (void)givenLoadingPopupVisible;
 - (void)givenLoadingPopupNotVisible;
 
