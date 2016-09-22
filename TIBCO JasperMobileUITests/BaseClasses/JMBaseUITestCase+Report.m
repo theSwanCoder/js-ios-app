@@ -119,6 +119,17 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [saveButton tap];
 }
 
+- (XCUIElement *)findNameFieldOnSaveReportPage
+{
+    // TODO: replace with accessibility ids
+    XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
+    XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
+    XCUIElement *textField = [nameCell childrenMatchingType:XCUIElementTypeTextField].element;
+    [self waitElementReady:textField
+                   timeout:kUITestsBaseTimeout];
+    return textField;
+}
+
 #pragma mark - Helpers
 
 - (void)searchTestReport
@@ -199,17 +210,24 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     return testCell;
 }
 
-#pragma mark - Saving Report
+#pragma mark - Printing
 
-- (XCUIElement *)findNameFieldOnSaveReportPage
+- (void)openPrintReportPage
 {
-    // TODO: replace with accessibility ids
-    XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
-    XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
-    XCUIElement *textField = [nameCell childrenMatchingType:XCUIElementTypeTextField].element;
-    [self waitElementReady:textField
-                   timeout:kUITestsBaseTimeout];
-    return textField;
+    [self openMenuActions];
+    [self selectActionWithName:@"Print"];
+    [self givenLoadingPopupNotVisible];
+}
+
+- (void)closePrintReportPage
+{
+    // verify that 'print report' page is on the screen
+    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
+                                                        timeout:kUITestsBaseTimeout];
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                      parentElement:printNavBar
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
 }
 
 @end
