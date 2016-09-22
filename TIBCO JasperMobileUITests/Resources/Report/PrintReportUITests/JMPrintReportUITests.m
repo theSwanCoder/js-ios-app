@@ -7,6 +7,10 @@
 //
 
 #import "JMPrintReportUITests.h"
+#import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+Dashboard.h"
+#import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Printer.h"
 
 @implementation JMPrintReportUITests
 
@@ -20,7 +24,13 @@
 //    > User should see Print Report dialog (screen for iPhone)
 - (void)testThatUserCanSeePrintDialog
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openPrintReportPage];
+
+    [self verityThatPrintPageOnScreen];
+
+    [self closePrintReportPage];
+    [self closeTestReportPage];
 }
 
 //Printer Options title
@@ -31,7 +41,13 @@
 //    > User should see title like "Printer Options"
 - (void)testThatPrintDialogHasOptionsWithTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openPrintReportPage];
+    
+    [self verityThatPrintPageHasCorrectTitle];
+    
+    [self closePrintReportPage];
+    [self closeTestReportPage];
 }
 
 //Printer button
@@ -44,7 +60,13 @@
 //    > User can choose one of available printers
 - (void)testThatPrintDialogHasPrinterButton
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openPrintReportPage];
+    
+    // We need come up something with a test printer on CI to test this
+    
+    [self closePrintReportPage];
+    [self closeTestReportPage];
 }
 
 //Printer title
@@ -56,7 +78,15 @@
 //    > User should see title like "Printer"
 - (void)testThatPrintDialogHasTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openPrintReportPage];
+    
+    [self openSelectPrinterPage];
+    [self verifyThatPrinterPageHasCorrectTitle];
+    [self closeSelectPrinterPage];
+    
+    [self closePrintReportPage];
+    [self closeTestReportPage];
 }
 
 //Printer Options back button
@@ -69,7 +99,15 @@
 //    > Printer Otions dialog should appears
 - (void)testThatBackButtonForPrinterOptionsWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openPrintReportPage];
+    
+    [self openSelectPrinterPage];
+    [self verifyThatPrintersPageHasCorrentBackButton];
+    [self closeSelectPrinterPage];
+    
+    [self closePrintReportPage];
+    [self closeTestReportPage];
 }
 
 //Print button
@@ -81,7 +119,13 @@
 //    > Report should be printed
 - (void)testThatPrintDialogHasPrintButton
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openPrintReportPage];
+
+    // We need come up something with a test printer on CI to test this
+
+    [self closePrintReportPage];
+    [self closeTestReportPage];
 }
 
 //Cancel button on Print Options dialog
@@ -93,7 +137,13 @@
 //    > Report View screen should appears
 - (void)testThatCancelButtonForPrinterOptionWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openPrintReportPage];
+
+    // We need come up something with a test printer on CI to test this
+
+    [self closePrintReportPage];
+    [self closeTestReportPage];
 }
 
 //Number of copies
@@ -106,7 +156,13 @@
 //    > Report should be printed with appropriate number of copies
 - (void)testThatNumberOfCopiesCanBeChosen
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openPrintReportPage];
+
+    // We need come up something with a test printer on CI to test this
+
+    [self closePrintReportPage];
+    [self closeTestReportPage];
 }
 
 //Double-sided option (enabled)
@@ -119,7 +175,13 @@
 //    > Report should be printed on both sides of paper
 - (void)testThatDoubleSidedOptionVisibleWhenEnabledOnPrinter
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openPrintReportPage];
+
+    // We need come up something with a test printer on CI to test this
+
+    [self closePrintReportPage];
+    [self closeTestReportPage];
 }
 
 //Double-sided option (disabled)
@@ -132,7 +194,38 @@
 //    > Report should be printed only on one side of paper
 - (void)testThatDoubleSidedOptionNotVisibleWhenDisabledOnPrinter
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openPrintReportPage];
+
+    // We need come up something with a test printer on CI to test this
+
+    [self closePrintReportPage];
+    [self closeTestReportPage];
 }
 
+#pragma mark - Verifying
+
+- (void)verityThatPrintPageOnScreen
+{
+    [self verityThatPrintPageHasCorrectTitle];
+}
+
+- (void)verityThatPrintPageHasCorrectTitle
+{
+    [self waitNavigationBarWithLabel:@"Printer Options"
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatPrinterPageHasCorrectTitle
+{
+    [self waitNavigationBarWithLabel:@"Printer"
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatPrintersPageHasCorrentBackButton
+{
+    [self waitBackButtonWithAccessibilityId:@"Printer Options"
+                          onNavBarWithLabel:@"Printer"
+                                    timeout:kUITestsBaseTimeout];
+}
 @end

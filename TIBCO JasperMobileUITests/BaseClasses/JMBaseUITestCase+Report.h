@@ -26,5 +26,10 @@ extern NSString *const kTestReportWithSingleSelectedControlName;
 - (void)openSaveReportPage;
 - (void)closeSaveReportPage;
 
-- (void)saveTestReportWithName:(NSString *)name format:(NSString *)format;
+- (void)saveTestReportWithName:(NSString *)name
+                        format:(NSString *)format;
+
+// Printing
+- (void)openPrintReportPage;
+- (void)closePrintReportPage;
 @end

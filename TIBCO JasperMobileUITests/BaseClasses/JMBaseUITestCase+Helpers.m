@@ -540,42 +540,6 @@
     return element;
 }
 
-#pragma mark - Actions View
-
-- (XCUIElement *)findActionsButton
-{
-    return [self findActionsButtonOnNavBarWithLabel:nil];
-}
-
-- (XCUIElement *)findActionsButtonOnNavBarWithLabel:(NSString *)label
-{
-    XCUIElement *navBar;
-    if (label) {
-        navBar = [self waitNavigationBarWithLabel:label
-                                          timeout:kUITestsBaseTimeout];
-    }
-    XCUIElement *actionsButton = [self findButtonWithAccessibilityId:@"Share"
-                                                       parentElement:navBar];
-    return actionsButton;
-}
-
-- (XCUIElement *)waitActionsButtonWithTimeout:(NSTimeInterval)timeout
-{
-    return [self waitActionsButtonOnNavBarWithLabel:nil
-                                            timeout:timeout];
-}
-
-- (XCUIElement *)waitActionsButtonOnNavBarWithLabel:(NSString *)label
-                                            timeout:(NSTimeInterval)timeout
-{
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:label
-                                                   timeout:timeout];
-    XCUIElement *actionsButton = [self waitButtonWithAccessibilityId:@"Share"
-                                                       parentElement:navBar
-                                                             timeout:timeout];
-    return actionsButton;
-}
-
 #pragma mark - Other buttons
 
 - (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout
@@ -682,27 +646,6 @@
 }
 
 #pragma mark - Search
-- (void)searchResourceWithName:(NSString *)resourceName inSection:(NSString *)sectionName
-{
-    // TODO: add support of sections. for now we consider that active 'library' section
-    XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
-    [self waitElementReady:searchResourcesSearchField
-                   timeout:kUITestsBaseTimeout];
-    [searchResourcesSearchField tap];
-
-    XCUIElement *clearTextButton = [self findButtonWithTitle:@"Clear text"
-                                               parentElement:searchResourcesSearchField];
-    if (clearTextButton) {
-        [clearTextButton tap];
-        [self givenThatCellsAreVisible];
-    }
-    
-    [searchResourcesSearchField typeText:resourceName];
-
-    XCUIElement *searchButton = [self waitButtonWithAccessibilityId:@"Search"
-                                                            timeout:kUITestsBaseTimeout];
-    [searchButton tap];
-}
 
 - (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText
 {
@@ -723,8 +666,6 @@
 - (XCUIElement *)findAlertWithTitle:(NSString *)title
 {
     XCUIElementQuery *alertsQuery = self.application.alerts;
-    NSArray *allAlerts = alertsQuery.allElementsBoundByAccessibilityElement;
-    XCUIElement *firtsAlert = allAlerts.firstObject;
     XCUIElement *alert = [alertsQuery matchingIdentifier:title].element;
     return alert;
 }

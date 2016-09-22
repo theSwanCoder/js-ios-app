@@ -9,6 +9,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+Section.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";
@@ -27,6 +28,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self givenThatReportCellsOnScreen];
 
     [self tryOpenTestReportWithMandatoryFilters];
+    // We can have two times when loading up and down
+    // first time loading 'report info' and second one - loading report
+    [self givenLoadingPopupNotVisible];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -36,6 +40,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self givenThatReportCellsOnScreen];
     
     [self tryOpenTestReportWithSingleSelectedControl];
+    // We can have two times when loading up and down
+    // first time loading 'report info' and second one - loading report
+    [self givenLoadingPopupNotVisible];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -112,12 +119,23 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [saveButton tap];
 }
 
+- (XCUIElement *)findNameFieldOnSaveReportPage
+{
+    // TODO: replace with accessibility ids
+    XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
+    XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
+    XCUIElement *textField = [nameCell childrenMatchingType:XCUIElementTypeTextField].element;
+    [self waitElementReady:textField
+                   timeout:kUITestsBaseTimeout];
+    return textField;
+}
+
 #pragma mark - Helpers
 
 - (void)searchTestReport
 {
     [self searchResourceWithName:kTestReportName
-                       inSection:@"Library"];
+    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
 }
 
 - (void)tryOpenTestReport
@@ -152,7 +170,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)searchTestReportWithMandatoryFilters
 {
     [self searchResourceWithName:kTestReportWithMandatoryFiltersName
-                       inSection:@"Library"];
+    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
 }
 
 - (XCUIElement *)testReportWithMandatoryFiltersCell
@@ -178,7 +196,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)searchTestReportWithSingleSelectedControl
 {
     [self searchResourceWithName:kTestReportWithSingleSelectedControlName
-                       inSection:@"Library"];
+    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
 }
 
 - (XCUIElement *)testReportWithSingleSelectedControl
@@ -192,17 +210,24 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     return testCell;
 }
 
-#pragma mark - Saving Report
+#pragma mark - Printing
 
-- (XCUIElement *)findNameFieldOnSaveReportPage
+- (void)openPrintReportPage
 {
-    // TODO: replace with accessibility ids
-    XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
-    XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
-    XCUIElement *textField = [nameCell childrenMatchingType:XCUIElementTypeTextField].element;
-    [self waitElementReady:textField
-                   timeout:kUITestsBaseTimeout];
-    return textField;
+    [self openMenuActions];
+    [self selectActionWithName:@"Print"];
+    [self givenLoadingPopupNotVisible];
+}
+
+- (void)closePrintReportPage
+{
+    // verify that 'print report' page is on the screen
+    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
+                                                        timeout:kUITestsBaseTimeout];
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
+                                                      parentElement:printNavBar
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
 }
 
 @end

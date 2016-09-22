@@ -303,81 +303,12 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)givenThatReportCellsOnScreen
 {
-    [self tryOpenFilterMenu];
-
-    [self trySelectFilterBy:@"Reports"];
     [self givenThatCellsAreVisible];
 }
 
 - (void)givenThatDashboardCellsOnScreen
 {
-    [self tryOpenFilterMenu];
-
-    [self trySelectFilterBy:@"Dashboards"];
     [self givenThatCellsAreVisible];
-}
-
-- (void)tryOpenFilterMenu
-{
-    BOOL isShareButtonExists = [self isShareButtonExists];
-    if (isShareButtonExists) {
-
-        XCUIElement *actionsButton = [self waitActionsButtonWithTimeout:kUITestsBaseTimeout];
-        [actionsButton tap];
-
-        [self tryOpenFilterMenuFromMenuActions];
-    } else {
-        [self tryOpenFilterMenuFromNavBar];
-    }
-}
-
-- (void)tryOpenFilterMenuFromMenuActions
-{
-    XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
-    XCUIElement *filterActionElement = menuActionsElement.staticTexts[@"Filter by"];
-    if (filterActionElement.exists) {
-        [filterActionElement tap];
-
-        // Wait until sort view appears
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
-        [self expectationForPredicate:predicate
-                  evaluatedWithObject:self.application
-                              handler:nil];
-        [self waitForExpectationsWithTimeout:5 handler:nil];
-
-    } else {
-        XCTFail(@"Sort Action isn't visible");
-    }
-}
-
-- (void)tryOpenFilterMenuFromNavBar
-{
-    XCUIElement *navBar = self.application.navigationBars[@"Library"];
-    if (navBar.exists) {
-        XCUIElement *filterButton = navBar.buttons[@"filter action"];
-        if (filterButton.exists) {
-            [filterButton tap];
-        } else {
-            XCTFail(@"Filter Button isn't visible");
-        }
-    } else {
-        XCTFail(@"Navigation bar isn't visible");
-    }
-}
-
-- (void)trySelectFilterBy:(NSString *)filterTypeString
-{
-    XCUIElement *filterOptionsViewElement = [self.application.tables elementBoundByIndex:0];
-    if (filterOptionsViewElement.exists) {
-        XCUIElement *filterOptionElement = filterOptionsViewElement.staticTexts[filterTypeString];
-        if (filterOptionElement.exists) {
-            [filterOptionElement tap];
-        } else {
-            XCTFail(@"'%@' Filter Option isn't visible", filterTypeString);
-        }
-    } else {
-        XCTFail(@"Filter Options View isn't visible");
-    }
 }
 
 - (void)skipIntroPageIfNeed
@@ -409,13 +340,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
         backButton = [self findBackButtonWithAccessibilityId:@"Library"];
     }
     [backButton tap];
-}
-
-#pragma mark - Helpers - Menu
-- (BOOL)isShareButtonExists
-{
-    XCUIElement *actionsButton = [self findActionsButton];
-    return actionsButton.exists;
 }
 
 #pragma mark - Verifies

@@ -6,42 +6,10 @@
 #import "JMLibraryPageUITests+Helpers.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+Section.h"
 
 
 @implementation JMLibraryPageUITests (Helpers)
-
-#pragma mark - Helpers - Main
-- (void)givenThatCollectionViewContainsListOfCells
-{
-    NSInteger countOfListCells = [self countOfListCells];
-    if (countOfListCells > 0) {
-        return;
-    } else {
-        [self tryChangeViewPresentationFromGridToList];
-    }
-}
-
-#pragma mark - Helpers - Collection View Presentations
-
-- (void)tryChangeViewPresentationFromListToGrid
-{
-    XCUIElement *gridButtonButton = self.application.buttons[@"grid button"];
-    if (gridButtonButton.exists) {
-        [gridButtonButton tap];
-    } else {
-        XCTFail(@"There isn't 'grid' button");
-    }
-}
-
-- (void)tryChangeViewPresentationFromGridToList
-{
-    XCUIElement *horizontalListButtonButton = self.application.buttons[@"horizontal list button"];
-    if (horizontalListButtonButton.exists) {
-        [horizontalListButtonButton tap];
-    } else {
-        XCTFail(@"There isn't 'list' button");
-    }
-}
 
 #pragma mark - Helpers - Search
 
@@ -81,93 +49,21 @@
     }
 }
 
-#pragma mark - Helpers - Menu Sort By
-
-- (void)tryOpenSortMenu
-{
-    BOOL isShareButtonExists = [self isShareButtonExists];
-    if (isShareButtonExists) {
-        [self tryOpenMenuActions];
-        [self tryOpenSortMenuFromMenuActions];
-    } else {
-        [self tryOpenSortMenuFromNavBar];
-    }
-}
-
-- (void)tryOpenSortMenuFromMenuActions
-{
-    XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
-    XCUIElement *sortActionElement = menuActionsElement.staticTexts[@"Sort by"];
-    if (sortActionElement.exists) {
-        [sortActionElement tap];
-
-        // Wait until sort view appears
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
-        [self expectationForPredicate:predicate
-                  evaluatedWithObject:self.application
-                              handler:nil];
-        [self waitForExpectationsWithTimeout:5 handler:nil];
-
-    } else {
-        XCTFail(@"Sort Action isn't visible");
-    }
-}
-
-- (void)tryOpenSortMenuFromNavBar
-{
-    XCUIElement *navBar = self.application.navigationBars[@"Library"];
-    if (navBar.exists) {
-        XCUIElement *sortButton = navBar.buttons[@"sort action"];
-        if (sortButton.exists) {
-            [sortButton tap];
-        } else {
-            XCTFail(@"Sort Button isn't visible");
-        }
-    } else {
-        XCTFail(@"Navigation bar isn't visible");
-    }
-}
-
-#pragma mark - Helpers - Menu Filter By
-
-- (void)tryOpenMenuActions
-{
-    [self openMenuActionsOnNavBarWithLabel:@"Library"];
-}
-
 #pragma mark - Helpers - Sort By
 
 - (void)trySortByName
 {
-    [self tryOpenSortMenu];
-    [self trySelectSortBy:@"Name"];
+    [self selectSortBy:@"Name" inSectionWithTitle:@"Library"];
 }
 
 - (void)trySortByCreationDate
 {
-    [self tryOpenSortMenu];
-    [self trySelectSortBy:@"Creation Date"];
+    [self selectSortBy:@"Creation Date" inSectionWithTitle:@"Library"];
 }
 
 - (void)trySortByModifiedDate
 {
-    [self tryOpenSortMenu];
-    [self trySelectSortBy:@"Modified Date"];
-}
-
-- (void)trySelectSortBy:(NSString *)sortTypeString
-{
-    XCUIElement *sortOptionsViewElement = [self.application.tables elementBoundByIndex:0];
-    if (sortOptionsViewElement.exists) {
-        XCUIElement *sortOptionElement = sortOptionsViewElement.staticTexts[sortTypeString];
-        if (sortOptionElement.exists) {
-            [sortOptionElement tap];
-        } else {
-            XCTFail(@"'%@' Sort Option isn't visible", sortTypeString);
-        }
-    } else {
-        XCTFail(@"Sort Options View isn't visible");
-    }
+    [self selectSortBy:@"Modified Date" inSectionWithTitle:@"Library"];
 }
 
 #pragma mark - Helpers - Filter By
@@ -175,48 +71,19 @@
 
 - (void)tryFilterByReports
 {
+    [self selectFilterBy:@"Reports" inSectionWithTitle:@"Library"];
+
     [self givenThatReportCellsOnScreen];
 }
 
 - (void)tryFilterByDashboards
 {
+    [self selectFilterBy:@"Dashboards" inSectionWithTitle:@"Library"];
+
     [self givenThatDashboardCellsOnScreen];
 }
 
 #pragma mark - Verfies
-- (void)verifyThatCollectionViewContainsListOfCells
-{
-    // Shold be 'list' cells
-    NSInteger countOfListCells = [self countOfListCells];
-    XCTAssertTrue(countOfListCells > 0, @"Should be 'List' presentation");
-
-    // Should not be 'grid' cells
-    NSInteger countOfGridCells = [self countOfGridCells];
-    XCTAssertTrue(countOfGridCells == 0, @"Should be 'Grid' presentation");
-}
-
-- (void)verifyThatCollectionViewContainsGridOfCells
-{
-    // Should be 'grid' cells
-    NSInteger countOfGridCells = [self countOfGridCells];
-    XCTAssertTrue(countOfGridCells > 0, @"Should be 'Grid' presentation");
-
-    // Shold not be 'list' cells
-    NSInteger countOfListCells = [self countOfListCells];
-    XCTAssertTrue(countOfListCells == 0, @"Should be 'List' presentation");
-}
-
-- (void)verifyThatCollectionViewContainsCells
-{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.hittable == true"];
-    NSInteger filtredResultCount = [[self.application.cells allElementsBoundByIndex] filteredArrayUsingPredicate:predicate].count;
-    XCTAssertTrue(filtredResultCount > 0, @"Should be some cells");
-}
-
-- (void)verifyThatCollectionViewNotContainsCells
-{
-    // TODO: implement
-}
 
 - (void)verifyThatCellsSortedByName
 {
@@ -267,17 +134,6 @@
     // TODO: implement
     //    XCTFail(@"Need implementation");
     XCTAssertTrue(YES, @"Should be filtred by dashboards");
-}
-
-#pragma mark -
-- (NSInteger)countOfGridCells
-{
-    return [self countCellsWithAccessibilityId:@"JMCollectionViewGridCellAccessibilityId"];
-}
-
-- (NSInteger)countOfListCells
-{
-    return [self countCellsWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"];
 }
 
 @end

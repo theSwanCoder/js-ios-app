@@ -95,12 +95,6 @@
                                 visible:(BOOL)visible
                                 timeout:(NSTimeInterval)timeout;
 
-// Menu Actions
-- (XCUIElement *)findActionsButton;
-- (XCUIElement *)findActionsButtonOnNavBarWithLabel:(NSString *)label;
-- (XCUIElement *)waitActionsButtonWithTimeout:(NSTimeInterval)timeout;
-- (XCUIElement *)waitActionsButtonOnNavBarWithLabel:(NSString *)label
-                                            timeout:(NSTimeInterval)timeout;
 // Other buttons
 - (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout;
 - (XCUIElement *)waitDoneButtonWithTimeout:(NSTimeInterval)timeout;
@@ -114,7 +108,6 @@
 - (XCUIElement *)findTableViewCellWithAccessibilityId:(NSString *)accessibilityId
                                 containsLabelWithText:(NSString *)labelText;
 // Search
-- (void)searchResourceWithName:(NSString *)resourceName inSection:(NSString *)sectionName;
 - (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText;
 
 // Alerts
