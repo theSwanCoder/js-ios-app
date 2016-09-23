@@ -372,6 +372,7 @@ NSString *const JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestE
                         NSError *error = [self makeErrorFromWebViewError:errorJSON];
                         completion(nil, error);
                     } else {
+#warning HERE COMPLETION SHOULD BE CHECKED!!!!!
                         completion(response, nil);
                     }
                     break;

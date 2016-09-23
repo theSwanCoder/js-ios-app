@@ -26,15 +26,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 /**
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.5
  */
 @interface JMLocalization : NSObject
 
-+ (NSString *)localizedStringForKey:(NSString *)key;
++ (NSString *)accessibilityLanguage;
 
++ (void)setAccessibilityForView:(UIView *)view withTextKey:(NSString *)key;
 @end
 
 NSString *JMLocalizedString(NSString *key);

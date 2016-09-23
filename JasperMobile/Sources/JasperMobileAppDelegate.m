@@ -42,6 +42,7 @@
 #import "JMThemesManager.h"
 #import "NSObject+Additions.h"
 #import "JMCoreDataManager.h"
+#import "JMLocalization.h"
 
 NSString *const JMAppDelegateWillDestroyExternalWindowNotification = @"JMAppDelegateWillDestroyExternalWindowNotification";
 
@@ -84,6 +85,8 @@ static const NSInteger kSplashViewTag = 100;
 
     [application setStatusBarStyle:UIStatusBarStyleLightContent];
 
+    application.accessibilityLanguage = [JMLocalization accessibilityLanguage];
+    
     // Google Analytics
     [GAI sharedInstance].trackUncaughtExceptions = YES;
     [GAI sharedInstance].dispatchInterval = 20;

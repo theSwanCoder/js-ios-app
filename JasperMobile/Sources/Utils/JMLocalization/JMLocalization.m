@@ -32,8 +32,10 @@ NSString * const JMLocalizationBundleType = @"lproj";
 
 @implementation JMLocalization
 
-+ (NSString *)localizedStringForKey:(NSString *)key
++ (NSString *)localizedStringForKey:(NSString *)key language:(NSString **)language
 {
+    *language = [self accessibilityLanguage];
+    
     NSURL *localizationBundleURL = [[NSBundle bundleForClass:[self class]] bundleURL];
     NSBundle *localizationBundle = localizationBundleURL ? [NSBundle bundleWithURL:localizationBundleURL] : [NSBundle mainBundle];
     
@@ -43,14 +45,41 @@ NSString * const JMLocalizationBundleType = @"lproj";
         NSString *path = [localizationBundle pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
         NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
         localizedString = [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
+        *language = JMPreferredLanguage;
     }
     
     return localizedString;
+}
+
++ (NSString *)accessibilityLanguage
+{
+    NSArray *preferredLanguages = [NSLocale preferredLanguages];
+    NSArray *supportedLocalizations = [[NSBundle mainBundle] localizations];
+    for (NSInteger i = 0; i < preferredLanguages.count; i++) {
+        NSString *currentLanguage = [preferredLanguages objectAtIndex:i];
+        NSInteger dividerPosition = [currentLanguage rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"_-"]].location;
+        if (dividerPosition != NSNotFound) {
+            currentLanguage = [currentLanguage substringToIndex:dividerPosition];
+        }
+        if ([supportedLocalizations containsObject:currentLanguage]) {
+            return currentLanguage;
+        }
+    }
+    
+    return JMPreferredLanguage;
+}
+
++ (void)setAccessibilityForView:(UIView *)view withTextKey:(NSString *)key
+{
+    NSString *accessibilityLanguage;
+    view.isAccessibilityElement = YES;
+    view.accessibilityLabel = [JMLocalization localizedStringForKey:key language:&accessibilityLanguage];
+    view.accessibilityLanguage = accessibilityLanguage;
 }
 
 @end
 
 NSString *JMLocalizedString(NSString *key)
 {
-    return [JMLocalization localizedStringForKey:key];
+    return [JMLocalization localizedStringForKey:key language:nil];
 }
