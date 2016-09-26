@@ -130,6 +130,8 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
     [self setupLinksForString:aboutString];
 
     self.aboutAppTextView.attributedText = aboutString;
+    self.aboutAppTextView.isAccessibilityElement = YES;
+    self.aboutAppTextView.accessibilityLabel = aboutString.string;
 }
 
 - (void)setupLinksForString:(NSMutableAttributedString *)attributedString

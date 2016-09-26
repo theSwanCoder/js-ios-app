@@ -75,6 +75,8 @@
                                                                 target:target
                                                                 action:action];
     [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    backItem.isAccessibilityElement = YES;
+    backItem.accessibilityLabel = backItemTitle;
     backItem.accessibilityIdentifier = @"JMBackButtonAccessibilityId";
     return backItem;
 }
@@ -92,7 +94,7 @@
     CGFloat viewWidth = CGRectGetWidth(self.navigationController.navigationBar.frame);
 
     if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMLocalizedString(@"back_button_title")]) {
-        return [self croppedBackButtonTitle:JMLocalizedString(@"back_button_title")];
+        return JMLocalizedString(@"back_button_title");
     }
     return backButtonTitle;
 }

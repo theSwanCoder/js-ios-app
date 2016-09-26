@@ -36,7 +36,8 @@
 
 + (NSString *)accessibilityLanguage;
 
-+ (void)setAccessibilityForView:(UIView *)view withTextKey:(NSString *)key;
++ (void)setAccessibilityForElement:(NSObject *)accessibilityElement withTextKey:(NSString *)key accessibility:(BOOL)accessibility;
+
 @end
 
 NSString *JMLocalizedString(NSString *key);

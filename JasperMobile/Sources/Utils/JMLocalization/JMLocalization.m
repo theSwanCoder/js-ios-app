@@ -32,10 +32,8 @@ NSString * const JMLocalizationBundleType = @"lproj";
 
 @implementation JMLocalization
 
-+ (NSString *)localizedStringForKey:(NSString *)key language:(NSString **)language
++ (void)localizeStringForKey:(NSString *)key completion:(void (^)(NSString *localizedString, NSString *languageString))completion
 {
-    *language = [self accessibilityLanguage];
-    
     NSURL *localizationBundleURL = [[NSBundle bundleForClass:[self class]] bundleURL];
     NSBundle *localizationBundle = localizationBundleURL ? [NSBundle bundleWithURL:localizationBundleURL] : [NSBundle mainBundle];
     
@@ -45,10 +43,12 @@ NSString * const JMLocalizationBundleType = @"lproj";
         NSString *path = [localizationBundle pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
         NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
         localizedString = [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
-        *language = JMPreferredLanguage;
     }
-    
-    return localizedString;
+    if (completion) {
+        
+#warning HERE SHOULD BE LANGUAGE FOR CURRENT STRING!
+        completion(localizedString, [self accessibilityLanguage]);
+    }
 }
 
 + (NSString *)accessibilityLanguage
@@ -69,17 +69,22 @@ NSString * const JMLocalizationBundleType = @"lproj";
     return JMPreferredLanguage;
 }
 
-+ (void)setAccessibilityForView:(UIView *)view withTextKey:(NSString *)key
++ (void)setAccessibilityForElement:(NSObject *)accessibilityElement withTextKey:(NSString *)key accessibility:(BOOL)accessibility
 {
-    NSString *accessibilityLanguage;
-    view.isAccessibilityElement = YES;
-    view.accessibilityLabel = [JMLocalization localizedStringForKey:key language:&accessibilityLanguage];
-    view.accessibilityLanguage = accessibilityLanguage;
+    [JMLocalization localizeStringForKey:key completion:^(NSString *localizedString, NSString *languageString) {
+        accessibilityElement.isAccessibilityElement = accessibility;
+        accessibilityElement.accessibilityLabel = localizedString;
+        accessibilityElement.accessibilityLanguage = languageString;
+    }];
 }
 
 @end
 
 NSString *JMLocalizedString(NSString *key)
 {
-    return [JMLocalization localizedStringForKey:key language:nil];
+    __block NSString *resultLocalizedString;
+    [JMLocalization localizeStringForKey:key completion:^(NSString *localizedString, NSString *languageString) {
+        resultLocalizedString = localizedString;
+    }];
+    return resultLocalizedString;
 }
