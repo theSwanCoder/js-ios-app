@@ -36,7 +36,7 @@
 
 + (NSString *)accessibilityLanguage;
 
-+ (void)setAccessibilityForElement:(NSObject *)accessibilityElement withTextKey:(NSString *)key accessibility:(BOOL)accessibility;
++ (void)localizeStringForKey:(NSString *)key completion:(void (^)(NSString *localizedString, NSString *languageString))completion;
 
 @end
 

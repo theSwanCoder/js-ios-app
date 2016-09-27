@@ -30,6 +30,8 @@
 #import "PopoverView.h"
 #import "JMThemesManager.h"
 #import "JMUtils.h"
+#import "JMConstants.h"
+#import "UIView+Additions.h"
 
 CGFloat static kJMMenuActionsViewCellPortraitHeight = 40;
 CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
@@ -56,8 +58,7 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
         self.tableView.separatorColor = [UIColor darkGrayColor];
 
         // Accessibility
-        self.isAccessibilityElement = NO;
-        self.accessibilityIdentifier = @"JMMenuActionsViewAccessibilityId";
+        [self setAccessibility:NO withTextKey:nil identifier:JMMenuActionsViewAccessibilityId];
     }
     return self;
 }

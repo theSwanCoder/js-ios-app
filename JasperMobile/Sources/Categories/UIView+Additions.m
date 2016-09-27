@@ -23,6 +23,7 @@
 
 #import "UIView+Additions.h"
 #import <QuartzCore/QuartzCore.h>
+#import "JMLocalization.h"
 
 @implementation UIView (Additions)
 - (UIColor *) colorOfPoint:(CGPoint)point
@@ -121,5 +122,14 @@
                                                                    views:@{@"nestedView": view}]];
 }
 
+- (void)setAccessibility:(BOOL)accessibility withTextKey:(NSString *)key identifier:(NSString *)accessibilityIdentifier
+{
+    [JMLocalization localizeStringForKey:key completion:^(NSString *localizedString, NSString *languageString) {
+        self.isAccessibilityElement = accessibility;
+        self.accessibilityLabel = localizedString;
+        self.accessibilityLanguage = languageString;
+        self.accessibilityIdentifier = accessibilityIdentifier;
+    }];
+}
 
 @end

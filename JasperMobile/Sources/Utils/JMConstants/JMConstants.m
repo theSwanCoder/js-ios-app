@@ -146,3 +146,11 @@ NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex = 2;
 // Login VC
 NSString *const JMLoginVCLastUserNameKey           = @"JMLoginVCLastUserNameKey";
 NSString *const JMLoginVCLastServerProfileAliasKey = @"JMLoginVCLastServerProfileAliasKey";
+
+// Accessibility Identifiers
+NSString *const JMBackButtonAccessibilityId = @"JMBackButtonAccessibilityId";
+NSString *const JMCancelRequestPopupAccessibilityId = @"JMCancelRequestPopupAccessibilityId";
+NSString *const JMMenuActionsViewAccessibilityId = @"JMMenuActionsViewAccessibilityId";
+
+
+

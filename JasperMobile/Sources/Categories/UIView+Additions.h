@@ -50,4 +50,7 @@
 // Autolayout
 // Make subview fill its parent view
 - (void)fillWithView:(UIView *)view;
+
+- (void)setAccessibility:(BOOL)accessibility withTextKey:(NSString *)key identifier:(NSString *)accessibilityIdentifier;
+
 @end

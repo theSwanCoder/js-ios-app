@@ -29,6 +29,8 @@
 #import "JMUtils.h"
 #import "JMLocalization.h"
 #import <QuartzCore/QuartzCore.h>
+#import "JMConstants.h"
+#import "UIView+Additions.h"
 
 static NSInteger _cancelRequestPopupCounter = 0;
 
@@ -51,8 +53,7 @@ static NSInteger _cancelRequestPopupCounter = 0;
         self.isDissmissWithTapOutOfButton = NO;
         
         // Accessibility
-        self.isAccessibilityElement = NO;
-        self.accessibilityIdentifier = @"JMCancelRequestPopupAccessibilityId";
+        [self setAccessibility:NO withTextKey:nil identifier:JMCancelRequestPopupAccessibilityId];
     }
     return self;
 }

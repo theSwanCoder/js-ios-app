@@ -44,25 +44,12 @@ NSString * const JMLocalizationBundleType = @"lproj";
     return JMPreferredLanguage;
 }
 
-+ (void)setAccessibilityForElement:(NSObject *)accessibilityElement withTextKey:(NSString *)key accessibility:(BOOL)accessibility
-{
-    [JMLocalization localizeStringForKey:key completion:^(NSString *localizedString, NSString *languageString) {
-        accessibilityElement.isAccessibilityElement = accessibility;
-        accessibilityElement.accessibilityLabel = localizedString;
-        accessibilityElement.accessibilityLanguage = languageString;
-    }];
-}
-
-#pragma mark - Utilites
-+ (NSString *)localizeStringForKey:(NSString *)key language:(NSString *)language inBundle:(NSBundle *)bundle
-{
-    NSString *path = [bundle pathForResource:language ofType:JMLocalizationBundleType];
-    NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
-    return [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
-}
-
 + (void)localizeStringForKey:(NSString *)key completion:(void (^)(NSString *localizedString, NSString *languageString))completion
 {
+    if (![key length]) {
+        completion(nil, nil);
+        return;
+    }
     NSBundle *localizationBundle = [NSBundle bundleForClass:[self class]];
     NSString *localizedString = [self localizeStringForKey:key language:JMPreferredLanguage inBundle:localizationBundle];
     for (NSString *currentLanguage in [self listOfPreferredLanguages]) {
@@ -93,6 +80,13 @@ NSString * const JMLocalizationBundleType = @"lproj";
     completion(localizedString, JMPreferredLanguage);
 }
 
+#pragma mark - Utilites
++ (NSString *)localizeStringForKey:(NSString *)key language:(NSString *)language inBundle:(NSBundle *)bundle
+{
+    NSString *path = [bundle pathForResource:language ofType:JMLocalizationBundleType];
+    NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
+    return [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
+}
 
 + (NSArray *)listOfPreferredLanguages
 {

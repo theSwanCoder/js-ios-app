@@ -31,6 +31,7 @@
 #import "JMUtils.h"
 #import "JMLocalization.h"
 #import "JMThemesManager.h"
+#import "JMConstants.h"
 
 @interface JMBaseViewController()
 
@@ -76,8 +77,8 @@
                                                                 action:action];
     [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     backItem.isAccessibilityElement = YES;
-    backItem.accessibilityLabel = backItemTitle;
-    backItem.accessibilityIdentifier = @"JMBackButtonAccessibilityId";
+    backItem.accessibilityLabel = [self croppedBackButtonTitle:backItemTitle];
+    backItem.accessibilityIdentifier = JMBackButtonAccessibilityId;
     return backItem;
 }
 

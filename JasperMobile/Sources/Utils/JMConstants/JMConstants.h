@@ -155,3 +155,8 @@ extern NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex;
 // Login VC
 extern NSString *const JMLoginVCLastUserNameKey;
 extern NSString *const JMLoginVCLastServerProfileAliasKey;
+
+// Accessibility Identifiers
+extern NSString *const JMBackButtonAccessibilityId;
+extern NSString *const JMCancelRequestPopupAccessibilityId;
+extern NSString *const JMMenuActionsViewAccessibilityId;
