@@ -32,40 +32,15 @@ NSString * const JMLocalizationBundleType = @"lproj";
 
 @implementation JMLocalization
 
-+ (void)localizeStringForKey:(NSString *)key completion:(void (^)(NSString *localizedString, NSString *languageString))completion
-{
-    NSURL *localizationBundleURL = [[NSBundle bundleForClass:[self class]] bundleURL];
-    NSBundle *localizationBundle = localizationBundleURL ? [NSBundle bundleWithURL:localizationBundleURL] : [NSBundle mainBundle];
-    
-    NSString *localizedString = NSLocalizedStringFromTableInBundle(key, nil, localizationBundle, comment);
-    
-    if (![[NSLocale preferredLanguages][0] isEqualToString:JMPreferredLanguage] && [localizedString isEqualToString:key]) {
-        NSString *path = [localizationBundle pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
-        NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
-        localizedString = [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
-    }
-    if (completion) {
-        
-#warning HERE SHOULD BE LANGUAGE FOR CURRENT STRING!
-        completion(localizedString, [self accessibilityLanguage]);
-    }
-}
-
+#pragma mark - Public API
 + (NSString *)accessibilityLanguage
 {
-    NSArray *preferredLanguages = [NSLocale preferredLanguages];
     NSArray *supportedLocalizations = [[NSBundle mainBundle] localizations];
-    for (NSInteger i = 0; i < preferredLanguages.count; i++) {
-        NSString *currentLanguage = [preferredLanguages objectAtIndex:i];
-        NSInteger dividerPosition = [currentLanguage rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"_-"]].location;
-        if (dividerPosition != NSNotFound) {
-            currentLanguage = [currentLanguage substringToIndex:dividerPosition];
-        }
+    for (NSString *currentLanguage in [self listOfPreferredLanguages]) {
         if ([supportedLocalizations containsObject:currentLanguage]) {
             return currentLanguage;
         }
     }
-    
     return JMPreferredLanguage;
 }
 
@@ -76,6 +51,62 @@ NSString * const JMLocalizationBundleType = @"lproj";
         accessibilityElement.accessibilityLabel = localizedString;
         accessibilityElement.accessibilityLanguage = languageString;
     }];
+}
+
+#pragma mark - Utilites
++ (NSString *)localizeStringForKey:(NSString *)key language:(NSString *)language inBundle:(NSBundle *)bundle
+{
+    NSString *path = [bundle pathForResource:language ofType:JMLocalizationBundleType];
+    NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
+    return [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
+}
+
++ (void)localizeStringForKey:(NSString *)key completion:(void (^)(NSString *localizedString, NSString *languageString))completion
+{
+    NSBundle *localizationBundle = [NSBundle bundleForClass:[self class]];
+    NSString *localizedString = [self localizeStringForKey:key language:JMPreferredLanguage inBundle:localizationBundle];
+    for (NSString *currentLanguage in [self listOfPreferredLanguages]) {
+        if (![currentLanguage isEqualToString:JMPreferredLanguage]) {
+            NSString *currentLocalizedString = [self localizeStringForKey:key language:currentLanguage inBundle:localizationBundle];
+            if (![currentLocalizedString isEqualToString:key]) {
+                if (![currentLocalizedString isEqualToString:localizedString]) {
+                    completion(currentLocalizedString, currentLanguage);
+                    return;
+                } else { //Check all other localisations
+                    NSMutableArray *supportedLocalizations = [[[NSBundle mainBundle] localizations] mutableCopy];
+                    [supportedLocalizations removeObject:JMPreferredLanguage];
+                    [supportedLocalizations removeObject:currentLanguage];
+                    
+                    for (NSString *language in supportedLocalizations) {
+                        NSString *currentString = [self localizeStringForKey:key language:language inBundle:localizationBundle];
+                        if (![currentString isEqualToString:localizedString]) {
+                            completion(currentLocalizedString, currentLanguage);
+                            return;
+                        }
+                    }
+                }
+            }
+        } else {
+            break;
+        }
+    }
+    completion(localizedString, JMPreferredLanguage);
+}
+
+
++ (NSArray *)listOfPreferredLanguages
+{
+    NSArray *preferredLanguages = [NSLocale preferredLanguages];
+    NSMutableArray *clearedLanguages = [NSMutableArray array];
+    for (NSInteger i = 0; i < preferredLanguages.count; i++) {
+        NSString *currentLanguage = [preferredLanguages objectAtIndex:i];
+        NSInteger dividerPosition = [currentLanguage rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"_-"]].location;
+        if (dividerPosition != NSNotFound) {
+            currentLanguage = [currentLanguage substringToIndex:dividerPosition];
+        }
+        [clearedLanguages addObject:currentLanguage];
+    }
+    return clearedLanguages;
 }
 
 @end
