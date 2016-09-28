@@ -39,7 +39,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 //    > User should see selected dashlet on the separate screen
 - (void)testThatUserCanSeeSelectedDashlet
 {
-        [self openTestDashletWithHyperlinks];
+    [self openTestDashletWithHyperlinks];
 }
 
 //Back button like title of the dashboard
@@ -119,6 +119,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 - (void)testThatInputControlsWorkCorrectly
 {
 //    TODO: remove this case, because of 'native input controls change' feature.
+    [self openTestDashletWithHyperlinks];
 }
 
 //Change Chart Type of report
@@ -152,13 +153,16 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 - (void)testThatJIVEWorkCorrectly
 {
 //    XCTFail(@"Not implemented tests");
+    [self openTestDashletWithHyperlinks];
 }
 
 #pragma mark - Helpers
 
 - (void)openTestDashletWithHyperlinks
 {
+    XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
     XCUIElement *customersElement = [self waitStaticTextWithAccessibilityId:@"Customers"
+                                                              parentElement:webView
                                                                     timeout:kUITestsBaseTimeout];
     [customersElement tap];
     [self givenLoadingPopupNotVisible];
@@ -185,6 +189,9 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     XCUIElement *hyperlinkElement = [self waitStaticTextWithAccessibilityId:@"Ida Rodriguez"
                                                                     timeout:kUITestsBaseTimeout];
     [hyperlinkElement tap];
+    // We can have two times when loading up and down
+    // first time loading 'report info' and second one - loading report
+    [self givenLoadingPopupNotVisible];
     [self givenLoadingPopupNotVisible];
 }
 

@@ -15,20 +15,22 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *gridButton = [self waitButtonWithAccessibilityId:@"grid button"
-                                                    parentElement:navBar
-                                                          timeout:kUITestsBaseTimeout];
-    [gridButton tap];
+    XCUIElement *gridButton = [self findButtonWithAccessibilityId:@"grid button"
+                                                    parentElement:navBar];
+    if (gridButton) {
+        [gridButton tap];
+    }
 }
 
 - (void)switchViewFromGridToListInSectionWithTitle:(NSString *)sectionTitle
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *listButton = [self waitButtonWithAccessibilityId:@"horizontal list button"
-                                                    parentElement:navBar
-                                                          timeout:kUITestsBaseTimeout];
-    [listButton tap];
+    XCUIElement *listButton = [self findButtonWithAccessibilityId:@"horizontal list button"
+                                                    parentElement:navBar];
+    if (listButton) {
+        [listButton tap];
+    }
 }
 
 #pragma mark - Search
@@ -124,8 +126,11 @@
 
 - (void)verifyThatCollectionViewContainsCells
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.hittable == true"];
-    NSInteger filtredResultCount = [[self.application.cells allElementsBoundByIndex] filteredArrayUsingPredicate:predicate].count;
+    NSArray *allCells = [self.application.cells allElementsBoundByAccessibilityElement];
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement  * _Nullable cell, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return cell.exists == true && cell.isHittable == true;
+    }];
+    NSInteger filtredResultCount = [allCells filteredArrayUsingPredicate:predicate].count;
     XCTAssertTrue(filtredResultCount > 0, @"Should be some cells");
 }
 

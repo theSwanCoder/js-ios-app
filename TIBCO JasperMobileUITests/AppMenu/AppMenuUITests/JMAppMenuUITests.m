@@ -75,19 +75,16 @@
 
 - (void)testThatMenuViewCanSelectItems
 {
-    [self showSideMenu];
-    [self verifySideMenuVisible];
-
-    XCUIElement *menuView = [self sideMenuElement];
-
     // Check all collection screen items
     NSArray *itemsArray = @[@"Library", @"Repository", @"Recently Viewed", @"Saved Items", @"Favorites", @"Schedules"];
     for (NSString *itemName in itemsArray) {
+        [self showSideMenu];
+        [self verifySideMenuVisible];
+        XCUIElement *menuView = [self sideMenuElement];
         XCUIElement *pageMenuItem = menuView.cells.staticTexts[itemName];
         if (pageMenuItem.exists) {
             [pageMenuItem tap];
         }
-        [self showSideMenu];
     }
 
     // Check About item
@@ -109,8 +106,6 @@
     } else {
         XCTFail(@"'Settings' button doesn't exist.");
     }
-
-    [self hideSideMenu];
 }
 
 - (void)testThatServerProfileInfoIsAppeared

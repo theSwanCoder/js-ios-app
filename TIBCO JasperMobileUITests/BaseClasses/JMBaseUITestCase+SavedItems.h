@@ -24,8 +24,8 @@
 - (void)saveTestReportInPDFFormat;
 - (void)deleteTestReportInPDFFormat;
 
-- (void)saveTestReportInXMLFormat;
-- (void)deleteTestReportInXMLFormat;
+- (void)saveTestReportInXLSFormat;
+- (void)deleteTestReportInXLSFormat;
 
 - (void)openTestSavedItemInHTMLFormat;
 - (void)openTestSavedItemInPDFFormat;

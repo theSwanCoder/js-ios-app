@@ -284,7 +284,7 @@
 {
     [self givenThatSavedItemsEmpty];
     
-    [self saveTestReportInXMLFormat];
+    [self saveTestReportInXLSFormat];
 }
 
 //Save the report with same name but in different output formats
@@ -309,7 +309,7 @@
     [self givenThatSavedItemsEmpty];
     
     [self saveTestReportInHTMLFormat];    
-    [self saveTestReportInXMLFormat];
+    [self saveTestReportInXLSFormat];
 }
 
 //Cancel saving

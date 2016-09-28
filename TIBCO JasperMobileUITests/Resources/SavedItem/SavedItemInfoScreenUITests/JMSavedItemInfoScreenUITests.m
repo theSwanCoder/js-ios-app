@@ -28,7 +28,7 @@
 
     [self verifyThatInfoPageOnScreen];
 
-    [self closeInfoPageAndDeleteTestSavedItem];
+    [self closeInfoPageAndDeleteTestSavedItemInHTMLFormat];
 }
 
 //Back button like "Saved Items"
@@ -43,7 +43,7 @@
     
     [self verifyThatBackButtonOnInfoPageHasCorrectTitle];
     
-    [self closeInfoPageAndDeleteTestSavedItem];
+    [self closeInfoPageAndDeleteTestSavedItemInHTMLFormat];
 }
 
 //Title like name of item
@@ -57,7 +57,7 @@
     
     [self verifyThatInfoPageHasCorrectTitle];
     
-    [self closeInfoPageAndDeleteTestSavedItem];
+    [self closeInfoPageAndDeleteTestSavedItemInHTMLFormat];
 }
 
 //Info about the html-file
@@ -83,7 +83,7 @@
 
     [self verifyThatInfoPageHasNeededFieldsForHTMLFile];
 
-    [self closeInfoPageAndDeleteTestSavedItem];
+    [self closeInfoPageAndDeleteTestSavedItemInHTMLFormat];
 }
 
 //Info about the pdf-file
@@ -109,7 +109,7 @@
 
     [self verifyThatInfoPageHasNeededFieldsForPDFFile];
 
-    [self closeInfoPageAndDeleteTestSavedItem];
+    [self closeInfoPageAndDeleteTestSavedItemInPDFFormat];
 }
 
 //Favorite button
@@ -127,7 +127,7 @@
     [self markTestSavedItemAsFavoriteFromMenuOnInfoPage];
     [self unmarkTestSavedItemAsFavoriteFromMenuOnInfoPage];
 
-    [self closeInfoPageAndDeleteTestSavedItem];
+    [self closeInfoPageAndDeleteTestSavedItemInHTMLFormat];
 }
 
 //Run button
@@ -144,7 +144,7 @@
     [self verifyThatTestSavedItemPageOnScreen];
     [self closeTestSavedItem];
     
-    [self closeInfoPageAndDeleteTestSavedItem];
+    [self closeInfoPageAndDeleteTestSavedItemInHTMLFormat];
 }
 
 #pragma mark - Helpers
@@ -165,11 +165,18 @@
     [self showInfoPageTestSavedItemFromSavedItemsSection];
 }
 
-- (void)closeInfoPageAndDeleteTestSavedItem
+- (void)closeInfoPageAndDeleteTestSavedItemInHTMLFormat
 {
     [self closeInfoPageTestSavedItemFromSavedItemsSection];
 
     [self deleteTestReportInHTMLFormat];
+}
+    
+- (void)closeInfoPageAndDeleteTestSavedItemInPDFFormat
+{
+    [self closeInfoPageTestSavedItemFromSavedItemsSection];
+
+    [self deleteTestReportInPDFFormat];
 }
 
 #pragma mark - Verifying
