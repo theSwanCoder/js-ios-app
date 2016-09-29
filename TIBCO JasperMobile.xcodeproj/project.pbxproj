@@ -92,7 +92,6 @@
 		08BC078D1D86E9B500FC5847 /* JMBaseUITestCase+Printer.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BC078C1D86E9B500FC5847 /* JMBaseUITestCase+Printer.m */; };
 		08BFA4C51D91661D0024F2B2 /* JMResourceLoaderOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BFA4C41D91661D0024F2B2 /* JMResourceLoaderOption.m */; };
 		08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB3D931A891640006F9620 /* MessageUI.framework */; };
-		08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD181E1B13426200856112 /* JMRecentViewsListLoader.m */; };
 		08DD182B1B135BE500856112 /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18231B135BE500856112 /* JasperMobile.xcdatamodeld */; };
 		08DD182C1B135BE500856112 /* MigrateTo_v_1_9.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18281B135BE500856112 /* MigrateTo_v_1_9.xcmappingmodel */; };
 		08DD182D1B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18291B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel */; };
@@ -573,8 +572,6 @@
 		08BFA4C31D91661D0024F2B2 /* JMResourceLoaderOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceLoaderOption.h; sourceTree = "<group>"; };
 		08BFA4C41D91661D0024F2B2 /* JMResourceLoaderOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceLoaderOption.m; sourceTree = "<group>"; };
 		08DB3D931A891640006F9620 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		08DD181D1B13426200856112 /* JMRecentViewsListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRecentViewsListLoader.h; sourceTree = "<group>"; };
-		08DD181E1B13426200856112 /* JMRecentViewsListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRecentViewsListLoader.m; sourceTree = "<group>"; };
 		08DD18241B135BE500856112 /* JasperMobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile.xcdatamodel; sourceTree = "<group>"; };
 		08DD18251B135BE500856112 /* JasperMobile_v_1_9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile_v_1_9.xcdatamodel; sourceTree = "<group>"; };
 		08DD18261B135BE500856112 /* JasperMobile_v_2_0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile_v_2_0.xcdatamodel; sourceTree = "<group>"; };
@@ -1587,7 +1584,6 @@
 			isa = PBXGroup;
 			children = (
 				08BFA4C21D91661D0024F2B2 /* JMResourceLoaderOption */,
-				08DD181C1B13426200856112 /* JMRecentViewsListLoader */,
 				089B14FB1AA756BD0021A915 /* JMFavoritesListLoader */,
 				089B14FE1AA756BD0021A915 /* JMLibraryListLoader */,
 				089B15011AA756BD0021A915 /* JMRepositoryListLoader */,
@@ -1772,15 +1768,6 @@
 				08BFA4C41D91661D0024F2B2 /* JMResourceLoaderOption.m */,
 			);
 			path = JMResourceLoaderOption;
-			sourceTree = "<group>";
-		};
-		08DD181C1B13426200856112 /* JMRecentViewsListLoader */ = {
-			isa = PBXGroup;
-			children = (
-				08DD181D1B13426200856112 /* JMRecentViewsListLoader.h */,
-				08DD181E1B13426200856112 /* JMRecentViewsListLoader.m */,
-			);
-			path = JMRecentViewsListLoader;
 			sourceTree = "<group>";
 		};
 		08DD182F1B136B8A00856112 /* JMDashBoardInfoViewController */ = {
@@ -4408,7 +4395,6 @@
 				089B15BD1AA756BD0021A915 /* JMServerOption.m in Sources */,
 				087A71B91BD95FEE007B98A4 /* JMEULAViewController.m in Sources */,
 				089B15CF1AA756BD0021A915 /* JMSavedResourcesListLoader.m in Sources */,
-				08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */,
 				089B15A61AA756BD0021A915 /* UIView+Additions.m in Sources */,
 				089B15B01AA756BD0021A915 /* JMPopupView.m in Sources */,
 				089B159D1AA756BD0021A915 /* JMMainNavigationController.m in Sources */,

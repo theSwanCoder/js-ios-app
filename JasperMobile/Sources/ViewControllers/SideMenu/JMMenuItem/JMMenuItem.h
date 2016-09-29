@@ -36,7 +36,6 @@
 typedef NS_ENUM(NSInteger, JMMenuItemType){
     JMMenuItemType_Library,
     JMMenuItemType_Repository,
-    JMMenuItemType_RecentViews,
     JMMenuItemType_SavedItems,
     JMMenuItemType_Favorites,
     JMMenuItemType_Scheduling,

@@ -136,6 +136,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return _allResources;
 }
 
+- (NSString *)accessType
+{
+    NSString *sortByString = [self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Sort];
+    return [sortByString isEqualToString:@"accessTime"] ? @"viewed" : nil;
+}
+
 #pragma mark - Public API
 - (NSUInteger)resourceCount
 {
@@ -261,7 +267,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
             NSArray *allOptions;
             if ([JMUtils isServerProEdition]) {
                 // reports
-                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT];
+                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_FOLDER]; //We should send kJS_WS_TYPE_FOLDER here according to http://jira.jaspersoft.com/browse/JRS-11049
                 JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
                                                                                                value:reportsValues];
                 // dashboards
