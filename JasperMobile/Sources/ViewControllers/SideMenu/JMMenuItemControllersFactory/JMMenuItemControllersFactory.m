@@ -30,7 +30,6 @@
 #import "JMServerOptionsViewController.h"
 #import "JMResourceCollectionViewController.h"
 #import "JMMainNavigationController.h"
-#import "JMRecentViewsListLoader.h"
 #import "JMSavedResourcesListLoader.h"
 #import "JMFavoritesListLoader.h"
 #import "JMLibraryListLoader.h"
@@ -67,14 +66,6 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             repositoryVC.resourceListLoader = [JMRepositoryListLoader new];
             repositoryVC.resourceListLoader.delegate = repositoryVC;
             menuItemViewController = repositoryVC;
-            break;
-        }
-        case JMMenuItemType_RecentViews:{
-            JMResourceCollectionViewController *recentViewsVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
-            recentViewsVC.representationTypeKey = @"RecentViewsRepresentationTypeKey";
-            recentViewsVC.resourceListLoader = [JMRecentViewsListLoader new];
-            recentViewsVC.resourceListLoader.delegate = recentViewsVC;
-            menuItemViewController = recentViewsVC;
             break;
         }
         case JMMenuItemType_SavedItems:{

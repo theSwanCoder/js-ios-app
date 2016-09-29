@@ -188,7 +188,6 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         } else if (item.itemType == JMMenuItemType_Feedback) {
             [self showFeedback];
         } else {
-            [self closeMenu];
             id nextVC = [JMMenuItemControllersFactory viewControllerWithMenuItem:item];
             if ([nextVC isKindOfClass:[JMMainNavigationController class]]) {
                 JMMainNavigationController *navigationVC = nextVC;
@@ -211,6 +210,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             } else {
                 self.revealViewController.frontViewController = nextVC;
             }
+            [self closeMenu];
         }
         
         if ([item nameForAnalytics]) {
@@ -276,11 +276,6 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             [JMMenuItem menuItemWithItemType:JMMenuItemType_Feedback],
             [JMMenuItem menuItemWithItemType:JMMenuItemType_Logout]
     ] mutableCopy];
-
-    if ([JMUtils isServerProEdition]) {
-        NSUInteger indexOfRepository = [menuItems indexOfObject:[JMMenuItem menuItemWithItemType:JMMenuItemType_Repository]];
-        [menuItems insertObject:[JMMenuItem menuItemWithItemType:JMMenuItemType_RecentViews] atIndex:indexOfRepository + 1];
-    }
 
     return [menuItems copy];
 }

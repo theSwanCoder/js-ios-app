@@ -78,8 +78,6 @@
     switch (self.itemType) {
         case JMMenuItemType_Library:
             return JMLocalizedString(@"menuitem_library_label");
-        case JMMenuItemType_RecentViews:
-            return JMLocalizedString(@"menuitem_recentviews_label");
         case JMMenuItemType_SavedItems:
             return JMLocalizedString(@"menuitem_saveditems_label");
         case JMMenuItemType_Favorites:
@@ -106,8 +104,6 @@
     switch (self.itemType) {
         case JMMenuItemType_Library:
             return [UIImage imageNamed:@"ic_library"];
-        case JMMenuItemType_RecentViews:
-            return [UIImage imageNamed:@"ic_recent_views"];
         case JMMenuItemType_Repository:
             return [UIImage imageNamed:@"ic_repository"];
         case JMMenuItemType_SavedItems:
@@ -126,8 +122,6 @@
     switch (self.itemType) {
         case JMMenuItemType_Library:
             return [UIImage imageNamed:@"ic_library_selected"];
-        case JMMenuItemType_RecentViews:
-            return [UIImage imageNamed:@"ic_recent_views_selected"];
         case JMMenuItemType_Repository:
             return [UIImage imageNamed:@"ic_repository_selected"];
         case JMMenuItemType_SavedItems:
@@ -146,8 +140,6 @@
     switch (self.itemType) {
         case JMMenuItemType_Library:
             return [UIImage imageNamed:@"ic_library"];
-        case JMMenuItemType_RecentViews:
-            return [UIImage imageNamed:@"ic_recent_views"];
         case JMMenuItemType_Repository:
             return [UIImage imageNamed:@"ic_repository"];
         case JMMenuItemType_SavedItems:
@@ -164,8 +156,6 @@
     switch (self.itemType) {
         case JMMenuItemType_Library:
             return [UIImage imageNamed:@"ic_library_selected"];
-        case JMMenuItemType_RecentViews:
-            return [UIImage imageNamed:@"ic_recent_views_selected"];
         case JMMenuItemType_Repository:
             return [UIImage imageNamed:@"ic_repository_selected"];
         case JMMenuItemType_SavedItems:
@@ -182,8 +172,6 @@
     switch (self.itemType) {
         case JMMenuItemType_Library:
             return @"Library";
-        case JMMenuItemType_RecentViews:
-            return @"Recenlty Viewed";
         case JMMenuItemType_Repository:
             return @"Repository";
         case JMMenuItemType_SavedItems:
