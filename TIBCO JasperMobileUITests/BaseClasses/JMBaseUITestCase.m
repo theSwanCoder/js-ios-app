@@ -348,7 +348,8 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 #pragma mark - Verifies
 - (void)verifyThatCurrentPageIsLibrary
 {
-    [self waitElementWithAccessibilityId:@"JMLibraryPageAccessibilityId"
+// TODO: replace with specific element - JMLibraryPageAccessibilityId
+    [self waitElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"
                                  timeout:kUITestsBaseTimeout];
 }
 

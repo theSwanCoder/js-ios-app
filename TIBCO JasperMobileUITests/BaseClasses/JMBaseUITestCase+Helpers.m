@@ -51,7 +51,7 @@
     } while (element == nil && remain >= 0);
 
     if (element == nil) {
-        XCTFail(@"Button with id '%@' not found", accessibilityId);
+        XCTFail(@"Element with id '%@' not found", accessibilityId);
     }
     return element;
 }

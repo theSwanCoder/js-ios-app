@@ -10,10 +10,6 @@
 
 @implementation JMFavoriteInfoPageUITests
 
-#pragma mark - Tests
-- (void)testThatAlwaysFail
-{
-//    XCTFail(@"Not implemented tests");
-}
+
 
 @end
