@@ -26,6 +26,7 @@
 //
 
 #import "JMSingleSelectInputControlCell.h"
+#import "JMLocalization.h"
 
 @interface JMSingleSelectInputControlCell()
 @property (nonatomic, weak) IBOutlet UILabel *valueLabel;
@@ -79,7 +80,7 @@
         self.valueLabel.text = valuesAsStrings;
     } else {
         self.inputControlDescriptor.state.value = nil;
-        self.valueLabel.text = @"---";
+        self.valueLabel.text = JMLocalizedString(@"---");
     }
     [self updateDisplayingOfErrorMessage];
 }

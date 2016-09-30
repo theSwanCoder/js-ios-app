@@ -89,6 +89,12 @@
 
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self updateColorPreview];
+}
+
 #pragma mark - Actions
 - (IBAction)applyButtonDidTapped:(id)sender
 {

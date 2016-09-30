@@ -40,12 +40,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 @property (nonatomic, strong) NSMutableArray <JMResource *>*allResources;
 
 @property (nonatomic, assign) BOOL needUpdateData;
-@property (nonatomic, assign) BOOL isLoadingNow;
 @property (nonatomic, assign) NSInteger totalCount;
 @end
 
 @implementation JMResourcesListLoader
 @synthesize resource = _resource;
+@synthesize isLoadingNow = _isLoadingNow;
 
 #pragma mark - LifeCycle
 
@@ -58,8 +58,20 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
         _resourcesItems = [NSMutableArray array];
         _needUpdateData = YES;
         _loadRecursively = YES;
+        
+        _filterBySelectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:[self filterBySelectedIndexKey]];
+        _sortBySelectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:[self sortBySelectedIndexKey]];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:self.filterBySelectedIndex
+                                               forKey:[self filterBySelectedIndexKey]];
+    [[NSUserDefaults standardUserDefaults] setInteger:self.sortBySelectedIndex
+                                               forKey:[self sortBySelectedIndexKey]];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark - Change state API
@@ -122,6 +134,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
         [_allResources addObjectsFromArray:self.resourcesItems];
     }
     return _allResources;
+}
+
+- (NSString *)accessType
+{
+    NSString *sortByString = [self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Sort];
+    return [sortByString isEqualToString:@"accessTime"] ? @"viewed" : nil;
 }
 
 #pragma mark - Public API
@@ -225,7 +243,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 {
     if (self.searchQuery) {
         self.searchQuery = nil;
-        [self setNeedsUpdate];
+         [self setNeedsUpdate];
         [self updateIfNeeded];
     }
 }
@@ -236,20 +254,20 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Sort: {
             NSArray *allOptions = @[
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_name")
-                                                      value:@"label"],
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_creationDate")
-                                                      value:@"creationDate"],
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_modifiedDate")
-                                                      value:@"updateDate"]
-            ];
+                                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_name")
+                                                                      value:@"label"],
+                                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_creationDate")
+                                                                      value:@"creationDate"],
+                                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_modifiedDate")
+                                                                      value:@"updateDate"]
+                                    ];
             return allOptions;
         }
         case JMResourcesListLoaderOptionType_Filter:{
             NSArray *allOptions;
             if ([JMUtils isServerProEdition]) {
                 // reports
-                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT];
+                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_FOLDER]; //We should send kJS_WS_TYPE_FOLDER here according to http://jira.jaspersoft.com/browse/JRS-11049
                 JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
                                                                                                value:reportsValues];
                 // dashboards
@@ -257,22 +275,21 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                 JMResourceLoaderOption *dashboardFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_dashboard")
                                                                                                   value:dashboardsValues];
                 // all
-                NSArray *allValues = reportsValues;
-                allValues = [allValues arrayByAddingObjectsFromArray:dashboardsValues];
+                NSArray *allValues = [reportsValues arrayByAddingObjectsFromArray:dashboardsValues];
                 JMResourceLoaderOption *allItemsFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
-                                                                                           value:allValues];
+                                                                                                 value:allValues];
                 allOptions = @[
-                        allItemsFilterOption,
-                        reportFilterOption,
-                        dashboardFilterOption
-                ];
+                               allItemsFilterOption,
+                               reportFilterOption,
+                               dashboardFilterOption
+                               ];
             } else {
                 NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT];
                 JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
                                                                                                value:reportsValues];
                 allOptions = @[
-                        reportFilterOption
-                ];
+                               reportFilterOption
+                               ];
             }
             return allOptions;
         }
@@ -302,7 +319,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return nil;
 }
 
-- (NSString *)titleForPopupWithOptionType:(JMResourcesListLoaderOptionType)optionType
+- (NSString *)titleForPopupWitOptionType:(JMResourcesListLoaderOptionType)optionType
 {
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Filter:
@@ -313,4 +330,13 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return nil;
 }
 
+- (NSString *)filterBySelectedIndexKey
+{
+    return [NSString stringWithFormat:@"%@FilterByIndexKey", NSStringFromClass([self class])];
+}
+
+- (NSString *)sortBySelectedIndexKey
+{
+    return [NSString stringWithFormat:@"%@SortByIndexKey", NSStringFromClass([self class])];
+}
 @end

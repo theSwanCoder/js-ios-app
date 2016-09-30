@@ -107,7 +107,7 @@
                 return;
             }
             JMResource *resource  = [JMResource resourceWithResourceLookup:resourceLookup];
-            JMReportViewerVC *reportViewController = [strongSelf.controller.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+            JMReportViewerVC *reportViewController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
             reportViewController.configurator = [JMUtils reportViewerConfiguratorNonReusableWebView];
             reportViewController.resource = resource;
             reportViewController.initialReportParameters = hyperlink.parameters;
@@ -131,7 +131,7 @@
                 return;
             }
             JMResource *resource  = [JMResource resourceWithResourceLookup:resourceLookup];
-            JMReportViewerVC *reportViewController = [strongSelf.controller.storyboard instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
+            JMReportViewerVC *reportViewController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[resource resourceViewerVCIdentifier]];
             reportViewController.configurator = [JMUtils reportViewerConfiguratorNonReusableWebView];
             reportViewController.resource = resource;
             reportViewController.initialReportParameters = hyperlink.parameters;

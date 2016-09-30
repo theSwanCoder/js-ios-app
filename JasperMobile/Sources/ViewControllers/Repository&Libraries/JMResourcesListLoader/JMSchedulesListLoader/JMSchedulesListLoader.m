@@ -79,6 +79,19 @@
                                              }];
 }
 
+- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
+{
+    switch (optionType) {
+        case JMResourcesListLoaderOptionType_Sort: {
+            // TODO: Here we can add new sort parameters
+            return nil;
+        }
+        case JMResourcesListLoaderOptionType_Filter: {
+            return nil;
+        }
+    }
+}
+
 - (JSResourceLookup *)resourceLookupFromScheduleLookup:(JSScheduleLookup *)scheduleLookup
 {
     JSResourceLookup *resourceLookup = [JSResourceLookup new];

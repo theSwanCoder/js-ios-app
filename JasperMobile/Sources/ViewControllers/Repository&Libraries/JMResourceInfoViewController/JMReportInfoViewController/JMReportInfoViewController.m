@@ -68,7 +68,7 @@
 }
 
 - (void)scheduleReport {
-    JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+    JMScheduleVC *newJobVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
     [newJobVC createNewScheduleMetadataWithResourceLookup:self.resource];
     [self.navigationController pushViewController:newJobVC animated:YES];
 }

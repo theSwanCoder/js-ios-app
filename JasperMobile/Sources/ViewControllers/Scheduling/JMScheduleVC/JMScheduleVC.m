@@ -117,12 +117,11 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     [super viewDidLoad];
 
-    self.title = @"Schedule";
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     [self createSections];
 
-    [self.createJobButton setTitle:@"Apply"
+    [self.createJobButton setTitle:JMLocalizedString(@"dialog_button_apply")
                           forState:UIControlStateNormal];
 
     // TODO: need make this copy?
@@ -342,7 +341,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (void)selectMonths
 {
     JMMultiSelectedItemsVC *multiValuesVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMMultiSelectedItemsVC"];
-    multiValuesVC.title = @"Select months";
+    multiValuesVC.title = JMLocalizedString(@"schedules_new_job_select_months");
 
     JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) [self currentTrigger];
     NSAssert(calendarTrigger.type == JSScheduleTriggerTypeCalendar, @"should be calendar trigger");
@@ -382,8 +381,8 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (void)selectDays
 {
     JMMultiSelectedItemsVC *multiValuesVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMMultiSelectedItemsVC"];
-    multiValuesVC.title = @"Select days";
-
+    multiValuesVC.title = JMLocalizedString(@"schedules_new_job_select_weekDays");
+    
     JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) [self currentTrigger];
     NSAssert(calendarTrigger.type == JSScheduleTriggerTypeCalendar, @"should be calendar trigger");
 

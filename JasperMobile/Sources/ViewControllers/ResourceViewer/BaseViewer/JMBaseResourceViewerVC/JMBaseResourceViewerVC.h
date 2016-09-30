@@ -44,11 +44,6 @@
 
 @end
 
-extern NSString * const kJMShowReportOptionsSegue;
-extern NSString * const kJMShowMultiPageReportSegue;
-extern NSString * const kJMShowDashboardViewerSegue;
-extern NSString * const kJMShowSavedRecourcesViewerSegue;
-
 @interface JMBaseResourceViewerVC : JMBaseViewController <JMResourceClientHolder, JMMenuActionsViewDelegate>
 @property (nonatomic, weak) id <JMBaseResourceViewerVCDelegate>delegate;
 

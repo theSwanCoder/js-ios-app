@@ -114,8 +114,12 @@
 - (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
 {
     switch (optionType) {
-        case JMResourcesListLoaderOptionType_Sort:
-            return [super listItemsWithOption:optionType];
+        case JMResourcesListLoaderOptionType_Sort:{
+            JMResourceLoaderOption *filterOption = [[super listItemsWithOption:optionType] firstObject];
+            return @[
+                     filterOption
+                     ];
+        }
         case JMResourcesListLoaderOptionType_Filter:
             return @[
                     [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")

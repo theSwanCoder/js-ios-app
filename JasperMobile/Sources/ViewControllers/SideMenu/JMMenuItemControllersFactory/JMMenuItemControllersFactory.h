@@ -22,17 +22,20 @@
 
 
 //
-//  JMRecentViewsListLoader.h
+//  JMMenuItemControllersFactory.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.1
+ @since 2.6
  */
 
-#import "JMResourcesListLoader.h"
+#import <Foundation/Foundation.h>
+#import "JMMenuViewController.h"
 
-@interface JMRecentViewsListLoader : JMResourcesListLoader
+@interface JMMenuItemControllersFactory : NSObject
+
++ (UIViewController *)viewControllerWithMenuItem:(JMMenuItem *)menuItem;
 
 @end

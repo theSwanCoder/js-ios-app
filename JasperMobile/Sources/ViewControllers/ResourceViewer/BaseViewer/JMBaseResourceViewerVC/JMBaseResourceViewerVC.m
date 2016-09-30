@@ -33,11 +33,6 @@
 #import "JMConstants.h"
 #import "JMThemesManager.h"
 
-NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
-NSString * const kJMShowMultiPageReportSegue = @"ShowMultiPageReport";
-NSString * const kJMShowDashboardViewerSegue = @"ShowDashboardViewer";
-NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
-
 @interface JMBaseResourceViewerVC () <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
 @property (nonatomic, assign) BOOL needLayoutUI;
