@@ -27,7 +27,10 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self searchTestDashboard];
     [self tryOpenTestDashboard];
 
+    [self givenLoadingPopupNotVisible];
     if (waitingFinish) {
+        // We can have two times when loading up and down
+        // first time loading 'dashboard info' and second one - loading dashboard
         [self givenLoadingPopupNotVisible];
         
         // Could be several hover items which visible while dashlet in loading process (in test dashboard - 5)

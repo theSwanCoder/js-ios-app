@@ -17,6 +17,7 @@
 - (void)givenThatSavedItemsEmpty
 {
     [self openSavedItemsSection];
+    [self switchViewFromGridToListInSectionWithTitle:@"Saved Items"];
     [self deleteAllExportedResourcesIfNeed];
     [self openLibrarySection];
 }
@@ -57,6 +58,7 @@
 - (void)saveTestReportInHTMLFormat
 {
     [self givenThatLibraryPageOnScreen];
+    [self givenThatReportCellsOnScreen];
     [self openTestReportPage];
     [self openSaveReportPage];
 
@@ -72,9 +74,13 @@
 
 - (void)deleteTestReportInHTMLFormat
 {
-    [self givenThatLibraryPageOnScreen];
     [self openSavedItemsSection];
-    [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
+    
+    [self selectFilterBy:@"HTML"
+      inSectionWithTitle:@"Saved Items"];
+    
+    [self verifyThatCollectionViewContainsCells];
+    
     [self deleteSavedItemWithName:kTestReportName
                            format:@"html"];
     [self openLibrarySection];
@@ -97,36 +103,41 @@
 
 - (void)deleteTestReportInPDFFormat
 {
-    [self givenThatLibraryPageOnScreen];
     [self openSavedItemsSection];
-    [self selectFilterBy:@"PDF" inSectionWithTitle:@"Saved Items"];
+    
+    [self selectFilterBy:@"PDF"
+      inSectionWithTitle:@"Saved Items"];
+    
+    [self verifyThatCollectionViewContainsCells];
+    
     [self deleteSavedItemWithName:kTestReportName
                            format:@"pdf"];
     [self openLibrarySection];
 }
 
-- (void)saveTestReportInXMLFormat
+- (void)saveTestReportInXLSFormat
 {
     [self openTestReportPage];
     [self openSaveReportPage];
 
     [self saveTestReportWithName:kTestReportName
-                          format:@"xml"];
+                          format:@"xls"];
 
     [self closeTestReportPage];
 
     [self verifyThatReportDidSaveWithReportName:kTestReportName
-                                         format:@"xml"];
+                                         format:@"xls"];
     [self openLibrarySection];
 }
 
-- (void)deleteTestReportInXMLFormat
+- (void)deleteTestReportInXLSFormat
 {
     [self givenThatLibraryPageOnScreen];
+    [self givenThatReportCellsOnScreen];
     [self openSavedItemsSection];
 
     [self deleteSavedItemWithName:kTestReportName
-                           format:@"xml"];
+                           format:@"xls"];
     [self openLibrarySection];
 }
 

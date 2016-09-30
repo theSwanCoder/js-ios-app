@@ -9,9 +9,10 @@
 #import "JMBaseUITestCase.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+SideMenu.h"
+#import "JMBaseUITestCase+Section.h"
 
-NSTimeInterval kUITestsBaseTimeout = 10;
-NSTimeInterval kUITestsResourceWaitingTimeout = 30;
+NSTimeInterval kUITestsBaseTimeout = 30;
+NSTimeInterval kUITestsResourceWaitingTimeout = 60;
 NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 @implementation JMBaseUITestCase
@@ -303,12 +304,14 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)givenThatReportCellsOnScreen
 {
-    [self givenThatCellsAreVisible];
+    [self selectFilterBy:@"Reports" inSectionWithTitle:@"Library"];
+    [self givenThatListCellsAreVisible];
 }
 
 - (void)givenThatDashboardCellsOnScreen
 {
-    [self givenThatCellsAreVisible];
+    [self selectFilterBy:@"Dashboards" inSectionWithTitle:@"Library"];
+    [self givenThatListCellsAreVisible];
 }
 
 - (void)skipIntroPageIfNeed

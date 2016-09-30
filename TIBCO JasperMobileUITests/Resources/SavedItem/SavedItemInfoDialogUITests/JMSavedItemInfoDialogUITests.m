@@ -32,7 +32,7 @@
     [self verifyThatInfoPageOnScreen];
 
     [self closeInfoPageTestSavedItemFromViewer];
-    [self closeAndDeleteTestSavedItem];
+    [self closeAndDeleteTestSavedItemInHTMLFormat];
 }
 
 //Cancel button on Info dialog
@@ -50,7 +50,7 @@
     [self verifyThatInfoPageHasCancelButton];
 
     [self closeInfoPageTestSavedItemFromViewer];
-    [self closeAndDeleteTestSavedItem];
+    [self closeAndDeleteTestSavedItemInHTMLFormat];
 }
 
 //Title like name of item
@@ -67,7 +67,7 @@
     [self verifyThatInfoPageHasCorrectTitle];
 
     [self closeInfoPageTestSavedItemFromViewer];
-    [self closeAndDeleteTestSavedItem];
+    [self closeAndDeleteTestSavedItemInHTMLFormat];
 }
 
 //Info about the html-file
@@ -96,7 +96,7 @@
     [self verifyThatInfoPageHasNeededFieldsForHTMLFile];
 
     [self closeInfoPageTestSavedItemFromViewer];
-    [self closeAndDeleteTestSavedItem];
+    [self closeAndDeleteTestSavedItemInHTMLFormat];
 }
 
 //Info about the pdf-file
@@ -125,7 +125,7 @@
     [self verifyThatInfoPageHasNeededFieldsForPDFFile];
 
     [self closeInfoPageTestSavedItemFromViewer];
-    [self closeAndDeleteTestSavedItem];
+    [self closeAndDeleteTestSavedItemInPDFFormat];
 }
 
 //Favorite button
@@ -146,7 +146,7 @@
     [self unmarkSavedAsFavoriteFromInfoPage];
 
     [self closeInfoPageTestSavedItemFromViewer];
-    [self closeAndDeleteTestSavedItem];
+    [self closeAndDeleteTestSavedItemInHTMLFormat];
 }
 
 #pragma mark - Helpers
@@ -167,11 +167,16 @@
     [self openTestSavedItemInPDFFormat];
 }
 
-- (void)closeAndDeleteTestSavedItem
+- (void)closeAndDeleteTestSavedItemInHTMLFormat
 {
     [self closeTestSavedItem];
-    
     [self deleteTestReportInHTMLFormat];
+}
+    
+- (void)closeAndDeleteTestSavedItemInPDFFormat
+{
+    [self closeTestSavedItem];
+    [self deleteTestReportInPDFFormat];
 }
 
 #pragma mark - Verifying

@@ -30,7 +30,7 @@ NSInteger static kJMRunReportTestCellIndex = 2;
 - (void)testRunReport
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
+    [self givenThatListCellsAreVisible];
     
     [self runTestReport];
     [self backToLibrary];

@@ -36,6 +36,26 @@
                                  }];
 }
 
+- (XCUIElement *)waitElementInHierarchyWithAccessibilityId:(NSString *)accessibilityId
+                                                   timeout:(NSTimeInterval)timeout
+{
+    NSTimeInterval remain = timeout;
+    XCUIElement *element;
+    do {
+        remain -= kUITestsElementAvailableTimeout;
+        sleep(kUITestsElementAvailableTimeout);
+        XCUIElementQuery *elementQuery = [self.application.otherElements matchingIdentifier:accessibilityId];
+        NSArray *allElements = elementQuery.allElementsBoundByAccessibilityElement;
+        NSLog(@"For id '%@' all found elements: %@", accessibilityId, allElements);
+        element = allElements.firstObject;
+    } while (element == nil && remain >= 0);
+
+    if (element == nil) {
+        XCTFail(@"Button with id '%@' not found", accessibilityId);
+    }
+    return element;
+}
+
 - (XCUIElement *)waitButtonInHierarchyWithAccessiblitiyId:(NSString *)accessibilityId
                                                   timeout:(NSTimeInterval)timeout
 {
@@ -78,7 +98,7 @@
 }
 
 - (XCUIElement *)waitAlertInHierarchyWithTitle:(NSString *)title
-                              timeout:(NSTimeInterval)timeout
+                                       timeout:(NSTimeInterval)timeout
 {
     NSTimeInterval remain = timeout;
     XCUIElement *alert;
@@ -182,7 +202,8 @@
     XCUIElement *element = [self elementWithAccessibilityId:accessibilityId
                                               parentElement:parentElement];
     if (!element) {
-        return nil;
+        element = [self waitElementInHierarchyWithAccessibilityId:accessibilityId
+                                                          timeout:timeout];
     }
     [self waitElementReady:element
                    visible:visible
@@ -680,6 +701,15 @@
     [self waitElementReady:alert
                    timeout:timeout];
     return alert;
+}
+
+#pragma mark - Images
+
+- (XCUIElement *)findImageWithAccessibilityId:(NSString *)accessibilityId
+{
+    XCUIElementQuery *alertsQuery = self.application.images;
+    XCUIElement *image = [alertsQuery matchingIdentifier:accessibilityId].element;
+    return image;
 }
 
 @end
