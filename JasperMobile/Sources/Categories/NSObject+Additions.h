@@ -39,4 +39,6 @@
 
 - (JSRESTBase *)restClient;
 
+- (void)setAccessibility:(BOOL)accessibility withTextKey:(NSString *)key identifier:(NSString *)accessibilityIdentifier;
+
 @end

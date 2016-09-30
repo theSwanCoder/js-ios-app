@@ -31,7 +31,7 @@
 #import "JMThemesManager.h"
 #import "JMUtils.h"
 #import "JMConstants.h"
-#import "UIView+Additions.h"
+#import "NSObject+Additions.h"
 
 CGFloat static kJMMenuActionsViewCellPortraitHeight = 40;
 CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;

@@ -319,17 +319,6 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return nil;
 }
 
-- (NSString *)titleForPopupWitOptionType:(JMResourcesListLoaderOptionType)optionType
-{
-    switch (optionType) {
-        case JMResourcesListLoaderOptionType_Filter:
-            return JMLocalizedString(@"resources_filterby_title");
-        case JMResourcesListLoaderOptionType_Sort:
-            return JMLocalizedString(@"resources_sortby_title");
-    }
-    return nil;
-}
-
 - (NSString *)filterBySelectedIndexKey
 {
     return [NSString stringWithFormat:@"%@FilterByIndexKey", NSStringFromClass([self class])];

@@ -89,7 +89,6 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
 //
 - (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)option;
 - (id)parameterForQueryWithOptionType:(JMResourcesListLoaderOptionType)optionType;
-- (NSString *)titleForPopupWithOptionType:(JMResourcesListLoaderOptionType)optionType;
 
 - (void)finishLoadingWithError:(NSError *)error;
 @end

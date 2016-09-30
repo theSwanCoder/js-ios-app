@@ -30,7 +30,7 @@
 #import "JMLocalization.h"
 #import <QuartzCore/QuartzCore.h>
 #import "JMConstants.h"
-#import "UIView+Additions.h"
+#import "NSObject+Additions.h"
 
 static NSInteger _cancelRequestPopupCounter = 0;
 

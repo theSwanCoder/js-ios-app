@@ -27,7 +27,7 @@
 //
 
 #import "NSObject+Additions.h"
-
+#import "JMLocalization.h"
 
 @implementation NSObject(Additions)
 
@@ -36,4 +36,16 @@
     return [JMSessionManager sharedManager].restClient;
 }
 
+- (void)setAccessibility:(BOOL)accessibility withTextKey:(NSString *)key identifier:(NSString *)accessibilityIdentifier
+{
+    [JMLocalization localizeStringForKey:key completion:^(NSString *localizedString, NSString *languageString) {
+        self.isAccessibilityElement = accessibility;
+        self.accessibilityLabel = localizedString;
+        self.accessibilityLanguage = languageString;
+        if ([self conformsToProtocol:@protocol(UIAccessibilityIdentification)]) {
+            id identificationObject = self;
+            [identificationObject setAccessibilityIdentifier:accessibilityIdentifier];
+        }
+    }];
+}
 @end
