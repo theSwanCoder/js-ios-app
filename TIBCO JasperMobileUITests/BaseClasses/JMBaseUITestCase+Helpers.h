@@ -113,4 +113,7 @@
 // Alerts
 - (XCUIElement *)findAlertWithTitle:(NSString *)title;
 - (XCUIElement *)waitAlertWithTitle:(NSString *)title timeout:(NSTimeInterval)timeout;
+
+// Images
+- (XCUIElement *)findImageWithAccessibilityId:(NSString *)accessibilityId;
 @end
