@@ -56,7 +56,7 @@
 #pragma mark - Accessibility
 - (NSString *)accessibilityIdentifier
 {
-    return JMReportInfoPageAccessibilityID;
+    return JMReportInfoPageAccessibilityId;
 }
 
 #pragma mark - Private API

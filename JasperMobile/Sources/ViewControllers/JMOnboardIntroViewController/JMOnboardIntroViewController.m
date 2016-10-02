@@ -96,18 +96,18 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.view setAccessibility:NO withTextKey:@"intro_title" identifier:JMOnboardIntroPageAccessibilityID];
+    [self.view setAccessibility:NO withTextKey:@"intro_title" identifier:JMOnboardIntroPageAccessibilityId];
     
     [self addGestureRecognizer];
     
     [self setButtonTitleForPage:self.introPage];
-    [self.skipButton setAccessibility:YES withTextKey:@"intro_button_skip_startUsing" identifier:JMOnboardIntroPageSkipIntroButtonAccessibilityID];
+    [self.skipButton setAccessibility:YES withTextKey:@"intro_button_skip_startUsing" identifier:JMOnboardIntroPageSkipIntroButtonPageAccessibilityId];
     
     self.titleLabel.text = [NSString stringWithFormat:JMLocalizedString(@"intro_title"), kJMAppName];
-    [self.titleLabel setAccessibility:YES withTextKey:@"intro_title" identifier:JMOnboardIntroPageTitleAccessibilityID];
+    [self.titleLabel setAccessibility:YES withTextKey:@"intro_title" identifier:JMOnboardIntroPageTitlePageAccessibilityId];
 
     self.descriptionLabel.text = JMLocalizedString(@"intro_description");
-    [self.descriptionLabel setAccessibility:YES withTextKey:@"intro_title" identifier:JMOnboardIntroPageDescriptionAccessibilityID];
+    [self.descriptionLabel setAccessibility:YES withTextKey:@"intro_title" identifier:JMOnboardIntroPageDescriptionPageAccessibilityId];
 }
 
 - (void)viewWillAppear:(BOOL)animated

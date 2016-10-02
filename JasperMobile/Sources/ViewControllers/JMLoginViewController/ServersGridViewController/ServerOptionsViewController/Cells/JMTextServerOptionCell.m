@@ -43,7 +43,7 @@
 -(void)setServerOption:(JMServerOption *)serverOption
 {
     [super setServerOption:serverOption];
-    [self.textField setAccessibility:YES withTextKey:serverOption.titleString identifier:serverOption.elementAccessibilityID];
+    [self.textField setAccessibility:YES withTextKey:serverOption.titleString identifier:serverOption.elementPageAccessibilityId];
 
     self.textField.enabled = serverOption.editable;
     self.textField.text = serverOption.optionValue;

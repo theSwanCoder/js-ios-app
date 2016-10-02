@@ -108,7 +108,7 @@
 #pragma mark - Accessibility
 - (NSString *)accessibilityIdentifier
 {
-    return JMRepositoryInfoPageAccessibilityID;
+    return JMRepositoryInfoPageAccessibilityId;
 }
 
 #pragma mark - JMMenuActionsViewDelegate

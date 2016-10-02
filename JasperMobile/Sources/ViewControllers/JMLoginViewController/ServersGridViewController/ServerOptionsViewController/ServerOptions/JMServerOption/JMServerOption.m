@@ -29,7 +29,7 @@
                   optionValue:(id)optionValue
                cellIdentifier:(NSString *)cellIdentifier
                      editable:(BOOL)editable
-       elementAccessibilityID:(NSString *)elementAccessibilityID
+       elementPageAccessibilityId:(NSString *)elementPageAccessibilityId
                     mandatory:(BOOL)mandatory
 {
     self = [super init];
@@ -38,7 +38,7 @@
         _optionValue = optionValue;
         _cellIdentifier = cellIdentifier;
         _editable = editable;
-        _elementAccessibilityID = elementAccessibilityID;
+        _elementPageAccessibilityId = elementPageAccessibilityId;
         _mandatory = mandatory;
     }
     return self;
@@ -48,14 +48,14 @@
                     optionValue:(id)optionValue
                  cellIdentifier:(NSString *)cellIdentifier
                        editable:(BOOL)editable
-         elementAccessibilityID:(NSString *)elementAccessibilityID
+         elementPageAccessibilityId:(NSString *)elementPageAccessibilityId
                       mandatory:(BOOL)mandatory
 {
     return [[self alloc] initWithTitle:title
                            optionValue:optionValue
                         cellIdentifier:cellIdentifier
                               editable:editable
-                elementAccessibilityID:elementAccessibilityID
+                elementPageAccessibilityId:elementPageAccessibilityId
                              mandatory:mandatory];
 }
 

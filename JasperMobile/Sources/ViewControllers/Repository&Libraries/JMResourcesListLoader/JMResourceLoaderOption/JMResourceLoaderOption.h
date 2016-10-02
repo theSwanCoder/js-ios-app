@@ -47,7 +47,7 @@ typedef NS_OPTIONS(NSInteger, JMResourceLoaderOptionType) {
 
 @interface JMResourceLoaderOption : NSObject
 @property (nonatomic, strong, readonly) NSString *titleKey;
-@property (nonatomic, strong, readonly) NSString *elementAccessibilityID;
+@property (nonatomic, strong, readonly) NSString *elementPageAccessibilityId;
 @property (nonatomic, strong) id value;
 
 - (instancetype)initWithOptionType:(JMResourceLoaderOptionType)optionType value:(id)value;

@@ -36,7 +36,7 @@
 {
     self = [super init];
     if (self) {
-        _elementAccessibilityID = [self accessibilityIdentifierForType:optionType];
+        _elementPageAccessibilityId = [self accessibilityIdentifierForType:optionType];
         _titleKey = [self titleKeyForType:optionType];
         _value = value;
     }
@@ -52,7 +52,7 @@
 {
     self = [super init];
     if (self) {
-        _elementAccessibilityID = [self accessibilityIdentifierForFormat:[format lowercaseString]];
+        _elementPageAccessibilityId = [self accessibilityIdentifierForFormat:[format lowercaseString]];
         _titleKey = format;
         _value = value;
     }
@@ -95,36 +95,36 @@
 {
     switch (optionType) {
         case JMResourceLoaderOptionTypeSortBy_Name:
-            return JMResourceLoaderSortByNameAccessibilityID;
+            return JMResourceLoaderSortByNamePageAccessibilityId;
         case JMResourceLoaderOptionTypeSortBy_CreationDate:
-            return JMResourceLoaderSortByCreationDateAccessibilityID;
+            return JMResourceLoaderSortByCreationDatePageAccessibilityId;
         case JMResourceLoaderOptionTypeSortBy_ModifiedDate:
-            return JMResourceLoaderSortByModifiedDateAccessibilityID;
+            return JMResourceLoaderSortByModifiedDatePageAccessibilityId;
         case JMResourceLoaderOptionTypeSortBy_AccessTime:
-            return JMResourceLoaderSortByAccessTimeAccessibilityID;
+            return JMResourceLoaderSortByAccessTimePageAccessibilityId;
         case JMResourceLoaderOptionTypeFilterBy_All:
-            return JMResourceLoaderFilterByAllAccessibilityID;
+            return JMResourceLoaderFilterByAllPageAccessibilityId;
         case JMResourceLoaderOptionTypeFilterBy_ReportUnit:
-            return JMResourceLoaderFilterByReportUnitAccessibilityID;
+            return JMResourceLoaderFilterByReportUnitPageAccessibilityId;
         case JMResourceLoaderOptionTypeFilterBy_Dashboard:
-            return JMResourceLoaderFilterByDashboardAccessibilityID;
+            return JMResourceLoaderFilterByDashboardPageAccessibilityId;
         case JMResourceLoaderOptionTypeFilterBy_Folder:
-            return JMResourceLoaderFilterByFolderAccessibilityID;
+            return JMResourceLoaderFilterByFolderPageAccessibilityId;
         case JMResourceLoaderOptionTypeFilterBy_File:
-            return JMResourceLoaderFilterByFileAccessibilityID;
+            return JMResourceLoaderFilterByFilePageAccessibilityId;
         case JMResourceLoaderOptionTypeFilterBy_SavedItem:
-            return JMResourceLoaderFilterBySavedItemAccessibilityID;
+            return JMResourceLoaderFilterBySavedItemPageAccessibilityId;
     }
 }
 
 - (NSString *)accessibilityIdentifierForFormat:(NSString *)format
 {
     if ([format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
-        return JMResourceLoaderFilterByHTMLAccessibilityID;
+        return JMResourceLoaderFilterByHTMLPageAccessibilityId;
     } else if ([format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
-        return JMResourceLoaderFilterByPDFAccessibilityID;
+        return JMResourceLoaderFilterByPDFPageAccessibilityId;
     } else if ([format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
-        return JMResourceLoaderFilterByXLSAccessibilityID;
+        return JMResourceLoaderFilterByXLSPageAccessibilityId;
     }
     return nil;
 }

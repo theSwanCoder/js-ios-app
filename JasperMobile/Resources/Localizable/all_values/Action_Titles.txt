@@ -163,16 +163,6 @@
 		pt = Abrir com...
 		zh = 以下列方式打开：
 		tags = ios
-	[action_title_accept]
-		en = Accept
-		de = Akzeptieren
-		es = Aceptar
-		fr = Accepter
-		it = Accetta
-		ja = 受け入れる
-		pt = Aceitar
-		zh = 接受
-		tags = ios
 	[action_title_schedule]
 		en = Schedule
 		de = Zeitplan

@@ -53,7 +53,7 @@ extern NSString * const JMServerProfileDidChangeNotification;
 // Shared keys for dictionary
 extern NSString * const kJMTitleKey;
 extern NSString * const kJMValueKey;
-extern NSString * const kJMAccessibilityIDKey;
+extern NSString * const kJMPageAccessibilityIdKey;
 extern NSString * const kJMServerProfileKey;
 extern NSString * const kJMResourceLookup;
 extern NSString * const kJMInputControls;
@@ -158,10 +158,10 @@ extern NSString *const JMLoginVCLastUserNameKey;
 extern NSString *const JMLoginVCLastServerProfileAliasKey;
 
 // Accessibility Identifiers
-extern NSString *const JMOnboardIntroPageAccessibilityID;
-extern NSString *const JMOnboardIntroPageTitleAccessibilityID;
-extern NSString *const JMOnboardIntroPageDescriptionAccessibilityID;
-extern NSString *const JMOnboardIntroPageSkipIntroButtonAccessibilityID;
+extern NSString *const JMOnboardIntroPageAccessibilityId;
+extern NSString *const JMOnboardIntroPageTitlePageAccessibilityId;
+extern NSString *const JMOnboardIntroPageDescriptionPageAccessibilityId;
+extern NSString *const JMOnboardIntroPageSkipIntroButtonPageAccessibilityId;
 
 extern NSString *const JMBackButtonAccessibilityId;
 extern NSString *const JMCancelRequestPopupAccessibilityId;
@@ -183,13 +183,18 @@ extern NSString *const JMMenuActionsViewClearSelectionActionAccessibilityId;
 extern NSString *const JMMenuActionsViewRunActionAccessibilityId;
 extern NSString *const JMMenuActionsViewPrintActionAccessibilityId;
 extern NSString *const JMMenuActionsViewOpenInActionAccessibilityId;
-extern NSString *const JMMenuActionsViewAcceptActionAccessibilityId;
 extern NSString *const JMMenuActionsViewScheduleActionAccessibilityId;
 extern NSString *const JMMenuActionsViewShareActionAccessibilityId;
 extern NSString *const JMMenuActionsViewBookmarksActionAccessibilityId;
 extern NSString *const JMMenuActionsViewChartTypesActionAccessibilityId;
 extern NSString *const JMMenuActionsViewShowExternalDisplayActionAccessibilityId;
 extern NSString *const JMMenuActionsViewHideExternalDisplayActionAccessibilityId;
+
+extern NSString *const JMButtonDoneAccessibilityId;
+extern NSString *const JMButtonAcceptAccessibilityId;
+
+extern NSString *const JMEULAPageAccessibilityId;
+extern NSString *const JMPrivacyPolicyPageAccessibilityId;
 
 extern NSString *const JMServerProfilesPageAccessibilityId;
 extern NSString *const JMServerProfilesPageAddNewProfileButtonAccessibilityId;
@@ -227,65 +232,50 @@ extern NSString *const JMSavedItemsPageAccessibilityId;
 extern NSString *const JMSchedulesPageAccessibilityId;
 extern NSString *const JMAppAboutPageAccessibilityId;
 extern NSString *const JMSettingsPageAccessibilityId;
-extern NSString *const JMFeedbackPageAccessibilityID;
-extern NSString *const JMLogoutAccessibilityID;
+extern NSString *const JMFeedbackPageAccessibilityId;
+extern NSString *const JMLogoutPageAccessibilityId;
 
-extern NSString *const JMResourceCollectionPageSearchBarAccessibilityID;
-extern NSString *const JMResourceCollectionPageActivityLabelAccessibilityID;
-extern NSString *const JMResourceCollectionPageNoResultLabelAccessibilityID;
-extern NSString *const JMResourceCollectionPageSortByPopupViewAccessibilityID;
-extern NSString *const JMResourceCollectionPageFilterByPopupViewAccessibilityID;
-extern NSString *const JMResourceCollectionPageRepresentationButtonViewAccessibilityID;
+extern NSString *const JMResourceCollectionPageSearchBarPageAccessibilityId;
+extern NSString *const JMResourceCollectionPageActivityLabelPageAccessibilityId;
+extern NSString *const JMResourceCollectionPageNoResultLabelPageAccessibilityId;
+extern NSString *const JMResourceCollectionPageSortByPopupViewPageAccessibilityId;
+extern NSString *const JMResourceCollectionPageFilterByPopupViewPageAccessibilityId;
+extern NSString *const JMResourceCollectionPageRepresentationButtonViewPageAccessibilityId;
 extern NSString *const JMResourceCollectionPageListCellAccessibilityId;
 extern NSString *const JMResourceCollectionPageGridCellAccessibilityId;
 extern NSString *const JMResourceCellResourceNameLabelAccessibilityId;
 extern NSString *const JMResourceCellResourceInfoButtonAccessibilityId;
 
-extern NSString *const JMResourceLoaderSortByNameAccessibilityID;
-extern NSString *const JMResourceLoaderSortByCreationDateAccessibilityID;
-extern NSString *const JMResourceLoaderSortByModifiedDateAccessibilityID;
-extern NSString *const JMResourceLoaderSortByAccessTimeAccessibilityID;
-extern NSString *const JMResourceLoaderFilterByAllAccessibilityID;
-extern NSString *const JMResourceLoaderFilterByReportUnitAccessibilityID;
-extern NSString *const JMResourceLoaderFilterByDashboardAccessibilityID;
-extern NSString *const JMResourceLoaderFilterByFolderAccessibilityID;
-extern NSString *const JMResourceLoaderFilterByFileAccessibilityID;
-extern NSString *const JMResourceLoaderFilterBySavedItemAccessibilityID;
-extern NSString *const JMResourceLoaderFilterByHTMLAccessibilityID;
-extern NSString *const JMResourceLoaderFilterByPDFAccessibilityID;
-extern NSString *const JMResourceLoaderFilterByXLSAccessibilityID;
+extern NSString *const JMResourceLoaderSortByNamePageAccessibilityId;
+extern NSString *const JMResourceLoaderSortByCreationDatePageAccessibilityId;
+extern NSString *const JMResourceLoaderSortByModifiedDatePageAccessibilityId;
+extern NSString *const JMResourceLoaderSortByAccessTimePageAccessibilityId;
+extern NSString *const JMResourceLoaderFilterByAllPageAccessibilityId;
+extern NSString *const JMResourceLoaderFilterByReportUnitPageAccessibilityId;
+extern NSString *const JMResourceLoaderFilterByDashboardPageAccessibilityId;
+extern NSString *const JMResourceLoaderFilterByFolderPageAccessibilityId;
+extern NSString *const JMResourceLoaderFilterByFilePageAccessibilityId;
+extern NSString *const JMResourceLoaderFilterBySavedItemPageAccessibilityId;
+extern NSString *const JMResourceLoaderFilterByHTMLPageAccessibilityId;
+extern NSString *const JMResourceLoaderFilterByPDFPageAccessibilityId;
+extern NSString *const JMResourceLoaderFilterByXLSPageAccessibilityId;
 
-extern NSString *const JMResourceInfoPageAccessibilityID;
-extern NSString *const JMRepositoryInfoPageAccessibilityID;
-extern NSString *const JMSavedItemsInfoPageAccessibilityID;
-extern NSString *const JMReportInfoPageAccessibilityID;
-extern NSString *const JMDashboardInfoPageAccessibilityID;
-extern NSString *const JMScheduleInfoPageAccessibilityID;
-extern NSString *const JMResourceInfoPageCancelButtonAccessibilityID;
+extern NSString *const JMResourceInfoPageAccessibilityId;
+extern NSString *const JMRepositoryInfoPageAccessibilityId;
+extern NSString *const JMSavedItemsInfoPageAccessibilityId;
+extern NSString *const JMReportInfoPageAccessibilityId;
+extern NSString *const JMDashboardInfoPageAccessibilityId;
+extern NSString *const JMScheduleInfoPageAccessibilityId;
+extern NSString *const JMResourceInfoPageCancelButtonPageAccessibilityId;
 
-extern NSString *const JMResourceInfoPageTitleLabelAccessibilityID;
-extern NSString *const JMResourceInfoPageDescriptionLabelAccessibilityID;
-extern NSString *const JMResourceInfoPageTypeLabelAccessibilityID;
-extern NSString *const JMResourceInfoPageUriLabelAccessibilityID;
-extern NSString *const JMResourceInfoPageVersionLabelAccessibilityID;
-extern NSString *const JMResourceInfoPageCreationDateLabelAccessibilityID;
-extern NSString *const JMResourceInfoPageModifiedDateLabelAccessibilityID;
-extern NSString *const JMResourceInfoPageFormatLabelAccessibilityID;
-extern NSString *const JMResourceInfoPageScheduleOwnerLabelAccessibilityID;
-extern NSString *const JMResourceInfoPageScheduleStateLabelAccessibilityID;
-extern NSString *const JMResourceInfoPageSchedulePreviousFireTimeLabelAccessibilityID;
-
-/*
-
-extern NSString *const ;
-extern NSString *const ;
-extern NSString *const ;
-extern NSString *const ;
-extern NSString *const ;
-extern NSString *const ;
-extern NSString *const ;
-extern NSString *const ;
-extern NSString *const ;
-extern NSString *const ;
-extern NSString *const ;
-*/
+extern NSString *const JMResourceInfoPageTitleLabelPageAccessibilityId;
+extern NSString *const JMResourceInfoPageDescriptionLabelPageAccessibilityId;
+extern NSString *const JMResourceInfoPageTypeLabelPageAccessibilityId;
+extern NSString *const JMResourceInfoPageUriLabelPageAccessibilityId;
+extern NSString *const JMResourceInfoPageVersionLabelPageAccessibilityId;
+extern NSString *const JMResourceInfoPageCreationDateLabelPageAccessibilityId;
+extern NSString *const JMResourceInfoPageModifiedDateLabelPageAccessibilityId;
+extern NSString *const JMResourceInfoPageFormatLabelPageAccessibilityId;
+extern NSString *const JMResourceInfoPageScheduleOwnerLabelPageAccessibilityId;
+extern NSString *const JMResourceInfoPageScheduleStateLabelPageAccessibilityId;
+extern NSString *const JMResourceInfoPageSchedulePreviousFireTimeLabelPageAccessibilityId;

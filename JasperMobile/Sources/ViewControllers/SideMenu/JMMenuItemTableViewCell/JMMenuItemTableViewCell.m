@@ -78,7 +78,7 @@
 {
     _menuItem = menuItem;
     self.textLabel.text = JMLocalizedString(menuItem.itemTitleKey);
-    [self.textLabel setAccessibility:YES withTextKey:menuItem.itemTitleKey identifier:menuItem.itemAccessibilityID];
+    [self.textLabel setAccessibility:YES withTextKey:menuItem.itemTitleKey identifier:menuItem.itemPageAccessibilityId];
     self.imageView.image = menuItem.itemIcon;
 }
 

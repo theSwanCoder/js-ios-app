@@ -125,7 +125,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     NSAssert(menuItemViewController, @"MenuItemViewController not initialized. Item Title: %@", menuItem.itemTitleKey);
     
     menuItemViewController.title = JMLocalizedString(menuItem.itemTitleKey);
-    [menuItemViewController setAccessibility:NO withTextKey:menuItem.itemTitleKey identifier:menuItem.itemAccessibilityID];
+    [menuItemViewController setAccessibility:NO withTextKey:menuItem.itemTitleKey identifier:menuItem.itemPageAccessibilityId];
     return [[JMMainNavigationController alloc] initWithRootViewController:menuItemViewController];
 }
 

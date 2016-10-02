@@ -147,43 +147,43 @@ NSString *const JMCacheReportsOptionDidChangeNotification = @"JMCacheReportsOpti
                                                                                         optionValue:self.serverProfile.alias ? : @""
                                                                                      cellIdentifier:kJMTextCellIdentifier
                                                                                            editable:YES
-                                                                             elementAccessibilityID:JMNewServerProfilePageNameAccessibilityId
+                                                                             elementPageAccessibilityId:JMNewServerProfilePageNameAccessibilityId
                                                                                           mandatory:YES],
                                        @(JMServerOptionTypeURL) : [JMServerOption optionWithTitle:@"servers_url_label"
                                                                                       optionValue:self.serverProfile.serverUrl ? : @""
                                                                                    cellIdentifier:kJMTextCellIdentifier
                                                                                          editable:self.editable
-                                                                           elementAccessibilityID:JMNewServerProfilePageServerURLAccessibilityId
+                                                                           elementPageAccessibilityId:JMNewServerProfilePageServerURLAccessibilityId
                                                                                         mandatory:YES],
                                        @(JMServerOptionTypeOrganization) : [JMServerOption optionWithTitle:@"servers_orgid_label"
                                                                                                optionValue:self.serverProfile.organization ? : @""
                                                                                             cellIdentifier:kJMTextCellIdentifier
                                                                                                   editable:self.editable
-                                                                                    elementAccessibilityID:JMNewServerProfilePageOrganizationAccessibilityId
+                                                                                    elementPageAccessibilityId:JMNewServerProfilePageOrganizationAccessibilityId
                                                                                                  mandatory:NO],
                                        @(JMServerOptionTypeAskPassword) : [JMServerOption optionWithTitle:@"servers_askpassword_label"
                                                                                               optionValue:self.serverProfile.askPassword ? : @(NO)
                                                                                            cellIdentifier:kJMBooleanCellIdentifier
                                                                                                  editable:YES
-                                                                                   elementAccessibilityID:JMNewServerProfilePageAskPasswordAccessibilityId
+                                                                                   elementPageAccessibilityId:JMNewServerProfilePageAskPasswordAccessibilityId
                                                                                                 mandatory:NO],
                                        @(JMServerOptionTypeKeepSession) : [JMServerOption optionWithTitle:@"servers_keepSession_label"
                                                                                               optionValue:self.serverProfile.keepSession  ? : @(NO)
                                                                                            cellIdentifier:kJMBooleanCellIdentifier
                                                                                                  editable:YES
-                                                                                   elementAccessibilityID:JMNewServerProfilePageKeepSessionAccessibilityId
+                                                                                   elementPageAccessibilityId:JMNewServerProfilePageKeepSessionAccessibilityId
                                                                                                 mandatory:NO],
                                        @(JMServerOptionTypeUseVisualize) : [JMServerOption optionWithTitle:@"servers_useVisualize_label"
                                                                                                optionValue:self.serverProfile.useVisualize  ? : @(NO)
                                                                                             cellIdentifier:kJMBooleanCellIdentifier
                                                                                                   editable:YES
-                                                                                    elementAccessibilityID:JMNewServerProfilePageUseVisualizeAccessibilityId
+                                                                                    elementPageAccessibilityId:JMNewServerProfilePageUseVisualizeAccessibilityId
                                                                                                  mandatory:NO],
                                        @(JMServerOptionTypeCacheReports) : [JMServerOption optionWithTitle:@"servers_cacheReport_label"
                                                                                                optionValue:self.serverProfile.cacheReports  ? : @(NO)
                                                                                             cellIdentifier:kJMBooleanCellIdentifier
                                                                                                   editable:YES
-                                                                                    elementAccessibilityID:JMNewServerProfilePageUseCacheReportAccessibilityId
+                                                                                    elementPageAccessibilityId:JMNewServerProfilePageUseCacheReportAccessibilityId
                                                                                                  mandatory:NO],
                                        };
     return availableOptions;

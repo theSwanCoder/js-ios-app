@@ -30,6 +30,7 @@
 #import "JaspersoftSDK.h"
 #import "JMUtils.h"
 #import "UIAlertController+Additions.h"
+#import "NSObject+Additions.h"
 
 @interface JMPrivacyPolicyViewController () <UIWebViewDelegate>
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
@@ -42,7 +43,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = JMLocalizedString(@"about_privacy_policy_title");
-    
+    [self.view setAccessibility:NO withTextKey:@"about_privacy_policy_title" identifier:JMPrivacyPolicyPageAccessibilityId];
+
     self.webView.scrollView.bounces = NO;
     
     [NSURLProtocol registerClass:[RNCachingURLProtocol class]];

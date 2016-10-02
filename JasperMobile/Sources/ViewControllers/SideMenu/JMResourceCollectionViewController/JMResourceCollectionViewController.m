@@ -107,7 +107,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     
     self.searchBar.tintColor = [[JMThemesManager sharedManager] barItemsColor];
     self.searchBar.placeholder = JMLocalizedString(@"resources_search_placeholder");
-    [self.searchBar setAccessibility:YES withTextKey:@"resources_search_placeholder" identifier:JMResourceCollectionPageSearchBarAccessibilityID];
+    [self.searchBar setAccessibility:YES withTextKey:@"resources_search_placeholder" identifier:JMResourceCollectionPageSearchBarPageAccessibilityId];
     
     
     self.refreshControl = [[UIRefreshControl alloc] init];
@@ -124,10 +124,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     }
     
     self.activityViewTitleLabel.text = JMLocalizedString(@"resources_loading_msg");
-    [self.activityViewTitleLabel setAccessibility:YES withTextKey:@"resources_loading_msg" identifier:JMResourceCollectionPageActivityLabelAccessibilityID];
+    [self.activityViewTitleLabel setAccessibility:YES withTextKey:@"resources_loading_msg" identifier:JMResourceCollectionPageActivityLabelPageAccessibilityId];
 
     self.noResultsViewTitleLabel.text = JMLocalizedString(self.noResultStringKey);
-    [self.noResultsViewTitleLabel setAccessibility:YES withTextKey:self.noResultStringKey identifier:JMResourceCollectionPageNoResultLabelAccessibilityID];
+    [self.noResultsViewTitleLabel setAccessibility:YES withTextKey:self.noResultStringKey identifier:JMResourceCollectionPageNoResultLabelPageAccessibilityId];
     
     self.activityViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
     self.noResultsViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
@@ -248,7 +248,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     JMListOptionsPopupView *sortPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
                                                                                     type:JMPopupViewType_ContentViewOnly
                                                                                  options:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOptionType_Sort]];
-    [sortPopup setAccessibility:NO withTextKey:@"resources_sortby_title" identifier:JMResourceCollectionPageSortByPopupViewAccessibilityID];
+    [sortPopup setAccessibility:NO withTextKey:@"resources_sortby_title" identifier:JMResourceCollectionPageSortByPopupViewPageAccessibilityId];
     sortPopup.titleString = JMLocalizedString(@"resources_sortby_title");
     sortPopup.selectedIndex = self.resourceListLoader.sortBySelectedIndex;
     sortPopup.optionType = JMResourcesListLoaderOptionType_Sort;
@@ -260,7 +260,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     JMListOptionsPopupView *filterPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
                                                                                       type:JMPopupViewType_ContentViewOnly
                                                                                    options:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOptionType_Filter]];
-    [filterPopup setAccessibility:NO withTextKey:@"resources_filterby_title" identifier:JMResourceCollectionPageFilterByPopupViewAccessibilityID];
+    [filterPopup setAccessibility:NO withTextKey:@"resources_filterby_title" identifier:JMResourceCollectionPageFilterByPopupViewPageAccessibilityId];
     filterPopup.titleString = JMLocalizedString(@"resources_filterby_title");
     filterPopup.selectedIndex = self.resourceListLoader.filterBySelectedIndex;
     filterPopup.optionType = JMResourcesListLoaderOptionType_Filter;
@@ -439,7 +439,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
                                                                            style:UIBarButtonItemStylePlain
                                                                           target:self
                                                                           action:@selector(filterByButtonTapped:)];
-            [filterItem setAccessibility:YES withTextKey:filterAction.actionTitle identifier:filterAction.elementAccessibilityID];
+            [filterItem setAccessibility:YES withTextKey:filterAction.actionTitle identifier:filterAction.elementPageAccessibilityId];
             [navBarItems addObject:filterItem];
         }
         if (availableAction & JMMenuActionsViewAction_Sort) {
@@ -448,7 +448,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
                                                                          style:UIBarButtonItemStylePlain
                                                                         target:self
                                                                         action:@selector(sortByButtonTapped:)];
-            [sortItem setAccessibility:YES withTextKey:sortAction.actionTitle identifier:sortAction.elementAccessibilityID];
+            [sortItem setAccessibility:YES withTextKey:sortAction.actionTitle identifier:sortAction.elementPageAccessibilityId];
             [navBarItems addObject:sortItem];
         }
         if (availableAction & JMMenuActionsViewAction_Schedule) {
@@ -456,7 +456,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             UIBarButtonItem *scheduleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                           target:self
                                                                                           action:@selector(createNewScheduleTapped:)];
-            [scheduleItem setAccessibility:YES withTextKey:scheduleAction.actionTitle identifier:scheduleAction.elementAccessibilityID];
+            [scheduleItem setAccessibility:YES withTextKey:scheduleAction.actionTitle identifier:scheduleAction.elementPageAccessibilityId];
             [navBarItems addObject:scheduleItem];
         }
         
@@ -557,7 +557,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
                                             style:UIBarButtonItemStylePlain
                                            target:self
                                            action:@selector(representationTypeButtonTapped:)];
-    [representationTypeItem setAccessibility:YES withTextKey:@"resources_change_representation_type_label" identifier:JMResourceCollectionPageRepresentationButtonViewAccessibilityID];
+    [representationTypeItem setAccessibility:YES withTextKey:@"resources_change_representation_type_label" identifier:JMResourceCollectionPageRepresentationButtonViewPageAccessibilityId];
     return representationTypeItem;
 }
 
@@ -687,14 +687,16 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     JMResource *currentResource = [self loadedResourceForIndexPath:indexPath];
     cell.resource = currentResource;
     cell.delegate = self;
-    NSString *elementAccessibilityID;
+    NSString *elementPageAccessibilityId;
     switch (self.representationType) {
         case JMResourcesRepresentationType_HorizontalList:
-            elementAccessibilityID = JMResourceCollectionPageListCellAccessibilityId;
+            elementPageAccessibilityId = JMResourceCollectionPageListCellAccessibilityId;
+            break;
         case JMResourcesRepresentationType_Grid:
-            elementAccessibilityID = JMResourceCollectionPageGridCellAccessibilityId;
+            elementPageAccessibilityId = JMResourceCollectionPageGridCellAccessibilityId;
+            break;
     }
-    [cell setAccessibility:NO withTextKey:currentResource.resourceLookup.label identifier:elementAccessibilityID];
+    [cell setAccessibility:NO withTextKey:currentResource.resourceLookup.label identifier:elementPageAccessibilityId];
     return cell;
 }
 

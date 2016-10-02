@@ -99,7 +99,7 @@
     
     JMResourceLoaderOption *currentOption = self.options[indexPath.row];
     cell.textLabel.text = JMLocalizedString(currentOption.titleKey);
-    [cell.textLabel setAccessibility:YES withTextKey:currentOption.titleKey identifier:currentOption.elementAccessibilityID];
+    [cell.textLabel setAccessibility:YES withTextKey:currentOption.titleKey identifier:currentOption.elementPageAccessibilityId];
     cell.accessoryType = indexPath.row == self.selectedIndex ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     return cell;
 }

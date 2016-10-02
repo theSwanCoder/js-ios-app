@@ -28,7 +28,7 @@
 -(void)setServerOption:(JMServerOption *)serverOption
 {
     [super setServerOption:serverOption];
-    [self.checkBoxButton setAccessibility:YES withTextKey:serverOption.titleString identifier:serverOption.elementAccessibilityID];
+    [self.checkBoxButton setAccessibility:YES withTextKey:serverOption.titleString identifier:serverOption.elementPageAccessibilityId];
     
     self.checkBoxButton.userInteractionEnabled = serverOption.editable;
     self.checkBoxButton.selected = [serverOption.optionValue boolValue];

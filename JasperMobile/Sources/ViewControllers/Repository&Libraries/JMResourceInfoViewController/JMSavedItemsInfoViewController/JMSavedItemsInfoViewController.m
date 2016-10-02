@@ -77,7 +77,7 @@
     [properties addObject:@{
                             kJMTitleKey : @"format",
                             kJMValueKey : self.savedReports.format ?: @"",
-                            kJMAccessibilityIDKey : JMResourceInfoPageFormatLabelAccessibilityID
+                            kJMPageAccessibilityIdKey : JMResourceInfoPageFormatLabelPageAccessibilityId
                             }];
     return properties;
 }
@@ -163,7 +163,7 @@
 #pragma mark - Accessibility
 - (NSString *)accessibilityIdentifier
 {
-    return JMSavedItemsInfoPageAccessibilityID;
+    return JMSavedItemsInfoPageAccessibilityId;
 }
 
 #pragma mark - UITextFieldDelegate

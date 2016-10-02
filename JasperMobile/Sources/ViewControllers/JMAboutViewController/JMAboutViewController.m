@@ -36,6 +36,7 @@
 #import "JMThemesManager.h"
 #import "JMConstants.h"
 #import "JMUtils.h"
+#import "NSObject+Additions.h"
 
 NSString * const kJMCommunitySiteURL = @"http://community.jaspersoft.com/project/jaspermobile-ios";
 NSString * const kJMWhatsNewURL = @"https://github.com/Jaspersoft/js-ios-app/wiki/What's-new";
@@ -54,12 +55,14 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMLocalizedString(@"menuitem_about_label");
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     [self setupTextView];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                           target:self
-                                                                                           action:@selector(closeAboutAction:)];
+    
+    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                              target:self
+                                                                              action:@selector(closeAboutAction:)];
+    [doneItem setAccessibility:YES withTextKey:@"dialog_button_done" identifier:JMButtonDoneAccessibilityId];
+    self.navigationItem.rightBarButtonItem = doneItem;
 }
 
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator

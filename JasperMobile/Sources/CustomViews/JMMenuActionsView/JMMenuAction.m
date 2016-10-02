@@ -98,7 +98,7 @@
     }
 }
 
-- (NSString *)elementAccessibilityID
+- (NSString *)elementPageAccessibilityId
 {
     switch (self.menuAction) {
         case JMMenuActionsViewAction_None:

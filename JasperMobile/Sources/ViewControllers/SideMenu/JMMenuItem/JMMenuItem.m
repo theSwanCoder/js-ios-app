@@ -73,7 +73,7 @@
     return JMMenuItemControllerPresentationStyle_Navigate;
 }
 
-- (NSString *)itemAccessibilityID
+- (NSString *)itemPageAccessibilityId
 {
     switch (self.itemType) {
         case JMMenuItemType_Library:
@@ -89,11 +89,11 @@
         case JMMenuItemType_About:
             return JMAppAboutPageAccessibilityId;
         case JMMenuItemType_Feedback:
-            return JMFeedbackPageAccessibilityID;
+            return JMFeedbackPageAccessibilityId;
         case JMMenuItemType_Settings:
             return JMSettingsPageAccessibilityId;
         case JMMenuItemType_Logout:
-            return JMLogoutAccessibilityID;
+            return JMLogoutPageAccessibilityId;
         default:
             return nil;
     }

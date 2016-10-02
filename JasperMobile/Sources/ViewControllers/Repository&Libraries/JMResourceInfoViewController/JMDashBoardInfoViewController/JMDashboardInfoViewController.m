@@ -55,7 +55,7 @@
 #pragma mark - Accessibility
 - (NSString *)accessibilityIdentifier
 {
-    return JMDashboardInfoPageAccessibilityID;
+    return JMDashboardInfoPageAccessibilityId;
 }
 
 - (void)runDashboard

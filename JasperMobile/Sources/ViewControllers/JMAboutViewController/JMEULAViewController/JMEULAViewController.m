@@ -29,6 +29,9 @@
 #import "JMEULAViewController.h"
 #import "JMUtils.h"
 #import "JMLocalization.h"
+#import "JMMenuAction.h"
+#import "NSObject+Additions.h"
+#import "JMConstants.h"
 
 @interface JMEULAViewController() <UIWebViewDelegate>
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
@@ -48,12 +51,14 @@
     [super viewDidLoad];
 
     self.title = JMLocalizedString(@"about_eula_title");
+    [self.view setAccessibility:NO withTextKey:@"about_eula_title" identifier:JMEULAPageAccessibilityId];
 
     if (self.shouldUserAccept) {
-        UIBarButtonItem *acceptButton = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"action_title_accept")
+        UIBarButtonItem *acceptButton = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"dialog_title_accept")
                                                                          style:UIBarButtonItemStyleDone
                                                                         target:self
                                                                         action:@selector(agreeAction:)];
+        [acceptButton setAccessibility:YES withTextKey:@"dialog_title_accept" identifier:JMButtonAcceptAccessibilityId];
         self.navigationItem.rightBarButtonItem = acceptButton;
     }
 
