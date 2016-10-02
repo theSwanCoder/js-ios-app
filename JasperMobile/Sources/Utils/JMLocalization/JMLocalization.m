@@ -35,11 +35,9 @@ NSString * const JMLocalizationBundleType = @"lproj";
 #pragma mark - Public API
 + (NSString *)accessibilityLanguage
 {
-    NSArray *supportedLocalizations = [[NSBundle mainBundle] localizations];
-    for (NSString *currentLanguage in [self listOfPreferredLanguages]) {
-        if ([supportedLocalizations containsObject:currentLanguage]) {
-            return currentLanguage;
-        }
+    NSArray *supportedLanguages = [self listOfPreferredSupportedLanguages];
+    if ([supportedLanguages count]) {
+        return supportedLanguages[0];
     }
     return JMPreferredLanguage;
 }
@@ -52,7 +50,7 @@ NSString * const JMLocalizationBundleType = @"lproj";
     }
     NSBundle *localizationBundle = [NSBundle bundleForClass:[self class]];
     NSString *localizedString = [self localizeStringForKey:key language:JMPreferredLanguage inBundle:localizationBundle];
-    for (NSString *currentLanguage in [self listOfPreferredLanguages]) {
+    for (NSString *currentLanguage in [self listOfPreferredSupportedLanguages]) {
         if (![currentLanguage isEqualToString:JMPreferredLanguage]) {
             NSString *currentLocalizedString = [self localizeStringForKey:key language:currentLanguage inBundle:localizationBundle];
             if (![currentLocalizedString isEqualToString:key]) {
@@ -88,9 +86,11 @@ NSString * const JMLocalizationBundleType = @"lproj";
     return [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
 }
 
-+ (NSArray *)listOfPreferredLanguages
++ (NSArray *)listOfPreferredSupportedLanguages
 {
     NSArray *preferredLanguages = [NSLocale preferredLanguages];
+    NSArray *supportedLocalizations = [[NSBundle mainBundle] localizations];
+
     NSMutableArray *clearedLanguages = [NSMutableArray array];
     for (NSInteger i = 0; i < preferredLanguages.count; i++) {
         NSString *currentLanguage = [preferredLanguages objectAtIndex:i];
@@ -98,7 +98,9 @@ NSString * const JMLocalizationBundleType = @"lproj";
         if (dividerPosition != NSNotFound) {
             currentLanguage = [currentLanguage substringToIndex:dividerPosition];
         }
-        [clearedLanguages addObject:currentLanguage];
+        if ([supportedLocalizations indexOfObject:currentLanguage] != NSNotFound) {
+            [clearedLanguages addObject:currentLanguage];
+        }
     }
     return clearedLanguages;
 }

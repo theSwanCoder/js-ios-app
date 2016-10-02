@@ -23,6 +23,7 @@
 
 #import "JMServerOptionCell.h"
 #import "JMThemesManager.h"
+#import "JMLocalization.h"
 
 @interface JMServerOptionCell ()
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
@@ -45,7 +46,7 @@
 {
     _serverOption = serverOption;
     
-    self.titleLabel.text = serverOption.titleString;
+    self.titleLabel.text = [self localizedString:serverOption.titleString mandatory:serverOption.mandatory];
     [self updateDisplayingOfErrorMessage];
 }
 
@@ -58,5 +59,12 @@
     [self.delegate reloadTableViewCell:self];
 }
 
+- (NSString *)localizedString:(NSString *)key mandatory:(BOOL)mandatory
+{
+    if (mandatory) {
+        return [NSString stringWithFormat:@"* %@",JMLocalizedString(key)];
+    }
+    return JMLocalizedString(key);
+}
 
 @end

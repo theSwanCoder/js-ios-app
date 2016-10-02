@@ -26,8 +26,8 @@
 #import "JMTextField.h"
 #import "UIColor+RGBComponent.h"
 #import "JMThemesManager.h"
-
-
+#import "NSObject+Additions.h"
+#import "JMLocalization.h"
 @interface JMTextServerOptionCell () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet JMTextField *textField;
 
@@ -43,6 +43,8 @@
 -(void)setServerOption:(JMServerOption *)serverOption
 {
     [super setServerOption:serverOption];
+    [self.textField setAccessibility:YES withTextKey:serverOption.titleString identifier:serverOption.elementAccessibilityID];
+
     self.textField.enabled = serverOption.editable;
     self.textField.text = serverOption.optionValue;
 
@@ -51,9 +53,8 @@
                                  NSFontAttributeName : [[JMThemesManager sharedManager] menuItemDescriptionFont],
                                  NSForegroundColorAttributeName : placeholderColor
                                  };
-    NSString *trimmedPlaceholderString = [serverOption.titleString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" *"]];
     
-    NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:trimmedPlaceholderString
+    NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:JMLocalizedString(serverOption.titleString)
                                                                       attributes:attributes];
     self.textField.attributedPlaceholder = placeholder;
 }

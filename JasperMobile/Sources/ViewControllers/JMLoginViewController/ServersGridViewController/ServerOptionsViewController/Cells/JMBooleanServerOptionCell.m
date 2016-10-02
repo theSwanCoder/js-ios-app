@@ -22,11 +22,14 @@
 
 
 #import "JMBooleanServerOptionCell.h"
+#import "NSObject+Additions.h"
 
 @implementation JMBooleanServerOptionCell
 -(void)setServerOption:(JMServerOption *)serverOption
 {
     [super setServerOption:serverOption];
+    [self.checkBoxButton setAccessibility:YES withTextKey:serverOption.titleString identifier:serverOption.elementAccessibilityID];
+    
     self.checkBoxButton.userInteractionEnabled = serverOption.editable;
     self.checkBoxButton.selected = [serverOption.optionValue boolValue];
 }

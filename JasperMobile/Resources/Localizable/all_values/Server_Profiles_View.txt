@@ -106,6 +106,9 @@
 		ja = 新しいサーバー プロファイル
 		zh = 新服务器配置文件
 		tags = ios
+    [servers_title_edit]
+        en = Edit Server Profile
+        tags = ios,new
 	[servers_action_profile_edit]
 		en = Edit
 		de = Bearbeiten

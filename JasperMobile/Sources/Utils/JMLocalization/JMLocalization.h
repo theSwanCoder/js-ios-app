@@ -32,6 +32,9 @@
  @author Alexey Gubarev ogubarie@tibco.com
  @since 2.5
  */
+
+extern NSString *const JMPreferredLanguage;
+
 @interface JMLocalization : NSObject
 
 + (NSString *)accessibilityLanguage;

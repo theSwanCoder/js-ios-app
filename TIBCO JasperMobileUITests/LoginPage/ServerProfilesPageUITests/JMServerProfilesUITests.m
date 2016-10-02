@@ -58,11 +58,11 @@
     }
 
     [self givenThatServerProfilesPageOnScreen];
-    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
 
     [self createTestProfile];
 
-    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
     XCTAssertTrue(endCellsCount > startCellsCount, @"Start Cells Count: %@, but End Cells Count: %@", @(startCellsCount), @(endCellsCount));
     [self tryBackToPreviousPage];
 }
@@ -71,19 +71,19 @@
 {
     [self tryOpenServerProfilesPage];
     
-    NSInteger cellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    NSInteger cellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
     if (!cellsCount) {
         [self createTestProfile];
         [self givenThatServerProfilesPageOnScreen];
     }
 
-    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
-    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
+    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"
                                                              forIndex:0];
     if (serverProfileElement && serverProfileElement.exists) {
         [self removeProfileWithElement:serverProfileElement];
     }
-    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
     XCTAssertTrue(endCellsCount < startCellsCount);
     [self tryBackToPreviousPage];
 }
@@ -98,15 +98,15 @@
         [self givenThatServerProfilesPageOnScreen];
     }
 
-    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
+    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"
                                                              forIndex:0];
     if (!serverProfileElement) {
         [self createTestProfile];
         [self givenThatServerProfilesPageOnScreen];
     }
 
-    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
-    serverProfileElement = [self cellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
+    serverProfileElement = [self cellWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"
                                                              forIndex:0];
 
     [serverProfileElement pressForDuration:1.0];

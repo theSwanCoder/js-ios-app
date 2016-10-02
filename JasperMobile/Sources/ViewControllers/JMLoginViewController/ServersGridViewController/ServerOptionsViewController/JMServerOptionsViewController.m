@@ -32,6 +32,7 @@
 #import "JMLocalization.h"
 #import "JMThemesManager.h"
 #import "UIAlertController+Additions.h"
+#import "NSObject+Additions.h"
 
 
 @interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, JMServerOptionCellDelegate>
@@ -51,11 +52,15 @@
 {
     [super viewDidLoad];
     
+    NSString *accessibilityLabelString;
     if (self.serverOptionManager.isExistingServerProfile) {
         self.title = self.serverProfile.alias;
+        accessibilityLabelString = @"servers_title_edit";
     } else {
         self.title = JMLocalizedString(@"servers_title_new");
+        accessibilityLabelString = @"servers_title_new";
     }
+    [self.view setAccessibility:NO withTextKey:accessibilityLabelString identifier:JMNewServerProfilePageAccessibilityId];
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     [self setupSaveButton];
@@ -88,6 +93,7 @@
 - (void)setupSaveButton
 {
     [self.saveButton setTitle:JMLocalizedString(@"dialog_button_save") forState:UIControlStateNormal];
+    [self.saveButton setAccessibility:YES withTextKey:@"dialog_button_save" identifier:JMNewServerProfilePageSaveAccessibilityId];
     [self.saveButton setTitleColor:[[JMThemesManager sharedManager] serverProfileSaveButtonTextColor] forState:UIControlStateNormal];
     self.saveButton.backgroundColor = [[JMThemesManager sharedManager] serverProfileSaveButtonBackgroundColor];
 }

@@ -152,5 +152,63 @@ NSString *const JMBackButtonAccessibilityId = @"JMBackButtonAccessibilityId";
 NSString *const JMCancelRequestPopupAccessibilityId = @"JMCancelRequestPopupAccessibilityId";
 NSString *const JMMenuActionsViewAccessibilityId = @"JMMenuActionsViewAccessibilityId";
 
+NSString *const JMServerProfilesPageAccessibilityId = @"JMServerProfilesPageAccessibilityId";
+NSString *const JMServerProfilesPageAddNewProfileButtonAccessibilityId = @"JMServerProfilesPageAddNewProfileButtonAccessibilityId";
+NSString *const JMServerProfilesPageServerCellAccessibilityId = @"JMServerProfilesPageServerCellAccessibilityId";
+NSString *const JMServerProfilesPageListEmptyAccessibilityId = @"JMServerProfilesPageListEmptyAccessibilityId";
+NSString *const JMServerProfilesPageEditProfileAccessibilityId = @"JMServerProfilesPageEditProfileAccessibilityId";
+NSString *const JMServerProfilesPageDeleteProfileAccessibilityId = @"JMServerProfilesPageDeleteProfileAccessibilityId";
+NSString *const JMServerProfilesPageCloneProfileAccessibilityId = @"JMServerProfilesPageCloneProfileAccessibilityId";
 
 
+NSString *const JMLoginPageAccessibilityId = @"JMLoginPageAccessibilityId";
+NSString *const JMLoginPageUserNameTextFieldAccessibilityId = @"JMLoginPageUserNameTextFieldAccessibilityId";
+NSString *const JMLoginPagePasswordTextFieldAccessibilityId = @"JMLoginPagePasswordTextFieldAccessibilityId";
+NSString *const JMLoginPageServerProfileTextFieldAccessibilityId = @"JMLoginPageServerProfileTextFieldAccessibilityId";
+NSString *const JMLoginPageTryButtonAccessibilityId = @"JMLoginPageTryButtonAccessibilityId";
+NSString *const JMLoginPageLoginButtonAccessibilityId = @"JMLoginPageLoginButtonAccessibilityId";
+
+NSString *const JMNewServerProfilePageAccessibilityId = @"JMNewServerProfilePageAccessibilityId";
+NSString *const JMNewServerProfilePageSaveAccessibilityId = @"JMNewServerProfilePageSaveAccessibilityId";
+NSString *const JMNewServerProfilePageNameAccessibilityId = @"JMNewServerProfilePageNameAccessibilityId";
+NSString *const JMNewServerProfilePageServerURLAccessibilityId = @"JMNewServerProfilePageServerURLAccessibilityId";
+NSString *const JMNewServerProfilePageOrganizationAccessibilityId = @"JMNewServerProfilePageOrganizationAccessibilityId";
+NSString *const JMNewServerProfilePageAskPasswordAccessibilityId = @"JMNewServerProfilePageAskPasswordAccessibilityId";
+NSString *const JMNewServerProfilePageKeepSessionAccessibilityId = @"JMNewServerProfilePageKeepSessionAccessibilityId";
+NSString *const JMNewServerProfilePageUseVisualizeAccessibilityId = @"JMNewServerProfilePageUseVisualizeAccessibilityId";
+NSString *const JMNewServerProfilePageUseCacheReportAccessibilityId = @"JMNewServerProfilePageUseCacheReportAccessibilityId";
+
+/*
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+NSString *const  = @"";
+
+
+
+*/

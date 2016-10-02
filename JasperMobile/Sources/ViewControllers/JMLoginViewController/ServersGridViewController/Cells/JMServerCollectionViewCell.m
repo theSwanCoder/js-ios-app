@@ -24,6 +24,8 @@
 #import "JMServerCollectionViewCell.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMThemesManager.h"
+#import "NSObject+Additions.h"
+#import "JMLocalization.h"
 
 @interface JMServerCollectionViewCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *titleImage;
@@ -43,6 +45,7 @@
     self.urlLabel.textColor = [[JMThemesManager sharedManager] serverProfileDetailsTextColor];
     
     self.titleImage.backgroundColor = [[JMThemesManager sharedManager] serverProfilePreviewBackgroundColor];
+    [self setAccessibility:YES withTextKey:nil identifier:JMServerProfilesPageServerCellAccessibilityId];
 }
 
 - (void)setServerProfile:(JMServerProfile *)serverProfile
@@ -50,6 +53,8 @@
     _serverProfile = serverProfile;
     self.titleLabel.text = serverProfile.alias;
     self.urlLabel.text = serverProfile.serverUrl;
+    self.accessibilityLabel = serverProfile.serverUrl;
+    self.accessibilityLanguage = JMPreferredLanguage;
 }
 
 - (void) cloneServerProfile:(id)sender

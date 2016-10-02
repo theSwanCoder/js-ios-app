@@ -41,6 +41,7 @@
 #import "JMUtils.h"
 #import "JMConstants.h"
 #import "JMCoreDataManager.h"
+#import "NSObject+Additions.h"
 
 @interface JMLoginViewController () <UITextFieldDelegate, JMServersGridViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
@@ -60,7 +61,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self.view setAccessibility:NO withTextKey:@"login_button_login" identifier:JMLoginPageAccessibilityId];
+
     self.view.backgroundColor = [[JMThemesManager sharedManager] loginViewBackgroundColor];
     self.placeHolderView.backgroundColor = [[JMThemesManager sharedManager] loginViewPlaceholderBackgroundColor];
     [self.textfields makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] loginViewTextFieldsBackgroundColor]];
@@ -69,8 +71,11 @@
     UIColor *placeholderColor = [[JMThemesManager sharedManager] loginViewTextFieldsTextColor];
     NSDictionary *attributes = @{NSForegroundColorAttributeName:[placeholderColor colorWithAlphaComponent: 0.5f]};
     self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMLocalizedString(@"login_username_label") attributes:attributes];
+    [self.userNameTextField setAccessibility:YES withTextKey:@"login_username_label" identifier:JMLoginPageUserNameTextFieldAccessibilityId];
     self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMLocalizedString(@"login_password_label") attributes:attributes];
+    [self.passwordTextField setAccessibility:YES withTextKey:@"login_password_label" identifier:JMLoginPagePasswordTextFieldAccessibilityId];
     self.serverProfileTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMLocalizedString(@"settings_item_server") attributes:attributes];
+    [self.serverProfileTextField setAccessibility:YES withTextKey:@"settings_item_server" identifier:JMLoginPageServerProfileTextFieldAccessibilityId];
 
     // setup "Login" button
     self.loginButton.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -79,7 +84,8 @@
     self.loginButton.backgroundColor = [[JMThemesManager sharedManager] loginViewLoginButtonBackgroundColor];
     [self.loginButton setTitleColor:[[JMThemesManager sharedManager] loginViewLoginButtonTextColor] forState:UIControlStateNormal];
     [self.loginButton setTitle:JMLocalizedString(@"login_button_login") forState:UIControlStateNormal];
-    
+    [self.loginButton setAccessibility:YES withTextKey:@"login_button_login" identifier:JMLoginPageLoginButtonAccessibilityId];
+
     self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
     [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
 
@@ -131,10 +137,12 @@
         }
     }
     
-    NSString *tryDemoButtonTitle = self.showForRestoreSession ? JMLocalizedString(@"dialog_button_cancel") : JMLocalizedString(@"login_button_try_demo");
+    NSString *tryDemoButtonTitleKey = self.showForRestoreSession ? @"dialog_button_cancel" : @"login_button_try_demo";
     SEL tryDemoButtonAction = self.showForRestoreSession ? @selector(cancelButtonTapped:) : @selector(tryDemoButtonTapped:);
     
-    [self.tryDemoButton setTitle:tryDemoButtonTitle forState:UIControlStateNormal];
+    [self.tryDemoButton setTitle:JMLocalizedString(tryDemoButtonTitleKey) forState:UIControlStateNormal];
+    [self.tryDemoButton setAccessibility:YES withTextKey:tryDemoButtonTitleKey identifier:JMLoginPageTryButtonAccessibilityId];
+
     [self.tryDemoButton removeTarget:self action:nil forControlEvents:UIControlEventTouchUpInside];
     [self.tryDemoButton addTarget:self action:tryDemoButtonAction forControlEvents:UIControlEventTouchUpInside];
 }

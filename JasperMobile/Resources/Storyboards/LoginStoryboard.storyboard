@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="gG3-xD-BHg">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="gG3-xD-BHg">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -26,7 +26,6 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8dE-ta-sCn">
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Biu-xJ-P2l">
-                                        <accessibility key="accessibilityConfiguration" identifier="JMLoginPageUserNameTextFieldAccessibilityId" label="Login Page Username Text Field"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="4Tc-aP-LZb">
                                                 <variation key="widthClass=compact" constant="35"/>
@@ -40,7 +39,6 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8la-dV-F8G">
-                                        <accessibility key="accessibilityConfiguration" identifier="JMLoginPagePasswordTextFieldAccessibilityId" label="Login Page Password Text Field"/>
                                         <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
@@ -49,7 +47,6 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Server Profile" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IlI-wL-7hQ">
-                                        <accessibility key="accessibilityConfiguration" identifier="JMLoginPageServerProfileTextFieldAccessibilityId" label="Server Profile Text Field"/>
                                         <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -59,7 +56,6 @@
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="z2N-OC-qP7">
                                         <color key="backgroundColor" red="0.20784313730000001" green="0.47843137250000001" blue="0.70196078429999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="JMLoginPageTryButtonAccessibilityId" label="Login Page Try Button"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="dWI-Hw-cYy">
                                                 <variation key="widthClass=compact" constant="35"/>
@@ -77,7 +73,6 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="dqm-Y4-gBK">
                                         <color key="backgroundColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="JMLoginPageLoginButtonAccessibilityId" label="Login Page Login Button"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Login">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -93,7 +88,7 @@
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <accessibility key="accessibilityConfiguration" identifier="JMLoginPagePlaceHolderAccesibilityId" label="Login Page PlaceHolder">
+                                <accessibility key="accessibilityConfiguration">
                                     <bool key="isElement" value="YES"/>
                                 </accessibility>
                                 <constraints>
@@ -135,9 +130,6 @@
                                         <variation key="widthClass=compact" constant="15"/>
                                     </constraint>
                                 </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="NO"/>
-                                </userDefinedRuntimeAttributes>
                                 <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <exclude reference="Oci-bn-KGT"/>
@@ -145,7 +137,7 @@
                                 </variation>
                             </view>
                         </subviews>
-                        <accessibility key="accessibilityConfiguration" identifier="JMLoginPageAccessibilityId" label="Login Page">
+                        <accessibility key="accessibilityConfiguration">
                             <bool key="isElement" value="YES"/>
                         </accessibility>
                         <constraints>
@@ -158,9 +150,6 @@
                             <constraint firstItem="8dE-ta-sCn" firstAttribute="leading" secondItem="N4k-vx-8Kc" secondAttribute="leading" id="PhY-WG-2rk"/>
                             <constraint firstItem="8eL-An-K7e" firstAttribute="centerX" secondItem="N4k-vx-8Kc" secondAttribute="centerX" id="YjL-c4-HHH"/>
                         </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="NO"/>
-                        </userDefinedRuntimeAttributes>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="8aB-xL-f9i"/>
@@ -207,17 +196,17 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dhA-YR-l07">
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="4Y4-TV-4RH">
-                                    <size key="itemSize" width="590" height="60"/>
+                                    <size key="itemSize" width="375" height="60"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="5" minY="5" maxX="5" maxY="5"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ServerCell" id="82C-GT-gxn" customClass="JMServerCollectionViewCell">
-                                        <rect key="frame" x="-108" y="5" width="590" height="60"/>
+                                        <rect key="frame" x="0.0" y="5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="590" height="60"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="server" translatesAutoresizingMaskIntoConstraints="NO" id="4hb-1H-1ir">
@@ -253,10 +242,6 @@
                                             <constraint firstItem="a0f-Y6-rnY" firstAttribute="top" secondItem="82C-GT-gxn" secondAttribute="top" constant="5" id="yVy-RX-BL1"/>
                                             <constraint firstAttribute="trailing" secondItem="icm-m7-bF0" secondAttribute="trailing" constant="5" id="zeu-MM-SDQ"/>
                                         </constraints>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="JMCollectionViewServerGridAccessibilityId"/>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="NO"/>
-                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="titleImage" destination="4hb-1H-1ir" id="qND-If-kMq"/>
                                             <outlet property="titleLabel" destination="a0f-Y6-rnY" id="wpC-kf-ayz"/>
@@ -276,7 +261,7 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <accessibility key="accessibilityConfiguration" identifier="JMServerProfilesPageAccessibilityId" label="Server Profiles Page">
+                        <accessibility key="accessibilityConfiguration">
                             <bool key="isElement" value="YES"/>
                         </accessibility>
                         <constraints>
@@ -289,15 +274,9 @@
                             <constraint firstItem="dhA-YR-l07" firstAttribute="top" secondItem="foW-XN-j1U" secondAttribute="topMargin" id="i2X-Ay-LVj"/>
                             <constraint firstItem="DZo-TK-rAn" firstAttribute="top" secondItem="dhA-YR-l07" secondAttribute="bottom" id="wAv-4G-u4W"/>
                         </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="NO"/>
-                        </userDefinedRuntimeAttributes>
                     </view>
                     <navigationItem key="navigationItem" id="9wc-cF-qtO">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="4Ej-K5-gar">
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="JMServerProfilesPageAddNewProfileButtonAccessibilityId"/>
-                            </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="addButtonTapped:" destination="csQ-Mx-H91" id="pT7-Fw-Ij8"/>
                             </connections>
@@ -305,6 +284,7 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="addButtonItem" destination="4Ej-K5-gar" id="f0D-cZ-Gqy"/>
                         <outlet property="collectionView" destination="dhA-YR-l07" id="4zq-Fu-HJ1"/>
                         <outlet property="errorLabel" destination="wU2-jd-N5e" id="xj8-3u-HHl"/>
                         <segue destination="Cud-Db-3p3" kind="show" identifier="ShowServerOptions" id="OgL-0K-8uP"/>
@@ -453,7 +433,7 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <accessibility key="accessibilityConfiguration" identifier="JMNewServerProfilePageAccessibilityId" label="New Server Profile Page">
+                        <accessibility key="accessibilityConfiguration">
                             <bool key="isElement" value="YES"/>
                         </accessibility>
                         <constraints>
@@ -465,9 +445,6 @@
                             <constraint firstItem="rpQ-dX-Oe6" firstAttribute="top" secondItem="GOA-Lr-4Wr" secondAttribute="bottom" constant="10" id="xZ2-wr-FEk"/>
                             <constraint firstAttribute="trailing" secondItem="GOA-Lr-4Wr" secondAttribute="trailing" constant="10" id="yuP-Ym-ZJz"/>
                         </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="NO"/>
-                        </userDefinedRuntimeAttributes>
                     </view>
                     <navigationItem key="navigationItem" id="iVZ-RF-Jbl"/>
                     <connections>

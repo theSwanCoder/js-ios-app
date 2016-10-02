@@ -37,15 +37,23 @@
 
 @property (nonatomic, strong, readonly) NSString *titleString;
 @property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong, readonly) NSString *elementAccessibilityID;
 @property (nonatomic, strong) id        optionValue;
 @property (nonatomic, strong, readonly) NSString *cellIdentifier;
 @property (nonatomic, assign, readonly) BOOL      editable;       // By default YES
+@property (nonatomic, assign, readonly) BOOL      mandatory;      // By default YES
+
 - (instancetype)initWithTitle:(NSString *)title
                   optionValue:(id)optionValue
                cellIdentifier:(NSString *)cellIdentifier
-                     editable:(BOOL)editable;
+                     editable:(BOOL)editable
+       elementAccessibilityID:(NSString *)elementAccessibilityID
+                    mandatory:(BOOL)mandatory;
+
 + (instancetype)optionWithTitle:(NSString *)title
                     optionValue:(id)optionValue
                  cellIdentifier:(NSString *)cellIdentifier
-                       editable:(BOOL)editable;
+                       editable:(BOOL)editable
+         elementAccessibilityID:(NSString *)elementAccessibilityID
+                      mandatory:(BOOL)mandatory;
 @end

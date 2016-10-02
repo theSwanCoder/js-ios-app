@@ -38,12 +38,14 @@
 
 - (void)setAccessibility:(BOOL)accessibility withTextKey:(NSString *)key identifier:(NSString *)accessibilityIdentifier
 {
+    __weak typeof(self) weakSelf = self;
     [JMLocalization localizeStringForKey:key completion:^(NSString *localizedString, NSString *languageString) {
-        self.isAccessibilityElement = accessibility;
-        self.accessibilityLabel = localizedString;
-        self.accessibilityLanguage = languageString;
-        if ([self conformsToProtocol:@protocol(UIAccessibilityIdentification)]) {
-            id identificationObject = self;
+        __strong typeof(self)strongSelf = weakSelf;
+        strongSelf.isAccessibilityElement = accessibility;
+        strongSelf.accessibilityLabel = localizedString;
+        strongSelf.accessibilityLanguage = languageString;
+        if ([accessibilityIdentifier length] && [strongSelf conformsToProtocol:@protocol(UIAccessibilityIdentification)]) {
+            id identificationObject = strongSelf;
             [identificationObject setAccessibilityIdentifier:accessibilityIdentifier];
         }
     }];

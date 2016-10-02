@@ -32,6 +32,7 @@
 #import "JMCoreDataManager.h"
 #import "JMConstants.h"
 #import "UIAlertController+Additions.h"
+#import "NSObject+Additions.h"
 
 NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
@@ -40,7 +41,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 @property (nonatomic, strong) NSMutableArray *servers;
 @property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, weak) IBOutlet UILabel *errorLabel;
-
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *addButtonItem;
 @end
 
 @implementation JMServersGridViewController
@@ -51,18 +52,26 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 {
     [super viewDidLoad];
     self.title = JMLocalizedString(@"servers_profile_title");
+    [self.view setAccessibility:NO withTextKey:@"servers_profile_title" identifier:JMServerProfilesPageAccessibilityId];
+    
     self.view.backgroundColor = [[JMThemesManager sharedManager] serversViewBackgroundColor];
     self.collectionView.backgroundColor = [UIColor clearColor];
     
     self.errorLabel.text = JMLocalizedString(@"servers_profile_list_empty");
+    [self.errorLabel setAccessibility:YES withTextKey:@"servers_profile_list_empty" identifier:JMServerProfilesPageListEmptyAccessibilityId];
     self.errorLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
 
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];
     
+    [self.addButtonItem setAccessibility:YES withTextKey:@"servers_title_new" identifier:JMServerProfilesPageAddNewProfileButtonAccessibilityId];
+    
     UIMenuItem *editItem = [[UIMenuItem alloc] initWithTitle:JMLocalizedString(@"servers_action_profile_edit") action:@selector(editServerProfile:)];
+    [editItem setAccessibility:YES withTextKey:@"servers_action_profile_edit" identifier:JMServerProfilesPageEditProfileAccessibilityId];
     UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:JMLocalizedString(@"servers_action_profile_delete") action:@selector(deleteServerProfile:)];
+    [deleteItem setAccessibility:YES withTextKey:@"servers_action_profile_delete" identifier:JMServerProfilesPageDeleteProfileAccessibilityId];
     UIMenuItem *cloneItem = [[UIMenuItem alloc] initWithTitle:JMLocalizedString(@"servers_action_profile_clone") action:@selector(cloneServerProfile:)];
+    [cloneItem setAccessibility:YES withTextKey:@"servers_action_profile_clone" identifier:JMServerProfilesPageCloneProfileAccessibilityId];
 
     [[UIMenuController sharedMenuController] setMenuItems:@[editItem, deleteItem, cloneItem]];
 }
