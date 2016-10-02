@@ -29,7 +29,7 @@
 #import "JMUtils.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
-
+#import "NSObject+Additions.h"
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
@@ -50,10 +50,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Accessibility
-    self.view.isAccessibilityElement = NO;
-    self.view.accessibilityIdentifier = [self accessibilityIdentifier];
     
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -77,7 +73,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 #pragma mark - Accessibility
 - (NSString *)accessibilityIdentifier
 {
-    return [NSString stringWithFormat:@"%@AccessibilityId", NSStringFromClass(self.class)];
+    return JMResourceInfoPageAccessibilityID;
 }
 
 #pragma mark - Observers
@@ -90,6 +86,8 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 - (void)resetResourceProperties
 {
     self.title = self.resource.resourceLookup.label;
+    [self.view setAccessibility:NO withTextKey:self.resource.resourceLookup.label identifier:[self accessibilityIdentifier]];
+    
     self.resourceProperties = nil;
     [self.tableView reloadData];
     self.needLayoutUI = YES;
@@ -117,32 +115,39 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         _resourceProperties = @[
                                 @{
                                     kJMTitleKey : @"label",
-                                    kJMValueKey : self.resource.resourceLookup.label ?: @""
+                                    kJMValueKey : self.resource.resourceLookup.label ?: @"",
+                                    kJMAccessibilityIDKey : JMResourceInfoPageTitleLabelAccessibilityID
                                     },
                                 @{
                                     kJMTitleKey : @"description",
-                                    kJMValueKey : self.resource.resourceLookup.resourceDescription ?: @""
+                                    kJMValueKey : self.resource.resourceLookup.resourceDescription ?: @"",
+                                    kJMAccessibilityIDKey : JMResourceInfoPageDescriptionLabelAccessibilityID
                                     },
                                 @{
                                     kJMTitleKey : @"uri",
-                                    kJMValueKey : self.resource.resourceLookup.uri ?: @""
+                                    kJMValueKey : self.resource.resourceLookup.uri ?: @"",
+                                    kJMAccessibilityIDKey : JMResourceInfoPageUriLabelAccessibilityID
                                     },
                                 
                                 @{
                                     kJMTitleKey : @"type",
-                                    kJMValueKey : [self.resource localizedResourceType] ?: @""
+                                    kJMValueKey : [self.resource localizedResourceType] ?: @"",
+                                    kJMAccessibilityIDKey : JMResourceInfoPageTypeLabelAccessibilityID
                                     },
                                 @{
                                     kJMTitleKey : @"version",
-                                    kJMValueKey : self.resource.resourceLookup.version ? [NSString stringWithFormat:@"%@", self.resource.resourceLookup.version]: @""
+                                    kJMValueKey : self.resource.resourceLookup.version ? [NSString stringWithFormat:@"%@", self.resource.resourceLookup.version]: @"",
+                                    kJMAccessibilityIDKey : JMResourceInfoPageVersionLabelAccessibilityID
                                     },
                                 @{
                                     kJMTitleKey : @"creationDate",
-                                    kJMValueKey : createdAtString ?: @""
+                                    kJMValueKey : createdAtString ?: @"",
+                                    kJMAccessibilityIDKey : JMResourceInfoPageCreationDateLabelAccessibilityID
                                     },
                                 @{
                                     kJMTitleKey : @"modifiedDate",
-                                    kJMValueKey : modifiedAtString ?: @""
+                                    kJMValueKey : modifiedAtString ?: @"",
+                                    kJMAccessibilityIDKey : JMResourceInfoPageModifiedDateLabelAccessibilityID
                                     }
                                 ];
     }
@@ -182,10 +187,12 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
     NSMutableArray *rightBarItems = [NSMutableArray array];
     if (selfIsModalViewController) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                              target:self
-                                                                                              action:@selector(cancelButtonTapped:)];
-        self.navigationItem.leftBarButtonItem.tintColor = [[JMThemesManager sharedManager] barItemsColor];
+        UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                    target:self
+                                                                                    action:@selector(cancelButtonTapped:)];
+        cancelItem.tintColor = [[JMThemesManager sharedManager] barItemsColor];
+        [cancelItem setAccessibility:YES withTextKey:@"dialog_button_cancel" identifier:JMResourceInfoPageCancelButtonAccessibilityID];
+        self.navigationItem.leftBarButtonItem = cancelItem;
     } else {
         JMMenuActionsViewAction availableAction = [self availableAction];
         if (availableAction) {
@@ -203,9 +210,11 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
 - (UIBarButtonItem *) actionBarButtonItem
 {
-    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                         target:self
-                                                         action:@selector(showAvailableActions)];
+    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                                target:self
+                                                                                action:@selector(showAvailableActions)];
+    [actionItem setAccessibility:YES withTextKey:@"action_button_title" identifier:JMMenuActionsViewActionButtonAccessibilityId];
+    return actionItem;
 }
 
 - (void)showAvailableActions
@@ -244,6 +253,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         
     NSDictionary *item = self.resourceProperties[indexPath.row];
     cell.textLabel.text = JMLocalizedString([NSString stringWithFormat:@"resource_%@_title", item[kJMTitleKey]]);
+    [cell.textLabel setAccessibility:YES withTextKey:[NSString stringWithFormat:@"resource_%@_title", item[kJMTitleKey]] identifier:item[kJMAccessibilityIDKey]];
     cell.detailTextLabel.text = item[kJMValueKey];
     return cell;
 }

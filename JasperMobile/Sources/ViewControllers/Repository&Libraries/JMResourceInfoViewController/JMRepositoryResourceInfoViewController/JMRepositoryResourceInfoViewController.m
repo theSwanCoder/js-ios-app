@@ -32,7 +32,7 @@
 #import "JMConstants.h"
 #import "JMUtils.h"
 #import "JMThemesManager.h"
-
+#import "NSObject+Additions.h"
 @interface JMRepositoryResourceInfoViewController ()
 
 @end
@@ -93,10 +93,22 @@
                                                                          style:UIBarButtonItemStylePlain
                                                                         target:self
                                                                         action:@selector(favoriteButtonTapped:)];
+        if (isResourceInFavorites) {
+            [favoriteItem setAccessibility:YES withTextKey:@"action_title_markasunfavorite" identifier:JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId];
+        } else {
+            [favoriteItem setAccessibility:YES withTextKey:@"action_title_markasfavorite" identifier:JMMenuActionsViewMarkAsFavoriteActionAccessibilityId];
+        }
+        
         favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
         return favoriteItem;
     }
     return nil;
+}
+
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    return JMRepositoryInfoPageAccessibilityID;
 }
 
 #pragma mark - JMMenuActionsViewDelegate

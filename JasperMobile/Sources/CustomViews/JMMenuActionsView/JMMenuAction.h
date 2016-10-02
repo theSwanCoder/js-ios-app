@@ -64,6 +64,7 @@ typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
 @interface JMMenuAction : NSObject
 @property (nonatomic, strong, readonly) NSString *actionTitle;
 @property (nonatomic, strong, readonly) NSString *actionImageName;
+@property (nonatomic, strong, readonly) NSString *elementAccessibilityID;
 @property (nonatomic, assign) JMMenuActionsViewAction menuAction;
 @property (nonatomic, assign) BOOL actionEnabled;
 @property (nonatomic, assign) BOOL actionAvailable;

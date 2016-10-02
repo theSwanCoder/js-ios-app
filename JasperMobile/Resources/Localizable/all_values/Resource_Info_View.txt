@@ -72,7 +72,7 @@
 		tags = ios
 	[resource_format_title]
 		en = Format
-		tags = ios,unused
+		tags = ios,new
 	[resources_type_reportUnit]
 		en = Report
 		de = Bericht

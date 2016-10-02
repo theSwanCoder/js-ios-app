@@ -434,26 +434,29 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         NSMutableArray *navBarItems = [NSMutableArray array];
         JMMenuActionsViewAction availableAction = [self availableAction];
         if (availableAction & JMMenuActionsViewAction_Filter) {
+            JMMenuAction *filterAction = [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Filter available:YES enabled:YES];
             UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"]
                                                                            style:UIBarButtonItemStylePlain
                                                                           target:self
                                                                           action:@selector(filterByButtonTapped:)];
-            [filterItem setAccessibility:YES withTextKey:@"action_title_filter" identifier:JMMenuActionsViewFilterActionAccessibilityId];
+            [filterItem setAccessibility:YES withTextKey:filterAction.actionTitle identifier:filterAction.elementAccessibilityID];
             [navBarItems addObject:filterItem];
         }
         if (availableAction & JMMenuActionsViewAction_Sort) {
+            JMMenuAction *sortAction = [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Sort available:YES enabled:YES];
             UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"]
                                                                          style:UIBarButtonItemStylePlain
                                                                         target:self
                                                                         action:@selector(sortByButtonTapped:)];
-            [sortItem setAccessibility:YES withTextKey:@"action_title_sort" identifier:JMMenuActionsViewSortActionAccessibilityId];
+            [sortItem setAccessibility:YES withTextKey:sortAction.actionTitle identifier:sortAction.elementAccessibilityID];
             [navBarItems addObject:sortItem];
         }
         if (availableAction & JMMenuActionsViewAction_Schedule) {
+            JMMenuAction *scheduleAction = [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Schedule available:YES enabled:YES];
             UIBarButtonItem *scheduleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                           target:self
                                                                                           action:@selector(createNewScheduleTapped:)];
-            [scheduleItem setAccessibility:YES withTextKey:@"action_title_schedule" identifier:JMMenuActionsViewScheduleActionAccessibilityId];
+            [scheduleItem setAccessibility:YES withTextKey:scheduleAction.actionTitle identifier:scheduleAction.elementAccessibilityID];
             [navBarItems addObject:scheduleItem];
         }
         
@@ -680,10 +683,18 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         return [collectionView dequeueReusableCellWithReuseIdentifier:[self loadingCellForRepresentationType:self.representationType] forIndexPath:indexPath];
     }
     
-    JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [collectionView dequeueReusableCellWithReuseIdentifier:[self resourceCellForRepresentationType:self.representationType]
-                                                                                                                    forIndexPath:indexPath];
-    cell.resource = [self loadedResourceForIndexPath:indexPath];
+    JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [collectionView dequeueReusableCellWithReuseIdentifier:[self resourceCellForRepresentationType:self.representationType] forIndexPath:indexPath];
+    JMResource *currentResource = [self loadedResourceForIndexPath:indexPath];
+    cell.resource = currentResource;
     cell.delegate = self;
+    NSString *elementAccessibilityID;
+    switch (self.representationType) {
+        case JMResourcesRepresentationType_HorizontalList:
+            elementAccessibilityID = JMResourceCollectionPageListCellAccessibilityId;
+        case JMResourcesRepresentationType_Grid:
+            elementAccessibilityID = JMResourceCollectionPageGridCellAccessibilityId;
+    }
+    [cell setAccessibility:NO withTextKey:currentResource.resourceLookup.label identifier:elementAccessibilityID];
     return cell;
 }
 

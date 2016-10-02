@@ -52,6 +52,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    [self.resourceName setAccessibility:YES withTextKey:@"action_title_info" identifier:JMResourceCellResourceInfoButtonAccessibilityId];
+
     self.resourceName.adjustsFontSizeToFitWidth = YES;
     self.resourceName.minimumScaleFactor = [JMUtils isCompactWidth] ? 0.7 : 0.5;
     
@@ -68,6 +70,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 - (void)setResource:(JMResource *)resource
 {
     _resource = resource;
+    [self.resourceName setAccessibility:NO withTextKey:resource.resourceLookup.label identifier:JMResourceCellResourceNameLabelAccessibilityId];
+
     self.resourceName.text = resource.resourceLookup.label;
     self.resourceDescription.text = resource.resourceLookup.resourceDescription;
     self.thumbnailImage = nil;

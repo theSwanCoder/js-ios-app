@@ -27,7 +27,7 @@
 //
 
 #import "JMMenuAction.h"
-
+#import "JMConstants.h"
 
 @implementation JMMenuAction
 - (instancetype)initWithAction:(JMMenuActionsViewAction)action available:(BOOL)available enabled:(BOOL)enabled
@@ -95,6 +95,58 @@
             return @"action_title_hideExternalDisplay";
         case JMMenuActionsViewAction_ShowReportChartTypes:
             return @"action_title_report_chart_types";
+    }
+}
+
+- (NSString *)elementAccessibilityID
+{
+    switch (self.menuAction) {
+        case JMMenuActionsViewAction_None:
+            return nil;
+        case JMMenuActionsViewAction_Filter:
+            return JMMenuActionsViewFilterActionAccessibilityId;
+        case JMMenuActionsViewAction_Edit:
+            return JMMenuActionsViewEditActionAccessibilityId;
+        case JMMenuActionsViewAction_EditFilters:
+            return JMMenuActionsViewEditFiltersActionAccessibilityId;
+        case JMMenuActionsViewAction_Refresh:
+            return JMMenuActionsViewRefreshActionAccessibilityId;
+        case JMMenuActionsViewAction_Save:
+            return JMMenuActionsViewSaveActionAccessibilityId;
+        case JMMenuActionsViewAction_Delete:
+            return JMMenuActionsViewDeleteActionAccessibilityId;
+        case JMMenuActionsViewAction_Rename:
+            return JMMenuActionsViewRenameActionAccessibilityId;
+        case JMMenuActionsViewAction_MakeFavorite:
+            return JMMenuActionsViewMarkAsFavoriteActionAccessibilityId;
+        case JMMenuActionsViewAction_MakeUnFavorite:
+            return JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId;
+        case JMMenuActionsViewAction_Info:
+            return JMMenuActionsViewInfoActionAccessibilityId;
+        case JMMenuActionsViewAction_Sort:
+            return JMMenuActionsViewSortActionAccessibilityId;
+        case JMMenuActionsViewAction_SelectAll:
+            return JMMenuActionsViewSelectAllActionAccessibilityId;
+        case JMMenuActionsViewAction_ClearSelections:
+            return JMMenuActionsViewClearSelectionActionAccessibilityId;
+        case JMMenuActionsViewAction_Run:
+            return JMMenuActionsViewRunActionAccessibilityId;
+        case JMMenuActionsViewAction_Print:
+            return JMMenuActionsViewPrintActionAccessibilityId;
+        case JMMenuActionsViewAction_OpenIn:
+            return JMMenuActionsViewOpenInActionAccessibilityId;
+        case JMMenuActionsViewAction_Schedule:
+            return JMMenuActionsViewScheduleActionAccessibilityId;
+        case JMMenuActionsViewAction_Share:
+            return JMMenuActionsViewShareActionAccessibilityId;
+        case JMMenuActionsViewAction_Bookmarks:
+            return JMMenuActionsViewBookmarksActionAccessibilityId;
+        case JMMenuActionsViewAction_ShowExternalDisplay:
+            return JMMenuActionsViewShowExternalDisplayActionAccessibilityId;
+        case JMMenuActionsViewAction_HideExternalDisplay:
+            return JMMenuActionsViewHideExternalDisplayActionAccessibilityId;
+        case JMMenuActionsViewAction_ShowReportChartTypes:
+            return JMMenuActionsViewChartTypesActionAccessibilityId;
     }
 }
 

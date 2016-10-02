@@ -30,6 +30,7 @@
 #import "JMResource.h"
 #import "JMDashboardViewerVC.h"
 #import "JMUtils.h"
+#import "JMConstants.h"
 
 @interface JMDashboardInfoViewController ()
 
@@ -49,6 +50,12 @@
     if (action == JMMenuActionsViewAction_Run) {
         [self runDashboard];
     }
+}
+
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    return JMDashboardInfoPageAccessibilityID;
 }
 
 - (void)runDashboard

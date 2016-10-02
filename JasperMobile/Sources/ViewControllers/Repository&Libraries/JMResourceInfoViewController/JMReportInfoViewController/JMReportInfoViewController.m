@@ -30,6 +30,7 @@
 #import "JMResource.h"
 #import "JMReportViewerVC.h"
 #import "JMUtils.h"
+#import "JMConstants.h"
 
 @interface JMReportInfoViewController ()
 
@@ -50,6 +51,12 @@
     } else if (action == JMMenuActionsViewAction_Schedule) {
         [self scheduleReport];
     }
+}
+
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    return JMReportInfoPageAccessibilityID;
 }
 
 #pragma mark - Private API

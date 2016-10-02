@@ -24,6 +24,8 @@
 #import "JMLoadingCollectionViewCell.h"
 #import "JMThemesManager.h"
 #import "JMLocalization.h"
+#import "NSObject+Additions.h"
+#import "JMConstants.h"
 
 NSString * kJMHorizontalLoadingCell = @"JMHorizontalLoadingCollectionViewCell";
 NSString * kJMGridLoadingCell = @"JMGridLoadingCollectionViewCell";

@@ -76,7 +76,8 @@
     NSMutableArray *properties = [[super resourceProperties] mutableCopy];
     [properties addObject:@{
                             kJMTitleKey : @"format",
-                            kJMValueKey : self.savedReports.format ?: @""
+                            kJMValueKey : self.savedReports.format ?: @"",
+                            kJMAccessibilityIDKey : JMResourceInfoPageFormatLabelAccessibilityID
                             }];
     return properties;
 }
@@ -157,6 +158,12 @@
     if (nextVC) {
         [self.navigationController pushViewController:nextVC animated:YES];
     }
+}
+
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    return JMSavedItemsInfoPageAccessibilityID;
 }
 
 #pragma mark - UITextFieldDelegate
