@@ -54,7 +54,8 @@ typedef NS_ENUM(NSInteger, JMMenuItemControllerPresentationStyle){
 @interface JMMenuItem : NSObject
 @property (nonatomic, readonly) JMMenuItemControllerPresentationStyle presentationStyle;
 @property (nonatomic, readonly) JMMenuItemType itemType;
-@property (nonatomic, readonly) NSString *itemTitle;
+@property (nonatomic, readonly) NSString *itemTitleKey;
+@property (nonatomic, readonly) NSString *itemAccessibilityID;
 @property (nonatomic, readonly) UIImage  *itemIcon;
 @property (nonatomic, readonly) UIImage  *selectedItemIcon;
 

@@ -30,6 +30,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+RGBComponent.h"
 #import "JMThemesManager.h"
+#import "JMLocalization.h"
+#import "NSObject+Additions.h"
 
 @implementation JMMenuItemTableViewCell
 
@@ -75,7 +77,8 @@
 - (void)setMenuItem:(JMMenuItem *)menuItem
 {
     _menuItem = menuItem;
-    self.textLabel.text = menuItem.itemTitle;
+    self.textLabel.text = JMLocalizedString(menuItem.itemTitleKey);
+    [self.textLabel setAccessibility:YES withTextKey:menuItem.itemTitleKey identifier:menuItem.itemAccessibilityID];
     self.imageView.image = menuItem.itemIcon;
 }
 

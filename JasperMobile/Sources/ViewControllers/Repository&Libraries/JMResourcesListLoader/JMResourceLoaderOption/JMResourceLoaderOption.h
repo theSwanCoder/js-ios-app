@@ -32,9 +32,28 @@
  */
 #import <Foundation/Foundation.h>
 
+typedef NS_OPTIONS(NSInteger, JMResourceLoaderOptionType) {
+    JMResourceLoaderOptionTypeSortBy_Name            = 0,
+    JMResourceLoaderOptionTypeSortBy_CreationDate,
+    JMResourceLoaderOptionTypeSortBy_ModifiedDate,
+    JMResourceLoaderOptionTypeSortBy_AccessTime,
+    JMResourceLoaderOptionTypeFilterBy_All,
+    JMResourceLoaderOptionTypeFilterBy_ReportUnit,
+    JMResourceLoaderOptionTypeFilterBy_Dashboard,
+    JMResourceLoaderOptionTypeFilterBy_Folder,
+    JMResourceLoaderOptionTypeFilterBy_File,
+    JMResourceLoaderOptionTypeFilterBy_SavedItem
+};
+
 @interface JMResourceLoaderOption : NSObject
-@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong, readonly) NSString *titleKey;
+@property (nonatomic, strong, readonly) NSString *elementAccessibilityID;
 @property (nonatomic, strong) id value;
-- (instancetype)initWithTitle:(NSString *)title value:(id)value;
-+ (instancetype)optionWithTitle:(NSString *)title value:(id)value;
+
+- (instancetype)initWithOptionType:(JMResourceLoaderOptionType)optionType value:(id)value;
++ (instancetype)optionWithOptionType:(JMResourceLoaderOptionType)optionType value:(id)value;
+
+- (instancetype)initWithFormat:(NSString *)format value:(id)value;
++ (instancetype)optionWithFormat:(NSString *)format value:(id)value;
+
 @end

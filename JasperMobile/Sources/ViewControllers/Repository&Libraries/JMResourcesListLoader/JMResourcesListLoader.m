@@ -254,12 +254,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Sort: {
             NSArray *allOptions = @[
-                                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_name")
-                                                                      value:@"label"],
-                                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_creationDate")
-                                                                      value:@"creationDate"],
-                                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_modifiedDate")
-                                                                      value:@"updateDate"]
+                                    [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeSortBy_Name
+                                                                         value:@"label"],
+                                    [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeSortBy_CreationDate
+                                                                         value:@"creationDate"],
+                                    [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeSortBy_ModifiedDate
+                                                                         value:@"updateDate"]
                                     ];
             return allOptions;
         }
@@ -268,16 +268,16 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
             if ([JMUtils isServerProEdition]) {
                 // reports
                 NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_FOLDER]; //We should send kJS_WS_TYPE_FOLDER here according to http://jira.jaspersoft.com/browse/JRS-11049
-                JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
-                                                                                               value:reportsValues];
+                JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_ReportUnit
+                                                                                                  value:reportsValues];
                 // dashboards
                 NSArray *dashboardsValues = @[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY];
-                JMResourceLoaderOption *dashboardFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_dashboard")
-                                                                                                  value:dashboardsValues];
+                JMResourceLoaderOption *dashboardFilterOption = [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_Dashboard
+                                                                                                     value:dashboardsValues];
                 // all
                 NSArray *allValues = [reportsValues arrayByAddingObjectsFromArray:dashboardsValues];
-                JMResourceLoaderOption *allItemsFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
-                                                                                                 value:allValues];
+                JMResourceLoaderOption *allItemsFilterOption = [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_All
+                                                                                                    value:allValues];
                 allOptions = @[
                                allItemsFilterOption,
                                reportFilterOption,
@@ -285,8 +285,8 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                                ];
             } else {
                 NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT];
-                JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
-                                                                                               value:reportsValues];
+                JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_ReportUnit
+                                                                                                  value:reportsValues];
                 allOptions = @[
                                reportFilterOption
                                ];

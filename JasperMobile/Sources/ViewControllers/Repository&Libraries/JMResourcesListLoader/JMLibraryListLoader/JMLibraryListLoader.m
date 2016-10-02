@@ -33,7 +33,7 @@
         case JMResourcesListLoaderOptionType_Sort: {
             NSMutableArray *allOptions = [[super listItemsWithOption:optionType] mutableCopy];
             if ([JMUtils isServerProEdition]) {
-                [allOptions addObject:[JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_accessTime")
+                [allOptions addObject:[JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeSortBy_AccessTime
                                                                         value:@"accessTime"]];
             }
             return allOptions;

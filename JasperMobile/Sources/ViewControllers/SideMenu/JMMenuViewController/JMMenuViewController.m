@@ -41,6 +41,7 @@
 #import "JMUtils.h"
 #import "NSObject+Additions.h"
 #import "JMLocalization.h"
+#import "NSObject+Additions.h"
 
 typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonStateNormal,
@@ -89,7 +90,8 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-
+    [self.view setAccessibility:NO withTextKey:@"menu_title_label" identifier:JMSideApplicationMenuAccessibilityId];
+    
     self.view.backgroundColor = [[JMThemesManager sharedManager] menuViewBackgroundColor];
     self.userNameLabel.textColor = [[JMThemesManager sharedManager] menuViewUserNameTextColor];
     self.serverNameLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
@@ -101,8 +103,10 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     // version and build
     NSString *version = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
     NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
-    self.appVersionLabel.text = [NSString stringWithFormat:@"v. %@ (%@)", version, build];
-
+    NSString *fullVersioString = [NSString stringWithFormat:@"v. %@ (%@)", version, build];
+    self.appVersionLabel.text = fullVersioString;
+    [self.appVersionLabel setAccessibility:YES withTextKey:fullVersioString identifier:JMSideApplicationMenuVersionLabelAccessibilityId];
+    
     [self updateServerInfo];
 }
 
@@ -307,6 +311,8 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
      forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:button];
 
+    [bbi setAccessibility:YES withTextKey:@"menu_open_button" identifier:JMSideApplicationMenuMenuButtonAccessibilityId];
+    
     return bbi;
 }
 

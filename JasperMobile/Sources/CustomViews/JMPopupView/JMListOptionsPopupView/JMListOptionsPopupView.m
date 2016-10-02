@@ -26,6 +26,8 @@
 #import "JMResourceLoaderOption.h"
 #import "JMThemesManager.h"
 #import "JMUtils.h"
+#import "JMLocalization.h"
+#import "NSObject+Additions.h"
 
 #define kJMList
 
@@ -95,7 +97,9 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    cell.textLabel.text = [self.options[indexPath.row] title];
+    JMResourceLoaderOption *currentOption = self.options[indexPath.row];
+    cell.textLabel.text = JMLocalizedString(currentOption.titleKey);
+    [cell.textLabel setAccessibility:YES withTextKey:currentOption.titleKey identifier:currentOption.elementAccessibilityID];
     cell.accessoryType = indexPath.row == self.selectedIndex ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     return cell;
 }

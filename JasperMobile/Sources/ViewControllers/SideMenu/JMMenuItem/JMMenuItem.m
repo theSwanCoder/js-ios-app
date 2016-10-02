@@ -28,6 +28,7 @@
 
 #import "JMMenuItem.h"
 #import "JMLocalization.h"
+#import "JMConstants.h"
 
 @implementation JMMenuItem
 
@@ -36,7 +37,7 @@
     self = [super init];
     if (self) {
         _itemType = itemType;
-        _itemTitle = [self titleWithResourceType];
+        _itemTitleKey = [self titleKeyWithResourceType];
         _showNotes = NO;
         _selected = NO;
     }
@@ -72,28 +73,54 @@
     return JMMenuItemControllerPresentationStyle_Navigate;
 }
 
-#pragma mark - Private API
-- (NSString *) titleWithResourceType
+- (NSString *)itemAccessibilityID
 {
     switch (self.itemType) {
         case JMMenuItemType_Library:
-            return JMLocalizedString(@"menuitem_library_label");
+            return JMLibraryPageAccessibilityId;
         case JMMenuItemType_SavedItems:
-            return JMLocalizedString(@"menuitem_saveditems_label");
+            return JMSavedItemsPageAccessibilityId;
         case JMMenuItemType_Favorites:
-            return JMLocalizedString(@"menuitem_favorites_label");
+            return JMFavoritesPageAccessibilityId;
         case JMMenuItemType_Scheduling:
-            return JMLocalizedString(@"menuitem_schedules_label");
+            return JMSchedulesPageAccessibilityId;
         case JMMenuItemType_Repository:
-            return JMLocalizedString(@"menuitem_repository_label");
+            return JMRepositoryPageAccessibilityId;
         case JMMenuItemType_About:
-            return JMLocalizedString(@"menuitem_about_label");
+            return JMAppAboutPageAccessibilityId;
         case JMMenuItemType_Feedback:
-            return JMLocalizedString(@"menuitem_feedback_label");
+            return JMFeedbackPageAccessibilityID;
         case JMMenuItemType_Settings:
-            return JMLocalizedString(@"menuitem_settings_label");
+            return JMSettingsPageAccessibilityId;
         case JMMenuItemType_Logout:
-            return JMLocalizedString(@"menuitem_logout_label");
+            return JMLogoutAccessibilityID;
+        default:
+            return nil;
+    }
+}
+
+#pragma mark - Private API
+- (NSString *) titleKeyWithResourceType
+{
+    switch (self.itemType) {
+        case JMMenuItemType_Library:
+            return @"menuitem_library_label";
+        case JMMenuItemType_SavedItems:
+            return @"menuitem_saveditems_label";
+        case JMMenuItemType_Favorites:
+            return @"menuitem_favorites_label";
+        case JMMenuItemType_Scheduling:
+            return @"menuitem_schedules_label";
+        case JMMenuItemType_Repository:
+            return @"menuitem_repository_label";
+        case JMMenuItemType_About:
+            return @"menuitem_about_label";
+        case JMMenuItemType_Feedback:
+            return @"menuitem_feedback_label";
+        case JMMenuItemType_Settings:
+            return @"menuitem_settings_label";
+        case JMMenuItemType_Logout:
+            return @"menuitem_logout_label";
         default:
             return nil;
     }
@@ -206,7 +233,7 @@
 
 - (NSUInteger)hash
 {
-    return [self.itemTitle hash];
+    return [self.itemTitleKey hash];
 }
 
 @end

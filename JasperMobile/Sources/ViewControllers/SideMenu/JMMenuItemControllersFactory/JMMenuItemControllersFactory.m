@@ -39,7 +39,7 @@
 #import "JMLocalization.h"
 #import "JMConstants.h"
 #import "JMUtils.h"
-
+#import "NSObject+Additions.h"
 
 typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonState_Normal,
@@ -70,7 +70,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         }
         case JMMenuItemType_SavedItems:{
             JMResourceCollectionViewController *savedItemsVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
-            savedItemsVC.noResultString = JMLocalizedString(@"resources_noresults_saveditems_msg");
+            savedItemsVC.noResultStringKey = @"resources_noresults_saveditems_msg";
             savedItemsVC.representationTypeKey = @"SavedItemsRepresentationTypeKey";
             savedItemsVC.resourceListLoader = [JMSavedResourcesListLoader new];
             savedItemsVC.resourceListLoader.delegate = savedItemsVC;
@@ -79,7 +79,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         }
         case JMMenuItemType_Favorites:{
             JMResourceCollectionViewController *favoriteItemsVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
-            favoriteItemsVC.noResultString = JMLocalizedString(@"resources_noresults_favorites_msg");
+            favoriteItemsVC.noResultStringKey = @"resources_noresults_favorites_msg";
             favoriteItemsVC.representationTypeKey = @"FavoritesRepresentationTypeKey";
             favoriteItemsVC.resourceListLoader = [JMFavoritesListLoader new];
             favoriteItemsVC.resourceListLoader.delegate = favoriteItemsVC;
@@ -88,7 +88,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         }
         case JMMenuItemType_Scheduling: {
             JMResourceCollectionViewController *scheduleVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMResourceCollectionViewController"];
-            scheduleVC.noResultString = JMLocalizedString(@"resources_noresults_schedules_msg");
+            scheduleVC.noResultStringKey = @"resources_noresults_schedules_msg";
             scheduleVC.representationTypeKey = @"SchedulesRepresentationTypeKey";
             scheduleVC.resourceListLoader = [JMSchedulesListLoader new];
             scheduleVC.resourceListLoader.delegate = scheduleVC;
@@ -122,9 +122,10 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             break;
     }
     
-    NSAssert(menuItemViewController, @"MenuItemViewController not initialized. Item Title: %@", menuItem.itemTitle);
+    NSAssert(menuItemViewController, @"MenuItemViewController not initialized. Item Title: %@", menuItem.itemTitleKey);
     
-    menuItemViewController.title = menuItem.itemTitle;
+    menuItemViewController.title = JMLocalizedString(menuItem.itemTitleKey);
+    [menuItemViewController setAccessibility:NO withTextKey:menuItem.itemTitleKey identifier:menuItem.itemAccessibilityID];
     return [[JMMainNavigationController alloc] initWithRootViewController:menuItemViewController];
 }
 

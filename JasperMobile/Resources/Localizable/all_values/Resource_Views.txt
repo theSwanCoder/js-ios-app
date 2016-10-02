@@ -60,3 +60,6 @@
 		pt = Nenhum trabalho foi encontrado.
 		zh = 没有找到任务。
 		tags = ios
+    [resources_change_representation_type_label]
+        en = Change representation type
+        tags = ios,new

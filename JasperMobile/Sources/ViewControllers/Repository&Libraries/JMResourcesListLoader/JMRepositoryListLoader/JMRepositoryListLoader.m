@@ -122,7 +122,7 @@
         }
         case JMResourcesListLoaderOptionType_Filter:
             return @[
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
+                    [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_All
                                                       value:@[
                                                               kJS_WS_TYPE_REPORT_UNIT,
                                                               kJS_WS_TYPE_DASHBOARD,

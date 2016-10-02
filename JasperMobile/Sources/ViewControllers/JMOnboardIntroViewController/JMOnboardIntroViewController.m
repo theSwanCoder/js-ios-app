@@ -35,6 +35,7 @@
 #import "JMLocalization.h"
 #import "JMConstants.h"
 #import "JMUtils.h"
+#import "NSObject+Additions.h"
 
 static const CGFloat kDefaultAnimationDuration = 0.4f;
 static const CGFloat kDefaultStepValue = 1.0f;
@@ -95,12 +96,18 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.view setAccessibility:NO withTextKey:@"intro_title" identifier:JMOnboardIntroPageAccessibilityID];
     
     [self addGestureRecognizer];
     
     [self setButtonTitleForPage:self.introPage];
+    [self.skipButton setAccessibility:YES withTextKey:@"intro_button_skip_startUsing" identifier:JMOnboardIntroPageSkipIntroButtonAccessibilityID];
+    
     self.titleLabel.text = [NSString stringWithFormat:JMLocalizedString(@"intro_title"), kJMAppName];
+    [self.titleLabel setAccessibility:YES withTextKey:@"intro_title" identifier:JMOnboardIntroPageTitleAccessibilityID];
+
     self.descriptionLabel.text = JMLocalizedString(@"intro_description");
+    [self.descriptionLabel setAccessibility:YES withTextKey:@"intro_title" identifier:JMOnboardIntroPageDescriptionAccessibilityID];
 }
 
 - (void)viewWillAppear:(BOOL)animated

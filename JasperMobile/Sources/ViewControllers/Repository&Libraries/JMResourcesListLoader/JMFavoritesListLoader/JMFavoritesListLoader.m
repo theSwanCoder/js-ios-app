@@ -76,7 +76,7 @@
         }
         case JMResourcesListLoaderOptionType_Filter: {
             NSMutableArray *allFilterOptions = [@[
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
+                    [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_All
                                                       value:@[
                                                               kJS_WS_TYPE_REPORT_UNIT,
                                                               kJS_WS_TYPE_DASHBOARD,
@@ -85,18 +85,18 @@
                                                               kJS_WS_TYPE_FILE,
                                                               kJMSavedReportUnit
                                                       ]],
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
+                    [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_ReportUnit
                                                       value:@[kJS_WS_TYPE_REPORT_UNIT]],
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_saved_reportUnit")
+                    [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_SavedItem
                                                       value:@[kJMSavedReportUnit]],
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_folder")
+                    [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_Folder
                                                       value:@[kJS_WS_TYPE_FOLDER]],
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_files")
+                    [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_File
                                                       value:@[kJS_WS_TYPE_FILE]],
             ] mutableCopy];
 
             if ([JMUtils isServerProEdition]) {
-                JMResourceLoaderOption *filterByDashboardOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_dashboard")
+                JMResourceLoaderOption *filterByDashboardOption = [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_Dashboard
                                                                                                     value:@[
                                                                                                             kJS_WS_TYPE_DASHBOARD,
                                                                                                             kJS_WS_TYPE_DASHBOARD_LEGACY

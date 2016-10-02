@@ -58,7 +58,7 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
         self.tableView.separatorColor = [UIColor darkGrayColor];
 
         // Accessibility
-        [self setAccessibility:NO withTextKey:nil identifier:JMMenuActionsViewAccessibilityId];
+        [self setAccessibility:NO withTextKey:@"action_menu_title" identifier:JMMenuActionsViewAccessibilityId];
     }
     return self;
 }

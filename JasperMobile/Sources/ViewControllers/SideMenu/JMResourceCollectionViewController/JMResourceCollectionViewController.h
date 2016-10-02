@@ -46,7 +46,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
 @interface JMResourceCollectionViewController : JMBaseViewController <JMResourcesListLoaderDelegate>
 
-@property (nonatomic, strong) NSString *noResultString;
+@property (nonatomic, strong) NSString *noResultStringKey;
 @property (nonatomic, strong) NSString *representationTypeKey;
 @property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
 

@@ -1,5 +1,11 @@
 
 [[Menu View]]
+    [menu_title_label]
+        en = Side application menu
+        tags = ios,new
+    [menu_open_button]
+        en = Toggle menu button
+        tags = ios,new
 	[menuitem_library_label]
 		en = Library
 		de = Bibliothek

@@ -1,5 +1,8 @@
 
 [[Action titles]]
+    [action_button_title]
+        en = Action button
+        tags = ios,new
 	[action_title_refresh]
 		en = Refresh
 		de = Aktualisieren

@@ -27,23 +27,106 @@
 //
 
 #import "JMResourceLoaderOption.h"
-
+#import "JMConstants.h"
+#import "JSConstants.h"
 
 @implementation JMResourceLoaderOption
 
-- (instancetype)initWithTitle:(NSString *)title value:(id)value
+- (instancetype)initWithOptionType:(JMResourceLoaderOptionType)optionType value:(id)value
 {
     self = [super init];
     if (self) {
-        _title = title;
+        _elementAccessibilityID = [self accessibilityIdentifierForType:optionType];
+        _titleKey = [self titleKeyForType:optionType];
         _value = value;
     }
     return self;
 }
 
-+ (instancetype)optionWithTitle:(NSString *)title value:(id)value
++ (instancetype)optionWithOptionType:(JMResourceLoaderOptionType)optionType value:(id)value
 {
-    return [[self alloc] initWithTitle:title value:value];
+    return [[self alloc] initWithOptionType:optionType value:value];
+}
+
+- (instancetype)initWithFormat:(NSString *)format value:(id)value
+{
+    self = [super init];
+    if (self) {
+        _elementAccessibilityID = [self accessibilityIdentifierForFormat:[format lowercaseString]];
+        _titleKey = format;
+        _value = value;
+    }
+    return self;
+}
+
++ (instancetype)optionWithFormat:(NSString *)format value:(id)value
+{
+    return [[self alloc] initWithFormat:format value:value];
+}
+
+
+- (NSString *)titleKeyForType:(JMResourceLoaderOptionType)optionType
+{
+    switch (optionType) {
+        case JMResourceLoaderOptionTypeSortBy_Name:
+            return @"resources_sortby_name";
+        case JMResourceLoaderOptionTypeSortBy_CreationDate:
+            return @"resources_sortby_creationDate";
+        case JMResourceLoaderOptionTypeSortBy_ModifiedDate:
+            return @"resources_sortby_modifiedDate";
+        case JMResourceLoaderOptionTypeSortBy_AccessTime:
+            return @"resources_sortby_accessTime";
+        case JMResourceLoaderOptionTypeFilterBy_All:
+            return @"resources_filterby_type_all";
+        case JMResourceLoaderOptionTypeFilterBy_ReportUnit:
+            return @"resources_filterby_type_reportUnit";
+        case JMResourceLoaderOptionTypeFilterBy_Dashboard:
+            return @"resources_filterby_type_dashboard";
+        case JMResourceLoaderOptionTypeFilterBy_Folder:
+            return @"resources_filterby_type_folder";
+        case JMResourceLoaderOptionTypeFilterBy_File:
+            return @"resources_filterby_type_files";
+        case JMResourceLoaderOptionTypeFilterBy_SavedItem:
+            return @"resources_filterby_type_saved_reportUnit";
+    }
+}
+
+- (NSString *)accessibilityIdentifierForType:(JMResourceLoaderOptionType)optionType
+{
+    switch (optionType) {
+        case JMResourceLoaderOptionTypeSortBy_Name:
+            return JMResourceLoaderSortByNameAccessibilityID;
+        case JMResourceLoaderOptionTypeSortBy_CreationDate:
+            return JMResourceLoaderSortByCreationDateAccessibilityID;
+        case JMResourceLoaderOptionTypeSortBy_ModifiedDate:
+            return JMResourceLoaderSortByModifiedDateAccessibilityID;
+        case JMResourceLoaderOptionTypeSortBy_AccessTime:
+            return JMResourceLoaderSortByAccessTimeAccessibilityID;
+        case JMResourceLoaderOptionTypeFilterBy_All:
+            return JMResourceLoaderFilterByAllAccessibilityID;
+        case JMResourceLoaderOptionTypeFilterBy_ReportUnit:
+            return JMResourceLoaderFilterByReportUnitAccessibilityID;
+        case JMResourceLoaderOptionTypeFilterBy_Dashboard:
+            return JMResourceLoaderFilterByDashboardAccessibilityID;
+        case JMResourceLoaderOptionTypeFilterBy_Folder:
+            return JMResourceLoaderFilterByFolderAccessibilityID;
+        case JMResourceLoaderOptionTypeFilterBy_File:
+            return JMResourceLoaderFilterByFileAccessibilityID;
+        case JMResourceLoaderOptionTypeFilterBy_SavedItem:
+            return JMResourceLoaderFilterBySavedItemAccessibilityID;
+    }
+}
+
+- (NSString *)accessibilityIdentifierForFormat:(NSString *)format
+{
+    if ([format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
+        return JMResourceLoaderFilterByHTMLAccessibilityID;
+    } else if ([format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
+        return JMResourceLoaderFilterByPDFAccessibilityID;
+    } else if ([format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
+        return JMResourceLoaderFilterByXLSAccessibilityID;
+    }
+    return nil;
 }
 
 @end

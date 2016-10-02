@@ -39,3 +39,6 @@
 	[max_value_title]
 		en = Max
 		tags = ios,new
+    [action_menu_title]
+        en = Action menu
+        tags = ios,new
