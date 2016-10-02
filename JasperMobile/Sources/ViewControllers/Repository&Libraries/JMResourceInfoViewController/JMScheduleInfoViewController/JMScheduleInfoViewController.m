@@ -85,37 +85,37 @@
             @{
                     kJMTitleKey : @"type",
                     kJMValueKey : [self.resource localizedResourceType] ?: @"-",
-                    kJMPageAccessibilityIdKey : JMResourceInfoPageTypeLabelPageAccessibilityId
+                    kJMPageAccessibilityIdKey : JMResourceInfoPageTypeLabelAccessibilityId
             },
             @{
                     kJMTitleKey : @"version",
                     kJMValueKey : [NSString stringWithFormat:@"%@", @(scheduleLookup.version)],
-                    kJMPageAccessibilityIdKey : JMResourceInfoPageVersionLabelPageAccessibilityId
+                    kJMPageAccessibilityIdKey : JMResourceInfoPageVersionLabelAccessibilityId
             },
             @{
                     kJMTitleKey : @"label",
                     kJMValueKey : scheduleLookup.label ?: @"-",
-                    kJMPageAccessibilityIdKey : JMResourceInfoPageTitleLabelPageAccessibilityId
+                    kJMPageAccessibilityIdKey : JMResourceInfoPageTitleLabelAccessibilityId
             },
             @{
                     kJMTitleKey : @"description",
                     kJMValueKey : scheduleLookup.scheduleDescription ?: @"-",
-                    kJMPageAccessibilityIdKey : JMResourceInfoPageDescriptionLabelPageAccessibilityId
+                    kJMPageAccessibilityIdKey : JMResourceInfoPageDescriptionLabelAccessibilityId
             },
             @{
                     kJMTitleKey : @"schedule_owner",
                     kJMValueKey : scheduleLookup.owner ?: @"-",
-                    kJMPageAccessibilityIdKey : JMResourceInfoPageScheduleOwnerLabelPageAccessibilityId
+                    kJMPageAccessibilityIdKey : JMResourceInfoPageScheduleOwnerLabelAccessibilityId
             },
             @{
                     kJMTitleKey : @"schedule_state",
                     kJMValueKey : scheduleLookup.state.value ?: @"-",
-                    kJMPageAccessibilityIdKey : JMResourceInfoPageScheduleStateLabelPageAccessibilityId
+                    kJMPageAccessibilityIdKey : JMResourceInfoPageScheduleStateLabelAccessibilityId
             },
             @{
                     kJMTitleKey : @"schedule_previousFireTime",
                     kJMValueKey : [self dateStringFromDate:scheduleLookup.state.previousFireTime] ?: @"-",
-                    kJMPageAccessibilityIdKey : JMResourceInfoPageSchedulePreviousFireTimeLabelPageAccessibilityId
+                    kJMPageAccessibilityIdKey : JMResourceInfoPageSchedulePreviousFireTimeLabelAccessibilityId
             }
     ] mutableCopy];
     NSString *nextFireTime = @"-";

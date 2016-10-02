@@ -78,6 +78,7 @@ static NSInteger _cancelRequestPopupCounter = 0;
     if (cancelBlock) {
         popup.cancelButton.hidden = NO;
         [popup.cancelButton setTitle:JMLocalizedString(@"dialog_button_cancel") forState:UIControlStateNormal];
+        [popup setAccessibility:YES withTextKey:@"dialog_button_cancel" identifier:JMButtonCancelAccessibilityId];
         popup.cancelBlock = cancelBlock;
     } else {
         popup.cancelButton.hidden = YES;

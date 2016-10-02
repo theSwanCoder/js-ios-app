@@ -124,10 +124,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     }
     
     self.activityViewTitleLabel.text = JMLocalizedString(@"resources_loading_msg");
-    [self.activityViewTitleLabel setAccessibility:YES withTextKey:@"resources_loading_msg" identifier:JMResourceCollectionPageActivityLabelPageAccessibilityId];
+    [self.activityViewTitleLabel setAccessibility:YES withTextKey:@"resources_loading_msg" identifier:JMResourceCollectionPageActivityLabelAccessibilityId];
 
     self.noResultsViewTitleLabel.text = JMLocalizedString(self.noResultStringKey);
-    [self.noResultsViewTitleLabel setAccessibility:YES withTextKey:self.noResultStringKey identifier:JMResourceCollectionPageNoResultLabelPageAccessibilityId];
+    [self.noResultsViewTitleLabel setAccessibility:YES withTextKey:self.noResultStringKey identifier:JMResourceCollectionPageNoResultLabelAccessibilityId];
     
     self.activityViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
     self.noResultsViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];

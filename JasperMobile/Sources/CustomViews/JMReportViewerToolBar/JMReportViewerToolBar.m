@@ -24,6 +24,9 @@
 #import "JMThemesManager.h"
 #import "JaspersoftSDK.h"
 #import "JMLocalization.h"
+#import "JMConstants.h"
+#import "NSObject+Additions.h"
+
 
 @interface JMReportViewerToolBar () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *pageCountLabel;
@@ -48,6 +51,14 @@
     self.currentPageField.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
     self.currentPageField.inputView = self.pickerView;
     self.currentPageField.inputAccessoryView = [self pickerToolbar];
+
+    [self.firstButton setAccessibility:YES withTextKey:@"dialog_title_first" identifier:JMButtonFirstAccessibilityId];
+    [self.previousButton setAccessibility:YES withTextKey:@"dialog_title_previous" identifier:JMButtonPreviousAccessibilityId];
+    [self.nextButton setAccessibility:YES withTextKey:@"dialog_title_next" identifier:JMButtonNextAccessibilityId];
+    [self.lastButton setAccessibility:YES withTextKey:@"dialog_title_last" identifier:JMButtonLastAccessibilityId];
+    
+    
+    [self.currentPageField setAccessibility:YES withTextKey:@"dialog_title_last" identifier:JMButtonLastAccessibilityId];
 
     [self addObsevers];
 }
@@ -114,6 +125,7 @@
 {
     NSString *keyString = JMLocalizedString(@"report_viewer_pagecount");
     self.pageCountLabel.text = [NSString stringWithFormat:keyString, self.countOfPages];
+    [self.pageCountLabel setAccessibility:YES withTextKey:@"report_viewer_pagecount" identifier:<#(NSString *)#>
     self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
     
     self.previousButton.enabled = self.currentPage > 1;

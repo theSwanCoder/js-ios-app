@@ -1,11 +1,5 @@
 
 [[Buttons]]
-    [dialog_button_done]
-        en = Done
-        tags = ios, new
-    [dialog_button_apply]
-        en = Apply
-        tags = ios, new
 	[dialog_button_applyUpdate]
 		en = Run Dashboard
 		de = Bedieneroberfläche ausführen
@@ -129,3 +123,21 @@
         pt = Aceitar
         zh = 接受
         tags = ios
+    [dialog_button_done]
+        en = Done
+        tags = ios, new
+    [dialog_button_apply]
+        en = Apply
+        tags = ios, new
+    [dialog_button_first]
+        en = First
+        tags = ios, new
+    [dialog_button_previous]
+        en = Previous
+        tags = ios, new
+    [dialog_button_next]
+        en = Next
+        tags = ios, new
+    [dialog_button_last]
+        en = Last
+        tags = ios, new

@@ -116,38 +116,38 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
                                 @{
                                     kJMTitleKey : @"label",
                                     kJMValueKey : self.resource.resourceLookup.label ?: @"",
-                                    kJMPageAccessibilityIdKey : JMResourceInfoPageTitleLabelPageAccessibilityId
+                                    kJMPageAccessibilityIdKey : JMResourceInfoPageTitleLabelAccessibilityId
                                     },
                                 @{
                                     kJMTitleKey : @"description",
                                     kJMValueKey : self.resource.resourceLookup.resourceDescription ?: @"",
-                                    kJMPageAccessibilityIdKey : JMResourceInfoPageDescriptionLabelPageAccessibilityId
+                                    kJMPageAccessibilityIdKey : JMResourceInfoPageDescriptionLabelAccessibilityId
                                     },
                                 @{
                                     kJMTitleKey : @"uri",
                                     kJMValueKey : self.resource.resourceLookup.uri ?: @"",
-                                    kJMPageAccessibilityIdKey : JMResourceInfoPageUriLabelPageAccessibilityId
+                                    kJMPageAccessibilityIdKey : JMResourceInfoPageUriLabelAccessibilityId
                                     },
                                 
                                 @{
                                     kJMTitleKey : @"type",
                                     kJMValueKey : [self.resource localizedResourceType] ?: @"",
-                                    kJMPageAccessibilityIdKey : JMResourceInfoPageTypeLabelPageAccessibilityId
+                                    kJMPageAccessibilityIdKey : JMResourceInfoPageTypeLabelAccessibilityId
                                     },
                                 @{
                                     kJMTitleKey : @"version",
                                     kJMValueKey : self.resource.resourceLookup.version ? [NSString stringWithFormat:@"%@", self.resource.resourceLookup.version]: @"",
-                                    kJMPageAccessibilityIdKey : JMResourceInfoPageVersionLabelPageAccessibilityId
+                                    kJMPageAccessibilityIdKey : JMResourceInfoPageVersionLabelAccessibilityId
                                     },
                                 @{
                                     kJMTitleKey : @"creationDate",
                                     kJMValueKey : createdAtString ?: @"",
-                                    kJMPageAccessibilityIdKey : JMResourceInfoPageCreationDateLabelPageAccessibilityId
+                                    kJMPageAccessibilityIdKey : JMResourceInfoPageCreationDateLabelAccessibilityId
                                     },
                                 @{
                                     kJMTitleKey : @"modifiedDate",
                                     kJMValueKey : modifiedAtString ?: @"",
-                                    kJMPageAccessibilityIdKey : JMResourceInfoPageModifiedDateLabelPageAccessibilityId
+                                    kJMPageAccessibilityIdKey : JMResourceInfoPageModifiedDateLabelAccessibilityId
                                     }
                                 ];
     }

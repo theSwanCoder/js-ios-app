@@ -77,7 +77,7 @@
     [properties addObject:@{
                             kJMTitleKey : @"format",
                             kJMValueKey : self.savedReports.format ?: @"",
-                            kJMPageAccessibilityIdKey : JMResourceInfoPageFormatLabelPageAccessibilityId
+                            kJMPageAccessibilityIdKey : JMResourceInfoPageFormatLabelAccessibilityId
                             }];
     return properties;
 }
