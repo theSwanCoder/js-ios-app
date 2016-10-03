@@ -32,4 +32,9 @@ extern NSString *const kTestReportWithSingleSelectedControlName;
 // Printing
 - (void)openPrintReportPage;
 - (void)closePrintReportPage;
+
+// Favorites
+- (void)markTestReportAsFavorite;
+- (void)unmarkTestReportFromFavorite;
+
 @end

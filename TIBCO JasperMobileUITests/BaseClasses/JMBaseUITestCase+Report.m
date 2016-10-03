@@ -10,6 +10,7 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Resource.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";
@@ -134,8 +135,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)searchTestReport
 {
+    // TODO: replace with specific element - JMLibraryPageAccessibilityId
     [self searchResourceWithName:kTestReportName
-    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
+    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 }
 
 - (void)tryOpenTestReport
@@ -228,6 +230,51 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
                                                       parentElement:printNavBar
                                                             timeout:kUITestsBaseTimeout];
     [cancelButton tap];
+}
+
+#pragma mark - Favorites
+
+- (void)markTestReportAsFavorite
+{
+    [self searchTestReport];
+    [self givenThatCellsAreVisible];
+
+    XCUIElement *testCell = [self testReportCell];
+    [self openInfoPageForReportCell:testCell];
+
+    [self openMenuActions];
+    [self selectActionWithName:@"Mark as Favorite"];
+
+    [self closeInfoPageWithBackButton];
+}
+
+- (void)unmarkTestReportFromFavorite
+{
+    [self searchTestReport];
+    [self givenThatCellsAreVisible];
+    
+    XCUIElement *testCell = [self testReportCell];
+    [self openInfoPageForReportCell:testCell];
+    
+    [self openMenuActions];
+    [self selectActionWithName:@"Remove From Favorites"];
+    
+    [self closeInfoPageWithBackButton];
+}
+
+- (void)openInfoPageForReportCell:(XCUIElement *)cell
+{
+    XCUIElement *infoButton = [self waitButtonWithAccessibilityId:@"More Info"
+                                                    parentElement:cell
+                                                          timeout:kUITestsBaseTimeout];
+    [infoButton tap];
+    [self givenThatReportInfoPage];
+}
+
+- (void)givenThatReportInfoPage
+{
+    [self waitElementWithAccessibilityId:@"JMReportInfoViewControllerAccessibilityId"
+                                 timeout:kUITestsBaseTimeout];
 }
 
 @end

@@ -7,6 +7,7 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Resource.h"
 
 NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
@@ -159,8 +160,9 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (void)searchTestDashboard
 {
+    // TODO: replace with specific element - JMLibraryPageAccessibilityId
     [self searchResourceWithName:kTestDashboardName
-    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
+    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 }
 
 - (void)tryOpenTestDashboard
@@ -182,6 +184,51 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 }
 
 - (void)givenThatDashboardInfoPageOnScreen
+{
+    [self waitElementWithAccessibilityId:@"JMDashboardInfoViewControllerAccessibilityId"
+                                 timeout:kUITestsBaseTimeout];
+}
+
+#pragma mark - Favorites
+
+- (void)markTestDashboardAsFavorite
+{
+    [self searchTestDashboard];
+    [self givenThatCellsAreVisible];
+
+    XCUIElement *testCell = [self testDashboardCell];
+    [self openInfoPageForDashboardCell:testCell];
+
+    [self openMenuActions];
+    [self selectActionWithName:@"Mark as Favorite"];
+
+    [self closeInfoPageWithBackButton];
+}
+
+- (void)unmarkTestDashboardFromFavorite
+{
+    [self searchTestDashboard];
+    [self givenThatCellsAreVisible];
+
+    XCUIElement *testCell = [self testDashboardCell];
+    [self openInfoPageForDashboardCell:testCell];
+
+    [self openMenuActions];
+    [self selectActionWithName:@"Remove From Favorites"];
+
+    [self closeInfoPageWithBackButton];
+}
+
+- (void)openInfoPageForDashboardCell:(XCUIElement *)cell
+{
+    XCUIElement *infoButton = [self waitButtonWithAccessibilityId:@"More Info"
+                                                    parentElement:cell
+                                                          timeout:kUITestsBaseTimeout];
+    [infoButton tap];
+    [self verifyThatDashboardInfoPageOnScreen];
+}
+
+- (void)verifyThatDashboardInfoPageOnScreen
 {
     [self waitElementWithAccessibilityId:@"JMDashboardInfoViewControllerAccessibilityId"
                                  timeout:kUITestsBaseTimeout];

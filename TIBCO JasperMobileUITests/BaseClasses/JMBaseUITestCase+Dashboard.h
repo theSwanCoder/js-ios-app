@@ -29,4 +29,9 @@ extern NSString *const kTestDashboardName;
 
 - (void)openPrintDashboardPage;
 - (void)closePrintDashboardPage;
+
+// Favorites
+- (void)markTestDashboardAsFavorite;
+- (void)unmarkTestDashboardFromFavorite;
+
 @end

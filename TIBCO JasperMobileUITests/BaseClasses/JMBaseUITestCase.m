@@ -291,8 +291,9 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 - (void)givenThatGridCellsAreVisible
 {
     [self tryTapListButton];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsGridOfCells];
 }
+
 
 - (void)tryTapListButton
 {

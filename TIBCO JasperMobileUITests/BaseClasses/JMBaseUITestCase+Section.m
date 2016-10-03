@@ -87,7 +87,6 @@
     if (countOfListCells > 0) {
         return;
     } else {
-        // TODO: use section specific
         [self switchViewFromListToGridInSectionWithTitle:@"Library"];
     }
 }

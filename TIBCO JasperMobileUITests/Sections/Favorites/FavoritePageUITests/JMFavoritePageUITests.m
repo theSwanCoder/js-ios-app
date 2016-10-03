@@ -9,6 +9,10 @@
 #import "JMFavoritePageUITests.h"
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+Favorites.h"
+#import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Dashboard.h"
 
 @implementation JMFavoritePageUITests
 
@@ -71,7 +75,16 @@
 //      - Unmark the test report from favorites
 - (void)testThatSearchWorkCorrectly
 {
-    
+    [self givenThatFavoritesSectionIsEmpty];
+    [self markTestReportAsFavorite];
+
+    [self openFavoritesSection];
+    [self searchResourceWithName:kTestReportName
+    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+
+    [self givenThatCellsAreVisible];
+
+    [self unmarkTestReportFromFavorite];
 }
 
 //    Error message when no search result
@@ -87,7 +100,18 @@
 //      - Unmark the test report from favorites
 - (void)testThatSearchWithEmptyResultShowCorrectMessage
 {
+    [self givenThatFavoritesSectionIsEmpty];
+    [self markTestReportAsFavorite];
     
+    [self openFavoritesSection];
+    [self searchResourceWithName:@"Search without result text"
+    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+
+    [self waitStaticTextWithText:@"No Favorited Items"
+                   parentElement:nil
+                         timeout:kUITestsBaseTimeout];
+
+    [self unmarkTestReportFromFavorite];
 }
 
 //    View type button
@@ -118,7 +142,24 @@
 //      - Unmark the test folder from favorites
 - (void)testThatViewTypeButtonWorkCorrectly
 {
+    [self givenThatFavoritesSectionIsEmpty];
+    [self markTestReportAsFavorite];
+
+    [self openFavoritesSection];
+
+    [self switchViewFromListToGridInSectionWithTitle:@"Favorites"];
+    [self verifyThatCollectionViewContainsGridOfCells];
+
+    [self openLibrarySection];
+    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsListOfCells];
     
+    [self openFavoritesSection];
+    [self verifyThatCollectionViewContainsGridOfCells];
+
+    [self switchViewFromGridToListInSectionWithTitle:@"Favorites"];
+
+    [self unmarkTestReportFromFavorite];
 }
 
 //    Sorting button
@@ -137,7 +178,24 @@
 //      - User can sorted by Modified Date
 - (void)testThatSortingWorkCorrectly
 {
+    [self givenThatFavoritesSectionIsEmpty];
+    [self markTestReportAsFavorite];
     
+    [self openFavoritesSection];
+    
+    [self selectSortBy:@"Name"
+    inSectionWithTitle:@"Favorites"];
+    [self verifyThatCollectionViewContainsListOfCells];
+    
+    [self selectSortBy:@"Creation Date"
+    inSectionWithTitle:@"Favorites"];
+    [self verifyThatCollectionViewContainsListOfCells];
+    
+    [self selectSortBy:@"Modified Date"
+    inSectionWithTitle:@"Favorites"];
+    [self verifyThatCollectionViewContainsListOfCells];
+    
+    [self unmarkTestReportFromFavorite];
 }
 
 //    Filter button
@@ -163,7 +221,47 @@
 //      - User can see only content resources
 - (void)testThatFilteringWorkCorrectly
 {
+    [self givenThatFavoritesSectionIsEmpty];
+    [self markTestReportAsFavorite];
     
+    [self openFavoritesSection];
+    
+    [self selectFilterBy:@"All"
+    inSectionWithTitle:@"Favorites"];
+    [self verifyThatCollectionViewContainsListOfCells];
+    
+    [self selectFilterBy:@"Reports"
+    inSectionWithTitle:@"Favorites"];
+    [self verifyThatCollectionViewContainsListOfCells];
+    
+    [self selectFilterBy:@"Saved Items"
+    inSectionWithTitle:@"Favorites"];
+    [self waitStaticTextWithText:@"No Favorited Items"
+                   parentElement:nil
+                         timeout:kUITestsBaseTimeout];
+    
+    [self selectFilterBy:@"Dashboards"
+    inSectionWithTitle:@"Favorites"];
+    [self waitStaticTextWithText:@"No Favorited Items"
+                   parentElement:nil
+                         timeout:kUITestsBaseTimeout];
+    
+    [self selectFilterBy:@"Folders"
+    inSectionWithTitle:@"Favorites"];
+    [self waitStaticTextWithText:@"No Favorited Items"
+                   parentElement:nil
+                         timeout:kUITestsBaseTimeout];
+    
+    [self selectFilterBy:@"Content Resources"
+    inSectionWithTitle:@"Favorites"];
+    [self waitStaticTextWithText:@"No Favorited Items"
+                   parentElement:nil
+                         timeout:kUITestsBaseTimeout];
+    
+    [self selectFilterBy:@"All"
+      inSectionWithTitle:@"Favorites"];
+    
+    [self unmarkTestReportFromFavorite];
 }
 
 //    Pull down to refresh all items
@@ -179,7 +277,16 @@
 //      - Unmark the test report from favorites
 - (void)testThatRefreshWorkByUsingPullDown
 {
+    [self givenThatFavoritesSectionIsEmpty];
+    [self markTestReportAsFavorite];
+    [self markTestDashboardAsFavorite];
     
+    [self openFavoritesSection];
+
+    [self performPullDownToRefresh];
+
+    [self unmarkTestReportFromFavorite];
+    [self unmarkTestDashboardFromFavorite];
 }
 
 //    Scrolling of the list/grid
@@ -196,7 +303,14 @@
 //      - Unmark the test report from favorites
 - (void)testThatScrollingWorkCorreclty
 {
-    
+    [self givenThatFavoritesSectionIsEmpty];
+    [self markTestReportAsFavorite];
+
+    [self openFavoritesSection];
+
+    [self performSwipeToScrool];
+
+    [self unmarkTestReportFromFavorite];
 }
 
 //    User should see only favorites items which he/she added they
@@ -219,7 +333,7 @@
 //      - Jasperadmin shouldn’t see favorite items which were added by ‘joeuser’
 - (void)testThatFavoriteItemsVisibleOnlyOwner
 {
-    
+    // TODO: implement the test after implementing working with accounts
 }
 
 //    JRS 6.0/6.0.1/6.1: Report Thumbnails
@@ -237,7 +351,7 @@
 //      - User should see Report Thumbnails for reports which were run.
 - (void)testThatReportThumbnailsVisible
 {
-    
+    // It's difficult to implement, because after opening a report - thumbnail will be always available
 }
 
 //    Remove button on the report
@@ -252,7 +366,12 @@
 //      - Report should be removed
 - (void)testThatFavoriteReportCanBeUnmarkedFromFavorites
 {
+    [self givenThatFavoritesSectionIsEmpty];
+    [self markTestReportAsFavorite];
     
+    [self openFavoritesSection];
+    
+    [self unmarkTestReportFromFavorite];
 }
 
 //    Remove button on the dashboard
@@ -267,7 +386,12 @@
 //      - Test dashboard should be removed
 - (void)testThatFavoriteDashboardCanBeUnmarkedFromFavorites
 {
+    [self givenThatFavoritesSectionIsEmpty];
+    [self markTestDashboardAsFavorite];
     
+    [self openFavoritesSection];
+
+    [self unmarkTestDashboardFromFavorite];
 }
     
 //    Remove button on the folder
@@ -282,7 +406,7 @@
 //      - Test folder should be removed
 - (void)testThatFavoriteFolderCanBeUnmarkedFromFavorites
 {
-    
+    // TODO: implement after covering 'repositories'
 }
 
 #pragma mark - Verifying
@@ -306,6 +430,26 @@
 {
     [self waitNavigationBarWithLabel:@"Favorites"
                              timeout:kUITestsBaseTimeout];
+}
+
+#pragma mark - Helpers
+
+- (void)performPullDownToRefresh
+{
+    XCUIElement *collectionViewElement = [self collectionViewElementFromSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+
+    XCUIElement *firstCellElement = [collectionViewElement.cells elementBoundByIndex:0];
+    XCUIElement *secondCellElement = [collectionViewElement.cells elementBoundByIndex:1];
+
+    [firstCellElement pressForDuration:1
+                     thenDragToElement:secondCellElement];
+}
+
+- (void)performSwipeToScrool
+{
+    XCUIElement *collectionViewElement = [self collectionViewElementFromSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    XCUIElement *cellElement = [collectionViewElement.cells elementBoundByIndex:0];
+    [cellElement swipeUp];
 }
 
 @end
