@@ -253,8 +253,11 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         
     NSDictionary *item = self.resourceProperties[indexPath.row];
     cell.textLabel.text = JMLocalizedString([NSString stringWithFormat:@"resource_%@_title", item[kJMTitleKey]]);
-    [cell.textLabel setAccessibility:YES withTextKey:[NSString stringWithFormat:@"resource_%@_title", item[kJMTitleKey]] identifier:item[kJMPageAccessibilityIdKey]];
     cell.detailTextLabel.text = item[kJMValueKey];
+    
+    [cell setAccessibility:NO withTextKey:[NSString stringWithFormat:@"resource_%@_title", item[kJMTitleKey]] identifier:item[kJMPageAccessibilityIdKey]];
+    [cell.detailTextLabel setAccessibility:YES withTextKey:item[kJMValueKey] identifier:nil];
+
     return cell;
 }
 

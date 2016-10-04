@@ -93,7 +93,6 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
             scheduleVC.resourceListLoader = [JMSchedulesListLoader new];
             scheduleVC.resourceListLoader.delegate = scheduleVC;
             scheduleVC.availableAction = JMMenuActionsViewAction_Schedule;
-            scheduleVC.shouldShowButtonForChangingViewPresentation = NO;
             scheduleVC.needShowSearchBar = [JMUtils isSupportSearchInSchedules];
             menuItemViewController = scheduleVC;
             break;

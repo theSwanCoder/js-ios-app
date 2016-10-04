@@ -24,6 +24,7 @@
 #import "JMServerOptionCell.h"
 #import "JMThemesManager.h"
 #import "JMLocalization.h"
+#import "NSObject+Additions.h"
 
 @interface JMServerOptionCell ()
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
@@ -47,6 +48,8 @@
     _serverOption = serverOption;
     
     self.titleLabel.text = [self localizedString:serverOption.titleString mandatory:serverOption.mandatory];
+    [self setAccessibility:NO withTextKey:serverOption.titleString identifier:nil];
+
     [self updateDisplayingOfErrorMessage];
 }
 

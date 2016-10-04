@@ -58,6 +58,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
         _resourcesItems = [NSMutableArray array];
         _needUpdateData = YES;
         _loadRecursively = YES;
+        _shouldUseSavingForSelectedIndexes = YES;
         
         _filterBySelectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:[self filterBySelectedIndexKey]];
         _sortBySelectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:[self sortBySelectedIndexKey]];
@@ -67,11 +68,13 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 
 - (void)dealloc
 {
-    [[NSUserDefaults standardUserDefaults] setInteger:self.filterBySelectedIndex
-                                               forKey:[self filterBySelectedIndexKey]];
-    [[NSUserDefaults standardUserDefaults] setInteger:self.sortBySelectedIndex
-                                               forKey:[self sortBySelectedIndexKey]];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if (self.shouldUseSavingForSelectedIndexes) {
+        [[NSUserDefaults standardUserDefaults] setInteger:self.filterBySelectedIndex
+                                                   forKey:[self filterBySelectedIndexKey]];
+        [[NSUserDefaults standardUserDefaults] setInteger:self.sortBySelectedIndex
+                                                   forKey:[self sortBySelectedIndexKey]];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 #pragma mark - Change state API
@@ -119,6 +122,17 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
         _sortBySelectedIndex = sortBySelectedIndex;
         [self setNeedsUpdate];
         [self updateIfNeeded];
+    }
+}
+
+- (void)setShouldUseSavingForSelectedIndexes:(BOOL)shouldUseSavingForSelectedIndexes
+{
+    if (_shouldUseSavingForSelectedIndexes != shouldUseSavingForSelectedIndexes) {
+        _shouldUseSavingForSelectedIndexes = shouldUseSavingForSelectedIndexes;
+        if (!shouldUseSavingForSelectedIndexes) {
+            _filterBySelectedIndex = 0;
+            _sortBySelectedIndex = 0;
+        }
     }
 }
 
@@ -267,7 +281,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
             NSArray *allOptions;
             if ([JMUtils isServerProEdition]) {
                 // reports
-                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_FOLDER]; //We should send kJS_WS_TYPE_FOLDER here according to http://jira.jaspersoft.com/browse/JRS-11049
+                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_REPORT_OPTIONS]; //We should send kJS_WS_TYPE_REPORT_OPTIONS here according to http://jira.jaspersoft.com/browse/JRS-11049
                 JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_ReportUnit
                                                                                                   value:reportsValues];
                 // dashboards

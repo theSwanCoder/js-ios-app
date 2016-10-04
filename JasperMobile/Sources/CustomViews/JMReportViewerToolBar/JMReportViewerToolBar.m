@@ -125,7 +125,7 @@
 {
     NSString *keyString = JMLocalizedString(@"report_viewer_pagecount");
     self.pageCountLabel.text = [NSString stringWithFormat:keyString, self.countOfPages];
-    [self.pageCountLabel setAccessibility:YES withTextKey:@"report_viewer_pagecount" identifier:<#(NSString *)#>
+//    [self.pageCountLabel setAccessibility:YES withTextKey:@"report_viewer_pagecount" identifier:<#(NSString *)#>
     self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
     
     self.previousButton.enabled = self.currentPage > 1;

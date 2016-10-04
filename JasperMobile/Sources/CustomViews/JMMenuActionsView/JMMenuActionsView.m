@@ -212,7 +212,7 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
     }
     JMMenuAction *currentMenuAction = self.availableMenuActions[indexPath.row];
     cell.textLabel.text = JMLocalizedString(currentMenuAction.actionTitle);
-    [cell.textLabel setAccessibility:YES withTextKey:currentMenuAction.actionTitle identifier:currentMenuAction.elementPageAccessibilityId];
+    [cell setAccessibility:YES withTextKey:currentMenuAction.actionTitle identifier:currentMenuAction.elementPageAccessibilityId];
 
     cell.imageView.image = [UIImage imageNamed:currentMenuAction.actionImageName];
     cell.imageView.alpha = currentMenuAction.actionEnabled ? 1.0f : 0.5f;

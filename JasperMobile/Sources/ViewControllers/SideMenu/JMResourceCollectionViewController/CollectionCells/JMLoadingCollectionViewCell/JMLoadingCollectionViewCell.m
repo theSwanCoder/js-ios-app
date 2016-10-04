@@ -21,32 +21,30 @@
  */
 
 
-//
-//  JMResourceCollectionViewController.h
-//  TIBCO JasperMobile
-//
+#import "JMLoadingCollectionViewCell.h"
+#import "JMThemesManager.h"
+#import "JMLocalization.h"
+#import "NSObject+Additions.h"
+#import "JMConstants.h"
 
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 2.6
- */
+NSString * kJMListLoadingCell = @"JMListLoadingCollectionViewCell";
+NSString * kJMGridLoadingCell = @"JMGridLoadingCollectionViewCell";
 
-#import "JMMenuActionsView.h"
-#import "JMSavedResources+Helpers.h"
-#import "JMResourcesListLoader.h"
-#import "JMBaseViewController.h"
+@interface JMLoadingCollectionViewCell ()
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 
-@interface JMResourceCollectionViewController : JMBaseViewController <JMResourcesListLoaderDelegate>
+@end
 
-@property (nonatomic, strong) NSString *noResultStringKey;
-@property (nonatomic, strong) NSString *representationTypeKey;
-@property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
+@implementation JMLoadingCollectionViewCell
 
-@property (nonatomic, assign) BOOL shouldSavePresentationType;                      // YES by default
-@property (nonatomic, assign) BOOL needShowSearchBar;                               // YES by default
-
-@property (nonatomic, assign) JMMenuActionsViewAction availableAction;
-
-@property (nonatomic, copy) void(^actionBlock)(JMResource *);
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.titleLabel.font = [[JMThemesManager sharedManager] collectionLoadingFont];
+    self.titleLabel.text = JMLocalizedString(@"resources_loading_msg");
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] resourceViewLoadingCellTitleTextColor];
+    self.activityIndicator.color = [[JMThemesManager sharedManager] resourceViewLoadingCellActivityIndicatorColor];
+}
 
 @end

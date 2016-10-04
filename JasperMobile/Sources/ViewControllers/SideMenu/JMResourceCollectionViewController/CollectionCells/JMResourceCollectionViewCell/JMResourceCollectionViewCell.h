@@ -22,31 +22,31 @@
 
 
 //
-//  JMResourceCollectionViewController.h
+//  JMResourceCollectionViewCell.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.6
+ @since 1.9
  */
 
-#import "JMMenuActionsView.h"
-#import "JMSavedResources+Helpers.h"
-#import "JMResourcesListLoader.h"
-#import "JMBaseViewController.h"
+#import <UIKit/UIKit.h>
 
-@interface JMResourceCollectionViewController : JMBaseViewController <JMResourcesListLoaderDelegate>
+extern NSString * kJMListResourceCell;
+extern NSString * kJMGridResourceCell;
 
-@property (nonatomic, strong) NSString *noResultStringKey;
-@property (nonatomic, strong) NSString *representationTypeKey;
-@property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
+@class JMResourceCollectionViewCell;
+@class JMResource;
 
-@property (nonatomic, assign) BOOL shouldSavePresentationType;                      // YES by default
-@property (nonatomic, assign) BOOL needShowSearchBar;                               // YES by default
+@protocol JMResourceCollectionViewCellDelegate <NSObject>
+@required
+- (void) infoButtonDidTappedOnCell:(JMResourceCollectionViewCell *)cell;
+@end
 
-@property (nonatomic, assign) JMMenuActionsViewAction availableAction;
 
-@property (nonatomic, copy) void(^actionBlock)(JMResource *);
-
+@interface JMResourceCollectionViewCell : UICollectionViewCell
+@property (nonatomic, strong) JMResource *resource;
+@property (nonatomic, weak) id <JMResourceCollectionViewCellDelegate> delegate;
+@property (nonatomic, readonly) UIImage *thumbnailImage;
 @end

@@ -157,9 +157,6 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.15391257405281067" green="0.16536694765090942" blue="0.19515880942344666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <accessibility key="accessibilityConfiguration">
-                            <bool key="isElement" value="YES"/>
-                        </accessibility>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="mtY-8Y-ro8" secondAttribute="trailing" id="059-bh-YCz"/>
                             <constraint firstItem="hU8-xn-4eY" firstAttribute="top" secondItem="mtY-8Y-ro8" secondAttribute="bottom" id="36F-8F-rei"/>
@@ -248,7 +245,7 @@ Please Wait...</string>
                                 <color key="textColor" red="0.57254901960000004" green="0.57254901960000004" blue="0.57254901960000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="43b-aa-7jS">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" prefetchingEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="43b-aa-7jS">
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="Dsz-CK-2X5">
                                     <size key="itemSize" width="150" height="150"/>
@@ -264,9 +261,6 @@ Please Wait...</string>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        <accessibility key="accessibilityConfiguration">
-                            <bool key="isElement" value="YES"/>
-                        </accessibility>
                         <constraints>
                             <constraint firstAttribute="centerY" secondItem="VWG-dx-9uL" secondAttribute="centerY" id="1KT-sv-VU4"/>
                             <constraint firstItem="43b-aa-7jS" firstAttribute="top" secondItem="bS4-Ij-bh1" secondAttribute="bottom" id="1dV-3s-8ip"/>

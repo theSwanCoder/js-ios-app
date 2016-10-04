@@ -54,6 +54,15 @@
 #import "JMLibraryListLoader.h"
 #import "NSObject+Additions.h"
 
+typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
+    JMResourcesRepresentationType_List = 0,
+    JMResourcesRepresentationType_Grid = 1
+};
+
+static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationType_List; }
+static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationType_Grid; }
+
+
 CGFloat const kJMResourceCollectionViewGridWidth = 310;
 
 CGFloat const kJMResourceCollectionViewCompactGridWidth = 150;
@@ -89,9 +98,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.shouldShowButtonForChangingViewPresentation = YES;
     self.needShowSearchBar = YES;
     self.availableAction = JMMenuActionsViewAction_None;
+    self.shouldSavePresentationType = YES;
 }
 
 - (void)dealloc
@@ -224,9 +233,11 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     if (_representationType != representationType) {
         _representationType = representationType;
-        [[NSUserDefaults standardUserDefaults] setInteger:representationType forKey:self.representationTypeKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMRepresentationTypeDidChangeNotification object:nil];
+        if (self.shouldSavePresentationType) {
+            [[NSUserDefaults standardUserDefaults] setInteger:representationType forKey:self.representationTypeKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kJMRepresentationTypeDidChangeNotification object:nil];
+        }
     }
 }
 
@@ -234,10 +245,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     if (![_representationTypeKey isEqualToString:representationTypeKey]) {
         _representationTypeKey = representationTypeKey;
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:self.representationTypeKey]) {
-            _representationType = [[NSUserDefaults standardUserDefaults] integerForKey:self.representationTypeKey];
-        } else {
-            _representationType = JMResourcesRepresentationTypeFirst();
+        if (self.shouldSavePresentationType) {
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:self.representationTypeKey]) {
+                _representationType = [[NSUserDefaults standardUserDefaults] integerForKey:self.representationTypeKey];
+            } else {
+                _representationType = JMResourcesRepresentationTypeFirst();
+            }
         }
     }
 }
@@ -272,9 +285,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     JMMenuItem *menuItem = [JMMenuItem menuItemWithItemType:JMMenuItemType_Library];
     UINavigationController *navigationVC = (UINavigationController *)[JMMenuItemControllersFactory viewControllerWithMenuItem:menuItem];
     JMResourceCollectionViewController *libraryViewController = (JMResourceCollectionViewController *)navigationVC.topViewController;
-    libraryViewController.shouldShowButtonForChangingViewPresentation = NO;
     libraryViewController.availableAction = JMMenuActionsViewAction_None;
+    libraryViewController.shouldSavePresentationType = NO;
     libraryViewController.navigationItem.leftBarButtonItem = nil;
+    libraryViewController.resourceListLoader.shouldUseSavingForSelectedIndexes = NO;
     libraryViewController.resourceListLoader.filterBySelectedIndex = JMLibraryListLoaderFilterIndexByReport;
     __weak __typeof(self) weakSelf = self;
     libraryViewController.actionBlock = ^(JMResource *resource) {
@@ -477,9 +491,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             [navBarItems addObject:actionItem];
             
         }
-        if (self.shouldShowButtonForChangingViewPresentation) {
-            [navBarItems addObject:[self resourceRepresentationItem]];
-        }
+        
+        [navBarItems addObject:[self resourceRepresentationItem]];
         self.navigationItem.rightBarButtonItems = navBarItems;
     } else {
         self.needLayoutUI = YES;
@@ -533,8 +546,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (NSString *)resourceCellForRepresentationType:(JMResourcesRepresentationType)type
 {
     switch (type) {
-        case JMResourcesRepresentationType_HorizontalList:
-            return kJMHorizontalResourceCell;
+        case JMResourcesRepresentationType_List:
+            return kJMListResourceCell;
         case JMResourcesRepresentationType_Grid:
             return kJMGridResourceCell;
     }
@@ -543,8 +556,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (NSString *)loadingCellForRepresentationType:(JMResourcesRepresentationType)type
 {
     switch (type) {
-        case JMResourcesRepresentationType_HorizontalList:
-            return kJMHorizontalLoadingCell;
+        case JMResourcesRepresentationType_List:
+            return kJMListLoadingCell;
         case JMResourcesRepresentationType_Grid:
             return kJMGridLoadingCell;
     }
@@ -684,19 +697,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     }
     
     JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [collectionView dequeueReusableCellWithReuseIdentifier:[self resourceCellForRepresentationType:self.representationType] forIndexPath:indexPath];
-    JMResource *currentResource = [self loadedResourceForIndexPath:indexPath];
-    cell.resource = currentResource;
+    cell.resource = [self loadedResourceForIndexPath:indexPath];
     cell.delegate = self;
-    NSString *elementPageAccessibilityId;
-    switch (self.representationType) {
-        case JMResourcesRepresentationType_HorizontalList:
-            elementPageAccessibilityId = JMResourceCollectionPageListCellAccessibilityId;
-            break;
-        case JMResourcesRepresentationType_Grid:
-            elementPageAccessibilityId = JMResourceCollectionPageGridCellAccessibilityId;
-            break;
-    }
-    [cell setAccessibility:NO withTextKey:currentResource.resourceLookup.label identifier:elementPageAccessibilityId];
     return cell;
 }
 

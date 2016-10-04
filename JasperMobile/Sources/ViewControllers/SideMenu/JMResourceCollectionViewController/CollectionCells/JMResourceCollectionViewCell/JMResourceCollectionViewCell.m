@@ -34,7 +34,7 @@
 #import "JMThemesManager.h"
 #import "NSObject+Additions.h"
 
-NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
+NSString * kJMListResourceCell = @"JMListResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
 
@@ -52,8 +52,6 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    [self.resourceName setAccessibility:YES withTextKey:@"action_title_info" identifier:JMResourceCellResourceInfoButtonAccessibilityId];
-
     self.resourceName.adjustsFontSizeToFitWidth = YES;
     self.resourceName.minimumScaleFactor = [JMUtils isCompactWidth] ? 0.7 : 0.5;
     
@@ -65,12 +63,17 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.infoButton.tintColor = [[JMThemesManager sharedManager] resourceViewResourceInfoButtonTintColor];
 
     self.contentView.backgroundColor = [UIColor whiteColor];
+    
+    // Fix for using Accessibility
+    self.backgroundView = [UIView new];
+    self.backgroundView.backgroundColor = [UIColor clearColor];
+    
+    [self.infoButton setAccessibility:YES withTextKey:@"action_title_info" identifier:JMResourceCellResourceInfoButtonAccessibilityId];
 }
 
 - (void)setResource:(JMResource *)resource
 {
     _resource = resource;
-    [self.resourceName setAccessibility:NO withTextKey:resource.resourceLookup.label identifier:JMResourceCellResourceNameLabelAccessibilityId];
 
     self.resourceName.text = resource.resourceLookup.label;
     self.resourceDescription.text = resource.resourceLookup.resourceDescription;
@@ -114,7 +117,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                        __strong typeof(self)strongSelf = weakSelf;
                                                        if (image) {
                                                            strongSelf.thumbnailImage = image;
-                                                           [strongSelf updateResourceImage:self.thumbnailImage thumbnails:YES];
+                                                           [strongSelf updateResourceImage:strongSelf.thumbnailImage thumbnails:YES];
                                                            [[JMAnalyticsManager sharedManager] sendThumbnailEventIfNeed];
                                                        } else {
                                                            // cache empty image, to prevent next requests in case thumbnails are disabled
@@ -125,11 +128,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                    }
                                                    failure:nil];
             } else {
-                if (cachedImage.size.width == CGSizeZero.width && cachedImage.size.height == CGSizeZero.height) {
-                    self.resourceImage.image = [UIImage imageNamed:@"res_type_report"];
-                } else {
+                if (cachedImage.size.width != CGSizeZero.width && cachedImage.size.height != CGSizeZero.height) {
                     self.thumbnailImage = cachedImage;
-                    [self updateResourceImage:self.thumbnailImage thumbnails:YES];
                 }
             }
         }
@@ -204,8 +204,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                 }];
     }
     
-    if (resourceImage || _thumbnailImage) {
-        [self updateResourceImage:_thumbnailImage ?: resourceImage thumbnails:_thumbnailImage != nil];
+    if (resourceImage || self.thumbnailImage) {
+        [self updateResourceImage:self.thumbnailImage ?: resourceImage thumbnails:self.thumbnailImage != nil];
     }
 }
 

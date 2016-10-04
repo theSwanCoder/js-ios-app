@@ -22,31 +22,21 @@
 
 
 //
-//  JMResourceCollectionViewController.h
+//  JMListLoadingCollectionViewCell.m
 //  TIBCO JasperMobile
 //
 
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 2.6
- */
+#import "JMListLoadingCollectionViewCell.h"
 
-#import "JMMenuActionsView.h"
-#import "JMSavedResources+Helpers.h"
-#import "JMResourcesListLoader.h"
-#import "JMBaseViewController.h"
+#import "NSObject+Additions.h"
+#import "JMConstants.h"
 
-@interface JMResourceCollectionViewController : JMBaseViewController <JMResourcesListLoaderDelegate>
+@implementation JMListLoadingCollectionViewCell
 
-@property (nonatomic, strong) NSString *noResultStringKey;
-@property (nonatomic, strong) NSString *representationTypeKey;
-@property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
-
-@property (nonatomic, assign) BOOL shouldSavePresentationType;                      // YES by default
-@property (nonatomic, assign) BOOL needShowSearchBar;                               // YES by default
-
-@property (nonatomic, assign) JMMenuActionsViewAction availableAction;
-
-@property (nonatomic, copy) void(^actionBlock)(JMResource *);
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [self setAccessibility:YES withTextKey:@"resources_loading_msg" identifier:JMResourceCollectionPageListLoadingCellAccessibilityId];
+}
 
 @end

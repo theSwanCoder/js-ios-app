@@ -22,20 +22,16 @@
 
 
 //
-//  JMLoadingCollectionViewCell.h
+//  JMListResourceCollectionViewCell.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
+ @since 2.6
  */
+#import "JMResourceCollectionViewCell.h"
 
-#import <UIKit/UIKit.h>
-extern NSString * kJMHorizontalLoadingCell;
-extern NSString * kJMGridLoadingCell;
-
-
-@interface JMLoadingCollectionViewCell : UICollectionViewCell
+@interface JMListResourceCollectionViewCell : JMResourceCollectionViewCell
 
 @end

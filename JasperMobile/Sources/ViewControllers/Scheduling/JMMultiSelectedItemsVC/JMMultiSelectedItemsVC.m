@@ -75,6 +75,8 @@
                                                             forIndexPath:indexPath];
     JMSelectedItem *item = self.availableItems[indexPath.row];
     cell.textLabel.text = item.title;
+    cell.textLabel.accessibilityLabel = item.title;
+    cell.textLabel.isAccessibilityElement = YES;
     return cell;
 }
 

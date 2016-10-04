@@ -621,6 +621,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         }
         case JMScheduleVCRowTypeCalendarDatesInMonth:
             // TODO: implement in next release.
+            cell = [self scheduleCellForIndexPath:indexPath row:row];
             break;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -1436,11 +1437,15 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     JMScheduleCell *scheduleCell = [self.tableView dequeueReusableCellWithIdentifier:@"JMScheduleCell" forIndexPath:indexPath];
     scheduleCell.titleLabel.text = row.title;
     scheduleCell.valueTextField.text = [self propertyValueForRowType:row.type];
+    scheduleCell.valueTextField.placeholder = row.title;
     scheduleCell.valueTextField.inputView = nil;
     scheduleCell.valueTextField.inputAccessoryView = nil;
     scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
     scheduleCell.valueTextField.userInteractionEnabled = YES;
     scheduleCell.delegate = self;
+
+    [scheduleCell setAccessibility:NO withTextKey:row.title identifier:nil];
+    [scheduleCell.valueTextField setAccessibility:YES withTextKey:row.title identifier:nil];
 
     [scheduleCell showErrorMessage:row.errorMessage];
 

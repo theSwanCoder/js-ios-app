@@ -22,7 +22,7 @@
 
 
 //
-//  JMResourceCollectionViewController.h
+//  JMGridLoadingCollectionViewCell.h
 //  TIBCO JasperMobile
 //
 
@@ -31,22 +31,9 @@
  @since 2.6
  */
 
-#import "JMMenuActionsView.h"
-#import "JMSavedResources+Helpers.h"
-#import "JMResourcesListLoader.h"
-#import "JMBaseViewController.h"
 
-@interface JMResourceCollectionViewController : JMBaseViewController <JMResourcesListLoaderDelegate>
+#import "JMLoadingCollectionViewCell.h"
 
-@property (nonatomic, strong) NSString *noResultStringKey;
-@property (nonatomic, strong) NSString *representationTypeKey;
-@property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
-
-@property (nonatomic, assign) BOOL shouldSavePresentationType;                      // YES by default
-@property (nonatomic, assign) BOOL needShowSearchBar;                               // YES by default
-
-@property (nonatomic, assign) JMMenuActionsViewAction availableAction;
-
-@property (nonatomic, copy) void(^actionBlock)(JMResource *);
+@interface JMGridLoadingCollectionViewCell : JMLoadingCollectionViewCell
 
 @end

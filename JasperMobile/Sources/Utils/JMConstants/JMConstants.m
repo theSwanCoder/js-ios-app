@@ -149,53 +149,16 @@ NSString *const JMLoginVCLastUserNameKey           = @"JMLoginVCLastUserNameKey"
 NSString *const JMLoginVCLastServerProfileAliasKey = @"JMLoginVCLastServerProfileAliasKey";
 
 // Accessibility Identifiers
-NSString *const JMBackButtonAccessibilityId = @"JMBackButtonAccessibilityId";
-NSString *const JMCancelRequestPopupAccessibilityId = @"JMCancelRequestPopupAccessibilityId";
-NSString *const JMMenuActionsViewActionButtonAccessibilityId = @"JMMenuActionsViewActionButtonAccessibilityId";
-NSString *const JMMenuActionsViewAccessibilityId = @"JMMenuActionsViewAccessibilityId";
-NSString *const JMMenuActionsViewFilterActionAccessibilityId = @"JMMenuActionsViewFilterActionAccessibilityId";
-NSString *const JMMenuActionsViewSortActionAccessibilityId = @"JMMenuActionsViewSortActionAccessibilityId";
-NSString *const JMMenuActionsViewMarkAsFavoriteActionAccessibilityId = @"JMMenuActionsViewMarkAsFavoriteActionAccessibilityId";
-NSString *const JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId = @"JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId";
 
-NSString *const JMMenuActionsViewRefreshActionAccessibilityId = @"JMMenuActionsViewRefreshActionAccessibilityId";
-NSString *const JMMenuActionsViewSaveActionAccessibilityId = @"JMMenuActionsViewSaveActionAccessibilityId";
-NSString *const JMMenuActionsViewEditActionAccessibilityId = @"JMMenuActionsViewEditActionAccessibilityId";
-NSString *const JMMenuActionsViewEditFiltersActionAccessibilityId = @"JMMenuActionsViewEditFiltersActionAccessibilityId";
-NSString *const JMMenuActionsViewDeleteActionAccessibilityId = @"JMMenuActionsViewDeleteActionAccessibilityId";
-NSString *const JMMenuActionsViewRenameActionAccessibilityId = @"JMMenuActionsViewRenameActionAccessibilityId";
-NSString *const JMMenuActionsViewInfoActionAccessibilityId = @"JMMenuActionsViewInfoActionAccessibilityId";
-NSString *const JMMenuActionsViewSelectAllActionAccessibilityId = @"JMMenuActionsViewSelectAllActionAccessibilityId";
-NSString *const JMMenuActionsViewClearSelectionActionAccessibilityId = @"JMMenuActionsViewClearSelectionActionAccessibilityId";
-NSString *const JMMenuActionsViewRunActionAccessibilityId = @"JMMenuActionsViewRunActionAccessibilityId";
-NSString *const JMMenuActionsViewPrintActionAccessibilityId = @"JMMenuActionsViewPrintActionAccessibilityId";
-NSString *const JMMenuActionsViewOpenInActionAccessibilityId = @"JMMenuActionsViewOpenInActionAccessibilityId";
-NSString *const JMMenuActionsViewScheduleActionAccessibilityId = @"JMMenuActionsViewScheduleActionAccessibilityId";
-NSString *const JMMenuActionsViewShareActionAccessibilityId = @"JMMenuActionsViewShareActionAccessibilityId";
-NSString *const JMMenuActionsViewBookmarksActionAccessibilityId = @"JMMenuActionsViewBookmarksActionAccessibilityId";
-NSString *const JMMenuActionsViewChartTypesActionAccessibilityId = @"JMMenuActionsViewChartTypesActionAccessibilityId";
-NSString *const JMMenuActionsViewShowExternalDisplayActionAccessibilityId = @"JMMenuActionsViewShowExternalDisplayActionAccessibilityId";
-NSString *const JMMenuActionsViewHideExternalDisplayActionAccessibilityId = @"JMMenuActionsViewHideExternalDisplayActionAccessibilityId";
+// Login Page Identifiers
+NSString *const JMLoginPageAccessibilityId = @"JMLoginPageAccessibilityId";
+NSString *const JMLoginPageUserNameTextFieldAccessibilityId = @"JMLoginPageUserNameTextFieldAccessibilityId";
+NSString *const JMLoginPagePasswordTextFieldAccessibilityId = @"JMLoginPagePasswordTextFieldAccessibilityId";
+NSString *const JMLoginPageServerProfileTextFieldAccessibilityId = @"JMLoginPageServerProfileTextFieldAccessibilityId";
+NSString *const JMLoginPageTryButtonAccessibilityId = @"JMLoginPageTryButtonAccessibilityId";
+NSString *const JMLoginPageLoginButtonAccessibilityId = @"JMLoginPageLoginButtonAccessibilityId";
 
-
-NSString *const JMButtonDoneAccessibilityId = @"JMButtonDoneAccessibilityId";
-NSString *const JMButtonAcceptAccessibilityId = @"JMButtonAcceptAccessibilityId";
-NSString *const JMButtonCancelAccessibilityId = @"JMButtonCancelAccessibilityId";
-
-NSString *const JMButtonFirstAccessibilityId = @"JMButtonFirstAccessibilityId";
-NSString *const JMButtonPreviousAccessibilityId = @"JMButtonPreviousAccessibilityId";
-NSString *const JMButtonNextAccessibilityId = @"JMButtonNextAccessibilityId";
-NSString *const JMButtonLastAccessibilityId = @"JMButtonLastAccessibilityId";
-
-NSString *const JMEULAPageAccessibilityId = @"JMEULAPageAccessibilityId";
-NSString *const JMPrivacyPolicyPageAccessibilityId = @"JMPrivacyPolicyPageAccessibilityId";
-
-
-NSString *const JMOnboardIntroPageAccessibilityId = @"JMOnboardIntroPageAccessibilityId";
-NSString *const JMOnboardIntroPageTitlePageAccessibilityId = @"JMOnboardIntroPageTitlePageAccessibilityId";
-NSString *const JMOnboardIntroPageDescriptionPageAccessibilityId = @"JMOnboardIntroPageDescriptionPageAccessibilityId";
-NSString *const JMOnboardIntroPageSkipIntroButtonPageAccessibilityId = @"JMOnboardIntroPageSkipIntroButtonPageAccessibilityId";
-
+// Server Profiles Identifiers
 NSString *const JMServerProfilesPageAccessibilityId = @"JMServerProfilesPageAccessibilityId";
 NSString *const JMServerProfilesPageAddNewProfileButtonAccessibilityId = @"JMServerProfilesPageAddNewProfileButtonAccessibilityId";
 NSString *const JMServerProfilesPageServerCellAccessibilityId = @"JMServerProfilesPageServerCellAccessibilityId";
@@ -204,14 +167,7 @@ NSString *const JMServerProfilesPageEditProfileAccessibilityId = @"JMServerProfi
 NSString *const JMServerProfilesPageDeleteProfileAccessibilityId = @"JMServerProfilesPageDeleteProfileAccessibilityId";
 NSString *const JMServerProfilesPageCloneProfileAccessibilityId = @"JMServerProfilesPageCloneProfileAccessibilityId";
 
-
-NSString *const JMLoginPageAccessibilityId = @"JMLoginPageAccessibilityId";
-NSString *const JMLoginPageUserNameTextFieldAccessibilityId = @"JMLoginPageUserNameTextFieldAccessibilityId";
-NSString *const JMLoginPagePasswordTextFieldAccessibilityId = @"JMLoginPagePasswordTextFieldAccessibilityId";
-NSString *const JMLoginPageServerProfileTextFieldAccessibilityId = @"JMLoginPageServerProfileTextFieldAccessibilityId";
-NSString *const JMLoginPageTryButtonAccessibilityId = @"JMLoginPageTryButtonAccessibilityId";
-NSString *const JMLoginPageLoginButtonAccessibilityId = @"JMLoginPageLoginButtonAccessibilityId";
-
+// New Server Profile Identifiers
 NSString *const JMNewServerProfilePageAccessibilityId = @"JMNewServerProfilePageAccessibilityId";
 NSString *const JMNewServerProfilePageSaveAccessibilityId = @"JMNewServerProfilePageSaveAccessibilityId";
 NSString *const JMNewServerProfilePageNameAccessibilityId = @"JMNewServerProfilePageNameAccessibilityId";
@@ -222,6 +178,13 @@ NSString *const JMNewServerProfilePageKeepSessionAccessibilityId = @"JMNewServer
 NSString *const JMNewServerProfilePageUseVisualizeAccessibilityId = @"JMNewServerProfilePageUseVisualizeAccessibilityId";
 NSString *const JMNewServerProfilePageUseCacheReportAccessibilityId = @"JMNewServerProfilePageUseCacheReportAccessibilityId";
 
+// Onboarding Intro Identifiers
+NSString *const JMOnboardIntroPageAccessibilityId = @"JMOnboardIntroPageAccessibilityId";
+NSString *const JMOnboardIntroPageTitlePageAccessibilityId = @"JMOnboardIntroPageTitlePageAccessibilityId";
+NSString *const JMOnboardIntroPageDescriptionPageAccessibilityId = @"JMOnboardIntroPageDescriptionPageAccessibilityId";
+NSString *const JMOnboardIntroPageSkipIntroButtonPageAccessibilityId = @"JMOnboardIntroPageSkipIntroButtonPageAccessibilityId";
+
+// Side Menu Identifiers
 NSString *const JMSideApplicationMenuAccessibilityId = @"JMSideApplicationMenuAccessibilityId";
 NSString *const JMSideApplicationMenuVersionLabelAccessibilityId = @"JMSideApplicationMenuVersionLabelAccessibilityId";
 NSString *const JMSideApplicationMenuMenuButtonAccessibilityId = @"JMSideApplicationMenuMenuButtonAccessibilityId";
@@ -236,21 +199,55 @@ NSString *const JMSettingsPageAccessibilityId = @"JMSettingsPageAccessibilityId"
 NSString *const JMFeedbackPageAccessibilityId = @"JMFeedbackPageAccessibilityId";
 NSString *const JMLogoutPageAccessibilityId = @"JMLogoutPageAccessibilityId";
 
+// Privacy Policy Identifiers
+NSString *const JMEULAPageAccessibilityId = @"JMEULAPageAccessibilityId";
+NSString *const JMPrivacyPolicyPageAccessibilityId = @"JMPrivacyPolicyPageAccessibilityId";
+
+// Resource Collection Identifiers
 NSString *const JMResourceCollectionPageSearchBarPageAccessibilityId = @"JMResourceCollectionPageSearchBarPageAccessibilityId";
 NSString *const JMResourceCollectionPageActivityLabelAccessibilityId = @"JMResourceCollectionPageActivityLabelAccessibilityId";
 NSString *const JMResourceCollectionPageNoResultLabelAccessibilityId = @"JMResourceCollectionPageNoResultLabelAccessibilityId";
 NSString *const JMResourceCollectionPageSortByPopupViewPageAccessibilityId = @"JMResourceCollectionPageSortByPopupViewPageAccessibilityId";
 NSString *const JMResourceCollectionPageFilterByPopupViewPageAccessibilityId = @"JMResourceCollectionPageFilterByPopupViewPageAccessibilityId";
 NSString *const JMResourceCollectionPageRepresentationButtonViewPageAccessibilityId = @"JMResourceCollectionPageRepresentationButtonViewPageAccessibilityId";
-NSString *const JMResourceCollectionPageListCellAccessibilityId = @"JMResourceCollectionPageListCellAccessibilityId";
-NSString *const JMResourceCollectionPageGridCellAccessibilityId = @"JMResourceCollectionPageGridCellAccessibilityId";
-NSString *const JMResourceCellResourceNameLabelAccessibilityId = @"JMResourceCellResourceNameLabelAccessibilityId";
+
+// Resource Collection Cells Identifiers
+NSString *const JMResourceCollectionPageListLoadingCellAccessibilityId = @"JMResourceCollectionPageListLoadingCellAccessibilityId";
+NSString *const JMResourceCollectionPageFileResourceListCellAccessibilityId = @"JMResourceCollectionPageFileResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPageFolderResourceListCellAccessibilityId = @"JMResourceCollectionPageFolderResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPageHTMLSavedItemsResourceListCellAccessibilityId = @"JMResourceCollectionPageSavedItemsResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPagePDFSavedItemsResourceListCellAccessibilityId = @"JMResourceCollectionPagePDFSavedItemsResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPageXLSSavedItemsResourceListCellAccessibilityId = @"JMResourceCollectionPageXLSSavedItemsResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPageReportResourceListCellAccessibilityId = @"JMResourceCollectionPageReportResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPageHTMLTempExportedResourceListCellAccessibilityId = @"JMResourceCollectionPageHTMLTempExportedResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPagePDFTempExportedResourceListCellAccessibilityId = @"JMResourceCollectionPagePDFTempExportedResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPageXLSTempExportedResourceListCellAccessibilityId = @"JMResourceCollectionPageXLSTempExportedResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPageDashboardResourceListCellAccessibilityId = @"JMResourceCollectionPageDashboardResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPageLegacyDashboardResourceListCellAccessibilityId = @"JMResourceCollectionPageLegacyDashboardResourceListCellAccessibilityId";
+NSString *const JMResourceCollectionPageScheduleResourceListCellAccessibilityId = @"JMResourceCollectionPageScheduleResourceListCellAccessibilityId";
+
+NSString *const JMResourceCollectionPageGridLoadingCellAccessibilityId = @"JMResourceCollectionPageGridLoadingCellAccessibilityId";
+NSString *const JMResourceCollectionPageFileResourceGridCellAccessibilityId = @"JMResourceCollectionPageFileResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPageFolderResourceGridCellAccessibilityId = @"JMResourceCollectionPageFolderResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPageHTMLSavedItemsResourceGridCellAccessibilityId = @"JMResourceCollectionPageHTMLSavedItemsResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPagePDFSavedItemsResourceGridCellAccessibilityId = @"JMResourceCollectionPagePDFSavedItemsResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPageXLSSavedItemsResourceGridCellAccessibilityId = @"JMResourceCollectionPageXLSSavedItemsResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPageReportResourceGridCellAccessibilityId = @"JMResourceCollectionPageReportResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPageHTMLTempExportedResourceGridCellAccessibilityId = @"JMResourceCollectionPageHTMLTempExportedResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPagePDFTempExportedResourceGridCellAccessibilityId = @"JMResourceCollectionPagePDFTempExportedResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPageXLSTempExportedResourceGridCellAccessibilityId = @"JMResourceCollectionPageXLSTempExportedResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPageDashboardResourceGridCellAccessibilityId = @"JMResourceCollectionPageDashboardResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPageLegacyDashboardResourceGridCellAccessibilityId = @"JMResourceCollectionPageLegacyDashboardResourceGridCellAccessibilityId";
+NSString *const JMResourceCollectionPageScheduleResourceGridCellAccessibilityId = @"JMResourceCollectionPageScheduleResourceGridCellAccessibilityId";
 NSString *const JMResourceCellResourceInfoButtonAccessibilityId = @"JMResourceCellResourceInfoButtonAccessibilityId";
 
+// Resource Collection Sorting Identifiers
 NSString *const JMResourceLoaderSortByNamePageAccessibilityId = @"JMResourceLoaderSortByNamePageAccessibilityId";
 NSString *const JMResourceLoaderSortByCreationDatePageAccessibilityId = @"JMResourceLoaderSortByCreationDatePageAccessibilityId";
 NSString *const JMResourceLoaderSortByModifiedDatePageAccessibilityId = @"JMResourceLoaderSortByModifiedDatePageAccessibilityId";
 NSString *const JMResourceLoaderSortByAccessTimePageAccessibilityId = @"JMResourceLoaderSortByAccessTimePageAccessibilityId";
+
+// Resource Collection Filtering Identifiers
 NSString *const JMResourceLoaderFilterByAllPageAccessibilityId = @"JMResourceLoaderFilterByAllPageAccessibilityId";
 NSString *const JMResourceLoaderFilterByReportUnitPageAccessibilityId = @"JMResourceLoaderFilterByReportUnitPageAccessibilityId";
 NSString *const JMResourceLoaderFilterByDashboardPageAccessibilityId = @"JMResourceLoaderFilterByDashboardPageAccessibilityId";
@@ -261,7 +258,7 @@ NSString *const JMResourceLoaderFilterByHTMLPageAccessibilityId = @"JMResourceLo
 NSString *const JMResourceLoaderFilterByPDFPageAccessibilityId = @"JMResourceLoaderFilterByPDFPageAccessibilityId";
 NSString *const JMResourceLoaderFilterByXLSPageAccessibilityId = @"JMResourceLoaderFilterByXLSPageAccessibilityId";
 
-// Info Pages Accessibility IDs
+// Info Pages Identifiers
 NSString *const JMResourceInfoPageAccessibilityId = @"JMResourceInfoPageAccessibilityId";
 NSString *const JMRepositoryInfoPageAccessibilityId = @"JMRepositoryInfoPageAccessibilityId";
 NSString *const JMSavedItemsInfoPageAccessibilityId = @"JMSavedItemsInfoPageAccessibilityId";
@@ -282,27 +279,47 @@ NSString *const JMResourceInfoPageScheduleOwnerLabelAccessibilityId = @"JMResour
 NSString *const JMResourceInfoPageScheduleStateLabelAccessibilityId = @"JMResourceInfoPageScheduleStateLabelAccessibilityId";
 NSString *const JMResourceInfoPageSchedulePreviousFireTimeLabelAccessibilityId = @"JMResourceInfoPageSchedulePreviousFireTimeLabelAccessibilityId";
 
+// New Schedule Identifiers
+
+
+// Report Viewer Identifiers
 NSString *const JMReportViewerPageCountOfPagesLabelAccessibilityId = @"JMResourceInfoPageSchedulePreviousFireTimeLabelAccessibilityId";
 
-/*
+// Menu Actions View Identifiers
+NSString *const JMMenuActionsViewActionButtonAccessibilityId = @"JMMenuActionsViewActionButtonAccessibilityId";
+NSString *const JMMenuActionsViewAccessibilityId = @"JMMenuActionsViewAccessibilityId";
+NSString *const JMMenuActionsViewFilterActionAccessibilityId = @"JMMenuActionsViewFilterActionAccessibilityId";
+NSString *const JMMenuActionsViewSortActionAccessibilityId = @"JMMenuActionsViewSortActionAccessibilityId";
+NSString *const JMMenuActionsViewMarkAsFavoriteActionAccessibilityId = @"JMMenuActionsViewMarkAsFavoriteActionAccessibilityId";
+NSString *const JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId = @"JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId";
+NSString *const JMMenuActionsViewRefreshActionAccessibilityId = @"JMMenuActionsViewRefreshActionAccessibilityId";
+NSString *const JMMenuActionsViewSaveActionAccessibilityId = @"JMMenuActionsViewSaveActionAccessibilityId";
+NSString *const JMMenuActionsViewEditActionAccessibilityId = @"JMMenuActionsViewEditActionAccessibilityId";
+NSString *const JMMenuActionsViewEditFiltersActionAccessibilityId = @"JMMenuActionsViewEditFiltersActionAccessibilityId";
+NSString *const JMMenuActionsViewDeleteActionAccessibilityId = @"JMMenuActionsViewDeleteActionAccessibilityId";
+NSString *const JMMenuActionsViewRenameActionAccessibilityId = @"JMMenuActionsViewRenameActionAccessibilityId";
+NSString *const JMMenuActionsViewInfoActionAccessibilityId = @"JMMenuActionsViewInfoActionAccessibilityId";
+NSString *const JMMenuActionsViewSelectAllActionAccessibilityId = @"JMMenuActionsViewSelectAllActionAccessibilityId";
+NSString *const JMMenuActionsViewClearSelectionActionAccessibilityId = @"JMMenuActionsViewClearSelectionActionAccessibilityId";
+NSString *const JMMenuActionsViewRunActionAccessibilityId = @"JMMenuActionsViewRunActionAccessibilityId";
+NSString *const JMMenuActionsViewPrintActionAccessibilityId = @"JMMenuActionsViewPrintActionAccessibilityId";
+NSString *const JMMenuActionsViewOpenInActionAccessibilityId = @"JMMenuActionsViewOpenInActionAccessibilityId";
+NSString *const JMMenuActionsViewScheduleActionAccessibilityId = @"JMMenuActionsViewScheduleActionAccessibilityId";
+NSString *const JMMenuActionsViewShareActionAccessibilityId = @"JMMenuActionsViewShareActionAccessibilityId";
+NSString *const JMMenuActionsViewBookmarksActionAccessibilityId = @"JMMenuActionsViewBookmarksActionAccessibilityId";
+NSString *const JMMenuActionsViewChartTypesActionAccessibilityId = @"JMMenuActionsViewChartTypesActionAccessibilityId";
+NSString *const JMMenuActionsViewShowExternalDisplayActionAccessibilityId = @"JMMenuActionsViewShowExternalDisplayActionAccessibilityId";
+NSString *const JMMenuActionsViewHideExternalDisplayActionAccessibilityId = @"JMMenuActionsViewHideExternalDisplayActionAccessibilityId";
 
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
-NSString *const  = @"";
+// Buttons Identifiers
+NSString *const JMBackButtonAccessibilityId = @"JMBackButtonAccessibilityId";
+NSString *const JMButtonDoneAccessibilityId = @"JMButtonDoneAccessibilityId";
+NSString *const JMButtonAcceptAccessibilityId = @"JMButtonAcceptAccessibilityId";
+NSString *const JMButtonCancelAccessibilityId = @"JMButtonCancelAccessibilityId";
+NSString *const JMButtonFirstAccessibilityId = @"JMButtonFirstAccessibilityId";
+NSString *const JMButtonPreviousAccessibilityId = @"JMButtonPreviousAccessibilityId";
+NSString *const JMButtonNextAccessibilityId = @"JMButtonNextAccessibilityId";
+NSString *const JMButtonLastAccessibilityId = @"JMButtonLastAccessibilityId";
 
-
-
-*/
+// Custom Views Identifiers
+NSString *const JMCancelRequestPopupAccessibilityId = @"JMCancelRequestPopupAccessibilityId";
