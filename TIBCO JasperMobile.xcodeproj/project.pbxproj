@@ -3240,9 +3240,9 @@
 		A1478964C52D662AE616ED9B /* JMMultiSelectedItemsVC */ = {
 			isa = PBXGroup;
 			children = (
+				A14780210DEDD7D0C186C25A /* JMSelectedItem */,
 				A1478E55CC94D69C3A685F73 /* JMMultiSelectedItemsVC.h */,
 				A14786A52719B5573D359D68 /* JMMultiSelectedItemsVC.m */,
-				A14780210DEDD7D0C186C25A /* JMSelectedItem */,
 			);
 			path = JMMultiSelectedItemsVC;
 			sourceTree = "<group>";

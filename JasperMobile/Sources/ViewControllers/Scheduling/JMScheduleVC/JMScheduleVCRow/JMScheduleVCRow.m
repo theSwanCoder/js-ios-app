@@ -28,6 +28,7 @@
 
 #import "JMScheduleVCRow.h"
 #import "JMLocalization.h"
+#import "JMConstants.h"
 
 @implementation JMScheduleVCRow
 
@@ -36,7 +37,8 @@
     self = [super init];
     if (self) {
         _type = type;
-        _title = [self titleForRowType:type];
+        _titleKey = [self titleKeyForRowType:type];
+        _elementAccessibilityId = [self elementAccessibilityIdForRowType:type];
         _hidden = hidden;
     }
     return self;
@@ -58,96 +60,142 @@
 }
 
 #pragma mark - Helpers
-- (NSString *)titleForRowType:(JMScheduleVCRowType)type
+- (NSString *)titleKeyForRowType:(JMScheduleVCRowType)type
 {
-    NSString *title;
     switch(type) {
         case JMScheduleVCRowTypeLabel: {
-            title = JMLocalizedString(@"schedules_new_job_label");
-            break;
+            return @"schedules_new_job_label";
         }
         case JMScheduleVCRowTypeDescription: {
-            title =JMLocalizedString(@"schedules_new_job_description");
-            break;
+            return @"schedules_new_job_description";
         }
         case JMScheduleVCRowTypeOutputFileURI: {
-            title = JMLocalizedString(@"schedules_new_job_baseOutputFilename");
-            break;
+            return @"schedules_new_job_baseOutputFilename";
         }
         case JMScheduleVCRowTypeOutputFolderURI: {
-            title = JMLocalizedString(@"schedules_new_job_folderURI");
-            break;
+            return @"schedules_new_job_folderURI";
         }
         case JMScheduleVCRowTypeFormat: {
-            title = JMLocalizedString(@"schedules_new_job_outputFormat");
-            break;
+            return @"schedules_new_job_outputFormat";
         }
         case JMScheduleVCRowTypeStartDate: {
-            title = JMLocalizedString(@"schedules_new_job_startDate");
-            break;
+            return @"schedules_new_job_startDate";
         }
         case JMScheduleVCRowTypeEndDate: {
-            title = JMLocalizedString(@"schedules_new_job_endDate");
-            break;
+            return @"schedules_new_job_endDate";
         }
         case JMScheduleVCRowTypeTimeZone: {
-            title = @"Time Zone";
-            break;
+            return @"schedules_new_job_timeZone";
         }
         case JMScheduleVCRowTypeStartImmediately: {
-            title = JMLocalizedString(@"schedules_new_job_startType");
-            break;
+            return @"schedules_new_job_startType";
         }
         case JMScheduleVCRowTypeRepeatType: {
-            title = JMLocalizedString(@"schedules_new_job_repeat_type");
-            break;
+            return @"schedules_new_job_repeat_type";
         }
         case JMScheduleVCRowTypeRepeatCount: {
-            title = JMLocalizedString(@"schedules_new_job_repeat_count");
-            break;
+            return @"schedules_new_job_repeat_count";
         }
         case JMScheduleVCRowTypeRepeatTimeInterval: {
-            title = JMLocalizedString(@"schedules_new_job_recurrenceIntervalUnit");
-            break;
+            return @"schedules_new_job_recurrenceIntervalUnit";
         }
         case JMScheduleVCRowTypeRunIndefinitely: {
-            title = JMLocalizedString(@"schedules_new_job_run_indefinitely");
-            break;
+            return @"schedules_new_job_run_indefinitely";
         }
         case JMScheduleVCRowTypeNumberOfRuns: {
-            title = JMLocalizedString(@"schedules_new_job_occurrenceCount");
-            break;
+            return @"schedules_new_job_occurrenceCount";
         }
         case JMScheduleVCRowTypeCalendarEveryMonth: {
-            title = JMLocalizedString(@"schedules_job_calendar_every_month");
-            break;
+            return @"schedules_job_calendar_every_month";
         }
         case JMScheduleVCRowTypeCalendarSelectedMonths: {
-            title = JMLocalizedString(@"schedules_new_job_months");
-            break;
+            return @"schedules_new_job_months";
         }
         case JMScheduleVCRowTypeCalendarEveryDay: {
-            title = JMLocalizedString(@"schedules_job_calendar_every_day");
-            break;
+            return @"schedules_job_calendar_every_day";
         }
         case JMScheduleVCRowTypeCalendarSelectedDays: {
-            title = JMLocalizedString(@"schedules_new_job_weekDays");
-            break;
+            return @"schedules_new_job_weekDays";
         }
         case JMScheduleVCRowTypeCalendarDatesInMonth: {
-            title = JMLocalizedString(@"schedules_new_job_monthDays");
-            break;
+            return @"schedules_new_job_monthDays";
         }
         case JMScheduleVCRowTypeCalendarHours: {
-            title = JMLocalizedString(@"schedules_new_job_hours");
-            break;
+            return @"schedules_new_job_hours";
         }
         case JMScheduleVCRowTypeCalendarMinutes: {
-            title = JMLocalizedString(@"schedules_new_job_minutes");
-            break;
+            return @"schedules_new_job_minutes";
         }
     }
-    return title;
+}
+
+- (NSString *)elementAccessibilityIdForRowType:(JMScheduleVCRowType)type
+{
+    switch(type) {
+        case JMScheduleVCRowTypeLabel: {
+            return JMNewSchedulePageTitleAccessibilityId;
+        }
+        case JMScheduleVCRowTypeDescription: {
+            return JMNewSchedulePageDescriptionAccessibilityId;
+        }
+        case JMScheduleVCRowTypeOutputFileURI: {
+            return JMNewSchedulePageOutputFileURIAccessibilityId;
+        }
+        case JMScheduleVCRowTypeOutputFolderURI: {
+            return JMNewSchedulePageOutputFolderURIAccessibilityId;
+        }
+        case JMScheduleVCRowTypeFormat: {
+            return JMNewSchedulePageFormatAccessibilityId;
+        }
+        case JMScheduleVCRowTypeStartDate: {
+            return JMNewSchedulePageStartDateAccessibilityId;
+        }
+        case JMScheduleVCRowTypeEndDate: {
+            return JMNewSchedulePageEndDateAccessibilityId;
+        }
+        case JMScheduleVCRowTypeTimeZone: {
+            return JMNewSchedulePageTimeZoneAccessibilityId;
+        }
+        case JMScheduleVCRowTypeStartImmediately: {
+            return JMNewSchedulePageStartImmediatelyAccessibilityId;
+        }
+        case JMScheduleVCRowTypeRepeatType: {
+            return JMNewSchedulePageRepeatTypeAccessibilityId;
+        }
+        case JMScheduleVCRowTypeRepeatCount: {
+            return JMNewSchedulePageRepeatCountAccessibilityId;
+        }
+        case JMScheduleVCRowTypeRepeatTimeInterval: {
+            return JMNewSchedulePageRepeatTimeIntervalAccessibilityId;
+        }
+        case JMScheduleVCRowTypeRunIndefinitely: {
+            return JMNewSchedulePageRunIndefinitelyAccessibilityId;
+        }
+        case JMScheduleVCRowTypeNumberOfRuns: {
+            return JMNewSchedulePageNumberOfRunsAccessibilityId;
+        }
+        case JMScheduleVCRowTypeCalendarEveryMonth: {
+            return JMNewSchedulePageCalendarEveryMonthAccessibilityId;
+        }
+        case JMScheduleVCRowTypeCalendarSelectedMonths: {
+            return JMNewSchedulePageCalendarSelectedMonthsAccessibilityId;
+        }
+        case JMScheduleVCRowTypeCalendarEveryDay: {
+            return JMNewSchedulePageCalendarEveryDayAccessibilityId;
+        }
+        case JMScheduleVCRowTypeCalendarSelectedDays: {
+            return JMNewSchedulePageCalendarSelectedDaysAccessibilityId;
+        }
+        case JMScheduleVCRowTypeCalendarDatesInMonth: {
+            return JMNewSchedulePageCalendarDatesInMonthAccessibilityId;
+        }
+        case JMScheduleVCRowTypeCalendarHours: {
+            return JMNewSchedulePageCalendarHoursAccessibilityId;
+        }
+        case JMScheduleVCRowTypeCalendarMinutes: {
+            return JMNewSchedulePageCalendarMinutesAccessibilityId;
+        }
+    }
 }
 
 @end

@@ -227,6 +227,9 @@
     [schedules_new_job_select_weekDays]
         en = Select Days
         tags = ios, new
+    [schedules_new_job_timeZone]
+        en = Start immediately
+        tags = ios,new
 	[schedules_new_job_months]
 		en = Selected Months
 		de = Ausgewählte Monate

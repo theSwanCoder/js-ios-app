@@ -66,7 +66,8 @@ typedef NS_ENUM(NSInteger, JMScheduleVCRowType) {
 };
 
 @interface JMScheduleVCRow : NSObject
-@property (nonatomic, strong, readonly) NSString *title;
+@property (nonatomic, strong, readonly) NSString *titleKey;
+@property (nonatomic, strong, readonly) NSString *elementAccessibilityId;
 @property (nonatomic, strong) NSString *errorMessage;
 @property (nonatomic, assign, readonly) JMScheduleVCRowType type;
 @property (nonatomic, assign, getter=isHidden) BOOL hidden;

@@ -87,6 +87,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         [_datePickerForStartDate addTarget:self
                        action:@selector(updateDate:)
              forControlEvents:UIControlEventValueChanged];
+        [_datePickerForStartDate setAccessibility:NO withTextKey:@"schedules_new_job_startDate" identifier:JMNewSchedulePageDatePickerForStartDateAccessibilityId];
     }
     return _datePickerForStartDate;
 }
@@ -108,6 +109,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         [_datePickerForEndDate addTarget:self
                         action:@selector(updateDate:)
               forControlEvents:UIControlEventValueChanged];
+        [_datePickerForEndDate setAccessibility:NO withTextKey:@"schedules_new_job_endDate" identifier:JMNewSchedulePageDatePickerForStartDateAccessibilityId];
     }
     return _datePickerForEndDate;
 }
@@ -116,14 +118,16 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    [self.view setAccessibility:NO withTextKey:@"" identifier:JMNewSchedulePageTitleAccessibilityId];
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     [self createSections];
 
     [self.createJobButton setTitle:JMLocalizedString(@"dialog_button_apply")
                           forState:UIControlStateNormal];
-
+    [self.createJobButton setAccessibility:YES withTextKey:@"dialog_button_apply" identifier:JMButtonApplyAccessibilityId];
+    
     // TODO: need make this copy?
     self.originTrigger = self.scheduleMetadata.trigger;
 }
@@ -1435,17 +1439,17 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (JMScheduleCell *)scheduleCellForIndexPath:(NSIndexPath *)indexPath row:(JMScheduleVCRow *)row
 {
     JMScheduleCell *scheduleCell = [self.tableView dequeueReusableCellWithIdentifier:@"JMScheduleCell" forIndexPath:indexPath];
-    scheduleCell.titleLabel.text = row.title;
+    scheduleCell.titleLabel.text = JMLocalizedString(row.titleKey);
     scheduleCell.valueTextField.text = [self propertyValueForRowType:row.type];
-    scheduleCell.valueTextField.placeholder = row.title;
+    scheduleCell.valueTextField.placeholder = JMLocalizedString(row.titleKey);
     scheduleCell.valueTextField.inputView = nil;
     scheduleCell.valueTextField.inputAccessoryView = nil;
     scheduleCell.valueTextField.keyboardType = UIKeyboardTypeDefault;
     scheduleCell.valueTextField.userInteractionEnabled = YES;
     scheduleCell.delegate = self;
 
-    [scheduleCell setAccessibility:NO withTextKey:row.title identifier:nil];
-    [scheduleCell.valueTextField setAccessibility:YES withTextKey:row.title identifier:nil];
+    [scheduleCell setAccessibility:NO withTextKey:row.titleKey identifier:nil];
+    [scheduleCell.valueTextField setAccessibility:YES withTextKey:row.titleKey identifier:row.elementAccessibilityId];
 
     [scheduleCell showErrorMessage:row.errorMessage];
 
@@ -1455,9 +1459,13 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (JMScheduleBoolenCell *)scheduleBooleanCellForIndexPath:(NSIndexPath *)indexPath row:(JMScheduleVCRow *)row
 {
     JMScheduleBoolenCell *scheduleCell = [self.tableView dequeueReusableCellWithIdentifier:@"JMScheduleBoolenCell" forIndexPath:indexPath];
-    scheduleCell.titleLabel.text = row.title;
+    scheduleCell.titleLabel.text = JMLocalizedString(row.titleKey);
     scheduleCell.uiSwitch.on = [self booleanValueForRowType:row.type];
     scheduleCell.delegate = self;
+    
+    [scheduleCell setAccessibility:NO withTextKey:row.titleKey identifier:nil];
+    [scheduleCell.uiSwitch setAccessibility:YES withTextKey:row.titleKey identifier:row.elementAccessibilityId];
+
     return scheduleCell;
 }
 
