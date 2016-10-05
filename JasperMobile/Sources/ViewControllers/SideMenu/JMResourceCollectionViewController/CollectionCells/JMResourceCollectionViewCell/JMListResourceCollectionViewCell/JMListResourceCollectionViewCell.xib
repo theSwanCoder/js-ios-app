@@ -19,6 +19,7 @@
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="grid_res_type_report" translatesAutoresizingMaskIntoConstraints="NO" id="Dhw-Rx-0zA">
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="250" constant="80" id="SeA-X8-VHA"/>
                             <constraint firstAttribute="width" constant="100" id="cOM-9j-vvE"/>
                         </constraints>
                     </imageView>
@@ -85,7 +86,8 @@
             </constraints>
             <size key="customSize" width="50" height="83"/>
             <connections>
-                <outlet property="imageWidthConstraint" destination="cOM-9j-vvE" id="aaO-OC-w1w"/>
+                <outlet property="heightImageConstraint" destination="SeA-X8-VHA" id="CVH-vd-J17"/>
+                <outlet property="widthImageConstraint" destination="cOM-9j-vvE" id="Zr5-4A-MW6"/>
                 <outlet property="infoButton" destination="NYT-un-VP1" id="CZc-iT-wfA"/>
                 <outlet property="resourceDescription" destination="W07-B6-tIS" id="ohD-pG-q7X"/>
                 <outlet property="resourceImage" destination="Dhw-Rx-0zA" id="ih9-1U-4aI"/>

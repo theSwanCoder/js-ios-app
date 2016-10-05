@@ -44,7 +44,10 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 @property (nonatomic, weak) IBOutlet UILabel *resourceDescription;
 @property (nonatomic, weak) IBOutlet UIButton *infoButton;
 @property (nonatomic, readwrite) UIImage *thumbnailImage;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageWidthConstraint;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *widthImageConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightImageConstraint;
+
 @end
 
 @implementation JMResourceCollectionViewCell
@@ -214,7 +217,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     UIImage *resourceImage = thumbnails ? [image cropedImageForRect:self.resourceImage.bounds] : image;
     BOOL shouldFitImage = thumbnails;
     if (!shouldFitImage) {
-        shouldFitImage = ((resourceImage.size.height > self.resourceImage.frame.size.height) || (resourceImage.size.width > self.resourceImage.frame.size.width));
+        shouldFitImage = ((resourceImage.size.height > self.heightImageConstraint.constant) || (resourceImage.size.width > self.widthImageConstraint.constant));
     }
     self.resourceImage.contentMode = shouldFitImage ? UIViewContentModeScaleAspectFit : UIViewContentModeCenter;
     if (self.resource.type == JMResourceTypeLegacyDashboard) {
@@ -224,7 +227,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     }
     self.resourceImage.image = resourceImage;
     [self layoutIfNeeded];
-    self.imageWidthConstraint.constant = [JMUtils isCompactWidth] ? 100: 115;
+    self.widthImageConstraint.constant = [JMUtils isCompactWidth] ? 100: 115;
     [self setNeedsUpdateConstraints];
 }
 
