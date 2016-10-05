@@ -76,7 +76,7 @@
 - (void)testThatSearchWorkCorrectly
 {
     [self givenThatFavoritesSectionIsEmpty];
-    [self markTestReportAsFavorite];
+    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
 
     [self openFavoritesSection];
     [self searchResourceWithName:kTestReportName
@@ -84,7 +84,7 @@
 
     [self givenThatCellsAreVisible];
 
-    [self unmarkTestReportFromFavorite];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
 
 //    Error message when no search result
@@ -101,7 +101,7 @@
 - (void)testThatSearchWithEmptyResultShowCorrectMessage
 {
     [self givenThatFavoritesSectionIsEmpty];
-    [self markTestReportAsFavorite];
+    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];
     [self searchResourceWithName:@"Search without result text"
@@ -111,7 +111,7 @@
                    parentElement:nil
                          timeout:kUITestsBaseTimeout];
 
-    [self unmarkTestReportFromFavorite];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
 
 //    View type button
@@ -143,7 +143,7 @@
 - (void)testThatViewTypeButtonWorkCorrectly
 {
     [self givenThatFavoritesSectionIsEmpty];
-    [self markTestReportAsFavorite];
+    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
 
     [self openFavoritesSection];
 
@@ -159,7 +159,7 @@
 
     [self switchViewFromGridToListInSectionWithTitle:@"Favorites"];
 
-    [self unmarkTestReportFromFavorite];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
 
 //    Sorting button
@@ -179,7 +179,7 @@
 - (void)testThatSortingWorkCorrectly
 {
     [self givenThatFavoritesSectionIsEmpty];
-    [self markTestReportAsFavorite];
+    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];
     
@@ -194,8 +194,8 @@
     [self selectSortBy:@"Modified Date"
     inSectionWithTitle:@"Favorites"];
     [self verifyThatCollectionViewContainsListOfCells];
-    
-    [self unmarkTestReportFromFavorite];
+
+    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
 
 //    Filter button
@@ -222,7 +222,7 @@
 - (void)testThatFilteringWorkCorrectly
 {
     [self givenThatFavoritesSectionIsEmpty];
-    [self markTestReportAsFavorite];
+    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];
     
@@ -260,8 +260,8 @@
     
     [self selectFilterBy:@"All"
       inSectionWithTitle:@"Favorites"];
-    
-    [self unmarkTestReportFromFavorite];
+
+    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
 
 //    Pull down to refresh all items
@@ -278,15 +278,15 @@
 - (void)testThatRefreshWorkByUsingPullDown
 {
     [self givenThatFavoritesSectionIsEmpty];
-    [self markTestReportAsFavorite];
-    [self markTestDashboardAsFavorite];
-    
+    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+
     [self openFavoritesSection];
 
     [self performPullDownToRefresh];
 
-    [self unmarkTestReportFromFavorite];
-    [self unmarkTestDashboardFromFavorite];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
 }
 
 //    Scrolling of the list/grid
@@ -304,13 +304,13 @@
 - (void)testThatScrollingWorkCorreclty
 {
     [self givenThatFavoritesSectionIsEmpty];
-    [self markTestReportAsFavorite];
+    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
 
     [self openFavoritesSection];
 
     [self performSwipeToScrool];
 
-    [self unmarkTestReportFromFavorite];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
 
 //    User should see only favorites items which he/she added they
@@ -367,11 +367,11 @@
 - (void)testThatFavoriteReportCanBeUnmarkedFromFavorites
 {
     [self givenThatFavoritesSectionIsEmpty];
-    [self markTestReportAsFavorite];
+    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];
-    
-    [self unmarkTestReportFromFavorite];
+
+    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
 
 //    Remove button on the dashboard
@@ -387,11 +387,11 @@
 - (void)testThatFavoriteDashboardCanBeUnmarkedFromFavorites
 {
     [self givenThatFavoritesSectionIsEmpty];
-    [self markTestDashboardAsFavorite];
+    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];
 
-    [self unmarkTestDashboardFromFavorite];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
 }
     
 //    Remove button on the folder
