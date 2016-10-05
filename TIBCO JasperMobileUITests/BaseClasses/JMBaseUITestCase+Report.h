@@ -14,6 +14,7 @@ extern NSString *const kTestReportWithSingleSelectedControlName;
 
 @interface JMBaseUITestCase (Report)
 - (void)openTestReportPage;
+- (void)openTestReportFromInfoPage;
 - (void)openTestReportWithMandatoryFiltersPage;
 - (void)openTestReportWithSingleSelectedControlPage;
 - (void)openTestReportPageWithWaitingFinish:(BOOL)waitingFinish;
@@ -29,12 +30,14 @@ extern NSString *const kTestReportWithSingleSelectedControlName;
 - (void)saveTestReportWithName:(NSString *)name
                         format:(NSString *)format;
 
+- (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName;
+
 // Printing
 - (void)openPrintReportPage;
 - (void)closePrintReportPage;
 
-// Favorites
-- (void)markTestReportAsFavorite;
-- (void)unmarkTestReportFromFavorite;
+// Verifying
+- (void)verifyThatReportInfoPageOnScreen;
+- (void)verifyThatReportInfoPageContainsCorrectDataForReportWithName:(NSString *)reportName;
 
 @end

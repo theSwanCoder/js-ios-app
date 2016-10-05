@@ -34,31 +34,55 @@
 
 - (void)openLibrarySection
 {
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Library"];
+    if (navigationBar.exists) {
+        return;
+    }
     [self tryOpenPageWithName:@"Library"];
 }
 
 - (void)openRepositorySection
 {
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Repository"];
+    if (navigationBar.exists) {
+        return;
+    }
     [self tryOpenPageWithName:@"Repository"];
 }
 
 - (void)openRecentlyViewedSection
 {
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Recently Viewed"];
+    if (navigationBar.exists) {
+        return;
+    }
     [self tryOpenPageWithName:@"Recently Viewed"];
 }
 
 - (void)openSavedItemsSection
 {
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Saved Items"];
+    if (navigationBar.exists) {
+        return;
+    }
     [self tryOpenPageWithName:@"Saved Items"];
 }
 
 - (void)openFavoritesSection
 {
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Favorites"];
+    if (navigationBar.exists) {
+        return;
+    }
     [self tryOpenPageWithName:@"Favorites"];
 }
 
 - (void)openSchedulesSection
 {
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Schedules"];
+    if (navigationBar.exists) {
+        return;
+    }
     [self tryOpenPageWithName:@"Schedules"];
 }
 
@@ -94,20 +118,30 @@
 {
     [self givenSideMenuNotVisible];
     [self tryTapSideApplicationMenu];
-    XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                                         timeout:kUITestsBaseTimeout];
-
-    NSArray *allStaticTexts = menuView.cells.staticTexts.allElementsBoundByAccessibilityElement;
-    NSLog(@"all static texts: %@", allStaticTexts);
-
-    XCUIElement *pageMenuItem = menuView.cells.staticTexts[pageName];
+    
+    XCUIElement *pageMenuItem = [self findMenuItemForPageName:pageName];
     if (!pageMenuItem) {
         NSString *pageNameWithNote = [NSString stringWithFormat:@"%@ note", pageName];
-        pageMenuItem = menuView.cells.staticTexts[pageNameWithNote];
+        pageMenuItem = [self findMenuItemForPageName:pageNameWithNote];
     }
-    [self waitElementReady:pageMenuItem
-                   timeout:kUITestsBaseTimeout];
     [pageMenuItem tap];
+}
+
+- (XCUIElement *)findMenuItemForPageName:(NSString *)pageName
+{
+    XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
+                                                         timeout:kUITestsBaseTimeout];
+    XCUIElement *pageMenuItem;
+    NSArray *allMenuItems = menuView.cells.allElementsBoundByAccessibilityElement;
+    for (XCUIElement *menuItem in allMenuItems) {
+        XCUIElement *label = [self findStaticTextWithText:pageName
+                                            parentElement:menuItem];
+        if (label.exists) {
+            pageMenuItem = menuItem;
+            break;
+        }
+    }
+    return pageMenuItem;
 }
 
 - (void)givenSideMenuVisible

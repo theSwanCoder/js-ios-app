@@ -6,10 +6,10 @@
 #import "JMBaseUITestCase+SavedItems.h"
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
-#import "JMBaseUITestCase+Resource.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+InfoPage.h"
 
 
 @implementation JMBaseUITestCase (SavedItems)
@@ -174,13 +174,12 @@
 
 - (void)showInfoPageTestSavedItemFromViewer
 {
-    [self openMenuActions];
-    [self selectActionWithName:@"Info"];
+    [self openInfoPageFromMenuActions];
 }
 
 - (void)closeInfoPageTestSavedItemFromViewer
 {
-    [self closeInfoPageWithCancelButton];
+    [self closeInfoPageFromMenuActions];
 }
 
 - (void)showInfoPageTestSavedItemFromSavedItemsSection
@@ -189,13 +188,12 @@
     
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                              format:@"html"];
-
-    [self openInfoPageForResource:testItem];
+    [self openInfoPageFromCell:testItem];
 }
 
 - (void)closeInfoPageTestSavedItemFromSavedItemsSection
 {
-    [self closeInfoPageWithBackButton];
+    [self closeInfoPageFromCell];
 }
 
 - (void)markSavedAsFavoriteFromInfoPage
@@ -255,8 +253,8 @@
 
 - (void)deleteSavedItem:(XCUIElement *)savedItem
 {
-    [self openInfoPageForResource:savedItem];
-    [self verifyInfoPageOnScreenForPageWithAccessibilityId:@"JMSavedItemsInfoViewControllerAccessibilityId"];
+    [self openInfoPageFromCell:savedItem];
+    [self verifyThatSavedItemInfoPageOnScreen];
 
     [self openMenuActions];
     [self selectActionWithName:@"Delete"];
@@ -278,6 +276,11 @@
                                             containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
                                                                    labelText:fullSavedItemName];
     return savedItem;
+}
+
+- (void)verifyThatSavedItemInfoPageOnScreen
+{
+    [self verifyInfoPageOnScreenForPageWithAccessibilityId:@"JMSavedItemsInfoViewControllerAccessibilityId"];
 }
 
 @end

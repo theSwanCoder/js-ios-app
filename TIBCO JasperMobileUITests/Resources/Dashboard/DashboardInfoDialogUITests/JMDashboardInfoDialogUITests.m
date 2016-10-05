@@ -9,6 +9,8 @@
 #import "JMDashboardInfoDialogUITests.h"
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Favorites.h"
 
 @implementation JMDashboardInfoDialogUITests
 
@@ -31,9 +33,9 @@
 {
     [self openTestDashboardPage];
 
-    [self openDashboardInfoPage];
+    [self openInfoPageForTestDashboardFromSectionWithName:@"Library"];
     [self verifyInfoPageContainsCorrectInfo];
-    [self closeDashboardInfoPage];
+    [self closeInfoPageForTestDashboard];
 
     [self closeTestDashboardPage];
 }
@@ -49,8 +51,8 @@
 {
     [self openTestDashboardPage];
 
-    [self openDashboardInfoPage];
-    [self closeDashboardInfoPage];
+    [self openInfoPageForTestDashboardFromSectionWithName:@"Library"];
+    [self closeInfoPageForTestDashboard];
 
     [self closeTestDashboardPage];
 }
@@ -65,9 +67,9 @@
 {
     [self openTestDashboardPage];
 
-    [self openDashboardInfoPage];
+    [self openInfoPageForTestDashboardFromSectionWithName:@"Library"];
     [self verifyInfoPageHasCorrectTitle];
-    [self closeDashboardInfoPage];
+    [self closeInfoPageForTestDashboard];
 
     [self closeTestDashboardPage];
 }
@@ -85,10 +87,10 @@
 {
     [self openTestDashboardPage];
 
-    [self openDashboardInfoPage];
-    [self markDashboardAsFavoriteFromInfoPage];
-    [self unmarkDashboardFromFavoriteFromInfoPage];
-    [self closeDashboardInfoPage];
+    [self openInfoPageForTestDashboardFromSectionWithName:@"Library"];
+    [self markAsFavoriteFromMenuActions];
+    [self unmarkFromFavoritesFromMenuActions];
+    [self closeInfoPageForTestDashboard];
 
     [self closeTestDashboardPage];
 }

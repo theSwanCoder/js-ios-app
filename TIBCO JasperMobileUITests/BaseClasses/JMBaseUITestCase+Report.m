@@ -10,7 +10,8 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Section.h"
-#import "JMBaseUITestCase+Resource.h"
+#import "JMBaseUITestCase+SideMenu.h"
+#import "JMBaseUITestCase+InfoPage.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";
@@ -21,6 +22,17 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openTestReportPage
 {
     [self openTestReportPageWithWaitingFinish:YES];
+}
+
+- (void)openTestReportFromInfoPage
+{
+    [self openMenuActions];
+    [self selectActionWithName:@"Run"];
+
+    [self givenLoadingPopupNotVisible];
+    [self givenLoadingPopupNotVisible];
+
+    [self tryBackToPreviousPage];
 }
 
 - (void)openTestReportWithMandatoryFiltersPage
@@ -133,16 +145,20 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 #pragma mark - Helpers
 
-- (void)searchTestReport
+- (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName
 {
-    // TODO: replace with specific element - JMLibraryPageAccessibilityId
     [self searchResourceWithName:kTestReportName
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+               inSectionWithName:sectionName];
+
+    [self givenThatCellsAreVisible];
+
+    XCUIElement *testCell = [self testReportCell];
+    return testCell;
 }
 
 - (void)tryOpenTestReport
 {
-    [self searchTestReport];
+    [self searchTestReportInSectionWithName:@"Library"];
     [self givenThatCellsAreVisible];
 
     XCUIElement *testCell = [self testReportCell];
@@ -232,49 +248,37 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [cancelButton tap];
 }
 
-#pragma mark - Favorites
+#pragma mark - Verifying
 
-- (void)markTestReportAsFavorite
+- (void)verifyThatReportInfoPageOnScreen
 {
-    [self searchTestReport];
-    [self givenThatCellsAreVisible];
-
-    XCUIElement *testCell = [self testReportCell];
-    [self openInfoPageForReportCell:testCell];
-
-    [self openMenuActions];
-    [self selectActionWithName:@"Mark as Favorite"];
-
-    [self closeInfoPageWithBackButton];
+    [self verifyInfoPageOnScreenForPageWithAccessibilityId:@"JMReportInfoViewControllerAccessibilityId"];
 }
 
-- (void)unmarkTestReportFromFavorite
+- (void)verifyThatReportInfoPageContainsCorrectDataForReportWithName:(NSString *)reportName
 {
-    [self searchTestReport];
-    [self givenThatCellsAreVisible];
-    
-    XCUIElement *testCell = [self testReportCell];
-    [self openInfoPageForReportCell:testCell];
-    
-    [self openMenuActions];
-    [self selectActionWithName:@"Remove From Favorites"];
-    
-    [self closeInfoPageWithBackButton];
-}
-
-- (void)openInfoPageForReportCell:(XCUIElement *)cell
-{
-    XCUIElement *infoButton = [self waitButtonWithAccessibilityId:@"More Info"
-                                                    parentElement:cell
-                                                          timeout:kUITestsBaseTimeout];
-    [infoButton tap];
-    [self givenThatReportInfoPage];
-}
-
-- (void)givenThatReportInfoPage
-{
-    [self waitElementWithAccessibilityId:@"JMReportInfoViewControllerAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
+    XCUIElement *infoPage = self.application.otherElements[@"JMReportInfoViewControllerAccessibilityId"];
+    [self waitStaticTextWithAccessibilityId:@"Name"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Description"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"URI"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Type"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Version"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Creation Date"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Modified Date"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
 }
 
 @end

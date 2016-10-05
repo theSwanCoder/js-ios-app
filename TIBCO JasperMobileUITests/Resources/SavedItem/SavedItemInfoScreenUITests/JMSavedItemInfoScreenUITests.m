@@ -8,10 +8,9 @@
 
 #import "JMSavedItemInfoScreenUITests.h"
 #import "JMBaseUITestCase+SavedItems.h"
-#import "JMBaseUITestCase+Resource.h"
-#import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+InfoPage.h"
 
 @implementation JMSavedItemInfoScreenUITests
 
@@ -183,7 +182,7 @@
 
 - (void)verifyThatInfoPageOnScreen
 {
-    [self verifyInfoPageOnScreenForPageWithAccessibilityId:@"JMSavedItemsInfoViewControllerAccessibilityId"];
+    [self verifyThatSavedItemInfoPageOnScreen];
 }
 
 - (void)verifyThatBackButtonOnInfoPageHasCorrectTitle

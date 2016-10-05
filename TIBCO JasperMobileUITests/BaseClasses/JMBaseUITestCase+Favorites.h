@@ -10,4 +10,18 @@
 
 - (void)givenThatFavoritesSectionIsEmpty;
 
+// Reports
+- (void)markTestReportAsFavoriteFromSectionWithName:(NSString *)sectionName;
+- (void)unmarkTestReportFromFavoriteFromSectionWithName:(NSString *)sectionName;
+
+// Dashboards
+- (void)markTestDashboardAsFavoriteFromSectionWithName:(NSString *)sectionName;
+- (void)unmarkTestDashboardFromFavoriteFromSectionWithName:(NSString *)sectionName;
+
+// General methods
+- (void)markAsFavoriteFromMenuActions;
+- (void)unmarkFromFavoritesFromMenuActions;
+
+- (void)markAsFavoriteFromNavigationBar:(XCUIElement *)navigationBar;
+- (void)unmarkFromFavoritesFromNavigationBar:(XCUIElement *)navigationBar;
 @end
