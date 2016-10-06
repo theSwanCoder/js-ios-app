@@ -62,6 +62,24 @@
 		tags = ios
 
 [[New Job]]
+    [schedules_new_section_main]
+        en = Main
+        tags = ios,new
+    [schedules_new_section_output_options]
+        en = Output Options
+        tags = ios,new
+    [schedules_new_section_schedule_start]
+        en = Schedule Start
+        tags = ios,new
+    [schedules_new_section_recurrence]
+        en = Recurrence
+        tags = ios,new
+    [schedules_new_section_schedule_end]
+        en = Schedule End
+        tags = ios,new
+    [schedules_new_section_holidays]
+        en = Holidays
+        tags = ios,new
 	[schedules_new_job_label]
 		en = Name
 		de = Auftrags-Etikett
@@ -290,6 +308,21 @@
 		pt = Minutos
 		zh = 分钟
 		tags = ios
+    [schedules_new_job_weeks]
+        en = Weeks
+        tags = ios,new
+    [schedules_new_job_days]
+        en = Days
+        tags = ios,new
+    [schedules_new_job_none]
+        en = None
+        tags = ios,new
+    [schedules_new_job_trigger_simple]
+        en = Simple
+        tags = ios,new
+    [schedules_new_job_trigger_calendar]
+        en = Calendar
+        tags = ios,new
 
 
 [[Schedule Notifications]]

@@ -28,6 +28,7 @@
 
 
 #import "JMScheduleVCSection.h"
+#import "JMConstants.h"
 
 @interface JMScheduleVCSection()
 @property (nonatomic, strong, readwrite) NSMutableArray <JMScheduleVCRow *> *internalRows;
@@ -39,7 +40,8 @@
 {
     self = [super init];
     if (self) {
-        _title = [self titleForSectionType:type];
+        _titleKey = [self titleKeyForSectionType:type];
+        _elementAccessibilityId = [self elementAccessibilityIdForSectionType:type];
         _type = type;
         _internalRows = [rows mutableCopy];
     }
@@ -91,36 +93,52 @@
 }
 
 #pragma mark - Helpers
-- (NSString *)titleForSectionType:(JMScheduleVCSectionType)type
+- (NSString *)titleKeyForSectionType:(JMScheduleVCSectionType)type
 {
-    NSString *title;
     switch(type) {
         case JMNewScheduleVCSectionTypeMain: {
-            title = @"Main";
-            break;
+            return @"schedules_new_section_main";
         }
         case JMNewScheduleVCSectionTypeOutputOptions: {
-            title = @"Output Options";
-            break;
+            return @"schedules_new_section_output_options";
         }
         case JMNewScheduleVCSectionTypeScheduleStart: {
-            title = @"Schedule Start";
-            break;
+            return @"schedules_new_section_schedule_start";
         }
         case JMNewScheduleVCSectionTypeRecurrence: {
-            title = @"Recurrence";
-            break;
+            return @"schedules_new_section_recurrence";
         }
         case JMNewScheduleVCSectionTypeScheduleEnd: {
-            title = @"Schedule End";
-            break;
+            return @"schedules_new_section_schedule_end";
         }
         case JMNewScheduleVCSectionTypeHolidays: {
-            title = @"Holidays";
-            break;
+            return @"schedules_new_section_holidays";
         }
     }
-    return title;
+}
+
+- (NSString *)elementAccessibilityIdForSectionType:(JMScheduleVCSectionType)type
+{
+    switch(type) {
+        case JMNewScheduleVCSectionTypeMain: {
+            return JMNewSchedulePageSectionMainAccessibilityId;
+        }
+        case JMNewScheduleVCSectionTypeOutputOptions: {
+            return JMNewSchedulePageSectionOutputOptionsAccessibilityId;
+        }
+        case JMNewScheduleVCSectionTypeScheduleStart: {
+            return JMNewSchedulePageSectionScheduleStartAccessibilityId;
+        }
+        case JMNewScheduleVCSectionTypeRecurrence: {
+            return JMNewSchedulePageSectionReccurenceAccessibilityId;
+        }
+        case JMNewScheduleVCSectionTypeScheduleEnd: {
+            return JMNewSchedulePageSectionScheduleEndAccessibilityId;
+        }
+        case JMNewScheduleVCSectionTypeHolidays: {
+            return JMNewSchedulePageSectionHolidaysAccessibilityId;
+        }
+    }
 }
 
 @end

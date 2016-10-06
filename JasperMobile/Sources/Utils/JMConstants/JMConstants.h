@@ -315,6 +315,12 @@ extern NSString *const JMMenuActionsViewHideExternalDisplayActionAccessibilityId
 
 // New Schedule Identifiers
 extern NSString *const JMNewSchedulePageTitleAccessibilityId;
+extern NSString *const JMNewSchedulePageSectionMainAccessibilityId;
+extern NSString *const JMNewSchedulePageSectionOutputOptionsAccessibilityId;
+extern NSString *const JMNewSchedulePageSectionScheduleStartAccessibilityId;
+extern NSString *const JMNewSchedulePageSectionReccurenceAccessibilityId;
+extern NSString *const JMNewSchedulePageSectionScheduleEndAccessibilityId;
+extern NSString *const JMNewSchedulePageSectionHolidaysAccessibilityId;
 extern NSString *const JMNewSchedulePageLabelAccessibilityId;
 extern NSString *const JMNewSchedulePageDescriptionAccessibilityId;
 extern NSString *const JMNewSchedulePageOutputFileURIAccessibilityId;
@@ -338,6 +344,13 @@ extern NSString *const JMNewSchedulePageRunIndefinitelyAccessibilityId;
 extern NSString *const JMNewSchedulePageNumberOfRunsAccessibilityId;
 extern NSString *const JMNewSchedulePageDatePickerForStartDateAccessibilityId;
 extern NSString *const JMNewSchedulePageDatePickerForEndDateAccessibilityId;
+extern NSString *const JMNewSchedulePageToolbarAccessibilityId;
+extern NSString *const JMNewSchedulePageToolbarDoneButtonAccessibilityId;
+extern NSString *const JMNewSchedulePageToolbarCancelButtonAccessibilityId;
+
+extern NSString *const JMMultiSelectedItemsPageSelectMonthsAccessibilityId;
+extern NSString *const JMMultiSelectedItemsPageSelectWeekDaysAccessibilityId;
+
 
 // Buttons Identifiers
 extern NSString *const JMBackButtonAccessibilityId;
@@ -352,3 +365,5 @@ extern NSString *const JMButtonApplyAccessibilityId;
 
 // Custom Views Identifiers
 extern NSString *const JMCancelRequestPopupAccessibilityId;
+
+extern NSString *const JMAlertControllerAccessibilityId;

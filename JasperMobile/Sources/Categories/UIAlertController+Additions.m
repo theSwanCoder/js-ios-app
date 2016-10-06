@@ -27,6 +27,7 @@
 
 #import "UIAlertController+Additions.h"
 #import "JMLocalization.h"
+#import "NSObject+Additions.h"
 
 @interface UIAlertController (UITextFieldDelegate) <UITextFieldDelegate>
 
@@ -48,6 +49,8 @@
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:JMLocalizedString(title)
                                                                              message:JMLocalizedString(message)
                                                                       preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController setAccessibility:YES withTextKey:title identifier:JMAlertControllerAccessibilityId];
     return alertController;
 }
 
@@ -114,6 +117,7 @@
             }
         }
     }];
+    alertAction.accessibilityLabel = @"accessibilityLabel";
     [self addAction:alertAction];
 }
 

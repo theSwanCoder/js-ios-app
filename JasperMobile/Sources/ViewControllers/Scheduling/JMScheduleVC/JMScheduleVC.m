@@ -224,12 +224,6 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (IBAction)selectFormat:(id)sender
 {
-    NSArray *availableFormats = @[
-            kJS_CONTENT_TYPE_HTML,
-            kJS_CONTENT_TYPE_PDF,
-            kJS_CONTENT_TYPE_XLS
-    ];
-
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMLocalizedString(@"schedules_new_job_outputFormat")
                                                                                       message:nil
                                                                             cancelButtonTitle:@"dialog_button_cancel"
@@ -244,7 +238,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
     NSAssert(formatCell != nil, @"Cell is nil");
 
-    for (NSString *format in availableFormats) {
+    for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
         [alertController addActionWithLocalizedTitle:format style:UIAlertActionStyleDefault
                                              handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                  self.scheduleMetadata.outputFormats = @[format.uppercaseString];
@@ -345,6 +339,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (void)selectMonths
 {
     JMMultiSelectedItemsVC *multiValuesVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMMultiSelectedItemsVC"];
+    [multiValuesVC.view setAccessibility:NO withTextKey:@"schedules_new_job_select_months" identifier:JMMultiSelectedItemsPageSelectMonthsAccessibilityId];
     multiValuesVC.title = JMLocalizedString(@"schedules_new_job_select_months");
 
     JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) [self currentTrigger];
@@ -385,6 +380,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (void)selectDays
 {
     JMMultiSelectedItemsVC *multiValuesVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMMultiSelectedItemsVC"];
+    [multiValuesVC.view setAccessibility:NO withTextKey:@"schedules_new_job_select_weekDays" identifier:JMMultiSelectedItemsPageSelectWeekDaysAccessibilityId];
     multiValuesVC.title = JMLocalizedString(@"schedules_new_job_select_weekDays");
     
     JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) [self currentTrigger];
@@ -479,9 +475,10 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     titleLabel.backgroundColor = [UIColor clearColor];
 
     JMScheduleVCSection *scheduleVCSection = self.sections[section];
-    NSString *sectionTitle = scheduleVCSection.title;
+    NSString *sectionTitle = JMLocalizedString(scheduleVCSection.titleKey);
 
     titleLabel.text = [sectionTitle uppercaseString];
+    [titleLabel setAccessibility:YES withTextKey:scheduleVCSection.titleKey identifier:scheduleVCSection.elementAccessibilityId];
     [titleLabel sizeToFit];
 
     UIView *headerView = [UIView new];
@@ -1062,10 +1059,12 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 - (UIToolbar *)toolbarForCellWithDoneAction:(SEL)doneAction cancelAction:(SEL)cancelAction
 {
     UIToolbar *toolbar = [UIToolbar new];
+    [toolbar setAccessibility:NO withTextKey:nil identifier:JMNewSchedulePageToolbarAccessibilityId];
     [toolbar sizeToFit];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                target:self
                                                                                action:doneAction];
+    [doneButton setAccessibility:YES withTextKey:@"dialog_button_done" identifier:JMNewSchedulePageToolbarDoneButtonAccessibilityId];
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                                    target:nil
                                                                                    action:nil];
@@ -1073,6 +1072,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                      target:self
                                                                                      action:cancelAction];
+        [cancelButton setAccessibility:YES withTextKey:@"dialog_button_cancel" identifier:JMNewSchedulePageToolbarCancelButtonAccessibilityId];
         [toolbar setItems:@[cancelButton, flexibleSpace, doneButton] animated:YES];
     } else {
         [toolbar setItems:@[flexibleSpace, doneButton] animated:YES];
@@ -1086,23 +1086,23 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
     switch(recurrenceType) {
         case JSScheduleSimpleTriggerRecurrenceIntervalTypeNone: {
-            stringValue = @"None";
+            stringValue = JMLocalizedString(@"schedules_new_job_none");
             break;
         }
         case JSScheduleSimpleTriggerRecurrenceIntervalTypeMinute: {
-            stringValue = @"Minutes";
+            stringValue = JMLocalizedString(@"schedules_new_job_minutes");
             break;
         }
         case JSScheduleSimpleTriggerRecurrenceIntervalTypeHour: {
-            stringValue = @"Hours";
+            stringValue = JMLocalizedString(@"schedules_new_job_hours");
             break;
         }
         case JSScheduleSimpleTriggerRecurrenceIntervalTypeDay: {
-            stringValue = @"Days";
+            stringValue = JMLocalizedString(@"schedules_new_job_days");
             break;
         }
         case JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek: {
-            stringValue = @"Weeks";
+            stringValue = JMLocalizedString(@"schedules_new_job_weeks");
             break;
         }
     }
@@ -1116,15 +1116,15 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
     switch(repeatType) {
         case JSScheduleTriggerTypeNone: {
-            stringValue = @"None";
+            stringValue = JMLocalizedString(@"schedules_new_job_none");
             break;
         }
         case JSScheduleTriggerTypeSimple: {
-            stringValue = @"Simple";
+            stringValue = JMLocalizedString(@"schedules_new_job_trigger_simple");
             break;
         }
         case JSScheduleTriggerTypeCalendar: {
-            stringValue = @"Calendar";
+            stringValue = JMLocalizedString(@"schedules_new_job_trigger_calendar");
             break;
         }
     }

@@ -45,7 +45,8 @@ typedef NS_ENUM(NSInteger, JMScheduleVCSectionType) {
 };
 
 @interface JMScheduleVCSection : NSObject
-@property (nonatomic, strong, readonly) NSString *title;
+@property (nonatomic, strong, readonly) NSString *titleKey;
+@property (nonatomic, strong, readonly) NSString *elementAccessibilityId;
 @property (nonatomic, assign, readonly) JMScheduleVCSectionType type;
 @property (nonatomic, strong, readonly) NSArray <JMScheduleVCRow *>*rows;
 - (instancetype)initWithSectionType:(JMScheduleVCSectionType)type rows:(NSArray <JMScheduleVCRow *> *)rows;
