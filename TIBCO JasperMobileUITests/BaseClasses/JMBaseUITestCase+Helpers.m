@@ -564,17 +564,24 @@
 #pragma mark - Other buttons
 
 - (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout
+                         inSectionWithName:(NSString *)sectionName
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:nil
-                                                   timeout:timeout];
+    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:sectionName];
+    [self waitElementReady:menuButton
+                   timeout:timeout];
+    return menuButton;
+}
+
+- (XCUIElement *)findMenuButtonInSectionWithName:(NSString *)sectionName
+{
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionName
+                                                   timeout:kUITestsBaseTimeout];
     XCUIElement *menuButton = [self findButtonWithAccessibilityId:@"menu icon"
                                                     parentElement:navBar];
     if (!menuButton) {
         menuButton = [self findButtonWithAccessibilityId:@"menu icon note"
                                            parentElement:navBar];
     }
-    [self waitElementReady:menuButton
-                   timeout:timeout];
     return menuButton;
 }
 

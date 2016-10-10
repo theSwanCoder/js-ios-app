@@ -337,11 +337,21 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 }
 
 #pragma mark - Helper Actions
+// TODO: replace this method with 'tryBackToPreviousPageWithTitle:'
 - (void)tryBackToPreviousPage
 {
     XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"];
     if (!backButton) {
         backButton = [self findBackButtonWithAccessibilityId:@"Library"];
+    }
+    [backButton tap];
+}
+
+- (void)tryBackToPreviousPageWithTitle:(NSString *)pageTitle
+{
+    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:pageTitle];
+    if (!backButton) {
+        XCTFail(@"There isn't back button with title: %@", pageTitle);
     }
     [backButton tap];
 }

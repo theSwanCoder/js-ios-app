@@ -51,8 +51,8 @@
 
 - (void)testMenuButton
 {
-    [self showSideMenu];
-    [self hideSideMenu];
+    [self showSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:@"Library"];
 }
 
 - (void)testThatUserCanPullDownToRefresh

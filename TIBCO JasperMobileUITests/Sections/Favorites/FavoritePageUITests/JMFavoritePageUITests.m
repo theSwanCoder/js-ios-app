@@ -420,7 +420,7 @@
 
 - (void)verifyThatFavoritePageHasSideMenuButton
 {
-    XCUIElement *menuButton = [self waitMenuButtonWithTimeout:kUITestsBaseTimeout];
+    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:@"Favorites"];
     if (!menuButton || !menuButton.exists) {
         XCTFail(@"There isn't menu button");
     }

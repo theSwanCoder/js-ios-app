@@ -9,17 +9,17 @@
 
 @implementation JMBaseUITestCase (SideMenu)
 
-- (void)showSideMenu
+- (void)showSideMenuInSectionWithName:(NSString *)sectionName
 {
     [self givenSideMenuNotVisible];
-    [self tryTapSideApplicationMenu];
+    [self tryTapSideApplicationMenuInSectionWithName:sectionName];
     [self givenSideMenuVisible];
 }
 
-- (void)hideSideMenu
+- (void)hideSideMenuInSectionWithName:(NSString *)sectionName
 {
     [self givenSideMenuVisible];
-    [self tryTapSideApplicationMenu];
+    [self tryTapSideApplicationMenuInSectionWithName:sectionName];
     [self givenSideMenuNotVisible];
 }
 
@@ -38,7 +38,8 @@
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Library"];
+    [self tryOpenPageWithName:@"Library"
+          fromSectionWithName:nil];
 }
 
 - (void)openRepositorySection
@@ -47,7 +48,8 @@
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Repository"];
+    [self tryOpenPageWithName:@"Repository"
+          fromSectionWithName:nil];
 }
 
 - (void)openRecentlyViewedSection
@@ -56,7 +58,8 @@
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Recently Viewed"];
+    [self tryOpenPageWithName:@"Recently Viewed"
+          fromSectionWithName:nil];
 }
 
 - (void)openSavedItemsSection
@@ -65,7 +68,8 @@
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Saved Items"];
+    [self tryOpenPageWithName:@"Saved Items"
+          fromSectionWithName:nil];
 }
 
 - (void)openFavoritesSection
@@ -74,7 +78,8 @@
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Favorites"];
+    [self tryOpenPageWithName:@"Favorites"
+          fromSectionWithName:nil];
 }
 
 - (void)openSchedulesSection
@@ -83,27 +88,32 @@
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Schedules"];
+    [self tryOpenPageWithName:@"Schedules"
+          fromSectionWithName:nil];
 }
 
 - (void)selectAbout
 {
-    [self tryOpenPageWithName:@"About"];
+    [self tryOpenPageWithName:@"About"
+          fromSectionWithName:nil];
 }
 
 - (void)selectSettings
 {
-    [self tryOpenPageWithName:@"Settings"];
+    [self tryOpenPageWithName:@"Settings"
+          fromSectionWithName:nil];
 }
 
 - (void)selectFeedback
 {
-    [self tryOpenPageWithName:@"Feedback by email"];
+    [self tryOpenPageWithName:@"Feedback by email"
+          fromSectionWithName:nil];
 }
 
 - (void)selectLogOut
 {
-    [self tryOpenPageWithName:@"Log Out"];
+    [self tryOpenPageWithName:@"Log Out"
+          fromSectionWithName:nil];
 }
 
 - (XCUIElement *)sideMenuElement
@@ -115,9 +125,10 @@
 #pragma mark - Helpers
 
 - (void)tryOpenPageWithName:(NSString *)pageName
+        fromSectionWithName:(NSString *)sectionName
 {
     [self givenSideMenuNotVisible];
-    [self tryTapSideApplicationMenu];
+    [self tryTapSideApplicationMenuInSectionWithName:sectionName];
     
     XCUIElement *pageMenuItem = [self findMenuItemForPageName:pageName];
     if (!pageMenuItem) {
@@ -158,9 +169,9 @@
     }
 }
 
-- (void)tryTapSideApplicationMenu
+- (void)tryTapSideApplicationMenuInSectionWithName:(NSString *)sectionName
 {
-    XCUIElement *menuButton = [self waitMenuButtonWithTimeout:kUITestsBaseTimeout];
+    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:sectionName];
     [menuButton tap];
 }
 

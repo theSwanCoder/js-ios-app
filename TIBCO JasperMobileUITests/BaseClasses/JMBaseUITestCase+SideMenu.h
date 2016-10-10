@@ -8,8 +8,8 @@
 
 @interface JMBaseUITestCase (SideMenu)
 
-- (void)showSideMenu;
-- (void)hideSideMenu;
+- (void)showSideMenuInSectionWithName:(NSString *)sectionName;
+- (void)hideSideMenuInSectionWithName:(NSString *)sectionName;
 
 - (void)waitNotificationOnMenuButtonWithTimeout:(NSTimeInterval)timeout;
 
@@ -27,4 +27,5 @@
 
 - (XCUIElement *)sideMenuElement;
 
+- (XCUIElement *)findMenuItemForPageName:(NSString *)pageName;
 @end
