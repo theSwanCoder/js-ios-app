@@ -29,4 +29,11 @@
 - (void)verifyThatInfoPageForTestDashboardContainsCorrectData;
 - (void)closeInfoPageForTestDashboard;
 
+// Folders
+- (void)openInfoPageForTestFolderFromSectionWithName:(NSString *)sectionName;
+- (void)verifyThatInfoPageForTestFolderHasBackButton;
+- (void)verifyThatInfoPageForTestFolderHasCorrectTitle;
+- (void)verifyThatInfoPageForTestFolderContainsCorrectData;
+- (void)closeInfoPageForTestFolder;
+
 @end

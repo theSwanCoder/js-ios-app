@@ -12,7 +12,12 @@ extern NSString *const kTestFolderName;
 
 - (void)openFolderWithName:(NSString *)folderName;
 - (void)backToFolderWithName:(NSString *)folderName;
+
+- (XCUIElement *)searchTestFolderInSectionWithName:(NSString *)sectionName;
+
 // Verifying
 - (void)verifyCorrectTitleForFolderWithName:(NSString *)folderName;
+- (void)verifyThatFolderInfoPageOnScreen;
+- (void)verifyThatFolderInfoPageContainsCorrectDataForFolderWithName:(NSString *)folderName;
 
 @end

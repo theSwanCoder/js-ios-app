@@ -8,6 +8,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+Folders.h"
 
 @implementation JMBaseUITestCase (InfoPage)
 
@@ -99,7 +100,7 @@
     XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"
                                                     onNavBarWithLabel:kTestDashboardName];
     if (!backButton.exists) {
-        XCTFail(@"Back button doesn't exist on 'Info' page for test report");
+        XCTFail(@"Back button doesn't exist on 'Info' page for test dashboard");
     }
 }
 
@@ -117,6 +118,42 @@
 }
 
 - (void)closeInfoPageForTestDashboard
+{
+    [self closeInfoPageFromCell];
+}
+
+#pragma mark - Folders
+
+- (void)openInfoPageForTestFolderFromSectionWithName:(NSString *)sectionName
+{
+    XCUIElement *folderCell = [self searchTestFolderInSectionWithName:sectionName];
+    [self openInfoPageFromCell:folderCell];
+    [self verifyThatFolderInfoPageOnScreen];
+}
+
+- (void)verifyThatInfoPageForTestFolderHasBackButton
+{
+    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"
+                                                    onNavBarWithLabel:kTestFolderName];
+    if (!backButton.exists) {
+        XCTFail(@"Back button doesn't exist on 'Info' page for test folder");
+    }
+}
+
+- (void)verifyThatInfoPageForTestFolderHasCorrectTitle
+{
+    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestFolderName];
+    if (!navBar.exists) {
+        XCTFail(@"Info page for test folder has incorrect title");
+    }
+}
+
+- (void)verifyThatInfoPageForTestFolderContainsCorrectData
+{
+    [self verifyThatFolderInfoPageContainsCorrectDataForFolderWithName:kTestFolderName];
+}
+
+- (void)closeInfoPageForTestFolder
 {
     [self closeInfoPageFromCell];
 }
