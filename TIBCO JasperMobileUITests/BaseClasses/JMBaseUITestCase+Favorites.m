@@ -18,6 +18,8 @@
 - (void)givenThatFavoritesSectionIsEmpty
 {
     [self openFavoritesSection];
+    [self selectFilterBy:@"All"
+      inSectionWithTitle:@"Favorites"];
     [self switchViewFromGridToListInSectionWithTitle:@"Favorites"];
     [self unmarkAllFavoritesResourcesIfNeed];
     [self openLibrarySection];

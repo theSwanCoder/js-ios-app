@@ -312,7 +312,7 @@
     if (!usernameStaticText) {
         XCTFail(@"Error of verifying 'Demo' account: username - is wrong");
     }
-    if (organization) {
+    if (organization && organization.length) {
         XCUIElement *organizationStaticText = [self findStaticTextWithText:organization
                                                              parentElement:sideMenuElement];
         if (!organizationStaticText) {

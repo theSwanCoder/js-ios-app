@@ -9,29 +9,24 @@
 #import "JMReportPageUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
-
-NSInteger static kJMRunReportTestCellIndex = 0;
+#import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+Favorites.h"
 
 @implementation JMReportPageUITests
 
 #pragma mark - Tests - Main
 - (void)testThatReportCanBeRun
 {
-    [self givenThatReportCanBeRun];
-    [self runTestReport];
-
-    [self tryBackToPreviousPage];
+    [self openTestReportPage];
+    [self verifyThatReportPageOnScreenWithReportName:kTestReportName];
+    [self closeTestReportPage];
 }
 
 - (void)testThatUserCanCancelLoadingReport
 {
-    [self givenThatReportCanBeRun];
-    [self tryRunReport];
-
-    [self givenLoadingPopupVisible];
-    [self cancelLoading];
-
-    [self givenThatLibraryPageOnScreen];
+    [self openTestReportPageWithWaitingFinish:NO];
+    [self givenLoadingPopupNotVisible];
+    [self cancelOpeningTestReportPage];
 }
 
 // Title like name of the report
@@ -39,17 +34,12 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 
 - (void)testThatReportCanBeMarkAsFavorite
 {
-    [self givenThatReportCanBeRun];
-    [self runTestReport];
-
-    [self openMenuActions];
-    [self selectActionWithName:@"Mark as Favorite"];
-
-    [self openMenuActions];
-    [self selectActionWithName:@"Remove From Favorites"];
-
-
-    [self tryBackToPreviousPage];
+    [self openTestReportPage];
+    
+    [self markAsFavoriteFromMenuActions];
+    [self unmarkFromFavoritesFromMenuActions];
+    
+    [self closeTestReportPage];
 }
 
 // Refresh button
@@ -61,15 +51,13 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     // tap 'refresh' button
     // wait until report has being refreshed
     // back to the 'library' page
-
-    [self givenThatReportCanBeRun];
-    [self runTestReport];
+    [self openTestReportPage];
 
     [self openMenuActions];
     [self selectActionWithName:@"Refresh"];
-
     [self givenLoadingPopupNotVisible];
-    [self tryBackToPreviousPage];
+    
+    [self closeTestReportPage];
 }
 
 // Edit Filters button
@@ -82,24 +70,13 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     // wait until 'filters' page appears
     // verify that 'filters' page on screen
     // back to report page
+    [self openTestReportPage];
 
-    [self givenThatReportCanBeRun];
-    [self runTestReport];
-
-    [self openMenuActions];
-    [self selectActionWithName:@"Edit Values"];
-
-    // verify that 'edit values' page is on the screen
-    [self waitElementWithAccessibilityId:@"JMInputControlsViewControllerAccessibilityIdentifier"
-                                 timeout:kUITestsBaseTimeout];
-    // back from edit values page
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"JMBackButtonAccessibilityId"
-                                                    onNavBarWithLabel:@"Filters"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
-
-    // back from report view page
-    [self tryBackToPreviousPage];
+    [self openReportFiltersPage];
+    [self verifyThatReportFiltersPageOnScreen];
+    [self closeReportFiltersPage];
+    
+    [self closeTestReportPage];
 }
 
 // TODO: Add case when report is without filters
@@ -116,8 +93,7 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     // back to report page
     // back to the 'library' page
 
-    [self givenThatReportCanBeRun];
-    [self runTestReport];
+    [self openTestReportPage];
 
     [self openMenuActions];
     [self selectActionWithName:@"Save"];
@@ -127,9 +103,8 @@ NSInteger static kJMRunReportTestCellIndex = 0;
                                  timeout:kUITestsBaseTimeout];
     // back from save report page
     [self tryBackToPreviousPage];
-
-    // back from report view page
-    [self tryBackToPreviousPage];
+    
+    [self closeTestReportPage];
 }
 
 // Print button
@@ -144,23 +119,19 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     // back to report page
     // back to the 'library' page
 
-    [self givenThatReportCanBeRun];
-    [self runTestReport];
+    [self openTestReportPage];
 
-    [self openMenuActions];
-    [self selectActionWithName:@"Print"];
-
-    [self givenLoadingPopupNotVisible];
-
+    [self openPrintReportPage];
     // verify that 'print report' page is on the screen
     XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
                                                         timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:printNavBar
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
 
-    [self tryBackToPreviousPage];
+    if (!printNavBar.exists) {
+        XCTFail(@"Print");
+    }
+    [self closePrintReportPage];
+    
+    [self closeTestReportPage];
 }
 
 // Info button
@@ -175,16 +146,15 @@ NSInteger static kJMRunReportTestCellIndex = 0;
     // back to report page
     // back to the 'library' page
 
-    [self givenThatReportCanBeRun];
-    [self runTestReport];
+    [self openTestReportPage];
 
     [self openMenuActions];
     [self selectActionWithName:@"Info"];
 
     [self verifyThatReportInfoPageOnScreen];
     [self closeReportInfoPage];
-
-    [self tryBackToPreviousPage];
+    
+    [self closeTestReportPage];
 }
 
 // Back button like "Library"
@@ -219,74 +189,19 @@ NSInteger static kJMRunReportTestCellIndex = 0;
 // JIVE
 // TODO: skip this for now
 
-#pragma mark - Helpers
-
-- (void)givenThatReportCanBeRun
-{
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
-    [self givenThatReportCellsOnScreen];
-}
-
-- (void)runTestReport
-{
-    XCUIElement *testCell = [self waitTestCell];
-    XCUIElement *reportNameLabel = testCell.staticTexts[@"JMResourceCellResourceNameLabelAccessibilityId"];
-    NSString *reportInfoLabel = reportNameLabel.label;
-
-    [self tryRunReport];
-
-    [self givenLoadingPopupNotVisible];
-    
-    if ([self verifyIfReportFiltersPageOnScreen]) {
-        // Run report
-        XCUIElement *runReportButton = [self waitButtonWithAccessibilityId:@"Run Report"
-                                                                   timeout:kUITestsBaseTimeout];
-        [runReportButton tap];
-    }
-
-    [self givenLoadingPopupNotVisible];
-
-    [self verifyThatReportPageOnScreenWithReportName:reportInfoLabel];
-}
-
-- (void)tryRunReport
-{
-    XCUIElement *testCell = [self testCell];
-    [testCell tap];
-}
-
-- (XCUIElement *)waitTestCell
-{
-    XCUIElement *testCell = [self testCell];
-    [self waitElementReady:testCell
-                   timeout:kUITestsBaseTimeout];
-    return testCell;
-}
-
-- (XCUIElement *)testCell
-{
-    XCUIElement *testCell = [self.application.collectionViews.cells elementBoundByIndex:kJMRunReportTestCellIndex];
-    return testCell;
-}
-
-- (void)cancelLoading
-{
-    XCUIElement *loadingPopup = [self findElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:loadingPopup
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
-}
-
 #pragma mark - Verifies
-- (BOOL)verifyIfReportFiltersPageOnScreen
+- (BOOL)verifyThatReportFiltersPageOnScreen
 {
     [self givenLoadingPopupNotVisible];
 
     BOOL isFilterPage = NO;
     XCUIElement *filtersNavBar = [self findNavigationBarWithLabel:@"Filters"];
     isFilterPage = filtersNavBar.exists;
+
+    // verify that 'edit values' page is on the screen
+    [self waitElementWithAccessibilityId:@"JMInputControlsViewControllerAccessibilityIdentifier"
+                                 timeout:kUITestsBaseTimeout];
+
     return isFilterPage;
 }
 

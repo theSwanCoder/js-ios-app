@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Dashboard.h"
+#import "JMBaseUITestCase+Section.h"
 
 @implementation JMFavoriteInfoPageUITests
 
@@ -42,6 +43,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
 
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
 
@@ -55,6 +58,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
 
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
 
@@ -92,6 +97,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
     
@@ -106,6 +113,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
     
@@ -143,6 +152,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
     
@@ -157,6 +168,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
     
@@ -212,6 +225,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
     
@@ -244,6 +259,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
     
@@ -399,6 +416,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
     
@@ -414,6 +433,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
     
@@ -454,6 +475,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
     
@@ -468,6 +491,8 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
     [self openFavoritesSection];
     

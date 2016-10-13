@@ -27,5 +27,7 @@
 
 - (XCUIElement *)sideMenuElement;
 
+- (void)selectMenuItemForPageWithName:(NSString *)pageName;
+
 - (XCUIElement *)findMenuItemForPageName:(NSString *)pageName;
 @end

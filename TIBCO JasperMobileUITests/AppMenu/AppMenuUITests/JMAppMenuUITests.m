@@ -12,19 +12,6 @@
 
 @implementation JMAppMenuUITests
 
-- (void)setUp
-{
-    [super setUp];
-
-    [self givenThatLibraryPageOnScreen];
-}
-
-- (void)tearDown
-{
-
-    [super tearDown];
-}
-
 #pragma mark - Tests
 - (void)testThatMenuViewCanBeViewedByTappingMenuButton
 {
@@ -76,38 +63,25 @@
 - (void)testThatMenuViewCanSelectItems
 {
     // Check all collection screen items
-    NSArray *itemsArray = @[@"Library", @"Repository", @"Recently Viewed", @"Saved Items", @"Favorites", @"Schedules"];
-    NSString *currentItemName = itemsArray.firstObject;
+    NSArray *itemsArray = @[@"Repository", @"Saved Items", @"Favorites", @"Schedules"];
     for (NSString *itemName in itemsArray) {
-        [self showSideMenuInSectionWithName:currentItemName];
+        [self showSideMenuInSectionWithName:nil];
         [self verifySideMenuVisible];
-        XCUIElement *menuView = [self sideMenuElement];
-        XCUIElement *pageMenuItem = menuView.cells.staticTexts[itemName];
-        if (pageMenuItem.exists) {
-            [pageMenuItem tap];
-            currentItemName = itemName;
-        }
+        [self selectMenuItemForPageWithName:itemName];
     }
 
     // Check About item
     [self selectAbout];
     // Close About page
-    XCUIElement *doneButton = self.application.buttons[@"Done"];
-    if (doneButton.exists) {
-        [doneButton tap];
-    } else {
-        XCTFail(@"'Done' button doesn't exist.");
-    }
+    XCUIElement *doneButton = [self waitDoneButtonWithTimeout:kUITestsBaseTimeout];
+    [doneButton tap];
 
     // Check Settings item
     [self selectSettings];
     // Close Settings page
-    XCUIElement *cancelButton = self.application.buttons[@"Cancel"];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"'Settings' button doesn't exist.");
-    }
+    XCUIElement *cancelButton = [self waitButtonWithTitle:@"Cancel"
+                                                  timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
 }
 
 - (void)testThatServerProfileInfoIsAppeared

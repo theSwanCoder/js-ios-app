@@ -28,16 +28,11 @@
 {
     [self tryOpenServerProfilesPage];
     
-    NSInteger cellsCount = self.application.collectionViews.cells.count;
-    if (cellsCount) {
-        [self givenThatCellsAreVisible];
-        XCUIElement *serverProfileCell = self.application.collectionViews.cells.allElementsBoundByIndex.firstObject;
-        if (serverProfileCell.exists) {
-            [serverProfileCell tap];
-        }
+    XCUIElement *testProfile = [self findTestProfileCell];
+    if (testProfile.exists) {
+        [testProfile tap];
     } else {
-        [self createTestProfile];
-        [self givenThatServerProfilesPageOnScreen];
+        XCTFail(@"Test profile doesn't visible or exist");
     }
     
     // verify server profile field has value that equal demo profile
@@ -91,26 +86,23 @@
 - (void)testThatServerProfileCanBeCloned
 {
     [self tryOpenServerProfilesPage];
-    
-    NSInteger cellsCount = self.application.collectionViews.cells.count;
-    if (!cellsCount) {
-        [self createTestProfile];
-        [self givenThatServerProfilesPageOnScreen];
-    }
+    [self removeAllServerProfiles];
 
-    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
-                                                             forIndex:0];
-    if (!serverProfileElement) {
-        [self createTestProfile];
-        [self givenThatServerProfilesPageOnScreen];
-    }
+    [self tryOpenNewServerProfilePage];
+    [self givenThatNewProfilePageOnScreen];
+    [self tryCreateNewTestServerProfile];
+
+    [self givenThatServerProfilesPageOnScreen];
 
     NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
-    serverProfileElement = [self cellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
-                                                             forIndex:0];
 
-    [serverProfileElement pressForDuration:1.0];
+    XCUIElement *serverProfileElement = [self findTestProfileCell];
+    if (!serverProfileElement.exists) {
+        XCTFail(@"Test profile doesn't visible or exist");
+    }
+    
     [serverProfileElement pressForDuration:1.1];
+    
     XCUIElement *menu = self.application.menuItems[@"Clone Profile"];
     if (menu) {
         [menu tap];
@@ -121,22 +113,16 @@
         [saveButton tap];
 
         // Confirm if need http end point
-        XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
-        if (securityWarningAlert.exists) {
-            NSString *okButtonTitle = JMLocalizedString(@"dialog_button_ok");
-            NSLog(@"okButtonTitle: %@", okButtonTitle);
-            XCUIElement *securityWarningAlertOkButton = securityWarningAlert.collectionViews.buttons[okButtonTitle];
-            if (securityWarningAlertOkButton.exists) {
-                [securityWarningAlertOkButton tap];
-            } else {
-                XCTFail(@"'Ok' button on security warning alert doesn't exist.");
-            }
-        }
+        XCUIElement *securityWarningAlert = [self waitAlertWithTitle:@"Warning"
+                                                             timeout:kUITestsBaseTimeout];
+        XCUIElement *okButton = [self findButtonWithTitle:JMLocalizedString(@"dialog_button_ok")
+                                            parentElement:securityWarningAlert];
+        [okButton tap];
     } else {
-        XCTFail(@"Delete menu item doesn't exist.");
+        XCTFail(@"'Clone Profile' menu item doesn't exist.");
     }
     
-    NSInteger endCellsCount = self.application.collectionViews.cells.count;
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
     XCTAssertTrue(endCellsCount > startCellsCount);
     
     // TODO: remove cloned profile.

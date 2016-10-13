@@ -33,9 +33,9 @@
 {
     [self openTestDashboardPage];
 
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Library"];
+    [self openInfoPageFromMenuActions];
     [self verifyInfoPageContainsCorrectInfo];
-    [self closeInfoPageForTestDashboard];
+    [self closeInfoPageFromMenuActions];
 
     [self closeTestDashboardPage];
 }
@@ -51,8 +51,8 @@
 {
     [self openTestDashboardPage];
 
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Library"];
-    [self closeInfoPageForTestDashboard];
+    [self openInfoPageFromMenuActions];
+    [self closeInfoPageFromMenuActions];
 
     [self closeTestDashboardPage];
 }
@@ -67,9 +67,9 @@
 {
     [self openTestDashboardPage];
 
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Library"];
+    [self openInfoPageFromMenuActions];
     [self verifyInfoPageHasCorrectTitle];
-    [self closeInfoPageForTestDashboard];
+    [self closeInfoPageFromMenuActions];
 
     [self closeTestDashboardPage];
 }
@@ -87,10 +87,10 @@
 {
     [self openTestDashboardPage];
 
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Library"];
-    [self markAsFavoriteFromMenuActions];
-    [self unmarkFromFavoritesFromMenuActions];
-    [self closeInfoPageForTestDashboard];
+    [self openInfoPageFromMenuActions];
+    [self markAsFavoriteFromNavigationBar:nil];
+    [self unmarkFromFavoritesFromNavigationBar:nil];
+    [self closeInfoPageFromMenuActions];
 
     [self closeTestDashboardPage];
 }

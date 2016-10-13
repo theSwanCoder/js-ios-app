@@ -118,6 +118,31 @@
     return alert;
 }
 
+- (XCUIElement *)waitStaticTextInHierarchyWithText:(NSString *)text
+                                     parentElement:(XCUIElement *)parentElement
+                                           timeout:(NSTimeInterval)timeout
+{
+    NSTimeInterval remain = timeout;
+    XCUIElement *staticText;
+    do {
+        remain -= kUITestsElementAvailableTimeout;
+        sleep(kUITestsElementAvailableTimeout);
+        if (parentElement == nil) {
+            parentElement = self.application;
+        }
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"label CONTAINS %@", text];
+        XCUIElementQuery *query = [parentElement.staticTexts matchingPredicate:predicate];
+        NSArray *elements = query.allElementsBoundByAccessibilityElement;
+        NSLog(@"All static texts: %@", elements);
+        staticText = elements.firstObject;
+    } while (staticText == nil && remain >= 0);
+
+    if (staticText == nil) {
+        XCTFail(@"Static text with text '%@' not found", text);
+    }
+    return staticText;
+}
+
 - (XCUIElement *)findNavigationBarWithLabel:(NSString *)label
 {
     XCUIApplication *app = self.application;
@@ -125,8 +150,10 @@
     if (label == nil) {
         navBar = [app.navigationBars elementBoundByIndex:0];
     } else {
-        navBar = [app.navigationBars elementMatchingType:XCUIElementTypeNavigationBar
-                                              identifier:label];
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *navBar, NSDictionary<NSString *, id> *bindings) {
+            return [navBar.identifier isEqualToString:label];
+        }];
+        navBar = [app.navigationBars elementMatchingPredicate:predicate];
     }
     return navBar;
 }
@@ -201,13 +228,17 @@
 {
     XCUIElement *element = [self elementWithAccessibilityId:accessibilityId
                                               parentElement:parentElement];
-    if (!element) {
+    if (!element && visible) {
         element = [self waitElementInHierarchyWithAccessibilityId:accessibilityId
                                                           timeout:timeout];
     }
-    [self waitElementReady:element
-                   visible:visible
-                   timeout:timeout];
+    
+    if (element) {
+        [self waitElementReady:element
+                       visible:visible
+                       timeout:timeout];
+    }
+    
     return element;
 }
 
@@ -328,6 +359,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K like %@", @"label", title];
     XCUIElementQuery *buttonsQuery = [parentElement.buttons matchingPredicate:predicate];
     NSArray *allMatchingButtons = buttonsQuery.allElementsBoundByAccessibilityElement;
+    NSLog(@"allMatchingButtons: %@", allMatchingButtons);
     if (allMatchingButtons.count == 0) {
         return nil;
     } else if (allMatchingButtons.count > 1) {
@@ -541,10 +573,11 @@
                           parentElement:(XCUIElement *)parentElement
                                 timeout:(NSTimeInterval)timeout
 {
-    XCUIElement *element = [self findStaticTextWithText:text
-                                          parentElement:parentElement];
-    [self waitElementReady:element
-                   timeout:timeout];
+    XCUIElement *element = [self waitStaticTextWithText:text
+                                          parentElement:parentElement
+                                                visible:YES
+                                                timeout:timeout];
+    
     return element;
 }
 
@@ -555,6 +588,12 @@
 {
     XCUIElement *element = [self findStaticTextWithText:text
                                           parentElement:parentElement];
+
+    if (!element) {
+        element = [self waitStaticTextInHierarchyWithText:text
+                                            parentElement:parentElement
+                                                  timeout:timeout];
+    }
     [self waitElementReady:element
                    visible:visible
                    timeout:timeout];
@@ -632,6 +671,9 @@
     NSPredicate *labelPredicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *cell, NSDictionary<NSString *, id> *bindings) {
         XCUIElement *label = [self findStaticTextWithAccessibilityId:labelAccessibilityId
                                                        parentElement:cell];
+        if (!label.exists) {
+            return NO;
+        }
         return [label.label isEqualToString:labelText];
     }];
 

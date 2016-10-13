@@ -143,7 +143,7 @@
 - (void)testThatSearchWithEmptyResultOnRepositoryPageHasCorrectMessage
 {
     [self openRepositorySection];
-    [self searchResourceWithName:@"Public"
+    [self searchResourceWithName:@"NoSearchResults"
                inSectionWithName:@"Repository"];
     XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
                                                 parentElement:nil
@@ -229,9 +229,10 @@
 {
     [self openRepositorySection];
     
-    [self openFolderWithName:@"Organization"];
+    [self searchResourceWithName:@"Monitoring" inSectionWithName:@"Repository"];
+    [self openFolderWithName:@"Monitoring"];
     [self givenThatCellsAreVisible];
-    [self openFolderWithName:@"Organizations"];
+    [self openFolderWithName:@"Monitoring Domains"];
     XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
                                                 parentElement:nil
                                                       timeout:kUITestsBaseTimeout];
@@ -239,7 +240,7 @@
         XCTFail(@"There isn't 'No Results.' label");
     }
     
-    [self backToFolderWithName:@"Organization"];
+    [self backToFolderWithName:@"Monitoring"];
     [self backToFolderWithName:@"Repository"];
 }
 

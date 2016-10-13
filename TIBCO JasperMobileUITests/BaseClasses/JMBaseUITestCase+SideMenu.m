@@ -5,6 +5,7 @@
 
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+ActionsMenu.h"
 
 
 @implementation JMBaseUITestCase (SideMenu)
@@ -129,9 +130,13 @@
 {
     [self givenSideMenuNotVisible];
     [self tryTapSideApplicationMenuInSectionWithName:sectionName];
-    
+    [self selectMenuItemForPageWithName:pageName];
+}
+
+- (void)selectMenuItemForPageWithName:(NSString *)pageName
+{
     XCUIElement *pageMenuItem = [self findMenuItemForPageName:pageName];
-    if (!pageMenuItem) {
+    if (!pageMenuItem.exists) {
         NSString *pageNameWithNote = [NSString stringWithFormat:@"%@ note", pageName];
         pageMenuItem = [self findMenuItemForPageName:pageNameWithNote];
     }
@@ -164,7 +169,7 @@
 - (void)givenSideMenuNotVisible
 {
     XCUIElement *sideMenu = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];
-    if (sideMenu) {
+    if (sideMenu.exists) {
         XCTFail(@"Side menu should not be visible");
     }
 }

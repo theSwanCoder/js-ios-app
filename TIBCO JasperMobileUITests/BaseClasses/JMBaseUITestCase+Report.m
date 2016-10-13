@@ -82,10 +82,10 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)cancelOpeningTestReportPage
 {
     // TODO: the same code is for dashboard - may be make it general?
-    XCUIElement *loadingPopup = [self findElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:loadingPopup
-                                                            timeout:kUITestsBaseTimeout];
+    XCUIElement *loadingPopup = [self waitElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"
+                                                             timeout:kUITestsBaseTimeout];
+    XCUIElement *cancelButton = [self findButtonWithTitle:@"Cancel"
+                                            parentElement:loadingPopup];
     [cancelButton tap];
 }
 
@@ -187,8 +187,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)searchTestReportWithMandatoryFilters
 {
+    // TODO: replace with specific element - JMLibraryPageAccessibilityId
     [self searchResourceWithName:kTestReportWithMandatoryFiltersName
-    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
+    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 }
 
 - (XCUIElement *)testReportWithMandatoryFiltersCell
@@ -213,8 +214,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)searchTestReportWithSingleSelectedControl
 {
+    // TODO: replace with specific element - JMLibraryPageAccessibilityId
     [self searchResourceWithName:kTestReportWithSingleSelectedControlName
-    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
+    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 }
 
 - (XCUIElement *)testReportWithSingleSelectedControl

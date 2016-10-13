@@ -19,7 +19,7 @@ NSInteger static kJMRunReportTestCellIndex = 2;
     [self logout];
     
     [self measureBlock:^{
-        [self loginWithTestProfile];
+        [self loginWithTestProfileIfNeed];
         
         [self givenThatLibraryPageOnScreen];
         [self logout];

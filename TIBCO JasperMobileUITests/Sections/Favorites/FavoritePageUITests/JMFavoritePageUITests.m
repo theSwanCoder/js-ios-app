@@ -76,6 +76,9 @@
 - (void)testThatSearchWorkCorrectly
 {
     [self givenThatFavoritesSectionIsEmpty];
+    
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
 
     [self openFavoritesSection];
@@ -101,6 +104,9 @@
 - (void)testThatSearchWithEmptyResultShowCorrectMessage
 {
     [self givenThatFavoritesSectionIsEmpty];
+    
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];
@@ -143,6 +149,9 @@
 - (void)testThatViewTypeButtonWorkCorrectly
 {
     [self givenThatFavoritesSectionIsEmpty];
+    
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
 
     [self openFavoritesSection];
@@ -179,6 +188,9 @@
 - (void)testThatSortingWorkCorrectly
 {
     [self givenThatFavoritesSectionIsEmpty];
+    
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];
@@ -222,12 +234,12 @@
 - (void)testThatFilteringWorkCorrectly
 {
     [self givenThatFavoritesSectionIsEmpty];
+    
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];
-    
-    [self selectFilterBy:@"All"
-    inSectionWithTitle:@"Favorites"];
     [self verifyThatCollectionViewContainsListOfCells];
     
     [self selectFilterBy:@"Reports"
@@ -278,7 +290,12 @@
 - (void)testThatRefreshWorkByUsingPullDown
 {
     [self givenThatFavoritesSectionIsEmpty];
+    
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
 
     [self openFavoritesSection];
@@ -304,6 +321,9 @@
 - (void)testThatScrollingWorkCorreclty
 {
     [self givenThatFavoritesSectionIsEmpty];
+    
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
 
     [self openFavoritesSection];
@@ -367,6 +387,9 @@
 - (void)testThatFavoriteReportCanBeUnmarkedFromFavorites
 {
     [self givenThatFavoritesSectionIsEmpty];
+    
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];
@@ -387,6 +410,9 @@
 - (void)testThatFavoriteDashboardCanBeUnmarkedFromFavorites
 {
     [self givenThatFavoritesSectionIsEmpty];
+    
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];

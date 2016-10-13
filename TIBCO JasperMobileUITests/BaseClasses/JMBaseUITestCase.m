@@ -26,34 +26,31 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     self.continueAfterFailure = NO;
     // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
     XCUIApplication *app = self.application;
-    NSLog(@"Launch Environment: %@", app.launchEnvironment);
-    NSLog(@"Launch Arguments: %@", app.launchArguments);
     @try {
         [app launch];
     } @catch(NSException *exception) {
         NSLog(@"Exception: %@", exception);
         XCTFail(@"Failed to launch application");
     }
-    NSLog(@"isEnabled: %@", app.isEnabled ? @"YES" : @"NO");
-    
-    XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    if (!loginPageView) {
-        [self skipIntroPageIfNeed];
-        [self skipRateAlertIfNeed];
-        [self logout];
-    }
-    
+
     if ([self shouldLoginBeforeStartTest]) {
-        [self loginWithTestProfile];
+        [self loginWithTestProfileIfNeed];
         [self givenThatLibraryPageOnScreen];
+    } else {
+        XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
+        if (!loginPageView) {
+            [self skipIntroPageIfNeed];
+            [self skipRateAlertIfNeed];
+            [self logout];
+        }
     }
 }
 
 - (void)tearDown {
-    XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    if (!loginPageView) {
-        [self logout];
-    }
+//    XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
+//    if (!loginPageView) {
+//        [self logout];
+//    }
     XCUIApplication *app = self.application;
     [app terminate];
     self.application = nil;
@@ -74,26 +71,42 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     [self tryOpenServerProfilesPage];
     
     [self givenThatServerProfilesPageOnScreen];
-    
-    XCUIElement *testProfile = self.application.collectionViews.staticTexts[@"Test Profile"];
+
+    [self trySelectNewTestServerProfile];
+}
+
+- (XCUIElement *)findTestProfileCell
+{
+    XCUIElement *testProfile = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
+                                 containsLabelWithAccessibilityId:@"Test Profile"
+                                                        labelText:@"Test Profile"];
     BOOL isTestProfileExists = testProfile.exists;
     if (!isTestProfileExists) {
         [self removeAllServerProfiles];
-        
+
         [self tryOpenNewServerProfilePage];
         [self givenThatNewProfilePageOnScreen];
         [self tryCreateNewTestServerProfile];
-        
+
         [self givenThatServerProfilesPageOnScreen];
+        
+        testProfile = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
+                                     containsLabelWithAccessibilityId:@"Test Profile"
+                                                            labelText:@"Test Profile"];
+        if (!testProfile.exists) {
+            XCTFail(@"Can't create test profile");
+        }
     }
-    [self trySelectNewTestServerProfile];
+    return testProfile;
 }
 
 - (void)removeAllServerProfiles
 {
-    NSInteger cellsCount = self.application.collectionViews.cells.count;
-    
-    while(cellsCount--) {
+    while(true) {
+        NSInteger cellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+        if (cellsCount == 0) {
+            break;
+        }
         [self removeFirstServerProfile];
     }
 }
@@ -120,17 +133,35 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     }
 }
 
+- (void)loginWithTestProfileIfNeed
+{
+    XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
+    if (loginPageView) {
+        [self loginWithTestProfile];
+    } else {
+        // check 'test profile' was logged
+        [self showSideMenuInSectionWithName:nil];
+        XCUIElement *profileNameLabel = [self findStaticTextWithText:kJMTestProfileName];
+        if (profileNameLabel.exists) {
+            [self hideSideMenuInSectionWithName:nil];
+        } else {
+            [self logout];
+            [self givenThatLoginPageOnScreen];
+            [self loginWithTestProfile];
+        }
+    }
+}
+
 - (void)loginWithTestProfile
 {
-    [self givenThatLoginPageOnScreen];
     [self selectTestProfile];
-    
+
     [self givenThatLoginPageOnScreen];
     [self tryEnterTestCredentials];
-    
+
     [self givenThatLoginPageOnScreen];
     [self tryTapLoginButton];
-    
+
     [self givenLoadingPopupNotVisible];
 }
 
@@ -201,7 +232,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)trySelectNewTestServerProfile
 {
-    XCUIElement *testProfile = self.application.collectionViews.staticTexts[@"Test Profile"];
+    XCUIElement *testProfile = [self findTestProfileCell];
     if (testProfile.exists) {
         [testProfile tap];
     } else {
@@ -359,7 +390,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 #pragma mark - Verifies
 - (void)verifyThatCurrentPageIsLibrary
 {
-// TODO: replace with specific element - JMLibraryPageAccessibilityId
+    // TODO: replace with specific element - JMLibraryPageAccessibilityId
     [self waitElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"
                                  timeout:kUITestsBaseTimeout];
 }
