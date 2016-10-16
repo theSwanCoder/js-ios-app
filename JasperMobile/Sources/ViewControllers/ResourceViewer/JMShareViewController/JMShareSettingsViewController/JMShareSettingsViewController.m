@@ -32,6 +32,8 @@
 #import "JMPopupView.h"
 #import "JMLocalization.h"
 #import "JMUtils.h"
+#import "NSObject+Additions.h"
+
 
 #define JMShareSettingsAvailableColors @[[UIColor blackColor], [UIColor whiteColor], [UIColor grayColor], [UIColor redColor], [UIColor greenColor], [UIColor blueColor], [UIColor cyanColor], [UIColor yellowColor], [UIColor magentaColor], [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor]]
 
@@ -66,19 +68,39 @@
     [super viewDidLoad];
     
     self.title = JMLocalizedString(@"resource_viewer_share_settings_title");
+    [self.view setAccessibility:NO withTextKey:@"resource_viewer_share_settings_title" identifier:JMShareSettingsPageAccessibilityId];
+    
     self.opacityTitleLabel.text = JMLocalizedString(@"resource_viewer_share_settings_opacity");
+    [self.opacityTitleLabel setAccessibility:YES withTextKey:@"resource_viewer_share_settings_opacity" identifier:nil];
+    self.opacityValueLabel.isAccessibilityElement = YES;
+    self.opacityValueLabel.accessibilityIdentifier = JMShareSettingsPageOpacityValueLabelAccessibilityId;
+
     self.brushTitleLabel.text = JMLocalizedString(@"resource_viewer_share_settings_brush");
+    [self.brushTitleLabel setAccessibility:YES withTextKey:@"resource_viewer_share_settings_brush" identifier:nil];
+    self.brushValueLabel.isAccessibilityElement = YES;
+    self.brushValueLabel.accessibilityIdentifier = JMShareSettingsPageBrushValueLabelAccessibilityId;
+
     self.borderTitleLabel.text = JMLocalizedString(@"resource_viewer_share_settings_border");
+    [self.borderTitleLabel setAccessibility:YES withTextKey:@"resource_viewer_share_settings_border" identifier:nil];
+    self.borderSwitch.isAccessibilityElement = YES;
+    self.borderSwitch.accessibilityIdentifier = JMShareSettingsPageBorderSwitchAccessibilityId;
+
     self.fontSizeTitleLabel.text = JMLocalizedString(@"resource_viewer_share_settings_font_size");
+    [self.fontSizeTitleLabel setAccessibility:YES withTextKey:@"resource_viewer_share_settings_font_size" identifier:nil];
+    self.fontSizeValueLabel.isAccessibilityElement = YES;
+    self.fontSizeValueLabel.accessibilityIdentifier = JMShareSettingsPageFontSizeValueLabelAccessibilityId;
 
     self.brushSlider.value = self.brushWidth;
+    [self.brushSlider setAccessibility:YES withTextKey:@"resource_viewer_share_settings_brush" identifier:JMShareSettingsPageBrushSliderAccessibilityId];
     [self sliderValueChanged:self.brushSlider];
     
     self.opacitySlider.value = self.opacity;
+    [self.opacitySlider setAccessibility:YES withTextKey:@"resource_viewer_share_settings_opacity" identifier:JMShareSettingsPageOpacitySliderAccessibilityId];
     [self sliderValueChanged:self.opacitySlider];
     
     self.selectedFont = self.selectedFont;
     self.fontSizeSlider.value = self.selectedFont.pointSize;
+    [self.fontSizeSlider setAccessibility:YES withTextKey:@"resource_viewer_share_settings_font_size" identifier:JMShareSettingsPageFontSizeSliderAccessibilityId];
     [self sliderValueChanged:self.fontSizeSlider];
     
     self.borderSwitch.on = self.borders;
@@ -86,7 +108,7 @@
     self.colorPreviewButton.layer.cornerRadius = 4.f;
     self.colorPreviewButton.layer.borderWidth = 0.5f;
     self.colorPreviewButton.layer.borderColor = [UIColor grayColor].CGColor;
-
+    [self.colorPreviewButton setAccessibility:YES withTextKey:@"resource_viewer_share_settings_select_color" identifier:JMShareSettingsPagePreviewColorButtonAccessibilityId];
 }
 
 - (void)viewDidAppear:(BOOL)animated

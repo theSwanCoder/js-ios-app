@@ -42,3 +42,33 @@
     [action_menu_title]
         en = Action menu
         tags = ios,new
+    [dialod_title_attention]
+        en = Warning
+        de = Warnung
+        fr = Avertissement
+        es = Advertencia
+        it = Avviso
+        pt = Atenção
+        ja = 警告
+        zh = 警告
+        tags = ios
+    [dialod_title_error]
+        en = Error
+        de = Fehler
+        fr = Erreur
+        es = Error
+        it = Errore
+        pt = Erro
+        ja = エラー
+        zh = 错误
+        tags = ios
+    [dialod_title_confirmation]
+        en = Confirmation
+        de = Bestätigung
+        fr = Confirmation
+        es = Confirmación
+        it = Conferma
+        pt = Confirmação
+        ja = 確認
+        zh = 确认
+        tags = ios

@@ -334,10 +334,10 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                     
                     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
                                                                                                       message:@"report_viewer_save_name_errmsg_notunique_rewrite"
-                                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                                            cancelButtonType:JMAlertControllerActionType_Cancel
                                                                                       cancelCompletionHandler:nil];
                     __weak typeof(self) weakSelf = strongSelf;
-                    [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                    [alertController addActionWithType:JMAlertControllerActionType_Ok style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                         __strong typeof(self) strongSelf = weakSelf;
                         [savedResource removeReport];
                         strongSelf.errorString = nil;
@@ -349,10 +349,10 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                     self.errorString = JMLocalizedString(@"report_viewer_save_name_errmsg_notunique");
                     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
                                                                                                       message:@"report_viewer_save_name_errmsg_notunique_rewrite"
-                                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                                            cancelButtonType:JMAlertControllerActionType_Cancel
                                                                                       cancelCompletionHandler:nil];
                     __weak typeof(self) weakSelf = self;
-                    [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                    [alertController addActionWithType:JMAlertControllerActionType_Ok style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                         __strong typeof(self) strongSelf = weakSelf;
                         [[JMExportManager sharedInstance] cancelTaskForResource:exportResource];
                         strongSelf.errorString = nil;
@@ -377,14 +377,14 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
             
             UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
                                                                                               message:errorMessage
-                                                                                    cancelButtonTitle:@"dialog_button_cancel"
+                                                                                    cancelButtonType:JMAlertControllerActionType_Cancel
                                                                               cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                                                   if (completion) {
                                                                                       completion(NO);
                                                                                   }
                                                                               }];
             __weak typeof(self) weakSelf = self;
-            [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+            [alertController addActionWithType:JMAlertControllerActionType_Ok style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                 __strong typeof(self) strongSelf = weakSelf;
                 strongSelf.selectedReportFormat = kJS_CONTENT_TYPE_PDF;
                 // update format section

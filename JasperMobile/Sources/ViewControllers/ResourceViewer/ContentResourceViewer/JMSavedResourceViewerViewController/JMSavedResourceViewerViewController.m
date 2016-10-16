@@ -34,6 +34,7 @@
 #import "JMUtils.h"
 #import "UIAlertController+Additions.h"
 #import "NSObject+Additions.h"
+#import "JMConstants.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
@@ -51,8 +52,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     [self setupSubviews];
+}
+
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    return JMContentResourceViewerPageTitleAccessibilityId;
 }
 
 #pragma mark - Accessors
@@ -157,10 +164,10 @@
     } else if(action == JMMenuActionsViewAction_Delete) {
         UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
                                                                                           message:@"savedreport_viewer_delete_confirmation_message"
-                                                                                cancelButtonTitle:@"dialog_button_cancel"
+                                                                                cancelButtonType:JMAlertControllerActionType_Cancel
                                                                           cancelCompletionHandler:nil];
         __weak typeof(self) weakSelf = self;
-        [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        [alertController addActionWithType:JMAlertControllerActionType_Ok style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
             __strong typeof(self) strongSelf = weakSelf;
             BOOL shouldCloseViewer = YES;
             if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:shouldCloseViewerAfterDeletingResource:)]) {
@@ -349,7 +356,7 @@
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_error"
                                                                                       message:message
-                                                                            cancelButtonTitle:@"dialog_button_ok"
+                                                                            cancelButtonType:JMAlertControllerActionType_Ok
                                                                       cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
                                                                           if (completion) {
                                                                               completion();

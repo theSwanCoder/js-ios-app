@@ -292,16 +292,46 @@ NSString *const JMNewSchedulePageDescriptionAccessibilityId = @"JMNewSchedulePag
 NSString *const JMNewSchedulePageOutputFileURIAccessibilityId = @"JMNewSchedulePageOutputFileURIAccessibilityId";
 NSString *const JMNewSchedulePageOutputFolderURIAccessibilityId = @"JMNewSchedulePageOutputFolderURIAccessibilityId";
 NSString *const JMNewSchedulePageFormatAccessibilityId = @"JMNewSchedulePageFormatAccessibilityId";
+NSString *const JMNewSchedulePageFormatHTMLAccessibilityId = @"JMNewSchedulePageFormatHTMLAccessibilityId";
+NSString *const JMNewSchedulePageFormatPDFAccessibilityId = @"JMNewSchedulePageFormatPDFAccessibilityId";
+NSString *const JMNewSchedulePageFormatXLSAccessibilityId = @"JMNewSchedulePageFormatXLSAccessibilityId";
 NSString *const JMNewSchedulePageTimeZoneAccessibilityId = @"JMNewSchedulePageTimeZoneAccessibilityId";
 NSString *const JMNewSchedulePageStartDateAccessibilityId = @"JMNewSchedulePageStartDateAccessibilityId";
 NSString *const JMNewSchedulePageStartImmediatelyAccessibilityId = @"JMNewSchedulePageStartImmediatelyAccessibilityId";
 NSString *const JMNewSchedulePageRepeatTypeAccessibilityId = @"JMNewSchedulePageRepeatTypeAccessibilityId";
+NSString *const JMNewSchedulePageRepeatTypeNoneAccessibilityId = @"JMNewSchedulePageRepeatTypeNoneAccessibilityId";
+NSString *const JMNewSchedulePageRepeatTypeSimpleAccessibilityId = @"JMNewSchedulePageRepeatTypeSimpleAccessibilityId";
+NSString *const JMNewSchedulePageRepeatTypeCalendarAccessibilityId = @"JMNewSchedulePageRepeatTypeCalendarAccessibilityId";
 NSString *const JMNewSchedulePageRepeatCountAccessibilityId = @"JMNewSchedulePageRepeatCountAccessibilityId";
 NSString *const JMNewSchedulePageRepeatTimeIntervalAccessibilityId = @"JMNewSchedulePageRepeatTimeIntervalAccessibilityId";
+NSString *const JMNewSchedulePageRepeatTimeIntervalNoneAccessibilityId = @"JMNewSchedulePageRepeatTimeIntervalNoneAccessibilityId";
+NSString *const JMNewSchedulePageRepeatTimeIntervalMinuteAccessibilityId = @"JMNewSchedulePageRepeatTimeIntervalMinuteAccessibilityId";
+NSString *const JMNewSchedulePageRepeatTimeIntervalHourAccessibilityId = @"JMNewSchedulePageRepeatTimeIntervalHourAccessibilityId";
+NSString *const JMNewSchedulePageRepeatTimeIntervalDayAccessibilityId = @"JMNewSchedulePageRepeatTimeIntervalDayAccessibilityId";
+NSString *const JMNewSchedulePageRepeatTimeIntervalWeekAccessibilityId = @"JMNewSchedulePageRepeatTimeIntervalWeekAccessibilityId";
 NSString *const JMNewSchedulePageCalendarEveryMonthAccessibilityId = @"JMNewSchedulePageCalendarEveryMonthAccessibilityId";
 NSString *const JMNewSchedulePageCalendarSelectedMonthsAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsJanuaryAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsJanuaryAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsFebruaryAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsFebruaryAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsMarchAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsMarchAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsAprilAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsAprilAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsMayAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsMayAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsJuneAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsJuneAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsJulyAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsJulyAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsAugustAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsAugustAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsSeptemberAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsSeptemberAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsOctoberAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsOctoberAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsNovemberAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsNovemberAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedMonthsDecemberAccessibilityId = @"JMNewSchedulePageCalendarSelectedMonthsDecemberAccessibilityId";
 NSString *const JMNewSchedulePageCalendarEveryDayAccessibilityId = @"JMNewSchedulePageCalendarEveryDayAccessibilityId";
 NSString *const JMNewSchedulePageCalendarSelectedDaysAccessibilityId = @"JMNewSchedulePageCalendarSelectedDaysAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedDaysSundayAccessibilityId = @"JMNewSchedulePageCalendarSelectedDaysSundayAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedDaysMondayAccessibilityId = @"JMNewSchedulePageCalendarSelectedDaysMondayAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedDaysTuesdayAccessibilityId = @"JMNewSchedulePageCalendarSelectedDaysTuesdayAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedDaysWednesdayAccessibilityId = @"JMNewSchedulePageCalendarSelectedDaysWednesdayAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedDaysThursdayAccessibilityId = @"JMNewSchedulePageCalendarSelectedDaysThursdayAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedDaysFridayAccessibilityId = @"JMNewSchedulePageCalendarSelectedDaysFridayAccessibilityId";
+NSString *const JMNewSchedulePageCalendarSelectedDaysSaturdayAccessibilityId = @"JMNewSchedulePageCalendarSelectedDaysSaturdayAccessibilityId";
 NSString *const JMNewSchedulePageCalendarDatesInMonthAccessibilityId = @"JMNewSchedulePageCalendarDatesInMonthAccessibilityId";
 NSString *const JMNewSchedulePageCalendarHoursAccessibilityId = @"JMNewSchedulePageCalendarHoursAccessibilityId";
 NSString *const JMNewSchedulePageCalendarMinutesAccessibilityId = @"JMNewSchedulePageCalendarMinutesAccessibilityId";
@@ -320,7 +350,35 @@ NSString *const JMMultiSelectedItemsPageSelectWeekDaysAccessibilityId = @"JMMult
 
 
 // Report Viewer Identifiers
+NSString *const JMReportViewerPageTitleAccessibilityId = @"JMReportViewerPageTitleAccessibilityId";
+
 NSString *const JMReportViewerPageCountOfPagesLabelAccessibilityId = @"JMResourceInfoPageSchedulePreviousFireTimeLabelAccessibilityId";
+
+// Content Resource Viewer Identifiers
+NSString *const JMContentResourceViewerPageTitleAccessibilityId = @"JMContentResourceViewerPageTitleAccessibilityId";
+
+// Dashboard Viewer Identifiers
+NSString *const JMDashboardViewerPageTitleAccessibilityId = @"JMDashboardViewerPageTitleAccessibilityId";
+NSString *const JMDashboardViewerInputControlsPageTitleAccessibilityId = @"JMDashboardViewerInputControlsPageTitleAccessibilityId";
+NSString *const JMDashboardViewerInputControlsPageApplyButtonAccessibilityId = @"JMDashboardViewerInputControlsPageApplyButtonAccessibilityId";
+
+// Share View Identifiers
+NSString *const JMSharePageTitleAccessibilityId = @"JMSharePageTitleAccessibilityId";
+NSString *const JMSharePageShareButtonAccessibilityId = @"JMSharePageShareButtonAccessibilityId";
+NSString *const JMSharePageAddTextButtonAccessibilityId = @"JMSharePageAddTextButtonAccessibilityId";
+NSString *const JMSharePageSettingsButtonAccessibilityId = @"JMSharePageSettingsButtonAccessibilityId";
+NSString *const JMSharePageResetButtonAccessibilityId = @"JMSharePageResetButtonAccessibilityId";
+NSString *const JMShareSettingsPageAccessibilityId = @"JMShareSettingsPageAccessibilityId";
+NSString *const JMShareSettingsPageBrushValueLabelAccessibilityId = @"JMShareSettingsPageBrushValueLabelAccessibilityId";
+NSString *const JMShareSettingsPageOpacityValueLabelAccessibilityId = @"JMShareSettingsPageOpacityValueLabelAccessibilityId";
+NSString *const JMShareSettingsPageFontSizeValueLabelAccessibilityId = @"JMShareSettingsPageFontSizeValueLabelAccessibilityId";
+NSString *const JMShareSettingsPageBrushSliderAccessibilityId = @"JMShareSettingsPageBrushSliderAccessibilityId";
+NSString *const JMShareSettingsPageOpacitySliderAccessibilityId = @"JMShareSettingsPageOpacitySliderAccessibilityId";
+NSString *const JMShareSettingsPageFontSizeSliderAccessibilityId = @"JMShareSettingsPageFontSizeSliderAccessibilityId";
+NSString *const JMShareSettingsPageBorderSwitchAccessibilityId = @"JMShareSettingsPageBorderSwitchAccessibilityId";
+NSString *const JMShareSettingsPagePreviewColorButtonAccessibilityId = @"JMShareSettingsPagePreviewColorButtonAccessibilityId";
+NSString *const JMShareAnnotationViewAccessibilityId = @"JMShareAnnotationViewAccessibilityId";
+
 
 // Menu Actions View Identifiers
 NSString *const JMMenuActionsViewActionButtonAccessibilityId = @"JMMenuActionsViewActionButtonAccessibilityId";
@@ -353,14 +411,22 @@ NSString *const JMBackButtonAccessibilityId = @"JMBackButtonAccessibilityId";
 NSString *const JMButtonDoneAccessibilityId = @"JMButtonDoneAccessibilityId";
 NSString *const JMButtonAcceptAccessibilityId = @"JMButtonAcceptAccessibilityId";
 NSString *const JMButtonCancelAccessibilityId = @"JMButtonCancelAccessibilityId";
+NSString *const JMButtonApplyAccessibilityId = @"JMButtonApplyAccessibilityId";
+NSString *const JMButtonDeleteAccessibilityId = @"JMButtonDeleteAccessibilityId";
+NSString *const JMButtonOkAccessibilityId = @"JMButtonOkAccessibilityId";
+NSString *const JMButtonSaveAccessibilityId = @"JMButtonSaveAccessibilityId";
+NSString *const JMButtonReloadAccessibilityId = @"JMButtonReloadAccessibilityId";
+NSString *const JMButtonRetryAccessibilityId = @"JMButtonRetryAccessibilityId";
+NSString *const JMButtonContinueAccessibilityId = @"JMButtonContinueAccessibilityId";
+NSString *const JMButtonRunReportAccessibilityId = @"JMButtonRunReportAccessibilityId";
+NSString *const JMButtonRunDashboardAccessibilityId = @"JMButtonRunDashboardAccessibilityId";
 NSString *const JMButtonFirstAccessibilityId = @"JMButtonFirstAccessibilityId";
 NSString *const JMButtonPreviousAccessibilityId = @"JMButtonPreviousAccessibilityId";
 NSString *const JMButtonNextAccessibilityId = @"JMButtonNextAccessibilityId";
 NSString *const JMButtonLastAccessibilityId = @"JMButtonLastAccessibilityId";
-NSString *const JMButtonApplyAccessibilityId = @"JMButtonApplyAccessibilityId";
-
 
 // Custom Views Identifiers
 NSString *const JMCancelRequestPopupAccessibilityId = @"JMCancelRequestPopupAccessibilityId";
 
 NSString *const JMAlertControllerAccessibilityId = @"JMAlertControllerAccessibilityId";
+NSString *const JMAlertControllerTextFieldAccessibilityId = @"JMAlertControllerTextFieldAccessibilityId";

@@ -163,18 +163,18 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"error_upgrade_data_title"
                                                                                       message:@"error_upgrade_data_msg"
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                            cancelButtonType:JMAlertControllerActionType_Cancel
                                                                       cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                                           abort();
                                                                       }];
     
     __weak typeof(self) weakSelf = self;
-    [alertController addActionWithLocalizedTitle:@"dialog_button_retry" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    [alertController addActionWithType:JMAlertControllerActionType_Retry style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         __strong typeof(self) strongSelf = weakSelf;
         [strongSelf update];
     }];
     
-    [alertController addActionWithLocalizedTitle:@"dialog_button_applyUpdate" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    [alertController addActionWithType:JMAlertControllerActionType_Apply style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMResetApplicationNotification object:nil];
     }];
     

@@ -326,16 +326,46 @@ extern NSString *const JMNewSchedulePageDescriptionAccessibilityId;
 extern NSString *const JMNewSchedulePageOutputFileURIAccessibilityId;
 extern NSString *const JMNewSchedulePageOutputFolderURIAccessibilityId;
 extern NSString *const JMNewSchedulePageFormatAccessibilityId;
+extern NSString *const JMNewSchedulePageFormatHTMLAccessibilityId;
+extern NSString *const JMNewSchedulePageFormatPDFAccessibilityId;
+extern NSString *const JMNewSchedulePageFormatXLSAccessibilityId;
 extern NSString *const JMNewSchedulePageTimeZoneAccessibilityId;
 extern NSString *const JMNewSchedulePageStartDateAccessibilityId;
 extern NSString *const JMNewSchedulePageStartImmediatelyAccessibilityId;
 extern NSString *const JMNewSchedulePageRepeatTypeAccessibilityId;
+extern NSString *const JMNewSchedulePageRepeatTypeNoneAccessibilityId;
+extern NSString *const JMNewSchedulePageRepeatTypeSimpleAccessibilityId;
+extern NSString *const JMNewSchedulePageRepeatTypeCalendarAccessibilityId;
 extern NSString *const JMNewSchedulePageRepeatCountAccessibilityId;
 extern NSString *const JMNewSchedulePageRepeatTimeIntervalAccessibilityId;
+extern NSString *const JMNewSchedulePageRepeatTimeIntervalNoneAccessibilityId;
+extern NSString *const JMNewSchedulePageRepeatTimeIntervalMinuteAccessibilityId;
+extern NSString *const JMNewSchedulePageRepeatTimeIntervalHourAccessibilityId;
+extern NSString *const JMNewSchedulePageRepeatTimeIntervalDayAccessibilityId;
+extern NSString *const JMNewSchedulePageRepeatTimeIntervalWeekAccessibilityId;
 extern NSString *const JMNewSchedulePageCalendarEveryMonthAccessibilityId;
 extern NSString *const JMNewSchedulePageCalendarSelectedMonthsAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsJanuaryAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsFebruaryAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsMarchAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsAprilAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsMayAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsJuneAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsJulyAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsAugustAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsSeptemberAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsOctoberAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsNovemberAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedMonthsDecemberAccessibilityId;
 extern NSString *const JMNewSchedulePageCalendarEveryDayAccessibilityId;
 extern NSString *const JMNewSchedulePageCalendarSelectedDaysAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedDaysSundayAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedDaysMondayAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedDaysTuesdayAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedDaysWednesdayAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedDaysThursdayAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedDaysFridayAccessibilityId;
+extern NSString *const JMNewSchedulePageCalendarSelectedDaysSaturdayAccessibilityId;
 extern NSString *const JMNewSchedulePageCalendarDatesInMonthAccessibilityId;
 extern NSString *const JMNewSchedulePageCalendarHoursAccessibilityId;
 extern NSString *const JMNewSchedulePageCalendarMinutesAccessibilityId;
@@ -351,19 +381,56 @@ extern NSString *const JMNewSchedulePageToolbarCancelButtonAccessibilityId;
 extern NSString *const JMMultiSelectedItemsPageSelectMonthsAccessibilityId;
 extern NSString *const JMMultiSelectedItemsPageSelectWeekDaysAccessibilityId;
 
+// Report Viewer Identifiers
+extern NSString *const JMReportViewerPageTitleAccessibilityId;
+extern NSString *const JMReportViewerPageCountOfPagesLabelAccessibilityId;
+
+// Content Resource Viewer Identifiers
+extern NSString *const JMContentResourceViewerPageTitleAccessibilityId;
+
+// Dashboard Viewer Identifiers
+extern NSString *const JMDashboardViewerPageTitleAccessibilityId;
+extern NSString *const JMDashboardViewerInputControlsPageTitleAccessibilityId;
+extern NSString *const JMDashboardViewerInputControlsPageApplyButtonAccessibilityId;
+
+// Share View Identifiers
+extern NSString *const JMSharePageTitleAccessibilityId;
+extern NSString *const JMSharePageShareButtonAccessibilityId;
+extern NSString *const JMSharePageAddTextButtonAccessibilityId;
+extern NSString *const JMSharePageSettingsButtonAccessibilityId;
+extern NSString *const JMSharePageResetButtonAccessibilityId;
+extern NSString *const JMShareSettingsPageAccessibilityId;
+extern NSString *const JMShareSettingsPageBrushValueLabelAccessibilityId;
+extern NSString *const JMShareSettingsPageOpacityValueLabelAccessibilityId;
+extern NSString *const JMShareSettingsPageFontSizeValueLabelAccessibilityId;
+extern NSString *const JMShareSettingsPageBrushSliderAccessibilityId;
+extern NSString *const JMShareSettingsPageOpacitySliderAccessibilityId;
+extern NSString *const JMShareSettingsPageFontSizeSliderAccessibilityId;
+extern NSString *const JMShareSettingsPageBorderSwitchAccessibilityId;
+extern NSString *const JMShareSettingsPagePreviewColorButtonAccessibilityId;
+extern NSString *const JMShareAnnotationViewAccessibilityId;
 
 // Buttons Identifiers
 extern NSString *const JMBackButtonAccessibilityId;
 extern NSString *const JMButtonDoneAccessibilityId;
 extern NSString *const JMButtonAcceptAccessibilityId;
 extern NSString *const JMButtonCancelAccessibilityId;
+extern NSString *const JMButtonApplyAccessibilityId;
+extern NSString *const JMButtonDeleteAccessibilityId;
+extern NSString *const JMButtonOkAccessibilityId;
+extern NSString *const JMButtonSaveAccessibilityId;
+extern NSString *const JMButtonReloadAccessibilityId;
+extern NSString *const JMButtonRetryAccessibilityId;
+extern NSString *const JMButtonContinueAccessibilityId;
+extern NSString *const JMButtonRunReportAccessibilityId;
+extern NSString *const JMButtonRunDashboardAccessibilityId;
 extern NSString *const JMButtonFirstAccessibilityId;
 extern NSString *const JMButtonPreviousAccessibilityId;
 extern NSString *const JMButtonNextAccessibilityId;
 extern NSString *const JMButtonLastAccessibilityId;
-extern NSString *const JMButtonApplyAccessibilityId;
 
 // Custom Views Identifiers
 extern NSString *const JMCancelRequestPopupAccessibilityId;
 
 extern NSString *const JMAlertControllerAccessibilityId;
+extern NSString *const JMAlertControllerTextFieldAccessibilityId;

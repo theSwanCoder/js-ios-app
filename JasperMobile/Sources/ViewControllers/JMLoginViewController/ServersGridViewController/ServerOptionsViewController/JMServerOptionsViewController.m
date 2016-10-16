@@ -212,7 +212,7 @@
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_attention"
                                                                                       message:@"secutiry_http_message"
-                                                                            cancelButtonTitle:@"dialog_button_ok"
+                                                                            cancelButtonType:JMAlertControllerActionType_Ok
                                                                       cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
                                                                           [self saveServerOptions];
                                                                           [self cancel];

@@ -122,6 +122,7 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isSystemVersion9
 {
+#warning MAYBE HERE NEED CHECK 9 or HIGHER???
     return [UIDevice currentDevice].systemVersion.integerValue == 9;
 }
 
@@ -344,7 +345,7 @@ void jmDebugLog(NSString *format, ...) {
         message = @"error_authenication_dialog_msg";
     }
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonTitle:@"dialog_button_ok" cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonType:JMAlertControllerActionType_Ok cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         if (completion) {
             completion();
         }

@@ -180,11 +180,11 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
     JMServerProfile *serverProfile = cell.serverProfile;
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
                                                                                       message:@"servers_profile_delete_message"
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                            cancelButtonType:JMAlertControllerActionType_Cancel
                                                                       cancelCompletionHandler:nil];
     
     __weak typeof(self) weakSelf = self;
-    [alertController addActionWithLocalizedTitle:@"dialog_button_delete" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    [alertController addActionWithType:JMAlertControllerActionType_Delete style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         __strong typeof(self) strongSelf = weakSelf;
         [JMServerProfile deleteServerProfile:serverProfile];
         [strongSelf refreshDatasource];
@@ -211,7 +211,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_attention"
                                                                                       message:@"secutiry_http_message"
-                                                                            cancelButtonTitle:@"dialog_button_ok"
+                                                                            cancelButtonType:JMAlertControllerActionType_Ok
                                                                       cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
                                                                           if ([self.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
                                                                               [self.delegate serverGridControllerDidSelectProfile:serverProfile];

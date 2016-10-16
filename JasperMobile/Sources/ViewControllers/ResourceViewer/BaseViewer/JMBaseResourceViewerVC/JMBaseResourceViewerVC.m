@@ -32,6 +32,7 @@
 #import "JMBaseResourceView.h"
 #import "JMConstants.h"
 #import "JMThemesManager.h"
+#import "NSObject+Additions.h"
 
 @interface JMBaseResourceViewerVC () <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
@@ -55,7 +56,10 @@
     [super viewDidLoad];
 
     self.title = self.resource.resourceLookup.label;
-
+    self.view.isAccessibilityElement = NO;
+    self.view.accessibilityIdentifier = [self accessibilityIdentifier];
+    self.view.accessibilityLabel = self.resource.resourceLookup.label;
+    
     [self hideTopToolbarAnimated:NO];
     [self setupNavigationItems];
 
@@ -82,6 +86,12 @@
     [self.popoverView dismiss:YES];
 
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+}
+
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:[NSString stringWithFormat:@"You need to implement \"%@\" method in \"%@\" class", NSStringFromSelector(_cmd), NSStringFromClass(self.class)] userInfo:nil];
 }
 
 #pragma mark - Private API
@@ -340,9 +350,11 @@
 
 - (UIBarButtonItem *) actionBarButtonItem
 {
-    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                          target:self
                                                          action:@selector(showAvailableActions)];
+    [actionItem setAccessibility:YES withTextKey:@"action_button_title" identifier:JMMenuActionsViewActionButtonAccessibilityId];
+    return actionItem;
 }
 
 - (UIBarButtonItem *) favoriteBarButtonItem
@@ -355,6 +367,11 @@
                                                                     target:self
                                                                     action:@selector(favoriteButtonTapped:)];
     favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
+    if (isResourceInFavorites) {
+        [favoriteItem setAccessibility:YES withTextKey:@"action_title_markasunfavorite" identifier:JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId];
+    } else {
+        [favoriteItem setAccessibility:YES withTextKey:@"action_title_markasfavorite" identifier:JMMenuActionsViewMarkAsFavoriteActionAccessibilityId];
+    }
     return favoriteItem;
 }
 

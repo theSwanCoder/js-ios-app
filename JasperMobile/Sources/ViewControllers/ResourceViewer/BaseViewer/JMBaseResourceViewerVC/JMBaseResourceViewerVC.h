@@ -81,4 +81,7 @@
                                           action:(SEL)action;
 
 - (void) backButtonTapped:(id)sender;
+
+- (NSString *)accessibilityIdentifier;
+
 @end

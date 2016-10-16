@@ -28,6 +28,8 @@
 
 #import "JMMultiSelectedItemsVC.h"
 #import "JMSelectedItem.h"
+#import "NSObject+Additions.h"
+#import "JMLocalization.h"
 
 @interface JMMultiSelectedItemsVC() <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
@@ -74,9 +76,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JMMultiValuesCell"
                                                             forIndexPath:indexPath];
     JMSelectedItem *item = self.availableItems[indexPath.row];
-    cell.textLabel.text = item.title;
-    cell.textLabel.accessibilityLabel = item.title;
-    cell.textLabel.isAccessibilityElement = YES;
+    cell.textLabel.text = JMLocalizedString(item.titleKey);
+    [cell setAccessibility:YES withTextKey:item.titleKey identifier:item.itemAccessibilityId];
     return cell;
 }
 

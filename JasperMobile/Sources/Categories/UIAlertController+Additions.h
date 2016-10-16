@@ -32,13 +32,26 @@
  @since 2.2
  */
 
+typedef NS_ENUM(NSInteger, JMAlertControllerActionType) {
+    JMAlertControllerActionType_Done = 0,
+    JMAlertControllerActionType_Accept,
+    JMAlertControllerActionType_Apply,
+    JMAlertControllerActionType_Cancel,
+    JMAlertControllerActionType_Delete,
+    JMAlertControllerActionType_Ok,
+    JMAlertControllerActionType_Save,
+    JMAlertControllerActionType_Reload,
+    JMAlertControllerActionType_Retry,
+    JMAlertControllerActionType_Continue
+};
+
 typedef void(^UIAlertControllerCompletionBlock)(UIAlertController * __nonnull controller, UIAlertAction * __nonnull action);
 
 @interface UIAlertController (Additions)
 
 + (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message;
 
-+ (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message cancelButtonTitle:(nonnull NSString *)cancelButtonTitle cancelCompletionHandler:(__nullable UIAlertControllerCompletionBlock)handler;
++ (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message cancelButtonType:(JMAlertControllerActionType)cancelButtonType cancelCompletionHandler:(__nullable UIAlertControllerCompletionBlock)handler;
 
 + (nonnull instancetype)alertTextDialogueControllerWithLocalizedTitle:(nullable NSString *)title
                                                               message:(nullable NSString *)message
@@ -46,6 +59,8 @@ typedef void(^UIAlertControllerCompletionBlock)(UIAlertController * __nonnull co
                                                 textValidationHandler:(NSString * __nonnull (^ __nullable)(NSString * __nullable text))validationHandler
                                             textEditCompletionHandler:(void (^ __nullable)(NSString * __nullable text))editCompletionHandler;
 
-- (void)addActionWithLocalizedTitle:(nonnull NSString *)title style:(UIAlertActionStyle)style handler:(__nullable UIAlertControllerCompletionBlock)handler;
+- (void)addActionWithType:(JMAlertControllerActionType)actionType style:(UIAlertActionStyle)style handler:(__nullable UIAlertControllerCompletionBlock)handler;
+
+- (void)addActionWithLocalizedTitle:(NSString *__nonnull)title accessibilityId:(NSString *__nonnull)accessibilityId style:(UIAlertActionStyle)style handler:(__nullable UIAlertControllerCompletionBlock)handler;
 
 @end

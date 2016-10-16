@@ -27,29 +27,30 @@
 //
 
 #import "JMSelectedItem.h"
-
+#import "JMLocalization.h"
 
 @implementation JMSelectedItem
 
-- (instancetype)initWithTitle:(NSString *)title value:(id)value selected:(BOOL)selected
+- (instancetype)initWithTitleKey:(NSString *)titleKey value:(id)value accessibilityId:(NSString *)accessibilityId selected:(BOOL)selected
 {
     self = [super init];
     if (self) {
-        _title = title;
+        _titleKey = titleKey;
         _value = value;
         _selected = selected;
+        _itemAccessibilityId = accessibilityId;
     }
     return self;
 }
 
-+ (instancetype)itemWithTitle:(NSString *)title value:(id)value selected:(BOOL)selected
++ (instancetype)itemWithTitleKey:(NSString *)titleKey value:(id)value accessibilityId:(NSString *)accessibilityId selected:(BOOL)selected
 {
-    return [[self alloc] initWithTitle:title value:value selected:selected];
+    return [[self alloc] initWithTitleKey:titleKey value:value accessibilityId:accessibilityId selected:selected];
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"item: %@, selected:%@", self.title, self.isSelected ? @"YES": @"NO"];
+    return [NSString stringWithFormat:@"item: %@, selected:%@", JMLocalizedString(self.titleKey), self.isSelected ? @"YES": @"NO"];
 }
 
 @end

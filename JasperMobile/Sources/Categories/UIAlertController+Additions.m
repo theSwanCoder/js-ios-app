@@ -54,10 +54,10 @@
     return alertController;
 }
 
-+ (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message cancelButtonTitle:(nonnull NSString *)cancelButtonTitle cancelCompletionHandler:(__nullable UIAlertControllerCompletionBlock)handler
++ (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message cancelButtonType:(JMAlertControllerActionType)cancelButtonType cancelCompletionHandler:(UIAlertControllerCompletionBlock _Nullable)handler
 {
     UIAlertController *alertController = [self alertControllerWithLocalizedTitle:title message:message];
-    [alertController addActionWithLocalizedTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:handler];
+    [alertController addActionWithType:cancelButtonType style:UIAlertActionStyleCancel handler:handler];
     return alertController;
 }
 
@@ -70,7 +70,7 @@
     UIAlertController *alertController = [self alertControllerWithLocalizedTitle:title message:message];
     __block id textFieldObserver;
     
-    [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    [alertController addActionWithType:JMAlertControllerActionType_Ok style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         if (editCompletionHandler) {
             NSString *text = [controller.textFields objectAtIndex:0].text;
             editCompletionHandler(text);
@@ -78,7 +78,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:textFieldObserver name:UITextFieldTextDidChangeNotification object:controller.textFields[0]];
     }];
     
-    [alertController addActionWithLocalizedTitle:@"dialog_button_cancel" style:UIAlertActionStyleCancel handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+    [alertController addActionWithType:JMAlertControllerActionType_Cancel style:UIAlertActionStyleCancel handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         [[NSNotificationCenter defaultCenter] removeObserver:textFieldObserver name:UITextFieldTextDidChangeNotification object:controller.textFields[0]];
     }];
     
@@ -86,6 +86,8 @@
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         __strong typeof (weakAlertController) strongAlertController = weakAlertController;
         if (strongAlertController) {
+            textField.isAccessibilityElement = YES;
+            textField.accessibilityIdentifier = JMAlertControllerTextFieldAccessibilityId;
             
             if (validationHandler) {
                 textFieldObserver = [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:textField queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
@@ -104,7 +106,15 @@
     return alertController;
 }
 
-- (void)addActionWithLocalizedTitle:(nonnull NSString *)title style:(UIAlertActionStyle)style handler:(UIAlertControllerCompletionBlock _Nullable)handler
+- (void)addActionWithType:(JMAlertControllerActionType)actionType style:(UIAlertActionStyle)style handler:(UIAlertControllerCompletionBlock)handler
+{
+    [self addActionWithLocalizedTitle:[self actionButtonTitleWithType:actionType]
+                      accessibilityId:[self accesssibilityIdWithActionType:actionType]
+                                style:style
+                              handler:handler];
+}
+
+- (void)addActionWithLocalizedTitle:(NSString *)title accessibilityId:(NSString *)accessibilityId style:(UIAlertActionStyle)style handler:(UIAlertControllerCompletionBlock)handler
 {
     __weak typeof(self) weakSelf = self;
     UIAlertAction *alertAction = [UIAlertAction actionWithTitle:JMLocalizedString(title) style:style handler:^(UIAlertAction * _Nonnull action) {
@@ -117,8 +127,65 @@
             }
         }
     }];
-    alertAction.accessibilityLabel = @"accessibilityLabel";
+    [alertAction setAccessibility:YES withTextKey:title identifier:accessibilityId];
     [self addAction:alertAction];
+}
+
+- (NSString *)actionButtonTitleWithType:(JMAlertControllerActionType)actionType
+{
+    switch (actionType) {
+        case JMAlertControllerActionType_Done:
+            return @"dialog_button_done";
+        case JMAlertControllerActionType_Accept:
+            return @"dialog_title_accept";
+        case JMAlertControllerActionType_Cancel:
+            return @"dialog_button_cancel";
+        case JMAlertControllerActionType_Delete:
+            return @"dialog_button_delete";
+        case JMAlertControllerActionType_Ok:
+            return @"dialog_button_ok";
+        case JMAlertControllerActionType_Save:
+            return @"dialog_button_save";
+        case JMAlertControllerActionType_Reload:
+            return @"dialog_button_reload";
+        case JMAlertControllerActionType_Retry:
+            return @"dialog_button_retry";
+        case JMAlertControllerActionType_Continue:
+            return @"dialog_button_continue";
+        case JMAlertControllerActionType_Apply:
+            return @"dialog_button_apply";
+        default:
+            NSCAssert(NO, @"wrong type: %zd", actionType);
+    }
+}
+
+- (NSString *)accesssibilityIdWithActionType:(JMAlertControllerActionType)actionType
+{
+    switch (actionType) {
+        case JMAlertControllerActionType_Done:
+            return JMButtonDoneAccessibilityId;
+        case JMAlertControllerActionType_Accept:
+            return JMButtonAcceptAccessibilityId;
+        case JMAlertControllerActionType_Cancel:
+            return JMButtonCancelAccessibilityId;
+        case JMAlertControllerActionType_Delete:
+            return JMButtonDeleteAccessibilityId;
+        case JMAlertControllerActionType_Ok:
+            return JMButtonOkAccessibilityId;
+        case JMAlertControllerActionType_Save:
+            return JMButtonSaveAccessibilityId;
+        case JMAlertControllerActionType_Reload:
+            return JMButtonReloadAccessibilityId;
+        case JMAlertControllerActionType_Retry:
+            return JMButtonRetryAccessibilityId;
+        case JMAlertControllerActionType_Continue:
+            return JMButtonContinueAccessibilityId;
+        case JMAlertControllerActionType_Apply:
+            return JMButtonApplyAccessibilityId;
+        default:
+            NSCAssert(NO, @"wrong type: %zd", actionType);
+    }
+
 }
 
 @end

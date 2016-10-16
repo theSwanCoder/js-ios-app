@@ -32,6 +32,7 @@
 #import "JMResource.h"
 #import "JMSavedResources.h"
 #import "JMExportResource.h"
+#import "JMSavedResources+Helpers.h"
 
 @implementation JMGridResourceCollectionViewCell
 
@@ -59,7 +60,7 @@
             elementPageAccessibilityId = JMResourceCollectionPageLegacyDashboardResourceGridCellAccessibilityId;
             break;
         case JMResourceTypeSavedResource: {
-            JMSavedResources *savedResource = (JMSavedResources *)resource;
+            JMSavedResources *savedResource = [JMSavedResources savedReportsFromResource:resource];
             if ([savedResource.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
                 elementPageAccessibilityId = JMResourceCollectionPageHTMLSavedItemsResourceGridCellAccessibilityId;
             } else if ([savedResource.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {

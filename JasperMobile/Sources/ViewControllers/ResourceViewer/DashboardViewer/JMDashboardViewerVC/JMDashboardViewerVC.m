@@ -93,6 +93,12 @@
     [self startResourceViewing];
 }
 
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    return JMDashboardViewerPageTitleAccessibilityId;
+}
+
 #pragma mark - Rotation
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
@@ -513,7 +519,7 @@
     // TODO: translate
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Visualize Message"
                                                                                       message:@"The hyperlink could not be processed"
-                                                                            cancelButtonTitle:@"dialog_button_ok"
+                                                                            cancelButtonType:JMAlertControllerActionType_Ok
                                                                       cancelCompletionHandler:nil];
     [self presentViewController:alertController animated:YES completion:nil];
 }

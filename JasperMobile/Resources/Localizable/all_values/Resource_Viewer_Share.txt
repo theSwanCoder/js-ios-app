@@ -10,6 +10,18 @@
 		pt = Compartilhamento de recursos
 		zh = 资源共享
 		tags = ios
+    [resource_viewer_share_share_button]
+        en = Share
+        tags = ios,new
+    [resource_viewer_share_settings_button]
+        en = Settings
+        tags = ios,new
+    [resource_viewer_share_add_text_button]
+        en = Add text
+        tags = ios,new
+    [resource_viewer_share_reset_button]
+        en = Reset
+        tags = ios,new
     [resource_viewer_share_annotation_title]
         en = Input text, please
         de = Bitte Text eingeben
@@ -100,3 +112,6 @@
         pt = Tamanho da fonte
         zh = 字体大小
         tags = ios
+    [resource_viewer_share_settings_select_color]
+        en = Select Color
+        tags = ios,new

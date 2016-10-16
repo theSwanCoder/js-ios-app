@@ -146,6 +146,12 @@
     }
 }
 
+#pragma mark - Accessibility
+- (NSString *)accessibilityIdentifier
+{
+    return JMReportViewerPageTitleAccessibilityId;
+}
+
 #pragma mark - Setups
 
 - (void)setupSessionManager
@@ -557,7 +563,7 @@
     // TODO: translate
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Visualize Message"
                                                                                       message:@"The hyperlink could not be processed"
-                                                                            cancelButtonTitle:@"dialog_button_ok"
+                                                                            cancelButtonType:JMAlertControllerActionType_Ok
                                                                       cancelCompletionHandler:nil];
     [self presentViewController:alertController animated:YES completion:nil];
 }

@@ -102,24 +102,24 @@
     // TODO: add translations
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was expired"
                                                                                       message:@"Reload?"
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                            cancelButtonType:JMAlertControllerActionType_Cancel
                                                                       cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                                           __strong typeof(self) strongSelf = weakSelf;
                                                                           // back to collection view
                                                                           [strongSelf.navigationController popToRootViewControllerAnimated:YES];
                                                                       }];
-    [alertController addActionWithLocalizedTitle:@"dialog_button_reload"
-                                           style:UIAlertActionStyleDefault
-                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                             __strong typeof(self) strongSelf = weakSelf;
-                                             if (strongSelf.completionBlock) {
-                                                 JMFiltersVCResult *result = [JMFiltersVCResult new];
-                                                 result.type = JMFiltersVCResultTypeSessionExpired;
-                                                 strongSelf.completionBlock(result);
-                                             } else {
-                                                 // TODO: We need completion block anyway
-                                             }
-                                         }];
+    [alertController addActionWithType:JMAlertControllerActionType_Reload
+                                 style:UIAlertActionStyleDefault
+                               handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                   __strong typeof(self) strongSelf = weakSelf;
+                                   if (strongSelf.completionBlock) {
+                                       JMFiltersVCResult *result = [JMFiltersVCResult new];
+                                       result.type = JMFiltersVCResultTypeSessionExpired;
+                                       strongSelf.completionBlock(result);
+                                   } else {
+                                       // TODO: We need completion block anyway
+                                   }
+                               }];
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
@@ -210,10 +210,10 @@
                 NSString *confirmationMessage = [NSString stringWithFormat:JMLocalizedString(@"report_viewer_report_options_remove_confirmation_message"), strongSelf.activeReportOption.label];
                 UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
                                                                                                   message:confirmationMessage
-                                                                                        cancelButtonTitle:@"dialog_button_cancel"
+                                                                                        cancelButtonType:JMAlertControllerActionType_Cancel
                                                                                   cancelCompletionHandler:nil];
                 __weak typeof(self) weakSelf = strongSelf;
-                [alertController addActionWithLocalizedTitle:@"dialog_button_ok"
+                [alertController addActionWithType:JMAlertControllerActionType_Ok
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                          __strong typeof(self) strongSelf = weakSelf;

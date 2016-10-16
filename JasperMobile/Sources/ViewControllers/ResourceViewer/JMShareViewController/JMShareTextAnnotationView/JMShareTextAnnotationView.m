@@ -28,6 +28,7 @@
 
 
 #import "JMShareTextAnnotationView.h"
+#import "JMConstants.h"
 
 @interface JMShareTextAnnotationView()
 @property (nonatomic, strong) UILabel *textLabel;
@@ -57,6 +58,9 @@
     annotation.text = text;
     [annotation addSubview:annotation.textLabel];
     
+    annotation.isAccessibilityElement = YES;
+    annotation.accessibilityIdentifier = JMShareAnnotationViewAccessibilityId;
+    
     return annotation;
 }
 
@@ -69,6 +73,7 @@
 - (void)setText:(NSString *)text
 {
     self.textLabel.text = text;
+    self.accessibilityLabel = text;
     [self updateFrame];
 }
 

@@ -1,15 +1,5 @@
 
 [[Buttons]]
-	[dialog_button_applyUpdate]
-		en = Run Dashboard
-		de = Bedieneroberfläche ausführen
-		es = Ejecutar el Panel
-		fr = Tableau de bord d\'exécution
-		it = Esegui pannello
-		ja = ダッシュボードを実行する
-		pt = Executar Painel de Controle
-		zh = 运行仪表板
-		tags = ios
 	[dialog_button_ok]
 		en = OK
 		de = OK
@@ -63,6 +53,16 @@
 		ja = レポートの実行
 		zh = 运行报表
 		tags = ios
+    [dialog_button_run_dashboard]
+        en = Run Dashboard
+        de = Bedieneroberfläche ausführen
+        es = Ejecutar el Panel
+        fr = Tableau de bord d\'exécution
+        it = Esegui pannello
+        ja = ダッシュボードを実行する
+        pt = Executar Painel de Controle
+        zh = 运行仪表板
+        tags = ios
 	[dialog_button_save]
 		en = Save
 		de = Speichern
@@ -83,37 +83,7 @@
 		ja = 削除
 		zh = 删除
 		tags = ios
-	[dialod_title_attention]
-		en = Warning
-		de = Warnung
-		fr = Avertissement
-		es = Advertencia
-		it = Avviso
-		pt = Atenção
-		ja = 警告
-		zh = 警告
-		tags = ios
-	[dialod_title_error]
-		en = Error
-		de = Fehler
-		fr = Erreur
-		es = Error
-		it = Errore
-		pt = Erro
-		ja = エラー
-		zh = 错误
-		tags = ios
-	[dialod_title_confirmation]
-		en = Confirmation
-		de = Bestätigung
-		fr = Confirmation
-		es = Confirmación
-		it = Conferma
-		pt = Confirmação
-		ja = 確認
-		zh = 确认
-		tags = ios
-    [dialog_title_accept]
+    [dialog_button_accept]
         en = Accept
         de = Akzeptieren
         es = Aceptar

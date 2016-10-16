@@ -47,6 +47,7 @@
 {
     [super viewDidLoad];
     self.title = JMLocalizedString(@"report_viewer_options_title");
+    [self.view setAccessibility:NO withTextKey:@"report_viewer_options_title" identifier:JMDashboardViewerInputControlsPageTitleAccessibilityId];
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     // Remove extra separators
@@ -56,9 +57,10 @@
     self.applyButton.backgroundColor = [[JMThemesManager sharedManager] reportOptionsRunReportButtonBackgroundColor];
     [self.applyButton setTitleColor:[[JMThemesManager sharedManager] reportOptionsRunReportButtonTextColor]
                            forState:UIControlStateNormal];
-    [self.applyButton setTitle:JMLocalizedString(@"dialog_button_applyUpdate")
+    [self.applyButton setTitle:JMLocalizedString(@"dialog_button_run_dashboard")
                       forState:UIControlStateNormal];
-
+    [self.applyButton setAccessibility:YES withTextKey:@"dialog_button_run_dashboard" identifier:JMDashboardViewerInputControlsPageApplyButtonAccessibilityId];
+    
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
 
     self.chagedInputControls = [NSMutableArray array];

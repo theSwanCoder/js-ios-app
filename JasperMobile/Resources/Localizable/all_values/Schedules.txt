@@ -242,8 +242,65 @@
     [schedules_new_job_select_months]
         en = Select Months
         tags = ios, new
+    [schedules_new_job_select_months_january]
+        en = January
+        tags = ios, new
+    [schedules_new_job_select_months_february]
+        en = February
+        tags = ios, new
+    [schedules_new_job_select_months_march]
+        en = March
+        tags = ios, new
+    [schedules_new_job_select_months_april]
+        en = April
+        tags = ios, new
+    [schedules_new_job_select_months_may]
+        en = May
+        tags = ios, new
+    [schedules_new_job_select_months_june]
+        en = June
+        tags = ios, new
+    [schedules_new_job_select_months_july]
+        en = July
+        tags = ios, new
+    [schedules_new_job_select_months_august]
+        en = August
+        tags = ios, new
+    [schedules_new_job_select_months_september]
+        en = September
+        tags = ios, new
+    [schedules_new_job_select_months_october]
+        en = October
+        tags = ios, new
+    [schedules_new_job_select_months_november]
+        en = November
+        tags = ios, new
+    [schedules_new_job_select_months_december]
+        en = December
+        tags = ios, new
     [schedules_new_job_select_weekDays]
         en = Select Days
+        tags = ios, new
+    [schedules_new_job_select_weekDays_sunday]
+        en = Sunday
+        tags = ios, new
+    [schedules_new_job_select_weekDays_monday]
+        en = Monday
+        tags = ios, new
+    [schedules_new_job_select_weekDays_tuesday]
+        en = Tuesday
+        tags = ios, new
+    [schedules_new_job_select_weekDays_wednesday]
+        en = Wednesday
+        tags = ios, new
+    [schedules_new_job_select_weekDays_thursday]
+        en = Thursday
+        tags = ios, new
+    [schedules_new_job_select_weekDays_friday]
+        en = Friday
+        tags = ios, new
+    [schedules_new_job_select_weekDays_saturday]
+        en = Saturday
         tags = ios, new
     [schedules_new_job_timeZone]
         en = Start immediately

@@ -258,9 +258,9 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
         if ([[UIApplication sharedApplication] canOpenURL:navigationAction.request.URL]) {
             UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_attention"
                                                                                               message:@"resource_viewer_open_link"
-                                                                                    cancelButtonTitle:@"dialog_button_cancel"
+                                                                                    cancelButtonType:JMAlertControllerActionType_Cancel
                                                                               cancelCompletionHandler:nil];
-            [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+            [alertController addActionWithType:JMAlertControllerActionType_Ok style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                 [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
             }];
             [self presentViewController:alertController animated:YES completion:nil];

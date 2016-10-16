@@ -120,11 +120,11 @@
     } else if(action == JMMenuActionsViewAction_Delete) {
         UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
                                                                                           message:@"savedreport_viewer_delete_confirmation_message"
-                                                                                cancelButtonTitle:@"dialog_button_cancel"
+                                                                                cancelButtonType:JMAlertControllerActionType_Cancel
                                                                           cancelCompletionHandler:nil];
         
         __weak typeof(self) weakSelf = self;
-        [alertController addActionWithLocalizedTitle:@"dialog_button_ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        [alertController addActionWithType:JMAlertControllerActionType_Ok style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
             __strong typeof(self) strongSelf = weakSelf;
             [strongSelf.savedReports removeReport];
             [strongSelf.navigationController popViewControllerAnimated:YES];

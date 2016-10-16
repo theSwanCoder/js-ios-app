@@ -226,7 +226,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMLocalizedString(@"schedules_new_job_outputFormat")
                                                                                       message:nil
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                            cancelButtonType:JMAlertControllerActionType_Cancel
                                                                       cancelCompletionHandler:nil];
 
     JMScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeOutputOptions];
@@ -239,7 +239,9 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     NSAssert(formatCell != nil, @"Cell is nil");
 
     for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
-        [alertController addActionWithLocalizedTitle:format style:UIAlertActionStyleDefault
+        [alertController addActionWithLocalizedTitle:format
+                                     accessibilityId:[NSString stringWithFormat:@"JMNewSchedulePageFormat%@AccessibilityId", format.uppercaseString]
+                                               style:UIAlertActionStyleDefault
                                              handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                  self.scheduleMetadata.outputFormats = @[format.uppercaseString];
                                                  formatCell.valueTextField.text = self.scheduleMetadata.outputFormats.firstObject;
@@ -260,7 +262,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMLocalizedString(@"schedules_new_job_recurrenceIntervalUnit")
                                                                                       message:nil
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                            cancelButtonType:JMAlertControllerActionType_Cancel
                                                                       cancelCompletionHandler:nil];
 
     JMScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeRecurrence];
@@ -278,13 +280,13 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
     JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *)trigger;
     for (NSNumber *interval in intervals) {
         JSScheduleSimpleTriggerRecurrenceIntervalType intervalType = (JSScheduleSimpleTriggerRecurrenceIntervalType) interval.integerValue;
-        NSString *title = [self stringValueForRecurrenceType:intervalType];
-        [alertController addActionWithLocalizedTitle:title
-                                               style:UIAlertActionStyleDefault
-                                             handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                 simpleTrigger.recurrenceIntervalUnit = intervalType;
-                                                 cell.valueTextField.text = title;
-                                             }];
+        NSString *titleKey = [self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit];
+        [alertController addActionWithLocalizedTitle:titleKey
+                                     accessibilityId:[self accessibilityIdForRecurrenceType:simpleTrigger.recurrenceIntervalUnit]
+                                               style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                                   simpleTrigger.recurrenceIntervalUnit = intervalType;
+                                                   cell.valueTextField.text = JMLocalizedString(titleKey);
+                                               }];
     }
     [self presentViewController:alertController animated:YES completion:nil];
 }
@@ -299,7 +301,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMLocalizedString(@"schedules_new_job_repeat_type_alert_title")
                                                                                       message:nil
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                            cancelButtonType:JMAlertControllerActionType_Cancel
                                                                       cancelCompletionHandler:nil];
 
     JMScheduleVCSection *section = self.sections[JMNewScheduleVCSectionTypeRecurrence];
@@ -314,17 +316,18 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         JSScheduleTriggerType triggerType = (JSScheduleTriggerType) triggerTypeValue.integerValue;
         NSString *title = [self stringValueForTriggerType:triggerType];
         [alertController addActionWithLocalizedTitle:title
+                                     accessibilityId:[self accessibilityIdForTriggerType:triggerType]
                                                style:UIAlertActionStyleDefault
                                              handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                 cell.valueTextField.text = title;
-
+                                                 cell.valueTextField.text = JMLocalizedString(title);
+                                                 
                                                  // assigning a trigger
                                                  self.scheduleMetadata.trigger = [self triggerForType:triggerType];
                                                  // updating representation of the trigger
                                                  [self setupStartPolicySection];
                                                  [self setupRecurrenceSection];
                                                  [self setupEndPolicySection];
-
+                                                 
                                                  NSMutableIndexSet *sectionIndecies = [NSMutableIndexSet indexSet];
                                                  [sectionIndecies addIndex:JMNewScheduleVCSectionTypeScheduleStart];
                                                  [sectionIndecies addIndex:JMNewScheduleVCSectionTypeRecurrence];
@@ -352,9 +355,10 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         if ([calendarTrigger.months containsObject:month]) {
             isSelected = YES;
         }
-        JMSelectedItem *item = [JMSelectedItem itemWithTitle:[self stringValueForMonth:month]
-                                                       value:month
-                                                    selected:isSelected];
+        JMSelectedItem *item = [JMSelectedItem itemWithTitleKey:[self stringValueForMonth:month]
+                                                          value:month
+                                                accessibilityId:[self accessibilityIdForMonth:month]
+                                                       selected:isSelected];
         [availableItems addObject:item];
     }
 
@@ -393,9 +397,10 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         if ([calendarTrigger.weekDays containsObject:day]) {
             isSelected = YES;
         }
-        JMSelectedItem *item = [JMSelectedItem itemWithTitle:[self stringValueForDay:day]
-                                                       value:day
-                                                    selected:isSelected];
+        JMSelectedItem *item = [JMSelectedItem itemWithTitleKey:[self stringValueForDay:day]
+                                                          value:day
+                                                accessibilityId:[self accessibilityIdForDay:day]
+                                                       selected:isSelected];
         [availableItems addObject:item];
     }
 
@@ -1082,54 +1087,70 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 
 - (NSString *)stringValueForRecurrenceType:(JSScheduleSimpleTriggerRecurrenceIntervalType)recurrenceType
 {
-    NSString *stringValue;
-
     switch(recurrenceType) {
-        case JSScheduleSimpleTriggerRecurrenceIntervalTypeNone: {
-            stringValue = JMLocalizedString(@"schedules_new_job_none");
-            break;
-        }
-        case JSScheduleSimpleTriggerRecurrenceIntervalTypeMinute: {
-            stringValue = JMLocalizedString(@"schedules_new_job_minutes");
-            break;
-        }
-        case JSScheduleSimpleTriggerRecurrenceIntervalTypeHour: {
-            stringValue = JMLocalizedString(@"schedules_new_job_hours");
-            break;
-        }
-        case JSScheduleSimpleTriggerRecurrenceIntervalTypeDay: {
-            stringValue = JMLocalizedString(@"schedules_new_job_days");
-            break;
-        }
-        case JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek: {
-            stringValue = JMLocalizedString(@"schedules_new_job_weeks");
-            break;
-        }
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeNone:
+            return @"schedules_new_job_none";
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeMinute:
+            return @"schedules_new_job_minutes";
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeHour:
+            return @"schedules_new_job_hours";
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeDay:
+            return @"schedules_new_job_days";
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek:
+            return @"schedules_new_job_weeks";
+        default:
+            NSCAssert(NO, @"wrong type: %zd", recurrenceType);
+            return nil;
     }
+}
 
-    return stringValue;
+- (NSString *)accessibilityIdForRecurrenceType:(JSScheduleSimpleTriggerRecurrenceIntervalType)recurrenceType
+{
+    switch(recurrenceType) {
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeNone:
+            return JMNewSchedulePageRepeatTimeIntervalNoneAccessibilityId;
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeMinute:
+            return JMNewSchedulePageRepeatTimeIntervalMinuteAccessibilityId;
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeHour:
+            return JMNewSchedulePageRepeatTimeIntervalHourAccessibilityId;
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeDay:
+            return JMNewSchedulePageRepeatTimeIntervalDayAccessibilityId;
+        case JSScheduleSimpleTriggerRecurrenceIntervalTypeWeek:
+            return JMNewSchedulePageRepeatTimeIntervalWeekAccessibilityId;
+        default:
+            NSCAssert(NO, @"wrong type: %zd", recurrenceType);
+            return nil;
+    }
 }
 
 - (NSString *)stringValueForTriggerType:(JSScheduleTriggerType)repeatType
 {
-    NSString *stringValue;
-
     switch(repeatType) {
-        case JSScheduleTriggerTypeNone: {
-            stringValue = JMLocalizedString(@"schedules_new_job_none");
-            break;
-        }
-        case JSScheduleTriggerTypeSimple: {
-            stringValue = JMLocalizedString(@"schedules_new_job_trigger_simple");
-            break;
-        }
-        case JSScheduleTriggerTypeCalendar: {
-            stringValue = JMLocalizedString(@"schedules_new_job_trigger_calendar");
-            break;
-        }
+        case JSScheduleTriggerTypeNone:
+            return @"schedules_new_job_none";
+        case JSScheduleTriggerTypeSimple:
+            return @"schedules_new_job_trigger_simple";
+        case JSScheduleTriggerTypeCalendar:
+            return @"schedules_new_job_trigger_calendar";
+        default:
+            NSCAssert(NO, @"wrong type: %zd", repeatType);
+            return nil;
     }
+}
 
-    return stringValue;
+- (NSString *)accessibilityIdForTriggerType:(JSScheduleTriggerType)repeatType
+{
+    switch(repeatType) {
+        case JSScheduleTriggerTypeNone:
+            return JMNewSchedulePageRepeatTypeNoneAccessibilityId;
+        case JSScheduleTriggerTypeSimple:
+            return JMNewSchedulePageRepeatTypeSimpleAccessibilityId;
+        case JSScheduleTriggerTypeCalendar:
+            return JMNewSchedulePageRepeatTypeCalendarAccessibilityId;
+        default:
+            NSCAssert(NO, @"wrong type: %zd", repeatType);
+            return nil;
+    }
 }
 
 #pragma mark - Validation
@@ -1498,22 +1519,22 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         case JSScheduleTriggerTypeNone: {
             JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
             if (type == JMScheduleVCRowTypeRepeatType) {
-                propertyValue = [self stringValueForTriggerType:JSScheduleTriggerTypeNone];
+                propertyValue = JMLocalizedString([self stringValueForTriggerType:JSScheduleTriggerTypeNone]);
             } else if (type == JMScheduleVCRowTypeRepeatCount) {
                 propertyValue = simpleTrigger.recurrenceInterval.stringValue;
             } else if (type == JMScheduleVCRowTypeRepeatTimeInterval) {
-                propertyValue = [self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit];
+                propertyValue = JMLocalizedString([self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit]);
             }
             break;
         }
         case JSScheduleTriggerTypeSimple: {
             JSScheduleSimpleTrigger *simpleTrigger = (JSScheduleSimpleTrigger *) trigger;
             if (type == JMScheduleVCRowTypeRepeatType) {
-                propertyValue = [self stringValueForTriggerType:JSScheduleTriggerTypeSimple];
+                propertyValue = JMLocalizedString([self stringValueForTriggerType:JSScheduleTriggerTypeSimple]);
             } else if (type == JMScheduleVCRowTypeRepeatCount) {
                 propertyValue = simpleTrigger.recurrenceInterval.stringValue;
             } else if (type == JMScheduleVCRowTypeRepeatTimeInterval) {
-                propertyValue = [self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit];
+                propertyValue = JMLocalizedString([self stringValueForRecurrenceType:simpleTrigger.recurrenceIntervalUnit]);
             } else if (type == JMScheduleVCRowTypeEndDate) {
                 [self dateStringFromDate:simpleTrigger.endDate];
             } else if (type == JMScheduleVCRowTypeNumberOfRuns) {
@@ -1524,7 +1545,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
         case JSScheduleTriggerTypeCalendar: {
             JSScheduleCalendarTrigger *calendarTrigger = (JSScheduleCalendarTrigger *) trigger;
             if (type == JMScheduleVCRowTypeRepeatType) {
-                propertyValue = [self stringValueForTriggerType:JSScheduleTriggerTypeCalendar];
+                propertyValue = JMLocalizedString([self stringValueForTriggerType:JSScheduleTriggerTypeCalendar]);
             } else if (type == JMScheduleVCRowTypeCalendarHours) {
                 propertyValue = [calendarTrigger.hours stringByReplacingOccurrencesOfString:@"," withString:@", "];
             } else if (type == JMScheduleVCRowTypeCalendarMinutes) {
@@ -1622,98 +1643,153 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 #pragma mark - Days And Months
 - (NSString *)stringValueForDay:(NSNumber *)day
 {
-    NSString *stringValue;
     switch(day.integerValue) {
         case 1: {
-            stringValue = @"Sun";
-            break;
+#warning NEED CHECK FIRST DAY IN JRS!!!!
+            return @"schedules_new_job_select_weekDays_sunday";
         }
         case 2: {
-            stringValue = @"Mon";
-            break;
+            return @"schedules_new_job_select_weekDays_sunday";
         }
         case 3: {
-            stringValue = @"Tue";
-            break;
+            return @"schedules_new_job_select_weekDays_sunday";
         }
         case 4: {
-            stringValue = @"Wed";
-            break;
+            return @"schedules_new_job_select_weekDays_sunday";
         }
         case 5: {
-            stringValue = @"Thu";
-            break;
+            return @"schedules_new_job_select_weekDays_sunday";
         }
         case 6: {
-            stringValue = @"Fri";
-            break;
+            return @"schedules_new_job_select_weekDays_sunday";
         }
         case 7: {
-            stringValue = @"Sat";
-            break;
+            return @"schedules_new_job_select_weekDays_sunday";
         }
         default:
             NSCAssert(NO, @"wrong day: %@", day);
+            return nil;
     }
-    return stringValue;
+}
+
+- (NSString *)accessibilityIdForDay:(NSNumber *)day
+{
+    switch(day.integerValue) {
+        case 1: {
+            return JMNewSchedulePageCalendarSelectedDaysSundayAccessibilityId;
+        }
+        case 2: {
+            return JMNewSchedulePageCalendarSelectedDaysMondayAccessibilityId;
+        }
+        case 3: {
+            return JMNewSchedulePageCalendarSelectedDaysTuesdayAccessibilityId;
+        }
+        case 4: {
+            return JMNewSchedulePageCalendarSelectedDaysWednesdayAccessibilityId;
+        }
+        case 5: {
+            return JMNewSchedulePageCalendarSelectedDaysThursdayAccessibilityId;
+        }
+        case 6: {
+            return JMNewSchedulePageCalendarSelectedDaysFridayAccessibilityId;
+        }
+        case 7: {
+            return JMNewSchedulePageCalendarSelectedDaysSaturdayAccessibilityId;
+        }
+        default:
+            NSCAssert(NO, @"wrong day: %@", day);
+            return nil;
+    }
 }
 
 - (NSString *)stringValueForMonth:(NSNumber *)month
 {
-    NSString *stringValue;
     switch(month.integerValue) {
         case 1: {
-            stringValue = @"Jan";
-            break;
+            return @"schedules_new_job_select_months_january";
         }
         case 2: {
-            stringValue = @"Feb";
-            break;
+            return @"schedules_new_job_select_months_february";
         }
         case 3: {
-            stringValue = @"Mar";
-            break;
+            return @"schedules_new_job_select_months_march";
         }
         case 4: {
-            stringValue = @"Apr";
-            break;
+            return @"schedules_new_job_select_months_april";
         }
         case 5: {
-            stringValue = @"May";
-            break;
+            return @"schedules_new_job_select_months_may";
         }
         case 6: {
-            stringValue = @"Jun";
-            break;
+            return @"schedules_new_job_select_months_june";
         }
         case 7: {
-            stringValue = @"Jul";
-            break;
+            return @"schedules_new_job_select_months_july";
         }
         case 8: {
-            stringValue = @"Aug";
-            break;
+            return @"schedules_new_job_select_months_august";
         }
         case 9: {
-            stringValue = @"Sep";
-            break;
+            return @"schedules_new_job_select_months_september";
         }
         case 10: {
-            stringValue = @"Oct";
-            break;
+            return @"schedules_new_job_select_months_october";
         }
         case 11: {
-            stringValue = @"Nov";
-            break;
+            return @"schedules_new_job_select_months_november";
         }
         case 12: {
-            stringValue = @"Dec";
-            break;
+            return @"schedules_new_job_select_months_december";
         }
         default:
             NSCAssert(NO, @"wrong month: %@", month);
+            return nil;
     }
-    return stringValue;
+}
+
+- (NSString *)accessibilityIdForMonth:(NSNumber *)month
+{
+    switch(month.integerValue) {
+        case 1: {
+            return JMNewSchedulePageCalendarSelectedMonthsJanuaryAccessibilityId;
+        }
+        case 2: {
+            return JMNewSchedulePageCalendarSelectedMonthsFebruaryAccessibilityId;
+        }
+        case 3: {
+            return JMNewSchedulePageCalendarSelectedMonthsMarchAccessibilityId;
+        }
+        case 4: {
+            return JMNewSchedulePageCalendarSelectedMonthsAprilAccessibilityId;
+        }
+        case 5: {
+            return JMNewSchedulePageCalendarSelectedMonthsMayAccessibilityId;
+        }
+        case 6: {
+            return JMNewSchedulePageCalendarSelectedMonthsJuneAccessibilityId;
+        }
+        case 7: {
+            return JMNewSchedulePageCalendarSelectedMonthsJulyAccessibilityId;
+        }
+        case 8: {
+            return JMNewSchedulePageCalendarSelectedMonthsAugustAccessibilityId;
+        }
+        case 9: {
+            return JMNewSchedulePageCalendarSelectedMonthsSeptemberAccessibilityId;
+        }
+        case 10: {
+            return JMNewSchedulePageCalendarSelectedMonthsOctoberAccessibilityId;
+        }
+        case 11: {
+            return JMNewSchedulePageCalendarSelectedMonthsNovemberAccessibilityId;
+        }
+        case 12: {
+            return JMNewSchedulePageCalendarSelectedMonthsDecemberAccessibilityId;
+        }
+        default:
+            NSCAssert(NO, @"wrong month: %@", month);
+            return nil;
+    }
 }
 
 #pragma mark - Analytics

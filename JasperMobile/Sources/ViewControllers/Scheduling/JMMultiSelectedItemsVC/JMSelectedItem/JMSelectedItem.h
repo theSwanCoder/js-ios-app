@@ -34,9 +34,10 @@
 @import UIKit;
 
 @interface JMSelectedItem : NSObject
-@property (nonatomic, copy, readonly) NSString *title;
+@property (nonatomic, copy, readonly) NSString *titleKey;
+@property (nonatomic, copy, readonly) NSString *itemAccessibilityId;
 @property (nonatomic, assign, getter=isSelected) BOOL selected;
 @property (nonatomic, strong, readonly) id value;
-- (instancetype)initWithTitle:(NSString *)title value:(id)value selected:(BOOL)selected;
-+ (instancetype)itemWithTitle:(NSString *)title value:(id)value selected:(BOOL)selected;
+- (instancetype)initWithTitleKey:(NSString *)titleKey value:(id)value accessibilityId:(NSString *)accessibilityId selected:(BOOL)selected;
++ (instancetype)itemWithTitleKey:(NSString *)titleKey value:(id)value accessibilityId:(NSString *)accessibilityId selected:(BOOL)selected;
 @end

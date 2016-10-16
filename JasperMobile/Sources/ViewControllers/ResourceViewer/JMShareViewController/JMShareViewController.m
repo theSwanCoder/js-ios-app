@@ -37,6 +37,7 @@
 #import "JMShareTextAnnotationView.h"
 #import "JMLocalization.h"
 #import "JMUtils.h"
+#import "NSObject+Additions.h"
 
 @interface JMShareViewController () <JMShareSettingsViewControllerDelegate>
 
@@ -63,14 +64,20 @@
     [super viewDidLoad];
     
     self.title = JMLocalizedString(@"resource_viewer_share_title");
+    [self.view setAccessibility:NO withTextKey:@"resource_viewer_share_title" identifier:JMSharePageTitleAccessibilityId];
     
     UIBarButtonItem *shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share_action"] style:UIBarButtonItemStylePlain target:self action:@selector(shareButtonDidTapped:)];
-    
+    [shareItem setAccessibility:YES withTextKey:@"resource_viewer_share_share_button" identifier:JMSharePageShareButtonAccessibilityId];
     self.navigationItem.rightBarButtonItem = shareItem;
     
     UIBarButtonItem *addTextItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_text_action"] style:UIBarButtonItemStylePlain target:self action:@selector(addTextButtonDidTapped:)];
+    [addTextItem setAccessibility:YES withTextKey:@"resource_viewer_share_add_text_button" identifier:JMSharePageAddTextButtonAccessibilityId];
+
     UIBarButtonItem *settingsItem = [[UIBarButtonItem alloc] initWithCustomView:self.settingsButton];
+    [settingsItem setAccessibility:YES withTextKey:@"resource_viewer_share_settings_button" identifier:JMSharePageSettingsButtonAccessibilityId];
+
     UIBarButtonItem *resetItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reset_action"] style:UIBarButtonItemStylePlain target:self action:@selector(resetButtonDidTapped:)];
+    [resetItem setAccessibility:YES withTextKey:@"resource_viewer_share_reset_button" identifier:JMSharePageResetButtonAccessibilityId];
 
     UIBarButtonItem *dividerItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *dividerItem1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];

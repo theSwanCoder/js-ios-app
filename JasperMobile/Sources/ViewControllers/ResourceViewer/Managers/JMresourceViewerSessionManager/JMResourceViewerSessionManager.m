@@ -91,14 +91,14 @@
     // TODO: add translations
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was expired"
                                                                                       message:@"Reload?"
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                            cancelButtonType:JMAlertControllerActionType_Cancel
                                                                       cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                                           __strong typeof(self) strongSelf = weakSelf;
                                                                           if (strongSelf.exitAction) {
                                                                               strongSelf.exitAction();
                                                                           }
                                                                       }];
-    [alertController addActionWithLocalizedTitle:@"dialog_button_reload"
+    [alertController addActionWithType:JMAlertControllerActionType_Reload
                                            style:UIAlertActionStyleDefault
                                          handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                              __strong typeof(self) strongSelf = weakSelf;
@@ -115,7 +115,7 @@
     // TODO: add translations
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was expired"
                                                                                       message:@"Reload?"
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
+                                                                            cancelButtonType:JMAlertControllerActionType_Cancel
                                                                       cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                                           __strong typeof(self) strongSelf = weakSelf;
                                                                           // back to collection view
@@ -123,7 +123,7 @@
                                                                               strongSelf.exitAction();
                                                                           }
                                                                       }];
-    [alertController addActionWithLocalizedTitle:@"dialog_button_reload"
+    [alertController addActionWithType:JMAlertControllerActionType_Reload
                                            style:UIAlertActionStyleDefault
                                          handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                              __strong typeof(self) strongSelf = weakSelf;
