@@ -32,6 +32,8 @@
 #import "JMLocalization.h"
 #import "JMThemesManager.h"
 #import "UIAlertController+Additions.h"
+#import "JMUtils.h"
+#import "JMSessionManager.h"
 
 
 @interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, JMServerOptionCellDelegate>
@@ -61,6 +63,7 @@
     [self setupSaveButton];
     [self setupTableView];
     [self setupServerOptions];
+    [self setupNavigationItems];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -107,6 +110,22 @@
     [serverOptions addObject:self.serverOptionManager.availableOptions[@(JMServerOptionTypeCacheReports)]];
 #endif
     self.serverOptions = serverOptions;
+}
+
+- (void)setupNavigationItems
+{
+#ifndef  __RELEASE__
+    UIBarButtonItem *obsoleteSessionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
+                                                                                           target:self
+                                                                                           action:@selector(makeSessionObsolete)];
+    self.navigationItem.leftBarButtonItem = obsoleteSessionButton;
+#endif
+}
+
+- (void)makeSessionObsolete
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    [[JMSessionManager sharedManager] obsolete];
 }
 
 #pragma mark - Custom Accessors
