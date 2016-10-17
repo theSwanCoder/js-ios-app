@@ -645,6 +645,8 @@
 		9331B2C31C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowDashboardControlsTableViewCell.h; sourceTree = "<group>"; };
 		9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowDashboardControlsTableViewCell.m; sourceTree = "<group>"; };
 		9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMExternalWindowDashboardControlsTableViewCell.xib; sourceTree = "<group>"; };
+		93373F5C1DB4FEC500AB57DA /* libJaspersoftSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libJaspersoftSDK.a; path = "../../../../../../Library/Developer/Xcode/DerivedData/TIBCO_JasperMobile-cdsskohxpsanuverxstlkgbumohr/Build/Products/Debug-iphonesimulator/JaspersoftSDK/libJaspersoftSDK.a"; sourceTree = "<group>"; };
+		93373F611DB5062D00AB57DA /* TIBCO JasperMobile.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile.pch"; sourceTree = "<group>"; };
 		933CAF5B1C776A8E00EF6F84 /* JMReportPageUITests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportPageUITests.h; sourceTree = "<group>"; };
 		933CAF5C1C776A8E00EF6F84 /* JMReportPageUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportPageUITests.m; sourceTree = "<group>"; };
 		933CAF671C776A8E00EF6F84 /* JMLibraryPageUITests+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMLibraryPageUITests+Helpers.h"; sourceTree = "<group>"; };
@@ -1976,6 +1978,14 @@
 			path = JMExtraWindowDashboardControlsTableViewCell;
 			sourceTree = "<group>";
 		};
+		93373F601DB5062D00AB57DA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				93373F611DB5062D00AB57DA /* TIBCO JasperMobile.pch */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		933CAF491C776A8E00EF6F84 /* AppMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -2478,6 +2488,7 @@
 		93DC8C3A1C6CCEEE000DEADF /* TIBCO JasperMobileUITests */ = {
 			isa = PBXGroup;
 			children = (
+				93373F601DB5062D00AB57DA /* Supporting Files */,
 				933CAF491C776A8E00EF6F84 /* AppMenu */,
 				933CAF4B1C776A8E00EF6F84 /* LoginPage */,
 				933CAF501C776A8E00EF6F84 /* Resources */,
@@ -3700,6 +3711,7 @@
 		F55CC331174CFFCE00CEB39E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				93373F5C1DB4FEC500AB57DA /* libJaspersoftSDK.a */,
 				93DB0CD31D4D222600B94469 /* libJaspersoftSDK.a */,
 				BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */,
 				93EEB4651AC55430000718C7 /* WebKit.framework */,
@@ -4758,6 +4770,8 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -4794,7 +4808,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -4812,6 +4833,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jaspersoft.mobile.TIBCO-JasperMobile-Performance-UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = "TIBCO JasperMobile";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/Pods\"";
 				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
 			name = Debug;
@@ -4831,7 +4853,14 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -4845,6 +4874,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jaspersoft.mobile.TIBCO-JasperMobile-Performance-UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = "TIBCO JasperMobile";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/Pods\"";
 				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
 			name = Release;
@@ -4864,7 +4894,14 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -4878,6 +4915,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jaspersoft.mobile.TIBCO-JasperMobile-Performance-UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = "TIBCO JasperMobile";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/Pods\"";
 				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
 			name = Adhoc;
@@ -4900,6 +4938,8 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -4945,6 +4985,8 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -4980,7 +5022,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TIBCO JasperMobileUITests/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -4994,10 +5043,16 @@
 				INFOPLIST_FILE = "TIBCO JasperMobileUITests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/GoogleAnalyticsServices",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jaspersoft.mobile.TIBCO-JasperMobileUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = "TIBCO JasperMobile";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/Pods\"";
 				USES_XCTRUNNER = YES;
 				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
@@ -5017,7 +5072,14 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TIBCO JasperMobileUITests/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -5027,10 +5089,16 @@
 				INFOPLIST_FILE = "TIBCO JasperMobileUITests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/GoogleAnalyticsServices",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jaspersoft.mobile.TIBCO-JasperMobileUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = "TIBCO JasperMobile";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/Pods\"";
 				USES_XCTRUNNER = YES;
 				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
@@ -5050,7 +5118,14 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TIBCO JasperMobileUITests/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -5060,10 +5135,16 @@
 				INFOPLIST_FILE = "TIBCO JasperMobileUITests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/GoogleAnalyticsServices",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jaspersoft.mobile.TIBCO-JasperMobileUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = "TIBCO JasperMobile";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/Pods\"";
 				USES_XCTRUNNER = YES;
 				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
