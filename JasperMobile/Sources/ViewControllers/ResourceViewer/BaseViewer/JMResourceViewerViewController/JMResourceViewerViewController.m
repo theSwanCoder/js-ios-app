@@ -203,7 +203,7 @@ NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewer
     if ([JMUtils isIphone]) {
         [printInteractionController presentAnimated:YES completionHandler:completionHandler];
     } else {
-        if ([JMUtils isSystemVersion9]) {
+        if ([JMUtils isSystemVersionEqualOrUp9]) {
             [printInteractionController presentFromBarButtonItem:self.printNavController.navigationItem.rightBarButtonItems.firstObject
                                                         animated:YES
                                                completionHandler:completionHandler];

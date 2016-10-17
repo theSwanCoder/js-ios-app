@@ -82,7 +82,7 @@ void jmDebugLog(NSString * __nonnull format, ...);
 /**
  Verify system version is 9
  */
-+ (BOOL)isSystemVersion9;
++ (BOOL)isSystemVersionEqualOrUp9;
 
 /**
  Returns YES if crash reports sending is available

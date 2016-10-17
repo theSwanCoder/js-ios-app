@@ -58,7 +58,7 @@ static JMSessionManager *_sharedManager = nil;
         _sharedManager = [JMSessionManager new];
         [[NSNotificationCenter defaultCenter] addObserver:_sharedManager selector:@selector(saveActiveSessionIfNeeded:) name:kJSSessionDidAuthorized object:_sharedManager.restClient];
     });
-    
+
     return _sharedManager;
 }
 
@@ -158,7 +158,7 @@ static JMSessionManager *_sharedManager = nil;
 - (void)obsolete
 {
     // USE ONLY FOR DEBUG PURPOSES
-    NSArray *cookies = self.restClient.cookies;
+    NSArray *cookies = [NSHTTPCookieStorage sharedHTTPCookieStorage].cookies;
     JMLog(@"Current cookies: %@", cookies);
     NSHTTPCookie *sessionCookie = [self selectSessionCookieFromCookies:cookies];
     NSMutableArray *newCookies = [NSMutableArray arrayWithArray:cookies];
@@ -169,6 +169,9 @@ static JMSessionManager *_sharedManager = nil;
     [newCookies addObject:newSessionCookie];
     [self.restClient updateCookiesWithCookies:newCookies];
     JMLog(@"Updated cookies: %@", newCookies);
+
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:sessionCookie];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:newSessionCookie];
 }
 
 - (NSHTTPCookie *)selectSessionCookieFromCookies:(NSArray <NSHTTPCookie *>*)cookies
