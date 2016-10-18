@@ -41,6 +41,8 @@
     self.errorLabel.font = [[JMThemesManager sharedManager] tableViewCellErrorFont];
     self.errorLabel.textColor = [[JMThemesManager sharedManager] tableViewCellErrorColor];
     self.textField.placeholder = JMLocalizedString(@"report_viewer_save_name");
+    [self setAccessibility:YES withTextKey:@"report_viewer_save_name" identifier:nil];
+    [self.textField setAccessibility:YES withTextKey:@"report_viewer_save_name" identifier:JMReportViewerSavingPageReportNameTextFieldAccessibilityId];
 }
 
 #pragma mark - UITextFieldDelegate

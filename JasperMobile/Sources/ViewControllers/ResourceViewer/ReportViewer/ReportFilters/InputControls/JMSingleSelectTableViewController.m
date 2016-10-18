@@ -44,11 +44,14 @@
     
     self.title = self.cell.inputControlDescriptor.label;
     self.titleLabel.text = JMLocalizedString(@"report_viewer_options_singleselect_titlelabel_title");
+    [self.titleLabel setAccessibility:YES withTextKey:@"report_viewer_options_singleselect_titlelabel_title" identifier:JMReportViewerInputControlsSingleSelectPageTitleAccessibilityId];
+
     self.noResultLabel.text = JMLocalizedString(@"resources_noresults_msg");
+    [self.noResultLabel setAccessibility:YES withTextKey:@"resources_noresults_msg" identifier:JMReportViewerInputControlsPageNoResultsAccessibilityId];
 
     self.titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     self.noResultLabel.textColor = [[JMThemesManager sharedManager] reportOptionsNoResultLabelTextColor];
-    
+
     self.tableView.layer.cornerRadius = 4;
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -62,6 +65,7 @@
     self.icSearchBar.tintColor = [UIColor darkGrayColor];
     [self.icSearchBar setBackgroundImage:[UIImage new]];
     self.icSearchBar.placeholder = JMLocalizedString(@"report_viewer_options_search_value_placeholder");
+    [self.icSearchBar setAccessibility:YES withTextKey:@"report_viewer_options_search_value_placeholder" identifier:JMReportViewerInputControlsPageSearchBarAccessibilityId];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -118,6 +122,8 @@ TODO: // Should reimplement this logic - it does not correct update cell!!!
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         cell.textLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
         cell.textLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+        cell.isAccessibilityElement = YES;
+        cell.accessibilityIdentifier = JMReportViewerInputControlsPageSelectableOptionCellAccessibilityId;
     }
     
     JSInputControlOption *option = self.listOfValues[indexPath.row];

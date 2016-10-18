@@ -26,6 +26,7 @@
 //
 //  Modified by Vlad Zavadskii vzavadskii@jaspersoft.com on 14.02.14.
 //  Modified by Aleksey Gubarev ogubarie@tibco.com on 14.02.14.
+//  Modified by Aleksey Gubarev ogubarie@tibco.com on 18.10.16.
 //
 
 #import <QuartzCore/QuartzCore.h>
@@ -106,7 +107,12 @@ static NSMutableArray *toasts;
 	// Change toastview frame
     view.frame = CGRectMake(ceil((pWidth - lWidth - 20) / 2), pHeight - lHeight - 60, lWidth + 20, lHeight + 10);
 	view.alpha = 0.0f;
-	
+    
+    // Setup toast view Accessibility
+    view.isAccessibilityElement = YES;
+    view.accessibilityLabel = text;
+    view.accessibilityIdentifier = JMToastViewAccessibilityId;
+    
     if (!toasts) {
         toasts = [[NSMutableArray alloc] initWithCapacity:1];
     }

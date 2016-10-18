@@ -383,7 +383,40 @@ extern NSString *const JMMultiSelectedItemsPageSelectWeekDaysAccessibilityId;
 
 // Report Viewer Identifiers
 extern NSString *const JMReportViewerPageTitleAccessibilityId;
+extern NSString *const JMReportViewerPageReportEmptyAccessibilityId;
+extern NSString *const JMReportViewerPageCurrentPageAccessibilityId;
 extern NSString *const JMReportViewerPageCountOfPagesLabelAccessibilityId;
+extern NSString *const JMReportViewerBookmarkPageTitleAccessibilityId;
+extern NSString *const JMReportViewerBookmarkPageButtonAccessibilityId;
+extern NSString *const JMReportViewerBookmarkPageCellAccessibilityId;
+extern NSString *const JMReportViewerChartTypePageTitleAccessibilityId;
+extern NSString *const JMReportViewerChartTypePageCellAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageTitleAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageBooleanParameterCellAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageTextParameterCellAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageNumberParameterCellAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageDateParameterCellAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageTimeParameterCellAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageDateTimeParameterCellAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageSingleSelectParameterCellAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageMultiSelectParameterCellAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageSelectableOptionCellAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageSearchBarAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageNoResultsAccessibilityId;
+extern NSString *const JMReportViewerInputControlsSingleSelectPageTitleAccessibilityId;
+extern NSString *const JMReportViewerInputControlsMultiSelectPageTitleAccessibilityId;
+extern NSString *const JMReportViewerInputControlsPageOptionCellAccessibilityId;
+extern NSString *const JMReportViewerReportOptionsPageTitleAccessibilityId;
+
+// Report Viewer Saving Identifiers
+extern NSString *const JMReportViewerSavingPageTitleAccessibilityId;
+extern NSString *const JMReportViewerSavingPageReportNameTextFieldAccessibilityId;
+extern NSString *const JMReportViewerSavingPageFormatHTMLAccessibilityId;
+extern NSString *const JMReportViewerSavingPageFormatPDFAccessibilityId;
+extern NSString *const JMReportViewerSavingPageFormatXLSAccessibilityId;
+extern NSString *const JMReportViewerSavingPagePagesTypeSwitchAccessibilityId;
+extern NSString *const JMReportViewerSavingPagePagesRangeFromAccessibilityId;
+extern NSString *const JMReportViewerSavingPagePagesRangeToAccessibilityId;
 
 // Content Resource Viewer Identifiers
 extern NSString *const JMContentResourceViewerPageTitleAccessibilityId;
@@ -431,6 +464,6 @@ extern NSString *const JMButtonLastAccessibilityId;
 
 // Custom Views Identifiers
 extern NSString *const JMCancelRequestPopupAccessibilityId;
-
+extern NSString *const JMToastViewAccessibilityId;
 extern NSString *const JMAlertControllerAccessibilityId;
 extern NSString *const JMAlertControllerTextFieldAccessibilityId;

@@ -47,8 +47,11 @@
     [super viewDidLoad];
     
     self.title = JMLocalizedString(@"report_viewer_report_options_title");
-    self.noResultLabel.text = JMLocalizedString(@"resources_noresults_msg");
+    [self.view setAccessibility:NO withTextKey:@"report_viewer_report_options_title" identifier:JMReportViewerReportOptionsPageTitleAccessibilityId];
     
+    self.noResultLabel.text = JMLocalizedString(@"resources_noresults_msg");
+    [self.noResultLabel setAccessibility:YES withTextKey:@"resources_noresults_msg" identifier:JMReportViewerInputControlsPageNoResultsAccessibilityId];
+
     self.noResultLabel.textColor = [[JMThemesManager sharedManager] reportOptionsNoResultLabelTextColor];
     
     self.tableView.layer.cornerRadius = 4;
@@ -64,6 +67,7 @@
     self.searchBar.tintColor = [UIColor darkGrayColor];
     [self.searchBar setBackgroundImage:[UIImage new]];
     self.searchBar.placeholder = JMLocalizedString(@"report_viewer_options_search_value_placeholder");
+    [self.searchBar setAccessibility:YES withTextKey:@"report_viewer_options_search_value_placeholder" identifier:JMReportViewerInputControlsPageSearchBarAccessibilityId];
 }
 
 #pragma mark - Accessors
@@ -99,6 +103,8 @@
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         cell.textLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
         cell.textLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+        cell.isAccessibilityElement = YES;
+        cell.accessibilityIdentifier = JMReportViewerInputControlsPageOptionCellAccessibilityId;
     }
     
     JSReportOption *reportOption = self.listOfValues[indexPath.row];

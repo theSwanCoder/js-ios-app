@@ -68,6 +68,8 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 {
     [super viewDidLoad];
     self.title = JMLocalizedString(@"report_viewer_save_title");
+    [self.view setAccessibility:NO withTextKey:@"report_viewer_save_title" identifier:JMReportViewerSavingPageTitleAccessibilityId];
+    
     self.reportName = self.report.resourceLookup.label;
     self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] firstObject];
 
@@ -84,6 +86,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                 forState:UIControlStateNormal];
     [self.saveReportButton setTitle:JMLocalizedString(@"dialog_button_save")
                            forState:UIControlStateNormal];
+    [self.saveReportButton setAccessibility:YES withTextKey:@"dialog_button_save" identifier:JMButtonSaveAccessibilityId];
 
     [self setupSections];
 
@@ -222,6 +225,8 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
             JMSaveReportFormatCell *formatCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportFormatCellIdentifier
                                                                                  forIndexPath:indexPath];
             NSString *currentFormat = [JMUtils supportedFormatsForReportSaving][indexPath.row];
+            NSString *accessibilityIdentifier = [NSString stringWithFormat:@"JMReportViewerSavingPageFormat%@AccessibilityId", currentFormat.uppercaseString];
+            [formatCell setAccessibility:YES withTextKey:currentFormat identifier:accessibilityIdentifier];
             formatCell.titleLabel.text = currentFormat;
             formatCell.accessoryType = [self.selectedReportFormat isEqualToString:currentFormat] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             return formatCell;
@@ -240,10 +245,16 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                 
                 if (indexPath.row == 1) {
                     pageRangeCell.titleLabel.text = JMLocalizedString(@"report_viewer_save_pages_range_fromPage");
+                    [pageRangeCell setAccessibility:YES withTextKey:@"report_viewer_save_pages_range_fromPage" identifier:nil];
+                    
                     pageRangeCell.currentPage = self.pagesRange.startPage;
+                    [pageRangeCell.textField setAccessibility:YES withTextKey:@"report_viewer_save_pages_range_fromPage" identifier:JMReportViewerSavingPagePagesRangeFromAccessibilityId];
                 } else if (indexPath.row == 2) {
                     pageRangeCell.titleLabel.text = JMLocalizedString(@"report_viewer_save_pages_range_toPage");
+                    [pageRangeCell setAccessibility:YES withTextKey:@"report_viewer_save_pages_range_toPage" identifier:nil];
+
                     pageRangeCell.currentPage = self.pagesRange.endPage;
+                    [pageRangeCell.textField setAccessibility:YES withTextKey:@"report_viewer_save_pages_range_toPage" identifier:JMReportViewerSavingPagePagesRangeToAccessibilityId];
                 }
                 return pageRangeCell;
             }

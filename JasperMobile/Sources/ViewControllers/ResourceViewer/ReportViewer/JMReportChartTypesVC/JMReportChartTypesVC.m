@@ -40,6 +40,7 @@
     [super viewDidLoad];
 
     self.title = JMLocalizedString(@"report_chart_type_view_title");
+    [self.view setAccessibility:NO withTextKey:@"report_chart_type_view_title" identifier:JMReportViewerChartTypePageTitleAccessibilityId];
 }
 
 #pragma mark - UITableViewDataSource
@@ -52,6 +53,9 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ReportChartTypeCell" forIndexPath:indexPath];
     JMReportChartType *chartType = self.chartTypes[indexPath.row];
+    cell.isAccessibilityElement = YES;
+    cell.accessibilityIdentifier = JMReportViewerChartTypePageCellAccessibilityId;
+
     cell.textLabel.text = chartType.name;
     cell.imageView.image = [UIImage imageNamed:chartType.imageName];
     return cell;

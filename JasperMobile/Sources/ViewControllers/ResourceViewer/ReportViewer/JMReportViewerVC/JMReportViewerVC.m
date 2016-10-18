@@ -306,6 +306,7 @@
 {
     UILabel *label = [UILabel new];
     label.text = JMLocalizedString(@"report_viewer_emptyreport_title");
+    [label setAccessibility:YES withTextKey:@"report_viewer_emptyreport_title" identifier:JMReportViewerPageReportEmptyAccessibilityId];
     label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 0;
     return label;
@@ -873,6 +874,7 @@
                                                                      style:UIBarButtonItemStyleDone
                                                                     target:self
                                                                     action:@selector(showBookmarks)];
+    [bookmarkItem setAccessibility:YES withTextKey:@"action_title_bookmarks" identifier:JMReportViewerBookmarkPageButtonAccessibilityId];
     return bookmarkItem;
 }
 

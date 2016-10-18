@@ -788,7 +788,7 @@
 		A147825B77B4E40269C5406A /* JMHTMLScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMHTMLScript.h; sourceTree = "<group>"; };
 		A1478266E2F8FDC96D2EEEC0 /* JMReportViewerToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportViewerToolBar.h; sourceTree = "<group>"; };
 		A147826E8809AC736A77F251 /* JMBooleanInputControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanInputControlCell.m; sourceTree = "<group>"; };
-		A147828587C9ADB5A3A51ACD /* JMReportChartTypesVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportChartTypesVC.h; sourceTree = "<group>"; };
+		A147828587C9ADB5A3A51ACD /* JMReportChartTypesVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMReportChartTypesVC.h; path = JasperMobile/Sources/ViewControllers/ResourceViewer/ReportViewer/JMReportChartTypesVC/JMReportChartTypesVC.h; sourceTree = SOURCE_ROOT; };
 		A1478288629CDC8C0AA27ABF /* Report_Viewer_Options_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Report_Viewer_Options_View.txt; sourceTree = "<group>"; };
 		A147829270E29D77346C612C /* JMBaseUITestCase+Dashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMBaseUITestCase+Dashboard.h"; sourceTree = "<group>"; };
 		A147829B0E2544CFADF211C6 /* JMResourceViewerSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceViewerSessionManager.m; sourceTree = "<group>"; };
@@ -2891,9 +2891,9 @@
 		A14783EE4F8ED749FF9E4329 /* JMReportChartTypesVC */ = {
 			isa = PBXGroup;
 			children = (
-				A147812C5A2218C0E412E42B /* JMReportChartTypesVC.m */,
-				A147828587C9ADB5A3A51ACD /* JMReportChartTypesVC.h */,
 				A147843AF4681919AF467E60 /* JMReportChartType */,
+				A147828587C9ADB5A3A51ACD /* JMReportChartTypesVC.h */,
+				A147812C5A2218C0E412E42B /* JMReportChartTypesVC.m */,
 			);
 			path = JMReportChartTypesVC;
 			sourceTree = "<group>";
@@ -3145,8 +3145,8 @@
 		A147885819EE3E11FEE33A86 /* JMBookmarkTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				A147889C0F92771D412D2883 /* JMBookmarkTableViewCell.m */,
 				A1478CC3B31B3AA31C223EE0 /* JMBookmarkTableViewCell.h */,
+				A147889C0F92771D412D2883 /* JMBookmarkTableViewCell.m */,
 			);
 			path = JMBookmarkTableViewCell;
 			sourceTree = "<group>";
@@ -3164,8 +3164,8 @@
 		A147886A0D7788114D370D90 /* JMReportPartViewToolbar */ = {
 			isa = PBXGroup;
 			children = (
-				A14781FDD3FB5DC7AEEEE6C0 /* JMReportPartViewToolbar.m */,
 				A1478B3A983B05651568A2E8 /* JMReportPartViewToolbar.h */,
+				A14781FDD3FB5DC7AEEEE6C0 /* JMReportPartViewToolbar.m */,
 				935415281D1437CB00A487D8 /* JMReportPartViewToolbar.xib */,
 			);
 			path = JMReportPartViewToolbar;
@@ -3427,9 +3427,9 @@
 		A1478CBC61DACDE835797DB8 /* JMBookmarksVC */ = {
 			isa = PBXGroup;
 			children = (
-				A14783DA49140EC26AB4E08B /* JMBookmarksVC.m */,
-				A14788D16492D50432A69315 /* JMBookmarksVC.h */,
 				A147885819EE3E11FEE33A86 /* JMBookmarkTableViewCell */,
+				A14788D16492D50432A69315 /* JMBookmarksVC.h */,
+				A14783DA49140EC26AB4E08B /* JMBookmarksVC.m */,
 			);
 			path = JMBookmarksVC;
 			sourceTree = "<group>";

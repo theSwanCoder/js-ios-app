@@ -126,6 +126,8 @@
     UIView *headerView = [UIView new];
     [headerView addSubview:titleLabel];
     [headerView addConstraint:[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:headerView attribute:NSLayoutAttributeBottom multiplier:1.0 constant: -8.0]];
+    
+    [headerView setAccessibility:YES withTextKey:@"report_viewer_options_title" identifier:JMDashboardViewerInputControlsPageTitleAccessibilityId];
 
     return headerView;
 }

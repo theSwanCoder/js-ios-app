@@ -52,6 +52,8 @@
 {
     [super viewDidLoad];
     self.title = JMLocalizedString(@"report_viewer_options_title");
+    [self.view setAccessibility:NO withTextKey:@"report_viewer_options_title" identifier:JMReportViewerInputControlsPageTitleAccessibilityId];
+    
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     
     // Remove extra separators
@@ -63,6 +65,7 @@
                                forState:UIControlStateNormal];
     [self.runReportButton setTitle:JMLocalizedString(@"dialog_button_run_report")
                           forState:UIControlStateNormal];
+    [self.runReportButton setAccessibility:NO withTextKey:@"dialog_button_run_report" identifier:JMButtonRunReportAccessibilityId];
 
     [self setupNavigationItems];
 
@@ -493,22 +496,25 @@
     titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
     titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     titleLabel.backgroundColor = [UIColor clearColor];
-    NSString *sectionTitle = JMLocalizedString(@"report_viewer_options_title");
-
+    NSString *sectionTitleKey = @"report_viewer_options_title";
+    NSString *accessibilityIdentifier = JMReportViewerInputControlsPageTitleAccessibilityId;
+    
     // empty 'none' option
     // we need this if an user marked 'always prompt' as true, but there are any input controls
     BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
     BOOL isSeveralReportOptions = [self isMultyReportOptions];
     if ( (isSeveralReportOptions || isEmptyNoneOption) && section == 0) {
-        sectionTitle = JMLocalizedString(@"report_viewer_report_options_title");
+        sectionTitleKey = @"report_viewer_report_options_title";
+        accessibilityIdentifier = JMReportViewerReportOptionsPageTitleAccessibilityId;
     }
-    titleLabel.text = [sectionTitle uppercaseString];
+    titleLabel.text = [JMLocalizedString(sectionTitleKey) uppercaseString];
     [titleLabel sizeToFit];
     
     UIView *headerView = [UIView new];
     [headerView addSubview:titleLabel];
     [headerView addConstraint:[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:headerView attribute:NSLayoutAttributeBottom multiplier:1.0 constant: -8.0]];
     
+    [headerView setAccessibility:YES withTextKey:sectionTitleKey identifier:accessibilityIdentifier];
     return headerView;
 }
 
@@ -579,7 +585,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellIdentifier = [self cellIdentifierForIndexPath:indexPath];
+    NSString *cellAccessibilityIdentifier = [self cellAccessibilityIdentifierForIndexPath:indexPath];
+    
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    cell.isAccessibilityElement = YES;
+    cell.accessibilityIdentifier = cellAccessibilityIdentifier;
     
     // Configure the cell for this indexPath
     // empty 'none' option
@@ -700,6 +710,32 @@
     return inputControlDescriptorTypes[@(inputControlDescriptor.type)];
 }
 
+- (NSString *)cellAccessibilityIdentifierForIndexPath:(NSIndexPath *)indexPath
+{
+    // empty 'none' option
+    // we need this if an user marked 'always prompt' as true, but there are any input controls
+    BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
+    BOOL isSeveralReportOptions = [self isMultyReportOptions];
+    if ( (isSeveralReportOptions || isEmptyNoneOption) && indexPath.section == 0) {
+        return JMReportViewerInputControlsPageOptionCellAccessibilityId;
+    }
+    JSInputControlDescriptor *inputControlDescriptor = self.inputControls[indexPath.row];
+    NSDictionary *inputControlDescriptorTypes = @{
+                                                  @(kJS_ICD_TYPE_BOOL)                     : JMReportViewerInputControlsPageBooleanParameterCellAccessibilityId,
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_TEXT)        : JMReportViewerInputControlsPageTextParameterCellAccessibilityId,
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_NUMBER)      : JMReportViewerInputControlsPageNumberParameterCellAccessibilityId,
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_DATE)        : JMReportViewerInputControlsPageDateParameterCellAccessibilityId,
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_TIME)        : JMReportViewerInputControlsPageTimeParameterCellAccessibilityId,
+                                                  @(kJS_ICD_TYPE_SINGLE_VALUE_DATETIME)    : JMReportViewerInputControlsPageDateTimeParameterCellAccessibilityId,
+                                                  @(kJS_ICD_TYPE_SINGLE_SELECT)            : JMReportViewerInputControlsPageSingleSelectParameterCellAccessibilityId,
+                                                  @(kJS_ICD_TYPE_SINGLE_SELECT_RADIO)      : JMReportViewerInputControlsPageSingleSelectParameterCellAccessibilityId,
+                                                  @(kJS_ICD_TYPE_MULTI_SELECT)             : JMReportViewerInputControlsPageMultiSelectParameterCellAccessibilityId,
+                                                  @(kJS_ICD_TYPE_MULTI_SELECT_CHECKBOX)    : JMReportViewerInputControlsPageMultiSelectParameterCellAccessibilityId,
+                                                  };
+    
+    return inputControlDescriptorTypes[@(inputControlDescriptor.type)];
+}
+
 - (BOOL)isMultyReportOptions
 {
     return [self.reportOptions count] > 1;
@@ -803,13 +839,17 @@
 
 - (void)updateRightBurButtonItem
 {
+    UIBarButtonItem *rightBarButtonItem;
     if ([JMUtils isServerProEdition]) {
         if ([self currentReportOptionIsExisted]) {
-            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item"] style:UIBarButtonItemStyleDone target:self action:@selector(deleteReportOptionTapped:)];
+            rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item"] style:UIBarButtonItemStyleDone target:self action:@selector(deleteReportOptionTapped:)];
+            [rightBarButtonItem setAccessibility:YES withTextKey:@"dialog_button_delete" identifier:JMButtonDeleteAccessibilityId];
         } else {
-            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"save_item"] style:UIBarButtonItemStyleDone target:self action:@selector(createReportOptionTapped:)];
+            rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"save_item"] style:UIBarButtonItemStyleDone target:self action:@selector(createReportOptionTapped:)];
+            [rightBarButtonItem setAccessibility:YES withTextKey:@"dialog_button_save" identifier:JMButtonSaveAccessibilityId];
         }
     }
+    self.navigationItem.rightBarButtonItem = rightBarButtonItem;
 }
 
 - (void)createNewReportOptionWithName:(NSString *)name

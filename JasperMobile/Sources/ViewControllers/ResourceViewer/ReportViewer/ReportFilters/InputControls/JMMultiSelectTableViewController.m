@@ -39,7 +39,11 @@
     [super viewDidLoad];
     
     self.titleLabel.text = JMLocalizedString(@"report_viewer_options_multiselect_titlelabel_title");
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
+    [self.titleLabel setAccessibility:YES withTextKey:@"report_viewer_options_multiselect_titlelabel_title" identifier:JMReportViewerInputControlsMultiSelectPageTitleAccessibilityId];
+
+    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
+    [actionItem setAccessibility:YES withTextKey:@"action_button_title" identifier:JMMenuActionsViewActionButtonAccessibilityId];
+    self.navigationItem.rightBarButtonItem = actionItem;
 
     self.itemsSegmentedControl.tintColor = [[JMThemesManager sharedManager] reportOptionsItemsSegmentedTintColor];
     [self setupSegmentedControlAppearence];

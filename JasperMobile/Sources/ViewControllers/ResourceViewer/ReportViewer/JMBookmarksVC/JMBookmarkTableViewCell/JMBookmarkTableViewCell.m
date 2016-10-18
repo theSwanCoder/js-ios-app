@@ -31,6 +31,12 @@
 
 @implementation JMBookmarkTableViewCell
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [self setAccessibility:YES withTextKey:nil identifier:JMReportViewerBookmarkPageCellAccessibilityId];
+}
+
 - (IBAction)showBookmarksButtonDidTap:(UIButton *)button
 {
     if ([self.delegate respondsToSelector:@selector(bookmarkCellDidTapShowBookmarksButton:)]) {

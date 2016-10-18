@@ -33,12 +33,13 @@
  @since 1.9.1
 */
 
-@import UIKit;
+#import "JMTextField.h"
 
 @protocol JMSaveReportPageRangeCellDelegate;
 
 @interface JMSaveReportPageRangeCell : UITableViewCell
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet JMTextField *textField;
 @property (nonatomic, assign) NSInteger currentPage;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, weak) id<JMSaveReportPageRangeCellDelegate> cellDelegate;

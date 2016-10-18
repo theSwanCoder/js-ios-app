@@ -53,8 +53,11 @@
     [self.nextButton setAccessibility:YES withTextKey:@"dialog_title_next" identifier:JMButtonNextAccessibilityId];
     [self.lastButton setAccessibility:YES withTextKey:@"dialog_title_last" identifier:JMButtonLastAccessibilityId];
     
-    
-    [self.currentPageField setAccessibility:YES withTextKey:@"dialog_title_last" identifier:JMButtonLastAccessibilityId];
+    self.currentPageField.isAccessibilityElement = YES;
+    self.currentPageField.accessibilityIdentifier = JMReportViewerPageCurrentPageAccessibilityId;
+
+    self.pageCountLabel.isAccessibilityElement = YES;
+    self.pageCountLabel.accessibilityIdentifier = JMReportViewerPageCountOfPagesLabelAccessibilityId;
 
     [self addObsevers];
 }
@@ -121,9 +124,19 @@
 {
     NSString *keyString = JMLocalizedString(@"report_viewer_pagecount");
     self.pageCountLabel.text = [NSString stringWithFormat:keyString, self.countOfPages];
-//    [self.pageCountLabel setAccessibility:YES withTextKey:@"report_viewer_pagecount" identifier:<#(NSString *)#>
-    self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
+    [JMLocalization localizeStringForKey:@"report_viewer_count_of_pages_is" completion:^(NSString *localizedString, NSString *languageString) {
+        NSString *accessibilityLabel = [NSString stringWithFormat:localizedString, self.countOfPages];
+        self.pageCountLabel.accessibilityLabel = accessibilityLabel;
+        self.pageCountLabel.accessibilityLanguage = languageString;
+    }];
     
+    self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
+    [JMLocalization localizeStringForKey:@"report_viewer_current_page_is" completion:^(NSString *localizedString, NSString *languageString) {
+        NSString *accessibilityLabel = [NSString stringWithFormat:localizedString, self.currentPage];
+        self.currentPageField.accessibilityLabel = accessibilityLabel;
+        self.currentPageField.accessibilityLanguage = languageString;
+    }];
+
     self.previousButton.enabled = self.currentPage > 1;
     self.firstButton.enabled = self.currentPage > 1;
 
@@ -188,7 +201,9 @@
     [pickerToolbar sizeToFit];
     
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+    [cancel setAccessibility:YES withTextKey:@"dialog_button_cancel" identifier:JMButtonCancelAccessibilityId];
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
+    [done setAccessibility:YES withTextKey:@"dialog_button_done" identifier:JMButtonDoneAccessibilityId];
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     [pickerToolbar setItems:@[cancel, flexibleSpace, done]];
 

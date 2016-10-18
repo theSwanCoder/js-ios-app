@@ -50,6 +50,9 @@
 {
     [super awakeFromNib];
 
+    [self.nextButton setAccessibility:YES withTextKey:@"dialog_title_next" identifier:JMButtonNextAccessibilityId];
+    [self.previousButton setAccessibility:YES withTextKey:@"dialog_title_previous" identifier:JMButtonPreviousAccessibilityId];
+
     [self addObsevers];
 }
 

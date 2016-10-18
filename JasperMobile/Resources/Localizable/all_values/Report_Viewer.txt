@@ -46,3 +46,9 @@
 	[report_viewer_wrongNumberOfCurrentPage]
 		en = The requested page is out of range (%@).
 		tags = ios,unused
+    [report_viewer_current_page_is]
+        en = Current page is %d
+        tags = ios,new
+    [report_viewer_count_of_pages_is]
+        en = Count of pages is %d
+        tags = ios,new

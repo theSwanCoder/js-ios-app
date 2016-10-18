@@ -42,6 +42,9 @@
     self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
     self.titleLabel.text = JMLocalizedString(@"report_viewer_save_pages_all");
     self.pagesTypeSwitch.onTintColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
+    
+    [self setAccessibility:YES withTextKey:@"report_viewer_save_pages_all" identifier:nil];
+    [self.pagesTypeSwitch setAccessibility:YES withTextKey:nil identifier:JMReportViewerSavingPagePagesTypeSwitchAccessibilityId];
 }
 
 #pragma mark - Private API

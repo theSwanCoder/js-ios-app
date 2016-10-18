@@ -31,11 +31,9 @@
 */
 
 #import "JMSaveReportPageRangeCell.h"
-#import "JMTextField.h"
 
 @interface JMSaveReportPageRangeCell() <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (weak, nonatomic) UIPickerView *pickerView;
-@property (nonatomic, weak) IBOutlet JMTextField *textField;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @property (nonatomic, assign) NSRange availableRange;
@@ -111,6 +109,10 @@
 #pragma mark - Private API
 - (BOOL)configurePickerView
 {
+    self.pickerView.isAccessibilityElement = YES;
+    self.pickerView.accessibilityLabel = self.accessibilityLabel;
+    self.pickerView.accessibilityIdentifier = self.textField.accessibilityIdentifier;
+    
     self.availableRange = [self.cellDelegate availableRangeForPageRangeCell:self];
     if (self.availableRange.location != NSNotFound) {
         [self.pickerView selectRow:(self.currentPage - self.availableRange.location)
@@ -129,7 +131,9 @@
     [pickerToolbar sizeToFit];
 
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+    [cancel setAccessibility:YES withTextKey:@"dialog_button_cancel" identifier:JMButtonCancelAccessibilityId];
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
+    [cancel setAccessibility:YES withTextKey:@"dialog_button_done" identifier:JMButtonDoneAccessibilityId];
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     [pickerToolbar setItems:@[flexibleSpace, cancel, done]];
 

@@ -41,8 +41,10 @@
     [JMLocalization localizeStringForKey:key completion:^(NSString *localizedString, NSString *languageString) {
         __strong typeof(self)strongSelf = weakSelf;
         strongSelf.isAccessibilityElement = accessibility;
-        strongSelf.accessibilityLabel = localizedString;
-        strongSelf.accessibilityLanguage = languageString;
+        if (localizedString && languageString) {
+            strongSelf.accessibilityLabel = localizedString;
+            strongSelf.accessibilityLanguage = languageString;
+        }
         if ([accessibilityIdentifier length] && [strongSelf conformsToProtocol:@protocol(UIAccessibilityIdentification)]) {
             id identificationObject = strongSelf;
             [identificationObject setAccessibilityIdentifier:accessibilityIdentifier];

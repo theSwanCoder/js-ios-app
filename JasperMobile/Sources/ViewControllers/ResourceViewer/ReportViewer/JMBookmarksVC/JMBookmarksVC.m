@@ -43,6 +43,7 @@ static NSString *const kJMBookmarkTableViewCellId = @"JMBookmarkTableViewCell";
     [super viewDidLoad];
 
     self.title = JMLocalizedString(@"bookmarks_view_title");
+    [self.view setAccessibility:NO withTextKey:@"bookmarks_view_title" identifier:JMReportViewerBookmarkPageTitleAccessibilityId];
 }
 
 #pragma mark - UITableViewDataSource
