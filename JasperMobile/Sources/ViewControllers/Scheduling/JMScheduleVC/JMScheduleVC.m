@@ -1649,22 +1649,22 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
             return @"schedules_new_job_select_weekDays_sunday";
         }
         case 2: {
-            return @"schedules_new_job_select_weekDays_sunday";
+            return @"schedules_new_job_select_weekDays_monday";
         }
         case 3: {
-            return @"schedules_new_job_select_weekDays_sunday";
+            return @"schedules_new_job_select_weekDays_tuesday";
         }
         case 4: {
-            return @"schedules_new_job_select_weekDays_sunday";
+            return @"schedules_new_job_select_weekDays_wednesday";
         }
         case 5: {
-            return @"schedules_new_job_select_weekDays_sunday";
+            return @"schedules_new_job_select_weekDays_thursday";
         }
         case 6: {
-            return @"schedules_new_job_select_weekDays_sunday";
+            return @"schedules_new_job_select_weekDays_friday";
         }
         case 7: {
-            return @"schedules_new_job_select_weekDays_sunday";
+            return @"schedules_new_job_select_weekDays_saturday";
         }
         default:
             NSCAssert(NO, @"wrong day: %@", day);
