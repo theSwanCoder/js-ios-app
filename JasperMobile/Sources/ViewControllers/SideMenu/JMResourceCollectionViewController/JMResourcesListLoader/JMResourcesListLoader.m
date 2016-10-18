@@ -281,7 +281,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
             NSArray *allOptions;
             if ([JMUtils isServerProEdition]) {
                 // reports
-                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_REPORT_OPTIONS]; //We should send kJS_WS_TYPE_REPORT_OPTIONS here according to http://jira.jaspersoft.com/browse/JRS-11049
+                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_UNKNOW]; //We should send kJS_WS_TYPE_UNKNOW here according to http://jira.jaspersoft.com/browse/JRS-11049
                 JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithOptionType:JMResourceLoaderOptionTypeFilterBy_ReportUnit
                                                                                                   value:reportsValues];
                 // dashboards
