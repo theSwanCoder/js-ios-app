@@ -1657,10 +1657,12 @@ JasperMobile.VIS.Dashboard.Helpers = {
         });
     },
     _defineComponentsClickEvent: function() {
+        var parentElement;
         var dashboardId = JasperMobile.VIS.Dashboard.state.dashboardFunction.componentIdDomAttribute;
         var dashlets = this._getDashlets(dashboardId); // DOM elements
-        for (var i = 0; i < dashlets.length; ++i) {
-            var parentElement = dashlets[i].parentElement;
+        var dashletsWithoutHyperlinks = dashlets["dashletsWithoutHyperlinks"];
+        for (var i = 0; i < dashletsWithoutHyperlinks.length; ++i) {
+            parentElement = dashletsWithoutHyperlinks[i].parentElement;
             // set onClick listener for parent of dashlet
 
             (function(self) {
@@ -1709,6 +1711,16 @@ JasperMobile.VIS.Dashboard.Helpers = {
                             });
                         });
                     }
+                };
+            })(this);
+        }
+        var dashletsWithHyperlinks = dashlets["dashletsWithHyperlinks"];
+        for (var j = 0; j < dashletsWithHyperlinks.length; ++j) {
+            parentElement = dashletsWithHyperlinks[j].parentElement;
+            // set onClick listener for parent of dashlet
+            (function(self) {
+                parentElement.onclick = function(event) {
+                    JasperMobile.Callback.listener("JasperMobile.VIS.Event.Link.Dashlet", {});
                 };
             })(this);
         }
@@ -1799,13 +1811,30 @@ JasperMobile.VIS.Dashboard.Helpers = {
         }
     },
     _getDashlets: function(dashboardId) {
-        var dashlets;
+        var allDashlets, dashletsWithoutHyperlinks, dashletsWithHyperlinks;
         var query = ".dashlet";
         if (dashboardId != null) {
             query = "[" + dashboardId + "] > .dashlet";
         }
-        dashlets = document.querySelectorAll(query);
-        return dashlets;
+        allDashlets = document.querySelectorAll(query);
+        dashletsWithoutHyperlinks = [];
+        dashletsWithHyperlinks = [];
+        for (var i = 0; i < allDashlets.length; i++) {
+            var dashlet = allDashlets[i];
+            if (dashlet.nodeName != "DIV") {
+                continue;
+            }
+            var hyperlinks = dashlet.querySelectorAll(".dashletContent > .hyperlink");
+            if (hyperlinks.length == 0) {
+                dashletsWithoutHyperlinks.push(dashlet);
+            } else {
+                dashletsWithHyperlinks.push(dashlet)
+            }
+        }
+        return {
+            "dashletsWithoutHyperlinks" : dashletsWithoutHyperlinks,
+            "dashletsWithHyperlinks" : dashletsWithHyperlinks
+        };
     },
     _getComponentById: function(id) {
         var components = JasperMobile.VIS.Dashboard.state.dashboardObject.data().components;

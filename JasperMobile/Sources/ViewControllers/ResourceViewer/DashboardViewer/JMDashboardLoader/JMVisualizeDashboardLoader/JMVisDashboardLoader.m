@@ -453,6 +453,23 @@
                                     }
                                 }
                             }];
+    NSString *dashletHyperlinkListenerId = @"JasperMobile.VIS.Event.Link.Dashlet";
+    [self.webEnvironment addListener:self
+                          forEventId:dashletHyperlinkListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(remotePageListenerId);
+                                if (!weakSelf) {
+                                    return;
+                                }
+                                if (error) {
+                                    [weakSelf handleHyperlinksError:error];
+                                } else {
+                                    JMLog(@"parameters: %@", params);
+                                    if ([self.delegate respondsToSelector:@selector(dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
+                                        [self.delegate dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:self];
+                                    }
+                                }
+                            }];
 }
 
 - (void)removeListenersForVisualizeEvents
