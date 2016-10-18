@@ -96,7 +96,9 @@
                                 timeout:(NSTimeInterval)timeout;
 
 // Other buttons
-- (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout;
+- (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout
+                         inSectionWithName:(NSString *)sectionName;
+- (XCUIElement *)findMenuButtonInSectionWithName:(NSString *)sectionName;
 - (XCUIElement *)waitDoneButtonWithTimeout:(NSTimeInterval)timeout;
 
 // Cells

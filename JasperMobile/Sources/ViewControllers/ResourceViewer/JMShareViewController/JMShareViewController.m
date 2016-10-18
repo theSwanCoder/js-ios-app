@@ -188,7 +188,7 @@
                                            UIActivityTypeAssignToContact,
                                            UIActivityTypeAddToReadingList,
                                            UIActivityTypeAirDrop] mutableCopy];
-    if ([JMUtils isSystemVersion9]) {
+    if ([JMUtils isSystemVersionEqualOrUp9]) {
         [excludeActivities addObject:UIActivityTypeOpenInIBooks];
     }
     

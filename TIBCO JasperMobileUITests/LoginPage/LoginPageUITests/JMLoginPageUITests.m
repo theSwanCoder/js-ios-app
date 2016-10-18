@@ -12,13 +12,6 @@
 
 @implementation JMLoginPageUITests
 
-#pragma mark - Tests
-
-- (void)setUp
-{
-    [super setUp];
-}
-
 #pragma mark - JMBaseUITestProtocol
 - (BOOL) shouldLoginBeforeStartTest
 {
@@ -281,11 +274,11 @@
 
 - (void)verifyThatUserDidLoginIntoDemoServer
 {
-    [self showSideMenu];
+    [self showSideMenuInSectionWithName:@"Library"];
     [self verifyAccountWithUsername:@"phoneuser"
                        organization:@"organization_1"
                         profileName:@"Jaspersoft Mobile Demo"];
-    [self hideSideMenu];
+    [self hideSideMenuInSectionWithName:@"Library"];
 }
 
 - (void)verifyThatErrorAlertOnScreenWithTitle:(NSString *)title message:(NSString *)message
@@ -301,11 +294,11 @@
 
 - (void)verifyThatUserDidLoginIntoTestServer
 {
-    [self showSideMenu];
+    [self showSideMenuInSectionWithName:@"Library"];
     [self verifyAccountWithUsername:kJMTestProfileCredentialsUsername
                        organization:kJMTestProfileCredentialsOrganization
                         profileName:kJMTestProfileName];
-    [self hideSideMenu];
+    [self hideSideMenuInSectionWithName:@"Library"];
 }
 
 - (void)verifyAccountWithUsername:(NSString *)username
@@ -319,7 +312,7 @@
     if (!usernameStaticText) {
         XCTFail(@"Error of verifying 'Demo' account: username - is wrong");
     }
-    if (organization) {
+    if (organization && organization.length) {
         XCUIElement *organizationStaticText = [self findStaticTextWithText:organization
                                                              parentElement:sideMenuElement];
         if (!organizationStaticText) {

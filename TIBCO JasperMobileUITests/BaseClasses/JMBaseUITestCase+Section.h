@@ -15,6 +15,9 @@
 // Search
 - (void)searchResourceWithName:(NSString *)resourceName
   inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
+- (void)searchResourceWithName:(NSString *)resourceName
+             inSectionWithName:(NSString *)sectionName;
+
 - (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
 
 // Cells

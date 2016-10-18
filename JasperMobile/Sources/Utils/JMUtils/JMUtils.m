@@ -120,10 +120,10 @@ void jmDebugLog(NSString *format, ...) {
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
 
-+ (BOOL)isSystemVersion9
++ (BOOL)isSystemVersionEqualOrUp9
 {
-#warning MAYBE HERE NEED CHECK 9 or HIGHER???
-    return [UIDevice currentDevice].systemVersion.integerValue == 9;
+    NSInteger version = [UIDevice currentDevice].systemVersion.integerValue;
+    return version >= 9;
 }
 
 + (BOOL)crashReportsSendingEnable
@@ -345,11 +345,14 @@ void jmDebugLog(NSString *format, ...) {
         message = @"error_authenication_dialog_msg";
     }
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonType:JMAlertControllerActionType_Ok cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-        if (completion) {
-            completion();
-        }
-    }];
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title
+                                                                                      message:message
+                                                                             cancelButtonType:JMAlertControllerActionType_Ok
+                                                                      cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                                                          if (completion) {
+                                                                              completion();
+                                                                          }
+                                                                      }];
 
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     if (rootViewController.presentedViewController) {
@@ -466,11 +469,12 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isDemoAccount
 {
+    JSProfile *serverProfile = self.restClient.serverProfile;
     NSURL *demoURL = [NSURL URLWithString:kJMDemoServerUrl];
-    NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+    NSURL *serverURL = [NSURL URLWithString:serverProfile.serverUrl];
     BOOL isDemoServer = [serverURL.host isEqualToString:demoURL.host];
-    BOOL isDemoUser = [self.restClient.serverProfile.username isEqualToString:kJMDemoServerUsername];
-    BOOL isDemoOrganization = [self.restClient.serverProfile.organization isEqualToString:kJMDemoServerOrganization];
+    BOOL isDemoUser = [serverProfile.username isEqualToString:kJMDemoServerUsername];
+    BOOL isDemoOrganization = [serverProfile.organization isEqualToString:kJMDemoServerOrganization];
     BOOL isDemoAccount = isDemoServer && isDemoUser && isDemoOrganization;
     return isDemoAccount;
 }
@@ -512,7 +516,7 @@ void jmDebugLog(NSString *format, ...) {
 {
     JMResourceFlowType flowType = JMResourceFlowTypeUndefined;
     BOOL needVisualizeFlow = NO;
-    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    JMServerProfile *activeServerProfile = [[self class] activeServerProfile];
     if (activeServerProfile && activeServerProfile.useVisualize.boolValue) {
         needVisualizeFlow = YES;
     }

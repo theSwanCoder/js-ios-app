@@ -8,11 +8,9 @@
 
 #import "JMSavedItemInfoDialogUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
-#import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+SavedItems.h"
-#import "JMBaseUITestCase+ActionsMenu.h"
-#import "JMBaseUITestCase+Resource.h"
 #import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+InfoPage.h"
 
 @implementation JMSavedItemInfoDialogUITests
 
@@ -183,7 +181,7 @@
 
 - (void)verifyThatInfoPageOnScreen
 {
-    [self verifyInfoPageOnScreenForPageWithAccessibilityId:@"JMSavedItemsInfoViewControllerAccessibilityId"]; 
+    [self verifyThatSavedItemInfoPageOnScreen];
 }
 
 - (void)verifyThatInfoPageHasCancelButton

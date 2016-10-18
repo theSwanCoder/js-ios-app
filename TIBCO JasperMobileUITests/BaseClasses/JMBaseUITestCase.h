@@ -21,9 +21,15 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 @interface JMBaseUITestCase : XCTestCase <JMBaseUITestProtocol>
 @property(nonatomic, strong) XCUIApplication *application;
 - (void)selectTestProfile;
-- (void)loginWithTestProfile;
+
+- (XCUIElement *)findTestProfileCell;
+
+- (void)removeAllServerProfiles;
+
+- (void)loginWithTestProfileIfNeed;
 - (void)logout;
 - (void)tryBackToPreviousPage;
+- (void)tryBackToPreviousPageWithTitle:(NSString *)pageTitle;
 - (void)tryOpenServerProfilesPage;
 - (void)tryOpenNewServerProfilePage;
 - (void)tryCreateNewTestServerProfile;

@@ -6,6 +6,7 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+SideMenu.h"
 
 
 @implementation JMBaseUITestCase (Section)
@@ -53,6 +54,28 @@
     [searchButton tap];
 }
 
+- (void)searchResourceWithName:(NSString *)resourceName inSectionWithName:(NSString *)sectionName
+{
+    if ([sectionName isEqualToString:@"Library"]) {
+        [self openLibrarySection];
+        // TODO: replace with specific element - JMLibraryPageAccessibilityId
+        [self searchResourceWithName:resourceName
+        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    } else if ([sectionName isEqualToString:@"Repository"]) {
+        [self openRepositorySection];
+        // TODO: replace with specific element - JMRepositoryPageAccessibilityId
+        [self searchResourceWithName:resourceName
+        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    } else if ([sectionName isEqualToString:@"Favorites"]) {
+        [self openFavoritesSection];
+        // TODO: replace with specific element - JMRepositoryPageAccessibilityId
+        [self searchResourceWithName:resourceName
+        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    } else {
+        XCTFail(@"Wrong section for searching test dashboard: %@", sectionName);
+    }
+}
+
 - (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
     XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
@@ -87,7 +110,6 @@
     if (countOfListCells > 0) {
         return;
     } else {
-        // TODO: use section specific
         [self switchViewFromListToGridInSectionWithTitle:@"Library"];
     }
 }

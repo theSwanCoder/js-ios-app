@@ -46,4 +46,6 @@
 - (void)unmarkTestSavedItemAsFavoriteFromViewerPage;
 
 - (XCUIElement *)savedItemWithName:(NSString *)itemName format:(NSString *)format;
+
+- (void)verifyThatSavedItemInfoPageOnScreen;
 @end

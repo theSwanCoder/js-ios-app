@@ -35,9 +35,9 @@
 {
     [self openSavedItemsSection];
 
-    [self showSideMenu];
+    [self showSideMenuInSectionWithName:@"Saved Items"];
     [self verifySideMenuVisible];
-    [self hideSideMenu];
+    [self hideSideMenuInSectionWithName:@"Saved Items"];
 }
 
 //Saved Items title

@@ -11,7 +11,7 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
-#import "JMBaseUITestCase+Resource.h"
+#import "JMBaseUITestCase+InfoPage.h"
 
 @implementation JMSavedItemPageUITests
 
@@ -396,7 +396,7 @@
 
 - (void)verifyThatInfoPageOnScreen
 {
-    [self verifyInfoPageOnScreenForPageWithAccessibilityId:@"JMSavedItemsInfoViewControllerAccessibilityId"];
+    [self verifyThatSavedItemInfoPageOnScreen];
 }
 
 @end

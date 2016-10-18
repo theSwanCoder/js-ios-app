@@ -12,26 +12,13 @@
 
 @implementation JMAppMenuUITests
 
-- (void)setUp
-{
-    [super setUp];
-
-    [self givenThatLibraryPageOnScreen];
-}
-
-- (void)tearDown
-{
-
-    [super tearDown];
-}
-
 #pragma mark - Tests
 - (void)testThatMenuViewCanBeViewedByTappingMenuButton
 {
-    [self showSideMenu];
+    [self showSideMenuInSectionWithName:@"Library"];
     [self verifySideMenuVisible];
 
-    [self hideSideMenu];
+    [self hideSideMenuInSectionWithName:@"Library"];
     [self verifySideMenuNotVisible];
 }
 
@@ -46,14 +33,14 @@
 
 - (void)testThatMenuViewIsScrollable
 {
-    [self showSideMenu];
+    [self showSideMenuInSectionWithName:@"Library"];
     [self verifySideMenuVisible];
 
     XCUIElement *menuView = [self sideMenuElement];
     [menuView swipeUp];
     [menuView swipeDown];
 
-    [self hideSideMenu];
+    [self hideSideMenuInSectionWithName:@"Library"];
     [self verifySideMenuNotVisible];
 }
 
@@ -76,41 +63,30 @@
 - (void)testThatMenuViewCanSelectItems
 {
     // Check all collection screen items
-    NSArray *itemsArray = @[@"Library", @"Repository", @"Recently Viewed", @"Saved Items", @"Favorites", @"Schedules"];
+    NSArray *itemsArray = @[@"Repository", @"Saved Items", @"Favorites", @"Schedules"];
     for (NSString *itemName in itemsArray) {
-        [self showSideMenu];
+        [self showSideMenuInSectionWithName:nil];
         [self verifySideMenuVisible];
-        XCUIElement *menuView = [self sideMenuElement];
-        XCUIElement *pageMenuItem = menuView.cells.staticTexts[itemName];
-        if (pageMenuItem.exists) {
-            [pageMenuItem tap];
-        }
+        [self selectMenuItemForPageWithName:itemName];
     }
 
     // Check About item
     [self selectAbout];
     // Close About page
-    XCUIElement *doneButton = self.application.buttons[@"Done"];
-    if (doneButton.exists) {
-        [doneButton tap];
-    } else {
-        XCTFail(@"'Done' button doesn't exist.");
-    }
+    XCUIElement *doneButton = [self waitDoneButtonWithTimeout:kUITestsBaseTimeout];
+    [doneButton tap];
 
     // Check Settings item
     [self selectSettings];
     // Close Settings page
-    XCUIElement *cancelButton = self.application.buttons[@"Cancel"];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"'Settings' button doesn't exist.");
-    }
+    XCUIElement *cancelButton = [self waitButtonWithTitle:@"Cancel"
+                                                  timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
 }
 
 - (void)testThatServerProfileInfoIsAppeared
 {
-    [self showSideMenu];
+    [self showSideMenuInSectionWithName:@"Library"];
     [self verifySideMenuVisible];
     
     XCUIElement *userNameLabel = self.application.staticTexts[kJMTestProfileCredentialsUsername];
@@ -127,7 +103,7 @@
     if (!organizationLabel.exists) {
         XCTFail(@"'Organization' label doesn't exist.");
     }
-    [self hideSideMenu];
+    [self hideSideMenuInSectionWithName:@"Library"];
 }
 
 

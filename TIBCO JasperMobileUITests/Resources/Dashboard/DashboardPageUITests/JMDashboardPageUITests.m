@@ -9,6 +9,8 @@
 #import "JMDashboardPageUITests.h"
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Favorites.h"
+#import "JMBaseUITestCase+InfoPage.h"
 
 @implementation JMDashboardPageUITests
 
@@ -77,8 +79,8 @@
 {
     [self openTestDashboardPage];
 
-    [self markDashboardAsFavoriteFromActionsMenu];
-    [self unmarkDashboardFromFavoriteFromActionsMenu];
+    [self markAsFavoriteFromMenuActions];
+    [self unmarkFromFavoritesFromMenuActions];
 
     [self closeTestDashboardPage];
 }
@@ -122,8 +124,9 @@
 {
     [self openTestDashboardPage];
 
-    [self openDashboardInfoPage];
-    [self closeDashboardInfoPage];
+    [self openInfoPageFromMenuActions];
+    [self verifyThatDashboardInfoPageOnScreen];
+    [self closeInfoPageFromMenuActions];
 
     [self closeTestDashboardPage];
 }

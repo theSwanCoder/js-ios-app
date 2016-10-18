@@ -50,6 +50,8 @@
 
 - (void) reset;
 
+- (void)obsolete;
+
 - (void) logout;
 
 - (void) updateSessionServerProfileWith:(JMServerProfile *)changedServerProfile;

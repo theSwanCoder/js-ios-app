@@ -271,7 +271,7 @@
 
 - (void)verifyThatReportFiltersPageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMReportFiltersPageAccessibilityIdentifier"
+    [self waitElementWithAccessibilityId:@"JMInputControlsViewControllerAccessibilityIdentifier"
                                  timeout:kUITestsBaseTimeout];
 }
 

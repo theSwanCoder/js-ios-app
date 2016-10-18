@@ -7,6 +7,8 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+SideMenu.h"
+#import "JMBaseUITestCase+InfoPage.h"
 
 NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
@@ -19,12 +21,23 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self openTestDashboardPageWithWaitingFinish:YES];
 }
 
+- (void)openTestDashboardFromInfoPage
+{
+    [self openMenuActions];
+    [self selectActionWithName:@"Run"];
+
+    [self givenLoadingPopupNotVisible];
+    [self givenLoadingPopupNotVisible];
+
+    [self tryBackToPreviousPage];
+}
+
 - (void)openTestDashboardPageWithWaitingFinish:(BOOL)waitingFinish
 {
     [self givenThatLibraryPageOnScreen];
     [self givenThatDashboardCellsOnScreen];
 
-    [self searchTestDashboard];
+    [self searchTestDashboardInSectionWithName:@"Library"];
     [self tryOpenTestDashboard];
 
     [self givenLoadingPopupNotVisible];
@@ -71,65 +84,6 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [cancelButton tap];
 }
 
-- (void)openDashboardInfoPage
-{
-    [self openMenuActions];
-    [self selectActionWithName:@"Info"];
-    [self givenThatDashboardInfoPageOnScreen];
-}
-
-- (void)closeDashboardInfoPage
-{
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:navBar
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
-}
-
-- (void)markDashboardAsFavoriteFromInfoPage
-{
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestDashboardName
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"make favorite item"
-                                                        parentElement:navBar
-                                                              timeout:kUITestsBaseTimeout];
-    [favoriteButton tap];
-}
-
-- (void)unmarkDashboardFromFavoriteFromInfoPage
-{
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestDashboardName
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"favorited item"
-                                                        parentElement:navBar
-                                                              timeout:kUITestsBaseTimeout];
-    [favoriteButton tap];
-}
-
-
-- (void)markDashboardAsFavoriteFromActionsMenu
-{
-    [self openMenuActions];
-    [self selectActionWithName:@"Mark as Favorite"];
-}
-
-- (void)unmarkDashboardFromFavoriteFromActionsMenu
-{
-    [self openMenuActions];
-    [self selectActionWithName:@"Remove From Favorites"];
-}
-
-- (void)markDashboardAsFavoriteFromNavigationBar
-{
-
-}
-
-- (void)unmarkDashboardFromFavoriteFromNavigationBar
-{
-
-}
-
 - (void)refreshDashboard
 {
     [self openMenuActions];
@@ -157,10 +111,15 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 #pragma mark - Helpers
 
-- (void)searchTestDashboard
+- (XCUIElement *)searchTestDashboardInSectionWithName:(NSString *)sectionName
 {
     [self searchResourceWithName:kTestDashboardName
-    inSectionWithAccessibilityId:@"JMLibraryPageAccessibilityId"];
+               inSectionWithName:sectionName];
+
+    [self givenThatCellsAreVisible];
+
+    XCUIElement *testCell = [self testDashboardCell];
+    return testCell;
 }
 
 - (void)tryOpenTestDashboard
@@ -181,10 +140,35 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     return testCell;
 }
 
-- (void)givenThatDashboardInfoPageOnScreen
+- (void)verifyThatDashboardInfoPageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMDashboardInfoViewControllerAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
+    [self verifyInfoPageOnScreenForPageWithAccessibilityId:@"JMDashboardInfoViewControllerAccessibilityId"];
+}
+
+- (void)verifyThatDashboardInfoPageContainsCorrectDataForDashboardWithName:(NSString *)dashboardName
+{
+    XCUIElement *infoPage = self.application.otherElements[@"JMDashboardInfoViewControllerAccessibilityId"];
+    [self waitStaticTextWithAccessibilityId:@"Name"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Description"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"URI"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Type"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Version"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Creation Date"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Modified Date"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
 }
 
 @end
