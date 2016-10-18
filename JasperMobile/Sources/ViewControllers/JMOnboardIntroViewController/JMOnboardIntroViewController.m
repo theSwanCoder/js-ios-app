@@ -32,10 +32,6 @@
 #import "JMIntroModelManager.h"
 #import "JMIntroModel.h"
 #import "JMIntroImageView.h"
-#import "JMLocalization.h"
-#import "JMConstants.h"
-#import "JMUtils.h"
-#import "NSObject+Additions.h"
 
 static const CGFloat kDefaultAnimationDuration = 0.4f;
 static const CGFloat kDefaultStepValue = 1.0f;

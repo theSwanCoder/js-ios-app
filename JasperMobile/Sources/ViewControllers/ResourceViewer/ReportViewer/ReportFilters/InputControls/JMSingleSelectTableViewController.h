@@ -32,7 +32,6 @@
  */
 
 @import UIKit;
-#import "JMBaseViewController.h"
 
 @class JMSingleSelectInputControlCell;
 

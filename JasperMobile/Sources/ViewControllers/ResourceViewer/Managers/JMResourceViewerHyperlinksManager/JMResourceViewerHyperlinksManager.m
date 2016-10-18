@@ -34,8 +34,6 @@
 #import "JMHyperlink.h"
 #import "JMResourceViewerStateManager.h"
 #import "JMResourceViewerDocumentManager.h"
-#import "JMUtils.h"
-#import "NSObject+Additions.h"
 
 @interface JMResourceViewerHyperlinksManager()
 @property (nonatomic, strong) NSURL *tempResourceURL;

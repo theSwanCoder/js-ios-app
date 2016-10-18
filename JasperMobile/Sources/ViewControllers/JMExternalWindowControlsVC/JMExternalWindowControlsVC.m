@@ -28,7 +28,6 @@
 
 @import WebKit;
 #import "JMExternalWindowControlsVC.h"
-#import "JMUtils.h"
 
 CGFloat const kJMExternalWindowControlsScrollStep = 10;
 CGFloat const kJMExternalWindowControlsScrollTimeInterval = 0.1;

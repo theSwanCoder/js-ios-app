@@ -40,8 +40,6 @@
 #import "JMResourceViewerShareManager.h"
 #import "JMResourceViewerHyperlinksManager.h"
 #import "JMResourceViewerDocumentManager.h"
-#import "JMUtils.h"
-#import "NSObject+Additions.h"
 #import "JMReportViewerExternalScreenManager.h"
 
 @interface JMReportViewerConfigurator()

@@ -25,9 +25,6 @@
 #import "UITableViewCell+Additions.h"
 #import "JMTextField.h"
 #import "UIColor+RGBComponent.h"
-#import "JMThemesManager.h"
-#import "NSObject+Additions.h"
-#import "JMLocalization.h"
 @interface JMTextServerOptionCell () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet JMTextField *textField;
 

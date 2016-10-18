@@ -24,8 +24,6 @@
 #import "JMMultiSelectTableViewController.h"
 #import "JMMenuActionsView.h"
 #import "PopoverView.h"
-#import "JMLocalization.h"
-#import "JMThemesManager.h"
 #import "JaspersoftSDK.h"
 #import "JMSingleSelectInputControlCell.h"
 

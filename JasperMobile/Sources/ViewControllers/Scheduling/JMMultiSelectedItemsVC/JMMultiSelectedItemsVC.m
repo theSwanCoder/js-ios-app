@@ -28,8 +28,6 @@
 
 #import "JMMultiSelectedItemsVC.h"
 #import "JMSelectedItem.h"
-#import "NSObject+Additions.h"
-#import "JMLocalization.h"
 
 @interface JMMultiSelectedItemsVC() <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;

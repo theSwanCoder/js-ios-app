@@ -27,7 +27,6 @@
 
 #import "JMResourceViewerExternalScreenManager.h"
 #import "JasperMobileAppDelegate.h"
-#import "JMUtils.h"
 #import "JMBaseResourceView.h"
 #import "UIView+Additions.h"
 

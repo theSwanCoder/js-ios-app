@@ -35,13 +35,7 @@
 #import "JMResourceCollectionViewController.h"
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
-#import "JMConstants.h"
 #import "JMAnalyticsManager.h"
-#import "JMThemesManager.h"
-#import "JMUtils.h"
-#import "NSObject+Additions.h"
-#import "JMLocalization.h"
-#import "NSObject+Additions.h"
 
 typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonStateNormal,

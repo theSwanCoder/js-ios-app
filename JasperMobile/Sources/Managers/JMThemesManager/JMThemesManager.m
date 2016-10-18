@@ -27,12 +27,9 @@
 //
 
 
-#import "JMThemesManager.h"
 #import "JasperMobileAppDelegate.h"
 
 #import "UIColor+RGBComponent.h"
-#import "JMConstants.h"
-#import "JMUtils.h"
 
 NSString * const kJMThemePlatformIPhoneKey = @"iPhone";
 NSString * const kJMThemePlatformIPadKey = @"iPad";

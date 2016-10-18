@@ -26,8 +26,6 @@
 //
 
 #import "JMResourceViewerDocumentManager.h"
-#import "JMLocalization.h"
-#import "JMUtils.h"
 
 @interface JMResourceViewerDocumentManager() <UIDocumentInteractionControllerDelegate>
 @property (nonatomic) UIDocumentInteractionController *documentController;

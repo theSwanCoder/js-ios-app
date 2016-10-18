@@ -27,7 +27,6 @@
 //
 
 #import "NSObject+Additions.h"
-#import "JMLocalization.h"
 
 @implementation NSObject(Additions)
 

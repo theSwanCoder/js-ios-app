@@ -22,7 +22,6 @@
 
 
 #import "JMBooleanServerOptionCell.h"
-#import "NSObject+Additions.h"
 
 @implementation JMBooleanServerOptionCell
 -(void)setServerOption:(JMServerOption *)serverOption

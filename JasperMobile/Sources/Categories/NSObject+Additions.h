@@ -33,7 +33,6 @@
 
 #import <Foundation/Foundation.h>
 #import "JMSessionManager.h"
-#import "JMConstants.h"
 
 @interface NSObject(Additions)
 

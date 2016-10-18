@@ -31,7 +31,6 @@
  @since 2.1
  */
 
-#import "JMBaseViewController.h"
 #import "JMResourceClientHolder.h"
 #import "JMMenuActionsView.h"
 #import "JMCancelRequestPopup.h"

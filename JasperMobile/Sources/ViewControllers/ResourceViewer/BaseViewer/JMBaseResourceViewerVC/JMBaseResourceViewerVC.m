@@ -25,14 +25,10 @@
 #import "PopoverView.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMResourceInfoViewController.h"
-#import "JMUtils.h"
 #import "JMMainNavigationController.h"
 #import "UIViewController+Additions.h"
 #import "JMResource.h"
 #import "JMBaseResourceView.h"
-#import "JMConstants.h"
-#import "JMThemesManager.h"
-#import "NSObject+Additions.h"
 
 @interface JMBaseResourceViewerVC () <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;

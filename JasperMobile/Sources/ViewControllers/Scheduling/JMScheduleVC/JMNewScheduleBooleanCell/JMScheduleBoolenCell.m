@@ -26,7 +26,6 @@
 //  TIBCO JasperMobile
 //
 #import "JMScheduleBoolenCell.h"
-#import "JMThemesManager.h"
 
 @implementation JMScheduleBoolenCell
 

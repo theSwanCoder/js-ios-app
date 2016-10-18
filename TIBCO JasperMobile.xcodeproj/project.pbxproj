@@ -461,7 +461,6 @@
 		08221C921AE78CD300F94F1D /* JMMigrationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMigrationManager.m; sourceTree = "<group>"; };
 		08221C9C1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMigrateTo_v_2_0.h; sourceTree = "<group>"; };
 		08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMigrateTo_v_2_0.m; sourceTree = "<group>"; };
-		08221C9F1AE7A3B100F94F1D /* TIBCO JasperMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		082FD8291D6C4FDF0029E320 /* TIBCO JasperMobile.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "TIBCO JasperMobile.entitlements"; sourceTree = "<group>"; };
 		08338A741DA3B28E00FDF590 /* JMLoadingCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLoadingCollectionViewCell.h; sourceTree = "<group>"; };
 		08338A751DA3B28E00FDF590 /* JMLoadingCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLoadingCollectionViewCell.m; sourceTree = "<group>"; };
@@ -1875,7 +1874,6 @@
 			isa = PBXGroup;
 			children = (
 				082FD8291D6C4FDF0029E320 /* TIBCO JasperMobile.entitlements */,
-				08221C9F1AE7A3B100F94F1D /* TIBCO JasperMobile-Bridging-Header.h */,
 				08E62C7F19922B0B0081CA83 /* TIBCO JasperMobile.pch */,
 				08E62C7D19922B0B0081CA83 /* InfoPlist.strings */,
 				08E62C7E19922B0B0081CA83 /* TIBCO JasperMobile.plist */,

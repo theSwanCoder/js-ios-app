@@ -37,8 +37,6 @@
 #import "AFAutoPurgingImageCache.h"
 #import "AFImageDownloader.h"
 #import "UIKit+AFNetworking.h"
-#import "JMConstants.h"
-#import "JMUtils.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 

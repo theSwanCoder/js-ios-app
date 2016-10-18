@@ -31,9 +31,6 @@
 #import "JMSchedule.h"
 #import "JMScheduleManager.h"
 #import "JMScheduleVC.h"
-#import "JMConstants.h"
-#import "JMUtils.h"
-#import "UIAlertController+Additions.h"
 
 @implementation JMScheduleInfoViewController
 

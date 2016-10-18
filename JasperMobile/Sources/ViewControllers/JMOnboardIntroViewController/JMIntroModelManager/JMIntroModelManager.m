@@ -32,9 +32,6 @@
 #import "JMIntroModelManager.h"
 #import "JMIntroModel.h"
 #import "JMServerProfile+Helpers.h"
-#import "JMLocalization.h"
-#import "JMConstants.h"
-#import "JMUtils.h"
 
 @interface JMIntroModelManager()
 @property (nonatomic, copy) NSArray *pageData;

@@ -28,7 +28,6 @@
 #import "JMBookmarksVC.h"
 #import "JMBookmarkTableViewCell.h"
 #import "JSReportBookmark.h"
-#import "JMLocalization.h"
 
 static NSString *const kJMBookmarkTableViewCellId = @"JMBookmarkTableViewCell";
 

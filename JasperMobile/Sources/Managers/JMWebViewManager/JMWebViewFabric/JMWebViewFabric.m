@@ -26,7 +26,6 @@
 //
 
 #import "JMWebViewFabric.h"
-#import "JMUtils.h"
 
 @implementation JMWebViewFabric
 

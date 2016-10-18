@@ -28,8 +28,6 @@
 
 #import "JMResource.h"
 #import "JMDashboard.h"
-#import "JMLocalization.h"
-#import "JMConstants.h"
 
 
 @implementation JMResource

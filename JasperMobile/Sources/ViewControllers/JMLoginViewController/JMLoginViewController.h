@@ -31,7 +31,6 @@
  @since 2.0
  */
 
-#import "JMBaseViewController.h"
 
 typedef void(^LoginCompletionBlock)(void);
 

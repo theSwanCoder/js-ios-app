@@ -26,8 +26,6 @@
 //
 
 #import "JMBaseResourceView.h"
-#import "JMThemesManager.h"
-#import "JMUtils.h"
 
 @implementation JMBaseResourceView
 

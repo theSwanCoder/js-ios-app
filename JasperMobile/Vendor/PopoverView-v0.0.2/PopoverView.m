@@ -9,7 +9,6 @@
 #import "PopoverView.h"
 #import "PopoverView_Configuration.h"
 #import <QuartzCore/QuartzCore.h>
-#import "JMThemesManager.h"
 
 #pragma mark - Implementation
 

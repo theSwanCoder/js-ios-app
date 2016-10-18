@@ -28,7 +28,6 @@
 #import "JasperMobileAppDelegate.h"
 #import "JMAppUpdater.h"
 #import "Appirater.h"
-#import "JMUtils.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMSessionManager.h"
 #import "JMCancelRequestPopup.h"
@@ -36,13 +35,9 @@
 #import "JMOnboardIntroViewController.h"
 #import "UIImage+Additions.h"
 #import "JMExportManager.h"
-#import "JMConstants.h"
 #import "GAI.h"
 #import "SWRevealViewController.h"
-#import "JMThemesManager.h"
-#import "NSObject+Additions.h"
 #import "JMCoreDataManager.h"
-#import "JMLocalization.h"
 
 NSString *const JMAppDelegateWillDestroyExternalWindowNotification = @"JMAppDelegateWillDestroyExternalWindowNotification";
 

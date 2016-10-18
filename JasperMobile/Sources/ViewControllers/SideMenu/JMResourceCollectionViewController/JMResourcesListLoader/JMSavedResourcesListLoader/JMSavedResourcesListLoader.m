@@ -27,10 +27,7 @@
 #import "JMFavorites+Helpers.h"
 #import "JMExportManager.h"
 #import "JMResourceLoaderOption.h"
-#import "JMConstants.h"
 #import "JMCoreDataManager.h"
-#import "JMLocalization.h"
-#import "JMUtils.h"
 #import "JMSessionManager.h"
 
 @implementation JMSavedResourcesListLoader

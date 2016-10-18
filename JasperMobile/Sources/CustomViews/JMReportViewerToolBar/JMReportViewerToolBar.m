@@ -21,11 +21,7 @@
  */
 
 #import "JMReportViewerToolBar.h"
-#import "JMThemesManager.h"
 #import "JaspersoftSDK.h"
-#import "JMLocalization.h"
-#import "JMConstants.h"
-#import "NSObject+Additions.h"
 
 
 @interface JMReportViewerToolBar () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>

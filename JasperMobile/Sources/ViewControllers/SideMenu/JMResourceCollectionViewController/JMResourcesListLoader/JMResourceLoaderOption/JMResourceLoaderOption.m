@@ -27,7 +27,6 @@
 //
 
 #import "JMResourceLoaderOption.h"
-#import "JMConstants.h"
 #import "JSConstants.h"
 
 @implementation JMResourceLoaderOption

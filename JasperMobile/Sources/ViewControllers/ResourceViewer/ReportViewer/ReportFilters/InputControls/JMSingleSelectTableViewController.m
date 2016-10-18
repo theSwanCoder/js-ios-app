@@ -23,9 +23,6 @@
 
 #import "JMSingleSelectTableViewController.h"
 #import "JMSingleSelectInputControlCell.h"
-#import "JMLocalization.h"
-#import "JMThemesManager.h"
-#import "JMUtils.h"
 
 @interface JMSingleSelectTableViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UISearchBarDelegate>
 @property (nonatomic, weak) IBOutlet UILabel     *noResultLabel;

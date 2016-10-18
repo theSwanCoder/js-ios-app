@@ -29,8 +29,6 @@
 #import "JMDashboardInfoViewController.h"
 #import "JMResource.h"
 #import "JMDashboardViewerVC.h"
-#import "JMUtils.h"
-#import "JMConstants.h"
 
 @interface JMDashboardInfoViewController ()
 

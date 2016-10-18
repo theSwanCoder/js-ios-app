@@ -32,7 +32,6 @@
 
 #import "JMSaveReportPageRangeCell.h"
 #import "JMTextField.h"
-#import "JMThemesManager.h"
 
 @interface JMSaveReportPageRangeCell() <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (weak, nonatomic) UIPickerView *pickerView;

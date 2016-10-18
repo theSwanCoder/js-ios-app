@@ -26,7 +26,6 @@
 //
 
 #import "JMInputControlCell.h"
-#import "JMThemesManager.h"
 
 @interface JMInputControlCell()
 @property (nonatomic, weak) IBOutlet UIView  *valuePlaceHolderView;

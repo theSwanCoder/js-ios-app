@@ -30,9 +30,6 @@
 #import "JMExportResource.h"
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
-#import "JMUtils.h"
-#import "JMThemesManager.h"
-#import "NSObject+Additions.h"
 
 NSString * kJMListResourceCell = @"JMListResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";

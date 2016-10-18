@@ -29,9 +29,6 @@
 #import "JMSchedulesListLoader.h"
 #import "JMResource.h"
 #import "JMSchedule.h"
-#import "NSObject+Additions.h"
-#import "JMUtils.h"
-#import "JMConstants.h"
 
 @interface JMSchedulesListLoader()
 @property (nonatomic, assign) NSInteger totalCount;

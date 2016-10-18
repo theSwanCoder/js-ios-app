@@ -32,7 +32,6 @@
 #import "JMWebEnvironment.h"
 #import "JMResource.h"
 #import "JMResourceViewerMenuHelper.h"
-#import "NSObject+Additions.h"
 
 @interface JMReportViewerStateManager()
 @property (nonatomic, assign, readwrite) JMReportViewerState state;

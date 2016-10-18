@@ -8,7 +8,6 @@
 
 #import <XCTest/XCTest.h>
 #import "JMUITestConstants.h"
-#import "JMLocalization.h"
 
 extern NSTimeInterval kUITestsBaseTimeout;
 extern NSTimeInterval kUITestsResourceWaitingTimeout;

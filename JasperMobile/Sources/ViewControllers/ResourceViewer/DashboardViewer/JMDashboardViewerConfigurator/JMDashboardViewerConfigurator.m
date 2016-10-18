@@ -43,8 +43,6 @@
 #import "JMResourceViewerHyperlinksManager.h"
 #import "JMResourceViewerDocumentManager.h"
 #import "JMResourceViewerSessionManager.h"
-#import "JMUtils.h"
-#import "NSObject+Additions.h"
 #import "JMDashboardViewerExternalScreenManager.h"
 
 @interface JMDashboardViewerConfigurator()

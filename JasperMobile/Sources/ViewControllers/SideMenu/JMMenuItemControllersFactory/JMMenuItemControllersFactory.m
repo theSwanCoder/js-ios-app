@@ -36,10 +36,6 @@
 #import "JMRepositoryListLoader.h"
 #import "JMSchedulesListLoader.h"
 
-#import "JMLocalization.h"
-#import "JMConstants.h"
-#import "JMUtils.h"
-#import "NSObject+Additions.h"
 
 typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonState_Normal,

@@ -26,7 +26,6 @@
 //
 
 #import "JMReportChartTypesVC.h"
-#import "JMLocalization.h"
 #import "JMReportChartType.h"
 
 @interface JMReportChartTypesVC() <UITableViewDelegate, UITableViewDataSource>

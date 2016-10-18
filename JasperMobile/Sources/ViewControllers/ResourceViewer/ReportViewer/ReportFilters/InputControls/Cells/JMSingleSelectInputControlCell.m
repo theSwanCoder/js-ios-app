@@ -26,7 +26,6 @@
 //
 
 #import "JMSingleSelectInputControlCell.h"
-#import "JMLocalization.h"
 
 @interface JMSingleSelectInputControlCell()
 @property (nonatomic, weak) IBOutlet UILabel *valueLabel;

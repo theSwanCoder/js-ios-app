@@ -27,8 +27,6 @@
 //
 
 #import "JMReportOptionsViewController.h"
-#import "JMLocalization.h"
-#import "JMThemesManager.h"
 
 @interface JMReportOptionsViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UISearchBarDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;

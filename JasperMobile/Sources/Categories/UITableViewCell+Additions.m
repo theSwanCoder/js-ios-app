@@ -26,7 +26,6 @@
 //
 
 #import "UITableViewCell+Additions.h"
-#import "JMUtils.h"
 
 @implementation UITableViewCell (Additions)
 

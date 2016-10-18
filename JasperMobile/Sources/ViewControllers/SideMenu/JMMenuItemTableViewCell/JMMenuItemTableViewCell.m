@@ -29,9 +29,6 @@
 #import "JMMenuItemTableViewCell.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+RGBComponent.h"
-#import "JMThemesManager.h"
-#import "JMLocalization.h"
-#import "NSObject+Additions.h"
 
 @implementation JMMenuItemTableViewCell
 

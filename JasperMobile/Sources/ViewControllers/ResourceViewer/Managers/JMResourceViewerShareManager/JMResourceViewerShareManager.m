@@ -29,7 +29,6 @@
 #import "JMResourceViewerShareManager.h"
 #import "JMShareViewController.h"
 #import "UIView+Additions.h"
-#import "JMUtils.h"
 
 @implementation JMResourceViewerShareManager
 

@@ -27,7 +27,6 @@
 //
 
 #import "JMSelectedItem.h"
-#import "JMLocalization.h"
 
 @implementation JMSelectedItem
 

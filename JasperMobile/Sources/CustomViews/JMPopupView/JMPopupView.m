@@ -23,9 +23,6 @@
 #import "JMPopupView.h"
 #import "JasperMobileAppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
-#import "JMUtils.h"
-#import "JMThemesManager.h"
-#import "JMLocalization.h"
 
 static NSMutableArray* visiblePopupsArray = nil;
 

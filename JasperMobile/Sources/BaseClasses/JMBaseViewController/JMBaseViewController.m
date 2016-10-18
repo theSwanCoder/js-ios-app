@@ -26,12 +26,7 @@
 //  TIBCO JasperMobile
 //
 
-#import "JMBaseViewController.h"
 #import "JMAnalyticsManager.h"
-#import "JMUtils.h"
-#import "JMLocalization.h"
-#import "JMThemesManager.h"
-#import "JMConstants.h"
 
 @interface JMBaseViewController()
 

@@ -33,7 +33,6 @@
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptRequestExecutor.h"
 #import "JMHyperlink.h"
-#import "JMUtils.h"
 #import "EKMapper.h"
 #import "JMReportChartType.h"
 #import "JMServerProfile+Helpers.h"

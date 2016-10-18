@@ -25,9 +25,6 @@
 //  TIBCO JasperMobile
 //
 
-#import "UIAlertController+Additions.h"
-#import "JMLocalization.h"
-#import "NSObject+Additions.h"
 
 @interface UIAlertController (UITextFieldDelegate) <UITextFieldDelegate>
 

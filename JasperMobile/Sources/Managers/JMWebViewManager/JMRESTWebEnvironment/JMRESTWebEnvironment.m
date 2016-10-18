@@ -30,8 +30,6 @@
 #import "JMWebEnvironmentLoadingTask.h"
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptRequestTask.h"
-#import "NSObject+Additions.h"
-#import "JMUtils.h"
 
 @implementation JMRESTWebEnvironment
 

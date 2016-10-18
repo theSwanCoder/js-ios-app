@@ -23,9 +23,6 @@
 
 #import "JMServerCollectionViewCell.h"
 #import "JMServerProfile+Helpers.h"
-#import "JMThemesManager.h"
-#import "NSObject+Additions.h"
-#import "JMLocalization.h"
 
 @interface JMServerCollectionViewCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *titleImage;

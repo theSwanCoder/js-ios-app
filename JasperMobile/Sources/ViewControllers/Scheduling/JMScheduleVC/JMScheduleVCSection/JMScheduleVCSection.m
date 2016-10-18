@@ -28,7 +28,6 @@
 
 
 #import "JMScheduleVCSection.h"
-#import "JMConstants.h"
 
 @interface JMScheduleVCSection()
 @property (nonatomic, strong, readwrite) NSMutableArray <JMScheduleVCRow *> *internalRows;

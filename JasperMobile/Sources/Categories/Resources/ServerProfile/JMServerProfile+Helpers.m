@@ -26,12 +26,10 @@
 //
 
 #import "JMServerProfile+Helpers.h"
-#import "JMConstants.h"
 #import <objc/runtime.h>
 #import "JMSessionManager.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMCoreDataManager.h"
-#import "NSObject+Additions.h"
 
 @implementation JMServerProfile (Helpers)
 + (JMServerProfile *)demoServerProfile

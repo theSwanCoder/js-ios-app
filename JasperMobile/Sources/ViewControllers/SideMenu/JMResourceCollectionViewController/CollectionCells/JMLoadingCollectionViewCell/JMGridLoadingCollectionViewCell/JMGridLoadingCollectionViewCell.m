@@ -28,8 +28,6 @@
 
 
 #import "JMGridLoadingCollectionViewCell.h"
-#import "NSObject+Additions.h"
-#import "JMConstants.h"
 
 @implementation JMGridLoadingCollectionViewCell
 

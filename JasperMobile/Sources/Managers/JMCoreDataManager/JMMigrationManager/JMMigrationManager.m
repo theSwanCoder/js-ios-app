@@ -26,8 +26,6 @@
 //
 
 #import "JMMigrationManager.h"
-#import "JMConstants.h"
-#import "JMUtils.h"
 
 static void * JMMigrationManagerContext = &JMMigrationManagerContext;
 

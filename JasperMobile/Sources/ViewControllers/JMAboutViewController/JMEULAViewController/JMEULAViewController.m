@@ -27,11 +27,7 @@
 //
 
 #import "JMEULAViewController.h"
-#import "JMUtils.h"
-#import "JMLocalization.h"
 #import "JMMenuAction.h"
-#import "NSObject+Additions.h"
-#import "JMConstants.h"
 
 @interface JMEULAViewController() <UIWebViewDelegate>
 @property (weak, nonatomic) IBOutlet UIWebView *webView;

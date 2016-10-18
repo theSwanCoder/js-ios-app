@@ -23,8 +23,6 @@
 
 #import "JMLibraryListLoader.h"
 #import "JMResourceLoaderOption.h"
-#import "JMLocalization.h"
-#import "JMUtils.h"
 
 @implementation JMLibraryListLoader
 - (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType

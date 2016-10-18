@@ -31,8 +31,6 @@
 #import "JMServerOptionManager.h"
 #import "JMWebEnvironmentLoadingTask.h"
 #import "JMJavascriptRequestTask.h"
-#import "NSObject+Additions.h"
-#import "JMUtils.h"
 
 @implementation JMVIZWebEnvironment
 

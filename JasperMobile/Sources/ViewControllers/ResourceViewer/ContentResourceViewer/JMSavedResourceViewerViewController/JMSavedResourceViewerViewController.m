@@ -29,12 +29,6 @@
 #import "JMWebEnvironment.h"
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
-#import "JMConstants.h"
-#import "JMLocalization.h"
-#import "JMUtils.h"
-#import "UIAlertController+Additions.h"
-#import "NSObject+Additions.h"
-#import "JMConstants.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;

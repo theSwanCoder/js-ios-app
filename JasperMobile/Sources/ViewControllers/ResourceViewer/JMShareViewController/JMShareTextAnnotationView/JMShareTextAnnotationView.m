@@ -28,7 +28,6 @@
 
 
 #import "JMShareTextAnnotationView.h"
-#import "JMConstants.h"
 
 @interface JMShareTextAnnotationView()
 @property (nonatomic, strong) UILabel *textLabel;

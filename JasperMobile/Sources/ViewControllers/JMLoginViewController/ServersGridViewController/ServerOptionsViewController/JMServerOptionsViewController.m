@@ -29,10 +29,6 @@
 #import "JMServerOptionCell.h"
 
 #import "JMCancelRequestPopup.h"
-#import "JMLocalization.h"
-#import "JMThemesManager.h"
-#import "UIAlertController+Additions.h"
-#import "JMUtils.h"
 #import "JMSessionManager.h"
 
 

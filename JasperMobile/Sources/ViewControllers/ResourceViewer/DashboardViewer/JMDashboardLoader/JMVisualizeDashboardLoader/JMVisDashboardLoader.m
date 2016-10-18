@@ -33,7 +33,6 @@
 #import "JMJavascriptRequest.h"
 #import "JMHyperlink.h"
 #import "JMJavascriptRequestExecutor.h"
-#import "JMUtils.h"
 
 @interface JMVisDashboardLoader()
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;

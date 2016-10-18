@@ -31,7 +31,6 @@
 */
 
 @import UIKit;
-#import "JMBaseViewController.h"
 @class JMReportChartType;
 
 @interface JMReportChartTypesVC : JMBaseViewController

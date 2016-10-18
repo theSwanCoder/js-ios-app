@@ -31,7 +31,6 @@
 */
 
 @import UIKit;
-#import "JMBaseViewController.h"
 @class JSReportBookmark;
 
 @interface JMBookmarksVC : JMBaseViewController

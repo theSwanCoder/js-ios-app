@@ -26,9 +26,6 @@
 //
 
 #import "JMAnalyticsManager.h"
-#import "NSObject+Additions.h"
-#import "JMUtils.h"
-#import "JMConstants.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 // Google Analitycs

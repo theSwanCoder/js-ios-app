@@ -29,10 +29,6 @@
 
 #import "JMRepositoryResourceInfoViewController.h"
 #import "JMFavorites+Helpers.h"
-#import "JMConstants.h"
-#import "JMUtils.h"
-#import "JMThemesManager.h"
-#import "NSObject+Additions.h"
 @interface JMRepositoryResourceInfoViewController ()
 
 @end

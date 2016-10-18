@@ -32,7 +32,6 @@
  @since 2.0
  */
 
-#import "JMBaseViewController.h"
 #import "JMMenuItem.h"
 
 @interface JMMenuViewController : JMBaseViewController

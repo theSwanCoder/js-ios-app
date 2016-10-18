@@ -25,8 +25,6 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMCoreDataManager.h"
 #import "JMSessionManager.h"
-#import "JMLocalization.h"
-#import "JMConstants.h"
 
 NSString * const kJMBooleanCellIdentifier = @"BooleanCell";
 NSString * const kJMTextCellIdentifier = @"TextEditCell";

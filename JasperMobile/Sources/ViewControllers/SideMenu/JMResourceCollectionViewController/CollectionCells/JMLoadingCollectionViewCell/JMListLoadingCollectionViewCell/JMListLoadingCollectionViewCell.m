@@ -28,8 +28,6 @@
 
 #import "JMListLoadingCollectionViewCell.h"
 
-#import "NSObject+Additions.h"
-#import "JMConstants.h"
 
 @implementation JMListLoadingCollectionViewCell
 

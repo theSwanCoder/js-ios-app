@@ -7,7 +7,6 @@
 //
 
 #import "JMReportOptionsCell.h"
-#import "JMThemesManager.h"
 
 @implementation JMReportOptionsCell
 

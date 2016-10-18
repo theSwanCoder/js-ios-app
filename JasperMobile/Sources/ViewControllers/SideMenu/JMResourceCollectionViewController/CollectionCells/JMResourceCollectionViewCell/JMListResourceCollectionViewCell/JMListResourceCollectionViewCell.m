@@ -27,8 +27,6 @@
 //
 
 #import "JMListResourceCollectionViewCell.h"
-#import "NSObject+Additions.h"
-#import "JMConstants.h"
 #import "JMResource.h"
 #import "JMSavedResources.h"
 #import "JMExportResource.h"

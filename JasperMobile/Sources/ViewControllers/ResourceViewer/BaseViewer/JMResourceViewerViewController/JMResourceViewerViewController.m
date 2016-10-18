@@ -31,12 +31,6 @@
 #import "JMShareViewController.h"
 #import "JMAnalyticsManager.h"
 #import "JMBaseResourceView.h"
-#import "JMConstants.h"
-#import "JMUtils.h"
-#import "JMThemesManager.h"
-#import "NSObject+Additions.h"
-#import "UIAlertController+Additions.h"
-#import "JMLocalization.h"
 
 NSString * const kJMResourceViewerWebEnvironmentIdentifier = @"kJMResourceViewerWebEnvironmentIdentifier";
 

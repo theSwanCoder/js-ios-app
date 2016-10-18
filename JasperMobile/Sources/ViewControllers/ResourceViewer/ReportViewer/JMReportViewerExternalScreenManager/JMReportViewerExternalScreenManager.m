@@ -26,7 +26,6 @@
 //
 
 #import "JMReportViewerExternalScreenManager.h"
-#import "JMUtils.h"
 #import "JMExternalWindowControlsVC.h"
 #import "JMBaseResourceView.h"
 #import "JMVisualizeReportLoader.h"

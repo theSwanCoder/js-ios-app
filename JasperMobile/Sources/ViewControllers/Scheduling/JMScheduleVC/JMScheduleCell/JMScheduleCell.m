@@ -27,7 +27,6 @@
 //
 
 #import "JMScheduleCell.h"
-#import "JMUtils.h"
 
 @interface JMScheduleCell ()
 @property(nonatomic, weak) IBOutlet UILabel *errorLabel;

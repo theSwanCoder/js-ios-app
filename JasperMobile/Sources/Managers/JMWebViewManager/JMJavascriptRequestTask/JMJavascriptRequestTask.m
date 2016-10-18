@@ -29,7 +29,6 @@
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptRequestExecutor.h"
 #import "JMJavascriptResponse.h"
-#import "JMUtils.h"
 
 @interface JMJavascriptRequestTask()
 @property (nonatomic, strong) JMJavascriptRequest *request;

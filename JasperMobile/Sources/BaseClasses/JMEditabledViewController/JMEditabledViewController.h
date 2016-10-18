@@ -31,7 +31,6 @@
  @since 1.9
  */
 
-#import "JMBaseViewController.h"
 
 @interface JMEditabledViewController : JMBaseViewController
 

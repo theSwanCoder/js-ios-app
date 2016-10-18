@@ -31,8 +31,6 @@
 */
 
 #import "JMSaveReportNameCell.h"
-#import "JMThemesManager.h"
-#import "JMLocalization.h"
 
 @implementation JMSaveReportNameCell
 

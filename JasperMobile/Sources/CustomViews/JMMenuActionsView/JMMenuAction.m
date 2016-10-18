@@ -27,7 +27,6 @@
 //
 
 #import "JMMenuAction.h"
-#import "JMConstants.h"
 
 @implementation JMMenuAction
 - (instancetype)initWithAction:(JMMenuActionsViewAction)action available:(BOOL)available enabled:(BOOL)enabled

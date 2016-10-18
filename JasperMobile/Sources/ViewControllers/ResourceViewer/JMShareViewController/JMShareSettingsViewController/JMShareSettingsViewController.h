@@ -32,7 +32,6 @@
  @since 2.5
  */
 
-#import "JMBaseViewController.h"
 
 @class JMShareSettingsViewController;
 @protocol JMShareSettingsViewControllerDelegate <NSObject>

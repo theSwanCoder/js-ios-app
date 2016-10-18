@@ -27,7 +27,6 @@
 //
 
 #import "JMWebEnvironment.h"
-#import "JMUtils.h"
 #import "JMReportChartType.h"
 
 @interface JMWebEnvironment()

@@ -45,14 +45,10 @@
 #import "JMSchedule.h"
 #import "JMWebViewManager.h"
 #import "JMDashboardViewerVC.h"
-#import "JMLocalization.h"
-#import "JMUtils.h"
-#import "JMThemesManager.h"
 
 #import "JMScheduleManager.h"
 #import "JMScheduleVC.h"
 #import "JMLibraryListLoader.h"
-#import "NSObject+Additions.h"
 
 typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
     JMResourcesRepresentationType_List = 0,

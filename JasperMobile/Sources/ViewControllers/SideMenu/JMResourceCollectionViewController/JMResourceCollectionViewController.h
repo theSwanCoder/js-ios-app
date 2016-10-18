@@ -34,7 +34,6 @@
 #import "JMMenuActionsView.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMResourcesListLoader.h"
-#import "JMBaseViewController.h"
 
 @interface JMResourceCollectionViewController : JMBaseViewController <JMResourcesListLoaderDelegate>
 

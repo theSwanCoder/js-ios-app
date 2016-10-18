@@ -27,7 +27,6 @@
 //
 
 #import "JMTextField.h"
-#import "JMThemesManager.h"
 
 @implementation JMTextField
 

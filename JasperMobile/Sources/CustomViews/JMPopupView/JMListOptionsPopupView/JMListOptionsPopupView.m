@@ -24,10 +24,6 @@
 #import "JMListOptionsPopupView.h"
 #import "JMResourcesListLoader.h"
 #import "JMResourceLoaderOption.h"
-#import "JMThemesManager.h"
-#import "JMUtils.h"
-#import "JMLocalization.h"
-#import "NSObject+Additions.h"
 
 #define kJMList
 
