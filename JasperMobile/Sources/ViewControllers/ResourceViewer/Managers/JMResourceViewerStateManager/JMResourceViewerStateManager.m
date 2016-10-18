@@ -330,12 +330,6 @@
         UIView *bottomToolbarView = [self.controller bottomToolbarView];
         [resourceView.bottomView fillWithView:bottomToolbarView];
     }
-
-    if ([self.controller respondsToSelector:@selector(nonExistingResourceView)]) {
-        UIView *nonExistingResourceView = [self.controller nonExistingResourceView];
-        [resourceView.contentView fillWithView:nonExistingResourceView];
-        self.nonExistingResourceView = nonExistingResourceView;
-    }
 }
 
 - (void)showMainView
@@ -368,15 +362,19 @@
 #pragma mark - Setup Resource Not Exist View
 - (void)showResourceNotExistView
 {
-    if (self.nonExistingResourceView) {
-        self.nonExistingResourceView.hidden = NO;
+    if ([self.controller respondsToSelector:@selector(warningsView)]) {
+        JMBaseResourceView *resourceView = (JMBaseResourceView *)self.controller.view;
+        UIView *warningsView = [self.controller warningsView];
+        [resourceView.contentView fillWithView:warningsView];
+        self.warningsView = warningsView;
     }
 }
 
 - (void)hideResourceNotExistView
 {
-    if (self.nonExistingResourceView) {
-        self.nonExistingResourceView.hidden = YES;
+    if (self.warningsView) {
+        [self.warningsView removeFromSuperview];
+        self.warningsView = nil;
     }
 }
 

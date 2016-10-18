@@ -59,6 +59,7 @@
 @property (nonatomic, strong) JMFiltersNetworkManager *filtersNetworkManager;
 @property (nonatomic, assign) BOOL shouldShowFiltersPage;
 @property (nonatomic, copy) void(^runReportCompletion)(BOOL success, NSError *error);
+@property (nonatomic, copy) NSString *warningMessage;
 @end
 
 @implementation JMReportViewerVC
@@ -85,7 +86,7 @@
     [super viewDidLoad];
 
     self.filtersNetworkManager = [JMFiltersNetworkManager managerWithRestClient:self.restClient];
-
+    self.warningMessage = JMLocalizedString(@"report_viewer_filters_not_applyed_title");
     [self setupSessionManager];
 
     [self.configurator setup];
@@ -301,10 +302,10 @@
     return toolbar;
 }
 
-- (UIView *)nonExistingResourceView
+- (UIView *)warningsView
 {
     UILabel *label = [UILabel new];
-    label.text = JMLocalizedString(@"report_viewer_emptyreport_title");
+    label.text = self.warningMessage;
     label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 0;
     return label;
@@ -788,16 +789,19 @@
                 break;
             }
             case JMFiltersVCResultTypeEmptyFilters : {
+                self.warningMessage = JMLocalizedString(@"report_viewer_emptyreport_title");
                 if ([strongSelf stateManager].state != JMReportViewerStateResourceReady) {
                     [strongSelf runReportWithDestination:strongSelf.initialDestination];
                 }
                 break;
             }
             case JMFiltersVCResultTypeReportParameters : {
+                self.warningMessage = JMLocalizedString(@"report_viewer_emptyreport_title");
                 [strongSelf updateReportWithParameters:result.reportParameters];
                 break;
             }
             case JMFiltersVCResultTypeFilterOption : {
+                self.warningMessage = JMLocalizedString(@"report_viewer_emptyreport_title");
                 [strongSelf runReportWithReportURI:result.filterOptionURI];
                 break;
             }
