@@ -44,14 +44,14 @@
     [self givenThatFavoritesSectionIsEmpty];
 
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
 
-    [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self closeInfoPageForTestReport];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 - (void)testViewingInfoScreenFromFavoritesScreenForDashboard
@@ -59,14 +59,14 @@
     [self givenThatFavoritesSectionIsEmpty];
 
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
 
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self closeInfoPageForTestDashboard];
 
-    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Back button from Info Screen
@@ -98,15 +98,15 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
-    [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatInfoPageForTestReportHasBackButton];
     [self closeInfoPageForTestReport];
     
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 - (void)testThatBackButtonAtDashboardInfoScreenWorkCorrectly
@@ -114,15 +114,15 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatInfoPageForTestDashboardHasBackButton];
     [self closeInfoPageForTestDashboard];
     
-    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
   
 //    Title like name of the item
@@ -153,15 +153,15 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
-    [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatInfoPageForTestReportHasCorrectTitle];
     [self closeInfoPageForTestReport];
     
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 - (void)testThatInfoScreenForTestDashboardHasCorrectTitle
@@ -169,15 +169,15 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatInfoPageForTestDashboardHasCorrectTitle];
     [self closeInfoPageForTestDashboard];
     
-    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Info about test folder
@@ -226,15 +226,15 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
-    [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatInfoPageForTestReportContainsCorrectData];
     [self closeInfoPageForTestReport];
     
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Info about test dashboard
@@ -260,15 +260,15 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatInfoPageForTestDashboardContainsCorrectData];
     [self closeInfoPageForTestDashboard];
     
-    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Info about test html-file
@@ -417,16 +417,16 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
-    [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self unmarkFromFavoritesFromMenuActions];
     [self markAsFavoriteFromMenuActions];
     [self closeInfoPageForTestReport];
     
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 - (void)testThatFavoriteButtonOnInfoScreenForTestDashboardWorkCorrectly
@@ -434,16 +434,16 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self unmarkFromFavoritesFromMenuActions];
     [self markAsFavoriteFromMenuActions];
     [self closeInfoPageForTestDashboard];
     
-    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Run button
@@ -476,15 +476,15 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
-    [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self openTestReportFromInfoPage];
     [self closeInfoPageForTestReport];
     
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 - (void)testThatRunButtonOnInfoScreenForTestDashboardWorkCorrectly
@@ -492,15 +492,15 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self openTestDashboardFromInfoPage];
     [self closeInfoPageForTestDashboard];
     
-    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 @end

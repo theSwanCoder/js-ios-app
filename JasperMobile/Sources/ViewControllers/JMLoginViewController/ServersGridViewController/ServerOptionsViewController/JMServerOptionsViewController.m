@@ -48,12 +48,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     if (self.serverOptionManager.isExistingServerProfile) {
         self.title = self.serverProfile.alias;
     } else {
         self.title = JMLocalizedString(@"servers_title_new");
     }
+    self.view.accessibilityIdentifier = JMNewServerProfilePageAccessibilityId;
+    
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     [self setupSaveButton];
@@ -89,6 +90,7 @@
     [self.saveButton setTitle:JMLocalizedString(@"dialog_button_save") forState:UIControlStateNormal];
     [self.saveButton setTitleColor:[[JMThemesManager sharedManager] serverProfileSaveButtonTextColor] forState:UIControlStateNormal];
     self.saveButton.backgroundColor = [[JMThemesManager sharedManager] serverProfileSaveButtonBackgroundColor];
+    [self.saveButton setAccessibility:YES withTextKey:@"dialog_button_save" identifier:JMButtonSaveAccessibilityId];
 }
 
 - (void)setupServerOptions
@@ -111,10 +113,12 @@
 - (void)setupNavigationItems
 {
 #ifndef  __RELEASE__
-    UIBarButtonItem *obsoleteSessionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
-                                                                                           target:self
-                                                                                           action:@selector(makeSessionObsolete)];
-    self.navigationItem.leftBarButtonItem = obsoleteSessionButton;
+    if (self.restClient) {
+        UIBarButtonItem *obsoleteSessionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
+                                                                                               target:self
+                                                                                               action:@selector(makeSessionObsolete)];
+        self.navigationItem.rightBarButtonItem = obsoleteSessionButton;
+    }
 #endif
 }
 

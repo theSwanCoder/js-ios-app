@@ -88,8 +88,14 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     
     self.view.backgroundColor = [[JMThemesManager sharedManager] menuViewBackgroundColor];
     self.userNameLabel.textColor = [[JMThemesManager sharedManager] menuViewUserNameTextColor];
+    [self.userNameLabel setAccessibility:YES withTextKey:nil identifier:JMSideApplicationMenuUsernameLabelAccessibilityId];
+    
     self.serverNameLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
+    [self.serverNameLabel setAccessibility:YES withTextKey:nil identifier:JMSideApplicationMenuFullServerNameLabelAccessibilityId];
+
     self.organizationNameLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
+    [self.organizationNameLabel setAccessibility:YES withTextKey:nil identifier:JMSideApplicationMenuOrganizationLabelAccessibilityId];
+
     self.appVersionLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
     
     [self.separatorsCollection makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] menuViewSeparatorColor]];
@@ -286,13 +292,16 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 - (UIBarButtonItem *)barButtonItemForState:(JMMenuButtonState)buttonState
 {
     UIImage *menuButtonImage;
+    NSString *accessibilityIdentifier;
     switch (buttonState) {
         case JMMenuButtonStateNormal: {
             menuButtonImage = [UIImage imageNamed:@"menu_icon"];
+            accessibilityIdentifier = JMSideApplicationMenuMenuButtonAccessibilityId;
             break;
         }
         case JMMenuButtonStateNotification: {
             menuButtonImage = [UIImage imageNamed:@"menu_icon_note"];
+            accessibilityIdentifier = JMSideApplicationMenuMenuButtonNoteAccessibilityId;
             break;
         }
     }
@@ -305,7 +314,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
      forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:button];
 
-    [bbi setAccessibility:YES withTextKey:@"menu_open_button" identifier:JMSideApplicationMenuMenuButtonAccessibilityId];
+    [bbi setAccessibility:YES withTextKey:@"menu_open_button" identifier:accessibilityIdentifier];
     
     return bbi;
 }

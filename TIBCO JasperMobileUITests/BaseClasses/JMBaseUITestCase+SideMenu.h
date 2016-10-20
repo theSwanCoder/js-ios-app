@@ -8,14 +8,13 @@
 
 @interface JMBaseUITestCase (SideMenu)
 
-- (void)showSideMenuInSectionWithName:(NSString *)sectionName;
-- (void)hideSideMenuInSectionWithName:(NSString *)sectionName;
+- (void)showSideMenuInSectionWithAccessibilityId:(NSString *)accessibilityId;
+- (void)hideSideMenuInSectionWithAccessibilityId:(NSString *)accessibilityId;
 
 - (void)waitNotificationOnMenuButtonWithTimeout:(NSTimeInterval)timeout;
 
 - (void)openLibrarySection;
 - (void)openRepositorySection;
-- (void)openRecentlyViewedSection;
 - (void)openSavedItemsSection;
 - (void)openFavoritesSection;
 - (void)openSchedulesSection;
@@ -27,7 +26,7 @@
 
 - (XCUIElement *)sideMenuElement;
 
-- (void)selectMenuItemForPageWithName:(NSString *)pageName;
+- (void)selectMenuItemForPageWithAccessibilityId:(NSString *)accessibilityId;
 
-- (XCUIElement *)findMenuItemForPageName:(NSString *)pageName;
+- (XCUIElement *)findMenuItemForPageAccessibilityId:(NSString *)accessibilityId;
 @end

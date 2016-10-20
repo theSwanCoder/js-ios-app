@@ -15,20 +15,20 @@
 #pragma mark - Tests - Main
 - (void)testThatReportInfoPageCanBeViewed
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Library"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self closeInfoPageForTestReport];
 }
 
 - (void)testThatReportInfoPageHasTitleAsReportLabel
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Library"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifyThatInfoPageForTestReportHasCorrectTitle];
     [self closeInfoPageForTestReport];
 }
 
 - (void)testThatReportInfoPageHasFullReportInfo
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Library"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifyThatInfoPageForTestReportContainsCorrectData];
     [self closeInfoPageForTestReport];
 }
@@ -36,7 +36,7 @@
 #pragma mark - Tests - Menu
 - (void)testThatReportCanBeMarkAsFavorite
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Library"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markAsFavoriteFromMenuActions];
     [self unmarkFromFavoritesFromMenuActions];
     [self closeInfoPageForTestReport];

@@ -19,8 +19,8 @@
 {
     [self openFavoritesSection];
     [self selectFilterBy:@"All"
-      inSectionWithTitle:@"Favorites"];
-    [self switchViewFromGridToListInSectionWithTitle:@"Favorites"];
+      inSectionWithTitle:JMFavoritesPageAccessibilityId];
+    [self switchViewFromGridToListInSectionWithTitle:JMFavoritesPageAccessibilityId];
     [self unmarkAllFavoritesResourcesIfNeed];
     [self openLibrarySection];
 }
@@ -35,17 +35,17 @@
 
 #pragma mark - Reports
 
-- (void)markTestReportAsFavoriteFromSectionWithName:(NSString *)sectionName
+- (void)markTestReportAsFavoriteFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    [self openInfoPageForTestReportFromSectionWithName:sectionName];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:accessibilityId];
     // TODO: do we need verify that item isn't favorite
     [self markAsFavoriteFromMenuActions];
     [self closeInfoPageFromCell];
 }
 
-- (void)unmarkTestReportFromFavoriteFromSectionWithName:(NSString *)sectionName
+- (void)unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    [self openInfoPageForTestReportFromSectionWithName:sectionName];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:accessibilityId];
     // TODO: do we need verify that item is favorite
     [self unmarkFromFavoritesFromMenuActions];
     [self closeInfoPageFromCell];
@@ -53,17 +53,17 @@
 
 #pragma mark - Dashboards
 
-- (void)markTestDashboardAsFavoriteFromSectionWithName:(NSString *)sectionName
+- (void)markTestDashboardAsFavoriteFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    [self openInfoPageForTestDashboardFromSectionWithName:sectionName];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:accessibilityId];
     // TODO: do we need verify that item isn't favorite
     [self markAsFavoriteFromMenuActions];
     [self closeInfoPageFromCell];
 }
 
-- (void)unmarkTestDashboardFromFavoriteFromSectionWithName:(NSString *)sectionName
+- (void)unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    [self openInfoPageForTestDashboardFromSectionWithName:sectionName];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:accessibilityId];
     // TODO: do we need verify that item is favorite
     [self unmarkFromFavoritesFromMenuActions];
     [self closeInfoPageFromCell];

@@ -78,8 +78,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 
     [self openFavoritesSection];
     [self searchResourceWithName:kTestReportName
@@ -87,7 +87,7 @@
 
     [self givenThatCellsAreVisible];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Error message when no search result
@@ -106,8 +106,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     
     [self openFavoritesSection];
     [self searchResourceWithName:@"Search without result text"
@@ -117,7 +117,7 @@
                    parentElement:nil
                          timeout:kUITestsBaseTimeout];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    View type button
@@ -151,12 +151,12 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 
     [self openFavoritesSection];
 
-    [self switchViewFromListToGridInSectionWithTitle:@"Favorites"];
+    [self switchViewFromListToGridInSectionWithTitle:JMFavoritesPageAccessibilityId];
     [self verifyThatCollectionViewContainsGridOfCells];
 
     [self openLibrarySection];
@@ -166,9 +166,9 @@
     [self openFavoritesSection];
     [self verifyThatCollectionViewContainsGridOfCells];
 
-    [self switchViewFromGridToListInSectionWithTitle:@"Favorites"];
+    [self switchViewFromGridToListInSectionWithTitle:JMFavoritesPageAccessibilityId];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Sorting button
@@ -190,24 +190,24 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     
     [self openFavoritesSection];
     
     [self selectSortBy:@"Name"
-    inSectionWithTitle:@"Favorites"];
+    inSectionWithTitle:JMFavoritesPageAccessibilityId];
     [self verifyThatCollectionViewContainsListOfCells];
     
     [self selectSortBy:@"Creation Date"
-    inSectionWithTitle:@"Favorites"];
+    inSectionWithTitle:JMFavoritesPageAccessibilityId];
     [self verifyThatCollectionViewContainsListOfCells];
     
     [self selectSortBy:@"Modified Date"
-    inSectionWithTitle:@"Favorites"];
+    inSectionWithTitle:JMFavoritesPageAccessibilityId];
     [self verifyThatCollectionViewContainsListOfCells];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Filter button
@@ -236,44 +236,44 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     
     [self openFavoritesSection];
     [self verifyThatCollectionViewContainsListOfCells];
     
     [self selectFilterBy:@"Reports"
-    inSectionWithTitle:@"Favorites"];
+    inSectionWithTitle:JMFavoritesPageAccessibilityId];
     [self verifyThatCollectionViewContainsListOfCells];
     
-    [self selectFilterBy:@"Saved Items"
-    inSectionWithTitle:@"Favorites"];
+    [self selectFilterBy:JMSavedItemsPageAccessibilityId
+    inSectionWithTitle:JMFavoritesPageAccessibilityId];
     [self waitStaticTextWithText:@"No Favorited Items"
                    parentElement:nil
                          timeout:kUITestsBaseTimeout];
     
     [self selectFilterBy:@"Dashboards"
-    inSectionWithTitle:@"Favorites"];
+    inSectionWithTitle:JMFavoritesPageAccessibilityId];
     [self waitStaticTextWithText:@"No Favorited Items"
                    parentElement:nil
                          timeout:kUITestsBaseTimeout];
     
     [self selectFilterBy:@"Folders"
-    inSectionWithTitle:@"Favorites"];
+    inSectionWithTitle:JMFavoritesPageAccessibilityId];
     [self waitStaticTextWithText:@"No Favorited Items"
                    parentElement:nil
                          timeout:kUITestsBaseTimeout];
     
     [self selectFilterBy:@"Content Resources"
-    inSectionWithTitle:@"Favorites"];
+    inSectionWithTitle:JMFavoritesPageAccessibilityId];
     [self waitStaticTextWithText:@"No Favorited Items"
                    parentElement:nil
                          timeout:kUITestsBaseTimeout];
     
     [self selectFilterBy:@"All"
-      inSectionWithTitle:@"Favorites"];
+      inSectionWithTitle:JMFavoritesPageAccessibilityId];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Pull down to refresh all items
@@ -292,18 +292,18 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 
     [self openFavoritesSection];
 
     [self performPullDownToRefresh];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
-    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Scrolling of the list/grid
@@ -323,14 +323,14 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 
     [self openFavoritesSection];
 
     [self performSwipeToScrool];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    User should see only favorites items which he/she added they
@@ -389,12 +389,12 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     
     [self openFavoritesSection];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Remove button on the dashboard
@@ -412,12 +412,12 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     
     [self openFavoritesSection];
 
-    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
     
 //    Remove button on the folder
@@ -446,7 +446,7 @@
 
 - (void)verifyThatFavoritePageHasSideMenuButton
 {
-    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:@"Favorites"];
+    XCUIElement *menuButton = [self findMenuButtonInSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     if (!menuButton || !menuButton.exists) {
         XCTFail(@"There isn't menu button");
     }
@@ -454,7 +454,7 @@
 
 - (void)verifyThatFavoritePageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Favorites"
+    [self waitNavigationBarWithLabel:JMFavoritesPageAccessibilityId
                              timeout:kUITestsBaseTimeout];
 }
 

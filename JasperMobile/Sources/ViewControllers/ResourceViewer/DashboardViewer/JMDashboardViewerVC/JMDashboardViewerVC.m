@@ -92,7 +92,7 @@
 #pragma mark - Accessibility
 - (NSString *)accessibilityIdentifier
 {
-    return JMDashboardViewerPageTitleAccessibilityId;
+    return JMDashboardViewerPageAccessibilityId;
 }
 
 #pragma mark - Rotation

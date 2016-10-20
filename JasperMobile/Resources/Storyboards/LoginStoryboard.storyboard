@@ -161,6 +161,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="loginButton" destination="dqm-Y4-gBK" id="Ctf-wZ-9C9"/>
+                        <outlet property="logoImageView" destination="8eL-An-K7e" id="YoO-I8-ylo"/>
                         <outlet property="passwordTextField" destination="8la-dV-F8G" id="OHh-Tv-Zcd"/>
                         <outlet property="placeHolderView" destination="8dE-ta-sCn" id="Lnh-cm-dAz"/>
                         <outlet property="serverProfileTextField" destination="IlI-wL-7hQ" id="ZEH-a5-zba"/>
@@ -307,10 +308,10 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextEditCell" rowHeight="60" id="1lk-fV-rW8" customClass="JMTextServerOptionCell">
-                                        <rect key="frame" x="0.0" y="1" width="1000" height="60"/>
+                                        <rect key="frame" x="0.0" y="1" width="355" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" tableViewCell="1lk-fV-rW8" id="KAE-f4-NnI">
-                                            <frame key="frameInset" width="1000" height="59"/>
+                                            <frame key="frameInset" width="355" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="tVI-4K-BmR">
@@ -360,10 +361,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BooleanCell" id="FXf-7g-1p8" customClass="JMBooleanServerOptionCell">
-                                        <rect key="frame" x="0.0" y="61" width="1000" height="50"/>
+                                        <rect key="frame" x="0.0" y="61" width="355" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FXf-7g-1p8" id="abQ-zA-yLk">
-                                            <frame key="frameInset" width="1000" height="49"/>
+                                            <frame key="frameInset" width="355" height="49.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="u9G-0I-P3I">

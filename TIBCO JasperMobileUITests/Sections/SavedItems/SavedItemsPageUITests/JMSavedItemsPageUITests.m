@@ -35,9 +35,9 @@
 {
     [self openSavedItemsSection];
 
-    [self showSideMenuInSectionWithName:@"Saved Items"];
+    [self showSideMenuInSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self verifySideMenuVisible];
-    [self hideSideMenuInSectionWithName:@"Saved Items"];
+    [self hideSideMenuInSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
 }
 
 //Saved Items title
@@ -108,9 +108,9 @@
     [self openSavedItemsSection];
 
     [self verifyThatListOfCellsVisible];
-    [self switchViewFromListToGridInSectionWithTitle:@"Saved Items"];
+    [self switchViewFromListToGridInSectionWithTitle:JMSavedItemsPageAccessibilityId];
     [self verifyThatGridOfCellsVisible];
-    [self switchViewFromGridToListInSectionWithTitle:@"Saved Items"];
+    [self switchViewFromGridToListInSectionWithTitle:JMSavedItemsPageAccessibilityId];
     [self verifyThatListOfCellsVisible];
     
     [self deleteTestReportInHTMLFormat];
@@ -134,9 +134,9 @@
     [self saveTestReportInHTMLFormat];
     [self openSavedItemsSection];
 
-    [self selectSortBy:@"Name" inSectionWithTitle:@"Saved Items"];
-    [self selectSortBy:@"Creation Date" inSectionWithTitle:@"Library"];
-    [self selectSortBy:@"Modified Date" inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Name" inSectionWithTitle:JMSavedItemsPageAccessibilityId];
+    [self selectSortBy:@"Creation Date" inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self selectSortBy:@"Modified Date" inSectionWithTitle:JMLibraryPageAccessibilityId];
 
     [self deleteTestReportInHTMLFormat];
 }
@@ -161,10 +161,10 @@
     [self saveTestReportInHTMLFormat];
     [self openSavedItemsSection];
     
-    [self selectFilterBy:@"All" inSectionWithTitle:@"Saved Items"];
-    [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
-    [self selectFilterBy:@"PDF" inSectionWithTitle:@"Saved Items"];
-    [self selectFilterBy:@"XLS" inSectionWithTitle:@"Saved Items"];
+    [self selectFilterBy:@"All" inSectionWithTitle:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:@"HTML" inSectionWithTitle:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:@"PDF" inSectionWithTitle:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:@"XLS" inSectionWithTitle:JMSavedItemsPageAccessibilityId];
     
     [self deleteTestReportInHTMLFormat];
 }
@@ -342,7 +342,7 @@
 - (void)verifyThatSavedItemsSectionOnScreen
 {
     // TODO: replace with waiting element (collection view) by accessibility id
-    [self waitNavigationBarWithLabel:@"Saved Items"
+    [self waitNavigationBarWithLabel:JMSavedItemsPageAccessibilityId
                              timeout:kUITestsBaseTimeout];
 }
 
@@ -356,7 +356,7 @@
 
 - (void)verifyThatSavedItemsSectionHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Saved Items"
+    [self waitNavigationBarWithLabel:JMSavedItemsPageAccessibilityId
                              timeout:kUITestsBaseTimeout];
 }
 

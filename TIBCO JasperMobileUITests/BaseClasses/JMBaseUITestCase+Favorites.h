@@ -11,12 +11,12 @@
 - (void)givenThatFavoritesSectionIsEmpty;
 
 // Reports
-- (void)markTestReportAsFavoriteFromSectionWithName:(NSString *)sectionName;
-- (void)unmarkTestReportFromFavoriteFromSectionWithName:(NSString *)sectionName;
+- (void)markTestReportAsFavoriteFromSectionWithAccessibilityId:(NSString *)accessibilityId;
+- (void)unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:(NSString *)accessibilityId;
 
 // Dashboards
-- (void)markTestDashboardAsFavoriteFromSectionWithName:(NSString *)sectionName;
-- (void)unmarkTestDashboardFromFavoriteFromSectionWithName:(NSString *)sectionName;
+- (void)markTestDashboardAsFavoriteFromSectionWithAccessibilityId:(NSString *)accessibilityId;
+- (void)unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:(NSString *)accessibilityId;
 
 // General methods
 - (void)markAsFavoriteFromMenuActions;

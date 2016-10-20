@@ -131,7 +131,7 @@
 {
     switch(type) {
         case JMScheduleVCRowTypeLabel: {
-            return JMNewSchedulePageTitleAccessibilityId;
+            return JMNewSchedulePageAccessibilityId;
         }
         case JMScheduleVCRowTypeDescription: {
             return JMNewSchedulePageDescriptionAccessibilityId;

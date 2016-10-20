@@ -53,11 +53,11 @@
     }
 
     [self givenThatServerProfilesPageOnScreen];
-    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
 
     [self createTestProfile];
 
-    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
     XCTAssertTrue(endCellsCount > startCellsCount, @"Start Cells Count: %@, but End Cells Count: %@", @(startCellsCount), @(endCellsCount));
     [self tryBackToPreviousPage];
 }
@@ -66,19 +66,19 @@
 {
     [self tryOpenServerProfilesPage];
     
-    NSInteger cellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    NSInteger cellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
     if (!cellsCount) {
         [self createTestProfile];
         [self givenThatServerProfilesPageOnScreen];
     }
 
-    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
-    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
+    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"
                                                              forIndex:0];
     if (serverProfileElement && serverProfileElement.exists) {
         [self removeProfileWithElement:serverProfileElement];
     }
-    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
     XCTAssertTrue(endCellsCount < startCellsCount);
     [self tryBackToPreviousPage];
 }
@@ -94,7 +94,7 @@
 
     [self givenThatServerProfilesPageOnScreen];
 
-    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
 
     XCUIElement *serverProfileElement = [self findTestProfileCell];
     if (!serverProfileElement.exists) {
@@ -115,14 +115,14 @@
         // Confirm if need http end point
         XCUIElement *securityWarningAlert = [self waitAlertWithTitle:@"Warning"
                                                              timeout:kUITestsBaseTimeout];
-        XCUIElement *okButton = [self findButtonWithTitle:JMLocalizedString(@"dialog_button_ok")
+        XCUIElement *okButton = [self findButtonWithAccessibilityId:JMLocalizedString(@"dialog_button_ok")
                                             parentElement:securityWarningAlert];
         [okButton tap];
     } else {
         XCTFail(@"'Clone Profile' menu item doesn't exist.");
     }
     
-    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
     XCTAssertTrue(endCellsCount > startCellsCount);
     
     // TODO: remove cloned profile.

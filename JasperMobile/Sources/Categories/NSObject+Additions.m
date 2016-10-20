@@ -45,7 +45,7 @@
             strongSelf.accessibilityLabel = localizedString;
             strongSelf.accessibilityLanguage = languageString;
         }
-        if ([accessibilityIdentifier length] && [strongSelf conformsToProtocol:@protocol(UIAccessibilityIdentification)]) {
+        if ([accessibilityIdentifier length] && [strongSelf respondsToSelector:@selector(setAccessibilityIdentifier:)]) {
             id identificationObject = strongSelf;
             [identificationObject setAccessibilityIdentifier:accessibilityIdentifier];
         }

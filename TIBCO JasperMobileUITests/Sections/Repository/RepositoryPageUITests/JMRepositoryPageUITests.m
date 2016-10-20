@@ -40,7 +40,7 @@
 - (void)testThatRepositoryPageHasSideMenuButton
 {
     [self openRepositorySection];
-    XCUIElement *sideMenuButton = [self findMenuButtonInSectionWithName:@"Repository"];
+    XCUIElement *sideMenuButton = [self findMenuButtonInSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     if (!sideMenuButton.exists) {
         XCTFail(@"There isn't side menu button");
     }
@@ -57,7 +57,7 @@
 - (void)testThatRepositoryPageHasCorrectTitle
 {
     [self openRepositorySection];
-    XCUIElement *navBarItem = [self findNavigationBarWithLabel:@"Repository"];
+    XCUIElement *navBarItem = [self findNavigationBarWithLabel:JMRepositoryPageAccessibilityId];
     if (!navBarItem.exists) {
         XCTFail(@"Page has non correct title");
     }
@@ -78,7 +78,7 @@
     [self openFolderWithName:kTestFolderName];
     [self givenThatCellsAreVisible];
     [self verifyCorrectTitleForFolderWithName:kTestFolderName];
-    [self backToFolderWithName:@"Repository"];
+    [self backToFolderWithName:JMRepositoryPageAccessibilityId];
 }
     
 //  Back button on the folder screen like name of the parent folder
@@ -96,12 +96,12 @@
     [self openRepositorySection];
     [self openFolderWithName:kTestFolderName];
     [self givenThatCellsAreVisible];
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Repository"
+    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:JMRepositoryPageAccessibilityId
                                                     onNavBarWithLabel:kTestFolderName];
     if (!backButton.exists) {
         XCTFail(@"Incorrect back button in folder");
     }
-    [self backToFolderWithName:@"Repository"];
+    [self backToFolderWithName:JMRepositoryPageAccessibilityId];
 }
 
 //  Search result
@@ -123,11 +123,11 @@
 {
     [self openRepositorySection];
     [self searchResourceWithName:@"Samples"
-               inSectionWithName:@"Repository"];
+               inSectionWithName:JMRepositoryPageAccessibilityId];
     [self givenThatCellsAreVisible];
     
     [self searchResourceWithName:@"Templates"
-               inSectionWithName:@"Repository"];
+               inSectionWithName:JMRepositoryPageAccessibilityId];
     [self givenThatCellsAreVisible];
 }
 
@@ -144,7 +144,7 @@
 {
     [self openRepositorySection];
     [self searchResourceWithName:@"NoSearchResults"
-               inSectionWithName:@"Repository"];
+               inSectionWithName:JMRepositoryPageAccessibilityId];
     XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
                                                 parentElement:nil
                                                       timeout:kUITestsBaseTimeout];
@@ -171,7 +171,7 @@
 {
     [self openRepositorySection];
 
-    [self switchViewFromListToGridInSectionWithTitle:@"Repository"];
+    [self switchViewFromListToGridInSectionWithTitle:JMRepositoryPageAccessibilityId];
     [self verifyThatCollectionViewContainsGridOfCells];
     
     [self openLibrarySection];
@@ -179,7 +179,7 @@
     [self givenThatCellsAreVisible];
     [self verifyThatCollectionViewContainsGridOfCells];
     
-    [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
+    [self switchViewFromGridToListInSectionWithTitle:JMRepositoryPageAccessibilityId];
     [self verifyThatCollectionViewContainsListOfCells];
 }
     
@@ -229,7 +229,7 @@
 {
     [self openRepositorySection];
     
-    [self searchResourceWithName:@"Monitoring" inSectionWithName:@"Repository"];
+    [self searchResourceWithName:@"Monitoring" inSectionWithName:JMRepositoryPageAccessibilityId];
     [self openFolderWithName:@"Monitoring"];
     [self givenThatCellsAreVisible];
     [self openFolderWithName:@"Monitoring Domains"];
@@ -241,7 +241,7 @@
     }
     
     [self backToFolderWithName:@"Monitoring"];
-    [self backToFolderWithName:@"Repository"];
+    [self backToFolderWithName:JMRepositoryPageAccessibilityId];
 }
 
 //  JRS 6.0/6.0.1/6.1: Report Thumbnails

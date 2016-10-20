@@ -53,17 +53,17 @@
 
 - (void)trySortByName
 {
-    [self selectSortBy:@"Name" inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Name" inSectionWithTitle:JMLibraryPageAccessibilityId];
 }
 
 - (void)trySortByCreationDate
 {
-    [self selectSortBy:@"Creation Date" inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Creation Date" inSectionWithTitle:JMLibraryPageAccessibilityId];
 }
 
 - (void)trySortByModifiedDate
 {
-    [self selectSortBy:@"Modified Date" inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Modified Date" inSectionWithTitle:JMLibraryPageAccessibilityId];
 }
 
 #pragma mark - Helpers - Filter By
@@ -71,14 +71,14 @@
 
 - (void)tryFilterByReports
 {
-    [self selectFilterBy:@"Reports" inSectionWithTitle:@"Library"];
+    [self selectFilterBy:@"Reports" inSectionWithTitle:JMLibraryPageAccessibilityId];
 
     [self givenThatReportCellsOnScreen];
 }
 
 - (void)tryFilterByDashboards
 {
-    [self selectFilterBy:@"Dashboards" inSectionWithTitle:@"Library"];
+    [self selectFilterBy:@"Dashboards" inSectionWithTitle:JMLibraryPageAccessibilityId];
 
     [self givenThatDashboardCellsOnScreen];
 }

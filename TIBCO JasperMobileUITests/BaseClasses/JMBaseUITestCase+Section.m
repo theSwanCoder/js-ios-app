@@ -41,7 +41,7 @@
     XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
     [searchResourcesSearchField tap];
 
-    XCUIElement *clearTextButton = [self findButtonWithTitle:@"Clear text"
+    XCUIElement *clearTextButton = [self findButtonWithAccessibilityId:@"Clear text"
                                                parentElement:searchResourcesSearchField];
     if (clearTextButton) {
         [clearTextButton tap];
@@ -56,17 +56,17 @@
 
 - (void)searchResourceWithName:(NSString *)resourceName inSectionWithName:(NSString *)sectionName
 {
-    if ([sectionName isEqualToString:@"Library"]) {
+    if ([sectionName isEqualToString:JMLibraryPageAccessibilityId]) {
         [self openLibrarySection];
         // TODO: replace with specific element - JMLibraryPageAccessibilityId
         [self searchResourceWithName:resourceName
         inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else if ([sectionName isEqualToString:@"Repository"]) {
+    } else if ([sectionName isEqualToString:JMRepositoryPageAccessibilityId]) {
         [self openRepositorySection];
         // TODO: replace with specific element - JMRepositoryPageAccessibilityId
         [self searchResourceWithName:resourceName
         inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else if ([sectionName isEqualToString:@"Favorites"]) {
+    } else if ([sectionName isEqualToString:JMFavoritesPageAccessibilityId]) {
         [self openFavoritesSection];
         // TODO: replace with specific element - JMRepositoryPageAccessibilityId
         [self searchResourceWithName:resourceName
@@ -81,7 +81,7 @@
     XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
     [searchResourcesSearchField tap];
 
-    XCUIElement *clearTextButton = [self findButtonWithTitle:@"Clear text"
+    XCUIElement *clearTextButton = [self findButtonWithAccessibilityId:@"Clear text"
                                                parentElement:searchResourcesSearchField];
     if (clearTextButton) {
         [clearTextButton tap];
@@ -110,7 +110,7 @@
     if (countOfListCells > 0) {
         return;
     } else {
-        [self switchViewFromListToGridInSectionWithTitle:@"Library"];
+        [self switchViewFromListToGridInSectionWithTitle:JMLibraryPageAccessibilityId];
     }
 }
 

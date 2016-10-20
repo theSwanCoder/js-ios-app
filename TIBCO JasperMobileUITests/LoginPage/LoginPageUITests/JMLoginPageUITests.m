@@ -260,13 +260,13 @@
 
 - (void)verifyThatLoginPageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMLoginPageAccessibilityId"
+    [self waitElementWithAccessibilityId:JMLoginPageAccessibilityId
                                  timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatLoginPageHasCorrectTrademarks
 {
-    XCUIElement *logoImage = [self findImageWithAccessibilityId:@"im_full_name"];
+    XCUIElement *logoImage = [self findImageWithAccessibilityId:JMLoginPageTradeMarkImageAccessibilityId];
     if (!logoImage) {
         XCTFail(@"There isn't an trademark element on Login Page");
     }
@@ -274,11 +274,11 @@
 
 - (void)verifyThatUserDidLoginIntoDemoServer
 {
-    [self showSideMenuInSectionWithName:@"Library"];
-    [self verifyAccountWithUsername:@"phoneuser"
-                       organization:@"organization_1"
-                        profileName:@"Jaspersoft Mobile Demo"];
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+    [self verifyAccountWithUsername:kJMDemoServerUsername
+                       organization:kJMDemoServerOrganization
+                        profileName:kJMDemoServerAlias];
+    [self hideSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 }
 
 - (void)verifyThatErrorAlertOnScreenWithTitle:(NSString *)title message:(NSString *)message
@@ -294,18 +294,18 @@
 
 - (void)verifyThatUserDidLoginIntoTestServer
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifyAccountWithUsername:kJMTestProfileCredentialsUsername
                        organization:kJMTestProfileCredentialsOrganization
                         profileName:kJMTestProfileName];
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 }
 
 - (void)verifyAccountWithUsername:(NSString *)username
                      organization:(NSString *)organization
                       profileName:(NSString *)profileName
 {
-    XCUIElement *sideMenuElement = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
+    XCUIElement *sideMenuElement = [self waitElementWithAccessibilityId:JMSideApplicationMenuAccessibilityId
                                                                 timeout:kUITestsBaseTimeout];
     XCUIElement *usernameStaticText = [self findStaticTextWithText:username
                                                      parentElement:sideMenuElement];
@@ -330,8 +330,8 @@
 
 - (void)tapTryDemoButton
 {
-    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    XCUIElement *demoButton = [self findButtonWithAccessibilityId:@"JMLoginPageTryButtonAccessibilityId"
+    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:JMLoginPageAccessibilityId];
+    XCUIElement *demoButton = [self findButtonWithAccessibilityId:JMLoginPageTryButtonAccessibilityId
                                                     parentElement:loginPageElement];
     if (demoButton) {
         [demoButton tap];
@@ -342,8 +342,8 @@
 
 - (void)tapLoginButton
 {
-    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    XCUIElement *loginButton = [self findButtonWithAccessibilityId:@"JMLoginPageLoginButtonAccessibilityId"
+    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:JMLoginPageAccessibilityId];
+    XCUIElement *loginButton = [self findButtonWithAccessibilityId:JMLoginPageLoginButtonAccessibilityId
                                                     parentElement:loginPageElement];
     if (loginButton) {
         [loginButton tap];
@@ -359,16 +359,16 @@
 
 - (void)enterUsername:(NSString *)username
 {
-    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    [self enterText:username intoTextFieldWithAccessibilityId:@"JMLoginPageUserNameTextFieldAccessibilityId"
+    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:JMLoginPageAccessibilityId];
+    [self enterText:username intoTextFieldWithAccessibilityId:JMLoginPageUserNameTextFieldAccessibilityId
       parentElement:loginPageElement
       isSecureField:false];
 }
 
 - (void)enterPassword:(NSString *)password
 {
-    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    [self enterText:password intoTextFieldWithAccessibilityId:@"JMLoginPagePasswordTextFieldAccessibilityId"
+    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:JMLoginPageAccessibilityId];
+    [self enterText:password intoTextFieldWithAccessibilityId:JMLoginPagePasswordTextFieldAccessibilityId
       parentElement:loginPageElement
       isSecureField:true];
 }
@@ -376,8 +376,8 @@
     - (void)closeErrorAlertWithTitle:(NSString *)title
 {
     XCUIElement *alert = [self findAlertWithTitle:title];
-    XCUIElement *okButton = [self findButtonWithTitle:@"OK"
-                                        parentElement:alert];
+    XCUIElement *okButton = [self findButtonWithAccessibilityId:JMButtonOkAccessibilityId
+                                                  parentElement:alert];
     if (okButton) {
         [okButton tap];
     } else {

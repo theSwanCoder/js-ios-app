@@ -50,8 +50,8 @@
     _serverProfile = serverProfile;
     self.titleLabel.text = serverProfile.alias;
     self.urlLabel.text = serverProfile.serverUrl;
-    self.accessibilityLabel = serverProfile.serverUrl;
-    self.accessibilityLanguage = JMPreferredLanguage;
+    self.accessibilityLabel = serverProfile.alias;
+    self.accessibilityLanguage = [JMLocalization accessibilityLanguage];
 }
 
 - (void) cloneServerProfile:(id)sender

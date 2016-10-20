@@ -114,7 +114,7 @@ NSString *const kJMJobRepeatTimeInterval = @"kJMJobRepeatTimeInterval";
 {
     [super viewDidLoad];
     
-    [self.view setAccessibility:NO withTextKey:@"" identifier:JMNewSchedulePageTitleAccessibilityId];
+    [self.view setAccessibility:NO withTextKey:@"" identifier:JMNewSchedulePageAccessibilityId];
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     [self createSections];

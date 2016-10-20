@@ -37,7 +37,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self givenThatLibraryPageOnScreen];
     [self givenThatDashboardCellsOnScreen];
 
-    [self searchTestDashboardInSectionWithName:@"Library"];
+    [self searchTestDashboardInSectionWithName:JMLibraryPageAccessibilityId];
     [self tryOpenTestDashboard];
 
     [self givenLoadingPopupNotVisible];

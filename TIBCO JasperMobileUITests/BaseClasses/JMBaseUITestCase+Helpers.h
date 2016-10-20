@@ -97,8 +97,8 @@
 
 // Other buttons
 - (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout
-                         inSectionWithName:(NSString *)sectionName;
-- (XCUIElement *)findMenuButtonInSectionWithName:(NSString *)sectionName;
+              inSectionWithAccessibilityId:(NSString *)accessibilityId;
+- (XCUIElement *)findMenuButtonInSectionWithAccessibilityId:(NSString *)accessibilityId;
 - (XCUIElement *)waitDoneButtonWithTimeout:(NSTimeInterval)timeout;
 
 // Cells

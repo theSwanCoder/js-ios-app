@@ -43,7 +43,7 @@
 {
     [super viewDidLoad];
     self.title = JMLocalizedString(@"report_viewer_options_title");
-    [self.view setAccessibility:NO withTextKey:@"report_viewer_options_title" identifier:JMDashboardViewerInputControlsPageTitleAccessibilityId];
+    [self.view setAccessibility:NO withTextKey:@"report_viewer_options_title" identifier:JMDashboardViewerInputControlsPageAccessibilityId];
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     // Remove extra separators
@@ -127,7 +127,7 @@
     [headerView addSubview:titleLabel];
     [headerView addConstraint:[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:headerView attribute:NSLayoutAttributeBottom multiplier:1.0 constant: -8.0]];
     
-    [headerView setAccessibility:YES withTextKey:@"report_viewer_options_title" identifier:JMDashboardViewerInputControlsPageTitleAccessibilityId];
+    [headerView setAccessibility:YES withTextKey:@"report_viewer_options_title" identifier:JMDashboardViewerInputControlsPageAccessibilityId];
 
     return headerView;
 }

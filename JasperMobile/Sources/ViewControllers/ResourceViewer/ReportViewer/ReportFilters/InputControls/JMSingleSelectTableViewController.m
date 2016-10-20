@@ -44,7 +44,7 @@
     
     self.title = self.cell.inputControlDescriptor.label;
     self.titleLabel.text = JMLocalizedString(@"report_viewer_options_singleselect_titlelabel_title");
-    [self.titleLabel setAccessibility:YES withTextKey:@"report_viewer_options_singleselect_titlelabel_title" identifier:JMReportViewerInputControlsSingleSelectPageTitleAccessibilityId];
+    [self.titleLabel setAccessibility:YES withTextKey:@"report_viewer_options_singleselect_titlelabel_title" identifier:JMReportViewerInputControlsSingleSelectPageAccessibilityId];
 
     self.noResultLabel.text = JMLocalizedString(@"resources_noresults_msg");
     [self.noResultLabel setAccessibility:YES withTextKey:@"resources_noresults_msg" identifier:JMReportViewerInputControlsPageNoResultsAccessibilityId];

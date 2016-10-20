@@ -47,6 +47,7 @@
 		08338AD11DA3B30100FDF590 /* JMGridLoadingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08338ACB1DA3B30100FDF590 /* JMGridLoadingCollectionViewCell.xib */; };
 		08338AD21DA3B30100FDF590 /* JMListLoadingCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08338ACE1DA3B30100FDF590 /* JMListLoadingCollectionViewCell.m */; };
 		08338AD31DA3B30100FDF590 /* JMListLoadingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08338ACF1DA3B30100FDF590 /* JMListLoadingCollectionViewCell.xib */; };
+		08397D371DB681C40074A724 /* JMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFA51AAF2CFB00DD072C /* JMConstants.m */; };
 		083BF4441D8FF68100039A8F /* JMResourceCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083BF4431D8FF68100039A8F /* JMResourceCollectionViewController.m */; };
 		083BF44B1D90142A00039A8F /* JMMenuItemControllersFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 083BF44A1D90142A00039A8F /* JMMenuItemControllersFactory.m */; };
 		0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */; };
@@ -4356,6 +4357,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08397D371DB681C40074A724 /* JMConstants.m in Sources */,
 				93CA63C71D11763600265DE4 /* JMLocalization.m in Sources */,
 				933CAFBE1C7770B600EF6F84 /* JMRecentlyViewedPageUITests.m in Sources */,
 				933CAFA91C776FCB00EF6F84 /* JMReportInfoDialogUITests.m in Sources */,

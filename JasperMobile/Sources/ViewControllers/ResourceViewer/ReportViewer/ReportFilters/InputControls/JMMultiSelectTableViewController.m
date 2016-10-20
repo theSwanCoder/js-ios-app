@@ -39,7 +39,7 @@
     [super viewDidLoad];
     
     self.titleLabel.text = JMLocalizedString(@"report_viewer_options_multiselect_titlelabel_title");
-    [self.titleLabel setAccessibility:YES withTextKey:@"report_viewer_options_multiselect_titlelabel_title" identifier:JMReportViewerInputControlsMultiSelectPageTitleAccessibilityId];
+    [self.titleLabel setAccessibility:YES withTextKey:@"report_viewer_options_multiselect_titlelabel_title" identifier:JMReportViewerInputControlsMultiSelectPageAccessibilityId];
 
     UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
     [actionItem setAccessibility:YES withTextKey:@"action_button_title" identifier:JMMenuActionsViewActionButtonAccessibilityId];

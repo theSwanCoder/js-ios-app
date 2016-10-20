@@ -52,7 +52,7 @@
 {
     [super viewDidLoad];
     self.title = JMLocalizedString(@"report_viewer_options_title");
-    [self.view setAccessibility:NO withTextKey:@"report_viewer_options_title" identifier:JMReportViewerInputControlsPageTitleAccessibilityId];
+    [self.view setAccessibility:NO withTextKey:@"report_viewer_options_title" identifier:JMReportViewerInputControlsPageAccessibilityId];
     
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     
@@ -497,7 +497,7 @@
     titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     titleLabel.backgroundColor = [UIColor clearColor];
     NSString *sectionTitleKey = @"report_viewer_options_title";
-    NSString *accessibilityIdentifier = JMReportViewerInputControlsPageTitleAccessibilityId;
+    NSString *accessibilityIdentifier = JMReportViewerInputControlsPageAccessibilityId;
     
     // empty 'none' option
     // we need this if an user marked 'always prompt' as true, but there are any input controls
@@ -505,7 +505,7 @@
     BOOL isSeveralReportOptions = [self isMultyReportOptions];
     if ( (isSeveralReportOptions || isEmptyNoneOption) && section == 0) {
         sectionTitleKey = @"report_viewer_report_options_title";
-        accessibilityIdentifier = JMReportViewerReportOptionsPageTitleAccessibilityId;
+        accessibilityIdentifier = JMReportViewerReportOptionsPageAccessibilityId;
     }
     titleLabel.text = [JMLocalizedString(sectionTitleKey) uppercaseString];
     [titleLabel sizeToFit];

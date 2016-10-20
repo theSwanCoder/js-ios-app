@@ -603,30 +603,35 @@
 #pragma mark - Other buttons
 
 - (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout
-                         inSectionWithName:(NSString *)sectionName
+              inSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:sectionName];
+    XCUIElement *menuButton = [self findMenuButtonInSectionWithAccessibilityId:accessibilityId];
     [self waitElementReady:menuButton
                    timeout:timeout];
     return menuButton;
 }
 
-- (XCUIElement *)findMenuButtonInSectionWithName:(NSString *)sectionName
+- (XCUIElement *)findMenuButtonInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionName
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *menuButton = [self findButtonWithAccessibilityId:@"menu icon"
-                                                    parentElement:navBar];
+    XCUIElement *parentElement = self.application;
+    if (sectionAccessibilityId) {
+        XCUIElement *sectionController = [self waitElementWithAccessibilityId:sectionAccessibilityId timeout:kUITestsBaseTimeout];
+        NSString *sectionTitle = sectionController.label;
+        parentElement = [self waitNavigationBarWithLabel:sectionTitle
+                                                       timeout:kUITestsBaseTimeout];
+    }
+    XCUIElement *menuButton = [self findButtonWithAccessibilityId:JMSideApplicationMenuMenuButtonAccessibilityId
+                                                    parentElement:parentElement];
     if (!menuButton) {
-        menuButton = [self findButtonWithAccessibilityId:@"menu icon note"
-                                           parentElement:navBar];
+        menuButton = [self findButtonWithAccessibilityId:JMSideApplicationMenuMenuButtonNoteAccessibilityId
+                                           parentElement:parentElement];
     }
     return menuButton;
 }
 
 - (XCUIElement *)waitDoneButtonWithTimeout:(NSTimeInterval)timeout
 {
-    return [self waitButtonWithAccessibilityId:@"Done"
+    return [self waitButtonWithAccessibilityId:JMButtonDoneAccessibilityId
                                        timeout:timeout];
 }
 
@@ -655,6 +660,7 @@
                           containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
                                                  labelText:(NSString *)labelText
 {
+#warning HERE NEED CHECK labelAccessibilityId
     XCUIApplication *app = self.application;
     XCUIElement *collectionView = [app.collectionViews elementBoundByIndex:0]; // TODO: replace with explicit accessibilityId
     NSArray *allCells;
@@ -669,12 +675,7 @@
     }
 
     NSPredicate *labelPredicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *cell, NSDictionary<NSString *, id> *bindings) {
-        XCUIElement *label = [self findStaticTextWithAccessibilityId:labelAccessibilityId
-                                                       parentElement:cell];
-        if (!label.exists) {
-            return NO;
-        }
-        return [label.label isEqualToString:labelText];
+        return [cell.label isEqualToString:labelText];
     }];
 
     allCells = [allCells filteredArrayUsingPredicate:labelPredicate];

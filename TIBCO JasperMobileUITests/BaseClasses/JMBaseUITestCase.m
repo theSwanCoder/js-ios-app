@@ -37,7 +37,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
         [self loginWithTestProfileIfNeed];
         [self givenThatLibraryPageOnScreen];
     } else {
-        XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
+        XCUIElement *loginPageView = [self findElementWithAccessibilityId:JMLoginPageAccessibilityId];
         if (!loginPageView) {
             [self skipIntroPageIfNeed];
             [self skipRateAlertIfNeed];
@@ -47,7 +47,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 }
 
 - (void)tearDown {
-//    XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
+//    XCUIElement *loginPageView = [self findElementWithAccessibilityId:JMLoginPageAccessibilityId];
 //    if (!loginPageView) {
 //        [self logout];
 //    }
@@ -77,9 +77,9 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (XCUIElement *)findTestProfileCell
 {
-    XCUIElement *testProfile = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
-                                 containsLabelWithAccessibilityId:@"Test Profile"
-                                                        labelText:@"Test Profile"];
+    XCUIElement *testProfile = [self findCollectionViewCellWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId
+                                 containsLabelWithAccessibilityId:kJMTestProfileName
+                                                        labelText:kJMTestProfileName];
     BOOL isTestProfileExists = testProfile.exists;
     if (!isTestProfileExists) {
         [self removeAllServerProfiles];
@@ -90,9 +90,9 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
         [self givenThatServerProfilesPageOnScreen];
         
-        testProfile = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
-                                     containsLabelWithAccessibilityId:@"Test Profile"
-                                                            labelText:@"Test Profile"];
+        testProfile = [self findCollectionViewCellWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId
+                                     containsLabelWithAccessibilityId:kJMTestProfileName
+                                                            labelText:kJMTestProfileName];
         if (!testProfile.exists) {
             XCTFail(@"Can't create test profile");
         }
@@ -103,7 +103,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 - (void)removeAllServerProfiles
 {
     while(true) {
-        NSInteger cellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
+        NSInteger cellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
         if (cellsCount == 0) {
             break;
         }
@@ -135,15 +135,15 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)loginWithTestProfileIfNeed
 {
-    XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
+    XCUIElement *loginPageView = [self findElementWithAccessibilityId:JMLoginPageAccessibilityId];
     if (loginPageView) {
         [self loginWithTestProfile];
     } else {
         // check 'test profile' was logged
-        [self showSideMenuInSectionWithName:nil];
+        [self showSideMenuInSectionWithAccessibilityId:nil];
         XCUIElement *profileNameLabel = [self findStaticTextWithText:kJMTestProfileName];
         if (profileNameLabel.exists) {
-            [self hideSideMenuInSectionWithName:nil];
+            [self hideSideMenuInSectionWithAccessibilityId:nil];
         } else {
             [self logout];
             [self givenThatLoginPageOnScreen];
@@ -243,19 +243,19 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 - (void)tryEnterTestCredentials
 {
     // Enter username
-    [self enterText:kJMTestProfileCredentialsUsername intoTextFieldWithAccessibilityId:@"JMLoginPageUserNameTextFieldAccessibilityId"
+    [self enterText:kJMTestProfileCredentialsUsername intoTextFieldWithAccessibilityId:JMLoginPageUserNameTextFieldAccessibilityId
       parentElement:nil
       isSecureField:false];
 
     // Enter password
-    [self enterText:kJMTestProfileCredentialsPassword intoTextFieldWithAccessibilityId:@"JMLoginPagePasswordTextFieldAccessibilityId"
+    [self enterText:kJMTestProfileCredentialsPassword intoTextFieldWithAccessibilityId:JMLoginPagePasswordTextFieldAccessibilityId
       parentElement:nil
       isSecureField:true];
 }
 
 - (void)tryTapLoginButton
 {
-    XCUIElement *loginButton = [self waitButtonWithAccessibilityId:@"JMLoginPageLoginButtonAccessibilityId"
+    XCUIElement *loginButton = [self waitButtonWithAccessibilityId:JMLoginPageLoginButtonAccessibilityId
                                                            timeout:kUITestsBaseTimeout];
     [loginButton tap];
 }
@@ -264,7 +264,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 #pragma mark - Helpers
 - (void)givenThatLoginPageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMLoginPageAccessibilityId"
+    [self waitElementWithAccessibilityId:JMLoginPageAccessibilityId
                                  timeout:kUITestsBaseTimeout];
 }
 
@@ -336,13 +336,13 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)givenThatReportCellsOnScreen
 {
-    [self selectFilterBy:@"Reports" inSectionWithTitle:@"Library"];
+    [self selectFilterBy:@"Reports" inSectionWithTitle:JMLibraryPageAccessibilityId];
     [self givenThatListCellsAreVisible];
 }
 
 - (void)givenThatDashboardCellsOnScreen
 {
-    [self selectFilterBy:@"Dashboards" inSectionWithTitle:@"Library"];
+    [self selectFilterBy:@"Dashboards" inSectionWithTitle:JMLibraryPageAccessibilityId];
     [self givenThatListCellsAreVisible];
 }
 
@@ -373,7 +373,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 {
     XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"];
     if (!backButton) {
-        backButton = [self findBackButtonWithAccessibilityId:@"Library"];
+        backButton = [self findBackButtonWithAccessibilityId:JMLibraryPageAccessibilityId];
     }
     [backButton tap];
 }
@@ -390,8 +390,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 #pragma mark - Verifies
 - (void)verifyThatCurrentPageIsLibrary
 {
-    // TODO: replace with specific element - JMLibraryPageAccessibilityId
-    [self waitElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"
+    [self waitElementWithAccessibilityId:JMLibraryPageAccessibilityId
                                  timeout:kUITestsBaseTimeout];
 }
 
@@ -435,7 +434,16 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 #pragma - Utils
 - (void)closeKeyboardWithDoneButton
 {
-    XCUIElement *doneButton = [self waitDoneButtonWithTimeout:kUITestsBaseTimeout];
+    XCUIElementQuery *keyboardsQuery = [self.application descendantsMatchingType:XCUIElementTypeKeyboard];
+    NSArray *allKeyboards = keyboardsQuery.allElementsBoundByAccessibilityElement;
+    
+    XCUIElement *currentKeyBoard = allKeyboards.firstObject;
+    if (!currentKeyBoard) {
+        XCTFail(@"There isn't any keyboard");
+    }
+    XCUIElement *doneButton = [self waitButtonWithAccessibilityId:@"Done"   // Here we should use "Done" accessibility identifier for keyboard Done button
+                                          parentElement:currentKeyBoard
+                                                timeout:kUITestsBaseTimeout];
     [doneButton tap];
 }
 

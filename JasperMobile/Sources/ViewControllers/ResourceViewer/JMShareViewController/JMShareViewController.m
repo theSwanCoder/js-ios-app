@@ -60,7 +60,7 @@
     [super viewDidLoad];
     
     self.title = JMLocalizedString(@"resource_viewer_share_title");
-    [self.view setAccessibility:NO withTextKey:@"resource_viewer_share_title" identifier:JMSharePageTitleAccessibilityId];
+    [self.view setAccessibility:NO withTextKey:@"resource_viewer_share_title" identifier:JMSharePageAccessibilityId];
     
     UIBarButtonItem *shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share_action"] style:UIBarButtonItemStylePlain target:self action:@selector(shareButtonDidTapped:)];
     [shareItem setAccessibility:YES withTextKey:@"resource_viewer_share_share_button" identifier:JMSharePageShareButtonAccessibilityId];

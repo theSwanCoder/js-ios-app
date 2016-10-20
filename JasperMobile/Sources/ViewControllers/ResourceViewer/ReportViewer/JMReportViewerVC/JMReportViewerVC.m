@@ -144,7 +144,7 @@
 #pragma mark - Accessibility
 - (NSString *)accessibilityIdentifier
 {
-    return JMReportViewerPageTitleAccessibilityId;
+    return JMReportViewerPageAccessibilityId;
 }
 
 #pragma mark - Setups

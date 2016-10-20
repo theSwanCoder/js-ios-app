@@ -84,7 +84,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     // TODO: the same code is for dashboard - may be make it general?
     XCUIElement *loadingPopup = [self waitElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"
                                                              timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self findButtonWithTitle:@"Cancel"
+    XCUIElement *cancelButton = [self findButtonWithAccessibilityId:@"Cancel"
                                             parentElement:loadingPopup];
     [cancelButton tap];
 }
@@ -158,7 +158,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)tryOpenTestReport
 {
-    [self searchTestReportInSectionWithName:@"Library"];
+    [self searchTestReportInSectionWithName:JMLibraryPageAccessibilityId];
     [self givenThatCellsAreVisible];
 
     XCUIElement *testCell = [self testReportCell];

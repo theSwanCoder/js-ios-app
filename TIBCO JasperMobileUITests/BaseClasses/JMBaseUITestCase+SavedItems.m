@@ -17,7 +17,7 @@
 - (void)givenThatSavedItemsEmpty
 {
     [self openSavedItemsSection];
-    [self switchViewFromGridToListInSectionWithTitle:@"Saved Items"];
+    [self switchViewFromGridToListInSectionWithTitle:JMSavedItemsPageAccessibilityId];
     [self deleteAllExportedResourcesIfNeed];
     [self openLibrarySection];
 }
@@ -77,7 +77,7 @@
     [self openSavedItemsSection];
     
     [self selectFilterBy:@"HTML"
-      inSectionWithTitle:@"Saved Items"];
+      inSectionWithTitle:JMSavedItemsPageAccessibilityId];
     
     [self verifyThatCollectionViewContainsCells];
     
@@ -106,7 +106,7 @@
     [self openSavedItemsSection];
     
     [self selectFilterBy:@"PDF"
-      inSectionWithTitle:@"Saved Items"];
+      inSectionWithTitle:JMSavedItemsPageAccessibilityId];
     
     [self verifyThatCollectionViewContainsCells];
     

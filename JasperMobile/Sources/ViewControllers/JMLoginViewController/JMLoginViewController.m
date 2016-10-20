@@ -38,6 +38,7 @@
 #import "JMCoreDataManager.h"
 
 @interface JMLoginViewController () <UITextFieldDelegate, JMServersGridViewControllerDelegate>
+@property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UITextField *serverProfileTextField;
@@ -62,6 +63,8 @@
     [self.textfields makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] loginViewTextFieldsBackgroundColor]];
     [self.textfields makeObjectsPerformSelector:@selector(setFont:) withObject:[[JMThemesManager sharedManager] loginInputControlsFont]];
 
+    [self.logoImageView setAccessibility:YES withTextKey:nil identifier:JMLoginPageTradeMarkImageAccessibilityId];
+    
     UIColor *placeholderColor = [[JMThemesManager sharedManager] loginViewTextFieldsTextColor];
     NSDictionary *attributes = @{NSForegroundColorAttributeName:[placeholderColor colorWithAlphaComponent: 0.5f]};
     self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMLocalizedString(@"login_username_label") attributes:attributes];
@@ -83,6 +86,7 @@
     self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
     [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
 
+    
     [self updateControlsForRestoration];
 }
 

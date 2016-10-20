@@ -22,17 +22,15 @@
     [self givenThatCellsAreVisible];
 }
 
-- (void)tearDown
-{
-
-    [super tearDown];
-}
-
 #pragma mark - Test 'Main' features
 
 - (void)testThatLibraryPageHasCorrectTitle
 {
-    // verify that library page has correct title
+    XCUIElement *libraryController = [self waitElementWithAccessibilityId:JMLibraryPageAccessibilityId timeout:kUITestsBaseTimeout];
+    NSString *libraryTitle = libraryController.label;
+    if (![libraryTitle isEqualToString:JMLocalizedString(@"menuitem_library_label")]) {
+        XCTFail(@"Library title doesn't correct");
+    }
 }
 
 - (void)testThatLibraryContainsListOfCells
@@ -51,8 +49,8 @@
 
 - (void)testMenuButton
 {
-    [self showSideMenuInSectionWithName:@"Library"];
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+    [self hideSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 }
 
 - (void)testThatUserCanPullDownToRefresh
@@ -128,10 +126,10 @@
         
         [self givenThatCollectionViewContainsListOfCells];
 
-        [self switchViewFromListToGridInSectionWithTitle:@"Library"];
+        [self switchViewFromListToGridInSectionWithTitle:JMLibraryPageAccessibilityId];
         [self verifyThatCollectionViewContainsGridOfCells];
 
-        [self switchViewFromGridToListInSectionWithTitle:@"Library"];
+        [self switchViewFromGridToListInSectionWithTitle:JMLibraryPageAccessibilityId];
         [self verifyThatCollectionViewContainsListOfCells];
         
     } else {
@@ -146,7 +144,7 @@
         
         [self givenThatCollectionViewContainsListOfCells];
 
-        [self switchViewFromListToGridInSectionWithTitle:@"Library"];
+        [self switchViewFromListToGridInSectionWithTitle:JMLibraryPageAccessibilityId];
         [self givenThatCellsAreVisible];
         [self verifyThatCollectionViewContainsGridOfCells];
         
@@ -170,7 +168,7 @@
 {
     [self givenThatCollectionViewContainsListOfCells];
 
-    [self switchViewFromListToGridInSectionWithTitle:@"Library"];
+    [self switchViewFromListToGridInSectionWithTitle:JMLibraryPageAccessibilityId];
     [self verifyThatCollectionViewContainsGridOfCells];
     
     // start find some text

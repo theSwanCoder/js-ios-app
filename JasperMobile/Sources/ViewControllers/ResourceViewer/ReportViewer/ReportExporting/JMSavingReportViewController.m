@@ -68,7 +68,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 {
     [super viewDidLoad];
     self.title = JMLocalizedString(@"report_viewer_save_title");
-    [self.view setAccessibility:NO withTextKey:@"report_viewer_save_title" identifier:JMReportViewerSavingPageTitleAccessibilityId];
+    [self.view setAccessibility:NO withTextKey:@"report_viewer_save_title" identifier:JMReportViewerSavingPageAccessibilityId];
     
     self.reportName = self.report.resourceLookup.label;
     self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] firstObject];

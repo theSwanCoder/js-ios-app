@@ -27,19 +27,19 @@
 //    - After:
 - (void)testThatUserCanSeeInfoScreenTestReport
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self closeInfoPageForTestReport];
 }
 
 - (void)testThatUserCanSeeInfoScreenTestDashboard
 {
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self closeInfoPageForTestDashboard];
 }
 
 - (void)testThatUserCanSeeInfoScreenTestFolder
 {
-    [self openInfoPageForTestFolderFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestFolderFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self closeInfoPageForTestFolder];
 }
 
@@ -55,7 +55,7 @@
 //    - After:
 - (void)testThatInfoScreenHasCorrectTitleOnBackButton
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self verifyThatInfoPageForTestReportHasBackButton];
     [self closeInfoPageForTestReport];
 }
@@ -71,7 +71,7 @@
 //    - After:
 - (void)testThatInfoScreenHasCorrectTitle
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self verifyThatInfoPageForTestReportHasCorrectTitle];
     [self closeInfoPageForTestReport];
 }
@@ -95,7 +95,7 @@
 //    - After:
 - (void)testThatInfoScreenContainsCorrectInfoForTestReport
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self verifyThatInfoPageForTestReportContainsCorrectData];
     [self closeInfoPageForTestReport];
 }
@@ -119,7 +119,7 @@
 //    - After:
 - (void)testThatInfoScreenContainsCorrectInfoForTestDashboard
 {
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self verifyThatInfoPageForTestDashboardContainsCorrectData];
     [self closeInfoPageForTestDashboard];
 }
@@ -143,7 +143,7 @@
 //    - After:
 - (void)testThatInfoScreenContainsCorrectInfoForTestFolder
 {
-    [self openInfoPageForTestFolderFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestFolderFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self verifyThatInfoPageForTestFolderContainsCorrectData];
     [self closeInfoPageForTestFolder];
 }
@@ -162,7 +162,7 @@
 //    - After:
 - (void)testThatTestReportCanBeMarkFavoriteFromInfoScreen
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
 
     [self markAsFavoriteFromMenuActions];
     [self unmarkFromFavoritesFromMenuActions];
@@ -172,7 +172,7 @@
 
 - (void)testThatTestDashboardCanBeMarkFavoriteFromInfoScreen
 {
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
 
     [self markAsFavoriteFromMenuActions];
     [self unmarkFromFavoritesFromMenuActions];
@@ -182,7 +182,7 @@
     
 - (void)testThatTestFolderCanBeMarkFavoriteFromInfoScreen
 {
-    [self openInfoPageForTestFolderFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestFolderFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
 
     [self markAsFavoriteFromMenuActions];
     [self unmarkFromFavoritesFromMenuActions];
@@ -202,7 +202,7 @@
 //    - After:
 - (void)testThatTestReportCanBeRunFromInfoScreen
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     
     [self openTestReportFromInfoPage];
     
@@ -211,7 +211,7 @@
 
 - (void)testThatTestDashboardCanBeRunFromInfoScreen
 {
-    [self openInfoPageForTestDashboardFromSectionWithName:@"Repository"];
+    [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
 
     [self openTestDashboardFromInfoPage];
 

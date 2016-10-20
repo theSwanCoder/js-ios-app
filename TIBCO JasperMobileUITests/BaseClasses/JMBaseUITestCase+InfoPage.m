@@ -53,9 +53,9 @@
 }
 
 #pragma mark - Reports
-- (void)openInfoPageForTestReportFromSectionWithName:(NSString *)sectionName
+- (void)openInfoPageForTestReportFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *reportCell = [self searchTestReportInSectionWithName:sectionName];
+    XCUIElement *reportCell = [self searchTestReportInSectionWithName:accessibilityId];
     [self openInfoPageFromCell:reportCell];
     [self verifyThatReportInfoPageOnScreen];
 }
@@ -88,9 +88,9 @@
 }
 
 #pragma mark - Dashboards
-- (void)openInfoPageForTestDashboardFromSectionWithName:(NSString *)sectionName
+- (void)openInfoPageForTestDashboardFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *dashboardCell = [self searchTestDashboardInSectionWithName:sectionName];
+    XCUIElement *dashboardCell = [self searchTestDashboardInSectionWithName:accessibilityId];
     [self openInfoPageFromCell:dashboardCell];
     [self verifyThatDashboardInfoPageOnScreen];
 }
@@ -124,9 +124,9 @@
 
 #pragma mark - Folders
 
-- (void)openInfoPageForTestFolderFromSectionWithName:(NSString *)sectionName
+- (void)openInfoPageForTestFolderFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *folderCell = [self searchTestFolderInSectionWithName:sectionName];
+    XCUIElement *folderCell = [self searchTestFolderInSectionWithName:accessibilityId];
     [self openInfoPageFromCell:folderCell];
     [self verifyThatFolderInfoPageOnScreen];
 }

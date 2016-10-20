@@ -16,21 +16,21 @@
 - (void)verifyInfoPageOnScreenForPageWithAccessibilityId:(NSString *)accessibilityId;
 
 // Reports
-- (void)openInfoPageForTestReportFromSectionWithName:(NSString *)sectionName;
+- (void)openInfoPageForTestReportFromSectionWithAccessibilityId:(NSString *)accessibilityId;
 - (void)verifyThatInfoPageForTestReportHasBackButton;
 - (void)verifyThatInfoPageForTestReportHasCorrectTitle;
 - (void)verifyThatInfoPageForTestReportContainsCorrectData;
 - (void)closeInfoPageForTestReport;
 
 // Dashboards
-- (void)openInfoPageForTestDashboardFromSectionWithName:(NSString *)sectionName;
+- (void)openInfoPageForTestDashboardFromSectionWithAccessibilityId:(NSString *)accessibilityId;
 - (void)verifyThatInfoPageForTestDashboardHasBackButton;
 - (void)verifyThatInfoPageForTestDashboardHasCorrectTitle;
 - (void)verifyThatInfoPageForTestDashboardContainsCorrectData;
 - (void)closeInfoPageForTestDashboard;
 
 // Folders
-- (void)openInfoPageForTestFolderFromSectionWithName:(NSString *)sectionName;
+- (void)openInfoPageForTestFolderFromSectionWithAccessibilityId:(NSString *)accessibilityId;
 - (void)verifyThatInfoPageForTestFolderHasBackButton;
 - (void)verifyThatInfoPageForTestFolderHasCorrectTitle;
 - (void)verifyThatInfoPageForTestFolderContainsCorrectData;

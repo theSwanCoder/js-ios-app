@@ -47,7 +47,7 @@
     [super viewDidLoad];
     
     self.title = JMLocalizedString(@"report_viewer_report_options_title");
-    [self.view setAccessibility:NO withTextKey:@"report_viewer_report_options_title" identifier:JMReportViewerReportOptionsPageTitleAccessibilityId];
+    [self.view setAccessibility:NO withTextKey:@"report_viewer_report_options_title" identifier:JMReportViewerReportOptionsPageAccessibilityId];
     
     self.noResultLabel.text = JMLocalizedString(@"resources_noresults_msg");
     [self.noResultLabel setAccessibility:YES withTextKey:@"resources_noresults_msg" identifier:JMReportViewerInputControlsPageNoResultsAccessibilityId];

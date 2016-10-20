@@ -165,7 +165,7 @@
 
 - (void)verifyBackButtonHasCorrectTitle
 {
-    [self waitBackButtonWithAccessibilityId:@"Library"
+    [self waitBackButtonWithAccessibilityId:JMLibraryPageAccessibilityId
                           onNavBarWithLabel:kTestDashboardName
                                     timeout:kUITestsBaseTimeout];
 }

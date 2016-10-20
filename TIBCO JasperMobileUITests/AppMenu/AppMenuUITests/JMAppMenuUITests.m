@@ -9,16 +9,18 @@
 #import "JMAppMenuUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+SideMenu.h"
+//#import "NSObject+Additions.h"
+//#import "JaspersoftSDK/JaspersoftSDK.h"
 
 @implementation JMAppMenuUITests
 
 #pragma mark - Tests
 - (void)testThatMenuViewCanBeViewedByTappingMenuButton
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifySideMenuVisible];
 
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifySideMenuNotVisible];
 }
 
@@ -33,14 +35,14 @@
 
 - (void)testThatMenuViewIsScrollable
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifySideMenuVisible];
 
     XCUIElement *menuView = [self sideMenuElement];
     [menuView swipeUp];
     [menuView swipeDown];
 
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifySideMenuNotVisible];
 }
 
@@ -63,11 +65,11 @@
 - (void)testThatMenuViewCanSelectItems
 {
     // Check all collection screen items
-    NSArray *itemsArray = @[@"Repository", @"Saved Items", @"Favorites", @"Schedules"];
+    NSArray *itemsArray = @[JMRepositoryPageAccessibilityId, JMSavedItemsPageAccessibilityId, JMFavoritesPageAccessibilityId, JMSchedulesPageAccessibilityId];
     for (NSString *itemName in itemsArray) {
-        [self showSideMenuInSectionWithName:nil];
+        [self showSideMenuInSectionWithAccessibilityId:nil];
         [self verifySideMenuVisible];
-        [self selectMenuItemForPageWithName:itemName];
+        [self selectMenuItemForPageWithAccessibilityId:itemName];
     }
 
     // Check About item
@@ -79,33 +81,51 @@
     // Check Settings item
     [self selectSettings];
     // Close Settings page
-    XCUIElement *cancelButton = [self waitButtonWithTitle:@"Cancel"
-                                                  timeout:kUITestsBaseTimeout];
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:JMButtonCancelAccessibilityId
+                                                            timeout:kUITestsBaseTimeout];
     [cancelButton tap];
 }
 
 - (void)testThatServerProfileInfoIsAppeared
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifySideMenuVisible];
     
-    XCUIElement *userNameLabel = self.application.staticTexts[kJMTestProfileCredentialsUsername];
+    XCUIElement *userNameLabel = [self findStaticTextWithAccessibilityId:JMSideApplicationMenuUsernameLabelAccessibilityId];
     if (!userNameLabel.exists) {
         XCTFail(@"'Username' label doesn't exist.");
     }
+    if(![userNameLabel.label isEqualToString:kJMTestProfileCredentialsUsername]){
+        XCTFail(@"'Username' label text doesn't correct.");
+    }
     
     NSString *fullServerNameString = [NSString stringWithFormat:@"%@ (v.%@)", kJMTestProfileName, @"6.3.0"];
-    XCUIElement *serverAliasLabel = self.application.staticTexts[fullServerNameString];
+    XCUIElement *serverAliasLabel = [self findStaticTextWithAccessibilityId:JMSideApplicationMenuFullServerNameLabelAccessibilityId];
     if (!serverAliasLabel.exists) {
         XCTFail(@"'Server Alias' label doesn't exist.");
     }
-    XCUIElement *organizationLabel = self.application.staticTexts[kJMTestProfileCredentialsOrganization];
-    if (!organizationLabel.exists) {
+    if(![serverAliasLabel.label isEqualToString:fullServerNameString]){
+        XCTFail(@"'Server Alias' label text doesn't correct.");
+    }
+
+    XCUIElement *organizationLabel = [self findStaticTextWithAccessibilityId:JMSideApplicationMenuOrganizationLabelAccessibilityId];
+    if (!userNameLabel.exists) {
         XCTFail(@"'Organization' label doesn't exist.");
     }
-    [self hideSideMenuInSectionWithName:@"Library"];
-}
+    if(![organizationLabel.label isEqualToString:kJMTestProfileCredentialsOrganization]){
+        XCTFail(@"'Organization' label text doesn't correct.");
+    }
+    
+    XCUIElement *buildVersionLabel = [self findStaticTextWithAccessibilityId:JMSideApplicationMenuVersionLabelAccessibilityId];
+    if (!buildVersionLabel.exists) {
+        XCTFail(@"'Build&version' label doesn't exist.");
+    }
+    if(!buildVersionLabel.label.length){
+        XCTFail(@"'Build&version' label text doesn't correct.");
+    }
 
+    [self hideSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+}
 
 #pragma mark - Helpers
 

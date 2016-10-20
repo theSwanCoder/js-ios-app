@@ -40,7 +40,7 @@
     [super viewDidLoad];
 
     self.title = JMLocalizedString(@"report_chart_type_view_title");
-    [self.view setAccessibility:NO withTextKey:@"report_chart_type_view_title" identifier:JMReportViewerChartTypePageTitleAccessibilityId];
+    [self.view setAccessibility:NO withTextKey:@"report_chart_type_view_title" identifier:JMReportViewerChartTypePageAccessibilityId];
 }
 
 #pragma mark - UITableViewDataSource

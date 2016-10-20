@@ -53,7 +53,7 @@
 #pragma mark - Accessibility
 - (NSString *)accessibilityIdentifier
 {
-    return JMContentResourceViewerPageTitleAccessibilityId;
+    return JMContentResourceViewerPageAccessibilityId;
 }
 
 #pragma mark - Accessors

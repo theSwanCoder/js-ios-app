@@ -10,17 +10,17 @@
 
 @implementation JMBaseUITestCase (SideMenu)
 
-- (void)showSideMenuInSectionWithName:(NSString *)sectionName
+- (void)showSideMenuInSectionWithAccessibilityId:(NSString *)accessibilityId
 {
     [self givenSideMenuNotVisible];
-    [self tryTapSideApplicationMenuInSectionWithName:sectionName];
+    [self tryTapSideApplicationMenuInSectionWithAccessibilityId:accessibilityId];
     [self givenSideMenuVisible];
 }
 
-- (void)hideSideMenuInSectionWithName:(NSString *)sectionName
+- (void)hideSideMenuInSectionWithAccessibilityId:(NSString *)accessibilityId
 {
     [self givenSideMenuVisible];
-    [self tryTapSideApplicationMenuInSectionWithName:sectionName];
+    [self tryTapSideApplicationMenuInSectionWithAccessibilityId:accessibilityId];
     [self givenSideMenuNotVisible];
 }
 
@@ -28,155 +28,142 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:nil
                                                    timeout:timeout];
-    [self waitButtonWithAccessibilityId:@"menu icon note"
+    [self waitButtonWithAccessibilityId:JMSideApplicationMenuMenuButtonNoteAccessibilityId
                           parentElement:navBar
                                 timeout:timeout];
 }
 
 - (void)openLibrarySection
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Library"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMLibraryPageAccessibilityId];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Library"
-          fromSectionWithName:nil];
+    [self tryOpenPageWithAccessibilityId:JMLibraryPageAccessibilityId
+          fromSectionWithAccessibilityId:nil];
 }
 
 - (void)openRepositorySection
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Repository"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMRepositoryPageAccessibilityId];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Repository"
-          fromSectionWithName:nil];
-}
-
-- (void)openRecentlyViewedSection
-{
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Recently Viewed"];
-    if (navigationBar.exists) {
-        return;
-    }
-    [self tryOpenPageWithName:@"Recently Viewed"
-          fromSectionWithName:nil];
+    [self tryOpenPageWithAccessibilityId:JMRepositoryPageAccessibilityId
+          fromSectionWithAccessibilityId:nil];
 }
 
 - (void)openSavedItemsSection
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Saved Items"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMSavedItemsPageAccessibilityId];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Saved Items"
-          fromSectionWithName:nil];
+    [self tryOpenPageWithAccessibilityId:JMSavedItemsPageAccessibilityId
+          fromSectionWithAccessibilityId:nil];
 }
 
 - (void)openFavoritesSection
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Favorites"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMFavoritesPageAccessibilityId];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Favorites"
-          fromSectionWithName:nil];
+    [self tryOpenPageWithAccessibilityId:JMFavoritesPageAccessibilityId
+          fromSectionWithAccessibilityId:nil];
 }
 
 - (void)openSchedulesSection
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Schedules"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMSchedulesPageAccessibilityId];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Schedules"
-          fromSectionWithName:nil];
+    [self tryOpenPageWithAccessibilityId:JMSchedulesPageAccessibilityId
+          fromSectionWithAccessibilityId:nil];
 }
 
 - (void)selectAbout
 {
-    [self tryOpenPageWithName:@"About"
-          fromSectionWithName:nil];
+    [self tryOpenPageWithAccessibilityId:JMAppAboutPageAccessibilityId
+          fromSectionWithAccessibilityId:nil];
 }
 
 - (void)selectSettings
 {
-    [self tryOpenPageWithName:@"Settings"
-          fromSectionWithName:nil];
+    [self tryOpenPageWithAccessibilityId:JMSettingsPageAccessibilityId
+          fromSectionWithAccessibilityId:nil];
 }
 
 - (void)selectFeedback
 {
-    [self tryOpenPageWithName:@"Feedback by email"
-          fromSectionWithName:nil];
+    [self tryOpenPageWithAccessibilityId:JMFeedbackPageAccessibilityId
+          fromSectionWithAccessibilityId:nil];
 }
 
 - (void)selectLogOut
 {
-    [self tryOpenPageWithName:@"Log Out"
-          fromSectionWithName:nil];
+    [self tryOpenPageWithAccessibilityId:JMLogoutPageAccessibilityId
+          fromSectionWithAccessibilityId:nil];
 }
 
 - (XCUIElement *)sideMenuElement
 {
-    XCUIElement *menuView = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];
+    XCUIElement *menuView = [self findElementWithAccessibilityId:JMSideApplicationMenuAccessibilityId];
     return menuView;
 }
 
 #pragma mark - Helpers
 
-- (void)tryOpenPageWithName:(NSString *)pageName
-        fromSectionWithName:(NSString *)sectionName
+- (void)tryOpenPageWithAccessibilityId:(NSString *)accessibilityId
+        fromSectionWithAccessibilityId:(NSString *)currentSectionAccessibilityId
 {
     [self givenSideMenuNotVisible];
-    [self tryTapSideApplicationMenuInSectionWithName:sectionName];
-    [self selectMenuItemForPageWithName:pageName];
+    [self tryTapSideApplicationMenuInSectionWithAccessibilityId:currentSectionAccessibilityId];
+    [self selectMenuItemForPageWithAccessibilityId:accessibilityId];
 }
 
-- (void)selectMenuItemForPageWithName:(NSString *)pageName
+- (void)selectMenuItemForPageWithAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *pageMenuItem = [self findMenuItemForPageName:pageName];
+    XCUIElement *pageMenuItem = [self findMenuItemForPageAccessibilityId:accessibilityId];
     if (!pageMenuItem.exists) {
-        NSString *pageNameWithNote = [NSString stringWithFormat:@"%@ note", pageName];
-        pageMenuItem = [self findMenuItemForPageName:pageNameWithNote];
+        NSString *pageNameWithNote = [NSString stringWithFormat:@"%@ note", accessibilityId];
+        pageMenuItem = [self findMenuItemForPageAccessibilityId:pageNameWithNote];
     }
     [pageMenuItem tap];
 }
 
-- (XCUIElement *)findMenuItemForPageName:(NSString *)pageName
+- (XCUIElement *)findMenuItemForPageAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
+    XCUIElement *menuView = [self waitElementWithAccessibilityId:JMSideApplicationMenuAccessibilityId
                                                          timeout:kUITestsBaseTimeout];
-    XCUIElement *pageMenuItem;
-    NSArray *allMenuItems = menuView.cells.allElementsBoundByAccessibilityElement;
-    for (XCUIElement *menuItem in allMenuItems) {
-        XCUIElement *label = [self findStaticTextWithText:pageName
-                                            parentElement:menuItem];
-        if (label.exists) {
-            pageMenuItem = menuItem;
-            break;
-        }
-    }
+    
+    XCUIElementQuery *menuItemsQuery = [menuView.cells matchingType:XCUIElementTypeCell
+                                                         identifier:accessibilityId];
+    
+    NSArray *allMenuItems = menuItemsQuery.allElementsBoundByAccessibilityElement;
+    XCUIElement *pageMenuItem = allMenuItems.firstObject;
+
     return pageMenuItem;
 }
 
 - (void)givenSideMenuVisible
 {
-    [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
+    [self waitElementWithAccessibilityId:JMSideApplicationMenuAccessibilityId
                                  timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenSideMenuNotVisible
 {
-    XCUIElement *sideMenu = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];
+    XCUIElement *sideMenu = [self findElementWithAccessibilityId:JMSideApplicationMenuAccessibilityId];
     if (sideMenu.exists) {
         XCTFail(@"Side menu should not be visible");
     }
 }
 
-- (void)tryTapSideApplicationMenuInSectionWithName:(NSString *)sectionName
+- (void)tryTapSideApplicationMenuInSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:sectionName];
+    XCUIElement *menuButton = [self findMenuButtonInSectionWithAccessibilityId:accessibilityId];
     [menuButton tap];
 }
 

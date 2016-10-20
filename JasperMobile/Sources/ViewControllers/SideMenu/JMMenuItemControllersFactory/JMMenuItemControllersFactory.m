@@ -95,10 +95,13 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         }
         case JMMenuItemType_Settings: {
             JMServerOptionsViewController *settingsVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMServerOptionsViewController"];
-            settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"dialog_button_cancel")
-                                                                                            style:UIBarButtonItemStyleDone
-                                                                                           target:settingsVC
-                                                                                           action:@selector(cancel)];
+            UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"dialog_button_cancel")
+                                                                           style:UIBarButtonItemStyleDone
+                                                                          target:settingsVC
+                                                                          action:@selector(cancel)];
+            [cancelItem setAccessibility:YES withTextKey:@"dialog_button_cancel" identifier:JMButtonCancelAccessibilityId];
+            settingsVC.navigationItem.leftBarButtonItem = cancelItem;
+            
             settingsVC.serverProfile = [JMUtils activeServerProfile];
             __weak __typeof(settingsVC) weakSettingVC = settingsVC;
             settingsVC.exitBlock = ^{
@@ -120,7 +123,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     NSAssert(menuItemViewController, @"MenuItemViewController not initialized. Item Title: %@", menuItem.itemTitleKey);
     
     menuItemViewController.title = JMLocalizedString(menuItem.itemTitleKey);
-    [menuItemViewController setAccessibility:NO withTextKey:menuItem.itemTitleKey identifier:menuItem.itemPageAccessibilityId];
+    [menuItemViewController.view setAccessibility:NO withTextKey:menuItem.itemTitleKey identifier:menuItem.itemPageAccessibilityId];
     return [[JMMainNavigationController alloc] initWithRootViewController:menuItemViewController];
 }
 
