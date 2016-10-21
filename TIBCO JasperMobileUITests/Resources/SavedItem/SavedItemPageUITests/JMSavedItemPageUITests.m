@@ -119,7 +119,7 @@
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
 
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self selectActionWithName:@"Delete"];
     [self cancelDeletingAction];
 
@@ -141,7 +141,7 @@
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self selectActionWithName:@"Rename"];
     [self cancelRenamingAction];
     
@@ -163,7 +163,7 @@
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self selectActionWithName:@"Rename"];
     [self performRenameAction];
     
@@ -185,7 +185,7 @@
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self selectActionWithName:@"Rename"];
     [self performRenameActionWithEmptyName];
     
@@ -207,7 +207,7 @@
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self selectActionWithName:@"Rename"];
     [self performRenameActionWithSpacesInName];
     
@@ -228,7 +228,7 @@
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self selectActionWithName:@"Rename"];
     [self performRenameActionWithTheSameName];
     

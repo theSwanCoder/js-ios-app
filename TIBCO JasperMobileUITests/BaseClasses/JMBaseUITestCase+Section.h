@@ -9,8 +9,8 @@
 @interface JMBaseUITestCase (Section)
 
 // View Types
-- (void)switchViewFromListToGridInSectionWithTitle:(NSString *)sectionTitle;
-- (void)switchViewFromGridToListInSectionWithTitle:(NSString *)sectionTitle;
+- (void)switchViewFromListToGridInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
+- (void)switchViewFromGridToListInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
 
 // Search
 - (void)searchResourceWithName:(NSString *)resourceName
@@ -21,7 +21,6 @@
 - (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
 
 // Cells
-- (void)givenThatCollectionViewContainsListOfCells;
 - (NSInteger)countOfGridCells;
 - (NSInteger)countOfListCells;
 - (void)verifyThatCollectionViewContainsCells;
@@ -35,9 +34,8 @@
   inSectionWithTitle:(NSString *)sectionTitle;
 
 // Filter Action
-- (void)openFilterMenuInSectionWithTitle:(NSString *)sectionTitle;
-- (void)selectFilterBy:(NSString *)filterTypeString
-    inSectionWithTitle:(NSString *)sectionTitle;
+- (void)selectFilterBy:(NSString *)filterAccessibilityId
+inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
 
 // CollectionView
 - (XCUIElement *)collectionViewElementFromSectionWithAccessibilityId:(NSString *)accessibilityId;

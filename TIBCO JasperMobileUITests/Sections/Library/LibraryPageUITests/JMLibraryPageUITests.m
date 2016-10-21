@@ -35,16 +35,11 @@
 
 - (void)testThatLibraryContainsListOfCells
 {
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatListCellsAreVisible];
+    NSInteger allCountOfCells = self.application.cells.count;
+    NSInteger countOfListCells = [self countOfListCells];
     
-    XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
-    if (contentView.exists) {
-
-        [self verifyThatCollectionViewContainsListOfCells];
-        
-    } else {
-        XCTFail(@"Content View doesn't visible");
-    }
+    XCTAssertTrue(allCountOfCells == countOfListCells, @"There are other cells in list");
 }
 
 - (void)testMenuButton
@@ -121,54 +116,36 @@
 
 - (void)testThatViewTypeButtonChangeViewPresentation
 {
-    XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
-    if (contentView.exists) {
-        
-        [self givenThatCollectionViewContainsListOfCells];
-
-        [self switchViewFromListToGridInSectionWithTitle:JMLibraryPageAccessibilityId];
-        [self verifyThatCollectionViewContainsGridOfCells];
-
-        [self switchViewFromGridToListInSectionWithTitle:JMLibraryPageAccessibilityId];
-        [self verifyThatCollectionViewContainsListOfCells];
-        
-    } else {
-        XCTFail(@"Content View doesn't visible");
-    }
+    [self givenThatListCellsAreVisible];
+    [self switchViewFromListToGridInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+    [self verifyThatCollectionViewContainsGridOfCells];
+    
+    [self switchViewFromGridToListInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+    [self verifyThatCollectionViewContainsListOfCells];
 }
 
 - (void)testThatViewPresentationNotChangeAfterChangingPages
 {
-    XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
-    if (contentView.exists) {
+    [self givenThatListCellsAreVisible];
+    [self switchViewFromListToGridInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+    [self verifyThatCollectionViewContainsGridOfCells];
         
-        [self givenThatCollectionViewContainsListOfCells];
-
-        [self switchViewFromListToGridInSectionWithTitle:JMLibraryPageAccessibilityId];
-        [self givenThatCellsAreVisible];
-        [self verifyThatCollectionViewContainsGridOfCells];
-        
-        // Change Page to Repository
-        [self openRepositorySection];
-        [self givenThatRepositoryPageOnScreen];
-        
-        // Change Page to Library
-        [self openLibrarySection];
-        [self givenThatLibraryPageOnScreen];
-        [self givenThatCellsAreVisible];
-        
-        [self verifyThatCollectionViewContainsGridOfCells];
-        
-    } else {
-        XCTFail(@"Content View doesn't visible");
-    }
+    // Change Page to Repository
+    [self openRepositorySection];
+    [self givenThatRepositoryPageOnScreen];
+    
+    // Change Page to Library
+    [self openLibrarySection];
+    [self givenThatLibraryPageOnScreen];
+    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsGridOfCells];
 }
 
 - (void)testThatViewPresentationNotChangeWhenUserUseSearch
 {
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatListCellsAreVisible];
 
-    [self switchViewFromListToGridInSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self switchViewFromListToGridInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifyThatCollectionViewContainsGridOfCells];
     
     // start find some text
@@ -214,14 +191,14 @@
 
 - (void)testThatUserCanFilterByReports
 {
-    [self tryFilterByReports];
+//    [self tryFilterByReports];
     [self givenThatCellsAreVisible];
     [self verifyThatCellsFiltredByReports];
 }
 
 - (void)testThatUserCanFilterByDashboards
 {
-    [self tryFilterByDashboards];
+    [self selectFilterBy:JMResourceLoaderFilterByDashboardPageAccessibilityId inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self givenThatCellsAreVisible];
     [self verifyThatCellsFiltredByDashboards];
 }

@@ -53,7 +53,7 @@
     // back to the 'library' page
     [self openTestReportPage];
 
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
     [self selectActionWithName:@"Refresh"];
     [self givenLoadingPopupNotVisible];
     
@@ -95,7 +95,7 @@
 
     [self openTestReportPage];
 
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
     [self selectActionWithName:@"Save"];
 
     // verify that 'save report' page is on the screen
@@ -148,7 +148,7 @@
 
     [self openTestReportPage];
 
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
     [self selectActionWithName:@"Info"];
 
     [self verifyThatReportInfoPageOnScreen];

@@ -23,7 +23,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (void)openTestDashboardFromInfoPage
 {
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMDashboardViewerPageAccessibilityId];
     [self selectActionWithName:@"Run"];
 
     [self givenLoadingPopupNotVisible];
@@ -35,7 +35,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)openTestDashboardPageWithWaitingFinish:(BOOL)waitingFinish
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatDashboardCellsOnScreen];
+//    [self givenThatDashboardCellsOnScreen];
 
     [self searchTestDashboardInSectionWithName:JMLibraryPageAccessibilityId];
     [self tryOpenTestDashboard];
@@ -86,7 +86,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (void)refreshDashboard
 {
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMDashboardViewerPageAccessibilityId];
     [self selectActionWithName:@"Refresh"];
 
     [self givenLoadingPopupNotVisible];
@@ -94,7 +94,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (void)openPrintDashboardPage
 {
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMDashboardViewerPageAccessibilityId];
     [self selectActionWithName:@"Print"];
 }
 

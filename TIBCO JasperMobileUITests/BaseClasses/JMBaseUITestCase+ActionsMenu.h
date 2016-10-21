@@ -6,14 +6,11 @@
 #import "JMBaseUITestCase.h"
 
 @interface JMBaseUITestCase (ActionsMenu)
-- (BOOL)isShareButtonExists;
-- (XCUIElement *)findActionsButton;
-- (XCUIElement *)findActionsButtonOnNavBarWithLabel:(NSString *)label;
-- (XCUIElement *)waitActionsButtonWithTimeout:(NSTimeInterval)timeout;
-- (XCUIElement *)waitActionsButtonOnNavBarWithLabel:(NSString *)label
-                                            timeout:(NSTimeInterval)timeout;
+- (BOOL)isActionsButtonExists;
+- (XCUIElement *)findActionsButtonWithControllerAccessibilityId:(NSString *)controllerAccessibilityId;
+- (XCUIElement *)waitActionsButtonWithControllerAccessibilityId:(NSString *)controllerAccessibilityId
+                                                        timeout:(NSTimeInterval)timeout;
 
-- (void)openMenuActions;
 - (void)selectActionWithName:(NSString *)actionName;
-- (void)openMenuActionsOnNavBarWithLabel:(NSString *)label;
+- (void)openMenuActionsWithControllerAccessibilityId:(NSString *)accessibilityId;
 @end

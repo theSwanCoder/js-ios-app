@@ -28,7 +28,7 @@
 
 - (void)openInfoPageFromMenuActions
 {
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:nil];
     [self selectActionWithName:@"Info"];
 }
 

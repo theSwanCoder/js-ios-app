@@ -44,7 +44,7 @@
     [self givenThatFavoritesSectionIsEmpty];
 
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
 
@@ -59,7 +59,7 @@
     [self givenThatFavoritesSectionIsEmpty];
 
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
 
@@ -98,7 +98,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
@@ -114,7 +114,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
@@ -153,7 +153,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
@@ -169,7 +169,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
@@ -226,7 +226,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
@@ -260,7 +260,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
@@ -417,7 +417,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
@@ -434,7 +434,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
@@ -476,7 +476,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     
@@ -492,7 +492,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self openFavoritesSection];
     

@@ -639,8 +639,8 @@
 
 - (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId
 {
-    NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
-    XCUIElementQuery *cellsQuery = [self.application.cells matchingPredicate:identifierPredicate];
+    XCUIElementQuery *cellsQuery = [self.application.cells matchingType:XCUIElementTypeCell
+                                                             identifier:accessibilityId];
     NSArray *allCells = cellsQuery.allElementsBoundByAccessibilityElement;
     return allCells.count;
 }

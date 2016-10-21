@@ -17,7 +17,7 @@
 - (void)givenThatSavedItemsEmpty
 {
     [self openSavedItemsSection];
-    [self switchViewFromGridToListInSectionWithTitle:JMSavedItemsPageAccessibilityId];
+    [self switchViewFromGridToListInSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self deleteAllExportedResourcesIfNeed];
     [self openLibrarySection];
 }
@@ -58,7 +58,7 @@
 - (void)saveTestReportInHTMLFormat
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatReportCellsOnScreen];
+//    [self givenThatReportCellsOnScreen];
     [self openTestReportPage];
     [self openSaveReportPage];
 
@@ -77,7 +77,7 @@
     [self openSavedItemsSection];
     
     [self selectFilterBy:@"HTML"
-      inSectionWithTitle:JMSavedItemsPageAccessibilityId];
+      inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
     
     [self verifyThatCollectionViewContainsCells];
     
@@ -106,7 +106,7 @@
     [self openSavedItemsSection];
     
     [self selectFilterBy:@"PDF"
-      inSectionWithTitle:JMSavedItemsPageAccessibilityId];
+      inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
     
     [self verifyThatCollectionViewContainsCells];
     
@@ -133,7 +133,7 @@
 - (void)deleteTestReportInXLSFormat
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatReportCellsOnScreen];
+//    [self givenThatReportCellsOnScreen];
     [self openSavedItemsSection];
 
     [self deleteSavedItemWithName:kTestReportName
@@ -163,7 +163,7 @@
 
 - (void)openTestSavedItemFromInfoPage
 {
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsInfoPageAccessibilityId];
     [self selectActionWithName:@"Run"];
 }
 
@@ -218,25 +218,25 @@
 
 - (void)markTestSavedItemAsFavoriteFromMenuOnInfoPage
 {
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsInfoPageAccessibilityId];
     [self selectActionWithName:@"Mark as Favorite"];
 }
 
 - (void)unmarkTestSavedItemAsFavoriteFromMenuOnInfoPage
 {
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsInfoPageAccessibilityId];
     [self selectActionWithName:@"Remove From Favorites"];
 }
 
 - (void)markTestSavedItemAsFavoriteFromViewerPage
 {
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsInfoPageAccessibilityId];
     [self selectActionWithName:@"Mark as Favorite"];
 }
 
 - (void)unmarkTestSavedItemAsFavoriteFromViewerPage
 {
-    [self openMenuActionsOnNavBarWithLabel:kTestReportName];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsInfoPageAccessibilityId];
     [self selectActionWithName:@"Remove From Favorites"];
 }
 
@@ -256,7 +256,7 @@
     [self openInfoPageFromCell:savedItem];
     [self verifyThatSavedItemInfoPageOnScreen];
 
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self selectActionWithName:@"Delete"];
     [self confirmDeleteAction];
 }

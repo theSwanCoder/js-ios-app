@@ -16,7 +16,7 @@
 - (void)trySearchText:(NSString *)text
 {
     // start find some text
-    XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
+    XCUIElement *searchResourcesSearchField = self.application.searchFields[JMResourceCollectionPageSearchBarPageAccessibilityId];
     if (searchResourcesSearchField.exists) {
         [searchResourcesSearchField tap];
         [searchResourcesSearchField typeText:text];
@@ -34,7 +34,7 @@
 
 - (void)tryClearSearchBar
 {
-    XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
+    XCUIElement *searchResourcesSearchField = self.application.searchFields[JMResourceCollectionPageSearchBarPageAccessibilityId];
     if (searchResourcesSearchField.exists) {
         [searchResourcesSearchField tap];
 
@@ -64,23 +64,6 @@
 - (void)trySortByModifiedDate
 {
     [self selectSortBy:@"Modified Date" inSectionWithTitle:JMLibraryPageAccessibilityId];
-}
-
-#pragma mark - Helpers - Filter By
-
-
-- (void)tryFilterByReports
-{
-    [self selectFilterBy:@"Reports" inSectionWithTitle:JMLibraryPageAccessibilityId];
-
-    [self givenThatReportCellsOnScreen];
-}
-
-- (void)tryFilterByDashboards
-{
-    [self selectFilterBy:@"Dashboards" inSectionWithTitle:JMLibraryPageAccessibilityId];
-
-    [self givenThatDashboardCellsOnScreen];
 }
 
 #pragma mark - Verfies

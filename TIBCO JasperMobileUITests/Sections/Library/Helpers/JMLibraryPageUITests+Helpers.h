@@ -13,9 +13,6 @@
 - (void)trySortByName;
 - (void)trySortByCreationDate;
 - (void)trySortByModifiedDate;
-// Helpers - Filter By
-- (void)tryFilterByReports;
-- (void)tryFilterByDashboards;
 // Verfies
 - (void)verifyThatCellsSortedByName;
 - (void)verifyThatCellsSortedByCreationDate;

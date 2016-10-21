@@ -171,7 +171,7 @@
 {
     [self openRepositorySection];
 
-    [self switchViewFromListToGridInSectionWithTitle:JMRepositoryPageAccessibilityId];
+    [self switchViewFromListToGridInSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self verifyThatCollectionViewContainsGridOfCells];
     
     [self openLibrarySection];
@@ -179,7 +179,7 @@
     [self givenThatCellsAreVisible];
     [self verifyThatCollectionViewContainsGridOfCells];
     
-    [self switchViewFromGridToListInSectionWithTitle:JMRepositoryPageAccessibilityId];
+    [self switchViewFromGridToListInSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self verifyThatCollectionViewContainsListOfCells];
 }
     

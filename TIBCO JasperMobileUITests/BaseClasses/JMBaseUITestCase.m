@@ -102,34 +102,10 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)removeAllServerProfiles
 {
-    while(true) {
-        NSInteger cellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
-        if (cellsCount == 0) {
-            break;
-        }
-        [self removeFirstServerProfile];
-    }
-}
-
-- (void)removeFirstServerProfile
-{
     XCUIApplication *app = self.application;
-    XCUIElement *profile = [app.collectionViews.cells elementBoundByIndex:0];
-    if (profile) {
-        [profile pressForDuration:1.1];
-        XCUIElement *menu = app.menuItems[@"Delete"];
-        if (menu) {
-            [menu tap];
-            XCUIElement *deleteButton = [self waitButtonWithAccessibilityId:@"Delete"
-                                                              parentElement:app.alerts[@"Confirmation"]
-                                                                    timeout:kUITestsBaseTimeout];
-            
-            [deleteButton tap];
-        } else {
-            XCTFail(@"Delete menu item doesn't exist.");
-        }
-    } else {
-        XCTFail(@"Server profile cell doesn't exist.");
+    while([self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId]) {
+        XCUIElement *profile = [app.collectionViews.cells elementBoundByIndex:0];
+        [self tryRemoveProfileWithElement:profile];
     }
 }
 
@@ -173,14 +149,14 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 #pragma mark - Helpers Test Profile
 - (void)tryOpenServerProfilesPage
 {
-    XCUIElement *serverProfileTextField = [self waitTextFieldWithAccessibilityId:@"JMLoginPageServerProfileTextFieldAccessibilityId"
+    XCUIElement *serverProfileTextField = [self waitTextFieldWithAccessibilityId:JMLoginPageServerProfileTextFieldAccessibilityId
                                                                          timeout:kUITestsBaseTimeout];
     [serverProfileTextField tap];
 }
 
 - (void)tryOpenNewServerProfilePage
 {
-    XCUIElement *addProfileButton = [self waitButtonWithAccessibilityId:@"JMServerProfilesPageAddNewProfileButtonAccessibilityId"
+    XCUIElement *addProfileButton = [self waitButtonWithAccessibilityId:JMServerProfilesPageAddNewProfileButtonAccessibilityId
                                                                 timeout:kUITestsBaseTimeout];
     [addProfileButton tap];
 }
@@ -191,22 +167,22 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     XCUIElement *table = [app.tables elementBoundByIndex:0];
 
     // Profile Name TextField
-    [self enterText:kJMTestProfileName intoTextFieldWithAccessibilityId:@"Profile name"
+    [self enterText:kJMTestProfileName intoTextFieldWithAccessibilityId:JMNewServerProfilePageNameAccessibilityId
       parentElement:table
       isSecureField:false];
 
     // Profile URL TextField
-    [self enterText:kJMTestProfileURL intoTextFieldWithAccessibilityId:@"Server address"
+    [self enterText:kJMTestProfileURL intoTextFieldWithAccessibilityId:JMNewServerProfilePageServerURLAccessibilityId
       parentElement:table
       isSecureField:false];
 
     // Organization TextField
-    [self enterText:kJMTestProfileCredentialsOrganization intoTextFieldWithAccessibilityId:@"Organization ID"
+    [self enterText:kJMTestProfileCredentialsOrganization intoTextFieldWithAccessibilityId:JMNewServerProfilePageOrganizationAccessibilityId
       parentElement:table
       isSecureField:false];
 
     // Save a new created profile
-    XCUIElement *saveButton = [self waitButtonWithAccessibilityId:@"Save"
+    XCUIElement *saveButton = [self waitButtonWithAccessibilityId:JMNewServerProfilePageSaveAccessibilityId
                                                           timeout:kUITestsBaseTimeout];
     [saveButton tap];
     
@@ -216,7 +192,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)closeSecurityWarningAlert
 {
-    XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
+    XCUIElement *securityWarningAlert = self.application.alerts[JMLocalizedString(@"dialod_title_attention")];
     if (securityWarningAlert.exists) {
         XCUIElement *okButton = [self waitButtonWithAccessibilityId:JMLocalizedString(@"dialog_button_ok")
                                                       parentElement:securityWarningAlert
@@ -260,6 +236,26 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     [loginButton tap];
 }
 
+- (void)tryRemoveProfileWithElement:(XCUIElement *)profile
+{
+    if (profile) {
+        [profile pressForDuration:1.1];
+        XCUIElement *menu = self.application.menuItems[JMLocalizedString(@"servers_action_profile_delete")];
+        if (menu) {
+            [menu tap];
+            XCUIElement *alertView = self.application.alerts[JMLocalizedString(@"dialod_title_confirmation")];
+            XCUIElement *deleteButton = [self waitButtonWithAccessibilityId:JMLocalizedString(@"dialog_button_delete")
+                                                              parentElement:alertView
+                                                                    timeout:kUITestsBaseTimeout];
+            
+            [deleteButton tap];
+        } else {
+            XCTFail(@"Delete menu item doesn't exist.");
+        }
+    } else {
+        XCTFail(@"Server profile cell doesn't exist.");
+    }
+}
 
 #pragma mark - Helpers
 - (void)givenThatLoginPageOnScreen
@@ -270,13 +266,13 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)givenThatServerProfilesPageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMServerProfilesPageAccessibilityId"
+    [self waitElementWithAccessibilityId:JMServerProfilesPageAccessibilityId
                                  timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenThatNewProfilePageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMNewServerProfilePageAccessibilityId"
+    [self waitElementWithAccessibilityId:JMNewServerProfilePageAccessibilityId
                                  timeout:kUITestsBaseTimeout];
 }
 
@@ -307,13 +303,13 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)givenThatListCellsAreVisible
 {
-    [self tryTapGridButton];
+    [self tryTapListButton];
     [self givenThatCellsAreVisible];
 }
 
 - (void)tryTapGridButton
 {
-    XCUIElement *button = [self findButtonWithAccessibilityId:@"horizontal list button"];
+    XCUIElement *button = [self findButtonWithAccessibilityId:JMResourceCollectionPageGridRepresentationButtonViewPageAccessibilityId];
     if (button) {
         [button tap];
     }
@@ -321,35 +317,26 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)givenThatGridCellsAreVisible
 {
-    [self tryTapListButton];
+    [self tryTapGridButton];
     [self verifyThatCollectionViewContainsGridOfCells];
 }
 
 
 - (void)tryTapListButton
 {
-    XCUIElement *button = [self findButtonWithAccessibilityId:@"grid button"];
+    XCUIElement *button = [self findButtonWithAccessibilityId:JMResourceCollectionPageListRepresentationButtonViewPageAccessibilityId];
     if (button) {
         [button tap];
     }
 }
 
-- (void)givenThatReportCellsOnScreen
-{
-    [self selectFilterBy:@"Reports" inSectionWithTitle:JMLibraryPageAccessibilityId];
-    [self givenThatListCellsAreVisible];
-}
-
-- (void)givenThatDashboardCellsOnScreen
-{
-    [self selectFilterBy:@"Dashboards" inSectionWithTitle:JMLibraryPageAccessibilityId];
-    [self givenThatListCellsAreVisible];
-}
-
 - (void)skipIntroPageIfNeed
 {
     sleep(kUITestsElementAvailableTimeout);
-    XCUIElement *skipIntroButton = self.application.buttons[@"Skip Intro"];
+    XCUIElementQuery *skipIntroButtonQuery = [self.application.buttons matchingType:XCUIElementTypeButton
+                                                               identifier:JMOnboardIntroPageSkipIntroButtonPageAccessibilityId];
+    XCUIElement *skipIntroButton = skipIntroButtonQuery.element;
+    
     if (skipIntroButton.exists) {
         [skipIntroButton tap];
     }

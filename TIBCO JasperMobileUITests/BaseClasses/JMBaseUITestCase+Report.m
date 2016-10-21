@@ -26,7 +26,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openTestReportFromInfoPage
 {
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMReportInfoPageAccessibilityId];
     [self selectActionWithName:@"Run"];
 
     [self givenLoadingPopupNotVisible];
@@ -38,7 +38,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openTestReportWithMandatoryFiltersPage
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatReportCellsOnScreen];
+//    [self givenThatReportCellsOnScreen];
 
     [self tryOpenTestReportWithMandatoryFilters];
     // We can have two times when loading up and down
@@ -50,7 +50,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openTestReportWithSingleSelectedControlPage
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatReportCellsOnScreen];
+//    [self givenThatReportCellsOnScreen];
     
     [self tryOpenTestReportWithSingleSelectedControl];
     // We can have two times when loading up and down
@@ -62,7 +62,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openTestReportPageWithWaitingFinish:(BOOL)waitingFinish
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatReportCellsOnScreen];
+//    [self givenThatReportCellsOnScreen];
 
     [self tryOpenTestReport];
 
@@ -91,7 +91,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openReportFiltersPage
 {
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
     [self selectActionWithName:@"Edit Values"];
 
     [self givenLoadingPopupNotVisible];
@@ -106,7 +106,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openSaveReportPage
 {
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
     [self selectActionWithName:@"Save"];
 }
 
@@ -234,7 +234,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openPrintReportPage
 {
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
     [self selectActionWithName:@"Print"];
     [self givenLoadingPopupNotVisible];
 }

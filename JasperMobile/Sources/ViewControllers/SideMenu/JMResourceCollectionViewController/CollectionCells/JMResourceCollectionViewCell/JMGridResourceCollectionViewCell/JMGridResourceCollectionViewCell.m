@@ -80,7 +80,8 @@
             break;
         }
     }
-    [self.backgroundView setAccessibility:YES withTextKey:resource.resourceLookup.label identifier:elementPageAccessibilityId];
+    [self.backgroundView setAccessibility:YES withTextKey:resource.resourceLookup.label identifier:nil];
+    self.accessibilityIdentifier = elementPageAccessibilityId;
 }
 
 @end

@@ -90,7 +90,7 @@
     [self.saveButton setTitle:JMLocalizedString(@"dialog_button_save") forState:UIControlStateNormal];
     [self.saveButton setTitleColor:[[JMThemesManager sharedManager] serverProfileSaveButtonTextColor] forState:UIControlStateNormal];
     self.saveButton.backgroundColor = [[JMThemesManager sharedManager] serverProfileSaveButtonBackgroundColor];
-    [self.saveButton setAccessibility:YES withTextKey:@"dialog_button_save" identifier:JMButtonSaveAccessibilityId];
+    [self.saveButton setAccessibility:YES withTextKey:@"dialog_button_save" identifier:JMNewServerProfilePageSaveAccessibilityId];
 }
 
 - (void)setupServerOptions

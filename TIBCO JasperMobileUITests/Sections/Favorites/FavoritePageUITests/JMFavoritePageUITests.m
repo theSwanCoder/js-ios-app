@@ -78,8 +78,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
-    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 
     [self openFavoritesSection];
     [self searchResourceWithName:kTestReportName
@@ -106,8 +106,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
-    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     
     [self openFavoritesSection];
     [self searchResourceWithName:@"Search without result text"
@@ -151,12 +151,12 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
-    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 
     [self openFavoritesSection];
 
-    [self switchViewFromListToGridInSectionWithTitle:JMFavoritesPageAccessibilityId];
+    [self switchViewFromListToGridInSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatCollectionViewContainsGridOfCells];
 
     [self openLibrarySection];
@@ -166,7 +166,7 @@
     [self openFavoritesSection];
     [self verifyThatCollectionViewContainsGridOfCells];
 
-    [self switchViewFromGridToListInSectionWithTitle:JMFavoritesPageAccessibilityId];
+    [self switchViewFromGridToListInSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 
     [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
@@ -190,8 +190,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
-    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     
     [self openFavoritesSection];
     
@@ -236,42 +236,42 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
-    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
+      inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
+    [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     
     [self openFavoritesSection];
     [self verifyThatCollectionViewContainsListOfCells];
     
     [self selectFilterBy:@"Reports"
-    inSectionWithTitle:JMFavoritesPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatCollectionViewContainsListOfCells];
     
     [self selectFilterBy:JMSavedItemsPageAccessibilityId
-    inSectionWithTitle:JMFavoritesPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self waitStaticTextWithText:@"No Favorited Items"
                    parentElement:nil
                          timeout:kUITestsBaseTimeout];
     
     [self selectFilterBy:@"Dashboards"
-    inSectionWithTitle:JMFavoritesPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self waitStaticTextWithText:@"No Favorited Items"
                    parentElement:nil
                          timeout:kUITestsBaseTimeout];
     
     [self selectFilterBy:@"Folders"
-    inSectionWithTitle:JMFavoritesPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self waitStaticTextWithText:@"No Favorited Items"
                    parentElement:nil
                          timeout:kUITestsBaseTimeout];
     
     [self selectFilterBy:@"Content Resources"
-    inSectionWithTitle:JMFavoritesPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self waitStaticTextWithText:@"No Favorited Items"
                    parentElement:nil
                          timeout:kUITestsBaseTimeout];
     
     [self selectFilterBy:@"All"
-      inSectionWithTitle:JMFavoritesPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 
     [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
@@ -292,10 +292,10 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 
     [self openFavoritesSection];
@@ -323,7 +323,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 
     [self openFavoritesSection];
@@ -389,7 +389,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self markTestReportAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     
     [self openFavoritesSection];
@@ -412,7 +412,7 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:JMLibraryPageAccessibilityId];
+inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self markTestDashboardAsFavoriteFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     
     [self openFavoritesSection];

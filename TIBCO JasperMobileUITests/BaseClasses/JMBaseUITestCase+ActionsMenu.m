@@ -9,68 +9,61 @@
 
 @implementation JMBaseUITestCase (ActionsMenu)
 
-- (BOOL)isShareButtonExists
+- (BOOL)isActionsButtonExists
 {
-    XCUIElement *actionsButton = [self findActionsButton];
+    XCUIElement *actionsButton = [self findActionsButtonWithControllerAccessibilityId:nil];
     return actionsButton.exists;
 }
 
-- (XCUIElement *)findActionsButton
+- (XCUIElement *)findActionsButtonWithControllerAccessibilityId:(NSString *)controllerAccessibilityId
 {
-    return [self findActionsButtonOnNavBarWithLabel:nil];
-}
-
-- (XCUIElement *)findActionsButtonOnNavBarWithLabel:(NSString *)label
-{
-    XCUIElement *navBar;
-    if (label) {
-        navBar = [self waitNavigationBarWithLabel:label
-                                          timeout:kUITestsBaseTimeout];
+#warning NEED REFACTORING! This code can move to parent class as one method
+    XCUIElement *parentElement = self.application;
+    if (controllerAccessibilityId) {
+        XCUIElement *currentController = [self waitElementWithAccessibilityId:controllerAccessibilityId timeout:kUITestsBaseTimeout];
+        NSString *title = currentController.label;
+        parentElement = [self waitNavigationBarWithLabel:title
+                                                 timeout:kUITestsBaseTimeout];
     }
-    XCUIElement *actionsButton = [self findButtonWithAccessibilityId:@"Share"
-                                                       parentElement:navBar];
+
+    XCUIElement *actionsButton = [self findButtonWithAccessibilityId:JMMenuActionsViewActionButtonAccessibilityId
+                                                       parentElement:parentElement];
     return actionsButton;
 }
 
-- (XCUIElement *)waitActionsButtonWithTimeout:(NSTimeInterval)timeout
+- (XCUIElement *)waitActionsButtonWithControllerAccessibilityId:(NSString *)controllerAccessibilityId
+                                                        timeout:(NSTimeInterval)timeout
 {
-    return [self waitActionsButtonOnNavBarWithLabel:nil
-                                            timeout:timeout];
-}
-
-- (XCUIElement *)waitActionsButtonOnNavBarWithLabel:(NSString *)label
-                                            timeout:(NSTimeInterval)timeout
-{
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:label
-                                                   timeout:timeout];
-    XCUIElement *actionsButton = [self waitButtonWithAccessibilityId:@"Share"
-                                                       parentElement:navBar
+    XCUIElement *parentElement = self.application;
+    if (controllerAccessibilityId) {
+        XCUIElement *currentController = [self waitElementWithAccessibilityId:controllerAccessibilityId timeout:kUITestsBaseTimeout];
+        NSString *title = currentController.label;
+        parentElement = [self waitNavigationBarWithLabel:title
+                                                 timeout:kUITestsBaseTimeout];
+    }
+    XCUIElement *actionsButton = [self waitButtonWithAccessibilityId:JMMenuActionsViewActionButtonAccessibilityId
+                                                       parentElement:parentElement
                                                              timeout:timeout];
     return actionsButton;
 }
 
-- (void)openMenuActions
-{
-    [self openMenuActionsOnNavBarWithLabel:nil];
-}
-
 - (void)selectActionWithName:(NSString *)actionName
 {
-    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:@"JMMenuActionsViewAccessibilityId"
+    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:JMMenuActionsViewAccessibilityId
                                                                 timeout:kUITestsBaseTimeout];
 
-    XCUIElement *saveButton = menuActionsView.staticTexts[actionName];
-    if (saveButton) {
-        [saveButton tap];
+    XCUIElement *menuAction = menuActionsView.cells[actionName];
+    if (menuAction) {
+        [menuAction tap];
     } else {
         XCTFail(@"'%@' button isn't visible", actionName);
     }
 }
 
-- (void)openMenuActionsOnNavBarWithLabel:(NSString *)label
+- (void)openMenuActionsWithControllerAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *actionsButton = [self waitActionsButtonOnNavBarWithLabel:label
-                                                                  timeout:kUITestsBaseTimeout];
+    XCUIElement *actionsButton = [self waitActionsButtonWithControllerAccessibilityId:accessibilityId
+                                                                              timeout:kUITestsBaseTimeout];
     [actionsButton tap];
 }
 

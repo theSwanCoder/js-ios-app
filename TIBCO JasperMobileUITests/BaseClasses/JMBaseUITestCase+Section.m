@@ -12,23 +12,33 @@
 @implementation JMBaseUITestCase (Section)
 
 #pragma mark - View Types
-- (void)switchViewFromListToGridInSectionWithTitle:(NSString *)sectionTitle
+- (void)switchViewFromListToGridInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *gridButton = [self findButtonWithAccessibilityId:@"grid button"
-                                                    parentElement:navBar];
+    XCUIElement *parentElement = self.application;
+    if (sectionAccessibilityId) {
+        XCUIElement *sectionController = [self waitElementWithAccessibilityId:sectionAccessibilityId timeout:kUITestsBaseTimeout];
+        NSString *sectionTitle = sectionController.label;
+        parentElement = [self waitNavigationBarWithLabel:sectionTitle
+                                                 timeout:kUITestsBaseTimeout];
+    }
+    XCUIElement *gridButton = [self findButtonWithAccessibilityId:JMResourceCollectionPageGridRepresentationButtonViewPageAccessibilityId
+                                                    parentElement:parentElement];
     if (gridButton) {
         [gridButton tap];
     }
 }
 
-- (void)switchViewFromGridToListInSectionWithTitle:(NSString *)sectionTitle
+- (void)switchViewFromGridToListInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *listButton = [self findButtonWithAccessibilityId:@"horizontal list button"
-                                                    parentElement:navBar];
+    XCUIElement *parentElement = self.application;
+    if (sectionAccessibilityId) {
+        XCUIElement *sectionController = [self waitElementWithAccessibilityId:sectionAccessibilityId timeout:kUITestsBaseTimeout];
+        NSString *sectionTitle = sectionController.label;
+        parentElement = [self waitNavigationBarWithLabel:sectionTitle
+                                                 timeout:kUITestsBaseTimeout];
+    }
+    XCUIElement *listButton = [self findButtonWithAccessibilityId:JMResourceCollectionPageListRepresentationButtonViewPageAccessibilityId
+                                                    parentElement:parentElement];
     if (listButton) {
         [listButton tap];
     }
@@ -103,25 +113,50 @@
 }
 
 #pragma mark - Cells
-
-- (void)givenThatCollectionViewContainsListOfCells
-{
-    NSInteger countOfListCells = [self countOfListCells];
-    if (countOfListCells > 0) {
-        return;
-    } else {
-        [self switchViewFromListToGridInSectionWithTitle:JMLibraryPageAccessibilityId];
-    }
-}
-
 - (NSInteger)countOfGridCells
 {
-    return [self countCellsWithAccessibilityId:@"JMCollectionViewGridCellAccessibilityId"];
+    NSInteger countOfListCells = 0;
+    NSArray *listCellsIdentifiers = @[JMResourceCollectionPageGridLoadingCellAccessibilityId,
+                                      JMResourceCollectionPageFileResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPageFolderResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPageHTMLSavedItemsResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPagePDFSavedItemsResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPageXLSSavedItemsResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPageReportResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPageHTMLTempExportedResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPagePDFTempExportedResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPageXLSTempExportedResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPageDashboardResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPageLegacyDashboardResourceGridCellAccessibilityId,
+                                      JMResourceCollectionPageScheduleResourceGridCellAccessibilityId];
+    for (NSString *cellIdentifier in listCellsIdentifiers) {
+        countOfListCells += [self countCellsWithAccessibilityId:cellIdentifier];
+    }
+    
+    return countOfListCells;
 }
 
 - (NSInteger)countOfListCells
 {
-    return [self countCellsWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"];
+    NSInteger countOfListCells = 0;
+    NSArray *listCellsIdentifiers = @[JMResourceCollectionPageListLoadingCellAccessibilityId,
+                                      JMResourceCollectionPageFileResourceListCellAccessibilityId,
+                                      JMResourceCollectionPageFolderResourceListCellAccessibilityId,
+                                      JMResourceCollectionPageHTMLSavedItemsResourceListCellAccessibilityId,
+                                      JMResourceCollectionPagePDFSavedItemsResourceListCellAccessibilityId,
+                                      JMResourceCollectionPageXLSSavedItemsResourceListCellAccessibilityId,
+                                      JMResourceCollectionPageReportResourceListCellAccessibilityId,
+                                      JMResourceCollectionPageHTMLTempExportedResourceListCellAccessibilityId,
+                                      JMResourceCollectionPagePDFTempExportedResourceListCellAccessibilityId,
+                                      JMResourceCollectionPageXLSTempExportedResourceListCellAccessibilityId,
+                                      JMResourceCollectionPageDashboardResourceListCellAccessibilityId,
+                                      JMResourceCollectionPageLegacyDashboardResourceListCellAccessibilityId,
+                                      JMResourceCollectionPageScheduleResourceListCellAccessibilityId];
+    for (NSString *cellIdentifier in listCellsIdentifiers) {
+        countOfListCells += [self countCellsWithAccessibilityId:cellIdentifier];
+    }
+
+    return countOfListCells;
 }
 
 - (void)verifyThatCollectionViewContainsListOfCells
@@ -165,9 +200,9 @@
 
 - (void)openSortMenuInSectionWithTitle:(NSString *)sectionTitle
 {
-    BOOL isShareButtonExists = [self isShareButtonExists];
-    if (isShareButtonExists) {
-        [self openMenuActions];
+    BOOL isActionsButtonExists = [self isActionsButtonExists];
+    if (isActionsButtonExists) {
+        [self openMenuActionsWithControllerAccessibilityId:sectionTitle];
         [self tryOpenSortMenuFromMenuActions];
     } else {
         [self tryOpenSortMenuFromNavBarWithTitle:sectionTitle];
@@ -225,67 +260,44 @@
 }
 
 #pragma mark - Menu Filter by
-
-- (void)openFilterMenuInSectionWithTitle:(NSString *)sectionTitle
+- (void)selectFilterBy:(NSString *)filterAccessibilityId
+inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
-    BOOL isShareButtonExists = [self isShareButtonExists];
-    if (isShareButtonExists) {
-        [self openMenuActions];
-        [self tryOpenFilterMenuFromMenuActions];
-    } else {
-        [self tryOpenFilterMenuFromNavBarWithTitle:sectionTitle];
+    BOOL isActionsButtonExists = [self isActionsButtonExists];
+    if (isActionsButtonExists) {
+        [self openFilterMenuInSectionWithAccessibilityId:sectionAccessibilityId];
+        
+        XCUIElement *filterOptionsViewElement = self.application.tables[JMResourceCollectionPageFilterByPopupViewPageAccessibilityId];
+        if (filterOptionsViewElement.exists) {
+            XCUIElement *filterOptionElement = filterOptionsViewElement.cells[filterAccessibilityId];
+            if (filterOptionElement.exists) {
+                [filterOptionElement tap];
+            } else {
+                XCTFail(@"'%@' Filter Option isn't visible", filterAccessibilityId);
+            }
+        } else {
+            XCTFail(@"Filter Options View isn't visible");
+        }
     }
 }
 
-- (void)tryOpenFilterMenuFromMenuActions
+- (void)openFilterMenuInSectionWithAccessibilityId:(NSString *)accessibilityId
 {
+    [self openMenuActionsWithControllerAccessibilityId:accessibilityId];
     XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
     XCUIElement *filterActionElement = menuActionsElement.staticTexts[@"Filter by"];
     if (filterActionElement.exists) {
         [filterActionElement tap];
-
+        
         // Wait until sort view appears
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
         [self expectationForPredicate:predicate
                   evaluatedWithObject:self.application
                               handler:nil];
         [self waitForExpectationsWithTimeout:5 handler:nil];
-
+        
     } else {
         XCTFail(@"Sort Action isn't visible");
-    }
-}
-
-- (void)tryOpenFilterMenuFromNavBarWithTitle:(NSString *)navBarTitle
-{
-    XCUIElement *navBar = self.application.navigationBars[navBarTitle];
-    if (navBar.exists) {
-        XCUIElement *filterButton = navBar.buttons[@"filter action"];
-        if (filterButton.exists) {
-            [filterButton tap];
-        } else {
-            XCTFail(@"Filter Button isn't visible");
-        }
-    } else {
-        XCTFail(@"Navigation bar isn't visible");
-    }
-}
-
-- (void)selectFilterBy:(NSString *)filterTypeString
-    inSectionWithTitle:(NSString *)sectionTitle
-{
-    [self openFilterMenuInSectionWithTitle:sectionTitle];
-
-    XCUIElement *filterOptionsViewElement = [self.application.tables elementBoundByIndex:0];
-    if (filterOptionsViewElement.exists) {
-        XCUIElement *filterOptionElement = filterOptionsViewElement.staticTexts[filterTypeString];
-        if (filterOptionElement.exists) {
-            [filterOptionElement tap];
-        } else {
-            XCTFail(@"'%@' Filter Option isn't visible", filterTypeString);
-        }
-    } else {
-        XCTFail(@"Filter Options View isn't visible");
     }
 }
 

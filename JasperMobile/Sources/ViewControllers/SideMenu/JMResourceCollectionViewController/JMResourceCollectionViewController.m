@@ -562,11 +562,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (UIBarButtonItem *)resourceRepresentationItem
 {
     NSString *imageName = ([self nextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationType_Grid) ? @"grid_button" : @"horizontal_list_button";
+    NSString *accessibilityId = ([self nextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationType_Grid) ? JMResourceCollectionPageGridRepresentationButtonViewPageAccessibilityId :JMResourceCollectionPageListRepresentationButtonViewPageAccessibilityId;
     UIBarButtonItem *representationTypeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
                                             style:UIBarButtonItemStylePlain
                                            target:self
                                            action:@selector(representationTypeButtonTapped:)];
-    [representationTypeItem setAccessibility:YES withTextKey:@"resources_change_representation_type_label" identifier:JMResourceCollectionPageRepresentationButtonViewPageAccessibilityId];
+    [representationTypeItem setAccessibility:YES withTextKey:@"resources_change_representation_type_label" identifier:accessibilityId];
     return representationTypeItem;
 }
 

@@ -36,28 +36,31 @@
     }
     
     // verify server profile field has value that equal demo profile
-    XCUIElement *serverProfileTextField = [self waitTextFieldWithAccessibilityId:@"JMLoginPageServerProfileTextFieldAccessibilityId"
+    XCUIElement *serverProfileTextField = [self waitTextFieldWithAccessibilityId:JMLoginPageServerProfileTextFieldAccessibilityId
                                                                          timeout:kUITestsBaseTimeout];
     NSString *stringValueInServerField = serverProfileTextField.value;
-    BOOL hasTestProfileName = [stringValueInServerField isEqualToString:@"Test Profile"];
+    BOOL hasTestProfileName = [stringValueInServerField isEqualToString:kJMTestProfileName];
     XCTAssert(hasTestProfileName, @"Value in 'Sever' field doesn't equal 'Test Profile'");
 }
 
 - (void)testThatServerProfileCanBeAdded
 {
     [self tryOpenServerProfilesPage];
-        
-    XCUIElement *testProfile = self.application.collectionViews.staticTexts[@"Test Profile"];
+    
+    XCUIElement *testProfile = [self findCollectionViewCellWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId
+                                              containsLabelWithAccessibilityId:kJMTestProfileName
+                                                                     labelText:kJMTestProfileName];
+
     if (testProfile.exists) {
-        [self removeTestProfile];
+        [self tryRemoveProfileWithElement:testProfile];
     }
 
     [self givenThatServerProfilesPageOnScreen];
-    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
 
     [self createTestProfile];
 
-    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
     XCTAssertTrue(endCellsCount > startCellsCount, @"Start Cells Count: %@, but End Cells Count: %@", @(startCellsCount), @(endCellsCount));
     [self tryBackToPreviousPage];
 }
@@ -66,19 +69,19 @@
 {
     [self tryOpenServerProfilesPage];
     
-    NSInteger cellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
+    NSInteger cellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
     if (!cellsCount) {
         [self createTestProfile];
         [self givenThatServerProfilesPageOnScreen];
     }
 
-    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
-    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
+    XCUIElement *serverProfileElement = [self cellWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId
                                                              forIndex:0];
     if (serverProfileElement && serverProfileElement.exists) {
-        [self removeProfileWithElement:serverProfileElement];
+        [self tryRemoveProfileWithElement:serverProfileElement];
     }
-    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
     XCTAssertTrue(endCellsCount < startCellsCount);
     [self tryBackToPreviousPage];
 }
@@ -94,26 +97,25 @@
 
     [self givenThatServerProfilesPageOnScreen];
 
-    NSInteger startCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
-
     XCUIElement *serverProfileElement = [self findTestProfileCell];
     if (!serverProfileElement.exists) {
         XCTFail(@"Test profile doesn't visible or exist");
     }
+    NSInteger startCellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
     
     [serverProfileElement pressForDuration:1.1];
     
-    XCUIElement *menu = self.application.menuItems[@"Clone Profile"];
+    XCUIElement *menu = self.application.menuItems[JMLocalizedString(@"servers_action_profile_clone")];
     if (menu) {
         [menu tap];
         [self givenThatNewProfilePageOnScreen];
         // Save a new created profile
-        XCUIElement *saveButton = [self waitButtonWithAccessibilityId:@"Save" 
+        XCUIElement *saveButton = [self waitButtonWithAccessibilityId:JMNewServerProfilePageSaveAccessibilityId
                                                               timeout:kUITestsBaseTimeout];
         [saveButton tap];
 
         // Confirm if need http end point
-        XCUIElement *securityWarningAlert = [self waitAlertWithTitle:@"Warning"
+        XCUIElement *securityWarningAlert = [self waitAlertWithTitle:JMLocalizedString(@"dialod_title_attention")
                                                              timeout:kUITestsBaseTimeout];
         XCUIElement *okButton = [self findButtonWithAccessibilityId:JMLocalizedString(@"dialog_button_ok")
                                             parentElement:securityWarningAlert];
@@ -122,7 +124,7 @@
         XCTFail(@"'Clone Profile' menu item doesn't exist.");
     }
     
-    NSInteger endCellsCount = [self countCellsWithAccessibilityId:@"JMServerProfilesPageServerCellAccessibilityId"];
+    NSInteger endCellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
     XCTAssertTrue(endCellsCount > startCellsCount);
     
     // TODO: remove cloned profile.
@@ -144,30 +146,6 @@
     [self tryOpenNewServerProfilePage];
     [self givenThatNewProfilePageOnScreen];
     [self tryCreateNewTestServerProfile];
-}
-
-- (void)removeTestProfile
-{
-    XCUIElement *testProfileElement = self.application.collectionViews.staticTexts[@"Test Profile"];
-    [self removeProfileWithElement:testProfileElement];
-}
-
-- (void)removeProfileWithElement:(XCUIElement *)element
-{
-    [element pressForDuration:1.0];
-    [element pressForDuration:1.1];
-    XCUIElement *menu = self.application.menuItems[@"Delete"];
-    if (menu) {
-        [menu tap];
-        XCUIElement *alertView = [self.application.alerts[@"Confirmation"].collectionViews elementBoundByIndex:0];
-        XCUIElement *deleteButton = [self waitButtonWithAccessibilityId:@"Delete" 
-                                                          parentElement:alertView
-                                                                timeout:kUITestsBaseTimeout];
-        
-        [deleteButton tap];
-    } else {
-        XCTFail(@"Delete menu item doesn't exist.");
-    }
 }
 
 @end

@@ -19,8 +19,8 @@
 {
     [self openFavoritesSection];
     [self selectFilterBy:@"All"
-      inSectionWithTitle:JMFavoritesPageAccessibilityId];
-    [self switchViewFromGridToListInSectionWithTitle:JMFavoritesPageAccessibilityId];
+      inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
+    [self switchViewFromGridToListInSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self unmarkAllFavoritesResourcesIfNeed];
     [self openLibrarySection];
 }
@@ -73,13 +73,13 @@
 
 - (void)markAsFavoriteFromMenuActions
 {
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMFavoritesPageAccessibilityId];
     [self selectActionWithName:@"Mark as Favorite"];
 }
 
 - (void)unmarkFromFavoritesFromMenuActions
 {
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMFavoritesPageAccessibilityId];
     [self selectActionWithName:@"Remove From Favorites"];
 }
 
@@ -114,7 +114,7 @@
 {
     [self openInfoPageFromCell:favoriteItem];
 
-    [self openMenuActions];
+    [self openMenuActionsWithControllerAccessibilityId:JMFavoritesPageAccessibilityId];
     [self selectActionWithName:@"Remove From Favorites"];
 
     [self closeInfoPageFromCell];

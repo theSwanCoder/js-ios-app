@@ -108,9 +108,9 @@
     [self openSavedItemsSection];
 
     [self verifyThatListOfCellsVisible];
-    [self switchViewFromListToGridInSectionWithTitle:JMSavedItemsPageAccessibilityId];
+    [self switchViewFromListToGridInSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self verifyThatGridOfCellsVisible];
-    [self switchViewFromGridToListInSectionWithTitle:JMSavedItemsPageAccessibilityId];
+    [self switchViewFromGridToListInSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
     [self verifyThatListOfCellsVisible];
     
     [self deleteTestReportInHTMLFormat];
@@ -161,10 +161,10 @@
     [self saveTestReportInHTMLFormat];
     [self openSavedItemsSection];
     
-    [self selectFilterBy:@"All" inSectionWithTitle:JMSavedItemsPageAccessibilityId];
-    [self selectFilterBy:@"HTML" inSectionWithTitle:JMSavedItemsPageAccessibilityId];
-    [self selectFilterBy:@"PDF" inSectionWithTitle:JMSavedItemsPageAccessibilityId];
-    [self selectFilterBy:@"XLS" inSectionWithTitle:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:@"All" inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:@"HTML" inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:@"PDF" inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:@"XLS" inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
     
     [self deleteTestReportInHTMLFormat];
 }

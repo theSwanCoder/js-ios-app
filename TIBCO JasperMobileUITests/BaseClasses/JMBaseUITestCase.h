@@ -35,6 +35,8 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)trySelectNewTestServerProfile;
 - (void)tryEnterTestCredentials;
 - (void)tryTapLoginButton;
+- (void)tryRemoveProfileWithElement:(XCUIElement *)profile;
+
 //
 - (void)givenThatLoginPageOnScreen;
 - (void)givenThatServerProfilesPageOnScreen;
@@ -45,8 +47,7 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)givenThatCellsAreVisible;
 - (void)givenThatListCellsAreVisible;
 - (void)givenThatGridCellsAreVisible;
-- (void)givenThatReportCellsOnScreen;
-- (void)givenThatDashboardCellsOnScreen;
+
 //
 - (void)skipIntroPageIfNeed;
 - (void)skipRateAlertIfNeed;

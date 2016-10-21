@@ -87,9 +87,9 @@
     [self selectTestProfile];
     [self tapLoginButton];
 
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Error" message:@"Specify a valid username."];
+    [self verifyThatErrorAlertOnScreenWithTitle:JMLocalizedString(@"dialod_title_error") message:JMLocalizedString(@"login_username_errmsg_empty")];
     
-    [self closeErrorAlertWithTitle:@"Error"];
+    [self closeErrorAlertWithTitle:JMLocalizedString(@"dialod_title_error")];
 }
 
 //- Try login if username includes only spaces
@@ -110,9 +110,9 @@
     [self selectTestProfile];
     [self tapLoginButton];
     
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Invalid credentials supplied." message:@"Could not login to JasperReports Server."];
+    [self verifyThatErrorAlertOnScreenWithTitle:JMLocalizedString(@"error_authenication_dialog_title") message:JMLocalizedString(@"error_authenication_dialog_msg")];
     
-    [self closeErrorAlertWithTitle:@"Invalid credentials supplied."];
+    [self closeErrorAlertWithTitle:JMLocalizedString(@"error_authenication_dialog_title")];
 }
 
 //- Try login if username is incorrect
@@ -133,9 +133,9 @@
     [self selectTestProfile];
     [self tapLoginButton];
     
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Invalid credentials supplied." message:@"Could not login to JasperReports Server."];
+    [self verifyThatErrorAlertOnScreenWithTitle:JMLocalizedString(@"error_authenication_dialog_title") message:JMLocalizedString(@"error_authenication_dialog_msg")];
     
-    [self closeErrorAlertWithTitle:@"Invalid credentials supplied."];
+    [self closeErrorAlertWithTitle:JMLocalizedString(@"error_authenication_dialog_title")];
 }
 
 //- Try login with empty password
@@ -156,9 +156,9 @@
     [self selectTestProfile];
     [self tapLoginButton];
     
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Error" message:@"Specify a valid password."];
+    [self verifyThatErrorAlertOnScreenWithTitle:JMLocalizedString(@"dialod_title_error") message:JMLocalizedString(@"login_password_errmsg_empty")];
     
-    [self closeErrorAlertWithTitle:@"Error"];
+    [self closeErrorAlertWithTitle:JMLocalizedString(@"dialod_title_error")];
 }
 
 //- Try login if password includes only spaces
@@ -179,9 +179,9 @@
     [self selectTestProfile];
     [self tapLoginButton];
 
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Invalid credentials supplied." message:@"Could not login to JasperReports Server."];
+    [self verifyThatErrorAlertOnScreenWithTitle:JMLocalizedString(@"error_authenication_dialog_title") message:JMLocalizedString(@"error_authenication_dialog_msg")];
     
-    [self closeErrorAlertWithTitle:@"Invalid credentials supplied."];
+    [self closeErrorAlertWithTitle:JMLocalizedString(@"error_authenication_dialog_title")];
 }
 
 //- Try login if password is incorrect
@@ -202,9 +202,9 @@
     [self selectTestProfile];
     [self tapLoginButton];
     
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Invalid credentials supplied." message:@"Could not login to JasperReports Server."];
+    [self verifyThatErrorAlertOnScreenWithTitle:JMLocalizedString(@"error_authenication_dialog_title") message:JMLocalizedString(@"error_authenication_dialog_msg")];
     
-    [self closeErrorAlertWithTitle:@"Invalid credentials supplied."];
+    [self closeErrorAlertWithTitle:JMLocalizedString(@"error_authenication_dialog_title")];
 }
 
 //- Try login with empty server
@@ -224,9 +224,9 @@
     [self enterPassword:kJMTestProfileCredentialsPassword];
     [self tapLoginButton];
     
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Error" message:@"Select a server profile."];
+    [self verifyThatErrorAlertOnScreenWithTitle:JMLocalizedString(@"dialod_title_error") message:JMLocalizedString(@"login_server_profile_errmsg_empty")];
     
-    [self closeErrorAlertWithTitle:@"Error"];
+    [self closeErrorAlertWithTitle:JMLocalizedString(@"dialod_title_error")];
 }
 
 //- Try login with valid credentials
@@ -373,11 +373,11 @@
       isSecureField:true];
 }
 
-    - (void)closeErrorAlertWithTitle:(NSString *)title
+- (void)closeErrorAlertWithTitle:(NSString *)title
 {
     XCUIElement *alert = [self findAlertWithTitle:title];
-    XCUIElement *okButton = [self findButtonWithAccessibilityId:JMButtonOkAccessibilityId
-                                                  parentElement:alert];
+    XCUIElement *okButton = [self findButtonWithTitle:JMLocalizedString(@"dialog_button_ok")    // Here we use localized string because AlertAction hasn't accessibilityIdentifier
+                                        parentElement:alert];
     if (okButton) {
         [okButton tap];
     } else {
