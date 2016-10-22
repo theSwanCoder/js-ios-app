@@ -195,16 +195,13 @@ inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     
     [self openFavoritesSection];
     
-    [self selectSortBy:@"Name"
-    inSectionWithTitle:JMFavoritesPageAccessibilityId];
+    [self selectSortBy:JMResourceLoaderSortByNamePageAccessibilityId inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatCollectionViewContainsListOfCells];
     
-    [self selectSortBy:@"Creation Date"
-    inSectionWithTitle:JMFavoritesPageAccessibilityId];
+    [self selectSortBy:JMResourceLoaderSortByCreationDatePageAccessibilityId inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatCollectionViewContainsListOfCells];
     
-    [self selectSortBy:@"Modified Date"
-    inSectionWithTitle:JMFavoritesPageAccessibilityId];
+    [self selectSortBy:JMResourceLoaderSortByModifiedDatePageAccessibilityId inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatCollectionViewContainsListOfCells];
 
     [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];

@@ -164,7 +164,7 @@
 - (void)openTestSavedItemFromInfoPage
 {
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsInfoPageAccessibilityId];
-    [self selectActionWithName:@"Run"];
+    [self selectActionWithAccessibility:JMMenuActionsViewRunActionAccessibilityId];
 }
 
 - (void)closeTestSavedItem
@@ -219,25 +219,25 @@
 - (void)markTestSavedItemAsFavoriteFromMenuOnInfoPage
 {
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsInfoPageAccessibilityId];
-    [self selectActionWithName:@"Mark as Favorite"];
+    [self selectActionWithAccessibility:JMMenuActionsViewMarkAsFavoriteActionAccessibilityId];
 }
 
 - (void)unmarkTestSavedItemAsFavoriteFromMenuOnInfoPage
 {
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsInfoPageAccessibilityId];
-    [self selectActionWithName:@"Remove From Favorites"];
+    [self selectActionWithAccessibility:JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId];
 }
 
 - (void)markTestSavedItemAsFavoriteFromViewerPage
 {
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsInfoPageAccessibilityId];
-    [self selectActionWithName:@"Mark as Favorite"];
+    [self selectActionWithAccessibility:JMMenuActionsViewMarkAsFavoriteActionAccessibilityId];
 }
 
 - (void)unmarkTestSavedItemAsFavoriteFromViewerPage
 {
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsInfoPageAccessibilityId];
-    [self selectActionWithName:@"Remove From Favorites"];
+    [self selectActionWithAccessibility:JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId];
 }
 
 #pragma mark - Helpers
@@ -257,7 +257,7 @@
     [self verifyThatSavedItemInfoPageOnScreen];
 
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
-    [self selectActionWithName:@"Delete"];
+    [self selectActionWithAccessibility:JMMenuActionsViewDeleteActionAccessibilityId];
     [self confirmDeleteAction];
 }
 

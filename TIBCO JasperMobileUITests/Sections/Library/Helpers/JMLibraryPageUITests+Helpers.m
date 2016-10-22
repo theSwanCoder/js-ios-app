@@ -21,12 +21,7 @@
         [searchResourcesSearchField tap];
         [searchResourcesSearchField typeText:text];
 
-        XCUIElement *searchButton = self.application.buttons[@"Search"];
-        if (searchButton.exists) {
-            [searchButton tap];
-        } else {
-            XCTFail(@"Search button doesn't exist.");
-        }
+        [self closeKeyboardWithButton:@"Search"];
     } else {
         XCTFail(@"Search field doesn't exist.");
     }
@@ -34,36 +29,14 @@
 
 - (void)tryClearSearchBar
 {
+    // start find some text
     XCUIElement *searchResourcesSearchField = self.application.searchFields[JMResourceCollectionPageSearchBarPageAccessibilityId];
     if (searchResourcesSearchField.exists) {
         [searchResourcesSearchField tap];
-
-        XCUIElement *cancelButton = self.application.buttons[@"Cancel"];
-        if (cancelButton.exists) {
-            [cancelButton tap];
-        } else {
-            XCTFail(@"Cancel button doesn't exist.");
-        }
+        [self closeKeyboardWithButton:@"Cancel"];
     } else {
         XCTFail(@"Search field doesn't exist.");
     }
-}
-
-#pragma mark - Helpers - Sort By
-
-- (void)trySortByName
-{
-    [self selectSortBy:@"Name" inSectionWithTitle:JMLibraryPageAccessibilityId];
-}
-
-- (void)trySortByCreationDate
-{
-    [self selectSortBy:@"Creation Date" inSectionWithTitle:JMLibraryPageAccessibilityId];
-}
-
-- (void)trySortByModifiedDate
-{
-    [self selectSortBy:@"Modified Date" inSectionWithTitle:JMLibraryPageAccessibilityId];
 }
 
 #pragma mark - Verfies

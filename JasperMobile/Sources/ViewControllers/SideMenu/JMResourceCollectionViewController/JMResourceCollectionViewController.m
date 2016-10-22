@@ -112,7 +112,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     
     self.searchBar.tintColor = [[JMThemesManager sharedManager] barItemsColor];
     self.searchBar.placeholder = JMLocalizedString(@"resources_search_placeholder");
-    [self.searchBar setAccessibility:YES withTextKey:@"resources_search_placeholder" identifier:JMResourceCollectionPageSearchBarPageAccessibilityId];
+
+    UITextField *txfSearchField = [self.searchBar valueForKey:@"_searchField"];
+    // This is fix for UISearchBar accessibility!!!
+    [txfSearchField setAccessibility:YES withTextKey:@"resources_search_placeholder" identifier:JMResourceCollectionPageSearchBarPageAccessibilityId];
     
     
     self.refreshControl = [[UIRefreshControl alloc] init];

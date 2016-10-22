@@ -54,7 +54,7 @@
     [self openTestReportPage];
 
     [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
-    [self selectActionWithName:@"Refresh"];
+    [self selectActionWithAccessibility:JMMenuActionsViewRefreshActionAccessibilityId];
     [self givenLoadingPopupNotVisible];
     
     [self closeTestReportPage];
@@ -96,7 +96,7 @@
     [self openTestReportPage];
 
     [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
-    [self selectActionWithName:@"Save"];
+    [self selectActionWithAccessibility:JMMenuActionsViewSaveActionAccessibilityId];
 
     // verify that 'save report' page is on the screen
     [self waitElementWithAccessibilityId:@"JMSaveReportViewControllerAccessibilityIdentifier"
@@ -149,7 +149,7 @@
     [self openTestReportPage];
 
     [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
-    [self selectActionWithName:@"Info"];
+    [self selectActionWithAccessibility:JMMenuActionsViewInfoActionAccessibilityId];
 
     [self verifyThatReportInfoPageOnScreen];
     [self closeReportInfoPage];

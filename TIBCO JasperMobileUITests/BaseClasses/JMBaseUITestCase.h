@@ -63,6 +63,6 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 
 - (void)deleteTextFromTextField:(XCUIElement *)textField;
 
-- (void)closeKeyboardWithDoneButton;
+- (void)closeKeyboardWithButton:(NSString *)buttonIdentifier;
 
 @end

@@ -75,10 +75,10 @@
 {
     // start find some text
     [self trySearchText:kJMTestLibrarySearchTextExample];
+    
     // verify result
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.hittable == true"];
-    NSInteger filtredResultCount = [[self.application.cells allElementsBoundByIndex] filteredArrayUsingPredicate:predicate].count;
-    XCTAssertTrue(filtredResultCount == 1, @"Should be only one result");
+    NSInteger cellsCount = [self countOfListCells];
+    XCTAssertTrue(cellsCount == 1, @"Should be only one result");
     
     // Reset search
     [self tryClearSearchBar];
@@ -89,27 +89,17 @@
 - (void)testThatSearchShowsNoResults
 {
     // start find wrong text
-    XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
-    if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tap];
-        [searchResourcesSearchField typeText:@"ababababababababa"];
-        
-        XCUIElement *searchButton = self.application.buttons[@"Search"];
-        if (searchButton.exists) {
-            [searchButton tap];
-            
-            // verify result
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.hittable == true"];
-            NSInteger filtredResultCount = [[self.application.cells allElementsBoundByIndex] filteredArrayUsingPredicate:predicate].count;
-            XCTAssertTrue(filtredResultCount == 0, @"Should be only one result");
-            
-        } else {
-            XCTFail(@"Search button doesn't exist.");
-        }
-        
-    } else {
-        XCTFail(@"Search field doesn't exist.");
-    }
+    [self trySearchText:@"ababababababababa"];
+
+    // verify result
+    NSInteger cellsCount = [self countOfListCells];
+    cellsCount += [self countOfGridCells];
+    XCTAssertTrue(cellsCount == 0, @"Should be only one result");
+
+    // Reset search
+    [self tryClearSearchBar];
+    // verify result
+    [self verifyThatCollectionViewContainsCells];
 }
 
 #pragma mark - Test 'Changing View Presentation' feature
@@ -158,40 +148,36 @@
 #pragma mark - Test 'Sort' feature
 - (void)testThatUserCanSortListItemsByName
 {
-    [self trySortByName];
+    [self selectSortBy:JMResourceLoaderSortByNamePageAccessibilityId inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self givenThatCellsAreVisible];
-
     [self verifyThatCellsSortedByName];
 }
 
 - (void)testThatUserCanSortListItemsByCreationDate
 {
-    [self trySortByCreationDate];
+    [self selectSortBy:JMResourceLoaderSortByCreationDatePageAccessibilityId inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self givenThatCellsAreVisible];
-    
     [self verifyThatCellsSortedByCreationDate];
 }
 
 - (void)testThatUserCanSortListItemsByModifiedDate
 {
-    [self trySortByModifiedDate];
+    [self selectSortBy:JMResourceLoaderSortByModifiedDatePageAccessibilityId inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self givenThatCellsAreVisible];
-
     [self verifyThatCellsSortedByModifiedDate];
 }
 
 #pragma mark - Test 'Filter' feature
 - (void)testThatUserCanFilterByAllItems
 {
-    [self givenThatLibraryPageOnScreen];
+    [self selectFilterBy:JMResourceLoaderFilterByAllPageAccessibilityId inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self givenThatCellsAreVisible];
-    
     [self verifyThatCellsFiltredByAll];
 }
 
 - (void)testThatUserCanFilterByReports
 {
-//    [self tryFilterByReports];
+    [self selectFilterBy:JMResourceLoaderFilterByReportUnitPageAccessibilityId inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self givenThatCellsAreVisible];
     [self verifyThatCellsFiltredByReports];
 }

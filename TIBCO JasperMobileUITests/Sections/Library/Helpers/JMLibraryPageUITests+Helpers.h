@@ -9,10 +9,7 @@
 // Helpers - Search
 - (void)trySearchText:(NSString *)text;
 - (void)tryClearSearchBar;
-// Helpers - Sort By
-- (void)trySortByName;
-- (void)trySortByCreationDate;
-- (void)trySortByModifiedDate;
+
 // Verfies
 - (void)verifyThatCellsSortedByName;
 - (void)verifyThatCellsSortedByCreationDate;

@@ -29,7 +29,7 @@
 - (void)openInfoPageFromMenuActions
 {
     [self openMenuActionsWithControllerAccessibilityId:nil];
-    [self selectActionWithName:@"Info"];
+    [self selectActionWithAccessibility:JMMenuActionsViewInfoActionAccessibilityId];
 }
 
 - (void)closeInfoPageFromMenuActions

@@ -29,13 +29,10 @@
 - (void)verifyThatCollectionViewContainsGridOfCells;
 
 // Sort Action
-- (void)openSortMenuInSectionWithTitle:(NSString *)sectionTitle;
-- (void)selectSortBy:(NSString *)sortTypeString
-  inSectionWithTitle:(NSString *)sectionTitle;
+- (void)selectSortBy:(NSString *)sortAccessibilityId inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
 
 // Filter Action
-- (void)selectFilterBy:(NSString *)filterAccessibilityId
-inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
+- (void)selectFilterBy:(NSString *)filterAccessibilityId inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
 
 // CollectionView
 - (XCUIElement *)collectionViewElementFromSectionWithAccessibilityId:(NSString *)accessibilityId;

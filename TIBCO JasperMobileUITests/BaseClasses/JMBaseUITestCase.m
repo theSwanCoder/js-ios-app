@@ -419,7 +419,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 }
 
 #pragma - Utils
-- (void)closeKeyboardWithDoneButton
+- (void)closeKeyboardWithButton:(NSString *)buttonIdentifier
 {
     XCUIElementQuery *keyboardsQuery = [self.application descendantsMatchingType:XCUIElementTypeKeyboard];
     NSArray *allKeyboards = keyboardsQuery.allElementsBoundByAccessibilityElement;
@@ -428,7 +428,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     if (!currentKeyBoard) {
         XCTFail(@"There isn't any keyboard");
     }
-    XCUIElement *doneButton = [self waitButtonWithAccessibilityId:@"Done"   // Here we should use "Done" accessibility identifier for keyboard Done button
+    XCUIElement *doneButton = [self waitButtonWithAccessibilityId:buttonIdentifier
                                           parentElement:currentKeyBoard
                                                 timeout:kUITestsBaseTimeout];
     [doneButton tap];
@@ -463,14 +463,14 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     
     if (isTextFieldContainText) {
         if (isTextFieldContainTheSameText) {
-            [self closeKeyboardWithDoneButton];
+            [self closeKeyboardWithButton:@"Done"];
         } else {
             [self replaceTextInTextField:textField 
                                 withText:text];                        
         }
     } else {
         [textField typeText:text];
-        [self closeKeyboardWithDoneButton];        
+        [self closeKeyboardWithButton:@"Done"];
     }
 }
 
@@ -479,7 +479,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 {
     [self deleteTextFromTextField:textField];
     [textField typeText:text];
-    [self closeKeyboardWithDoneButton];
+    [self closeKeyboardWithButton:@"Done"];
 }
 
 - (void)deleteTextFromTextField:(XCUIElement *)textField

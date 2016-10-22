@@ -120,7 +120,7 @@
     [self openTestSavedItemInHTMLFormat];
 
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
-    [self selectActionWithName:@"Delete"];
+    [self selectActionWithAccessibility:JMMenuActionsViewDeleteActionAccessibilityId];
     [self cancelDeletingAction];
 
     [self closeTestSavedItem];
@@ -142,7 +142,7 @@
     [self openTestSavedItemInHTMLFormat];
     
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
-    [self selectActionWithName:@"Rename"];
+    [self selectActionWithAccessibility:JMMenuActionsViewRenameActionAccessibilityId];
     [self cancelRenamingAction];
     
     [self closeTestSavedItem];
@@ -164,7 +164,7 @@
     [self openTestSavedItemInHTMLFormat];
     
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
-    [self selectActionWithName:@"Rename"];
+    [self selectActionWithAccessibility:JMMenuActionsViewRenameActionAccessibilityId];
     [self performRenameAction];
     
     [self closeTestSavedItem];
@@ -186,7 +186,7 @@
     [self openTestSavedItemInHTMLFormat];
     
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
-    [self selectActionWithName:@"Rename"];
+    [self selectActionWithAccessibility:JMMenuActionsViewRenameActionAccessibilityId];
     [self performRenameActionWithEmptyName];
     
     [self closeTestSavedItem];
@@ -208,7 +208,7 @@
     [self openTestSavedItemInHTMLFormat];
     
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
-    [self selectActionWithName:@"Rename"];
+    [self selectActionWithAccessibility:JMMenuActionsViewRenameActionAccessibilityId];
     [self performRenameActionWithSpacesInName];
     
     [self closeTestSavedItem];
@@ -229,7 +229,7 @@
     [self openTestSavedItemInHTMLFormat];
     
     [self openMenuActionsWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId];
-    [self selectActionWithName:@"Rename"];
+    [self selectActionWithAccessibility:JMMenuActionsViewRenameActionAccessibilityId];
     [self performRenameActionWithTheSameName];
     
     [self closeTestSavedItem];

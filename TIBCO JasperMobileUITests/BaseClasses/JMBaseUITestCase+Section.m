@@ -197,65 +197,24 @@
 }
 
 #pragma mark - Helpers - Menu Sort By
-
-- (void)openSortMenuInSectionWithTitle:(NSString *)sectionTitle
+- (void)selectSortBy:(NSString *)sortAccessibilityId
+inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
     BOOL isActionsButtonExists = [self isActionsButtonExists];
     if (isActionsButtonExists) {
-        [self openMenuActionsWithControllerAccessibilityId:sectionTitle];
-        [self tryOpenSortMenuFromMenuActions];
-    } else {
-        [self tryOpenSortMenuFromNavBarWithTitle:sectionTitle];
-    }
-}
-
-- (void)tryOpenSortMenuFromMenuActions
-{
-    XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
-    XCUIElement *sortActionElement = menuActionsElement.staticTexts[@"Sort by"];
-    if (sortActionElement.exists) {
-        [sortActionElement tap];
-
-        // Wait until sort view appears
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
-        [self expectationForPredicate:predicate
-                  evaluatedWithObject:self.application
-                              handler:nil];
-        [self waitForExpectationsWithTimeout:5 handler:nil];
-
-    } else {
-        XCTFail(@"Sort Action isn't visible");
-    }
-}
-
-- (void)tryOpenSortMenuFromNavBarWithTitle:(NSString *)navBarTitle
-{
-    XCUIElement *navBar = self.application.navigationBars[navBarTitle];
-    if (navBar.exists) {
-        XCUIElement *sortButton = navBar.buttons[@"sort action"];
-        if (sortButton.exists) {
-            [sortButton tap];
+        [self selectMenuItem:JMMenuActionsViewSortActionAccessibilityId inSectionWithAccessibilityId:sectionAccessibilityId];
+        
+        XCUIElement *sortOptionsViewElement = self.application.otherElements[JMResourceCollectionPageSortByPopupViewPageAccessibilityId];
+        if (sortOptionsViewElement.exists) {
+            XCUIElement *sortOptionElement = sortOptionsViewElement.cells[sortAccessibilityId];
+            if (sortOptionElement.exists) {
+                [sortOptionElement tap];
+            } else {
+                XCTFail(@"'%@' Sort Option isn't visible", sortAccessibilityId);
+            }
         } else {
-            XCTFail(@"Sort Button isn't visible");
+            XCTFail(@"Sort Options View isn't visible");
         }
-    } else {
-        XCTFail(@"Navigation bar isn't visible");
-    }
-}
-
-- (void)selectSortBy:(NSString *)sortTypeString inSectionWithTitle:(NSString *)sectionTitle
-{
-    [self openSortMenuInSectionWithTitle:sectionTitle];
-    XCUIElement *sortOptionsViewElement = [self.application.tables elementBoundByIndex:0];
-    if (sortOptionsViewElement.exists) {
-        XCUIElement *sortOptionElement = sortOptionsViewElement.staticTexts[sortTypeString];
-        if (sortOptionElement.exists) {
-            [sortOptionElement tap];
-        } else {
-            XCTFail(@"'%@' Sort Option isn't visible", sortTypeString);
-        }
-    } else {
-        XCTFail(@"Sort Options View isn't visible");
     }
 }
 
@@ -265,9 +224,9 @@ inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
     BOOL isActionsButtonExists = [self isActionsButtonExists];
     if (isActionsButtonExists) {
-        [self openFilterMenuInSectionWithAccessibilityId:sectionAccessibilityId];
+        [self selectMenuItem:JMMenuActionsViewFilterActionAccessibilityId inSectionWithAccessibilityId:sectionAccessibilityId];
         
-        XCUIElement *filterOptionsViewElement = self.application.tables[JMResourceCollectionPageFilterByPopupViewPageAccessibilityId];
+        XCUIElement *filterOptionsViewElement = self.application.otherElements[JMResourceCollectionPageFilterByPopupViewPageAccessibilityId];
         if (filterOptionsViewElement.exists) {
             XCUIElement *filterOptionElement = filterOptionsViewElement.cells[filterAccessibilityId];
             if (filterOptionElement.exists) {
@@ -281,24 +240,26 @@ inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
     }
 }
 
-- (void)openFilterMenuInSectionWithAccessibilityId:(NSString *)accessibilityId
+- (void)selectMenuItem:(NSString *)menuItemAccessibilityId inSectionWithAccessibilityId:(NSString *)accessibilityId
 {
     [self openMenuActionsWithControllerAccessibilityId:accessibilityId];
-    XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
-    XCUIElement *filterActionElement = menuActionsElement.staticTexts[@"Filter by"];
-    if (filterActionElement.exists) {
-        [filterActionElement tap];
-        
-        // Wait until sort view appears
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
-        [self expectationForPredicate:predicate
-                  evaluatedWithObject:self.application
-                              handler:nil];
-        [self waitForExpectationsWithTimeout:5 handler:nil];
-        
-    } else {
-        XCTFail(@"Sort Action isn't visible");
-    }
+    [self selectActionWithAccessibility:menuItemAccessibilityId];
+    
+//    XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
+//    XCUIElement *menuActionElement = menuActionsElement.cells[menuItemAccessibilityId];
+//    if (menuActionElement.exists) {
+//        [menuActionElement tap];
+//        
+//        // Wait until option view appears
+//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
+//        [self expectationForPredicate:predicate
+//                  evaluatedWithObject:self.application
+//                              handler:nil];
+//        [self waitForExpectationsWithTimeout:5 handler:nil];
+//        
+//    } else {
+//        XCTFail(@"'%@' Menu Action isn't visible", menuItemAccessibilityId);
+//    }
 }
 
 #pragma mark - CollectionView

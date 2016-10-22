@@ -11,6 +11,6 @@
 - (XCUIElement *)waitActionsButtonWithControllerAccessibilityId:(NSString *)controllerAccessibilityId
                                                         timeout:(NSTimeInterval)timeout;
 
-- (void)selectActionWithName:(NSString *)actionName;
+- (void)selectActionWithAccessibility:(NSString *)accessibilityId;
 - (void)openMenuActionsWithControllerAccessibilityId:(NSString *)accessibilityId;
 @end

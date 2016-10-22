@@ -134,9 +134,9 @@
     [self saveTestReportInHTMLFormat];
     [self openSavedItemsSection];
 
-    [self selectSortBy:@"Name" inSectionWithTitle:JMSavedItemsPageAccessibilityId];
-    [self selectSortBy:@"Creation Date" inSectionWithTitle:JMLibraryPageAccessibilityId];
-    [self selectSortBy:@"Modified Date" inSectionWithTitle:JMLibraryPageAccessibilityId];
+    [self selectSortBy:JMResourceLoaderSortByNamePageAccessibilityId inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
+    [self selectSortBy:JMResourceLoaderSortByCreationDatePageAccessibilityId inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
+    [self selectSortBy:JMResourceLoaderSortByModifiedDatePageAccessibilityId inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
 
     [self deleteTestReportInHTMLFormat];
 }
@@ -161,10 +161,10 @@
     [self saveTestReportInHTMLFormat];
     [self openSavedItemsSection];
     
-    [self selectFilterBy:@"All" inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
-    [self selectFilterBy:@"HTML" inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
-    [self selectFilterBy:@"PDF" inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
-    [self selectFilterBy:@"XLS" inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:JMResourceLoaderFilterByAllPageAccessibilityId inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:JMResourceLoaderFilterByHTMLPageAccessibilityId inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:JMResourceLoaderFilterByPDFPageAccessibilityId inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
+    [self selectFilterBy:JMResourceLoaderFilterByXLSPageAccessibilityId inSectionWithAccessibilityId:JMSavedItemsPageAccessibilityId];
     
     [self deleteTestReportInHTMLFormat];
 }

@@ -27,7 +27,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openTestReportFromInfoPage
 {
     [self openMenuActionsWithControllerAccessibilityId:JMReportInfoPageAccessibilityId];
-    [self selectActionWithName:@"Run"];
+    [self selectActionWithAccessibility:JMMenuActionsViewRunActionAccessibilityId];
 
     [self givenLoadingPopupNotVisible];
     [self givenLoadingPopupNotVisible];
@@ -92,7 +92,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openReportFiltersPage
 {
     [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
-    [self selectActionWithName:@"Edit Values"];
+    [self selectActionWithAccessibility:JMMenuActionsViewEditActionAccessibilityId];
 
     [self givenLoadingPopupNotVisible];
 }
@@ -107,7 +107,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openSaveReportPage
 {
     [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
-    [self selectActionWithName:@"Save"];
+    [self selectActionWithAccessibility:JMMenuActionsViewSaveActionAccessibilityId];
 }
 
 - (void)closeSaveReportPage
@@ -235,7 +235,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openPrintReportPage
 {
     [self openMenuActionsWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
-    [self selectActionWithName:@"Print"];
+    [self selectActionWithAccessibility:JMMenuActionsViewPrintActionAccessibilityId];
     [self givenLoadingPopupNotVisible];
 }
 

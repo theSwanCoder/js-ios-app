@@ -47,16 +47,16 @@
     return actionsButton;
 }
 
-- (void)selectActionWithName:(NSString *)actionName
+- (void)selectActionWithAccessibility:(NSString *)accessibilityId
 {
     XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:JMMenuActionsViewAccessibilityId
                                                                 timeout:kUITestsBaseTimeout];
 
-    XCUIElement *menuAction = menuActionsView.cells[actionName];
+    XCUIElement *menuAction = menuActionsView.cells[accessibilityId];
     if (menuAction) {
         [menuAction tap];
     } else {
-        XCTFail(@"'%@' button isn't visible", actionName);
+        XCTFail(@"'%@' button isn't visible", accessibilityId);
     }
 }
 

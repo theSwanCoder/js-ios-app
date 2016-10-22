@@ -74,13 +74,13 @@
 - (void)markAsFavoriteFromMenuActions
 {
     [self openMenuActionsWithControllerAccessibilityId:JMFavoritesPageAccessibilityId];
-    [self selectActionWithName:@"Mark as Favorite"];
+    [self selectActionWithAccessibility:JMMenuActionsViewMarkAsFavoriteActionAccessibilityId];
 }
 
 - (void)unmarkFromFavoritesFromMenuActions
 {
     [self openMenuActionsWithControllerAccessibilityId:JMFavoritesPageAccessibilityId];
-    [self selectActionWithName:@"Remove From Favorites"];
+    [self selectActionWithAccessibility:JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId];
 }
 
 - (void)markAsFavoriteFromNavigationBar:(XCUIElement *)navigationBar
@@ -115,7 +115,7 @@
     [self openInfoPageFromCell:favoriteItem];
 
     [self openMenuActionsWithControllerAccessibilityId:JMFavoritesPageAccessibilityId];
-    [self selectActionWithName:@"Remove From Favorites"];
+    [self selectActionWithAccessibility:JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId];
 
     [self closeInfoPageFromCell];
 }
