@@ -16,19 +16,25 @@
 
 @implementation JMFavoritePageUITests
 
-#pragma mark - Tests
+- (void)setUp
+{
+    [super setUp];
     
-//    User should see Favorites screen
+    [self openFavoritesSection];
+    [self verifyThatFavoritePageOnScreen];
+}
+
+#pragma mark - Tests
+
+//    Favorites title
 //    - Steps:
 //      - Open the Left Panel
 //      - Tap on the Favorites button
 //    - Results:
-//      - User should see Favorites screen
-- (void)testThatUserCanSeeFavoritesPage
+//      - User should see title like “Favorites”
+- (void)testThatUserFavoritesPageHasCorrectTitle
 {
-    [self openFavoritesSection];
-
-    [self verifyThatFavoritePageOnScreen];
+    [self verifyPageTitle:JMLocalizedString(@"menuitem_favorites_label") withPageAccessibilityId:JMFavoritesPageAccessibilityId];
 }
 
 //    Left Panel button
@@ -39,22 +45,7 @@
 //      - User should see Left Panel (side menu) button on the Favorites screen
 - (void)testThatFavoritesPageHasSideMenuButton
 {
-    [self openFavoritesSection];
-    
     [self verifyThatFavoritePageHasSideMenuButton];
-}
-
-//    Favorites title
-//    - Steps:
-//      - Open the Left Panel
-//      - Tap on the Favorites button
-//    - Results:
-//      - User should see title like “Favorites”
-- (void)testThatUserFavoritesPageHasCorrectTitle
-{
-    [self openFavoritesSection];
-    
-    [self verifyThatFavoritePageHasCorrectTitle];
 }
 
 //    Search result
@@ -83,7 +74,7 @@
 
     [self openFavoritesSection];
     [self searchResourceWithName:kTestReportName
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 
     [self givenThatCellsAreVisible];
 
@@ -436,8 +427,7 @@ inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 
 - (void)verifyThatFavoritePageOnScreen
 {
-    // TODO: replace with specific element - JMFavoritesPageAccessibilityId
-    [self waitElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"
+    [self waitElementWithAccessibilityId:JMFavoritesPageAccessibilityId
                                  timeout:kUITestsBaseTimeout];
 }
 
@@ -451,28 +441,28 @@ inSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 
 - (void)verifyThatFavoritePageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:JMFavoritesPageAccessibilityId
-                             timeout:kUITestsBaseTimeout];
+    [self waitBackButtonWithAccessibilityId:JMFavoritesPageAccessibilityId
+                                    timeout:kUITestsBaseTimeout];
 }
 
 #pragma mark - Helpers
 
 - (void)performPullDownToRefresh
 {
-    XCUIElement *collectionViewElement = [self collectionViewElementFromSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-
+    XCUIElement *collectionViewElement = [self.application.collectionViews elementBoundByIndex:0];
     XCUIElement *firstCellElement = [collectionViewElement.cells elementBoundByIndex:0];
-    XCUIElement *secondCellElement = [collectionViewElement.cells elementBoundByIndex:1];
-
-    [firstCellElement pressForDuration:1
-                     thenDragToElement:secondCellElement];
+    XCUIElement *secondCellElement = [collectionViewElement.cells elementBoundByIndex:4];
+    
+    [firstCellElement pressForDuration:1 thenDragToElement:secondCellElement];
 }
 
 - (void)performSwipeToScrool
 {
-    XCUIElement *collectionViewElement = [self collectionViewElementFromSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    XCUIElement *cellElement = [collectionViewElement.cells elementBoundByIndex:0];
+    XCUIElement *collectionViewElement = [self.application.collectionViews elementBoundByIndex:0];
+    XCUIElement *cellElement = [collectionViewElement.cells elementBoundByIndex:2];
     [cellElement swipeUp];
+    
+    [self verifyThatCollectionViewContainsCells];
 }
 
 @end

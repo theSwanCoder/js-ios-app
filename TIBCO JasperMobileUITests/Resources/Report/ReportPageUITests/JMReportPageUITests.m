@@ -102,7 +102,7 @@
     [self waitElementWithAccessibilityId:@"JMSaveReportViewControllerAccessibilityIdentifier"
                                  timeout:kUITestsBaseTimeout];
     // back from save report page
-    [self tryBackToPreviousPage];
+    [self findBackButtonWithControllerAccessibilityId:nil];
     
     [self closeTestReportPage];
 }
@@ -123,7 +123,7 @@
 
     [self openPrintReportPage];
     // verify that 'print report' page is on the screen
-    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
+    XCUIElement *printNavBar = [self waitNavigationBarWithControllerAccessibilityId:@"Printer Options"
                                                         timeout:kUITestsBaseTimeout];
 
     if (!printNavBar.exists) {
@@ -195,7 +195,7 @@
     [self givenLoadingPopupNotVisible];
 
     BOOL isFilterPage = NO;
-    XCUIElement *filtersNavBar = [self findNavigationBarWithLabel:@"Filters"];
+    XCUIElement *filtersNavBar = [self findNavigationBarWithControllerAccessibilityId:@"Filters"];
     isFilterPage = filtersNavBar.exists;
 
     // verify that 'edit values' page is on the screen
@@ -207,7 +207,7 @@
 
 - (void)verifyThatReportPageOnScreenWithReportName:(NSString *)reportName
 {
-    [self waitNavigationBarWithLabel:reportName
+    [self waitNavigationBarWithControllerAccessibilityId:reportName
                              timeout:kUITestsBaseTimeout];
 }
 
@@ -219,7 +219,7 @@
 
 - (void)closeReportInfoPage
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
+    XCUIElement *navBar = [self findNavigationBarWithControllerAccessibilityId:nil];
     XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
                                                       parentElement:navBar
                                                             timeout:kUITestsBaseTimeout];

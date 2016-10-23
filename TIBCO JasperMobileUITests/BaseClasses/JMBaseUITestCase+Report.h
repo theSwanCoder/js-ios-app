@@ -30,14 +30,8 @@ extern NSString *const kTestReportWithSingleSelectedControlName;
 - (void)saveTestReportWithName:(NSString *)name
                         format:(NSString *)format;
 
-- (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName;
-
 // Printing
 - (void)openPrintReportPage;
 - (void)closePrintReportPage;
-
-// Verifying
-- (void)verifyThatReportInfoPageOnScreen;
-- (void)verifyThatReportInfoPageContainsCorrectDataForReportWithName:(NSString *)reportName;
 
 @end

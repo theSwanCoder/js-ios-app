@@ -18,10 +18,8 @@
 
 - (void)closeSelectPrinterPage
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Printer Options"
-                                                    onNavBarWithLabel:@"Printer"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    XCUIElement *closeButton = [self waitBackButtonWithAccessibilityId:@"Printer Options" timeout:kUITestsBaseTimeout];
+    [closeButton tap];
 }
 
 @end

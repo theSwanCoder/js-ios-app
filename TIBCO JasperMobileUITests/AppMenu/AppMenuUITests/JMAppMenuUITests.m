@@ -38,28 +38,13 @@
     [self showSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifySideMenuVisible];
 
-    XCUIElement *menuView = [self sideMenuElement];
-    [menuView swipeUp];
-    [menuView swipeDown];
+    XCUIElement *sideMenuElement = [self waitElementWithAccessibilityId:JMSideApplicationMenuAccessibilityId
+                                                                timeout:kUITestsBaseTimeout];
+    [sideMenuElement swipeUp];
+    [sideMenuElement swipeDown];
 
     [self hideSideMenuInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifySideMenuNotVisible];
-}
-
-- (void)verifySideMenuVisible
-{
-    XCUIElement *menuView = [self sideMenuElement];
-    if (!menuView.exists) {
-        XCTFail(@"Menu Should be visible");
-    }
-}
-
-- (void)verifySideMenuNotVisible
-{
-    XCUIElement *menuView = [self sideMenuElement];
-    if (menuView.exists) {
-        XCTFail(@"Menu Should not be visible");
-    }
 }
 
 - (void)testThatMenuViewCanSelectItems

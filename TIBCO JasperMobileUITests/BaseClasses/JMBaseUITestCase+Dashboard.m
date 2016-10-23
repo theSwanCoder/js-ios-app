@@ -28,8 +28,6 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
     [self givenLoadingPopupNotVisible];
     [self givenLoadingPopupNotVisible];
-
-    [self tryBackToPreviousPage];
 }
 
 - (void)openTestDashboardPageWithWaitingFinish:(BOOL)waitingFinish
@@ -70,11 +68,6 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     }
 }
 
-- (void)closeTestDashboardPage
-{
-    [self tryBackToPreviousPage];
-}
-
 - (void)cancelOpeningTestDashboardPage
 {
     XCUIElement *loadingPopup = [self findElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"];
@@ -101,7 +94,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)closePrintDashboardPage
 {
     // verify that 'print report' page is on the screen
-    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
+    XCUIElement *printNavBar = [self waitNavigationBarWithControllerAccessibilityId:@"Printer Options"
                                                         timeout:kUITestsBaseTimeout];
     XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
                                                       parentElement:printNavBar
@@ -114,7 +107,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (XCUIElement *)searchTestDashboardInSectionWithName:(NSString *)sectionName
 {
     [self searchResourceWithName:kTestDashboardName
-               inSectionWithName:sectionName];
+               inSectionWithAccessibilityId:sectionName];
 
     [self givenThatCellsAreVisible];
 

@@ -13,9 +13,9 @@
                  timeout:(NSTimeInterval)timeout;
 
 // NavigationBars
-- (XCUIElement *)findNavigationBarWithLabel:(NSString *)label;
-- (XCUIElement *)waitNavigationBarWithLabel:(NSString *)label
-                                    timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)findNavigationBarWithControllerAccessibilityId:(NSString *)controllerAccessibilityId;
+- (XCUIElement *)waitNavigationBarWithControllerAccessibilityId:(NSString *)controllerAccessibilityId
+                                                        timeout:(NSTimeInterval)timeout;
 
 // Other elements
 - (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId;
@@ -50,14 +50,10 @@
                        parentElement:(XCUIElement *)parentElement
                              timeout:(NSTimeInterval)timeout;
 // Back buttons
-- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId;
-- (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
+- (XCUIElement *)findBackButtonWithControllerAccessibilityId:(NSString *)controllerAccessibilityId;
+- (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)controllerAccessibilityId
                                            timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 onNavBarWithLabel:(NSString *)label;
-- (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 onNavBarWithLabel:(NSString *)label
-                                           timeout:(NSTimeInterval)timeout;
+
 // Text Fields
 - (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
                                           timeout:(NSTimeInterval)timeout;
@@ -109,6 +105,7 @@
                                                  labelText:(NSString *)labelText;
 - (XCUIElement *)findTableViewCellWithAccessibilityId:(NSString *)accessibilityId
                                 containsLabelWithText:(NSString *)labelText;
+
 // Search
 - (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText;
 
@@ -118,4 +115,5 @@
 
 // Images
 - (XCUIElement *)findImageWithAccessibilityId:(NSString *)accessibilityId;
+
 @end

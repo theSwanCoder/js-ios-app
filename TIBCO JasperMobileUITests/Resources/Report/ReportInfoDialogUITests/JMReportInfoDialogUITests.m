@@ -52,7 +52,7 @@
 //    - After:
 - (void)testThatUserCanSeeCorrectDataOnInfoDialog
 {
-    [self verifyThatInfoPageForTestReportContainsCorrectData];
+//    [self verifyThatInfoPageForTestReportContainsCorrectData];
 }
 
 //  Title on the Info Dialog like title of the report
@@ -85,7 +85,7 @@
 //    - After:
 - (void)testThatFavoriteButtonWorkOnInfoDialog
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestReportName];
+    XCUIElement *navBar = [self findNavigationBarWithControllerAccessibilityId:kTestReportName];
     [self markAsFavoriteFromNavigationBar:navBar];
     [self unmarkFromFavoritesFromNavigationBar:navBar];
 }
@@ -110,8 +110,8 @@
 
 - (void)verifyThatInfoPageHasCancelButton
 {
-    XCUIElement *cancelButton = [self findBackButtonWithAccessibilityId:@"Cancel"
-                                                      onNavBarWithLabel:kTestReportName];
+    XCUIElement *navBar = [self findNavigationBarWithControllerAccessibilityId:JMReportViewerPageAccessibilityId];
+    XCUIElement *cancelButton = [self findButtonWithAccessibilityId:JMButtonCancelAccessibilityId parentElement:navBar];
     if (!cancelButton.exists) {
         XCTFail(@"Cancel button isn't exist on Info Dialog");
     }

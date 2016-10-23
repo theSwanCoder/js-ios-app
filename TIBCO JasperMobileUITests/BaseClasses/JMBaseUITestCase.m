@@ -51,8 +51,8 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 //    if (!loginPageView) {
 //        [self logout];
 //    }
-    XCUIApplication *app = self.application;
-    [app terminate];
+
+    [self.application terminate];
     self.application = nil;
     
     [super tearDown];
@@ -73,6 +73,12 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     [self givenThatServerProfilesPageOnScreen];
 
     [self trySelectNewTestServerProfile];
+}
+
+- (void)trySelectNewTestServerProfile
+{
+    XCUIElement *testProfile = [self findTestProfileCell];
+    [testProfile tap];
 }
 
 - (XCUIElement *)findTestProfileCell
@@ -198,21 +204,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
                                                       parentElement:securityWarningAlert
                                                             timeout:kUITestsBaseTimeout];
         [okButton tap];
-    }
-}
-
-- (void)tryBackToLoginPageFromProfilesPage
-{
-    [self tryBackToPreviousPage];
-}
-
-- (void)trySelectNewTestServerProfile
-{
-    XCUIElement *testProfile = [self findTestProfileCell];
-    if (testProfile.exists) {
-        [testProfile tap];
-    } else {
-        XCTFail(@"Test profile doesn't visible or exist");
     }
 }
 
@@ -355,22 +346,9 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 }
 
 #pragma mark - Helper Actions
-// TODO: replace this method with 'tryBackToPreviousPageWithTitle:'
-- (void)tryBackToPreviousPage
+- (void)tryBackFromPageWithAccessibilityId:(NSString *)currentPageAccessibilityId
 {
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"];
-    if (!backButton) {
-        backButton = [self findBackButtonWithAccessibilityId:JMLibraryPageAccessibilityId];
-    }
-    [backButton tap];
-}
-
-- (void)tryBackToPreviousPageWithTitle:(NSString *)pageTitle
-{
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:pageTitle];
-    if (!backButton) {
-        XCTFail(@"There isn't back button with title: %@", pageTitle);
-    }
+    XCUIElement *backButton = [self findBackButtonWithControllerAccessibilityId:currentPageAccessibilityId];
     [backButton tap];
 }
 

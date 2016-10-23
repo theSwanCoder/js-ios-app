@@ -10,7 +10,6 @@
 
 // General methods
 - (void)openInfoPageFromCell:(XCUIElement *)cell;
-- (void)closeInfoPageFromCell;
 - (void)openInfoPageFromMenuActions;
 - (void)closeInfoPageFromMenuActions;
 - (void)verifyInfoPageOnScreenForPageWithAccessibilityId:(NSString *)accessibilityId;
@@ -19,8 +18,6 @@
 - (void)openInfoPageForTestReportFromSectionWithAccessibilityId:(NSString *)accessibilityId;
 - (void)verifyThatInfoPageForTestReportHasBackButton;
 - (void)verifyThatInfoPageForTestReportHasCorrectTitle;
-- (void)verifyThatInfoPageForTestReportContainsCorrectData;
-- (void)closeInfoPageForTestReport;
 
 // Dashboards
 - (void)openInfoPageForTestDashboardFromSectionWithAccessibilityId:(NSString *)accessibilityId;

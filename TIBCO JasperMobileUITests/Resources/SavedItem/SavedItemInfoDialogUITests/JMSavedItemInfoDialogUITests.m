@@ -186,7 +186,7 @@
 
 - (void)verifyThatInfoPageHasCancelButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
+    XCUIElement *navBar = [self findNavigationBarWithControllerAccessibilityId:nil];
     XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
                                                       parentElement:navBar
                                                             timeout:kUITestsBaseTimeout];
@@ -197,7 +197,7 @@
 
 - (void)verifyThatInfoPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:kTestReportName
+    [self waitNavigationBarWithControllerAccessibilityId:kTestReportName
                              timeout:kUITestsBaseTimeout];
 }
 

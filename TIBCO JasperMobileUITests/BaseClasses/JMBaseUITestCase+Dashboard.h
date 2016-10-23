@@ -11,7 +11,6 @@ extern NSString *const kTestDashboardName;
 - (void)openTestDashboardPage;
 - (void)openTestDashboardFromInfoPage;
 - (void)openTestDashboardPageWithWaitingFinish:(BOOL)waitingFinish;
-- (void)closeTestDashboardPage;
 - (void)cancelOpeningTestDashboardPage;
 - (void)refreshDashboard;
 

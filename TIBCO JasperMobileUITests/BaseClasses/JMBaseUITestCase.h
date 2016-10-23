@@ -27,18 +27,15 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 
 - (void)loginWithTestProfileIfNeed;
 - (void)logout;
-- (void)tryBackToPreviousPage;
-- (void)tryBackToPreviousPageWithTitle:(NSString *)pageTitle;
+- (void)tryBackFromPageWithAccessibilityId:(NSString *)currentPageAccessibilityId;
 - (void)tryOpenServerProfilesPage;
 - (void)tryOpenNewServerProfilePage;
 - (void)tryCreateNewTestServerProfile;
 - (void)trySelectNewTestServerProfile;
 - (void)tryEnterTestCredentials;
-- (void)tryTapLoginButton;
 - (void)tryRemoveProfileWithElement:(XCUIElement *)profile;
 
 //
-- (void)givenThatLoginPageOnScreen;
 - (void)givenThatServerProfilesPageOnScreen;
 - (void)givenThatNewProfilePageOnScreen;
 - (void)givenThatLibraryPageOnScreen;

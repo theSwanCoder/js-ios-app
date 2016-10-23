@@ -353,22 +353,19 @@
 - (void)verifyThatSaveReportPageOnScreen
 {
     // TODO: replace with accessibility id of view
-    [self waitNavigationBarWithLabel:@"Save Report"
+    [self waitNavigationBarWithControllerAccessibilityId:@"Save Report"
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatSaveReportPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Save Report"
+    [self waitNavigationBarWithControllerAccessibilityId:@"Save Report"
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatSaveReportPageHasCorrectBackButtonName
 {
-    // TODO: need make general case for all devices, 'Back' on iPhones
-    [self waitBackButtonWithAccessibilityId:@"Back"
-                          onNavBarWithLabel:@"Save Report"
-                                    timeout:kUITestsBaseTimeout];
+    [self waitBackButtonWithAccessibilityId:JMReportViewerSavingPageAccessibilityId timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyErrorOfSavingReportWithEmptyName

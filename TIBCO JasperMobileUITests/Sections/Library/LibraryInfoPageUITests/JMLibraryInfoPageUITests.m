@@ -9,37 +9,53 @@
 #import "JMLibraryInfoPageUITests.h"
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+Favorites.h"
+#import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+ActionsMenu.h"
 
 @implementation JMLibraryInfoPageUITests
+
+- (void)setUp
+{
+    [super setUp];
+    
+    [self givenThatLibraryPageOnScreen];
+    [self givenThatCellsAreVisible];
+}
 
 #pragma mark - Tests - Main
 - (void)testThatReportInfoPageCanBeViewed
 {
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
-    [self closeInfoPageForTestReport];
+    [self verifyInfoPageOnScreenForPageWithAccessibilityId:JMReportInfoPageAccessibilityId];
 }
 
 - (void)testThatReportInfoPageHasTitleAsReportLabel
 {
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifyThatInfoPageForTestReportHasCorrectTitle];
-    [self closeInfoPageForTestReport];
-}
-
-- (void)testThatReportInfoPageHasFullReportInfo
-{
-    [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
-    [self verifyThatInfoPageForTestReportContainsCorrectData];
-    [self closeInfoPageForTestReport];
 }
 
 #pragma mark - Tests - Menu
 - (void)testThatReportCanBeMarkAsFavorite
 {
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
-    [self markAsFavoriteFromMenuActions];
-    [self unmarkFromFavoritesFromMenuActions];
-    [self closeInfoPageForTestReport];
+    
+    XCUIElement *navBar = [self findNavigationBarWithControllerAccessibilityId:JMReportInfoPageAccessibilityId];
+    XCUIElement *markAsFavoriteButton = [self findButtonWithAccessibilityId:JMMenuActionsViewMarkAsFavoriteActionAccessibilityId parentElement:navBar];
+    if (markAsFavoriteButton.exists) {
+        [markAsFavoriteButton tap];
+    } else {
+        [self openMenuActionsWithControllerAccessibilityId:JMReportInfoPageAccessibilityId];
+        [self selectActionWithAccessibility:JMMenuActionsViewMarkAsFavoriteActionAccessibilityId];
+    }
+    
+    XCUIElement *markAsUnFavoriteButton = [self findButtonWithAccessibilityId:JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId parentElement:navBar];
+    if (markAsUnFavoriteButton.exists) {
+        [markAsUnFavoriteButton tap];
+    } else {
+        [self openMenuActionsWithControllerAccessibilityId:JMReportInfoPageAccessibilityId];
+        [self selectActionWithAccessibility:JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId];
+    }
 }
 
 @end

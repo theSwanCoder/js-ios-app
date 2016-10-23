@@ -164,9 +164,7 @@
 
 - (void)stopEditFilterWithMultiItems
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"Low Fat"
-                                                              timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:JMReportViewerInputControlsPageMultiSelectParameterCellAccessibilityId timeout:kUITestsBaseTimeout];
     [backButton tap];
 }
 
@@ -179,9 +177,7 @@
 
 - (void)stopEditFilterWithSingleSelectedItem
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"Country"
-                                                              timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:JMReportViewerInputControlsPageSingleSelectParameterCellAccessibilityId timeout:kUITestsBaseTimeout];
     [backButton tap];
 }
 
@@ -205,7 +201,7 @@
 
 - (void)verifyThatInputControlsPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Low Fat"
+    [self waitNavigationBarWithControllerAccessibilityId:@"Low Fat"
                              timeout:kUITestsBaseTimeout];
 }
 
@@ -238,9 +234,11 @@
 
 - (void)verifyThatInputControlPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Filters"
-                          onNavBarWithLabel:@"Low Fat"
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:JMReportViewerInputControlsPageAccessibilityId timeout:kUITestsBaseTimeout];
+    NSString *backButtonTitle = backButton.label;
+    if ([backButtonTitle isEqualToString:JMLocalizedString(@"back_button_title")]) {
+        XCTAssert(@"Page has incorrect back button title");
+    }
 }
 
 @end

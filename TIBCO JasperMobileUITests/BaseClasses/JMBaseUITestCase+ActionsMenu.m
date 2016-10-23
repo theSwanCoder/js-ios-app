@@ -17,32 +17,18 @@
 
 - (XCUIElement *)findActionsButtonWithControllerAccessibilityId:(NSString *)controllerAccessibilityId
 {
-#warning NEED REFACTORING! This code can move to parent class as one method
-    XCUIElement *parentElement = self.application;
-    if (controllerAccessibilityId) {
-        XCUIElement *currentController = [self waitElementWithAccessibilityId:controllerAccessibilityId timeout:kUITestsBaseTimeout];
-        NSString *title = currentController.label;
-        parentElement = [self waitNavigationBarWithLabel:title
-                                                 timeout:kUITestsBaseTimeout];
-    }
-
+    XCUIElement *navBar = [self waitNavigationBarWithControllerAccessibilityId:controllerAccessibilityId timeout:kUITestsBaseTimeout];
     XCUIElement *actionsButton = [self findButtonWithAccessibilityId:JMMenuActionsViewActionButtonAccessibilityId
-                                                       parentElement:parentElement];
+                                                       parentElement:navBar];
     return actionsButton;
 }
 
 - (XCUIElement *)waitActionsButtonWithControllerAccessibilityId:(NSString *)controllerAccessibilityId
                                                         timeout:(NSTimeInterval)timeout
 {
-    XCUIElement *parentElement = self.application;
-    if (controllerAccessibilityId) {
-        XCUIElement *currentController = [self waitElementWithAccessibilityId:controllerAccessibilityId timeout:kUITestsBaseTimeout];
-        NSString *title = currentController.label;
-        parentElement = [self waitNavigationBarWithLabel:title
-                                                 timeout:kUITestsBaseTimeout];
-    }
+    XCUIElement *navBar = [self waitNavigationBarWithControllerAccessibilityId:controllerAccessibilityId timeout:kUITestsBaseTimeout];
     XCUIElement *actionsButton = [self waitButtonWithAccessibilityId:JMMenuActionsViewActionButtonAccessibilityId
-                                                       parentElement:parentElement
+                                                       parentElement:navBar
                                                              timeout:timeout];
     return actionsButton;
 }

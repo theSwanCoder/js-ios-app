@@ -212,20 +212,22 @@
 
 - (void)verityThatPrintPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Printer Options"
+    [self waitNavigationBarWithControllerAccessibilityId:@"Printer Options"
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatPrinterPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Printer"
+    [self waitNavigationBarWithControllerAccessibilityId:@"Printer"
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatPrintersPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Printer Options"
-                          onNavBarWithLabel:@"Printer"
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:JMDashboardViewerPageAccessibilityId timeout:kUITestsBaseTimeout];
+    NSString *backButtonTitle = backButton.label;
+    if ([backButtonTitle isEqualToString:JMLocalizedString(@"back_button_title")]) {
+        XCTAssert(@"Page has incorrect back button title");
+    }
 }
 @end

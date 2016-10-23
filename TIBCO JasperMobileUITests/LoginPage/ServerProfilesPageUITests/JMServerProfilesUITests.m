@@ -21,19 +21,14 @@
         [collectionView swipeUp];
         [collectionView swipeDown];
     }
-    [self tryBackToPreviousPage];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 - (void)testThatServerProfileCanBeSelected
 {
     [self tryOpenServerProfilesPage];
     
-    XCUIElement *testProfile = [self findTestProfileCell];
-    if (testProfile.exists) {
-        [testProfile tap];
-    } else {
-        XCTFail(@"Test profile doesn't visible or exist");
-    }
+    [self trySelectNewTestServerProfile];
     
     // verify server profile field has value that equal demo profile
     XCUIElement *serverProfileTextField = [self waitTextFieldWithAccessibilityId:JMLoginPageServerProfileTextFieldAccessibilityId
@@ -62,7 +57,7 @@
 
     NSInteger endCellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
     XCTAssertTrue(endCellsCount > startCellsCount, @"Start Cells Count: %@, but End Cells Count: %@", @(startCellsCount), @(endCellsCount));
-    [self tryBackToPreviousPage];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 - (void)testThatServerProfileCanBeDeleted
@@ -83,7 +78,7 @@
     }
     NSInteger endCellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
     XCTAssertTrue(endCellsCount < startCellsCount);
-    [self tryBackToPreviousPage];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 - (void)testThatServerProfileCanBeCloned
@@ -98,9 +93,7 @@
     [self givenThatServerProfilesPageOnScreen];
 
     XCUIElement *serverProfileElement = [self findTestProfileCell];
-    if (!serverProfileElement.exists) {
-        XCTFail(@"Test profile doesn't visible or exist");
-    }
+
     NSInteger startCellsCount = [self countCellsWithAccessibilityId:JMServerProfilesPageServerCellAccessibilityId];
     
     [serverProfileElement pressForDuration:1.1];
@@ -129,7 +122,7 @@
     
     // TODO: remove cloned profile.
     
-    [self tryBackToPreviousPage];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 

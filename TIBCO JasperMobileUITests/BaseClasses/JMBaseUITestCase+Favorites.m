@@ -40,7 +40,6 @@
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:accessibilityId];
     // TODO: do we need verify that item isn't favorite
     [self markAsFavoriteFromMenuActions];
-    [self closeInfoPageFromCell];
 }
 
 - (void)unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:(NSString *)accessibilityId
@@ -48,7 +47,6 @@
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:accessibilityId];
     // TODO: do we need verify that item is favorite
     [self unmarkFromFavoritesFromMenuActions];
-    [self closeInfoPageFromCell];
 }
 
 #pragma mark - Dashboards
@@ -58,7 +56,6 @@
     [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:accessibilityId];
     // TODO: do we need verify that item isn't favorite
     [self markAsFavoriteFromMenuActions];
-    [self closeInfoPageFromCell];
 }
 
 - (void)unmarkTestDashboardFromFavoriteFromSectionWithAccessibilityId:(NSString *)accessibilityId
@@ -66,7 +63,6 @@
     [self openInfoPageForTestDashboardFromSectionWithAccessibilityId:accessibilityId];
     // TODO: do we need verify that item is favorite
     [self unmarkFromFavoritesFromMenuActions];
-    [self closeInfoPageFromCell];
 }
 
 #pragma mark - General methods
@@ -116,8 +112,6 @@
 
     [self openMenuActionsWithControllerAccessibilityId:JMFavoritesPageAccessibilityId];
     [self selectActionWithAccessibility:JMMenuActionsViewMarkAsUnFavoriteActionAccessibilityId];
-
-    [self closeInfoPageFromCell];
 }
 
 @end

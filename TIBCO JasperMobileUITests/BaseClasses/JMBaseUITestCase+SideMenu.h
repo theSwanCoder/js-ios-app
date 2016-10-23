@@ -24,9 +24,11 @@
 - (void)selectFeedback;
 - (void)selectLogOut;
 
-- (XCUIElement *)sideMenuElement;
-
 - (void)selectMenuItemForPageWithAccessibilityId:(NSString *)accessibilityId;
 
 - (XCUIElement *)findMenuItemForPageAccessibilityId:(NSString *)accessibilityId;
+
+- (void)verifySideMenuVisible;
+
+- (void)verifySideMenuNotVisible;
 @end

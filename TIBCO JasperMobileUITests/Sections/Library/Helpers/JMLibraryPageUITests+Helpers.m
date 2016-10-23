@@ -13,31 +13,31 @@
 
 #pragma mark - Helpers - Search
 
-- (void)trySearchText:(NSString *)text
-{
-    // start find some text
-    XCUIElement *searchResourcesSearchField = self.application.searchFields[JMResourceCollectionPageSearchBarPageAccessibilityId];
-    if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tap];
-        [searchResourcesSearchField typeText:text];
-
-        [self closeKeyboardWithButton:@"Search"];
-    } else {
-        XCTFail(@"Search field doesn't exist.");
-    }
-}
-
-- (void)tryClearSearchBar
-{
-    // start find some text
-    XCUIElement *searchResourcesSearchField = self.application.searchFields[JMResourceCollectionPageSearchBarPageAccessibilityId];
-    if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tap];
-        [self closeKeyboardWithButton:@"Cancel"];
-    } else {
-        XCTFail(@"Search field doesn't exist.");
-    }
-}
+//- (void)trySearchText:(NSString *)text
+//{
+//    // start find some text
+//    XCUIElement *searchResourcesSearchField = self.application.searchFields[JMResourceCollectionPageSearchBarPageAccessibilityId];
+//    if (searchResourcesSearchField.exists) {
+//        [searchResourcesSearchField tap];
+//        [searchResourcesSearchField typeText:text];
+//
+//        [self closeKeyboardWithButton:@"Search"];
+//    } else {
+//        XCTFail(@"Search field doesn't exist.");
+//    }
+//}
+//
+//- (void)tryClearSearchBar
+//{
+//    // start find some text
+//    XCUIElement *searchResourcesSearchField = self.application.searchFields[JMResourceCollectionPageSearchBarPageAccessibilityId];
+//    if (searchResourcesSearchField.exists) {
+//        [searchResourcesSearchField tap];
+//        [self closeKeyboardWithButton:@"Cancel"];
+//    } else {
+//        XCTFail(@"Search field doesn't exist.");
+//    }
+//}
 
 #pragma mark - Verfies
 

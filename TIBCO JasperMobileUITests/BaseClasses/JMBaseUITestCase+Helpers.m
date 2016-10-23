@@ -143,27 +143,30 @@
     return staticText;
 }
 
-- (XCUIElement *)findNavigationBarWithLabel:(NSString *)label
+- (XCUIElement *)findNavigationBarWithControllerAccessibilityId:(NSString *)controllerAccessibilityId
 {
-    XCUIApplication *app = self.application;
     XCUIElement *navBar;
-    if (label == nil) {
-        navBar = [app.navigationBars elementBoundByIndex:0];
-    } else {
-        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *navBar, NSDictionary<NSString *, id> *bindings) {
-            return [navBar.identifier isEqualToString:label];
-        }];
-        navBar = [app.navigationBars elementMatchingPredicate:predicate];
+    if (controllerAccessibilityId) {
+        XCUIElement *currentController = [self waitElementWithAccessibilityId:controllerAccessibilityId timeout:kUITestsBaseTimeout];
+        NSString *title = currentController.label;
+        
+        if (title == nil) {
+            navBar = [self.application.navigationBars elementBoundByIndex:0];
+        } else {
+            navBar = [self.application.navigationBars elementMatchingType:XCUIElementTypeNavigationBar identifier:title];
+        }
     }
     return navBar;
 }
 
-- (XCUIElement *)waitNavigationBarWithLabel:(NSString *)label
-                                    timeout:(NSTimeInterval)timeout
+- (XCUIElement *)waitNavigationBarWithControllerAccessibilityId:(NSString *)controllerAccessibilityId
+                                                        timeout:(NSTimeInterval)timeout
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:label];
-    [self waitElementReady:navBar
-                   timeout:timeout];
+    XCUIElement *navBar = [self findNavigationBarWithControllerAccessibilityId:controllerAccessibilityId];
+    if (navBar) {
+        [self waitElementReady:navBar
+                       timeout:timeout];
+    }
     return navBar;
 }
 
@@ -388,40 +391,30 @@
 }
 
 #pragma mark - Back buttons
-- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
+- (XCUIElement *)findBackButtonWithControllerAccessibilityId:(NSString *)accessibilityId
 {
-    return [self findBackButtonWithAccessibilityId:accessibilityId
-                                 onNavBarWithLabel:nil];
+    XCUIElement *navBar = [self findNavigationBarWithControllerAccessibilityId:accessibilityId];
+    XCUIElement *backButton = [self findButtonWithAccessibilityId:JMBackButtonAccessibilityId
+                                                    parentElement:navBar];
+    if (!backButton) {
+        if (navBar) {
+            backButton = [navBar.buttons elementBoundByIndex:0];
+        } else {
+            backButton = [self.application.navigationBars.buttons elementBoundByIndex:0];
+        }
+    }
+    return backButton;
 }
+
 
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                            timeout:(NSTimeInterval)timeout
 {
-    return [self waitBackButtonWithAccessibilityId:accessibilityId
-                                 onNavBarWithLabel:nil
-                                           timeout:timeout];
-}
-
-- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 onNavBarWithLabel:(NSString *)label
-{
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:label
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *button = [self findButtonWithAccessibilityId:accessibilityId
-                                                parentElement:navBar];
-    return button;
-}
-
-- (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 onNavBarWithLabel:(NSString *)label
-                                           timeout:(NSTimeInterval)timeout
-{
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:label
-                                                   timeout:timeout];
-    XCUIElement *button = [self waitButtonWithAccessibilityId:accessibilityId
-                                                parentElement:navBar
-                                                      timeout:timeout];
-    return button;
+    XCUIElement *navBar = [self waitNavigationBarWithControllerAccessibilityId:accessibilityId
+                                                                       timeout:timeout];
+    return [self waitButtonWithAccessibilityId:JMBackButtonAccessibilityId
+                                 parentElement:navBar
+                                       timeout:timeout];
 }
 
 #pragma mark - Text Fields
@@ -613,18 +606,12 @@
 
 - (XCUIElement *)findMenuButtonInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
-    XCUIElement *parentElement = self.application;
-    if (sectionAccessibilityId) {
-        XCUIElement *sectionController = [self waitElementWithAccessibilityId:sectionAccessibilityId timeout:kUITestsBaseTimeout];
-        NSString *sectionTitle = sectionController.label;
-        parentElement = [self waitNavigationBarWithLabel:sectionTitle
-                                                       timeout:kUITestsBaseTimeout];
-    }
+    XCUIElement *navBar = [self waitNavigationBarWithControllerAccessibilityId:sectionAccessibilityId timeout:kUITestsBaseTimeout];
     XCUIElement *menuButton = [self findButtonWithAccessibilityId:JMSideApplicationMenuMenuButtonAccessibilityId
-                                                    parentElement:parentElement];
+                                                    parentElement:navBar];
     if (!menuButton) {
         menuButton = [self findButtonWithAccessibilityId:JMSideApplicationMenuMenuButtonNoteAccessibilityId
-                                           parentElement:parentElement];
+                                           parentElement:navBar];
     }
     return menuButton;
 }

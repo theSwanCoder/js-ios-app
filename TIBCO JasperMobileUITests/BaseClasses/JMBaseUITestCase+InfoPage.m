@@ -9,21 +9,17 @@
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Folders.h"
+#import "JMBaseUITestCase+Section.h"
 
 @implementation JMBaseUITestCase (InfoPage)
 
 #pragma mark - Info Page
 - (void)openInfoPageFromCell:(XCUIElement *)cell
 {
-    XCUIElement *infoButton = [self waitButtonWithAccessibilityId:@"More Info"
+    XCUIElement *infoButton = [self waitButtonWithAccessibilityId:JMResourceCellResourceInfoButtonAccessibilityId
                                                     parentElement:cell
                                                           timeout:kUITestsBaseTimeout];
     [infoButton tap];
-}
-
-- (void)closeInfoPageFromCell
-{
-    [self tryBackToPreviousPage];
 }
 
 - (void)openInfoPageFromMenuActions
@@ -32,38 +28,44 @@
     [self selectActionWithAccessibility:JMMenuActionsViewInfoActionAccessibilityId];
 }
 
-- (void)closeInfoPageFromMenuActions
-{
-    [self closeInfoPageWithCancelButton];
-}
-
-- (void)closeInfoPageWithCancelButton
-{
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:navBar
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
-}
-
 - (void)verifyInfoPageOnScreenForPageWithAccessibilityId:(NSString *)accessibilityId
 {
     [self waitElementWithAccessibilityId:accessibilityId
                                  timeout:kUITestsBaseTimeout];
+    
+    NSArray *cellsIdentifiers = @[JMResourceInfoPageTitleLabelAccessibilityId,
+                                  JMResourceInfoPageDescriptionLabelAccessibilityId,
+                                  JMResourceInfoPageTypeLabelAccessibilityId,
+                                  JMResourceInfoPageUriLabelAccessibilityId,
+                                  JMResourceInfoPageVersionLabelAccessibilityId,
+                                  JMResourceInfoPageCreationDateLabelAccessibilityId,
+                                  JMResourceInfoPageModifiedDateLabelAccessibilityId];
+    
+    for (NSString *cellIdentifier in cellsIdentifiers) {
+        NSInteger countOfCells = [self countCellsWithAccessibilityId:cellIdentifier];
+        XCTAssertTrue(countOfCells == 1, @"Incorrect presenting '%@' cell", cellIdentifier);
+    }
 }
 
 #pragma mark - Reports
 - (void)openInfoPageForTestReportFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *reportCell = [self searchTestReportInSectionWithName:accessibilityId];
-    [self openInfoPageFromCell:reportCell];
-    [self verifyThatReportInfoPageOnScreen];
+    [self searchResourceWithName:kJMTestLibrarySearchTextExample inSectionWithAccessibilityId:accessibilityId];
+    NSArray *cellsPredicatesArray = @[[NSPredicate predicateWithFormat:@"identifier CONTAINS %@", JMResourceCollectionPageReportResourceListCellAccessibilityId],
+                                      [NSPredicate predicateWithFormat:@"identifier CONTAINS %@", JMResourceCollectionPageReportResourceGridCellAccessibilityId]];
+    
+    NSCompoundPredicate *cellsPredicate = [[NSCompoundPredicate alloc] initWithType:NSOrPredicateType subpredicates:cellsPredicatesArray];
+    
+    XCUIElementQuery *cellsQuery = [self.application.cells matchingPredicate:cellsPredicate];
+    NSArray *allCells = cellsQuery.allElementsBoundByIndex;
+
+    XCUIElement *resultReportCell = allCells.firstObject;
+    [self openInfoPageFromCell:resultReportCell];
 }
 
 - (void)verifyThatInfoPageForTestReportHasBackButton
 {
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"
-                                                    onNavBarWithLabel:kTestReportName];
+    XCUIElement *backButton = [self findBackButtonWithControllerAccessibilityId:JMReportInfoPageAccessibilityId];
     if (!backButton.exists) {
         XCTFail(@"Back button doesn't exist on 'Info' page for test report");
     }
@@ -71,20 +73,14 @@
 
 - (void)verifyThatInfoPageForTestReportHasCorrectTitle
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestReportName];
-    if (!navBar.exists) {
+    XCUIElement *currentController = [self waitElementWithAccessibilityId:JMReportInfoPageAccessibilityId timeout:kUITestsBaseTimeout];
+    NSString *title = currentController.label;
+    
+    XCUIElement *titleCell = [self findTableViewCellWithAccessibilityId:JMResourceInfoPageTitleLabelAccessibilityId containsLabelWithText:title];
+    
+    if (!titleCell.exists) {
         XCTFail(@"Info page for test report has incorrect title");
     }
-}
-
-- (void)verifyThatInfoPageForTestReportContainsCorrectData
-{
-    [self verifyThatReportInfoPageContainsCorrectDataForReportWithName:kTestReportName];
-}
-
-- (void)closeInfoPageForTestReport
-{
-    [self closeInfoPageFromCell];
 }
 
 #pragma mark - Dashboards
@@ -97,8 +93,7 @@
 
 - (void)verifyThatInfoPageForTestDashboardHasBackButton
 {
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"
-                                                    onNavBarWithLabel:kTestDashboardName];
+    XCUIElement *backButton = [self findBackButtonWithControllerAccessibilityId:JMDashboardInfoPageAccessibilityId];
     if (!backButton.exists) {
         XCTFail(@"Back button doesn't exist on 'Info' page for test dashboard");
     }
@@ -106,7 +101,7 @@
 
 - (void)verifyThatInfoPageForTestDashboardHasCorrectTitle
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestDashboardName];
+    XCUIElement *navBar = [self findNavigationBarWithControllerAccessibilityId:kTestDashboardName];
     if (!navBar.exists) {
         XCTFail(@"Info page for test dashboard has incorrect title");
     }
@@ -115,11 +110,6 @@
 - (void)verifyThatInfoPageForTestDashboardContainsCorrectData
 {
     [self verifyThatDashboardInfoPageContainsCorrectDataForDashboardWithName:kTestDashboardName];
-}
-
-- (void)closeInfoPageForTestDashboard
-{
-    [self closeInfoPageFromCell];
 }
 
 #pragma mark - Folders
@@ -133,8 +123,7 @@
 
 - (void)verifyThatInfoPageForTestFolderHasBackButton
 {
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"
-                                                    onNavBarWithLabel:kTestFolderName];
+    XCUIElement *backButton = [self findBackButtonWithControllerAccessibilityId:nil];
     if (!backButton.exists) {
         XCTFail(@"Back button doesn't exist on 'Info' page for test folder");
     }
@@ -142,7 +131,7 @@
 
 - (void)verifyThatInfoPageForTestFolderHasCorrectTitle
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestFolderName];
+    XCUIElement *navBar = [self findNavigationBarWithControllerAccessibilityId:kTestFolderName];
     if (!navBar.exists) {
         XCTFail(@"Info page for test folder has incorrect title");
     }
@@ -151,11 +140,6 @@
 - (void)verifyThatInfoPageForTestFolderContainsCorrectData
 {
     [self verifyThatFolderInfoPageContainsCorrectDataForFolderWithName:kTestFolderName];
-}
-
-- (void)closeInfoPageForTestFolder
-{
-    [self closeInfoPageFromCell];
 }
 
 @end

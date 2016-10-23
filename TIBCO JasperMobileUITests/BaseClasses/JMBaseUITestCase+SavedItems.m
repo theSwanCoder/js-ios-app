@@ -169,7 +169,7 @@
 
 - (void)closeTestSavedItem
 {
-    [self tryBackToPreviousPage];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 - (void)showInfoPageTestSavedItemFromViewer
@@ -191,14 +191,9 @@
     [self openInfoPageFromCell:testItem];
 }
 
-- (void)closeInfoPageTestSavedItemFromSavedItemsSection
-{
-    [self closeInfoPageFromCell];
-}
-
 - (void)markSavedAsFavoriteFromInfoPage
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestReportName
+    XCUIElement *navBar = [self waitNavigationBarWithControllerAccessibilityId:kTestReportName
                                                    timeout:kUITestsBaseTimeout];
     XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"make favorite item"
                                                         parentElement:navBar
@@ -208,7 +203,7 @@
 
 - (void)unmarkSavedAsFavoriteFromInfoPage
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestReportName
+    XCUIElement *navBar = [self waitNavigationBarWithControllerAccessibilityId:kTestReportName
                                                    timeout:kUITestsBaseTimeout];
     XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"favorited item"
                                                         parentElement:navBar

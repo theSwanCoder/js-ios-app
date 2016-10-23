@@ -25,7 +25,6 @@
 {
     [self openTestDashboardPage];
     [self verifyDashboardPageOnScreen];
-    [self closeTestDashboardPage];
 }
 
 //Loader (Canceling Dashboard)
@@ -52,7 +51,6 @@
 {
     [self openTestDashboardPage];
     [self verifyBackButtonHasCorrectTitle];
-    [self closeTestDashboardPage];
 }
 
 //Title like name of the dashboard
@@ -64,7 +62,6 @@
 {
     [self openTestDashboardPage];
     [self verifyDashboardPageHasCorrectTitle];
-    [self closeTestDashboardPage];
 }
 
 //Favorite button
@@ -81,8 +78,6 @@
 
     [self markAsFavoriteFromMenuActions];
     [self unmarkFromFavoritesFromMenuActions];
-
-    [self closeTestDashboardPage];
 }
 
 //Refresh button
@@ -95,7 +90,6 @@
 {
     [self openTestDashboardPage];
     [self refreshDashboard];
-    [self closeTestDashboardPage];
 }
 
 //Print button
@@ -110,8 +104,6 @@
 
     [self openPrintDashboardPage];
     [self closePrintDashboardPage];
-
-    [self closeTestDashboardPage];
 }
 
 //Info button
@@ -127,8 +119,6 @@
     [self openInfoPageFromMenuActions];
     [self verifyThatDashboardInfoPageOnScreen];
     [self closeInfoPageFromMenuActions];
-
-    [self closeTestDashboardPage];
 }
 
 //Zoom on Dashboard View screen
@@ -153,21 +143,23 @@
 - (void)verifyDashboardPageOnScreen
 {
     // TODO: may be need other case
-    [self waitNavigationBarWithLabel:kTestDashboardName
+    [self waitNavigationBarWithControllerAccessibilityId:kTestDashboardName
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyDashboardPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:kTestDashboardName
+    [self waitNavigationBarWithControllerAccessibilityId:kTestDashboardName
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyBackButtonHasCorrectTitle
 {
-    [self waitBackButtonWithAccessibilityId:JMLibraryPageAccessibilityId
-                          onNavBarWithLabel:kTestDashboardName
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:JMDashboardViewerPageAccessibilityId timeout:kUITestsBaseTimeout];
+    NSString *backButtonTitle = backButton.label;
+    if ([backButtonTitle isEqualToString:JMLocalizedString(@"menuitem_library_label")]) {
+        XCTAssert(@"Dashboard viewer page has incorrect back button title");
+    }
 }
 
 @end

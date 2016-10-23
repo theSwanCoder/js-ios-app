@@ -20,13 +20,13 @@ NSString *const kTestFolderName = @"Public";
 
 - (void)backToFolderWithName:(NSString *)folderName
 {
-    [self tryBackToPreviousPageWithTitle:folderName];
+//    [self tryBackToPreviousPageWithTitle:folderName];
 }
 
 - (XCUIElement *)searchTestFolderInSectionWithName:(NSString *)sectionName
 {
     [self searchResourceWithName:@"Samples"
-               inSectionWithName:sectionName];
+               inSectionWithAccessibilityId:sectionName];
 
     [self givenThatCellsAreVisible];
 
@@ -37,7 +37,7 @@ NSString *const kTestFolderName = @"Public";
 
 - (void)verifyCorrectTitleForFolderWithName:(NSString *)folderName
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:folderName];
+    XCUIElement *navBar = [self findNavigationBarWithControllerAccessibilityId:folderName];
     if (!navBar.exists) {
         XCTFail(@"Wrong title, expected: %@", folderName);
     }

@@ -383,14 +383,12 @@
 
 - (void)verifyThatBackButtonHasCorrectTitle
 {
-    [self waitBackButtonWithAccessibilityId:@"Back"
-                          onNavBarWithLabel:kTestReportName
-                                    timeout:kUITestsBaseTimeout];
+    [self waitBackButtonWithAccessibilityId:JMContentResourceViewerPageAccessibilityId timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatSavedItemPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:kTestReportName 
+    [self waitNavigationBarWithControllerAccessibilityId:kTestReportName 
                              timeout:kUITestsBaseTimeout];
 }
 

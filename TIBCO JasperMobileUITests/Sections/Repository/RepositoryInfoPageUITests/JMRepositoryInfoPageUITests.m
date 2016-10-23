@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+Favorites.h"
 #import "JMBaseUITestCase+Dashboard.h"
+#import "JMBaseUITestCase+Helpers.h"
 
 @implementation JMRepositoryInfoPageUITests
 
@@ -28,7 +29,7 @@
 - (void)testThatUserCanSeeInfoScreenTestReport
 {
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 - (void)testThatUserCanSeeInfoScreenTestDashboard
@@ -57,7 +58,7 @@
 {
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self verifyThatInfoPageForTestReportHasBackButton];
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 //  Title like name of item
@@ -73,7 +74,7 @@
 {
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self verifyThatInfoPageForTestReportHasCorrectTitle];
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 //  Info about the report
@@ -96,8 +97,7 @@
 - (void)testThatInfoScreenContainsCorrectInfoForTestReport
 {
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
-    [self verifyThatInfoPageForTestReportContainsCorrectData];
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
     
 //  Info about the dashboard
@@ -167,7 +167,7 @@
     [self markAsFavoriteFromMenuActions];
     [self unmarkFromFavoritesFromMenuActions];
 
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 - (void)testThatTestDashboardCanBeMarkFavoriteFromInfoScreen
@@ -206,7 +206,7 @@
     
     [self openTestReportFromInfoPage];
     
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 - (void)testThatTestDashboardCanBeRunFromInfoScreen
@@ -215,7 +215,7 @@
 
     [self openTestDashboardFromInfoPage];
 
-    [self closeInfoPageForTestDashboard];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 @end

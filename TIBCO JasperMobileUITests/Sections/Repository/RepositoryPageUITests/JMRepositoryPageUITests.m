@@ -57,7 +57,7 @@
 - (void)testThatRepositoryPageHasCorrectTitle
 {
     [self openRepositorySection];
-    XCUIElement *navBarItem = [self findNavigationBarWithLabel:JMRepositoryPageAccessibilityId];
+    XCUIElement *navBarItem = [self findNavigationBarWithControllerAccessibilityId:JMRepositoryPageAccessibilityId];
     if (!navBarItem.exists) {
         XCTFail(@"Page has non correct title");
     }
@@ -96,8 +96,13 @@
     [self openRepositorySection];
     [self openFolderWithName:kTestFolderName];
     [self givenThatCellsAreVisible];
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:JMRepositoryPageAccessibilityId
-                                                    onNavBarWithLabel:kTestFolderName];
+    
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:JMDashboardViewerPageAccessibilityId timeout:kUITestsBaseTimeout];
+    NSString *backButtonTitle = backButton.label;
+    if ([backButtonTitle isEqualToString:JMLocalizedString(@"menuitem_repository_label")]) {
+        XCTAssert(@"Dashboard viewer page has incorrect back button title");
+    }
+
     if (!backButton.exists) {
         XCTFail(@"Incorrect back button in folder");
     }
@@ -123,11 +128,11 @@
 {
     [self openRepositorySection];
     [self searchResourceWithName:@"Samples"
-               inSectionWithName:JMRepositoryPageAccessibilityId];
+               inSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self givenThatCellsAreVisible];
     
     [self searchResourceWithName:@"Templates"
-               inSectionWithName:JMRepositoryPageAccessibilityId];
+               inSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self givenThatCellsAreVisible];
 }
 
@@ -144,7 +149,7 @@
 {
     [self openRepositorySection];
     [self searchResourceWithName:@"NoSearchResults"
-               inSectionWithName:JMRepositoryPageAccessibilityId];
+               inSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
                                                 parentElement:nil
                                                       timeout:kUITestsBaseTimeout];
@@ -229,7 +234,7 @@
 {
     [self openRepositorySection];
     
-    [self searchResourceWithName:@"Monitoring" inSectionWithName:JMRepositoryPageAccessibilityId];
+    [self searchResourceWithName:@"Monitoring" inSectionWithAccessibilityId:JMRepositoryPageAccessibilityId];
     [self openFolderWithName:@"Monitoring"];
     [self givenThatCellsAreVisible];
     [self openFolderWithName:@"Monitoring Domains"];

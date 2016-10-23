@@ -36,8 +36,6 @@
     [self openInfoPageFromMenuActions];
     [self verifyInfoPageContainsCorrectInfo];
     [self closeInfoPageFromMenuActions];
-
-    [self closeTestDashboardPage];
 }
 
 //Cancel button on Info dialog
@@ -53,8 +51,6 @@
 
     [self openInfoPageFromMenuActions];
     [self closeInfoPageFromMenuActions];
-
-    [self closeTestDashboardPage];
 }
 
 //Title on the Info Dialog like title of the dashboard
@@ -70,8 +66,6 @@
     [self openInfoPageFromMenuActions];
     [self verifyInfoPageHasCorrectTitle];
     [self closeInfoPageFromMenuActions];
-
-    [self closeTestDashboardPage];
 }
 
 //Favorite button
@@ -91,8 +85,6 @@
     [self markAsFavoriteFromNavigationBar:nil];
     [self unmarkFromFavoritesFromNavigationBar:nil];
     [self closeInfoPageFromMenuActions];
-
-    [self closeTestDashboardPage];
 }
 
 #pragma mark - Verifying
@@ -125,7 +117,7 @@
 
 - (void)verifyInfoPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:kTestDashboardName
+    [self waitNavigationBarWithControllerAccessibilityId:kTestDashboardName
                              timeout:kUITestsBaseTimeout];
 }
 

@@ -21,14 +21,6 @@
     [self openPrintDashboardPage];
 }
 
-- (void)tearDown
-{
-    [self closePrintDashboardPage];
-    [self closeTestDashboardPage];
-    
-    [super tearDown];
-}
-
 #pragma mark - Tests
 
 //User should see Print Dashboard dialog
@@ -177,27 +169,28 @@
 
 - (void)verifyThatPrintDashboardPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Printer Options"
+    [self waitNavigationBarWithControllerAccessibilityId:@"Printer Options"
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatPrintDashboardPageHasCancelButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Cancel"
-                          onNavBarWithLabel:@"Printer Options"
-                                    timeout:kUITestsBaseTimeout];
+//    
+//    [self waitBackButtonWithAccessibilityId:@"Cancel"
+//                          onNavBarWithLabel:@"Printer Options"
+//                                    timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatPrintersPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Printer Options"
-                          onNavBarWithLabel:@"Printer"
-                                    timeout:kUITestsBaseTimeout];
+//    [self waitBackButtonWithAccessibilityId:@"Printer Options"
+//                          onNavBarWithLabel:@"Printer"
+//                                    timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatPrintersPageOnScreen
 {
-    [self waitNavigationBarWithLabel:@"Printer"
+    [self waitNavigationBarWithControllerAccessibilityId:@"Printer"
                              timeout:kUITestsBaseTimeout];
 }
 

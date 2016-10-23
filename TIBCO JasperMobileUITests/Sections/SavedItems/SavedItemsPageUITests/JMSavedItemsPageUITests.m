@@ -342,21 +342,13 @@
 - (void)verifyThatSavedItemsSectionOnScreen
 {
     // TODO: replace with waiting element (collection view) by accessibility id
-    [self waitNavigationBarWithLabel:JMSavedItemsPageAccessibilityId
+    [self waitNavigationBarWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId
                              timeout:kUITestsBaseTimeout];
-}
-
-- (void)verifySideMenuVisible
-{
-    XCUIElement *sideMenu = [self sideMenuElement];
-    if (!sideMenu.exists) {
-        XCTFail(@"Side menu should be visible");
-    }
 }
 
 - (void)verifyThatSavedItemsSectionHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:JMSavedItemsPageAccessibilityId
+    [self waitNavigationBarWithControllerAccessibilityId:JMSavedItemsPageAccessibilityId
                              timeout:kUITestsBaseTimeout];
 }
 

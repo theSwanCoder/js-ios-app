@@ -31,8 +31,6 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
     [self givenLoadingPopupNotVisible];
     [self givenLoadingPopupNotVisible];
-
-    [self tryBackToPreviousPage];
 }
 
 - (void)openTestReportWithMandatoryFiltersPage
@@ -76,7 +74,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)closeTestReportPage
 {
-    [self tryBackToPreviousPage];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 - (void)cancelOpeningTestReportPage
@@ -99,7 +97,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)closeReportFiltersPage
 {
-    [self tryBackToPreviousPage];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 #pragma mark - Saving
@@ -112,7 +110,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)closeSaveReportPage
 {
-    [self tryBackToPreviousPage];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 - (void)saveTestReportWithName:(NSString *)name format:(NSString *)format
@@ -144,25 +142,13 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 }
 
 #pragma mark - Helpers
-
-- (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName
-{
-    [self searchResourceWithName:kTestReportName
-               inSectionWithName:sectionName];
-
-    [self givenThatCellsAreVisible];
-
-    XCUIElement *testCell = [self testReportCell];
-    return testCell;
-}
-
 - (void)tryOpenTestReport
 {
-    [self searchTestReportInSectionWithName:JMLibraryPageAccessibilityId];
-    [self givenThatCellsAreVisible];
-
-    XCUIElement *testCell = [self testReportCell];
-    [testCell tap];
+//    [self searchTestReportInSectionWithName:JMLibraryPageAccessibilityId];
+//    [self givenThatCellsAreVisible];
+//
+//    XCUIElement *testCell = [self testReportCell];
+//    [testCell tap];
 }
 
 - (XCUIElement *)testReportCell
@@ -242,45 +228,12 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)closePrintReportPage
 {
     // verify that 'print report' page is on the screen
-    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
+    XCUIElement *printNavBar = [self waitNavigationBarWithControllerAccessibilityId:@"Printer Options"
                                                         timeout:kUITestsBaseTimeout];
     XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
                                                       parentElement:printNavBar
                                                             timeout:kUITestsBaseTimeout];
     [cancelButton tap];
-}
-
-#pragma mark - Verifying
-
-- (void)verifyThatReportInfoPageOnScreen
-{
-    [self verifyInfoPageOnScreenForPageWithAccessibilityId:@"JMReportInfoViewControllerAccessibilityId"];
-}
-
-- (void)verifyThatReportInfoPageContainsCorrectDataForReportWithName:(NSString *)reportName
-{
-    XCUIElement *infoPage = self.application.otherElements[@"JMReportInfoViewControllerAccessibilityId"];
-    [self waitStaticTextWithAccessibilityId:@"Name"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Description"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"URI"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Type"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Version"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Creation Date"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Modified Date"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
 }
 
 @end

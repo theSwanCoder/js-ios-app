@@ -13,6 +13,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Helpers.h"
 
 @implementation JMFavoriteInfoPageUITests
 
@@ -49,7 +50,7 @@
     [self openFavoritesSection];
 
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 
     [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
@@ -104,7 +105,7 @@
     
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatInfoPageForTestReportHasBackButton];
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
     
     [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
@@ -159,7 +160,7 @@
     
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self verifyThatInfoPageForTestReportHasCorrectTitle];
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
     
     [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
@@ -231,8 +232,7 @@
     [self openFavoritesSection];
     
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
-    [self verifyThatInfoPageForTestReportContainsCorrectData];
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
     
     [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
@@ -424,7 +424,7 @@
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self unmarkFromFavoritesFromMenuActions];
     [self markAsFavoriteFromMenuActions];
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
     
     [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }
@@ -482,7 +482,7 @@
     
     [self openInfoPageForTestReportFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
     [self openTestReportFromInfoPage];
-    [self closeInfoPageForTestReport];
+    [self findBackButtonWithControllerAccessibilityId:nil];
     
     [self unmarkTestReportFromFavoriteFromSectionWithAccessibilityId:JMFavoritesPageAccessibilityId];
 }

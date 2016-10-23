@@ -21,14 +21,6 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     [self openTestDashboardPage];
 }
 
-- (void)tearDown
-{
-    [self closeTestDashlet];
-    [self closeTestDashboardPage];
-    
-    [super tearDown];
-}
-
 #pragma mark - Tests
 
 //User should see selected dashlet on the separate screen
@@ -197,27 +189,29 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)closeTestHyperlinkPage
 {
-    [self tryBackToPreviousPage];
+    [self findBackButtonWithControllerAccessibilityId:nil];
 }
 
 #pragma mark - Verifying
 
 - (void)verifyThatDashletPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Back"
-                          onNavBarWithLabel:kDashletName
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:kDashletName timeout:kUITestsBaseTimeout];
+    NSString *backButtonTitle = backButton.label;
+    if ([backButtonTitle isEqualToString:JMLocalizedString(@"back_button_title")]) {
+        XCTAssert(@"Page has incorrect back button title");
+    }
 }
 
 - (void)verifyThatDashletPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:kDashletName
+    [self waitNavigationBarWithControllerAccessibilityId:kDashletName
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatReportFromTestHypelinkOnScreen
 {
-    [self waitNavigationBarWithLabel:@"09. Customer Detail Report"
+    [self waitNavigationBarWithControllerAccessibilityId:@"09. Customer Detail Report"
                              timeout:kUITestsBaseTimeout];
 }
 

@@ -8,6 +8,8 @@
 
 @interface JMBaseUITestCase (Section)
 
+- (void)verifyPageTitle:(NSString *)title withPageAccessibilityId:(NSString *)accessibilityId;
+
 // View Types
 - (void)switchViewFromListToGridInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
 - (void)switchViewFromGridToListInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
@@ -15,9 +17,6 @@
 // Search
 - (void)searchResourceWithName:(NSString *)resourceName
   inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
-- (void)searchResourceWithName:(NSString *)resourceName
-             inSectionWithName:(NSString *)sectionName;
-
 - (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
 
 // Cells

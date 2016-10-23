@@ -193,7 +193,7 @@
 
 - (void)verifyThatInfoPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:kTestReportName
+    [self waitNavigationBarWithControllerAccessibilityId:kTestReportName
                              timeout:kUITestsBaseTimeout];
 }
 
@@ -276,7 +276,7 @@
 
 - (void)verifyThatTestSavedItemPageOnScreen
 {
-    [self waitNavigationBarWithLabel:kTestReportName
+    [self waitNavigationBarWithControllerAccessibilityId:kTestReportName
                              timeout:kUITestsBaseTimeout];
 }
 

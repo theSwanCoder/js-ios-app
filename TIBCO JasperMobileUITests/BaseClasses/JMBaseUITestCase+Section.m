@@ -11,6 +11,15 @@
 
 @implementation JMBaseUITestCase (Section)
 
+- (void)verifyPageTitle:(NSString *)title withPageAccessibilityId :(NSString *)accessibilityId
+{
+    XCUIElement *pageController = [self waitElementWithAccessibilityId:accessibilityId timeout:kUITestsBaseTimeout];
+    NSString *pageTitle = pageController.label;
+    if (![pageTitle isEqualToString:title]) {
+        XCTFail(@"'%@' page's title doesn't correct", accessibilityId);
+    }
+}
+
 #pragma mark - View Types
 - (void)switchViewFromListToGridInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
@@ -18,7 +27,7 @@
     if (sectionAccessibilityId) {
         XCUIElement *sectionController = [self waitElementWithAccessibilityId:sectionAccessibilityId timeout:kUITestsBaseTimeout];
         NSString *sectionTitle = sectionController.label;
-        parentElement = [self waitNavigationBarWithLabel:sectionTitle
+        parentElement = [self waitNavigationBarWithControllerAccessibilityId:sectionTitle
                                                  timeout:kUITestsBaseTimeout];
     }
     XCUIElement *gridButton = [self findButtonWithAccessibilityId:JMResourceCollectionPageGridRepresentationButtonViewPageAccessibilityId
@@ -34,7 +43,7 @@
     if (sectionAccessibilityId) {
         XCUIElement *sectionController = [self waitElementWithAccessibilityId:sectionAccessibilityId timeout:kUITestsBaseTimeout];
         NSString *sectionTitle = sectionController.label;
-        parentElement = [self waitNavigationBarWithLabel:sectionTitle
+        parentElement = [self waitNavigationBarWithControllerAccessibilityId:sectionTitle
                                                  timeout:kUITestsBaseTimeout];
     }
     XCUIElement *listButton = [self findButtonWithAccessibilityId:JMResourceCollectionPageListRepresentationButtonViewPageAccessibilityId
@@ -64,28 +73,6 @@
     [searchButton tap];
 }
 
-- (void)searchResourceWithName:(NSString *)resourceName inSectionWithName:(NSString *)sectionName
-{
-    if ([sectionName isEqualToString:JMLibraryPageAccessibilityId]) {
-        [self openLibrarySection];
-        // TODO: replace with specific element - JMLibraryPageAccessibilityId
-        [self searchResourceWithName:resourceName
-        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else if ([sectionName isEqualToString:JMRepositoryPageAccessibilityId]) {
-        [self openRepositorySection];
-        // TODO: replace with specific element - JMRepositoryPageAccessibilityId
-        [self searchResourceWithName:resourceName
-        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else if ([sectionName isEqualToString:JMFavoritesPageAccessibilityId]) {
-        [self openFavoritesSection];
-        // TODO: replace with specific element - JMRepositoryPageAccessibilityId
-        [self searchResourceWithName:resourceName
-        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else {
-        XCTFail(@"Wrong section for searching test dashboard: %@", sectionName);
-    }
-}
-
 - (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
     XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
@@ -106,7 +93,7 @@
 {
     XCUIElement *section = [self waitElementWithAccessibilityId:accessibilityId
                                                         timeout:kUITestsBaseTimeout];
-    XCUIElement *searchField = section.searchFields[@"Search resources"];
+    XCUIElement *searchField = section.searchFields[JMResourceCollectionPageSearchBarPageAccessibilityId];
     [self waitElementReady:searchField
                    timeout:kUITestsBaseTimeout];
     return searchField;
@@ -183,12 +170,9 @@
 
 - (void)verifyThatCollectionViewContainsCells
 {
-    NSArray *allCells = [self.application.cells allElementsBoundByAccessibilityElement];
-    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement  * _Nullable cell, NSDictionary<NSString *,id> * _Nullable bindings) {
-        return cell.exists == true && cell.isHittable == true;
-    }];
-    NSInteger filtredResultCount = [allCells filteredArrayUsingPredicate:predicate].count;
-    XCTAssertTrue(filtredResultCount > 0, @"Should be some cells");
+    NSInteger countOfCells = [self countOfGridCells];
+    countOfCells += [self countOfListCells];
+    XCTAssertTrue(countOfCells > 0, @"Collection view is empty");
 }
 
 - (void)verifyThatCollectionViewNotContainsCells
@@ -244,22 +228,6 @@ inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
     [self openMenuActionsWithControllerAccessibilityId:accessibilityId];
     [self selectActionWithAccessibility:menuItemAccessibilityId];
-    
-//    XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
-//    XCUIElement *menuActionElement = menuActionsElement.cells[menuItemAccessibilityId];
-//    if (menuActionElement.exists) {
-//        [menuActionElement tap];
-//        
-//        // Wait until option view appears
-//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
-//        [self expectationForPredicate:predicate
-//                  evaluatedWithObject:self.application
-//                              handler:nil];
-//        [self waitForExpectationsWithTimeout:5 handler:nil];
-//        
-//    } else {
-//        XCTFail(@"'%@' Menu Action isn't visible", menuItemAccessibilityId);
-//    }
 }
 
 #pragma mark - CollectionView

@@ -26,11 +26,7 @@
 
 - (void)testThatLibraryPageHasCorrectTitle
 {
-    XCUIElement *libraryController = [self waitElementWithAccessibilityId:JMLibraryPageAccessibilityId timeout:kUITestsBaseTimeout];
-    NSString *libraryTitle = libraryController.label;
-    if (![libraryTitle isEqualToString:JMLocalizedString(@"menuitem_library_label")]) {
-        XCTFail(@"Library title doesn't correct");
-    }
+    [self verifyPageTitle:JMLocalizedString(@"menuitem_library_label") withPageAccessibilityId:JMLibraryPageAccessibilityId];
 }
 
 - (void)testThatLibraryContainsListOfCells
@@ -74,14 +70,14 @@
 - (void)testThatSearchWorkWithCorrectWords
 {
     // start find some text
-    [self trySearchText:kJMTestLibrarySearchTextExample];
+    [self searchResourceWithName:kJMTestLibrarySearchTextExample inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     
     // verify result
     NSInteger cellsCount = [self countOfListCells];
     XCTAssertTrue(cellsCount == 1, @"Should be only one result");
     
     // Reset search
-    [self tryClearSearchBar];
+    [self clearSearchResultInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     // verify result
     [self verifyThatCollectionViewContainsCells];
 }
@@ -89,7 +85,7 @@
 - (void)testThatSearchShowsNoResults
 {
     // start find wrong text
-    [self trySearchText:@"ababababababababa"];
+    [self searchResourceWithName:@"ababababababababa" inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 
     // verify result
     NSInteger cellsCount = [self countOfListCells];
@@ -97,7 +93,7 @@
     XCTAssertTrue(cellsCount == 0, @"Should be only one result");
 
     // Reset search
-    [self tryClearSearchBar];
+    [self clearSearchResultInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     // verify result
     [self verifyThatCollectionViewContainsCells];
 }
@@ -139,10 +135,10 @@
     [self verifyThatCollectionViewContainsGridOfCells];
     
     // start find some text
-    [self trySearchText:kJMTestLibrarySearchTextExample];
+    [self searchResourceWithName:kJMTestLibrarySearchTextExample inSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
     [self verifyThatCollectionViewContainsGridOfCells];
     
-    [self tryClearSearchBar];
+    [self clearSearchResultInSectionWithAccessibilityId:JMLibraryPageAccessibilityId];
 }
 
 #pragma mark - Test 'Sort' feature
