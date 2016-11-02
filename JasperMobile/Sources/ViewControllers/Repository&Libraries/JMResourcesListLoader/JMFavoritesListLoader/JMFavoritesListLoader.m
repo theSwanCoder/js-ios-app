@@ -24,7 +24,7 @@
 #import "JMFavoritesListLoader.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
-#import "JMResourceLoaderOption.h"
+#import "JMResourcesListLoaderOption.h"
 #import "JMConstants.h"
 #import "JMCoreDataManager.h"
 #import "JMLocalization.h"
@@ -68,46 +68,25 @@
     }
 }
 
-- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
+- (NSArray<JMResourcesListLoaderOption *> *)filterByAvailableOptions
 {
-    switch (optionType) {
-        case JMResourcesListLoaderOptionType_Sort: {
-            return [super listItemsWithOption:optionType];
-        }
-        case JMResourcesListLoaderOptionType_Filter: {
-            NSMutableArray *allFilterOptions = [@[
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
-                                                      value:@[
-                                                              kJS_WS_TYPE_REPORT_UNIT,
-                                                              kJS_WS_TYPE_DASHBOARD,
-                                                              kJS_WS_TYPE_DASHBOARD_LEGACY,
-                                                              kJS_WS_TYPE_FOLDER,
-                                                              kJS_WS_TYPE_FILE,
-                                                              kJMSavedReportUnit
-                                                      ]],
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
-                                                      value:@[kJS_WS_TYPE_REPORT_UNIT]],
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_saved_reportUnit")
-                                                      value:@[kJMSavedReportUnit]],
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_folder")
-                                                      value:@[kJS_WS_TYPE_FOLDER]],
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_files")
-                                                      value:@[kJS_WS_TYPE_FILE]],
-            ] mutableCopy];
-
-            if ([JMUtils isServerProEdition]) {
-                JMResourceLoaderOption *filterByDashboardOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_dashboard")
-                                                                                                    value:@[
-                                                                                                            kJS_WS_TYPE_DASHBOARD,
-                                                                                                            kJS_WS_TYPE_DASHBOARD_LEGACY
-                                                                                                    ]];
-                [allFilterOptions insertObject:filterByDashboardOption
-                                       atIndex:3];
-            }
-
-            return allFilterOptions;
-        }
-    }
+    NSMutableArray *allOptions = [[super filterByAvailableOptions] mutableCopy];
+    JMResourcesListLoaderOption *savedItemsOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
+                                                                                          title:JMLocalizedString(@"resources_filterby_type_saved_reportUnit")
+                                                                                          value:@[kJMSavedReportUnit]];
+    JMResourcesListLoaderOption *foldersOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
+                                                                                       title:JMLocalizedString(@"resources_filterby_type_folder")
+                                                                                       value:@[kJS_WS_TYPE_FOLDER]];
+    JMResourcesListLoaderOption *filesOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
+                                                                                     title:JMLocalizedString(@"resources_filterby_type_files")
+                                                                                     value:@[kJS_WS_TYPE_FILE]];
+    
+    [allOptions addObjectsFromArray: @[
+                                       savedItemsOption,
+                                       foldersOption,
+                                       filesOption
+                                       ]];
+    return allOptions;
 }
 
 #pragma mark - Utils

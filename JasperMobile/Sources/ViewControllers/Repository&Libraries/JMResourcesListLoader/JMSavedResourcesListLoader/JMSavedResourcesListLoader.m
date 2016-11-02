@@ -26,7 +26,7 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JMExportManager.h"
-#import "JMResourceLoaderOption.h"
+#import "JMResourcesListLoaderOption.h"
 #import "JMConstants.h"
 #import "JMCoreDataManager.h"
 #import "JMLocalization.h"
@@ -89,25 +89,16 @@
     }
 }
 
-- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
+- (NSArray<JMResourcesListLoaderOption *> *)filterByAvailableOptions
 {
-    switch (optionType) {
-        case JMResourcesListLoaderOptionType_Sort:
-            return [super listItemsWithOption:optionType];
-        case JMResourcesListLoaderOptionType_Filter: {
-            NSMutableArray *filterOptions = [NSMutableArray array];
-            JMResourceLoaderOption *filterByAllOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
-                                                                                          value:[JMUtils supportedFormatsForReportSaving]];
-            [filterOptions addObject:filterByAllOption];
-
-            for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
-                JMResourceLoaderOption *filterByOption = [JMResourceLoaderOption optionWithTitle:[format uppercaseString]
-                                                                                           value:@[format]];
-                [filterOptions addObject:filterByOption];
-            }
-            return filterOptions;
-        }
+    NSMutableArray *filterOptions = [NSMutableArray array];
+    for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
+        JMResourcesListLoaderOption *filterByOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
+                                                                                            title:[format uppercaseString]
+                                                                                            value:format];
+        [filterOptions addObject:filterByOption];
     }
+    return [filterOptions copy];
 }
 
 #pragma mark - Utils

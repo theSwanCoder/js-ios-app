@@ -22,28 +22,26 @@
 
 
 //
-//  JMResourceLoaderOption.m
+//  JMResourcesListLoaderOption.h
 //  TIBCO JasperMobile
 //
 
-#import "JMResourceLoaderOption.h"
+/**
+ @author Aleksandr Dakhno odahno@tibco.com
+ @since 2.5
+ */
+#import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
+    JMResourcesListLoaderOptionType_Filter,
+    JMResourcesListLoaderOptionType_Sort
+};
 
-@implementation JMResourceLoaderOption
+@interface JMResourcesListLoaderOption : NSObject
+@property (nonatomic, strong, readonly, nonnull) NSString *title;
+@property (nonatomic, strong, readonly, nonnull) id value;
+@property (nonatomic, assign, readonly) JMResourcesListLoaderOptionType type;
 
-- (instancetype)initWithTitle:(NSString *)title value:(id)value
-{
-    self = [super init];
-    if (self) {
-        _title = title;
-        _value = value;
-    }
-    return self;
-}
-
-+ (instancetype)optionWithTitle:(NSString *)title value:(id)value
-{
-    return [[self alloc] initWithTitle:title value:value];
-}
-
+- (nonnull instancetype)initWithType:(JMResourcesListLoaderOptionType)type title:(nonnull NSString *)title value:(nonnull id)value;
++ (nonnull instancetype)optionWithType:(JMResourcesListLoaderOptionType)type title:(nonnull NSString *)title value:(nonnull id)value;
 @end

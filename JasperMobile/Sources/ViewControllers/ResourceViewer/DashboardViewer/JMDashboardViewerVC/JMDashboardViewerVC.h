@@ -30,8 +30,8 @@
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.1
 */
-
-#import "JMResourceViewerViewController.h"
+#import "JMResourceClientHolder.h"
+#import "JMMenuActionsView.h"
 #import "JMResourceViewerProtocol.h"
 #import "JMExternalWindowDashboardControlsVC.h"
 

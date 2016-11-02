@@ -23,7 +23,7 @@
 
 #import "JMRepositoryListLoader.h"
 #import "JMResource.h"
-#import "JMResourceLoaderOption.h"
+#import "JMResourcesListLoaderOption.h"
 #import "NSObject+Additions.h"
 #import "JMUtils.h"
 #import "JMLocalization.h"
@@ -111,27 +111,27 @@
                                                                                                      options:NSCaseInsensitiveSearch].location != NSNotFound));
 }
 
-- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
+- (NSArray<JMResourcesListLoaderOption *> *)sortByAvailableOptions
 {
-    switch (optionType) {
-        case JMResourcesListLoaderOptionType_Sort:{
-            JMResourceLoaderOption *filterOption = [[super listItemsWithOption:optionType] firstObject];
-            return @[
-                     filterOption
-                     ];
-        }
-        case JMResourcesListLoaderOptionType_Filter:
-            return @[
-                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
-                                                      value:@[
-                                                              kJS_WS_TYPE_REPORT_UNIT,
-                                                              kJS_WS_TYPE_DASHBOARD,
-                                                              kJS_WS_TYPE_DASHBOARD_LEGACY,
-                                                              kJS_WS_TYPE_FOLDER,
-                                                              kJS_WS_TYPE_FILE
-                                                      ]]
-            ];
-    }
+    JMResourcesListLoaderOption *sortByNameOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Sort
+                                                                                          title:JMLocalizedString(@"resources_sortby_name")
+                                                                                 value:@"label"];
+    return @[sortByNameOption];
+}
+
+- (NSArray<JMResourcesListLoaderOption *> *)filterByAvailableOptions
+{
+    JMResourcesListLoaderOption *allItemsOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
+                                                                                        title:JMLocalizedString(@"resources_filterby_type_all")
+                                                                               value:@[
+                                                                                       kJS_WS_TYPE_REPORT_UNIT,
+                                                                                       kJS_WS_TYPE_DASHBOARD,
+                                                                                       kJS_WS_TYPE_DASHBOARD_LEGACY,
+                                                                                       kJS_WS_TYPE_FOLDER,
+                                                                                       kJS_WS_TYPE_FILE,
+                                                                                       kJS_WS_TYPE_ADHOC_DATA_VIEW
+                                                                                       ]];
+    return @[allItemsOption];
 }
 
 - (BOOL)loadRecursively

@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, JMResourceType) {
     JMResourceTypeFolder,
     JMResourceTypeSavedResource,
     JMResourceTypeReport,
+    JMResourceTypeAdHoc,
     JMResourceTypeTempExportedReport,
     JMResourceTypeDashboard,
     JMResourceTypeLegacyDashboard,

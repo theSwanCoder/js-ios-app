@@ -162,6 +162,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if (self.resource.type == JMResourceTypeFolder) {
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
+    } else if (self.resource.type == JMResourceTypeAdHoc) {
+        resourceImage = [UIImage imageNamed:@"res_type_adhoc"];
     } else if(self.resource.type == JMResourceTypeFile) {
         resourceImage = [UIImage imageNamed:@"res_type_file"];
 

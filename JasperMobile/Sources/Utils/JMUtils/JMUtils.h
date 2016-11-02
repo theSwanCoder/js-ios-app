@@ -137,7 +137,10 @@ void jmDebugLog(NSString * __nonnull format, ...);
 /**
 @return YES if JRS instance has version equal 6.0 or 6.0.1
 */
+
 + (BOOL)isServerAmber;
+
++ (BOOL)isServerVersionUpOrEqual7;
 
 /**
  Returns YES if visualize is supported on current JRS instance

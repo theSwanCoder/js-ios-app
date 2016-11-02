@@ -375,6 +375,11 @@ void jmDebugLog(NSString *format, ...) {
     return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_0_0;
 }
 
++ (BOOL)isServerVersionUpOrEqual7
+{
+    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_Moonstone_7_0_0;
+}
+
 + (BOOL)isServerAmber
 {
     BOOL isAmberServer = NO;

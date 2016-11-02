@@ -33,18 +33,14 @@
 
 #import <Foundation/Foundation.h>
 #import "JMResourceClientHolder.h"
+#import "JMResourcesListLoaderOption.h"
 
 extern NSString * const kJMResourceListLoaderOptionItemTitleKey;
 extern NSString * const kJMResourceListLoaderOptionItemValueKey;
 
-typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
-    JMResourcesListLoaderOptionType_Filter,
-    JMResourcesListLoaderOptionType_Sort
-};
 
 @class JMResourcesListLoader;
 @class JMResource;
-@class JMResourceLoaderOption;
 
 @protocol JMResourcesListLoaderDelegate <NSObject>
 - (void)resourceListLoaderDidStartLoad:(JMResourcesListLoader *)listLoader;
@@ -87,9 +83,13 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
 - (void)clearSearchResults;
 
 //
-- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)option;
+- (NSArray <JMResourcesListLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)option;
+
+- (NSArray <JMResourcesListLoaderOption *>*)sortByAvailableOptions;
+
+- (NSArray <JMResourcesListLoaderOption *>*)filterByAvailableOptions;
+
 - (id)parameterForQueryWithOptionType:(JMResourcesListLoaderOptionType)optionType;
-- (NSString *)titleForPopupWithOptionType:(JMResourcesListLoaderOptionType)optionType;
 
 - (void)finishLoadingWithError:(NSError *)error;
 @end

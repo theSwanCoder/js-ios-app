@@ -23,7 +23,7 @@
 
 #import "JMListOptionsPopupView.h"
 #import "JMResourcesListLoader.h"
-#import "JMResourceLoaderOption.h"
+#import "JMResourcesListLoaderOption.h"
 #import "JMThemesManager.h"
 #import "JMUtils.h"
 
@@ -32,14 +32,14 @@
 @interface JMListOptionsPopupView () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, weak) IBOutlet UILabel *listOptionsTitleLabel;
 @property (nonatomic, weak) IBOutlet UITableView *listOptionsTableView;
-@property (nonatomic, strong) NSArray <JMResourceLoaderOption *> *options;
+@property (nonatomic, strong) NSArray <JMResourcesListLoaderOption *> *options;
 @end
 
 
 @implementation JMListOptionsPopupView
 @synthesize selectedIndex = _selectedIndex;
 
-- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type options:(NSArray <JMResourceLoaderOption *>*)options
+- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type options:(NSArray <JMResourcesListLoaderOption *>*)options
 {
     self = [super initWithDelegate:delegate type:type];
     if (self) {

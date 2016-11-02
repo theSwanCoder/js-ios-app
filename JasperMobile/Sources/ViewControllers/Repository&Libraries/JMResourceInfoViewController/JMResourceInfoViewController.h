@@ -47,8 +47,6 @@ extern NSString * __nonnull const kJMShowResourceInfoSegue;
 
 - (void)addObservers NS_REQUIRES_SUPER;
 
-- (JMMenuActionsViewAction)availableAction NS_REQUIRES_SUPER;
-
-- (nullable UIBarButtonItem *)additionalBarButtonItem;
+- (JMMenuActionsViewAction)availableAction;
 
 @end

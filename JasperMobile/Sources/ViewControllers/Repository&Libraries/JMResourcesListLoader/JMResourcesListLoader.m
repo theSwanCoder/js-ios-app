@@ -25,7 +25,6 @@
 #import "NSObject+Additions.h"
 #import "JMResourcesListLoader.h"
 #import "JMResource.h"
-#import "JMResourceLoaderOption.h"
 #import "JMConstants.h"
 #import "JMUtils.h"
 #import "JMLocalization.h"
@@ -41,6 +40,10 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 
 @property (nonatomic, assign) BOOL needUpdateData;
 @property (nonatomic, assign) NSInteger totalCount;
+
+@property (nonatomic, strong) NSArray *sortByAllOptions;
+@property (nonatomic, strong) NSArray *filterByAllOptions;
+
 @end
 
 @implementation JMResourcesListLoader
@@ -243,89 +246,111 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 {
     if (self.searchQuery) {
         self.searchQuery = nil;
-         [self setNeedsUpdate];
+        [self setNeedsUpdate];
         [self updateIfNeeded];
     }
 }
 
 #pragma mark - Utils
-- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
+- (NSArray <JMResourcesListLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
 {
     switch (optionType) {
         case JMResourcesListLoaderOptionType_Sort: {
-            NSArray *allOptions = @[
-                                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_name")
-                                                                      value:@"label"],
-                                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_creationDate")
-                                                                      value:@"creationDate"],
-                                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_modifiedDate")
-                                                                      value:@"updateDate"]
-                                    ];
-            return allOptions;
+            if (!self.sortByAllOptions) {
+                self.sortByAllOptions = [self sortByAvailableOptions];
+            }
+            return self.sortByAllOptions;
         }
         case JMResourcesListLoaderOptionType_Filter:{
-            NSArray *allOptions;
-            if ([JMUtils isServerProEdition]) {
-                // reports
-                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_UNKNOW]; //We should send kJS_WS_TYPE_UNKNOW here according to http://jira.jaspersoft.com/browse/JRS-11049
-                JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
-                                                                                               value:reportsValues];
-                // dashboards
-                NSArray *dashboardsValues = @[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY];
-                JMResourceLoaderOption *dashboardFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_dashboard")
-                                                                                                  value:dashboardsValues];
-                // all
-                NSArray *allValues = [reportsValues arrayByAddingObjectsFromArray:dashboardsValues];
-                JMResourceLoaderOption *allItemsFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
-                                                                                                 value:allValues];
-                allOptions = @[
-                               allItemsFilterOption,
-                               reportFilterOption,
-                               dashboardFilterOption
-                               ];
-            } else {
-                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT];
-                JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
-                                                                                               value:reportsValues];
-                allOptions = @[
-                               reportFilterOption
-                               ];
+            if (!self.filterByAllOptions) {
+                NSArray *allAvailableOptions = [self filterByAvailableOptions];
+                
+                if (allAvailableOptions.count > 1) {
+                    NSMutableSet *optionValues = [NSMutableSet set];
+                    for (JMResourcesListLoaderOption * option in allAvailableOptions) {
+                        if ([option.value isKindOfClass:[NSArray class]]) {
+                            [optionValues addObjectsFromArray:option.value];
+                        } else {
+                            [optionValues addObject:option.value];
+                        }
+                    }
+                    JMResourcesListLoaderOption *allItemsFilterOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
+                                                                                                              title:JMLocalizedString(@"resources_filterby_type_all")
+                                                                                                              value:[optionValues allObjects]];
+                    NSMutableArray *allOptions = [NSMutableArray arrayWithObject:allItemsFilterOption];
+                    [allOptions addObjectsFromArray:allAvailableOptions];
+                    self.filterByAllOptions = [allOptions copy];
+                } else {
+                    self.filterByAllOptions = allAvailableOptions;
+                }
             }
-            return allOptions;
+            
+            return self.filterByAllOptions;
         }
     }
 }
 
-- (id)parameterForQueryWithOptionType:(JMResourcesListLoaderOptionType)optionType
+- (NSArray <JMResourcesListLoaderOption *>*)sortByAvailableOptions
 {
-    switch (optionType) {
-        case JMResourcesListLoaderOptionType_Sort: {
-            NSArray *allSortOptions = [self listItemsWithOption:optionType];
-            if (allSortOptions.count > self.sortBySelectedIndex) {
-                JMResourceLoaderOption *option = allSortOptions[self.sortBySelectedIndex];
-                id value = option.value;
-                return value;
-            }
-            break;
-        }
-        case JMResourcesListLoaderOptionType_Filter:
-            if ([JMUtils isServerProEdition]) {
-                return [[self listItemsWithOption:optionType][self.filterBySelectedIndex] value];
-            } else {
-                return [[self listItemsWithOption:optionType].firstObject value];
-            }
-            break;
-    }
-    return nil;
+    NSArray *allOptions = @[
+                            [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Sort
+                                                                  title:JMLocalizedString(@"resources_sortby_name")
+                                                                  value:@"label"],
+                            [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Sort
+                                                                  title:JMLocalizedString(@"resources_sortby_creationDate")
+                                                                  value:@"creationDate"],
+                            [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Sort
+                                                                  title:JMLocalizedString(@"resources_sortby_modifiedDate")
+                                                                  value:@"updateDate"]
+                            ];
+    return allOptions;
 }
 
-- (NSString *)titleForPopupWitOptionType:(JMResourcesListLoaderOptionType)optionType
+- (NSArray <JMResourcesListLoaderOption *>*)filterByAvailableOptions
 {
+    NSMutableArray *allOptions;
+    // reports
+    JMResourcesListLoaderOption *reportFilterOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
+                                                                                            title:JMLocalizedString(@"resources_filterby_type_reportUnit")
+                                                                                            value:kJS_WS_TYPE_REPORT_UNIT];
+    allOptions = [NSMutableArray arrayWithObject:reportFilterOption];
+    
+    if ([JMUtils isServerProEdition]) {
+        // dashboards
+        NSArray *dashboardsValues = @[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY];
+        JMResourcesListLoaderOption *dashboardFilterOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
+                                                                                                   title:JMLocalizedString(@"resources_filterby_type_dashboard")
+                                                                                                   value:dashboardsValues];
+        [allOptions addObject:dashboardFilterOption];
+        
+#warning WE SHOULD CHECK CORRECT VERSION HERE!!!
+//        if ([JMUtils isServerVersionUpOrEqual7]) {
+            JMResourcesListLoaderOption *adHocFilterOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
+                                                                                                   title:JMLocalizedString(@"resources_filterby_type_adhoc")
+                                                                                                   value:kJS_WS_TYPE_ADHOC_DATA_VIEW];
+            [allOptions addObject:adHocFilterOption];
+//        }
+    }
+    return [allOptions copy];
+}
+
+- (NSArray *)parameterForQueryWithOptionType:(JMResourcesListLoaderOptionType)optionType
+{
+    NSArray *allOptions = [self listItemsWithOption:optionType];
+    NSInteger optionSelectedIndex;
     switch (optionType) {
-        case JMResourcesListLoaderOptionType_Filter:
-            return JMLocalizedString(@"resources_filterby_title");
         case JMResourcesListLoaderOptionType_Sort:
-            return JMLocalizedString(@"resources_sortby_title");
+        optionSelectedIndex = self.sortBySelectedIndex;
+        break;
+        
+        case JMResourcesListLoaderOptionType_Filter:
+        optionSelectedIndex = self.filterBySelectedIndex;
+        break;
+    }
+    
+    if (allOptions.count > optionSelectedIndex) {
+        JMResourcesListLoaderOption *option = allOptions[optionSelectedIndex];
+        return option.value;
     }
     return nil;
 }

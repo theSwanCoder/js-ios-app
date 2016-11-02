@@ -55,138 +55,110 @@
 
 - (id)modelOfResource
 {
-    id model;
     switch (self.type) {
         case JMResourceTypeFile: {break;}
         case JMResourceTypeFolder: {break;}
         case JMResourceTypeSavedResource: {break;}
         case JMResourceTypeReport: {
-            model = [JSReport reportWithResourceLookup:self.resourceLookup];
-            break;
+            return [JSReport reportWithResourceLookup:self.resourceLookup];
         }
         case JMResourceTypeTempExportedReport: {break;}
         case JMResourceTypeDashboard: {
-            model = [JMDashboard dashboardWithResource:self];
-            break;
+            return [JMDashboard dashboardWithResource:self];
         }
         case JMResourceTypeLegacyDashboard: {
-            model = [JMDashboard dashboardWithResource:self];
-            break;
+            return [JMDashboard dashboardWithResource:self];
         }
         case JMResourceTypeSchedule: {break;}
+        case JMResourceTypeAdHoc: {break;}
     }
-    return model;
+    return nil;
 }
 
 - (NSString *)localizedResourceType
 {
-    NSString *localizedResourceType;
     switch (self.type) {
         case JMResourceTypeFile: {
-            localizedResourceType = JMLocalizedString(@"resources_type_saved_reportUnit");
-            break;
+            return JMLocalizedString(@"resources_type_saved_reportUnit");
         }
         case JMResourceTypeFolder: {
-            localizedResourceType = JMLocalizedString(@"resources_type_folder");
-            break;
+            return JMLocalizedString(@"resources_type_folder");
         }
         case JMResourceTypeSavedResource: {
-            localizedResourceType = JMLocalizedString(@"resources_type_saved_reportUnit");
-            break;
+            return JMLocalizedString(@"resources_type_saved_reportUnit");
         }
         case JMResourceTypeReport: {
-            localizedResourceType = JMLocalizedString(@"resources_type_reportUnit");
-            break;
+            return JMLocalizedString(@"resources_type_reportUnit");
         }
         case JMResourceTypeTempExportedReport: {
-            localizedResourceType = JMLocalizedString(@"resources_type_saved_reportUnit");
-            break;
+            return JMLocalizedString(@"resources_type_saved_reportUnit");
         }
         case JMResourceTypeDashboard: {
-            localizedResourceType = JMLocalizedString(@"resources_type_dashboard");
-            break;
+            return JMLocalizedString(@"resources_type_dashboard");
         }
         case JMResourceTypeLegacyDashboard: {
-            localizedResourceType = JMLocalizedString(@"resources_type_dashboard_legacy");
-            break;
+            return JMLocalizedString(@"resources_type_dashboard_legacy");
         }
         case JMResourceTypeSchedule: {
-            localizedResourceType = JMLocalizedString(@"resources_type_schedule");
-            break;
+            return JMLocalizedString(@"resources_type_schedule");
+        }
+        case JMResourceTypeAdHoc: {
+            return JMLocalizedString(@"resources_type_adhoc");
         }
     }
-    return localizedResourceType;
 }
 
 - (NSString *)resourceViewerVCIdentifier
 {
-    NSString *vcIdentifier;
     switch (self.type) {
         case JMResourceTypeFile: {
-            vcIdentifier = @"JMSavedResourceViewerViewController";
-            break;
+            return @"JMSavedResourceViewerViewController";
         }
         case JMResourceTypeFolder: {break;}
         case JMResourceTypeSavedResource: {
-            vcIdentifier = @"JMSavedResourceViewerViewController";
-            break;
+            return @"JMSavedResourceViewerViewController";
         }
         case JMResourceTypeReport: {
-            vcIdentifier = @"JMReportViewerVC";
-            break;
+            return @"JMReportViewerVC";
         }
         case JMResourceTypeTempExportedReport: {break;}
         case JMResourceTypeDashboard: {
-            vcIdentifier = @"JMDashboardViewerVC";
-            break;
+            return @"JMDashboardViewerVC";
         }
         case JMResourceTypeLegacyDashboard: {
-            vcIdentifier = @"JMDashboardViewerVC";
-            break;
+            return @"JMDashboardViewerVC";
         }
         case JMResourceTypeSchedule: {
-            vcIdentifier = @"JMScheduleVC";
-            break;
+            return @"JMScheduleVC";
         }
     }
-    return vcIdentifier;
+    return nil;
 }
 
 - (NSString *)infoVCIdentifier
 {
-    NSString *vcIdentifier = @"JMResourceInfoViewController";
     switch (self.type) {
-        case JMResourceTypeFile: {
-            vcIdentifier = @"JMRepositoryResourceInfoViewController";
-            break;
-        }
-        case JMResourceTypeFolder: {
-            vcIdentifier = @"JMRepositoryResourceInfoViewController";
-            break;
-        }
+        case JMResourceTypeFile: {break;}
+        case JMResourceTypeFolder: {break;}
         case JMResourceTypeSavedResource: {
-            vcIdentifier = @"JMSavedItemsInfoViewController";
-            break;
+            return @"JMSavedItemsInfoViewController";
         }
         case JMResourceTypeReport: {
-            vcIdentifier = @"JMReportInfoViewController";
-            break;
+            return @"JMReportInfoViewController";
         }
         case JMResourceTypeTempExportedReport: {break;}
         case JMResourceTypeDashboard: {
-            vcIdentifier = @"JMDashboardInfoViewController";
-            break;
+            return @"JMDashboardInfoViewController";
         }
         case JMResourceTypeLegacyDashboard: {
-            vcIdentifier = @"JMDashboardInfoViewController";
-            break;
+            return @"JMDashboardInfoViewController";
         }
         case JMResourceTypeSchedule: {
-            vcIdentifier = @"JMScheduleInfoViewController";
-            break;
+            return @"JMScheduleInfoViewController";
         }
+        case JMResourceTypeAdHoc: {break;}
     }
-    return vcIdentifier;
+    return @"JMResourceInfoViewController";
 }
 
 #pragma mark - Helpers
@@ -208,6 +180,8 @@
         return JMResourceTypeFile;
     } else if([resourceLookup.resourceType isEqualToString:kJMScheduleUnit]) {
         return JMResourceTypeSchedule;
+    } else if([resourceLookup.resourceType isEqualToString:kJS_WS_TYPE_ADHOC_DATA_VIEW]) {
+        return JMResourceTypeAdHoc;
     }
     return NSNotFound;
 }

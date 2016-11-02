@@ -40,5 +40,5 @@
 @property(nonatomic, assign) JMResourcesListLoaderOptionType optionType;
 @property(nonatomic, strong) NSString *titleString;
 
-- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type options:(NSArray <JMResourceLoaderOption *>*)options;
+- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type options:(NSArray <JMResourcesListLoaderOption *>*)options;
 @end

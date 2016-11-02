@@ -31,8 +31,8 @@
  @since 2.1
  */
 
-#import "JMRepositoryResourceInfoViewController.h"
+#import "JMResourceInfoViewController.h"
 
-@interface JMDashboardInfoViewController : JMRepositoryResourceInfoViewController
+@interface JMDashboardInfoViewController : JMResourceInfoViewController
 
 @end

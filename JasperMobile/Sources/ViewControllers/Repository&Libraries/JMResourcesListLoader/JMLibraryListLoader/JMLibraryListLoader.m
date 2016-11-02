@@ -22,25 +22,20 @@
 
 
 #import "JMLibraryListLoader.h"
-#import "JMResourceLoaderOption.h"
+#import "JMResourcesListLoaderOption.h"
 #import "JMLocalization.h"
 #import "JMUtils.h"
 
 @implementation JMLibraryListLoader
-- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
+
+- (NSArray<JMResourcesListLoaderOption *> *)sortByAvailableOptions
 {
-    switch (optionType) {
-        case JMResourcesListLoaderOptionType_Sort: {
-            NSMutableArray *allOptions = [[super listItemsWithOption:optionType] mutableCopy];
-            if ([JMUtils isServerProEdition]) {
-                [allOptions addObject:[JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_sortby_accessTime")
-                                                                        value:@"accessTime"]];
-            }
-            return allOptions;
-        }
-        case JMResourcesListLoaderOptionType_Filter:{
-            return [super listItemsWithOption:optionType];
-        }
-    }
+    NSMutableArray *allOptions = [[super sortByAvailableOptions] mutableCopy];
+    JMResourcesListLoaderOption *accessTimeOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Sort
+                                                                                          title:JMLocalizedString(@"resources_sortby_accessTime")
+                                                                                 value:@"accessTime"];
+    [allOptions addObject:accessTimeOption];
+    return allOptions;
 }
+
 @end

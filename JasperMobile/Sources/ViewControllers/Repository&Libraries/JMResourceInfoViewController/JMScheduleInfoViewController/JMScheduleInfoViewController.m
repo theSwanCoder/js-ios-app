@@ -40,9 +40,7 @@
 #pragma mark - Menu Actions
 - (JMMenuActionsViewAction)availableAction
 {
-    JMMenuActionsViewAction action = [super availableAction];
-    action |= JMMenuActionsViewAction_Edit;
-    action |= JMMenuActionsViewAction_Delete;
+    JMMenuActionsViewAction action = JMMenuActionsViewAction_Edit | JMMenuActionsViewAction_Delete;
     return action;
 }
 

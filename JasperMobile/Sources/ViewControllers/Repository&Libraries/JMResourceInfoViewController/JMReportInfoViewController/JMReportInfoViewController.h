@@ -32,8 +32,8 @@
  */
 
 
-#import "JMRepositoryResourceInfoViewController.h"
+#import "JMResourceInfoViewController.h"
 
-@interface JMReportInfoViewController : JMRepositoryResourceInfoViewController
+@interface JMReportInfoViewController : JMResourceInfoViewController
 
 @end

@@ -29,6 +29,7 @@
 #import "JMUtils.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
+#import "JMFavorites+Helpers.h"
 
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
@@ -58,7 +59,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
-    [self showNavigationItems];
     [self resetResourceProperties];
     [self addObservers];
 }
@@ -85,6 +85,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetResourceProperties) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(favoriteMarkDidChanged:) name:kJMFavoritesDidChangedNotification object:nil];
 }
 
 - (void)resetResourceProperties
@@ -100,7 +101,21 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     self.needLayoutUI = YES;
 }
 
+- (void)favoriteMarkDidChanged:(id)notification
+{
+    self.needLayoutUI = YES;
+}
+
 #pragma mark - Actions
+- (void)favoriteButtonTapped:(id)sender
+{
+    if ([JMFavorites isResourceInFavorites:self.resource]) {
+        [JMFavorites removeFromFavorites:self.resource];
+    } else {
+        [JMFavorites addToFavorites:self.resource];
+    }
+}
+
 - (void)cancelButtonTapped:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -151,12 +166,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
 - (JMMenuActionsViewAction)availableAction
 {
-    return JMMenuActionsViewAction_None;
-}
-
-- (nullable UIBarButtonItem *)additionalBarButtonItem
-{
-    return nil;
+    return [self favoriteAction];
 }
 
 - (void)setNeedLayoutUI:(BOOL)needLayoutUI
@@ -175,30 +185,46 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     }
 }
 
+- (JMMenuActionsViewAction)favoriteAction
+{
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource];
+    return isResourceInFavorites ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
+}
+
+- (BOOL) favoriteItemShouldDisplaySeparately
+{
+    BOOL selfIsModalViewController = [self.navigationController.viewControllers count] == 1;
+    return (selfIsModalViewController || (![JMUtils isCompactWidth]) || ([JMUtils isCompactWidth] && [JMUtils isCompactHeight]));
+}
+
 #pragma mark - Setup Navigation Items
 - (void) showNavigationItems
 {
     BOOL selfIsModalViewController = [self.navigationController.viewControllers count] == 1;
 
-    NSMutableArray *rightBarItems = [NSMutableArray array];
     if (selfIsModalViewController) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                              target:self
-                                                                                              action:@selector(cancelButtonTapped:)];
-        self.navigationItem.leftBarButtonItem.tintColor = [[JMThemesManager sharedManager] barItemsColor];
+        UIBarButtonItem *cancelBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                             target:self
+                                                                                             action:@selector(cancelButtonTapped:)];
+        cancelBarButtonItem.tintColor = [[JMThemesManager sharedManager] barItemsColor];
+        self.navigationItem.leftBarButtonItem = cancelBarButtonItem;
+        
+        self.navigationItem.rightBarButtonItem = [self favoriteBarButtonItem];
     } else {
+        NSMutableArray *rightBarItems = [NSMutableArray array];
         JMMenuActionsViewAction availableAction = [self availableAction];
+        JMMenuActionsViewAction favoriteAction = [self favoriteAction];
+
         if (availableAction) {
-            [rightBarItems addObject:[self actionBarButtonItem]];
+            if (availableAction == favoriteAction || (availableAction & favoriteAction && [self favoriteItemShouldDisplaySeparately])) {
+                [rightBarItems addObject:[self favoriteBarButtonItem]];
+            }
+            if (availableAction ^ favoriteAction) {
+                [rightBarItems insertObject:[self actionBarButtonItem] atIndex:0];
+            }
         }
+        self.navigationItem.rightBarButtonItems = rightBarItems;
     }
-
-    UIBarButtonItem *additionalBarButtonItem = [self additionalBarButtonItem];
-    if (additionalBarButtonItem) {
-        [rightBarItems addObject:additionalBarButtonItem];
-    }
-
-    self.navigationItem.rightBarButtonItems = rightBarItems;
 }
 
 - (UIBarButtonItem *) actionBarButtonItem
@@ -208,11 +234,32 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
                                                          action:@selector(showAvailableActions)];
 }
 
+- (UIBarButtonItem *) favoriteBarButtonItem
+{
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resource];
+    NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
+    
+    UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(favoriteButtonTapped:)];
+    favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
+    return favoriteItem;
+}
+
 - (void)showAvailableActions
 {
     JMMenuActionsView *actionsView = [JMMenuActionsView new];
     actionsView.delegate = self;
-    [actionsView setAvailableActions:[self availableAction]
+    
+    JMMenuActionsViewAction availableAction = [self availableAction];
+    JMMenuActionsViewAction favoriteAction = [self favoriteAction];
+
+    if (availableAction == favoriteAction || (availableAction & favoriteAction && [self favoriteItemShouldDisplaySeparately])) {
+        availableAction ^= favoriteAction;
+    }
+    
+    [actionsView setAvailableActions:availableAction
                      disabledActions:JMMenuActionsViewAction_None];
     CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), -10);
     
@@ -251,6 +298,16 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 #pragma mark - JMMenuActionsViewDelegate
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
+    switch (action) {
+        case JMMenuActionsViewAction_MakeFavorite:
+        case JMMenuActionsViewAction_MakeUnFavorite: {
+            [self favoriteButtonTapped:nil];
+            break;
+        }
+        default: {
+            break;
+        }
+    }
     [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
 }
 

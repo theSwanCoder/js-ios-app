@@ -70,3 +70,6 @@
 		ja = 保存されたアイテム
 		zh = 已保存项目
 		tags = ios
+    [resources_filterby_type_adhoc]
+        en = AdHoc Views
+        tags = ios,new
