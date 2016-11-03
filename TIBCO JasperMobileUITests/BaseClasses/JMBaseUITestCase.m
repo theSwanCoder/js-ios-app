@@ -10,6 +10,8 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMUITestServerProfile.h"
+#import "JMUITestServerProfileManager.h"
 
 NSTimeInterval kUITestsBaseTimeout = 30;
 NSTimeInterval kUITestsResourceWaitingTimeout = 60;
@@ -139,9 +141,13 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     if (loginPageView) {
         [self loginWithTestProfile];
     } else {
+        [self skipIntroPageIfNeed];
+        [self skipRateAlertIfNeed];
+
         // check 'test profile' was logged
         [self showSideMenuInSectionWithName:nil];
-        XCUIElement *profileNameLabel = [self findStaticTextWithText:kJMTestProfileName];
+        JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+        XCUIElement *profileNameLabel = [self findStaticTextWithText:testServerProfile.name];
         if (profileNameLabel.exists) {
             [self hideSideMenuInSectionWithName:nil];
         } else {
@@ -190,18 +196,20 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
     XCUIApplication *app = self.application;
     XCUIElement *table = [app.tables elementBoundByIndex:0];
 
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+
     // Profile Name TextField
-    [self enterText:kJMTestProfileName intoTextFieldWithAccessibilityId:@"Profile name"
+    [self enterText:testServerProfile.name intoTextFieldWithAccessibilityId:@"Profile name"
       parentElement:table
       isSecureField:false];
 
     // Profile URL TextField
-    [self enterText:kJMTestProfileURL intoTextFieldWithAccessibilityId:@"Server address"
+    [self enterText:testServerProfile.url intoTextFieldWithAccessibilityId:@"Server address"
       parentElement:table
       isSecureField:false];
 
     // Organization TextField
-    [self enterText:kJMTestProfileCredentialsOrganization intoTextFieldWithAccessibilityId:@"Organization ID"
+    [self enterText:testServerProfile.organization intoTextFieldWithAccessibilityId:@"Organization ID"
       parentElement:table
       isSecureField:false];
 
@@ -242,13 +250,15 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)tryEnterTestCredentials
 {
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+
     // Enter username
-    [self enterText:kJMTestProfileCredentialsUsername intoTextFieldWithAccessibilityId:@"JMLoginPageUserNameTextFieldAccessibilityId"
+    [self enterText:testServerProfile.username intoTextFieldWithAccessibilityId:@"JMLoginPageUserNameTextFieldAccessibilityId"
       parentElement:nil
       isSecureField:false];
 
     // Enter password
-    [self enterText:kJMTestProfileCredentialsPassword intoTextFieldWithAccessibilityId:@"JMLoginPagePasswordTextFieldAccessibilityId"
+    [self enterText:testServerProfile.password intoTextFieldWithAccessibilityId:@"JMLoginPagePasswordTextFieldAccessibilityId"
       parentElement:nil
       isSecureField:true];
 }
@@ -348,10 +358,15 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (void)skipIntroPageIfNeed
 {
-    sleep(kUITestsElementAvailableTimeout);
-    XCUIElement *skipIntroButton = self.application.buttons[@"Skip Intro"];
-    if (skipIntroButton.exists) {
-        [skipIntroButton tap];
+    XCUIElement *skipIntroButton;
+    NSInteger attemptsCount = 3;
+    for (NSInteger i = 0; i < attemptsCount; i++) {
+        sleep(kUITestsElementAvailableTimeout);
+        skipIntroButton = [self findButtonWithTitle:@"Skip Intro"];
+        if (skipIntroButton.exists) {
+            [skipIntroButton tap];
+            break;
+        }
     }
 }
 

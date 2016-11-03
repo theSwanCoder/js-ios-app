@@ -9,6 +9,8 @@
 #import "JMLoginPageUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+SideMenu.h"
+#import "JMUITestServerProfileManager.h"
+#import "JMUITestServerProfile.h"
 
 @implementation JMLoginPageUITests
 
@@ -82,8 +84,9 @@
 //      - User should see error message “Error. Specify a valid username’
 - (void)testThatUserCanSeeErrorWhenTryLoginWithEmptyUsername
 {
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
     [self enterUsername:@""];
-    [self enterPassword:kJMTestProfileCredentialsPassword];
+    [self enterPassword:testServerProfile.password];
     [self selectTestProfile];
     [self tapLoginButton];
 
@@ -105,8 +108,9 @@
 //      - User should see error message “Invalid credentials supplied. Could not login to JasperReports Server”
 - (void)testThatUserCanSeeErrorWhenTryLoginWithSpacesInUsername
 {
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
     [self enterUsername:@"  "];
-    [self enterPassword:kJMTestProfileCredentialsPassword];
+    [self enterPassword:testServerProfile.password];
     [self selectTestProfile];
     [self tapLoginButton];
     
@@ -128,8 +132,9 @@
 //      - User should see error message “Invalid credentials supplied. Could not login to JasperReports Server”
 - (void)testThatUserCanSeeErrorWhenTryLoginWithWrongUsername
 {
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
     [self enterUsername:@"Wrong username"];
-    [self enterPassword:kJMTestProfileCredentialsPassword];
+    [self enterPassword:testServerProfile.password];
     [self selectTestProfile];
     [self tapLoginButton];
     
@@ -151,7 +156,8 @@
 //      - User should see error message “Error. Specify a valid password”
 - (void)testThatUserCanSeeErrorWhenTryLoginWithEmptyPassword
 {
-    [self enterUsername:kJMTestProfileCredentialsUsername];
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    [self enterUsername:testServerProfile.username];
     [self enterPassword:@""];
     [self selectTestProfile];
     [self tapLoginButton];
@@ -174,7 +180,8 @@
 //      - User should see error message “Invalid credentials supplied. Could not login to JasperReports Server”
 - (void)testThatUserCanSeeErrorWhenTryLoginWithSpacesInPassword
 {
-    [self enterUsername:kJMTestProfileCredentialsUsername];
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    [self enterUsername:testServerProfile.username];
     [self enterPassword:@"  "];
     [self selectTestProfile];
     [self tapLoginButton];
@@ -197,7 +204,8 @@
 //    - User should see error message “Invalid credentials supplied. Could not login to JasperReports Server”
 - (void)testThatUserCanSeeErrorWhenTryLoginWithWrongPassword
 {
-    [self enterUsername:kJMTestProfileCredentialsUsername];
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    [self enterUsername:testServerProfile.username];
     [self enterPassword:@"Wrong password"];
     [self selectTestProfile];
     [self tapLoginButton];
@@ -220,8 +228,9 @@
 //    - User should see error message “Error. Select a server profile”
 - (void)testThatUserCanSeeErrorWhenTryLoginWithoutSelectedServer
 {
-    [self enterUsername:kJMTestProfileCredentialsUsername];
-    [self enterPassword:kJMTestProfileCredentialsPassword];
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    [self enterUsername:testServerProfile.username];
+    [self enterPassword:testServerProfile.password];
     [self tapLoginButton];
     
     [self verifyThatErrorAlertOnScreenWithTitle:@"Error" message:@"Select a server profile."];
@@ -242,8 +251,9 @@
 //    - User should see Library screen
 - (void)testThatUserCanLoginToTestServer
 {
-    [self enterUsername:kJMTestProfileCredentialsUsername];
-    [self enterPassword:kJMTestProfileCredentialsPassword];
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    [self enterUsername:testServerProfile.username];
+    [self enterPassword:testServerProfile.password];
     [self selectTestProfile];
     [self tapLoginButton];
 
@@ -294,10 +304,11 @@
 
 - (void)verifyThatUserDidLoginIntoTestServer
 {
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
     [self showSideMenuInSectionWithName:@"Library"];
-    [self verifyAccountWithUsername:kJMTestProfileCredentialsUsername
-                       organization:kJMTestProfileCredentialsOrganization
-                        profileName:kJMTestProfileName];
+    [self verifyAccountWithUsername:testServerProfile.username
+                       organization:testServerProfile.organization
+                        profileName:testServerProfile.name];
     [self hideSideMenuInSectionWithName:@"Library"];
 }
 

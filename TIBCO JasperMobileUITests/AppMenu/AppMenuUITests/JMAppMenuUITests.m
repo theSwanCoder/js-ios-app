@@ -9,6 +9,8 @@
 #import "JMAppMenuUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+SideMenu.h"
+#import "JMUITestServerProfileManager.h"
+#import "JMUITestServerProfile.h"
 
 @implementation JMAppMenuUITests
 
@@ -88,21 +90,24 @@
 {
     [self showSideMenuInSectionWithName:@"Library"];
     [self verifySideMenuVisible];
-    
-    XCUIElement *userNameLabel = self.application.staticTexts[kJMTestProfileCredentialsUsername];
-    if (!userNameLabel.exists) {
-        XCTFail(@"'Username' label doesn't exist.");
+
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+
+    [self waitStaticTextWithText:testServerProfile.username
+                   parentElement:nil
+                         timeout:kUITestsBaseTimeout];
+
+    NSString *fullServerNameString = [NSString stringWithFormat:@"%@ (v.%@)", testServerProfile.name, @"6.3.0"];
+    [self waitStaticTextWithText:fullServerNameString
+                   parentElement:nil
+                         timeout:kUITestsBaseTimeout];
+
+    if (testServerProfile.organization.length > 0) {
+        [self waitStaticTextWithText:testServerProfile.organization
+                       parentElement:nil
+                             timeout:kUITestsBaseTimeout];
     }
-    
-    NSString *fullServerNameString = [NSString stringWithFormat:@"%@ (v.%@)", kJMTestProfileName, @"6.3.0"];
-    XCUIElement *serverAliasLabel = self.application.staticTexts[fullServerNameString];
-    if (!serverAliasLabel.exists) {
-        XCTFail(@"'Server Alias' label doesn't exist.");
-    }
-    XCUIElement *organizationLabel = self.application.staticTexts[kJMTestProfileCredentialsOrganization];
-    if (!organizationLabel.exists) {
-        XCTFail(@"'Organization' label doesn't exist.");
-    }
+
     [self hideSideMenuInSectionWithName:@"Library"];
 }
 
