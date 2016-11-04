@@ -74,6 +74,11 @@
       "mAlias" : "local 6.3 remote",
       "mServerUrl" : "http://194.29.62.80:8090/jasperserver-pro-630",
       "mOrganization" : ""
+    },
+    {
+      "mAlias" : "AdHoc visualize",
+      "mServerUrl" : "http://build-master.jaspersoft.com:8980/jrs-pro-feature-embeddable-ahv2",
+      "mOrganization" : ""
     }
   ]
 }

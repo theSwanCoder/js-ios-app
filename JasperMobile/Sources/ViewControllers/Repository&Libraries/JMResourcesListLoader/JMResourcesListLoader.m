@@ -328,14 +328,6 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                                                                                                    title:JMLocalizedString(@"resources_filterby_type_dashboard")
                                                                                                    value:dashboardsValues];
         [allOptions addObject:dashboardFilterOption];
-        
-#warning WE SHOULD CHECK CORRECT VERSION HERE!!!
-//        if ([JMUtils isServerVersionUpOrEqual7]) {
-            JMResourcesListLoaderOption *adHocFilterOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
-                                                                                                   title:JMLocalizedString(@"resources_filterby_type_adhoc")
-                                                                                                   value:kJS_WS_TYPE_ADHOC_DATA_VIEW];
-            [allOptions addObject:adHocFilterOption];
-//        }
     }
     return [allOptions copy];
 }

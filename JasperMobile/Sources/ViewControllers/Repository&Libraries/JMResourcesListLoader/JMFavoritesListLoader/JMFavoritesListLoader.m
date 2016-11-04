@@ -71,6 +71,16 @@
 - (NSArray<JMResourcesListLoaderOption *> *)filterByAvailableOptions
 {
     NSMutableArray *allOptions = [[super filterByAvailableOptions] mutableCopy];
+    if ([JMUtils isServerProEdition]) {
+#warning WE SHOULD CHECK CORRECT VERSION HERE!!!
+        //        if ([JMUtils isServerVersionUpOrEqual7]) {
+        JMResourcesListLoaderOption *adHocFilterOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
+                                                                                               title:JMLocalizedString(@"resources_filterby_type_adhoc")
+                                                                                               value:kJS_WS_TYPE_ADHOC_DATA_VIEW];
+        [allOptions addObject:adHocFilterOption];
+        //        }
+    }
+    
     JMResourcesListLoaderOption *savedItemsOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
                                                                                           title:JMLocalizedString(@"resources_filterby_type_saved_reportUnit")
                                                                                           value:@[kJMSavedReportUnit]];
