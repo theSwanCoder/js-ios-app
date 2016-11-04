@@ -30,6 +30,7 @@
 #import "JMDashboard.h"
 #import "JMLocalization.h"
 #import "JMConstants.h"
+#import "JMAdHoc.h"
 
 
 @implementation JMResource
@@ -70,7 +71,9 @@
             return [JMDashboard dashboardWithResource:self];
         }
         case JMResourceTypeSchedule: {break;}
-        case JMResourceTypeAdHoc: {break;}
+        case JMResourceTypeAdHoc: {
+            return [JMAdHoc adHocWithResource:self];
+        }
     }
     return nil;
 }
@@ -106,6 +109,7 @@
             return JMLocalizedString(@"resources_type_adhoc");
         }
     }
+    return @"unknown";
 }
 
 - (NSString *)resourceViewerVCIdentifier
@@ -130,6 +134,9 @@
         }
         case JMResourceTypeSchedule: {
             return @"JMScheduleVC";
+        }
+        case JMResourceTypeAdHoc: {
+            return @"JMAdHocViewerVC";
         }
     }
     return nil;
@@ -156,7 +163,8 @@
         case JMResourceTypeSchedule: {
             return @"JMScheduleInfoViewController";
         }
-        case JMResourceTypeAdHoc: {break;}
+        case JMResourceTypeAdHoc: {
+            return @"JMAdHocInfoViewController";}
     }
     return @"JMResourceInfoViewController";
 }

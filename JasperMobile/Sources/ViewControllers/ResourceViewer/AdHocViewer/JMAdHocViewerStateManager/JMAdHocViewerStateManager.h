@@ -20,31 +20,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
-//  JMResourcesListLoaderOption.m
+//  JMAdHocViewerStateManager.h
 //  TIBCO JasperMobile
 //
 
-#import "JMResourcesListLoaderOption.h"
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.7
+*/
 
+#import "JMResourceViewerToolbarsHelper.h"
+#import "JMResourceViewerStateManager.h"
 
-@implementation JMResourcesListLoaderOption
+typedef NS_ENUM(NSInteger, JMAdHocViewerState) {
+    JMAdHocViewerState_Initial,
+    JMAdHocViewerState_Loading,
+    JMAdHocViewerState_ResourceReady,
+    JMAdHocViewerState_ResourceFailed,
+    JMAdHocViewerState_ResourceNotExist,
+    JMAdHocViewerState_ResourceOnWExternalWindow,
+    JMAdHocViewerState_Destroy
+};
 
-- (instancetype)initWithType:(JMResourcesListLoaderOptionType)type title:(NSString *)title value:(id)value
-{
-    self = [super init];
-    if (self) {
-        _title = title;
-        _type = type;
-        _value = value;
-    }
-    return self;
-}
-
-+ (instancetype)optionWithType:(JMResourcesListLoaderOptionType)type title:(NSString *)title value:(id)value
-{
-    return [[self alloc] initWithType:type title:title value:value];
-}
-
+@interface JMAdHocViewerStateManager : JMResourceViewerStateManager 
+@property (nonatomic, assign, readonly) JMAdHocViewerState state;
+- (void)setupPageForState:(JMAdHocViewerState)state;
 @end

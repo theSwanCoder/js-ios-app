@@ -149,6 +149,10 @@
             stringValue = @"JasperMobile.REST.Dashboard.";
             break;
         }
+        case JMJavascriptNamespaceVISAdHoc: {
+            stringValue = @"JasperMobile.VIS.AdHoc.";
+            break;
+        }
     }
     return stringValue;
 }

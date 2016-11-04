@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,29 +22,23 @@
 
 
 //
-//  JMResourcesListLoaderOption.m
+//  JMAdHoc.h
 //  TIBCO JasperMobile
 //
 
-#import "JMResourcesListLoaderOption.h"
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.7
+ */
 
+#import <Foundation/Foundation.h>
+@class JMResource;
 
-@implementation JMResourcesListLoaderOption
+@interface JMAdHoc : NSObject
+@property (nonatomic, strong, readonly) JMResource *resource;
+@property (nonatomic, copy, readonly) NSString *resourceURI;
 
-- (instancetype)initWithType:(JMResourcesListLoaderOptionType)type title:(NSString *)title value:(id)value
-{
-    self = [super init];
-    if (self) {
-        _title = title;
-        _type = type;
-        _value = value;
-    }
-    return self;
-}
-
-+ (instancetype)optionWithType:(JMResourcesListLoaderOptionType)type title:(NSString *)title value:(id)value
-{
-    return [[self alloc] initWithType:type title:title value:value];
-}
+- (instancetype)initWithResource:(JMResource *)resource;
++ (instancetype)adHocWithResource:(JMResource *)resource;
 
 @end

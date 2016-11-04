@@ -142,6 +142,7 @@ extern NSString * const kJMAnalyticsResourceLabelReportVisualize;
 extern NSString * const kJMAnalyticsResourceLabelDashboardFlow;
 extern NSString * const kJMAnalyticsResourceLabelDashboardVisualize;
 extern NSString * const kJMAnalyticsResourceLabelSavedResource;
+extern NSString * const kJMAnalyticsResourceLabelAdHoc;
 extern NSString * const kJMAnalyticsLabelThumbnail;
 
 // Analytics - Repository

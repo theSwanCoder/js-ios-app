@@ -37,14 +37,15 @@
 #import "JMCancelRequestPopup.h"
 #import "JMAboutViewController.h"
 #import "JMMenuItemControllersFactory.h"
-#import "JMReportViewerVC.h"
 #import "JMResourceInfoViewController.h"
 #import "UIViewController+Additions.h"
 #import "JMExportManager.h"
 #import "JMResource.h"
 #import "JMSchedule.h"
 #import "JMWebViewManager.h"
+#import "JMReportViewerVC.h"
 #import "JMDashboardViewerVC.h"
+#import "JMAdHocViewerVC.h"
 #import "JMLocalization.h"
 #import "JMUtils.h"
 #import "JMThemesManager.h"
@@ -611,6 +612,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             } else if (resource.type == JMResourceTypeLegacyDashboard) {
                 JMDashboardViewerVC *dashboardViewerVC = nextVC;
                 dashboardViewerVC.configurator = [JMUtils dashboardViewerConfiguratorNonReusableWebView];
+            } else if (resource.type == JMResourceTypeAdHoc) {
+                JMAdHocViewerVC *adHocViewerVC = nextVC;
+                adHocViewerVC.configurator = [JMUtils adHocViewerConfiguratorReusableWebView];
             }
         }
     }

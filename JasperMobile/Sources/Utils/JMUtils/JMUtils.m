@@ -42,6 +42,7 @@
 #import "JMReportViewerConfigurator.h"
 #import "JMWebViewManager.h"
 #import "JMDashboardViewerConfigurator.h"
+#import "JMAdHocViewerConfigurator.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import "NSObject+Additions.h"
@@ -51,6 +52,7 @@
 NSString *const JMReportViewerVisualizeWebEnvironmentIdentifier    = @"JMReportViewerVisualizeWebEnvironmentIdentifier";
 NSString *const JMReportViewerRESTWebEnvironmentIdentifier         = @"JMReportViewerRESTWebEnvironmentIdentifier";
 NSString *const JMDashboardViewerVisualizeWebEnvironmentIdentifier = @"JMDashboardViewerVisualizeWebEnvironmentIdentifier";
+NSString *const JMAdHocViewerVisualizeWebEnvironmentIdentifier     = @"JMAdHocViewerVisualizeWebEnvironmentIdentifier";
 NSString *const JMDashboardViewerRESTWebEnvironmentIdentifier      = @"JMDashboardViewerRESTWebEnvironmentIdentifier";
 
 void jmDebugLog(NSString *format, ...) {
@@ -569,6 +571,16 @@ void jmDebugLog(NSString *format, ...) {
     JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:JMDashboardViewerVisualizeWebEnvironmentIdentifier
                                                                                               flowType:JMResourceFlowTypeVIZ];
     return webEnvironment;
+}
+
+#pragma mark - AdHoc Viewer Helpers
+
++ (JMAdHocViewerConfigurator * __nonnull)adHocViewerConfiguratorReusableWebView
+{
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:JMAdHocViewerVisualizeWebEnvironmentIdentifier
+                                                                                              flowType:JMResourceFlowTypeVIZ];
+    JMAdHocViewerConfigurator *configurator = [JMAdHocViewerConfigurator configuratorWithWebEnvironment:webEnvironment];
+    return configurator;
 }
 
 @end

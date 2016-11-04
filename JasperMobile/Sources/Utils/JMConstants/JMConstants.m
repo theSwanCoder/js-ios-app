@@ -135,6 +135,7 @@ NSString * const kJMAnalyticsResourceLabelReportVisualize    = @"Report (Visuali
 NSString * const kJMAnalyticsResourceLabelDashboardFlow      = @"Dashboard (Flow)";
 NSString * const kJMAnalyticsResourceLabelDashboardVisualize = @"Dashboard (Visualize)";
 NSString * const kJMAnalyticsResourceLabelSavedResource      = @"Saved Resource";
+NSString * const kJMAnalyticsResourceLabelAdHoc              = @"AdHoc";
 NSString * const kJMAnalyticsLabelThumbnail          = @"Thumbnail";
 
 // Analytics - Repository

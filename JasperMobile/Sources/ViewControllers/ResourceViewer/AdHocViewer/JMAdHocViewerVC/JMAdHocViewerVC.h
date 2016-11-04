@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,29 +22,26 @@
 
 
 //
-//  JMResourcesListLoaderOption.m
+//  JMAdHocViewerVC.h
 //  TIBCO JasperMobile
 //
 
-#import "JMResourcesListLoaderOption.h"
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.7
+*/
 
+#import "JMResourceClientHolder.h"
+#import "JMMenuActionsView.h"
+#import "JMResourceViewerProtocol.h"
 
-@implementation JMResourcesListLoaderOption
+@class JMAdHoc;
+@class JMAdHocViewerConfigurator;
 
-- (instancetype)initWithType:(JMResourcesListLoaderOptionType)type title:(NSString *)title value:(id)value
-{
-    self = [super init];
-    if (self) {
-        _title = title;
-        _type = type;
-        _value = value;
-    }
-    return self;
-}
+@interface JMAdHocViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol>
+@property (nonatomic, strong) JMAdHocViewerConfigurator *configurator;
+- (JMAdHoc *)adHoc;
 
-+ (instancetype)optionWithType:(JMResourcesListLoaderOptionType)type title:(NSString *)title value:(id)value
-{
-    return [[self alloc] initWithType:type title:title value:value];
-}
-
+- (void)showOnTV;
+- (void)switchFromTV;
 @end

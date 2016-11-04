@@ -161,12 +161,18 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 
 - (void)addResourcesWithResource:(JMResource *)resource
 {
-    if (resource.type == JMResourceTypeFolder) {
-        [self.resourcesFolders addObject:resource];
-    } else {
-        [self.resourcesItems addObject:resource];
+    id currentFilterOptionValue = [self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Filter];
+    NSArray *supportedFilterTypes = [currentFilterOptionValue isKindOfClass:[NSArray class]] ? currentFilterOptionValue : @[currentFilterOptionValue];
+    
+    //We should send kJS_WS_TYPE_UNKNOW here according to http://jira.jaspersoft.com/browse/JRS-11049
+    if ([supportedFilterTypes indexOfObject:resource.resourceLookup.resourceType] != NSNotFound) {
+        if (resource.type == JMResourceTypeFolder) {
+            [self.resourcesFolders addObject:resource];
+        } else {
+            [self.resourcesItems addObject:resource];
+        }
+        self.allResources = nil;
     }
-    self.allResources = nil;
 }
 
 - (void)addResourcesWithResources:(NSArray <JMResource *>*)resources

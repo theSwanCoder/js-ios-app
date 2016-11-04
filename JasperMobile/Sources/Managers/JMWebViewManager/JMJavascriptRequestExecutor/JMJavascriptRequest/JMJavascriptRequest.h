@@ -46,7 +46,8 @@ typedef NS_ENUM(NSInteger, JMJavascriptNamespace) {
     JMJavascriptNamespaceVISReport,
     JMJavascriptNamespaceVISDashboard,
     JMJavascriptNamespaceRESTReport,
-    JMJavascriptNamespaceRESTDashboard
+    JMJavascriptNamespaceRESTDashboard,
+    JMJavascriptNamespaceVISAdHoc
 };
 
 @interface JMJavascriptRequest : NSObject <NSCopying>

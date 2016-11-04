@@ -692,7 +692,8 @@ JasperMobile.VIS = {
         }
     },
     Report: {},
-    Dashboard: {}
+    Dashboard: {},
+    AdHoc: {}
 };
 
 // VIZ Reports
@@ -2174,6 +2175,174 @@ JasperMobile.VIS.Dashboard.API = {
                     "message" : "JasperMobile.VIS.Dashboard.state.dashboardObject == nil"
                 }
             });
+        }
+    }
+};
+
+
+
+// VIZ AdHoc
+JasperMobile.VIS.AdHoc = {
+    state: {
+        adHocObject             : undefined,
+        refreshedAdHocObject    : undefined,
+        canceledAdHocObject     : undefined
+    },
+    Setup: {},
+    API: {}
+};
+
+JasperMobile.VIS.AdHoc.Setup = {
+    runFn : function(parameters) {
+        var self = this;
+        return function (v) {
+            JasperMobile.VIS.AdHoc.state.adHocObject = v.adhocView(self.structFn(parameters));
+        };
+    },
+    structFn: function(parameters) {
+        var self = this;
+        var container = JasperMobile.containerManager.activeContainer.name;
+        return {
+            resource: parameters["uri"],
+            container: "#" + container,
+//            linkOptions: {
+//                events: {
+//                    "click" : self.linkOptionsEventsClick
+//                }
+//            },
+            success: self.success,
+            error: self.failed
+        };
+    },
+    success: function() {
+        setTimeout(function(){
+                   var data = JasperMobile.VIS.AdHoc.state.adHocObject.data();
+                   JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.run", {
+                                                  //                                              "params" : data.parameters
+                                                  });
+                   }, 6000);
+    },
+    failed: function(error) {
+        JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.run", {
+                                       "error" : {
+                                       "code" : error.errorCode,
+                                       "message" : error.message
+                                       }
+                                       });
+    }
+};
+
+JasperMobile.VIS.AdHoc.API = {
+    run: function(params) {
+        JasperMobile.containerManager.chooseDefaultContainer();
+        visualize(
+              JasperMobile.VIS.Helpers.authFn(false),
+              JasperMobile.VIS.AdHoc.Setup.runFn(params),
+              JasperMobile.VIS.AdHoc.Setup.failed
+              );
+    },
+    refresh: function() {
+        JasperMobile.Callback.log("start refresh");
+        JasperMobile.Callback.log("adHoc object: " + JasperMobile.VIS.AdHoc.state.adHocObject);
+        JasperMobile.VIS.AdHoc.state.refreshedAdHocObject = JasperMobile.VIS.AdHoc.state.adHocObject.refresh()
+        .done(function() {
+              JasperMobile.Callback.log("done refresh");
+              var data = JasperMobile.VIS.AdHoc.state.adHocObject.data();
+              setTimeout(function() {
+                     JasperMobile.Callback.log("state: " + JasperMobile.VIS.AdHoc.state.refreshedAdHocObject.state());
+                     if (JasperMobile.VIS.AdHoc.state.refreshedAdHocObject.state() === "rejected") {
+                     JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.refresh", {
+                                                    "error" : {
+                                                    "code" : "adhoc.refresh.rejected",
+                                                    "message" : "Refresh was rejected"
+                                                    }
+                                                    });
+                     } else if (JasperMobile.VIS.AdHoc.state.refreshedAdHocObject.state() === "pending") {
+                     // TODO: update handling this case
+                     var uri = JasperMobile.VIS.AdHoc.state.adHocObject.properties().resource;
+                     JasperMobile.VIS.AdHoc.state.adHocObject.destroy();
+                     JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.refresh", {
+                                                    "error" : {
+                                                    "code" : "adhoc.refresh.pending",
+                                                    "message" : "Refresh was pended"
+                                                    }
+                                                    });
+                     } else if (JasperMobile.VIS.AdHoc.state.refreshedAdHocObject.state() === "resolved") {
+                         JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.refresh", {
+                                                    "components" : data.components,
+                                                    "params" : data.parameters
+                                                    });
+                     } else {
+                         JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.refresh", {
+                                                    "error" : {
+                                                    "code" : "adhoc.refresh.undefined",
+                                                    "message" : "Refresh failed with 'undefied' error"
+                                                    }
+                                                    });
+                     }
+                }, 3000);
+        })
+        .fail(function(error) {
+              JasperMobile.Callback.log("failed refresh with error: " + error);
+              if (error.errorCode == "authentication.error") {
+                JasperMobile.VIS.AdHoc.state.adHocObject.destroy();
+                setTimeout(function () {
+                     JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.refresh", {
+                                                    "error" : {
+                                                    "code" : error.errorCode,
+                                                    "message" : error.message
+                                                    }
+                                                    });
+                     }, 3000);
+              } else {
+                JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.refresh", {
+                                         "error" : {
+                                         "code" : error.errorCode,
+                                         "message" : error.message
+                                         }
+                                         });
+              }
+          });
+    },
+    cancel: function() {
+        JasperMobile.Callback.log("start cancel");
+        JasperMobile.Callback.log("adhoc object: " + JasperMobile.VIS.AdHoc.state.adHocObject);
+        JasperMobile.VIS.AdHoc.state.canceledAdHocObject = JasperMobile.VIS.AdHoc.state.adHocObject.cancel()
+        .done(function() {
+          JasperMobile.Callback.log("success cancel");
+          JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.cancel", {});
+          })
+        .fail(function(error) {
+          JasperMobile.Callback.log("failed cancel with error: " + error);
+          JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.cancel", {
+                                         "error" : {
+                                         "code" : error.errorCode,
+                                         "message" : error.message
+                                         }
+                                         });
+          });
+    },
+    destroy: function() {
+        if (JasperMobile.VIS.AdHoc.state.adHocObject) {
+            JasperMobile.VIS.AdHoc.state.adHocObject.destroy()
+                .done(function() {
+                      JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.destroy", {});
+                })
+                .fail(function(error) {
+                      JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.destroy", {
+                                             "error" : {
+                                             "code" : error.errorCode,
+                                             "message" : error.message
+                                             }
+                                             });
+                });
+        } else {
+            JasperMobile.Callback.callback("JasperMobile.VIS.AdHoc.API.destroy", {
+                                       "error": {
+                                       "code" : "visualize.error",
+                                       "message" : "JasperMobile.VIS.AdHoc.state.adHocObject == nil"
+                                       }
+                                       });
         }
     }
 };

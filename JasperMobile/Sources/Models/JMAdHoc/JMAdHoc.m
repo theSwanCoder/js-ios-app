@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,29 +22,39 @@
 
 
 //
-//  JMResourcesListLoaderOption.m
+//  JMAdHoc.m
 //  TIBCO JasperMobile
 //
 
-#import "JMResourcesListLoaderOption.h"
+#import "JMAdHoc.h"
+#import "JMResource.h"
 
+@interface JMAdHoc()
+@property (nonatomic, strong, readwrite) JMResource *resource;
+@property (nonatomic, copy, readwrite) NSString *resourceURI;
+@end
 
-@implementation JMResourcesListLoaderOption
+@implementation JMAdHoc
 
-- (instancetype)initWithType:(JMResourcesListLoaderOptionType)type title:(NSString *)title value:(id)value
+#pragma mark - LifyCycle
+- (void)dealloc
+{
+    JMLog(@"%@ _ %@", self, NSStringFromSelector(_cmd));
+}
+
+- (instancetype)initWithResource:(JMResource *)resource
 {
     self = [super init];
     if (self) {
-        _title = title;
-        _type = type;
-        _value = value;
+        _resource = resource;
+        _resourceURI = resource.resourceLookup.uri;
     }
     return self;
 }
 
-+ (instancetype)optionWithType:(JMResourcesListLoaderOptionType)type title:(NSString *)title value:(id)value
++ (instancetype)adHocWithResource:(JMResource *)resourceLookup
 {
-    return [[self alloc] initWithType:type title:title value:value];
+    return [[self alloc] initWithResource:resourceLookup];
 }
 
 @end

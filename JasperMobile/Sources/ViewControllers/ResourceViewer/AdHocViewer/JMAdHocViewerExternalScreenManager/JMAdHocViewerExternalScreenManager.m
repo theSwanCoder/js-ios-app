@@ -20,31 +20,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
-//  JMResourcesListLoaderOption.m
+//  JMAdHocViewerExternalScreenManager.m
 //  TIBCO JasperMobile
 //
 
-#import "JMResourcesListLoaderOption.h"
 
+#import "JMAdHocViewerExternalScreenManager.h"
+#import "JMAdHocViewerVC.h"
+#import "JMBaseResourceView.h"
 
-@implementation JMResourcesListLoaderOption
+@implementation JMAdHocViewerExternalScreenManager
 
-- (instancetype)initWithType:(JMResourcesListLoaderOptionType)type title:(NSString *)title value:(id)value
+#pragma mark - Overridden
+
+- (JMBaseResourceView *)resourceView
 {
-    self = [super init];
-    if (self) {
-        _title = title;
-        _type = type;
-        _value = value;
-    }
-    return self;
+    return (JMBaseResourceView *) self.controller.view;
 }
 
-+ (instancetype)optionWithType:(JMResourcesListLoaderOptionType)type title:(NSString *)title value:(id)value
+- (void)handleExternalScreenWillBeDestroy
 {
-    return [[self alloc] initWithType:type title:title value:value];
+    [self.controller switchFromTV];
 }
 
 @end

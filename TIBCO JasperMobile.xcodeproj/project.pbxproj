@@ -41,8 +41,14 @@
 		087A71B41BD95FD1007B98A4 /* JMAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087A71B01BD95FD1007B98A4 /* JMAboutViewController.m */; };
 		087A71B51BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087A71B31BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m */; };
 		087A71B91BD95FEE007B98A4 /* JMEULAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087A71B81BD95FEE007B98A4 /* JMEULAViewController.m */; };
-		088F26BC1DCA204000ED1508 /* JMAdHocViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 088F26BB1DCA204000ED1508 /* JMAdHocViewerVC.m */; };
 		088F26C01DCA433100ED1508 /* JMResourcesListLoaderOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 088F26BF1DCA433100ED1508 /* JMResourcesListLoaderOption.m */; };
+		088F26C71DCB4DA900ED1508 /* JMAdHocInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 088F26C61DCB4DA900ED1508 /* JMAdHocInfoViewController.m */; };
+		088F26D81DCB7F6300ED1508 /* JMAdHocLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 088F26CB1DCB7F6300ED1508 /* JMAdHocLoader.m */; };
+		088F26D91DCB7F6300ED1508 /* JMAdHocViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = 088F26CE1DCB7F6300ED1508 /* JMAdHocViewerConfigurator.m */; };
+		088F26DA1DCB7F6300ED1508 /* JMAdHocViewerExternalScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088F26D11DCB7F6300ED1508 /* JMAdHocViewerExternalScreenManager.m */; };
+		088F26DB1DCB7F6300ED1508 /* JMAdHocViewerStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088F26D41DCB7F6300ED1508 /* JMAdHocViewerStateManager.m */; };
+		088F26DC1DCB7F6300ED1508 /* JMAdHocViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 088F26D71DCB7F6300ED1508 /* JMAdHocViewerVC.m */; };
+		088F26E31DCB813400ED1508 /* JMAdHoc.m in Sources */ = {isa = PBXBuildFile; fileRef = 088F26E21DCB813400ED1508 /* JMAdHoc.m */; };
 		089590FF19E3D514001471DA /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E019E3D514001471DA /* ALToastView.m */; };
 		08982CCF1AC98A0700368522 /* JMRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08982CCE1AC98A0700368522 /* JMRevealViewController.m */; };
 		089B159C1AA756BD0021A915 /* JMEditabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B148E1AA756BD0021A915 /* JMEditabledViewController.m */; };
@@ -482,10 +488,22 @@
 		087A71B31BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrivacyPolicyViewController.m; sourceTree = "<group>"; };
 		087A71B71BD95FED007B98A4 /* JMEULAViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEULAViewController.h; sourceTree = "<group>"; };
 		087A71B81BD95FEE007B98A4 /* JMEULAViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEULAViewController.m; sourceTree = "<group>"; };
-		088F26BA1DCA204000ED1508 /* JMAdHocViewerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAdHocViewerVC.h; sourceTree = "<group>"; };
-		088F26BB1DCA204000ED1508 /* JMAdHocViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAdHocViewerVC.m; sourceTree = "<group>"; };
 		088F26BE1DCA433100ED1508 /* JMResourcesListLoaderOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourcesListLoaderOption.h; sourceTree = "<group>"; };
 		088F26BF1DCA433100ED1508 /* JMResourcesListLoaderOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoaderOption.m; sourceTree = "<group>"; };
+		088F26C51DCB4DA900ED1508 /* JMAdHocInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAdHocInfoViewController.h; sourceTree = "<group>"; };
+		088F26C61DCB4DA900ED1508 /* JMAdHocInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAdHocInfoViewController.m; sourceTree = "<group>"; };
+		088F26CA1DCB7F6300ED1508 /* JMAdHocLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAdHocLoader.h; sourceTree = "<group>"; };
+		088F26CB1DCB7F6300ED1508 /* JMAdHocLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAdHocLoader.m; sourceTree = "<group>"; };
+		088F26CD1DCB7F6300ED1508 /* JMAdHocViewerConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAdHocViewerConfigurator.h; sourceTree = "<group>"; };
+		088F26CE1DCB7F6300ED1508 /* JMAdHocViewerConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAdHocViewerConfigurator.m; sourceTree = "<group>"; };
+		088F26D01DCB7F6300ED1508 /* JMAdHocViewerExternalScreenManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAdHocViewerExternalScreenManager.h; sourceTree = "<group>"; };
+		088F26D11DCB7F6300ED1508 /* JMAdHocViewerExternalScreenManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAdHocViewerExternalScreenManager.m; sourceTree = "<group>"; };
+		088F26D31DCB7F6300ED1508 /* JMAdHocViewerStateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAdHocViewerStateManager.h; sourceTree = "<group>"; };
+		088F26D41DCB7F6300ED1508 /* JMAdHocViewerStateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAdHocViewerStateManager.m; sourceTree = "<group>"; };
+		088F26D61DCB7F6300ED1508 /* JMAdHocViewerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAdHocViewerVC.h; sourceTree = "<group>"; };
+		088F26D71DCB7F6300ED1508 /* JMAdHocViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAdHocViewerVC.m; sourceTree = "<group>"; };
+		088F26E11DCB813400ED1508 /* JMAdHoc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAdHoc.h; sourceTree = "<group>"; };
+		088F26E21DCB813400ED1508 /* JMAdHoc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAdHoc.m; sourceTree = "<group>"; };
 		089590DF19E3D514001471DA /* ALToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALToastView.h; sourceTree = "<group>"; };
 		089590E019E3D514001471DA /* ALToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALToastView.m; sourceTree = "<group>"; };
 		08982CCE1AC98A0700368522 /* JMRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRevealViewController.m; sourceTree = "<group>"; };
@@ -1288,15 +1306,6 @@
 			path = JMEULAViewController;
 			sourceTree = "<group>";
 		};
-		088F26B91DCA204000ED1508 /* JMAdHocViewerVC */ = {
-			isa = PBXGroup;
-			children = (
-				088F26BA1DCA204000ED1508 /* JMAdHocViewerVC.h */,
-				088F26BB1DCA204000ED1508 /* JMAdHocViewerVC.m */,
-			);
-			path = JMAdHocViewerVC;
-			sourceTree = "<group>";
-		};
 		088F26BD1DCA433100ED1508 /* JMResourcesListLoaderOption */ = {
 			isa = PBXGroup;
 			children = (
@@ -1304,6 +1313,81 @@
 				088F26BF1DCA433100ED1508 /* JMResourcesListLoaderOption.m */,
 			);
 			path = JMResourcesListLoaderOption;
+			sourceTree = "<group>";
+		};
+		088F26C41DCB4DA900ED1508 /* JMAdHocInfoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				088F26C51DCB4DA900ED1508 /* JMAdHocInfoViewController.h */,
+				088F26C61DCB4DA900ED1508 /* JMAdHocInfoViewController.m */,
+			);
+			path = JMAdHocInfoViewController;
+			sourceTree = "<group>";
+		};
+		088F26C81DCB7F6300ED1508 /* AdHocViewer */ = {
+			isa = PBXGroup;
+			children = (
+				088F26C91DCB7F6300ED1508 /* JMAdHocLoader */,
+				088F26CC1DCB7F6300ED1508 /* JMAdHocViewerConfigurator */,
+				088F26CF1DCB7F6300ED1508 /* JMAdHocViewerExternalScreenManager */,
+				088F26D21DCB7F6300ED1508 /* JMAdHocViewerStateManager */,
+				088F26D51DCB7F6300ED1508 /* JMAdHocViewerVC */,
+			);
+			path = AdHocViewer;
+			sourceTree = "<group>";
+		};
+		088F26C91DCB7F6300ED1508 /* JMAdHocLoader */ = {
+			isa = PBXGroup;
+			children = (
+				088F26CA1DCB7F6300ED1508 /* JMAdHocLoader.h */,
+				088F26CB1DCB7F6300ED1508 /* JMAdHocLoader.m */,
+			);
+			path = JMAdHocLoader;
+			sourceTree = "<group>";
+		};
+		088F26CC1DCB7F6300ED1508 /* JMAdHocViewerConfigurator */ = {
+			isa = PBXGroup;
+			children = (
+				088F26CD1DCB7F6300ED1508 /* JMAdHocViewerConfigurator.h */,
+				088F26CE1DCB7F6300ED1508 /* JMAdHocViewerConfigurator.m */,
+			);
+			path = JMAdHocViewerConfigurator;
+			sourceTree = "<group>";
+		};
+		088F26CF1DCB7F6300ED1508 /* JMAdHocViewerExternalScreenManager */ = {
+			isa = PBXGroup;
+			children = (
+				088F26D01DCB7F6300ED1508 /* JMAdHocViewerExternalScreenManager.h */,
+				088F26D11DCB7F6300ED1508 /* JMAdHocViewerExternalScreenManager.m */,
+			);
+			path = JMAdHocViewerExternalScreenManager;
+			sourceTree = "<group>";
+		};
+		088F26D21DCB7F6300ED1508 /* JMAdHocViewerStateManager */ = {
+			isa = PBXGroup;
+			children = (
+				088F26D31DCB7F6300ED1508 /* JMAdHocViewerStateManager.h */,
+				088F26D41DCB7F6300ED1508 /* JMAdHocViewerStateManager.m */,
+			);
+			path = JMAdHocViewerStateManager;
+			sourceTree = "<group>";
+		};
+		088F26D51DCB7F6300ED1508 /* JMAdHocViewerVC */ = {
+			isa = PBXGroup;
+			children = (
+				088F26D61DCB7F6300ED1508 /* JMAdHocViewerVC.h */,
+				088F26D71DCB7F6300ED1508 /* JMAdHocViewerVC.m */,
+			);
+			path = JMAdHocViewerVC;
+			sourceTree = "<group>";
+		};
+		088F26E01DCB813400ED1508 /* JMAdHoc */ = {
+			isa = PBXGroup;
+			children = (
+				088F26E11DCB813400ED1508 /* JMAdHoc.h */,
+				088F26E21DCB813400ED1508 /* JMAdHoc.m */,
+			);
+			path = JMAdHoc;
 			sourceTree = "<group>";
 		};
 		089590DE19E3D514001471DA /* ALToastView-v0.0.1 */ = {
@@ -1596,6 +1680,7 @@
 		089B14F71AA756BD0021A915 /* JMResourceInfoViewController */ = {
 			isa = PBXGroup;
 			children = (
+				088F26C41DCB4DA900ED1508 /* JMAdHocInfoViewController */,
 				08DD182F1B136B8A00856112 /* JMDashBoardInfoViewController */,
 				08DD18321B136B8A00856112 /* JMReportInfoViewController */,
 				08DD18361B136B8A00856112 /* JMSavedItemsInfoViewController */,
@@ -2404,6 +2489,7 @@
 			isa = PBXGroup;
 			children = (
 				0801DF961AAF2CC900DD072C /* CoreDataEntities */,
+				088F26E01DCB813400ED1508 /* JMAdHoc */,
 				93D8C6521AAD69BE00117306 /* JMDashboard */,
 				A147857D5FCCB5723B672BD2 /* JMResourceLookup */,
 				A14784F3B9F734ECF7DA95AD /* JMSchedule */,
@@ -2837,8 +2923,8 @@
 		A14783BD2C92689AD7E79A1E /* ResourceViewer */ = {
 			isa = PBXGroup;
 			children = (
-				088F26B91DCA204000ED1508 /* JMAdHocViewerVC */,
 				A14788DF233B1B36C62D2C12 /* Managers */,
+				088F26C81DCB7F6300ED1508 /* AdHocViewer */,
 				A1478248137504E0284175CA /* ContentResourceViewer */,
 				A1478AE4D9F99FA173B13445 /* DashboardViewer */,
 				A1478384EEE0C1F98CB14623 /* ReportViewer */,
@@ -4420,11 +4506,14 @@
 				089F664B1C3D465200ED683B /* JMExportResource.m in Sources */,
 				089F664C1C3D465200ED683B /* JMExportTask.m in Sources */,
 				089B15AE1AA756BD0021A915 /* JMListOptionsPopupView.m in Sources */,
+				088F26DA1DCB7F6300ED1508 /* JMAdHocViewerExternalScreenManager.m in Sources */,
 				089B15CA1AA756BD0021A915 /* JMResourceInfoViewController.m in Sources */,
 				089B15A41AA756BD0021A915 /* UIImage+Additions.m in Sources */,
 				089F66501C3D727700ED683B /* UIViewController+Additions.m in Sources */,
+				088F26DB1DCB7F6300ED1508 /* JMAdHocViewerStateManager.m in Sources */,
 				0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */,
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,
+				088F26E31DCB813400ED1508 /* JMAdHoc.m in Sources */,
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
 				08DD183A1B136B8A00856112 /* JMReportInfoViewController.m in Sources */,
 				087A71B41BD95FD1007B98A4 /* JMAboutViewController.m in Sources */,
@@ -4462,6 +4551,8 @@
 				0801DFBC1AAF2E7500DD072C /* JMIntroImageView.m in Sources */,
 				93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */,
 				93826C7E1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m in Sources */,
+				088F26D81DCB7F6300ED1508 /* JMAdHocLoader.m in Sources */,
+				088F26C71DCB4DA900ED1508 /* JMAdHocInfoViewController.m in Sources */,
 				089B15A51AA756BD0021A915 /* UITableViewCell+Additions.m in Sources */,
 				087A71B51BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m in Sources */,
 				9331B2C61C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m in Sources */,
@@ -4492,6 +4583,7 @@
 				A147864EBDE7A5C24D8D3588 /* JMExternalWindowControlsVC.m in Sources */,
 				A14789DAD19DCADECAAAC548 /* JMDashboardParameter.m in Sources */,
 				A1478BC60E4CEBC8141E12EC /* JMScheduleCell.m in Sources */,
+				088F26DC1DCB7F6300ED1508 /* JMAdHocViewerVC.m in Sources */,
 				A147837E1991885EC48D81AC /* JMScheduleVC.m in Sources */,
 				A147862ACF2E0D9C1DAB389F /* JMScheduleBoolenCell.m in Sources */,
 				A147822581385266BCDCA6FB /* JMScheduleVCSection.m in Sources */,
@@ -4541,13 +4633,13 @@
 				A14787EC6234C21F6E4CEF75 /* JMDateInputControlCell.m in Sources */,
 				A14788035B82EB8099429870 /* JMDateTimeInputControlCell.m in Sources */,
 				A1478B7FA4307699BA5F7596 /* JMInputControlCell.m in Sources */,
+				088F26D91DCB7F6300ED1508 /* JMAdHocViewerConfigurator.m in Sources */,
 				A14780C4BA61D4EBFC6F603B /* JMMultiSelectInputControlCell.m in Sources */,
 				A14782334DBFE2F43DB3E766 /* JMNumberInputControlCell.m in Sources */,
 				A1478619F6825EC654AED1AD /* JMSingleSelectInputControlCell.m in Sources */,
 				A1478FE0C1BA9728771F8D12 /* JMTextInputControlCell.m in Sources */,
 				A1478E40DCCA05E0B9F47B5C /* JMTimeInputControlCell.m in Sources */,
 				A1478192F1AA3D79BED972D8 /* JMMultiSelectTableViewController.m in Sources */,
-				088F26BC1DCA204000ED1508 /* JMAdHocViewerVC.m in Sources */,
 				A1478BF9F290B96348742BCF /* JMSingleSelectTableViewController.m in Sources */,
 				A147873EBD7FEACD43281C98 /* JMInputControlsViewController.m in Sources */,
 				A1478983C71E4F2514E0251B /* JMFiltersVCResult.m in Sources */,
