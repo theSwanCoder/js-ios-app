@@ -26,7 +26,7 @@
 {
     self = [super init];
     if (self) {
-        _testProfile = [self mobileDemoProfile];
+        _testProfile = [self configurableFromCommandLineProfile];
     }
     return self;
 }
@@ -56,6 +56,19 @@
                                               username:@"superuser"
                                               password:@"superuser"
                                           organization:@""];
+}
+
+- (JMUITestServerProfile *)configurableFromCommandLineProfile
+{
+    NSBundle *bundle = [NSBundle bundleForClass:self.class];
+    NSString *path = [bundle pathForResource:@"Info" ofType:@"plist"];
+    NSDictionary *infoDict = [NSDictionary dictionaryWithContentsOfFile:path];
+    
+    return [[JMUITestServerProfile alloc] initWithName:infoDict[@"JMUITestsServerProfileName"]
+                                                   URL:infoDict[@"JMUITestsServerProfileURL"]
+                                              username:infoDict[@"JMUITestsServerProfileUsername"]
+                                              password:infoDict[@"JMUITestsServerProfilePassword"]
+                                          organization:infoDict[@"JMUITestsServerProfileOrganization"]];
 }
 
 @end

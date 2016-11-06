@@ -20,5 +20,15 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>JMUITestsServerProfileName</key>
+	<string>New Test Profile</string>
+	<key>JMUITestsServerProfileURL</key>
+	<string>http://194.29.62.80:8092/jasperserver-pro-630-ui-tests</string>
+	<key>JMUITestsServerProfileUsername</key>
+	<string>superuser</string>
+	<key>JMUITestsServerProfilePassword</key>
+	<string>superuser</string>
+	<key>JMUITestsServerProfileOrganization</key>
+	<string></string>
 </dict>
 </plist>
