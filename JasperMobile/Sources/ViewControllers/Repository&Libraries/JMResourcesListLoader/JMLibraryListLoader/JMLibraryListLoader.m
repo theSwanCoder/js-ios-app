@@ -33,7 +33,7 @@
     NSMutableArray *allOptions = [[super sortByAvailableOptions] mutableCopy];
     JMResourcesListLoaderOption *accessTimeOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Sort
                                                                                           title:JMLocalizedString(@"resources_sortby_accessTime")
-                                                                                 value:@"accessTime"];
+                                                                                          value:@"accessTime"];
     [allOptions addObject:accessTimeOption];
     return allOptions;
 }

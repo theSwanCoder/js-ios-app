@@ -95,7 +95,7 @@
     for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
         JMResourcesListLoaderOption *filterByOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
                                                                                             title:[format uppercaseString]
-                                                                                            value:format];
+                                                                                            value:@[format]];
         [filterOptions addObject:filterByOption];
     }
     return [filterOptions copy];

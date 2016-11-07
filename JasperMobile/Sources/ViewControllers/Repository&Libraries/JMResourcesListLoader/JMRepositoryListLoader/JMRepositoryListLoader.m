@@ -115,22 +115,27 @@
 {
     JMResourcesListLoaderOption *sortByNameOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Sort
                                                                                           title:JMLocalizedString(@"resources_sortby_name")
-                                                                                 value:@"label"];
+                                                                                          value:@"label"];
     return @[sortByNameOption];
 }
 
 - (NSArray<JMResourcesListLoaderOption *> *)filterByAvailableOptions
 {
+    NSMutableArray *allValuesArray = [@[
+                                       kJS_WS_TYPE_REPORT_UNIT,
+                                       kJS_WS_TYPE_DASHBOARD,
+                                       kJS_WS_TYPE_DASHBOARD_LEGACY,
+                                       kJS_WS_TYPE_FOLDER,
+                                       kJS_WS_TYPE_FILE
+                                       ] mutableCopy];
+#warning WE SHOULD CHECK CORRECT VERSION HERE!!!
+//    if ([JMUtils isServerVersionUpOrEqual7]) {
+    [allValuesArray addObject: kJS_WS_TYPE_ADHOC_DATA_VIEW];
+//    }
+    
     JMResourcesListLoaderOption *allItemsOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
                                                                                         title:JMLocalizedString(@"resources_filterby_type_all")
-                                                                               value:@[
-                                                                                       kJS_WS_TYPE_REPORT_UNIT,
-                                                                                       kJS_WS_TYPE_DASHBOARD,
-                                                                                       kJS_WS_TYPE_DASHBOARD_LEGACY,
-                                                                                       kJS_WS_TYPE_FOLDER,
-                                                                                       kJS_WS_TYPE_FILE,
-                                                                                       kJS_WS_TYPE_ADHOC_DATA_VIEW
-                                                                                       ]];
+                                                                                        value: allValuesArray];
     return @[allItemsOption];
 }
 

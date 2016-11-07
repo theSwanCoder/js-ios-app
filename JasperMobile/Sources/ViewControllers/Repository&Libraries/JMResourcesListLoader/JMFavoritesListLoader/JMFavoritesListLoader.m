@@ -76,7 +76,7 @@
         //        if ([JMUtils isServerVersionUpOrEqual7]) {
         JMResourcesListLoaderOption *adHocFilterOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
                                                                                                title:JMLocalizedString(@"resources_filterby_type_adhoc")
-                                                                                               value:kJS_WS_TYPE_ADHOC_DATA_VIEW];
+                                                                                               value:@[kJS_WS_TYPE_ADHOC_DATA_VIEW]];
         [allOptions addObject:adHocFilterOption];
         //        }
     }

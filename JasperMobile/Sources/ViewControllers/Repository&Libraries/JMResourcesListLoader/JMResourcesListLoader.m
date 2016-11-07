@@ -318,7 +318,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     // reports
     JMResourcesListLoaderOption *reportFilterOption = [JMResourcesListLoaderOption optionWithType:JMResourcesListLoaderOptionType_Filter
                                                                                             title:JMLocalizedString(@"resources_filterby_type_reportUnit")
-                                                                                            value:kJS_WS_TYPE_REPORT_UNIT];
+                                                                                            value:@[kJS_WS_TYPE_REPORT_UNIT]];
     allOptions = [NSMutableArray arrayWithObject:reportFilterOption];
     
     if ([JMUtils isServerProEdition]) {
