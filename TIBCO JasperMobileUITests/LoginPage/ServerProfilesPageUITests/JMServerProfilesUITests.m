@@ -8,6 +8,8 @@
 
 #import "JMServerProfilesUITests.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMUITestServerProfileManager.h"
+#import "JMUITestServerProfile.h"
 
 @implementation JMServerProfilesUITests
 
@@ -39,15 +41,19 @@
     XCUIElement *serverProfileTextField = [self waitTextFieldWithAccessibilityId:@"JMLoginPageServerProfileTextFieldAccessibilityId"
                                                                          timeout:kUITestsBaseTimeout];
     NSString *stringValueInServerField = serverProfileTextField.value;
-    BOOL hasTestProfileName = [stringValueInServerField isEqualToString:@"Test Profile"];
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    NSString *testProfileName = testServerProfile.name;
+    BOOL hasTestProfileName = [stringValueInServerField isEqualToString:testProfileName];
     XCTAssert(hasTestProfileName, @"Value in 'Sever' field doesn't equal 'Test Profile'");
 }
 
 - (void)testThatServerProfileCanBeAdded
 {
     [self tryOpenServerProfilesPage];
-        
-    XCUIElement *testProfile = self.application.collectionViews.staticTexts[@"Test Profile"];
+
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    NSString *testProfileName = testServerProfile.name;
+    XCUIElement *testProfile = self.application.collectionViews.staticTexts[testProfileName];
     if (testProfile.exists) {
         [self removeTestProfile];
     }
@@ -148,7 +154,9 @@
 
 - (void)removeTestProfile
 {
-    XCUIElement *testProfileElement = self.application.collectionViews.staticTexts[@"Test Profile"];
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    NSString *testProfileName = testServerProfile.name;
+    XCUIElement *testProfileElement = self.application.collectionViews.staticTexts[testProfileName];
     [self removeProfileWithElement:testProfileElement];
 }
 

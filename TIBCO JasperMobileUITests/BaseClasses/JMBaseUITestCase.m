@@ -63,7 +63,10 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 #pragma mark - Custom Accessors
 - (XCUIApplication *)application
 {
-    return [XCUIApplication new];
+    if (!_application) {
+        _application = [XCUIApplication new];
+    }
+    return _application;
 }
 
 #pragma mark - Setup Helpers
@@ -79,9 +82,11 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 
 - (XCUIElement *)findTestProfileCell
 {
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    NSString *testProfileName = testServerProfile.name;
     XCUIElement *testProfile = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
-                                 containsLabelWithAccessibilityId:@"Test Profile"
-                                                        labelText:@"Test Profile"];
+                                 containsLabelWithAccessibilityId:testProfileName
+                                                        labelText:testProfileName];
     BOOL isTestProfileExists = testProfile.exists;
     if (!isTestProfileExists) {
         [self removeAllServerProfiles];
@@ -93,8 +98,8 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
         [self givenThatServerProfilesPageOnScreen];
         
         testProfile = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
-                                     containsLabelWithAccessibilityId:@"Test Profile"
-                                                            labelText:@"Test Profile"];
+                                     containsLabelWithAccessibilityId:testProfileName
+                                                            labelText:testProfileName];
         if (!testProfile.exists) {
             XCTFail(@"Can't create test profile");
         }
