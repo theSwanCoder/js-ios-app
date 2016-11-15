@@ -80,6 +80,59 @@
                BlueprintName = "TIBCO JasperMobileUITests"
                ReferencedContainer = "container:TIBCO JasperMobile.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "JMAppMenuUITests">
+               </Test>
+               <Test
+                  Identifier = "JMBaseUITestCase">
+               </Test>
+               <Test
+                  Identifier = "JMDashboardInfoDialogUITests">
+               </Test>
+               <Test
+                  Identifier = "JMDashboardPrintDialogUITests">
+               </Test>
+               <Test
+                  Identifier = "JMFavoriteInfoPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMFavoritePageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMNewSchedulePageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMNewServerProfilePageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMPrintReportUITests">
+               </Test>
+               <Test
+                  Identifier = "JMRecentlyViewedInfoPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMRecentlyViewedPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMReportInfoDialogUITests">
+               </Test>
+               <Test
+                  Identifier = "JMRepositoryInfoPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMSaveReportPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMSavedItemInfoDialogUITests">
+               </Test>
+               <Test
+                  Identifier = "JMSavedItemInfoScreenUITests">
+               </Test>
+               <Test
+                  Identifier = "JMSavedItemsPageUITests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
