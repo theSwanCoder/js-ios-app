@@ -154,6 +154,7 @@
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSLog(@"Label: %@", label);
+    NSLog(@"All 'other elements':\n%@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
     NSLog(@"All nav bars:\n%@", [self.application.navigationBars allElementsBoundByAccessibilityElement]);
     XCUIApplication *app = self.application;
     XCUIElement *navBar;
