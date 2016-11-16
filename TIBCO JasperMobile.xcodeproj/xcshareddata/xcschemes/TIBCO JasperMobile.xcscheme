@@ -72,7 +72,7 @@
       codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
-            skipped = "YES">
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "93DC8C381C6CCEEE000DEADF"
@@ -85,19 +85,37 @@
                   Identifier = "JMAppMenuUITests">
                </Test>
                <Test
-                  Identifier = "JMBaseUITestCase">
-               </Test>
-               <Test
                   Identifier = "JMDashboardInfoDialogUITests">
                </Test>
                <Test
+                  Identifier = "JMDashboardPageUITests">
+               </Test>
+               <Test
                   Identifier = "JMDashboardPrintDialogUITests">
+               </Test>
+               <Test
+                  Identifier = "JMDashletPageUITests">
                </Test>
                <Test
                   Identifier = "JMFavoriteInfoPageUITests">
                </Test>
                <Test
                   Identifier = "JMFavoritePageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMFiltersPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMInputControlPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMLibraryInfoPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMLibraryPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests">
                </Test>
                <Test
                   Identifier = "JMNewSchedulePageUITests">
@@ -116,6 +134,9 @@
                </Test>
                <Test
                   Identifier = "JMReportInfoDialogUITests">
+               </Test>
+               <Test
+                  Identifier = "JMReportPageUITests">
                </Test>
                <Test
                   Identifier = "JMRepositoryInfoPageUITests">
