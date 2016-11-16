@@ -85,6 +85,9 @@
                   Identifier = "JMAppMenuUITests">
                </Test>
                <Test
+                  Identifier = "JMBaseUITestCase">
+               </Test>
+               <Test
                   Identifier = "JMDashboardInfoDialogUITests">
                </Test>
                <Test
@@ -113,9 +116,6 @@
                </Test>
                <Test
                   Identifier = "JMLibraryPageUITests">
-               </Test>
-               <Test
-                  Identifier = "JMLoginPageUITests">
                </Test>
                <Test
                   Identifier = "JMNewSchedulePageUITests">
