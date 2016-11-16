@@ -50,6 +50,8 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
             [self skipRateAlertIfNeed];
             [self skipIntroPageIfNeed];
             [self logout];
+        } else {
+            NSLog(@"Login page on screen");
         }
     }
 }

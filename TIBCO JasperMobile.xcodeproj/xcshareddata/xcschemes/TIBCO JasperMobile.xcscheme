@@ -118,6 +118,39 @@
                   Identifier = "JMLibraryPageUITests">
                </Test>
                <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeCorrectTrademarksOnLoginScreen">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeErrorWhenTryLoginWithEmptyPassword">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeErrorWhenTryLoginWithEmptyUsername">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeErrorWhenTryLoginWithSpacesInPassword">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeErrorWhenTryLoginWithSpacesInUsername">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeErrorWhenTryLoginWithWrongPassword">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeErrorWhenTryLoginWithWrongUsername">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeErrorWhenTryLoginWithoutSelectedServer">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeLaunchScreen">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeLoginScreen">
+               </Test>
+               <Test
+                  Identifier = "JMLoginPageUITests/testThatUserCanSeeLoginUsingTryDemoButton">
+               </Test>
+               <Test
                   Identifier = "JMNewSchedulePageUITests">
                </Test>
                <Test
