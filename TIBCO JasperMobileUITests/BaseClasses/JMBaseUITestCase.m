@@ -41,12 +41,14 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
         [self givenThatLibraryPageOnScreen];
     } else {
         NSLog(@"Perform tests without logging in");
-        NSLog(@"%@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
+        NSLog(@"All 'other elements':\n%@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
+        NSLog(@"All buttons:\n%@", [self.application.buttons allElementsBoundByAccessibilityElement]);
+        NSLog(@"All alerts:\n%@", [self.application.alerts allElementsBoundByAccessibilityElement]);
         XCUIElement *libraryPageView = [self findElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
         if (libraryPageView) {
             NSLog(@"Library page on screen");
-            [self skipIntroPageIfNeed];
             [self skipRateAlertIfNeed];
+            [self skipIntroPageIfNeed];
             [self logout];
         }
     }
@@ -384,12 +386,19 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 - (void)skipRateAlertIfNeed
 {
     NSLog(@"Try to skip rate dialog");
-    sleep(kUITestsElementAvailableTimeout);
-    XCUIElement *rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
-    if (rateAlert.exists) {
-        XCUIElement *rateAppLateButton = rateAlert.buttons[@"No, thanks"];
-        if (rateAppLateButton.exists) {
-            [rateAppLateButton tap];
+    XCUIElement *rateAlert;
+    NSInteger attemptsCount = 2;
+    for (NSInteger i = 0; i < attemptsCount; i++) {
+        sleep(kUITestsElementAvailableTimeout);
+        rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
+        if (rateAlert.exists) {
+            XCUIElement *rateAppLateButton = rateAlert.buttons[@"No, thanks"];
+            if (rateAppLateButton.exists) {
+                [rateAppLateButton tap];
+                break;
+            } else {
+                XCTFail(@"There is an rate dialog, but 'No, thanks' button isn't in hierarchy");
+            }
         }
     }
 }
