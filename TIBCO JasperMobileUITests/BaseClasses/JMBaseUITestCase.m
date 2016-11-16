@@ -13,9 +13,9 @@
 #import "JMUITestServerProfile.h"
 #import "JMUITestServerProfileManager.h"
 
-NSTimeInterval kUITestsBaseTimeout = 30;
-NSTimeInterval kUITestsResourceWaitingTimeout = 60;
-NSTimeInterval kUITestsElementAvailableTimeout = 2;
+NSTimeInterval kUITestsBaseTimeout = 20;
+NSTimeInterval kUITestsResourceWaitingTimeout = 30;
+NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 @implementation JMBaseUITestCase
 
@@ -39,6 +39,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
         [self loginWithTestProfileIfNeed];
         [self givenThatLibraryPageOnScreen];
     } else {
+        NSLog(@"%@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
         XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
         if (!loginPageView) {
             [self skipIntroPageIfNeed];
@@ -364,7 +365,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 - (void)skipIntroPageIfNeed
 {
     XCUIElement *skipIntroButton;
-    NSInteger attemptsCount = 3;
+    NSInteger attemptsCount = 2;
     for (NSInteger i = 0; i < attemptsCount; i++) {
         sleep(kUITestsElementAvailableTimeout);
         skipIntroButton = [self findButtonWithTitle:@"Skip Intro"];
