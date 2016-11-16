@@ -10,6 +10,7 @@
 - (void)waitElementReady:(XCUIElement *)element
                  timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self waitElementReady:element
                    visible:true
                    timeout:timeout];
@@ -19,6 +20,7 @@
                  visible:(BOOL)visible
                  timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", @"exists", visible ? @1 : @0];
     [self expectationForPredicate:predicate
               evaluatedWithObject:element
@@ -39,6 +41,7 @@
 - (XCUIElement *)waitElementInHierarchyWithAccessibilityId:(NSString *)accessibilityId
                                                    timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
     XCUIElement *element;
     do {
@@ -59,6 +62,7 @@
 - (XCUIElement *)waitButtonInHierarchyWithAccessiblitiyId:(NSString *)accessibilityId
                                                   timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
     XCUIElement *button;
     do {
@@ -79,6 +83,7 @@
 - (XCUIElement *)waitButtonInHierarchyWithTitle:(NSString *)title
                                         timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
     XCUIElement *button;
     do {
@@ -100,6 +105,7 @@
 - (XCUIElement *)waitAlertInHierarchyWithTitle:(NSString *)title
                                        timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
     XCUIElement *alert;
     do {
@@ -122,6 +128,7 @@
                                      parentElement:(XCUIElement *)parentElement
                                            timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
     XCUIElement *staticText;
     do {
@@ -145,6 +152,7 @@
 
 - (XCUIElement *)findNavigationBarWithLabel:(NSString *)label
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIApplication *app = self.application;
     XCUIElement *navBar;
     if (label == nil) {
@@ -161,6 +169,7 @@
 - (XCUIElement *)waitNavigationBarWithLabel:(NSString *)label
                                     timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *navBar = [self findNavigationBarWithLabel:label];
     [self waitElementReady:navBar
                    timeout:timeout];
@@ -171,6 +180,7 @@
 - (XCUIElement *)elementWithAccessibilityId:(NSString *)accessibilityId
                               parentElement:(XCUIElement *)parentElement
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (!parentElement) {
         parentElement = self.application;
     }
@@ -188,6 +198,7 @@
 
 - (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self findElementWithAccessibilityId:accessibilityId
                                   parentElement:nil];
 }
@@ -195,6 +206,7 @@
 - (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
                                         timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self waitElementWithAccessibilityId:accessibilityId
                                   parentElement:nil
                                         timeout:timeout];
@@ -203,6 +215,7 @@
 - (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId
                                   parentElement:(XCUIElement *)parentElement
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *element = [self elementWithAccessibilityId:accessibilityId
                                               parentElement:parentElement];
     if (!element.exists) {
@@ -215,6 +228,7 @@
                                   parentElement:(XCUIElement *)parentElement
                                         timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self waitElementWithAccessibilityId:accessibilityId
                                   parentElement:parentElement
                                         visible:true
@@ -226,6 +240,7 @@
                                         visible:(BOOL)visible
                                         timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *element = [self elementWithAccessibilityId:accessibilityId
                                               parentElement:parentElement];
     if (!element && visible) {
@@ -246,6 +261,7 @@
 
 - (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self findButtonWithAccessibilityId:accessibilityId
                                  parentElement:nil];
 }
@@ -253,6 +269,7 @@
 - (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
                                        timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self waitButtonWithAccessibilityId:accessibilityId
                                  parentElement:nil
                                        timeout:timeout];
@@ -261,6 +278,7 @@
 - (XCUIElement *)buttonWithAccessibilityId:(NSString *)accessibilityId
                              parentElement:(XCUIElement *)parentElement
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (parentElement == nil) {
         parentElement = self.application;
     }
@@ -279,6 +297,7 @@
 - (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId
                                  parentElement:(XCUIElement *)parentElement
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *button = [self buttonWithAccessibilityId:accessibilityId
                                             parentElement:parentElement];
     if (!button.exists || !button.isHittable) {
@@ -290,7 +309,8 @@
 - (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
                                  parentElement:(XCUIElement *)parentElement
                                        timeout:(NSTimeInterval)timeout
-{    
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *button = [self buttonWithAccessibilityId:accessibilityId
                                             parentElement:parentElement];
     if (!button) {
@@ -305,6 +325,7 @@
 
 - (XCUIElement *)findButtonWithTitle:(NSString *)title
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self findButtonWithTitle:title
                        parentElement:nil];
 }
@@ -312,6 +333,7 @@
 - (XCUIElement *)waitButtonWithTitle:(NSString *)title
                              timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self waitButtonWithTitle:title
                        parentElement:nil
                              timeout:timeout];
@@ -320,6 +342,7 @@
 - (XCUIElement *)findButtonWithTitle:(NSString *)title
                        parentElement:(XCUIElement *)parentElement
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *button = [self buttonWithTitle:title
                                   parentElement:parentElement];
     if (!button) {
@@ -338,6 +361,7 @@
                        parentElement:(XCUIElement *)parentElement
                              timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *button = [self buttonWithTitle:title
                                   parentElement:parentElement];
     if (!button) {
@@ -353,6 +377,7 @@
 - (XCUIElement *)buttonWithTitle:(NSString *)title
                    parentElement:(XCUIElement *)parentElement
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (parentElement == nil) {
         parentElement = self.application;
     }
@@ -371,6 +396,7 @@
 
 - (void)waitButtonIsHittable:(XCUIElement *)button
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
     [self expectationForPredicate:hittablePredicate
               evaluatedWithObject:button
@@ -390,6 +416,7 @@
 #pragma mark - Back buttons
 - (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self findBackButtonWithAccessibilityId:accessibilityId
                                  onNavBarWithLabel:nil];
 }
@@ -397,6 +424,7 @@
 - (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                            timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self waitBackButtonWithAccessibilityId:accessibilityId
                                  onNavBarWithLabel:nil
                                            timeout:timeout];
@@ -405,6 +433,7 @@
 - (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
                                  onNavBarWithLabel:(NSString *)label
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *navBar = [self waitNavigationBarWithLabel:label
                                                    timeout:kUITestsBaseTimeout];
     XCUIElement *button = [self findButtonWithAccessibilityId:accessibilityId
@@ -416,6 +445,7 @@
                                  onNavBarWithLabel:(NSString *)label
                                            timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *navBar = [self waitNavigationBarWithLabel:label
                                                    timeout:timeout];
     XCUIElement *button = [self waitButtonWithAccessibilityId:accessibilityId
@@ -428,7 +458,8 @@
 
 - (XCUIElement *)findTextFieldWithAccessibilityId:(NSString *)accessibilityId
                                     parentElement:(XCUIElement *)parentElement
-{   
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (parentElement == nil) {
         parentElement = self.application;
     }
@@ -447,6 +478,7 @@
 - (XCUIElement *)findSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
                                           parentElement:(XCUIElement *)parentElement
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (parentElement == nil) {
         parentElement = self.application;
     }
@@ -465,6 +497,7 @@
 - (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
                                           timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self waitTextFieldWithAccessibilityId:accessibilityId
                                     parentElement:nil
                                           timeout:timeout];
@@ -474,6 +507,7 @@
                                     parentElement:(XCUIElement *)parentElement
                                           timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *textField = [self findTextFieldWithAccessibilityId:accessibilityId
                                                       parentElement:parentElement];
     [self waitElementReady:textField
@@ -484,6 +518,7 @@
 - (XCUIElement *)waitSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
                                                 timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self waitSecureTextFieldWithAccessibilityId:accessibilityId
                                           parentElement:nil
                                                 timeout:timeout];
@@ -493,6 +528,7 @@
                                           parentElement:(XCUIElement *)parentElement
                                                 timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *textField = [self findSecureTextFieldWithAccessibilityId:accessibilityId
                                                             parentElement:parentElement];
     [self waitElementReady:textField
@@ -504,6 +540,7 @@
 
 - (XCUIElement *)findStaticTextWithAccessibilityId:(NSString *)accessibilityId
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self findStaticTextWithAccessibilityId:accessibilityId
                                      parentElement:nil];
 }
@@ -511,6 +548,7 @@
 - (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
                                            timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self waitStaticTextWithAccessibilityId:accessibilityId
                                      parentElement:nil
                                            timeout:timeout];
@@ -519,6 +557,7 @@
 - (XCUIElement *)findStaticTextWithAccessibilityId:(NSString *)accessibilityId
                                      parentElement:(XCUIElement *)parentElement
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (parentElement == nil) {
         parentElement = self.application;
     }
@@ -530,6 +569,7 @@
                                      parentElement:(XCUIElement *)parentElement
                                            timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *element = [self findStaticTextWithAccessibilityId:accessibilityId
                                                      parentElement:parentElement];
     [self waitElementReady:element
@@ -542,6 +582,7 @@
                                            visible:(BOOL)visible
                                            timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *element = [self findStaticTextWithAccessibilityId:accessibilityId
                                                      parentElement:parentElement];
     [self waitElementReady:element
@@ -552,6 +593,7 @@
 
 - (XCUIElement *)findStaticTextWithText:(NSString *)text
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self findStaticTextWithText:text
                           parentElement:nil];
 }
@@ -559,6 +601,7 @@
 - (XCUIElement *)findStaticTextWithText:(NSString *)text
                           parentElement:(XCUIElement *)parentElement
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (parentElement == nil) {
         parentElement = self.application;
     }
@@ -573,6 +616,7 @@
                           parentElement:(XCUIElement *)parentElement
                                 timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *element = [self waitStaticTextWithText:text
                                           parentElement:parentElement
                                                 visible:YES
@@ -586,6 +630,7 @@
                                 visible:(BOOL)visible
                                 timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *element = [self findStaticTextWithText:text
                                           parentElement:parentElement];
 
@@ -605,6 +650,7 @@
 - (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout
                          inSectionWithName:(NSString *)sectionName
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *menuButton = [self findMenuButtonInSectionWithName:sectionName];
     [self waitElementReady:menuButton
                    timeout:timeout];
@@ -613,6 +659,7 @@
 
 - (XCUIElement *)findMenuButtonInSectionWithName:(NSString *)sectionName
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionName
                                                    timeout:kUITestsBaseTimeout];
     XCUIElement *menuButton = [self findButtonWithAccessibilityId:@"menu icon"
@@ -626,6 +673,7 @@
 
 - (XCUIElement *)waitDoneButtonWithTimeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return [self waitButtonWithAccessibilityId:@"Done"
                                        timeout:timeout];
 }
@@ -634,6 +682,7 @@
 
 - (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
     XCUIElementQuery *cellsQuery = [self.application.cells matchingPredicate:identifierPredicate];
     NSArray *allCells = cellsQuery.allElementsBoundByAccessibilityElement;
@@ -642,6 +691,7 @@
 
 - (XCUIElement *)cellWithAccessibilityId:(NSString *)accessibilityId forIndex:(NSUInteger)index
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
     XCUIElementQuery *cellsQuery = [self.application.cells matchingPredicate:identifierPredicate];
     NSArray *allCells = cellsQuery.allElementsBoundByAccessibilityElement;
@@ -655,6 +705,7 @@
                           containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
                                                  labelText:(NSString *)labelText
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIApplication *app = self.application;
     XCUIElement *collectionView = [app.collectionViews elementBoundByIndex:0]; // TODO: replace with explicit accessibilityId
     NSArray *allCells;
@@ -688,6 +739,7 @@
 - (XCUIElement *)findTableViewCellWithAccessibilityId:(NSString *)accessibilityId
                                 containsLabelWithText:(NSString *)labelText
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIApplication *app = self.application;
     XCUIElement *tableView = [app.tables elementBoundByIndex:0]; // TODO: replace with explicit accessibilityId
     NSArray *allCells;
@@ -719,6 +771,7 @@
 
 - (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *searchField = self.application.searchFields[@"Search Values"];
     [self waitElementReady:searchField
                    timeout:kUITestsBaseTimeout];
@@ -735,6 +788,7 @@
 
 - (XCUIElement *)findAlertWithTitle:(NSString *)title
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElementQuery *alertsQuery = self.application.alerts;
     XCUIElement *alert = [alertsQuery matchingIdentifier:title].element;
     return alert;
@@ -742,6 +796,7 @@
 
 - (XCUIElement *)waitAlertWithTitle:(NSString *)title timeout:(NSTimeInterval)timeout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *alert = [self findAlertWithTitle:title];
     if (!alert) {
         alert = [self waitAlertInHierarchyWithTitle:title
@@ -756,6 +811,7 @@
 
 - (XCUIElement *)findImageWithAccessibilityId:(NSString *)accessibilityId
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElementQuery *alertsQuery = self.application.images;
     XCUIElement *image = [alertsQuery matchingIdentifier:accessibilityId].element;
     return image;
