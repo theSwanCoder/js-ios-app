@@ -36,12 +36,15 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     }
 
     if ([self shouldLoginBeforeStartTest]) {
+        NSLog(@"Try to log in before starting tests");
         [self loginWithTestProfileIfNeed];
         [self givenThatLibraryPageOnScreen];
     } else {
+        NSLog(@"Perform tests without logging in");
         NSLog(@"%@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
-        XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-        if (!loginPageView) {
+        XCUIElement *libraryPageView = [self findElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+        if (libraryPageView) {
+            NSLog(@"Library page on screen");
             [self skipIntroPageIfNeed];
             [self skipRateAlertIfNeed];
             [self logout];
@@ -364,12 +367,14 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)skipIntroPageIfNeed
 {
+    NSLog(@"Try to skip intro page");
     XCUIElement *skipIntroButton;
     NSInteger attemptsCount = 2;
     for (NSInteger i = 0; i < attemptsCount; i++) {
         sleep(kUITestsElementAvailableTimeout);
         skipIntroButton = [self findButtonWithTitle:@"Skip Intro"];
         if (skipIntroButton.exists) {
+            NSLog(@"%@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
             [skipIntroButton tap];
             break;
         }
@@ -378,6 +383,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)skipRateAlertIfNeed
 {
+    NSLog(@"Try to skip rate dialog");
     sleep(kUITestsElementAvailableTimeout);
     XCUIElement *rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
     if (rateAlert.exists) {
