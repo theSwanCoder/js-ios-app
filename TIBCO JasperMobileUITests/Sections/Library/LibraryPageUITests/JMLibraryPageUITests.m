@@ -81,12 +81,12 @@
 - (void)testThatSearchWorkWithCorrectWords
 {
     // start find some text
-    [self trySearchText:kJMTestLibrarySearchTextExample];
-    // verify result
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.hittable == true"];
-    NSInteger filtredResultCount = [[self.application.cells allElementsBoundByIndex] filteredArrayUsingPredicate:predicate].count;
-    XCTAssertTrue(filtredResultCount == 1, @"Should be only one result");
-    
+    [self switchViewFromGridToListInSectionWithTitle:@"Library"];
+    [self searchResourceWithName:kJMTestLibrarySearchTextExample
+               inSectionWithName:@"Library"];
+    NSInteger cellsCount = [self countOfListCells];
+    XCTAssertTrue(cellsCount == 1, @"Should be only one result");
+
     // Reset search
     [self tryClearSearchBar];
     // verify result

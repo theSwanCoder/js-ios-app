@@ -42,4 +42,7 @@
 // CollectionView
 - (XCUIElement *)collectionViewElementFromSectionWithAccessibilityId:(NSString *)accessibilityId;
 
+// Verifying
+- (void)verifyThatSectionOnScreenWithTitle:(NSString *)sectionTitle;
+
 @end

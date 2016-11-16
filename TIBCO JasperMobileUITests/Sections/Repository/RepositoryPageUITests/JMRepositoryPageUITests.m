@@ -14,6 +14,13 @@
 
 @implementation JMRepositoryPageUITests
 
+- (void)setUp
+{
+    [super setUp];
+
+    [self openRepositorySection];
+}
+
 #pragma mark - Tests
 
 //  User should see Repository screen
@@ -26,7 +33,7 @@
 //    - After:
 - (void)testThatUserCanOpenRepositoryPage
 {
-    [self openRepositorySection];
+    [self verifyThatSectionOnScreenWithTitle:@"Repository"];
 }
 
 //  Left Panel button
@@ -39,11 +46,8 @@
 //    - After:
 - (void)testThatRepositoryPageHasSideMenuButton
 {
-    [self openRepositorySection];
-    XCUIElement *sideMenuButton = [self findMenuButtonInSectionWithName:@"Repository"];
-    if (!sideMenuButton.exists) {
-        XCTFail(@"There isn't side menu button");
-    }
+    [self waitMenuButtonWithTimeout:kUITestsBaseTimeout
+                  inSectionWithName:@"Repository"];
 }
     
 //  Repository Title
@@ -56,11 +60,8 @@
 //    - After:
 - (void)testThatRepositoryPageHasCorrectTitle
 {
-    [self openRepositorySection];
-    XCUIElement *navBarItem = [self findNavigationBarWithLabel:@"Repository"];
-    if (!navBarItem.exists) {
-        XCTFail(@"Page has non correct title");
-    }
+    [self waitNavigationBarWithLabel:@"Repository"
+                             timeout:kUITestsBaseTimeout];
 }
     
 //  Folder title
@@ -74,9 +75,10 @@
 //    - After:
 - (void)testThatOpendFolderHasCorrectTitle
 {
-    [self openRepositorySection];
+    [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
+    [self givenThatCollectionViewContainsListOfCells];
+    
     [self openFolderWithName:kTestFolderName];
-    [self givenThatCellsAreVisible];
     [self verifyCorrectTitleForFolderWithName:kTestFolderName];
     [self backToFolderWithName:@"Repository"];
 }
@@ -93,14 +95,13 @@
 //    - After:
 - (void)testThatOpenedFolderHasBackButtonWithCorrectTitle
 {
-    [self openRepositorySection];
+    [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
+    [self givenThatCollectionViewContainsListOfCells];
+    
     [self openFolderWithName:kTestFolderName];
-    [self givenThatCellsAreVisible];
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Repository"
-                                                    onNavBarWithLabel:kTestFolderName];
-    if (!backButton.exists) {
-        XCTFail(@"Incorrect back button in folder");
-    }
+    [self waitBackButtonWithAccessibilityId:@"Repository"
+                          onNavBarWithLabel:kTestFolderName
+                                    timeout:kUITestsBaseTimeout];
     [self backToFolderWithName:@"Repository"];
 }
 
@@ -121,7 +122,6 @@
 //    - After:
 - (void)testThatSearchOnRepositoryPageWorkCorrectly
 {
-    [self openRepositorySection];
     [self searchResourceWithName:@"Samples"
                inSectionWithName:@"Repository"];
     [self givenThatCellsAreVisible];
@@ -142,9 +142,9 @@
 //    - After:
 - (void)testThatSearchWithEmptyResultOnRepositoryPageHasCorrectMessage
 {
-    [self openRepositorySection];
     [self searchResourceWithName:@"NoSearchResults"
                inSectionWithName:@"Repository"];
+
     XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
                                                 parentElement:nil
                                                       timeout:kUITestsBaseTimeout];
@@ -169,8 +169,6 @@
 //    - After:
 - (void)testThatUserCanChangeViewTypeOnRepositoryPage
 {
-    [self openRepositorySection];
-
     [self switchViewFromListToGridInSectionWithTitle:@"Repository"];
     [self verifyThatCollectionViewContainsGridOfCells];
     
@@ -194,8 +192,6 @@
 //    - After:
 - (void)testThatUserCanPullDownToRefreshOnRepositoryPage
 {
-    [self openRepositorySection];
-    
     [self performPullDownToRefresh];
 }
 
@@ -211,8 +207,6 @@
 //    - After:
 - (void)testThatUserCanScrollOnRepositoryPage
 {
-    [self openRepositorySection];
-
     [self performSwipeToScrool];
 }
     
@@ -227,21 +221,26 @@
 //    - After:
 - (void)testThatEmptyFolderHasCorrectMessage
 {
-    [self openRepositorySection];
-    
-    [self searchResourceWithName:@"Monitoring" inSectionWithName:@"Repository"];
-    [self openFolderWithName:@"Monitoring"];
-    [self givenThatCellsAreVisible];
-    [self openFolderWithName:@"Monitoring Domains"];
-    XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
-                                                parentElement:nil
-                                                      timeout:kUITestsBaseTimeout];
-    if (!noResultLabel.exists) {
-        XCTFail(@"There isn't 'No Results.' label");
+    [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
+    [self searchResourceWithName:@"Monitoring"
+               inSectionWithName:@"Repository"];
+
+    NSInteger cellsCount = [self countOfListCells];
+    if (cellsCount > 0) {
+        // Some instances hasn't the folder
+        [self openFolderWithName:@"Monitoring"];
+        [self givenThatCellsAreVisible];
+        [self openFolderWithName:@"Monitoring Domains"];
+        XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
+                                                    parentElement:nil
+                                                          timeout:kUITestsBaseTimeout];
+        if (!noResultLabel.exists) {
+            XCTFail(@"There isn't 'No Results.' label");
+        }
+
+        [self backToFolderWithName:@"Monitoring"];
+        [self backToFolderWithName:@"Repository"];
     }
-    
-    [self backToFolderWithName:@"Monitoring"];
-    [self backToFolderWithName:@"Repository"];
 }
 
 //  JRS 6.0/6.0.1/6.1: Report Thumbnails

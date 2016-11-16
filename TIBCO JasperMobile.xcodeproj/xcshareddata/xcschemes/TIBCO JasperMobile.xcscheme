@@ -121,6 +121,9 @@
                   Identifier = "JMRepositoryInfoPageUITests">
                </Test>
                <Test
+                  Identifier = "JMRepositoryPageUITests">
+               </Test>
+               <Test
                   Identifier = "JMSaveReportPageUITests">
                </Test>
                <Test
@@ -130,7 +133,13 @@
                   Identifier = "JMSavedItemInfoScreenUITests">
                </Test>
                <Test
+                  Identifier = "JMSavedItemPageUITests">
+               </Test>
+               <Test
                   Identifier = "JMSavedItemsPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMServerProfilesUITests">
                </Test>
             </SkippedTests>
          </TestableReference>

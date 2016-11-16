@@ -143,7 +143,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
 - (void)loginWithTestProfileIfNeed
 {
     XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    if (loginPageView) {
+    if (loginPageView.exists) {
         [self loginWithTestProfile];
     } else {
         [self skipIntroPageIfNeed];
@@ -153,9 +153,9 @@ NSTimeInterval kUITestsElementAvailableTimeout = 2;
         [self showSideMenuInSectionWithName:nil];
         JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
         XCUIElement *profileNameLabel = [self findStaticTextWithText:testServerProfile.name];
-        if (profileNameLabel.exists) {
-            [self hideSideMenuInSectionWithName:nil];
-        } else {
+        BOOL isProfileNameLabelExist = profileNameLabel.exists;
+        [self hideSideMenuInSectionWithName:nil];
+        if (!isProfileNameLabelExist) {
             [self logout];
             [self givenThatLoginPageOnScreen];
             [self loginWithTestProfile];

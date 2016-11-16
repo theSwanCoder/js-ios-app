@@ -18,6 +18,8 @@
 {
     [self openSavedItemsSection];
     [self switchViewFromGridToListInSectionWithTitle:@"Saved Items"];
+    [self selectFilterBy:@"All"
+      inSectionWithTitle:@"Saved Items"];
     [self deleteAllExportedResourcesIfNeed];
     [self openLibrarySection];
 }
@@ -136,6 +138,8 @@
     [self givenThatReportCellsOnScreen];
     [self openSavedItemsSection];
 
+    [self selectFilterBy:@"XLS" inSectionWithTitle:@"Saved Items"];
+    
     [self deleteSavedItemWithName:kTestReportName
                            format:@"xls"];
     [self openLibrarySection];
@@ -144,6 +148,8 @@
 - (void)openTestSavedItemInHTMLFormat
 {
     [self openSavedItemsSection];
+    
+    [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
     
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                               format:@"html"];
@@ -154,7 +160,9 @@
 - (void)openTestSavedItemInPDFFormat
 {
     [self openSavedItemsSection];
-
+    
+    [self selectFilterBy:@"PDF" inSectionWithTitle:@"Saved Items"];
+    
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                              format:@"pdf"];
     [testItem tap];
@@ -185,6 +193,8 @@
 - (void)showInfoPageTestSavedItemFromSavedItemsSection
 {
     [self openSavedItemsSection];
+    
+    [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
     
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                              format:@"html"];

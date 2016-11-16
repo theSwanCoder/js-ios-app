@@ -298,4 +298,12 @@
     return section;
 }
 
+#pragma mark - Verifying
+
+- (void)verifyThatSectionOnScreenWithTitle:(NSString *)sectionTitle
+{
+    [self waitNavigationBarWithLabel:sectionTitle
+                             timeout:kUITestsBaseTimeout];
+}
+
 @end
