@@ -35,6 +35,9 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
         XCTFail(@"Failed to launch application");
     }
 
+    [self skipRateAlertIfNeed];
+    [self skipIntroPageIfNeed];
+
     if ([self shouldLoginBeforeStartTest]) {
         NSLog(@"Try to log in before starting tests");
         [self loginWithTestProfileIfNeed];
@@ -47,8 +50,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
         XCUIElement *libraryPageView = [self findElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
         if (libraryPageView) {
             NSLog(@"Library page on screen");
-            [self skipRateAlertIfNeed];
-            [self skipIntroPageIfNeed];
             [self logout];
         } else {
             NSLog(@"Login page on screen");
