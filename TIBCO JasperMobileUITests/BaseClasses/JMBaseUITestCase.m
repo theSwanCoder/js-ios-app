@@ -267,10 +267,18 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)tryCreateNewTestServerProfile
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+
     XCUIApplication *app = self.application;
     XCUIElement *table = [app.tables elementBoundByIndex:0];
 
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    NSLog(@"All text fields: %@", [app.textFields allElementsBoundByAccessibilityElement]);
+    NSLog(@"testServerProfile.name: %@", testServerProfile.name);
+    NSLog(@"testServerProfile.url: %@", testServerProfile.url);
+    NSLog(@"testServerProfile.username: %@", testServerProfile.username);
+    NSLog(@"testServerProfile.password: %@", testServerProfile.password);
+    NSLog(@"testServerProfile.organization: %@", testServerProfile.organization);
 
     // Profile Name TextField
     [self enterText:testServerProfile.name intoTextFieldWithAccessibilityId:@"Profile name"
