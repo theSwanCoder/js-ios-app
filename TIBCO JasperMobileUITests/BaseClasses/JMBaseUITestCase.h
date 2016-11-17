@@ -27,6 +27,9 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)removeAllServerProfiles;
 
 - (void)loginWithTestProfileIfNeed;
+
+- (void)verifyThatLoginWasSuccess;
+
 - (void)logout;
 - (void)tryBackToPreviousPage;
 - (void)tryBackToPreviousPageWithTitle:(NSString *)pageTitle;

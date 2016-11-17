@@ -366,6 +366,9 @@
 - (void)waitLoginProcessDidFinish
 {
     [self givenLoadingPopupNotVisible];
+
+    [self verifyThatLoginWasSuccess];
+
     [self skipRateAlertIfNeed];
     [self skipIntroPageIfNeed];
 }

@@ -151,29 +151,22 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)loginWithTestProfileIfNeed
 {
-    XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    if (loginPageView.exists) {
-        [self loginWithTestProfile];
-    } else {
-        [self skipIntroPageIfNeed];
-        [self skipRateAlertIfNeed];
-
-        // check 'test profile' was logged
-        [self showSideMenuInSectionWithName:nil];
-        JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
-        XCUIElement *profileNameLabel = [self findStaticTextWithText:testServerProfile.name];
-        BOOL isProfileNameLabelExist = profileNameLabel.exists;
-        [self hideSideMenuInSectionWithName:nil];
-        if (!isProfileNameLabelExist) {
+    XCUIElement *libraryPageView = [self findElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    if (libraryPageView) {
+        BOOL isTestProfileWasLogged = [self isTestProfileWasLogged];
+        if (isTestProfileWasLogged) {
+            return;
+        } else {
             [self logout];
-            [self givenThatLoginPageOnScreen];
-            [self loginWithTestProfile];
         }
     }
+    [self loginWithTestProfile];
+    [self verifyThatLoginWasSuccess];
 }
 
 - (void)loginWithTestProfile
 {
+    [self givenThatLoginPageOnScreen];
     [self selectTestProfile];
 
     [self givenThatLoginPageOnScreen];
@@ -183,6 +176,58 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     [self tryTapLoginButton];
 
     [self givenLoadingPopupNotVisible];
+}
+
+- (void)verifyThatLoginWasSuccess
+{
+    NSLog(@"Verify that there isn't an error after trying to log into test JRS");
+
+    [self processErrorAlertIfExistWithTitle:@"JSHTTPErrorDomain" actionBlock:^{
+        NSLog(@"Try recreate test JRS profile");
+        [self tryOpenServerProfilesPage];
+        [self removeAllServerProfiles];
+        [self trySelectNewTestServerProfile];
+
+        NSLog(@"Try log into test JRS again");
+        [self tryTapLoginButton];
+        [self givenLoadingPopupNotVisible];
+    }];
+
+    [self processErrorAlertIfExistWithTitle:@"JSHTTPErrorDomain" actionBlock:^{
+        XCTFail(@"Failure to log into test JRS");
+    }];
+}
+
+- (void)processErrorAlertIfExistWithTitle:(NSString *)title
+                              actionBlock:(void(^)(void))actionBlock
+{
+    sleep(kUITestsElementAvailableTimeout);
+    NSLog(@"All alerts: %@", [self.application.alerts allElementsBoundByAccessibilityElement]);
+    
+    XCUIElement *alert = [self findAlertWithTitle:title];
+    if (alert.exists) {
+        XCUIElement *okButton = [self findButtonWithTitle:@"OK"];
+        if (okButton.exists) {
+            [okButton tap];
+        } else {
+            XCTFail(@"Failure with closing an error alert (JSHTTPErrorDomain)");
+        }
+        if (actionBlock) {
+            actionBlock();
+        }
+    } else {
+        NSLog(@"There is any error alert");
+    }
+}
+
+- (BOOL)isTestProfileWasLogged
+{
+    [self showSideMenuInSectionWithName:nil];
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    XCUIElement *profileNameLabel = [self findStaticTextWithText:testServerProfile.name];
+    BOOL isProfileNameLabelExist = profileNameLabel.exists;
+    [self hideSideMenuInSectionWithName:nil];
+    return isProfileNameLabelExist;
 }
 
 - (void)logout
