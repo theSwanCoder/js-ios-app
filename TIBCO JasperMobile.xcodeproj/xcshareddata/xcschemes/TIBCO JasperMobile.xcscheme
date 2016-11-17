@@ -112,12 +112,6 @@
                   Identifier = "JMInputControlPageUITests">
                </Test>
                <Test
-                  Identifier = "JMLibraryInfoPageUITests">
-               </Test>
-               <Test
-                  Identifier = "JMLibraryPageUITests">
-               </Test>
-               <Test
                   Identifier = "JMNewSchedulePageUITests">
                </Test>
                <Test
@@ -134,9 +128,6 @@
                </Test>
                <Test
                   Identifier = "JMReportInfoDialogUITests">
-               </Test>
-               <Test
-                  Identifier = "JMReportPageUITests">
                </Test>
                <Test
                   Identifier = "JMRepositoryInfoPageUITests">
