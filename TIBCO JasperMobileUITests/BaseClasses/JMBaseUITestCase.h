@@ -59,6 +59,7 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)givenLoadingPopupNotVisible;
 
 - (void)enterText:(NSString *)text intoTextFieldWithAccessibilityId:(NSString *)accessibilityId
+ placeholderValue:(NSString *)placeholderValue
     parentElement:(XCUIElement *)parentElement
     isSecureField:(BOOL)isSecureField;
 - (void)enterText:(NSString *)text

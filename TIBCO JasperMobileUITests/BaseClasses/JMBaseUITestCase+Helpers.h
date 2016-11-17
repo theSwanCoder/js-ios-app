@@ -61,6 +61,11 @@
 // Text Fields
 - (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
                                           timeout:(NSTimeInterval)timeout;
+
+- (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
+                                 placeholderValue:(NSString *)placeholderValue
+                                    parentElement:(XCUIElement *)parentElement
+                                          timeout:(NSTimeInterval)timeout;
 - (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
                                     parentElement:(XCUIElement *)parentElement
                                           timeout:(NSTimeInterval)timeout;

@@ -377,6 +377,7 @@
 {
     XCUIElement *loginPageElement = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
     [self enterText:username intoTextFieldWithAccessibilityId:@"JMLoginPageUserNameTextFieldAccessibilityId"
+   placeholderValue:nil
       parentElement:loginPageElement
       isSecureField:false];
 }
@@ -385,6 +386,7 @@
 {
     XCUIElement *loginPageElement = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
     [self enterText:password intoTextFieldWithAccessibilityId:@"JMLoginPagePasswordTextFieldAccessibilityId"
+   placeholderValue:nil
       parentElement:loginPageElement
       isSecureField:true];
 }

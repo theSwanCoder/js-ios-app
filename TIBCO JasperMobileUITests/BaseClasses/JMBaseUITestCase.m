@@ -282,16 +282,19 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
     // Profile Name TextField
     [self enterText:testServerProfile.name intoTextFieldWithAccessibilityId:@"Profile name"
+   placeholderValue:@"Profile name"
       parentElement:table
       isSecureField:false];
 
     // Profile URL TextField
     [self enterText:testServerProfile.url intoTextFieldWithAccessibilityId:@"Server address"
+   placeholderValue:@"Server address"
       parentElement:table
       isSecureField:false];
 
     // Organization TextField
     [self enterText:testServerProfile.organization intoTextFieldWithAccessibilityId:@"Organization ID"
+   placeholderValue:@"Organization ID"
       parentElement:table
       isSecureField:false];
 
@@ -336,11 +339,13 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
     // Enter username
     [self enterText:testServerProfile.username intoTextFieldWithAccessibilityId:@"JMLoginPageUserNameTextFieldAccessibilityId"
+   placeholderValue:nil
       parentElement:nil
       isSecureField:false];
 
     // Enter password
     [self enterText:testServerProfile.password intoTextFieldWithAccessibilityId:@"JMLoginPagePasswordTextFieldAccessibilityId"
+   placeholderValue:nil
       parentElement:nil
       isSecureField:true];
 }
@@ -547,6 +552,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 }
 
 - (void)enterText:(NSString *)text intoTextFieldWithAccessibilityId:(NSString *)accessibilityId
+ placeholderValue:(NSString *)placeholderValue
     parentElement:(XCUIElement *)parentElement
     isSecureField:(BOOL)isSecureField
 {
@@ -557,12 +563,17 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
                                                          timeout:kUITestsBaseTimeout];
     } else {
         textField = [self waitTextFieldWithAccessibilityId:accessibilityId
+                                          placeholderValue:placeholderValue
                                              parentElement:parentElement
                                                    timeout:kUITestsBaseTimeout];
     }
-
-    [self enterText:text
-      intoTextField:textField];
+    
+    if (textField.exists) {
+        [self enterText:text
+          intoTextField:textField];
+    } else {
+        XCTFail(@"Can't find text field with id:%@ to enter text: %@", accessibilityId, text);
+    }
 }
 
 - (void)enterText:(NSString *)text

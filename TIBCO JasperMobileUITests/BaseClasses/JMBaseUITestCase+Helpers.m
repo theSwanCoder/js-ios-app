@@ -460,15 +460,34 @@
 #pragma mark - Text Fields
 
 - (XCUIElement *)findTextFieldWithAccessibilityId:(NSString *)accessibilityId
+                                 placeholderValue:(NSString *)placeholderValue
                                     parentElement:(XCUIElement *)parentElement
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (parentElement == nil) {
         parentElement = self.application;
     }
-    XCUIElementQuery *textFieldsQuery = [parentElement.textFields matchingType:XCUIElementTypeTextField 
-                                                                    identifier:accessibilityId];
+
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *evaluatedObject, NSDictionary<NSString *, id> *bindings) {
+    
+        if ( ((NSString *)evaluatedObject.value).length > 0) {
+            return NO;
+        }
+        BOOL isPlaceholderValuesEquals = YES;
+        BOOL isAccessibilityIdsEquals = YES;
+
+        if (evaluatedObject.identifier.length > 0) {
+            isAccessibilityIdsEquals = [evaluatedObject.identifier isEqualToString:accessibilityId];
+        }
+        if (placeholderValue.length > 0 && evaluatedObject.placeholderValue.length > 0) {
+            isPlaceholderValuesEquals = [evaluatedObject.placeholderValue isEqualToString:placeholderValue];
+        }
+
+        return isAccessibilityIdsEquals && isPlaceholderValuesEquals;
+    }];
+    XCUIElementQuery *textFieldsQuery = [parentElement.textFields matchingPredicate:predicate];
     NSArray *allMatchingTextFields = textFieldsQuery.allElementsBoundByAccessibilityElement;
+
     if (allMatchingTextFields.count == 0) {
         return nil;
     } else if (allMatchingTextFields.count > 1) {
@@ -476,6 +495,15 @@
         NSLog(@"Several text fields with id: %@", accessibilityId);
     }
     return allMatchingTextFields.firstObject;
+}
+
+- (XCUIElement *)findTextFieldWithAccessibilityId:(NSString *)accessibilityId
+                                    parentElement:(XCUIElement *)parentElement
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    return [self findTextFieldWithAccessibilityId:accessibilityId
+                                 placeholderValue:nil
+                                    parentElement:parentElement];
 }
 
 - (XCUIElement *)findSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
@@ -507,15 +535,28 @@
 }
 
 - (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
+                                 placeholderValue:(NSString *)placeholderValue
                                     parentElement:(XCUIElement *)parentElement
                                           timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *textField = [self findTextFieldWithAccessibilityId:accessibilityId
+                                                   placeholderValue:placeholderValue
                                                       parentElement:parentElement];
     [self waitElementReady:textField
                    timeout:timeout];
     return textField;
+}
+
+- (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
+                                    parentElement:(XCUIElement *)parentElement
+                                          timeout:(NSTimeInterval)timeout
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    return [self waitTextFieldWithAccessibilityId:accessibilityId
+                                 placeholderValue:nil
+                                    parentElement:parentElement
+                                          timeout:timeout];
 }
 
 - (XCUIElement *)waitSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
