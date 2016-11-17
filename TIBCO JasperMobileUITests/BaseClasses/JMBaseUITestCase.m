@@ -21,7 +21,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)setUp {
     [super setUp];
-    
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
     // In UI tests it is usually best to stop immediately when a failure occurs.
@@ -58,6 +58,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 }
 
 - (void)tearDown {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 //    XCUIElement *loginPageView = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
 //    if (!loginPageView) {
 //        [self logout];
@@ -72,6 +73,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 #pragma mark - Custom Accessors
 - (XCUIApplication *)application
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (!_application) {
         _application = [XCUIApplication new];
     }
@@ -91,6 +93,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (XCUIElement *)findTestProfileCell
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
     NSString *testProfileName = testServerProfile.name;
     XCUIElement *testProfile = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
@@ -118,6 +121,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)removeAllServerProfiles
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     while(true) {
         NSInteger cellsCount = [self countCellsWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"];
         if (cellsCount == 0) {
@@ -129,6 +133,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)removeFirstServerProfile
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIApplication *app = self.application;
     XCUIElement *profile = [app.collectionViews.cells elementBoundByIndex:0];
     if (profile) {
@@ -151,6 +156,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)loginWithTestProfileIfNeed
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *libraryPageView = [self findElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     if (libraryPageView) {
         BOOL isTestProfileWasLogged = [self isTestProfileWasLogged];
@@ -166,6 +172,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)loginWithTestProfile
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self givenThatLoginPageOnScreen];
     [self selectTestProfile];
 
@@ -180,6 +187,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)verifyThatLoginWasSuccess
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSLog(@"Verify that there isn't an error after trying to log into test JRS");
 
     NSLog(@"All 'other elements': %@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
@@ -207,6 +215,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 - (void)processErrorAlertsIfExistWithTitles:(NSArray *)titles
                                 actionBlock:(void(^)(void))actionBlock
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     sleep(kUITestsElementAvailableTimeout);
     NSLog(@"All alerts: %@", [self.application.alerts allElementsBoundByAccessibilityElement]);
 
@@ -237,6 +246,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (BOOL)isTestProfileWasLogged
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self showSideMenuInSectionWithName:nil];
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
     XCUIElement *profileNameLabel = [self findStaticTextWithText:testServerProfile.name];
@@ -247,12 +257,14 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)logout
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self selectLogOut];
 }
 
 #pragma mark - Helpers Test Profile
 - (void)tryOpenServerProfilesPage
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *serverProfileTextField = [self waitTextFieldWithAccessibilityId:@"JMLoginPageServerProfileTextFieldAccessibilityId"
                                                                          timeout:kUITestsBaseTimeout];
     [serverProfileTextField tap];
@@ -260,6 +272,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)tryOpenNewServerProfilePage
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *addProfileButton = [self waitButtonWithAccessibilityId:@"JMServerProfilesPageAddNewProfileButtonAccessibilityId"
                                                                 timeout:kUITestsBaseTimeout];
     [addProfileButton tap];
@@ -309,6 +322,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)closeSecurityWarningAlert
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
     if (securityWarningAlert.exists) {
         XCUIElement *okButton = [self waitButtonWithAccessibilityId:JMLocalizedString(@"dialog_button_ok")
@@ -320,11 +334,13 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)tryBackToLoginPageFromProfilesPage
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self tryBackToPreviousPage];
 }
 
 - (void)trySelectNewTestServerProfile
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *testProfile = [self findTestProfileCell];
     if (testProfile.exists) {
         [testProfile tap];
@@ -335,6 +351,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)tryEnterTestCredentials
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
 
     // Enter username
@@ -352,6 +369,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)tryTapLoginButton
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *loginButton = [self waitButtonWithAccessibilityId:@"JMLoginPageLoginButtonAccessibilityId"
                                                            timeout:kUITestsBaseTimeout];
     [loginButton tap];
@@ -361,24 +379,28 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 #pragma mark - Helpers
 - (void)givenThatLoginPageOnScreen
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self waitElementWithAccessibilityId:@"JMLoginPageAccessibilityId"
                                  timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenThatServerProfilesPageOnScreen
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self waitElementWithAccessibilityId:@"JMServerProfilesPageAccessibilityId"
                                  timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenThatNewProfilePageOnScreen
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self waitElementWithAccessibilityId:@"JMNewServerProfilePageAccessibilityId"
                                  timeout:kUITestsBaseTimeout];
 }
 
 - (void)givenThatLibraryPageOnScreen
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self skipIntroPageIfNeed];
     [self skipRateAlertIfNeed];
     
@@ -388,11 +410,13 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)givenThatRepositoryPageOnScreen
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self verifyThatCurrentPageIsRepository];
 }
 
 - (void)givenThatCellsAreVisible
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     // wait until collection view will fill.
     NSPredicate *cellsCountPredicate = [NSPredicate predicateWithFormat:@"self.cells.count > 0"];
     [self expectationForPredicate:cellsCountPredicate
@@ -404,12 +428,14 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)givenThatListCellsAreVisible
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self tryTapGridButton];
     [self givenThatCellsAreVisible];
 }
 
 - (void)tryTapGridButton
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *button = [self findButtonWithAccessibilityId:@"horizontal list button"];
     if (button) {
         [button tap];
@@ -418,6 +444,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)givenThatGridCellsAreVisible
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self tryTapListButton];
     [self verifyThatCollectionViewContainsGridOfCells];
 }
@@ -425,6 +452,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)tryTapListButton
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *button = [self findButtonWithAccessibilityId:@"grid button"];
     if (button) {
         [button tap];
@@ -433,18 +461,21 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)givenThatReportCellsOnScreen
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self selectFilterBy:@"Reports" inSectionWithTitle:@"Library"];
     [self givenThatListCellsAreVisible];
 }
 
 - (void)givenThatDashboardCellsOnScreen
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self selectFilterBy:@"Dashboards" inSectionWithTitle:@"Library"];
     [self givenThatListCellsAreVisible];
 }
 
 - (void)skipIntroPageIfNeed
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSLog(@"Try to skip intro page");
     XCUIElement *skipIntroButton;
     NSInteger attemptsCount = 2;
@@ -461,6 +492,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)skipRateAlertIfNeed
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSLog(@"Try to skip rate dialog");
     XCUIElement *rateAlert;
     NSInteger attemptsCount = 2;
@@ -483,6 +515,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 // TODO: replace this method with 'tryBackToPreviousPageWithTitle:'
 - (void)tryBackToPreviousPage
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"];
     if (!backButton) {
         backButton = [self findBackButtonWithAccessibilityId:@"Library"];
@@ -492,6 +525,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)tryBackToPreviousPageWithTitle:(NSString *)pageTitle
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *backButton = [self findBackButtonWithAccessibilityId:pageTitle];
     if (!backButton) {
         XCTFail(@"There isn't back button with title: %@", pageTitle);
@@ -502,6 +536,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 #pragma mark - Verifies
 - (void)verifyThatCurrentPageIsLibrary
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     // TODO: replace with specific element - JMLibraryPageAccessibilityId
     [self waitElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"
                                  timeout:kUITestsBaseTimeout];
@@ -509,6 +544,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)verifyThatCurrentPageIsRepository
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *repositoryNavBar = self.application.navigationBars[@"Repository"];
     NSPredicate *repositoryPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
     
@@ -522,7 +558,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 #pragma mark - Verifies - Loading Popup
 - (void)givenLoadingPopupVisible
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self waitElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"
                            parentElement:nil
                                  visible:true
@@ -531,7 +567,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)givenLoadingPopupNotVisible
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self waitElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"
                            parentElement:nil
                                  visible:false
@@ -541,12 +577,14 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 #pragma mark - JMBaseUITestProtocol
 - (BOOL) shouldLoginBeforeStartTest
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return YES;
 }
 
 #pragma - Utils
 - (void)closeKeyboardWithDoneButton
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *doneButton = [self waitDoneButtonWithTimeout:kUITestsBaseTimeout];
     [doneButton tap];
 }
@@ -556,6 +594,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     parentElement:(XCUIElement *)parentElement
     isSecureField:(BOOL)isSecureField
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *textField;
     if (isSecureField) {
         textField = [self waitSecureTextFieldWithAccessibilityId:accessibilityId
@@ -579,6 +618,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 - (void)enterText:(NSString *)text
     intoTextField:(XCUIElement *)textField
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [textField tap];
     NSString *oldValueString = textField.value;
     BOOL isTextFieldContainText = oldValueString.length > 0;
@@ -600,6 +640,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 - (void)replaceTextInTextField:(XCUIElement *)textField 
                       withText:(NSString *)text
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self deleteTextFromTextField:textField];
     [textField typeText:text];
     [self closeKeyboardWithDoneButton];
@@ -607,6 +648,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)deleteTextFromTextField:(XCUIElement *)textField
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSString *oldValueString = textField.value;
     XCUIElement *keyboard = [self.application.keyboards elementBoundByIndex:0];
     XCUIElement *deleteSymbolButton = keyboard.keys[@"delete"];

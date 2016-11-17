@@ -21,6 +21,9 @@
                  timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    if (element.exists == visible) {
+        return;
+    }
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", @"exists", visible ? @1 : @0];
     [self expectationForPredicate:predicate
               evaluatedWithObject:element
@@ -469,21 +472,15 @@
     }
 
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *evaluatedObject, NSDictionary<NSString *, id> *bindings) {
-    
-        if ( ((NSString *)evaluatedObject.value).length > 0) {
-            return NO;
+        
+        if (placeholderValue) {
+            BOOL isAccessibilityIdsEquals = [evaluatedObject.identifier isEqualToString:accessibilityId];
+            BOOL isPlaceholderValuesEquals = [evaluatedObject.placeholderValue isEqualToString:placeholderValue];
+            return isAccessibilityIdsEquals || isPlaceholderValuesEquals;
+        } else {
+            return [evaluatedObject.identifier isEqualToString:accessibilityId];
         }
-        BOOL isPlaceholderValuesEquals = YES;
-        BOOL isAccessibilityIdsEquals = YES;
-
-        if (evaluatedObject.identifier.length > 0) {
-            isAccessibilityIdsEquals = [evaluatedObject.identifier isEqualToString:accessibilityId];
-        }
-        if (placeholderValue.length > 0 && evaluatedObject.placeholderValue.length > 0) {
-            isPlaceholderValuesEquals = [evaluatedObject.placeholderValue isEqualToString:placeholderValue];
-        }
-
-        return isAccessibilityIdsEquals && isPlaceholderValuesEquals;
+        
     }];
     XCUIElementQuery *textFieldsQuery = [parentElement.textFields matchingPredicate:predicate];
     NSArray *allMatchingTextFields = textFieldsQuery.allElementsBoundByAccessibilityElement;
