@@ -182,6 +182,11 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 {
     NSLog(@"Verify that there isn't an error after trying to log into test JRS");
 
+    NSLog(@"All 'other elements': %@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
+    NSLog(@"All static texts: %@", [self.application.staticTexts allElementsBoundByAccessibilityElement]);
+    NSLog(@"All text fields: %@", [self.application.textFields allElementsBoundByAccessibilityElement]);
+    NSLog(@"All security text fields: %@", [self.application.secureTextFields allElementsBoundByAccessibilityElement]);
+
     [self processErrorAlertIfExistWithTitle:@"JSHTTPErrorDomain" actionBlock:^{
         NSLog(@"Try recreate test JRS profile");
         [self tryOpenServerProfilesPage];
@@ -216,7 +221,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
             actionBlock();
         }
     } else {
-        NSLog(@"There is any error alert");
+        NSLog(@"There are no any error alerts");
     }
 }
 
