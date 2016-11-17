@@ -187,7 +187,8 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     NSLog(@"All text fields: %@", [self.application.textFields allElementsBoundByAccessibilityElement]);
     NSLog(@"All security text fields: %@", [self.application.secureTextFields allElementsBoundByAccessibilityElement]);
 
-    [self processErrorAlertIfExistWithTitle:@"JSHTTPErrorDomain" actionBlock:^{
+    NSArray *titles = @[@"JSHTTPErrorDomain", @"Invalid credentials supplied."];
+    [self processErrorAlertsIfExistWithTitles:titles actionBlock:^{
         NSLog(@"Try recreate test JRS profile");
         [self tryOpenServerProfilesPage];
         [self removeAllServerProfiles];
@@ -198,20 +199,29 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
         [self givenLoadingPopupNotVisible];
     }];
 
-    [self processErrorAlertIfExistWithTitle:@"JSHTTPErrorDomain" actionBlock:^{
+    [self processErrorAlertsIfExistWithTitles:titles actionBlock:^{
         XCTFail(@"Failure to log into test JRS");
     }];
 }
 
-- (void)processErrorAlertIfExistWithTitle:(NSString *)title
-                              actionBlock:(void(^)(void))actionBlock
+- (void)processErrorAlertsIfExistWithTitles:(NSArray *)titles
+                                actionBlock:(void(^)(void))actionBlock
 {
     sleep(kUITestsElementAvailableTimeout);
     NSLog(@"All alerts: %@", [self.application.alerts allElementsBoundByAccessibilityElement]);
-    
-    XCUIElement *alert = [self findAlertWithTitle:title];
+
+    XCUIElement *alert;
+
+    for(NSString *title in titles) {
+        alert = [self findAlertWithTitle:title];
+        if (alert.exists) {
+            break;
+        }
+    }
+
     if (alert.exists) {
-        XCUIElement *okButton = [self findButtonWithTitle:@"OK"];
+        XCUIElement *okButton = [self findButtonWithTitle:@"OK"
+                                            parentElement:alert];
         if (okButton.exists) {
             [okButton tap];
         } else {
