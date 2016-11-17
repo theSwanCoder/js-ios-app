@@ -26,7 +26,7 @@
 {
     self = [super init];
     if (self) {
-        _testProfile = [self configurableFromCommandLineProfile];
+        _testProfile = [self mobileDemoProfile];
     }
     return self;
 }
@@ -37,7 +37,7 @@
                                                    URL:@"https://mobiledemo.jaspersoft.com/jasperserver-pro"
                                               username:@"phoneuser"
                                               password:@"phoneuser"
-                                          organization:@""];
+                                          organization:@"organization_1"];
 }
 
 - (JMUITestServerProfile *)localInstanceProfile
