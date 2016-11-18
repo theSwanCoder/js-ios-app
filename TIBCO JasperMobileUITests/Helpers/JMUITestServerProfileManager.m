@@ -26,7 +26,7 @@
 {
     self = [super init];
     if (self) {
-        _testProfile = [self mobileDemoProfile];
+        _testProfile = [self configurableFromCommandLineProfileWithoutOrganization];
     }
     return self;
 }
@@ -69,6 +69,20 @@
                                               username:infoDict[@"JMUITestsServerProfileUsername"]
                                               password:infoDict[@"JMUITestsServerProfilePassword"]
                                           organization:infoDict[@"JMUITestsServerProfileOrganization"]];
+}
+
+// TODO: remove this after updating parameters on CI
+- (JMUITestServerProfile *)configurableFromCommandLineProfileWithoutOrganization
+{
+    NSBundle *bundle = [NSBundle bundleForClass:self.class];
+    NSString *path = [bundle pathForResource:@"Info" ofType:@"plist"];
+    NSDictionary *infoDict = [NSDictionary dictionaryWithContentsOfFile:path];
+
+    return [[JMUITestServerProfile alloc] initWithName:infoDict[@"JMUITestsServerProfileName"]
+                                                   URL:infoDict[@"JMUITestsServerProfileURL"]
+                                              username:infoDict[@"JMUITestsServerProfileUsername"]
+                                              password:infoDict[@"JMUITestsServerProfilePassword"]
+                                          organization:@""];
 }
 
 @end
