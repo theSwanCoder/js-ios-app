@@ -91,25 +91,10 @@
                   Identifier = "JMDashboardInfoDialogUITests">
                </Test>
                <Test
-                  Identifier = "JMDashboardPageUITests">
-               </Test>
-               <Test
                   Identifier = "JMDashboardPrintDialogUITests">
                </Test>
                <Test
-                  Identifier = "JMDashletPageUITests">
-               </Test>
-               <Test
                   Identifier = "JMFavoriteInfoPageUITests">
-               </Test>
-               <Test
-                  Identifier = "JMFavoritePageUITests">
-               </Test>
-               <Test
-                  Identifier = "JMFiltersPageUITests">
-               </Test>
-               <Test
-                  Identifier = "JMInputControlPageUITests">
                </Test>
                <Test
                   Identifier = "JMNewSchedulePageUITests">
@@ -127,9 +112,6 @@
                   Identifier = "JMRecentlyViewedPageUITests">
                </Test>
                <Test
-                  Identifier = "JMReportInfoDialogUITests">
-               </Test>
-               <Test
                   Identifier = "JMRepositoryInfoPageUITests">
                </Test>
                <Test
@@ -143,9 +125,6 @@
                </Test>
                <Test
                   Identifier = "JMSavedItemInfoScreenUITests">
-               </Test>
-               <Test
-                  Identifier = "JMSavedItemPageUITests">
                </Test>
                <Test
                   Identifier = "JMSavedItemsPageUITests">
