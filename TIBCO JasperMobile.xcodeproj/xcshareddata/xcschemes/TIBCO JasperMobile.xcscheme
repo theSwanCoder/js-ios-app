@@ -91,6 +91,9 @@
                   Identifier = "JMDashboardInfoDialogUITests">
                </Test>
                <Test
+                  Identifier = "JMDashboardPageUITests/testThatUserCanCancelLoadingDashboard">
+               </Test>
+               <Test
                   Identifier = "JMDashboardPrintDialogUITests">
                </Test>
                <Test
@@ -110,6 +113,9 @@
                </Test>
                <Test
                   Identifier = "JMRecentlyViewedPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMReportPageUITests/testThatUserCanCancelLoadingReport">
                </Test>
                <Test
                   Identifier = "JMRepositoryInfoPageUITests">
