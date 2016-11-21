@@ -248,11 +248,17 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self showSideMenuInSectionWithName:nil];
+    
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    // Test Profile Name
     XCUIElement *profileNameLabel = [self findStaticTextWithText:testServerProfile.name];
     BOOL isProfileNameLabelExist = profileNameLabel.exists;
+    // Test Profile Username
+    XCUIElement *profileUsernameLabel = [self findStaticTextWithText:testServerProfile.username];
+    BOOL isProfileUsernameLabelExist = profileUsernameLabel.exists;
+    
     [self hideSideMenuInSectionWithName:nil];
-    return isProfileNameLabelExist;
+    return isProfileNameLabelExist && isProfileUsernameLabelExist;
 }
 
 - (void)logout
