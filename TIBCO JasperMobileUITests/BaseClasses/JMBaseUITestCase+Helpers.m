@@ -602,8 +602,17 @@
     if (parentElement == nil) {
         parentElement = self.application;
     }
-    XCUIElement *element = parentElement.staticTexts[accessibilityId];
-    return element;
+   
+    XCUIElementQuery *query = [parentElement.staticTexts matchingType:XCUIElementTypeStaticText
+                                                                  identifier:accessibilityId];
+    NSArray *allMatchingElements = query.allElementsBoundByAccessibilityElement;
+    if (allMatchingElements.count == 0) {
+        return nil;
+    } else if (allMatchingElements.count > 1) {
+        // TODO: should this be interpreted as an error?
+        NSLog(@"Several button with id: %@", accessibilityId);
+    }    
+    return allMatchingElements.firstObject;
 }
 
 - (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
@@ -613,6 +622,9 @@
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *element = [self findStaticTextWithAccessibilityId:accessibilityId
                                                      parentElement:parentElement];
+    if (!element.exists) {
+        XCTFail(@"Static text wasn't found");
+    }
     [self waitElementReady:element
                    timeout:timeout];
     return element;
@@ -649,6 +661,12 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"label CONTAINS %@", text];
     XCUIElementQuery *query = [parentElement.staticTexts matchingPredicate:predicate];
     NSArray *elements = query.allElementsBoundByAccessibilityElement;
+    NSLog(@"All 'static text' with text '%@':%@", text, elements);
+    if (elements.count == 0) {
+        return nil;
+    } else if (elements.count > 1) {
+        // TODO: shold this case be interpreted as an error?
+    }
     XCUIElement *element = elements.firstObject;
     return element;
 }

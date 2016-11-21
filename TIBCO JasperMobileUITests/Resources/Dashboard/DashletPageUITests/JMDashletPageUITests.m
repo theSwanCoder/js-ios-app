@@ -160,11 +160,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)openTestDashletWithHyperlinks
 {
-    XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
-    XCUIElement *customersElement = [self waitStaticTextWithAccessibilityId:@"Customers"
-                                                              parentElement:webView
-                                                                    timeout:kUITestsBaseTimeout];
-    [customersElement tap];
+    [self tapOnElementWithText:@"Customers"];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -178,21 +174,30 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)openTestDashletWithChartTypes
 {
-    XCUIElement *customersElement = [self waitStaticTextWithAccessibilityId:@"Store Cost"
-                                                                    timeout:kUITestsBaseTimeout];
-    [customersElement tap];
+    [self tapOnElementWithText:@"Store Cost"];
     [self givenLoadingPopupNotVisible];
 }
 
 - (void)openTestHyperlinkPage
 {
-    XCUIElement *hyperlinkElement = [self waitStaticTextWithAccessibilityId:@"Ida Rodriguez"
-                                                                    timeout:kUITestsBaseTimeout];
-    [hyperlinkElement tap];
+    [self tapOnElementWithText:@"Ida Rodriguez"];
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
     [self givenLoadingPopupNotVisible];
     [self givenLoadingPopupNotVisible];
+}
+
+- (void)tapOnElementWithText:(NSString *)text
+{
+    XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
+    XCUIElement *element = [self waitStaticTextWithText:text
+                                                       parentElement:webView
+                                                         timeout:kUITestsBaseTimeout];
+    if (element) {
+        [element tap];
+    } else {
+        XCTFail(@"Element with text '%@' not found", text);
+    }
 }
 
 - (void)closeTestHyperlinkPage
