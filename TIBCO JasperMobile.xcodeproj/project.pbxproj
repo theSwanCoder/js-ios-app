@@ -141,7 +141,7 @@
 		08E2AC9D1B1E056900AC462B /* JMSavingReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC7B1B1E056900AC462B /* JMSavingReportViewController.m */; };
 		08E62C8319922B0B0081CA83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E62C8019922B0B0081CA83 /* main.m */; };
 		08F2D1701CB268C500C6E4EF /* Resource_Viewer_Share.txt in Resources */ = {isa = PBXBuildFile; fileRef = 08F2D16F1CB268C500C6E4EF /* Resource_Viewer_Share.txt */; };
-		7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */; };
+		3202F164BC0274959D937FCA /* libPods-AppPods-TIBCO JasperMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 396936083A627F84DD472FFE /* libPods-AppPods-TIBCO JasperMobile.a */; };
 		93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */; };
 		930E18DC1CEC98C600CE5E10 /* JMPerformanceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E18DB1CEC98C600CE5E10 /* JMPerformanceUITests.m */; };
 		930E18DD1CEC9A7100CE5E10 /* JMBaseUITestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */; };
@@ -234,6 +234,8 @@
 		A1478E66B18F94A3429C68CE /* JMSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = A147871821CD8ABB3C768A36 /* JMSchedule.m */; };
 		A1478EAB974E0D8B2645494C /* JMScheduleInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478F1B487DC5022B5356F7 /* JMScheduleInfoViewController.m */; };
 		A1478EFBFF648E171A39F2BF /* JMReportViewerToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */; };
+		A5EE20BBDE305A227B7FDADA /* libPods-AppPods-TIBCO JasperMobile Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3B2685A4F08316DBD813C5 /* libPods-AppPods-TIBCO JasperMobile Tests.a */; };
+		B52FC313FC60A46E2C96B926 /* libPods-AppPods-TIBCO JasperMobileUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6075EB57EBA2105C9C8DF23B /* libPods-AppPods-TIBCO JasperMobileUITests.a */; };
 		BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */; };
 		BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */; };
 		BD6DB2A01C981E5F002DEFDF /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */; };
@@ -244,6 +246,7 @@
 		BDE6A0861B5A891000A7FDEC /* JMTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BDE6A0851B5A891000A7FDEC /* JMTextField.m */; };
 		BDF3D2531B8B03F40005AA28 /* JMReportOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF3D2521B8B03F40005AA28 /* JMReportOptionsViewController.m */; };
 		BDF3D25A1B8B166B0005AA28 /* JMReportOptionsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF3D2591B8B166B0005AA28 /* JMReportOptionsCell.m */; };
+		C11F840D7997E8D0191F34E9 /* libPods-AppPods-TIBCO JasperMobile Performance UITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 358A030C4C84492D0AF3E99B /* libPods-AppPods-TIBCO JasperMobile Performance UITests.a */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
 		F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */; };
@@ -524,9 +527,20 @@
 		08E62C7F19922B0B0081CA83 /* TIBCO JasperMobile.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile.pch"; sourceTree = "<group>"; };
 		08E62C8019922B0B0081CA83 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		08F2D16F1CB268C500C6E4EF /* Resource_Viewer_Share.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Resource_Viewer_Share.txt; sourceTree = "<group>"; };
+		0B27080670B2029CEFC2D4B7 /* Pods-AppPods-TIBCO JasperMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile/Pods-AppPods-TIBCO JasperMobile.debug.xcconfig"; sourceTree = "<group>"; };
+		14A601AC57C5A5FAAD1D15F2 /* Pods-AppPods-TIBCO JasperMobileUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobileUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobileUITests/Pods-AppPods-TIBCO JasperMobileUITests.release.xcconfig"; sourceTree = "<group>"; };
 		20A5E8D0860C986563FB740C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		2F7FDC158DD411EA65F86E13 /* Pods-AppPods-TIBCO JasperMobileUITests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobileUITests.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobileUITests/Pods-AppPods-TIBCO JasperMobileUITests.adhoc.xcconfig"; sourceTree = "<group>"; };
+		358A030C4C84492D0AF3E99B /* libPods-AppPods-TIBCO JasperMobile Performance UITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AppPods-TIBCO JasperMobile Performance UITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		38F5DC042987B1BFE2C7801D /* Pods-AppPods-TIBCO JasperMobile Performance UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobile Performance UITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile Performance UITests/Pods-AppPods-TIBCO JasperMobile Performance UITests.debug.xcconfig"; sourceTree = "<group>"; };
+		396936083A627F84DD472FFE /* libPods-AppPods-TIBCO JasperMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AppPods-TIBCO JasperMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		540CAC3D2C15C459D8F22E12 /* Pods-AppPods-TIBCO JasperMobile Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobile Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile Tests/Pods-AppPods-TIBCO JasperMobile Tests.release.xcconfig"; sourceTree = "<group>"; };
+		6075EB57EBA2105C9C8DF23B /* libPods-AppPods-TIBCO JasperMobileUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AppPods-TIBCO JasperMobileUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77CFC8584A6846178D82DED1 /* Pods-AppPods-TIBCO JasperMobile Performance UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobile Performance UITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile Performance UITests/Pods-AppPods-TIBCO JasperMobile Performance UITests.release.xcconfig"; sourceTree = "<group>"; };
+		7A235084E318E2E3CC4A6B42 /* Pods-AppPods-TIBCO JasperMobile.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobile.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile/Pods-AppPods-TIBCO JasperMobile.adhoc.xcconfig"; sourceTree = "<group>"; };
+		84B9FCCC65BFED05E8861775 /* Pods-AppPods-TIBCO JasperMobile Tests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobile Tests.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile Tests/Pods-AppPods-TIBCO JasperMobile Tests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		93047D511AB6F5750047C982 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		93047D521AB6F5750047C982 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
 		93047D531AB6F5750047C982 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceFields.h; sourceTree = "<group>"; };
@@ -633,7 +647,9 @@
 		93F26A1E1C9BF9310069CD5D /* testPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = testPage.html; sourceTree = "<group>"; };
 		93F54FD91BD7975E00355A30 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		93F54FDA1BD7975E00355A30 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		988B019CF91A6ED01E9D9FCC /* Pods-AppPods-TIBCO JasperMobile Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobile Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile Tests/Pods-AppPods-TIBCO JasperMobile Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.adhoc.xcconfig; path = "Pods/Target Support Files/Pods/Pods.adhoc.xcconfig"; sourceTree = "<group>"; };
+		A06F456CF290ABC2DF892E36 /* Pods-AppPods-TIBCO JasperMobile Performance UITests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobile Performance UITests.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile Performance UITests/Pods-AppPods-TIBCO JasperMobile Performance UITests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A1478004BA83FE92F7423390 /* Saved_Reports_Viewer_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Saved_Reports_Viewer_View.txt; sourceTree = "<group>"; };
 		A147806D6CC4CAC23BF4488F /* JMJavascriptCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptCallback.m; sourceTree = "<group>"; };
 		A14780AC179AEE75F176117E /* Schedules.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Schedules.txt; sourceTree = "<group>"; };
@@ -738,6 +754,8 @@
 		A1478F1B487DC5022B5356F7 /* JMScheduleInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleInfoViewController.m; sourceTree = "<group>"; };
 		A1478F6E88F93749D4C42AAB /* Server_Profiles_View.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Server_Profiles_View.txt; sourceTree = "<group>"; };
 		A1478FF2E87954F5F6AF096E /* JMScheduleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMScheduleCell.m; sourceTree = "<group>"; };
+		BA298E29B9C3784D67D67510 /* Pods-AppPods-TIBCO JasperMobileUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobileUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobileUITests/Pods-AppPods-TIBCO JasperMobileUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		BB3B2685A4F08316DBD813C5 /* libPods-AppPods-TIBCO JasperMobile Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AppPods-TIBCO JasperMobile Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -754,6 +772,7 @@
 		BDF3D2521B8B03F40005AA28 /* JMReportOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportOptionsViewController.m; sourceTree = "<group>"; };
 		BDF3D2581B8B166B0005AA28 /* JMReportOptionsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportOptionsCell.h; sourceTree = "<group>"; };
 		BDF3D2591B8B166B0005AA28 /* JMReportOptionsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportOptionsCell.m; sourceTree = "<group>"; };
+		C2A3EA0E1A60D02A44665172 /* Pods-AppPods-TIBCO JasperMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppPods-TIBCO JasperMobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile/Pods-AppPods-TIBCO JasperMobile.release.xcconfig"; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -772,6 +791,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C11F840D7997E8D0191F34E9 /* libPods-AppPods-TIBCO JasperMobile Performance UITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -779,6 +799,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5EE20BBDE305A227B7FDADA /* libPods-AppPods-TIBCO JasperMobile Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -786,6 +807,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B52FC313FC60A46E2C96B926 /* libPods-AppPods-TIBCO JasperMobileUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -799,7 +821,6 @@
 				93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */,
 				0871503E19F1266900C5875E /* libz.dylib in Frameworks */,
 				F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */,
-				7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */,
 				93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */,
 				93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */,
 				08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */,
@@ -813,6 +834,7 @@
 				F55CC333174CFFCE00CEB39E /* UIKit.framework in Frameworks */,
 				F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */,
 				F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */,
+				3202F164BC0274959D937FCA /* libPods-AppPods-TIBCO JasperMobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3055,6 +3077,18 @@
 				36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */,
 				20A5E8D0860C986563FB740C /* Pods.release.xcconfig */,
 				9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */,
+				0B27080670B2029CEFC2D4B7 /* Pods-AppPods-TIBCO JasperMobile.debug.xcconfig */,
+				C2A3EA0E1A60D02A44665172 /* Pods-AppPods-TIBCO JasperMobile.release.xcconfig */,
+				7A235084E318E2E3CC4A6B42 /* Pods-AppPods-TIBCO JasperMobile.adhoc.xcconfig */,
+				38F5DC042987B1BFE2C7801D /* Pods-AppPods-TIBCO JasperMobile Performance UITests.debug.xcconfig */,
+				77CFC8584A6846178D82DED1 /* Pods-AppPods-TIBCO JasperMobile Performance UITests.release.xcconfig */,
+				A06F456CF290ABC2DF892E36 /* Pods-AppPods-TIBCO JasperMobile Performance UITests.adhoc.xcconfig */,
+				988B019CF91A6ED01E9D9FCC /* Pods-AppPods-TIBCO JasperMobile Tests.debug.xcconfig */,
+				540CAC3D2C15C459D8F22E12 /* Pods-AppPods-TIBCO JasperMobile Tests.release.xcconfig */,
+				84B9FCCC65BFED05E8861775 /* Pods-AppPods-TIBCO JasperMobile Tests.adhoc.xcconfig */,
+				BA298E29B9C3784D67D67510 /* Pods-AppPods-TIBCO JasperMobileUITests.debug.xcconfig */,
+				14A601AC57C5A5FAAD1D15F2 /* Pods-AppPods-TIBCO JasperMobileUITests.release.xcconfig */,
+				2F7FDC158DD411EA65F86E13 /* Pods-AppPods-TIBCO JasperMobileUITests.adhoc.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -3108,6 +3142,10 @@
 				3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */,
 				93F54FD91BD7975E00355A30 /* Fabric.framework */,
 				93F54FDA1BD7975E00355A30 /* Crashlytics.framework */,
+				396936083A627F84DD472FFE /* libPods-AppPods-TIBCO JasperMobile.a */,
+				358A030C4C84492D0AF3E99B /* libPods-AppPods-TIBCO JasperMobile Performance UITests.a */,
+				BB3B2685A4F08316DBD813C5 /* libPods-AppPods-TIBCO JasperMobile Tests.a */,
+				6075EB57EBA2105C9C8DF23B /* libPods-AppPods-TIBCO JasperMobileUITests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3132,9 +3170,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 930E18D81CEC988C00CE5E10 /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile Performance UITests" */;
 			buildPhases = (
+				0329EF96A78468512901AE32 /* [CP] Check Pods Manifest.lock */,
 				930E18CA1CEC988C00CE5E10 /* Sources */,
 				930E18CB1CEC988C00CE5E10 /* Frameworks */,
 				930E18CC1CEC988C00CE5E10 /* Resources */,
+				F0CE759F555EC170E0C59458 /* [CP] Embed Pods Frameworks */,
+				C75402C61BA0160B4EF59070 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3150,9 +3191,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9356EC9F1A30752900ACE2C6 /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile Tests" */;
 			buildPhases = (
+				777C7E5B0EEA59CDDFF01FA4 /* [CP] Check Pods Manifest.lock */,
 				9356EC931A30752800ACE2C6 /* Sources */,
 				9356EC941A30752800ACE2C6 /* Frameworks */,
 				9356EC951A30752800ACE2C6 /* Resources */,
+				6C1C783CDD43A29A9D974925 /* [CP] Embed Pods Frameworks */,
+				71E8BD8168D22B14AB810C8C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3168,9 +3212,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 93DC8C431C6CCEEE000DEADF /* Build configuration list for PBXNativeTarget "TIBCO JasperMobileUITests" */;
 			buildPhases = (
+				F92985FBC97250D9CF1D531D /* [CP] Check Pods Manifest.lock */,
 				93DC8C351C6CCEEE000DEADF /* Sources */,
 				93DC8C361C6CCEEE000DEADF /* Frameworks */,
 				93DC8C371C6CCEEE000DEADF /* Resources */,
+				2163DBDFF177BE7496063363 /* [CP] Embed Pods Frameworks */,
+				2B15C139A7E8AED758DFB17D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3186,14 +3233,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F55CC375174CFFCF00CEB39E /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile" */;
 			buildPhases = (
+				6F5F5E6592158193EE742D9E /* [CP] Check Pods Manifest.lock */,
 				93B2D7EA1CAD4B7100F60BF7 /* Run Script Generate Localizations */,
-				6F5F5E6592158193EE742D9E /* Check Pods Manifest.lock */,
 				F55CC32B174CFFCE00CEB39E /* Sources */,
 				F55CC32C174CFFCE00CEB39E /* Frameworks */,
 				0844F14019F694730082C6E5 /* Run Update Build Version Script */,
 				F55CC32D174CFFCE00CEB39E /* Resources */,
-				9D3415DC47E90FD0EB7D031E /* Copy Pods Resources */,
+				9D3415DC47E90FD0EB7D031E /* [CP] Copy Pods Resources */,
 				935E06761BD7969C007F8DDA /* Run Script (Fabric) */,
+				72D6593A87FADB01108D5413 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3335,6 +3383,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0329EF96A78468512901AE32 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		0844F14019F694730082C6E5 /* Run Update Build Version Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3349,19 +3412,109 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\n# Auto Increment Version Script\n# set CFBundleVersion to 1.0.1 first!!!\n# the perl regex splits out the last part of a build number (ie: 1.1.1) and increments it by one\n# if you have a build number that is more than 3 components, add a '\\.\\d+' into the first part of the regex.\n# Increment build number for release builds only!!!.\n\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\nbuildPlist=${INFOPLIST_FILE}\nappVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$buildPlist\"`\nbuildAppVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(.+\\d+)\\.\\d+/$1/eg'`\n\n\nif [ \"${appVersion}\" = \"${buildAppVersion}\" ]; then\nbuildVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/.+\\.(\\d+)/($1+1)/eg'`\nelse\nbuildVersion=1\nfi\n\nnewBuildVersion=${appVersion}.${buildVersion}\necho $newBuildVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $newBuildVersion\" \"$buildPlist\"\nfi";
 		};
-		6F5F5E6592158193EE742D9E /* Check Pods Manifest.lock */ = {
+		2163DBDFF177BE7496063363 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobileUITests/Pods-AppPods-TIBCO JasperMobileUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2B15C139A7E8AED758DFB17D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobileUITests/Pods-AppPods-TIBCO JasperMobileUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6C1C783CDD43A29A9D974925 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile Tests/Pods-AppPods-TIBCO JasperMobile Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F5F5E6592158193EE742D9E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		71E8BD8168D22B14AB810C8C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile Tests/Pods-AppPods-TIBCO JasperMobile Tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		72D6593A87FADB01108D5413 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile/Pods-AppPods-TIBCO JasperMobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		777C7E5B0EEA59CDDFF01FA4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		935E06761BD7969C007F8DDA /* Run Script (Fabric) */ = {
@@ -3392,19 +3545,64 @@
 			shellPath = /bin/sh;
 			shellScript = "echo \"Start compiling localizations\"\nlocalizationFolderPath=${SRCROOT}/JasperMobile/Resources/Localizable\nallLocalizationsFolderPath=$localizationFolderPath/all_values\nallLocalizationsFileName=locales.txt\noutputPathNewStrings=$localizationFolderPath/New_Strings\noutputPath=$localizationFolderPath/Localizable.strings\ncat \"$allLocalizationsFolderPath/\"*.txt > $localizationFolderPath/$allLocalizationsFileName\n\nif [ -d \"$outputPath\" ]; then\n    echo \"$outputPath exist\"\n    rm -r \"$outputPath\"\n    rm -r \"$outputPathNewStrings\"\nfi\n\necho \"$outputPath doesn't exist\"\n#localizable strings\nmkdir \"$outputPath\"\nmkdir \"$outputPath/de.lproj\"\nmkdir \"$outputPath/en.lproj\"\nmkdir \"$outputPath/es.lproj\"\nmkdir \"$outputPath/fr.lproj\"\nmkdir \"$outputPath/it.lproj\"\nmkdir \"$outputPath/ja.lproj\"\nmkdir \"$outputPath/pt.lproj\"\nmkdir \"$outputPath/zh.lproj\"\n#new strings\nmkdir \"$outputPathNewStrings\"\nmkdir \"$outputPathNewStrings/en.lproj\"\n#create new localizables\n/usr/local/bin/twine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPathNewStrings/\" --tags new\n/usr/local/bin/twine generate-all-string-files \"$localizationFolderPath/$allLocalizationsFileName\" \"$outputPath/\"\n\nrm \"$localizationFolderPath/$allLocalizationsFileName\"\necho \"Finish compiling localizations\"";
 		};
-		9D3415DC47E90FD0EB7D031E /* Copy Pods Resources */ = {
+		9D3415DC47E90FD0EB7D031E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile/Pods-AppPods-TIBCO JasperMobile-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C75402C61BA0160B4EF59070 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile Performance UITests/Pods-AppPods-TIBCO JasperMobile Performance UITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F0CE759F555EC170E0C59458 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AppPods-TIBCO JasperMobile Performance UITests/Pods-AppPods-TIBCO JasperMobile Performance UITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F92985FBC97250D9CF1D531D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -3757,7 +3955,7 @@
 		};
 		08DD18211B13519000856112 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */;
+			baseConfigurationReference = 7A235084E318E2E3CC4A6B42 /* Pods-AppPods-TIBCO JasperMobile.adhoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -3807,7 +4005,7 @@
 		};
 		08DD18221B13519000856112 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */;
+			baseConfigurationReference = 84B9FCCC65BFED05E8861775 /* Pods-AppPods-TIBCO JasperMobile Tests.adhoc.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -3849,6 +4047,7 @@
 		};
 		930E18D51CEC988C00CE5E10 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 38F5DC042987B1BFE2C7801D /* Pods-AppPods-TIBCO JasperMobile Performance UITests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -3882,6 +4081,7 @@
 		};
 		930E18D61CEC988C00CE5E10 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 77CFC8584A6846178D82DED1 /* Pods-AppPods-TIBCO JasperMobile Performance UITests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -3913,6 +4113,7 @@
 		};
 		930E18D71CEC988C00CE5E10 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A06F456CF290ABC2DF892E36 /* Pods-AppPods-TIBCO JasperMobile Performance UITests.adhoc.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -3944,7 +4145,7 @@
 		};
 		9356ECA01A30752900ACE2C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 988B019CF91A6ED01E9D9FCC /* Pods-AppPods-TIBCO JasperMobile Tests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -3990,7 +4191,7 @@
 		};
 		9356ECA11A30752900ACE2C6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 20A5E8D0860C986563FB740C /* Pods.release.xcconfig */;
+			baseConfigurationReference = 540CAC3D2C15C459D8F22E12 /* Pods-AppPods-TIBCO JasperMobile Tests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -4032,7 +4233,7 @@
 		};
 		93DC8C401C6CCEEE000DEADF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = BA298E29B9C3784D67D67510 /* Pods-AppPods-TIBCO JasperMobileUITests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -4066,7 +4267,7 @@
 		};
 		93DC8C411C6CCEEE000DEADF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 20A5E8D0860C986563FB740C /* Pods.release.xcconfig */;
+			baseConfigurationReference = 14A601AC57C5A5FAAD1D15F2 /* Pods-AppPods-TIBCO JasperMobileUITests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -4098,7 +4299,7 @@
 		};
 		93DC8C421C6CCEEE000DEADF /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */;
+			baseConfigurationReference = 2F7FDC158DD411EA65F86E13 /* Pods-AppPods-TIBCO JasperMobileUITests.adhoc.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -4195,7 +4396,7 @@
 		};
 		F55CC376174CFFCF00CEB39E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 0B27080670B2029CEFC2D4B7 /* Pods-AppPods-TIBCO JasperMobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -4246,7 +4447,7 @@
 		};
 		F55CC377174CFFCF00CEB39E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 20A5E8D0860C986563FB740C /* Pods.release.xcconfig */;
+			baseConfigurationReference = C2A3EA0E1A60D02A44665172 /* Pods-AppPods-TIBCO JasperMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
