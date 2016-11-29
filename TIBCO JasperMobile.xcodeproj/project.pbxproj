@@ -126,7 +126,6 @@
 		930E18DD1CEC9A7100CE5E10 /* JMBaseUITestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 93732E2C1C75F2050065B972 /* JMBaseUITestCase.m */; };
 		930E18DE1CEC9A7B00CE5E10 /* JMUITestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C4E3111C737DB300A19D64 /* JMUITestConstants.m */; };
 		931CB0361C9ED48000563008 /* testJSON in Resources */ = {isa = PBXBuildFile; fileRef = 931CB0351C9ED48000563008 /* testJSON */; };
-		932FB3281DCA2BA700D46ED1 /* JMResourceLoaderOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BFA4C41D91661D0024F2B2 /* JMResourceLoaderOption.m */; };
 		9331B2C61C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */; };
 		9331B2C71C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */; };
 		933CAF771C776A8E00EF6F84 /* JMReportPageUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 933CAF5C1C776A8E00EF6F84 /* JMReportPageUITests.m */; };
@@ -4365,7 +4364,6 @@
 				93DB0C911D4CCD3200B94469 /* JMLocalization.m in Sources */,
 				935C336F1D50C16800C68CD7 /* JMExternalWindowDashboardControlsVC.m in Sources */,
 				93DB0C8D1D4CCA3E00B94469 /* JMHTMLParser.m in Sources */,
-				932FB3281DCA2BA700D46ED1 /* JMResourceLoaderOption.m in Sources */,
 				93DB0CAA1D4CDBEE00B94469 /* JMResourceViewerShareManager.m in Sources */,
 				93DB0CB81D4D0F8800B94469 /* JMServerOption.m in Sources */,
 				93DB0CC41D4D113000B94469 /* JMWebEnvironment.m in Sources */,
