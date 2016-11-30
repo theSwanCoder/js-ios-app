@@ -29,24 +29,28 @@
 #import "JMDashboard.h"
 #import "JMDashboardParameter.h"
 #import "JMResource.h"
+#import "JMUtils.h"
 
 @interface JMDashboard()
 // setters
 @property (nonatomic, strong, readwrite) JMResource *resource;
 @property (nonatomic, copy, readwrite) NSString *resourceURI;
-@property (nonatomic, strong, readwrite) NSURLRequest *resourceRequest;
 @end
 
 @implementation JMDashboard
 
 #pragma mark - LifyCycle
+- (void)dealloc
+{
+    JMLog(@"%@ _ %@", self, NSStringFromSelector(_cmd));
+}
+
 - (instancetype)initWithResource:(JMResource *)resource
 {
     self = [super init];
     if (self) {
         _resource = resource;
         _resourceURI = resource.resourceLookup.uri;
-        _resourceRequest = [self createResourceRequest];
     }
     return self;
 }
@@ -54,41 +58,6 @@
 + (instancetype)dashboardWithResource:(JMResource *)resourceLookup
 {
     return [[self alloc] initWithResource:resourceLookup];
-}
-
-#pragma mark - Public API
-
-#pragma mark - Private API
-
-#pragma mark - Helpers
-- (NSURLRequest *)createResourceRequest
-{
-    NSString *dashboardUrl = [NSString stringWithFormat:@"flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=%@", _resourceURI];
-    dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
-    dashboardUrl = [[NSURL URLWithString:dashboardUrl relativeToURL:self.restClient.baseURL] absoluteString];
-    
-    NSMutableURLRequest *dashboardRequest = [self.restClient.requestSerializer requestWithMethod:@"GET" URLString:dashboardUrl parameters:nil error:nil];
-    dashboardRequest.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
-    [dashboardRequest addValue:[self cookiesAsStringFromCookies:self.restClient.cookies]
-            forHTTPHeaderField:@"Cookie"];
-
-    return dashboardRequest;
-}
-
-- (void)updateResourceRequest
-{
-    self.resourceRequest = [self createResourceRequest];
-}
-
-- (NSString *)cookiesAsStringFromCookies:(NSArray <NSHTTPCookie *>*)cookies
-{
-    NSString *cookiesAsString = @"";
-    for (NSHTTPCookie *cookie in cookies) {
-        NSString *name = cookie.name;
-        NSString *value = cookie.value;
-        cookiesAsString = [cookiesAsString stringByAppendingFormat:@"%@=%@; ", name, value];
-    }
-    return cookiesAsString;
 }
 
 @end

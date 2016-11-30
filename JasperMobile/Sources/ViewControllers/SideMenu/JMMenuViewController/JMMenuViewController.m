@@ -30,16 +30,17 @@
 #import "JMMenuViewController.h"
 #import "SWRevealViewController.h"
 #import "JMMenuItemTableViewCell.h"
+#import "JMMenuItemControllersFactory.h"
 #import "JMMainNavigationController.h"
-#import "JMLibraryCollectionViewController.h"
-#import "JMSavedItemsCollectionViewController.h"
-#import "JMFavoritesCollectionViewController.h"
-#import "JMAboutViewController.h"
+#import "JMResourceCollectionViewController.h"
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
-#import "JMServerOptionsViewController.h"
 #import "JMAnalyticsManager.h"
+#import "JMThemesManager.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
+#import "JMLocalization.h"
 
 typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     JMMenuButtonStateNormal,
@@ -60,7 +61,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
 @implementation JMMenuViewController
 + (NSInteger)defaultItemIndex {
-    return JMSectionTypeLibrary;
+    return JMMenuItemType_Library;
 }
 
 #pragma mark - LifeCycle
@@ -159,7 +160,6 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self setSelectedItemIndex:indexPath.row];
 }
 
@@ -176,74 +176,51 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     if (itemIndex > self.menuItems.count) {
         return;
     }
-
+    
     JMMenuItem *currentSelectedItem = self.selectedItem;
     JMMenuItem *item = self.menuItems[itemIndex];
-    item.showNotes = NO;
+    
+    if (!currentSelectedItem || currentSelectedItem != item) {
+        if (item.itemType == JMMenuItemType_Logout) {
+            [[JMSessionManager sharedManager] logout];
+            [JMUtils showLoginViewAnimated:YES completion:nil];
+            self.menuItems = nil;
+        } else if (item.itemType == JMMenuItemType_Feedback) {
+            [self showFeedback];
+        } else {
+            id nextVC = [JMMenuItemControllersFactory viewControllerWithMenuItem:item];
+            if ([nextVC isKindOfClass:[JMMainNavigationController class]]) {
+                JMMainNavigationController *navigationVC = nextVC;
+                if (item.presentationStyle == JMMenuItemControllerPresentationStyle_Modal) {
+                    navigationVC.modalPresentationStyle = UIModalPresentationFormSheet;
+                    [self.revealViewController.frontViewController presentViewController:navigationVC
+                                                                                animated:YES
+                                                                              completion:nil];
+                } else {
+                    [self unselectItems];
+                    item.selected = YES;
+                    item.showNotes = NO;
+                    [self.tableView reloadData];
 
-    if (item.sectionType == JMSectionTypeLogout) {
-        [[JMSessionManager sharedManager] logout];
-        [JMUtils showLoginViewAnimated:YES completion:nil];
-        self.menuItems = nil;
-    } else if (item.sectionType == JMSectionTypeSettings) {
-        [self closeMenu];
-
-        JMServerOptionsViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-        settingsVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"dialog_button_cancel", nil)
-                                                                                        style:UIBarButtonItemStyleDone
-                                                                                       target:settingsVC
-                                                                                       action:@selector(cancel)];
-        settingsVC.serverProfile = [JMUtils activeServerProfile];
-        __weak __typeof(settingsVC) weakSettingVC = settingsVC;
-        settingsVC.exitBlock = ^{
-            __typeof(settingsVC) strongSettingVC = weakSettingVC;
-            [strongSettingVC dismissViewControllerAnimated:YES completion:nil];
-        };
-        JMMainNavigationController *navController = [[JMMainNavigationController alloc] initWithRootViewController:settingsVC];
-        navController.modalPresentationStyle = UIModalPresentationFormSheet;
-
-        [self.revealViewController.frontViewController presentViewController:navController
-                                                                    animated:YES
-                                                                  completion:nil];
-
-    } else if (item.sectionType == JMSectionTypeAbout) {
-        [self closeMenu];
-
-        JMMainNavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-        navController.modalPresentationStyle = UIModalPresentationFormSheet;
-
-        [self.revealViewController.frontViewController presentViewController:navController
-                                                                    animated:YES
-                                                                  completion:nil];
-    } else if (item.sectionType == JMSectionTypeFeedback) {
-        [self showFeedback];
-    } else {
-        if (!currentSelectedItem || currentSelectedItem != item) {
-            [self unselectItems];
-            item.selected = YES;
-
-            [self.tableView reloadData];
-
-            id nextVC;
-            if([item vcIdentifierForSelectedItem]) {
-                // Analytics
-                [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
-                        kJMAnalyticsCategoryKey : kJMAnalyticsRepositoryEventCategoryTitle,
-                        kJMAnalyticsActionKey : kJMAnalyticsRepositoryEventActionOpen,
-                        kJMAnalyticsLabelKey : [item nameForAnalytics]
-                }];
-
-                nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-                UIBarButtonItem *bbi = [self barButtonItemForState:JMMenuButtonStateNormal];
-                [nextVC topViewController].navigationItem.leftBarButtonItem = bbi;
-                [[nextVC topViewController].view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+                    UIBarButtonItem *bbi = [self barButtonItemForState:JMMenuButtonStateNormal];
+                    [navigationVC topViewController].navigationItem.leftBarButtonItem = bbi;
+                    [[navigationVC topViewController].view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+                    self.revealViewController.frontViewController = navigationVC;
+                }
             } else {
-                nextVC = [JMUtils launchScreenViewController];
+                self.revealViewController.frontViewController = nextVC;
             }
-            self.revealViewController.frontViewController = nextVC;
+            [self closeMenu];
         }
-        [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
-                                               animated:YES];
+        
+        if ([item nameForAnalytics]) {
+            // Analytics
+            [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
+                                                                             kJMAnalyticsCategoryKey : kJMAnalyticsRepositoryEventCategoryTitle,
+                                                                             kJMAnalyticsActionKey : kJMAnalyticsRepositoryEventActionOpen,
+                                                                             kJMAnalyticsLabelKey : [item nameForAnalytics]
+                                                                             }];
+        }
     }
 }
 
@@ -289,21 +266,16 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 - (NSArray *)createMenuItems
 {
     NSMutableArray *menuItems = [@[
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeLibrary],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeRepository],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeSavedItems],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeFavorites],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeScheduling],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeAbout],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeSettings],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeFeedback],
-            [JMMenuItem menuItemWithSectionType:JMSectionTypeLogout]
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Library],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Repository],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_SavedItems],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Favorites],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Scheduling],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_About],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Settings],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Feedback],
+            [JMMenuItem menuItemWithItemType:JMMenuItemType_Logout]
     ] mutableCopy];
-
-    if ([JMUtils isServerProEdition]) {
-        NSUInteger indexOfRepository = [menuItems indexOfObject:[JMMenuItem menuItemWithSectionType:JMSectionTypeRepository]];
-        [menuItems insertObject:[JMMenuItem menuItemWithSectionType:JMSectionTypeRecentViews] atIndex:indexOfRepository + 1];
-    }
 
     return [menuItems copy];
 }
@@ -342,7 +314,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 {
     UINavigationController *navController = (UINavigationController *) self.revealViewController.frontViewController;
     for (UIViewController *viewController in navController.viewControllers) {
-        if ([viewController isKindOfClass:[JMBaseCollectionViewController class]]) {
+        if ([viewController isKindOfClass:[JMResourceCollectionViewController class]]) {
             UIButton *button = (UIButton *) viewController.navigationItem.leftBarButtonItem.customView;
             [button setImage:[UIImage imageNamed:@"menu_icon_note"] forState:UIControlStateNormal];
         }
@@ -353,16 +325,16 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 {
     UINavigationController *navController = (UINavigationController *) self.revealViewController.frontViewController;
     for (UIViewController *viewController in navController.viewControllers) {
-        if ([viewController isKindOfClass:[JMBaseCollectionViewController class]]) {
+        if ([viewController isKindOfClass:[JMResourceCollectionViewController class]]) {
             UIButton *button = (UIButton *) viewController.navigationItem.leftBarButtonItem.customView;
             [button setImage:[UIImage imageNamed:@"menu_icon"] forState:UIControlStateNormal];
         }
     }
 }
 
-- (JMMenuItem *)menuItemWithType:(JMSectionType)sectionType
+- (JMMenuItem *)menuItemWithType:(JMMenuItemType)itemType
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sectionType == %@", @(sectionType)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"itemType == %@", @(itemType)];
     return [self.menuItems filteredArrayUsingPredicate:predicate].firstObject;
 }
 
@@ -374,7 +346,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         // Email Subject
         NSString *emailTitle = @"JasperMobile (iOS)";
         // Email Content
-        NSString *messageBody = [NSString stringWithFormat:@"Send from build version: %@", [JMUtils buildVersion]];
+        NSString *messageBody = [NSString stringWithFormat:@"Send from build version: %@, JRS version: %@", [JMUtils buildVersion], self.restClient.serverProfile.serverInfo.version];
         // To address
         NSArray *toRecipents = @[kFeedbackPrimaryEmail, kFeedbackSecondaryEmail];
 
@@ -386,7 +358,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
         [self presentViewController:mc animated:YES completion:NULL];
     } else {
-        NSString *errorMessage = JMCustomLocalizedString(@"settings_feedback_errorShowClient", nil);
+        NSString *errorMessage = JMLocalizedString(@"settings_feedback_errorShowClient");
         NSError *error = [NSError errorWithDomain:@"dialod_title_error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         [JMUtils presentAlertControllerWithError:error completion:nil];
     }
@@ -414,16 +386,14 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     }
 
     [self dismissViewControllerAnimated:YES completion:NULL];
-
-    [self closeMenu];
 }
 
 #pragma mark - Notifications
 - (void)exportedResouceDidLoad:(NSNotification *)notification
 {
-    if (self.selectedItem.sectionType != JMSectionTypeSavedItems) {
+    if (self.selectedItem.itemType != JMMenuItemType_SavedItems) {
         [self showNoteInMenuButton];
-        JMMenuItem *savedItem = [self menuItemWithType:JMSectionTypeSavedItems];
+        JMMenuItem *savedItem = [self menuItemWithType:JMMenuItemType_SavedItems];
         savedItem.showNotes = YES;
     }
 }

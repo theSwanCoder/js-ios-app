@@ -39,7 +39,19 @@
 #import "JSConstants.h"
 #import "JMServersGridViewController.h"
 #import "JMServerOptionsViewController.h"
+#import "JMReportViewerConfigurator.h"
+#import "JMWebViewManager.h"
+#import "JMDashboardViewerConfigurator.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+#import "NSObject+Additions.h"
+#import "JMCoreDataManager.h"
+#import "UIAlertController+Additions.h"
 
+NSString *const JMReportViewerVisualizeWebEnvironmentIdentifier    = @"JMReportViewerVisualizeWebEnvironmentIdentifier";
+NSString *const JMReportViewerRESTWebEnvironmentIdentifier         = @"JMReportViewerRESTWebEnvironmentIdentifier";
+NSString *const JMDashboardViewerVisualizeWebEnvironmentIdentifier = @"JMDashboardViewerVisualizeWebEnvironmentIdentifier";
+NSString *const JMDashboardViewerRESTWebEnvironmentIdentifier      = @"JMDashboardViewerRESTWebEnvironmentIdentifier";
 
 void jmDebugLog(NSString *format, ...) {
 #ifndef __RELEASE__
@@ -65,11 +77,11 @@ void jmDebugLog(NSString *format, ...) {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
     reportName = [reportName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (reportName.length < kJMNameMin) {
-        *errorMessage = JMCustomLocalizedString(@"report_viewer_save_name_errmsg_empty", nil);
+        *errorMessage = JMLocalizedString(@"report_viewer_save_name_errmsg_empty");
     } else if (reportName.length > kJMNameMax) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_maxlength", nil), kJMNameMax];
+        *errorMessage = [NSString stringWithFormat:JMLocalizedString(@"report_viewer_save_name_errmsg_maxlength"), kJMNameMax];
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_save_name_errmsg_characters", nil), kJMInvalidCharacters];
+        *errorMessage = [NSString stringWithFormat:JMLocalizedString(@"report_viewer_save_name_errmsg_characters"), kJMInvalidCharacters];
     }
     return [*errorMessage length] == 0;
 }
@@ -108,9 +120,10 @@ void jmDebugLog(NSString *format, ...) {
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
 
-+ (BOOL)isSystemVersion9
++ (BOOL)isSystemVersionEqualOrUp9
 {
-    return [UIDevice currentDevice].systemVersion.integerValue == 9;
+    NSInteger version = [UIDevice currentDevice].systemVersion.integerValue;
+    return version >= 9;
 }
 
 + (BOOL)crashReportsSendingEnable
@@ -347,11 +360,6 @@ void jmDebugLog(NSString *format, ...) {
 
 #pragma mark - Helpers
 
-+ (BOOL)isSupportNewRESTFlow
-{
-    return [self isServerVersionUpOrEqual6];
-}
-
 + (BOOL)isSupportVisualize
 {
     return [self isServerVersionUpOrEqual6] && [self isServerProEdition];
@@ -458,11 +466,12 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isDemoAccount
 {
+    JSProfile *serverProfile = self.restClient.serverProfile;
     NSURL *demoURL = [NSURL URLWithString:kJMDemoServerUrl];
-    NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+    NSURL *serverURL = [NSURL URLWithString:serverProfile.serverUrl];
     BOOL isDemoServer = [serverURL.host isEqualToString:demoURL.host];
-    BOOL isDemoUser = [self.restClient.serverProfile.username isEqualToString:kJMDemoServerUsername];
-    BOOL isDemoOrganization = [self.restClient.serverProfile.organization isEqualToString:kJMDemoServerOrganization];
+    BOOL isDemoUser = [serverProfile.username isEqualToString:kJMDemoServerUsername];
+    BOOL isDemoOrganization = [serverProfile.organization isEqualToString:kJMDemoServerOrganization];
     BOOL isDemoAccount = isDemoServer && isDemoUser && isDemoOrganization;
     return isDemoAccount;
 }
@@ -476,6 +485,85 @@ void jmDebugLog(NSString *format, ...) {
 + (float)minSupportedServerVersion
 {
     return kJS_SERVER_VERSION_CODE_AMBER_6_0_0;
+}
+
+#pragma mark - Report Viewer Helpers
+
++ (JMReportViewerConfigurator *__nonnull)reportViewerConfiguratorReusableWebView
+{
+    JMReportViewerConfigurator *configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:[self reusableWebEnvironmentForReportViewer]];
+    return configurator;
+}
+
++ (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorNonReusableWebView
+{
+
+    JMReportViewerConfigurator *configurator = [JMReportViewerConfigurator configuratorWithWebEnvironment:[[JMWebViewManager sharedInstance] webEnvironmentForFlowType:[self flowTypeForReportViewer]]];
+    return configurator;
+}
+
++ (JMWebEnvironment *)reusableWebEnvironmentForReportViewer
+{
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:[self webEnvironmentIdentifierForReportViewer]
+                                                                                              flowType:[self flowTypeForReportViewer]];
+    return webEnvironment;
+}
+
++ (JMResourceFlowType)flowTypeForReportViewer
+{
+    JMResourceFlowType flowType = JMResourceFlowTypeUndefined;
+    BOOL needVisualizeFlow = NO;
+    JMServerProfile *activeServerProfile = [[self class] activeServerProfile];
+    if (activeServerProfile && activeServerProfile.useVisualize.boolValue) {
+        needVisualizeFlow = YES;
+    }
+    if (needVisualizeFlow && [JMUtils isSupportVisualize]) {
+        flowType = JMResourceFlowTypeVIZ;
+    } else {
+        flowType = JMResourceFlowTypeREST;
+    }
+    return flowType;
+}
+
++ (NSString *)webEnvironmentIdentifierForReportViewer
+{
+    NSString *webEnvironmentIdentifier;
+    switch([self flowTypeForReportViewer]) {
+        case JMResourceFlowTypeUndefined: {
+            break;
+        }
+        case JMResourceFlowTypeREST: {
+            webEnvironmentIdentifier = JMReportViewerRESTWebEnvironmentIdentifier;
+            break;
+        }
+        case JMResourceFlowTypeVIZ: {
+            webEnvironmentIdentifier = JMReportViewerVisualizeWebEnvironmentIdentifier;
+            break;
+        }
+    }
+    return webEnvironmentIdentifier;
+}
+
+#pragma mark - Dashboard Viewer Helpers
+
++ (JMDashboardViewerConfigurator * __nonnull)dashboardViewerConfiguratorReusableWebView
+{
+    JMDashboardViewerConfigurator *configurator = [JMDashboardViewerConfigurator configuratorWithWebEnvironment:[self reusableWebEnvironmentForDashboardViewer]];
+    return configurator;
+}
+
++ (JMDashboardViewerConfigurator * __nonnull)dashboardViewerConfiguratorNonReusableWebView
+{
+
+    JMDashboardViewerConfigurator *configurator = [JMDashboardViewerConfigurator configuratorWithWebEnvironment:[[JMWebViewManager sharedInstance] webEnvironmentForFlowType:JMResourceFlowTypeREST]];
+    return configurator;
+}
+
++ (JMWebEnvironment *)reusableWebEnvironmentForDashboardViewer
+{
+    JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:JMDashboardViewerVisualizeWebEnvironmentIdentifier
+                                                                                              flowType:JMResourceFlowTypeVIZ];
+    return webEnvironment;
 }
 
 @end

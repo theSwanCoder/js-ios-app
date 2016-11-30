@@ -36,6 +36,10 @@
 
  @since 1.6
  */
-@interface JasperMobileAppDelegate : UIResponder <UIApplicationDelegate>
 
+extern NSString *const JMAppDelegateWillDestroyExternalWindowNotification;
+
+@interface JasperMobileAppDelegate : UIResponder <UIApplicationDelegate>
+@property (nonatomic, strong) UIWindow *externalWindow;
+- (BOOL)isExternalScreenAvailable;
 @end

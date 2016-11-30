@@ -34,10 +34,13 @@ NSString * const JMLocalizationBundleType = @"lproj";
 
 + (NSString *)localizedStringForKey:(NSString *)key
 {
-    NSString *localizedString = NSLocalizedString(key, nil);
-    if (![[NSLocale preferredLanguages][0] isEqualToString:JMPreferredLanguage] &&
-        [localizedString isEqualToString:key]) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
+    NSURL *localizationBundleURL = [[NSBundle bundleForClass:[self class]] bundleURL];
+    NSBundle *localizationBundle = localizationBundleURL ? [NSBundle bundleWithURL:localizationBundleURL] : [NSBundle mainBundle];
+    
+    NSString *localizedString = NSLocalizedStringFromTableInBundle(key, nil, localizationBundle, comment);
+    
+    if (![[NSLocale preferredLanguages][0] isEqualToString:JMPreferredLanguage] && [localizedString isEqualToString:key]) {
+        NSString *path = [localizationBundle pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
         NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
         localizedString = [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
     }
@@ -47,7 +50,7 @@ NSString * const JMLocalizationBundleType = @"lproj";
 
 @end
 
-NSString *JMCustomLocalizedString(NSString *key, NSString *comment)
+NSString *JMLocalizedString(NSString *key)
 {
     return [JMLocalization localizedStringForKey:key];
 }

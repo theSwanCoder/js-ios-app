@@ -23,6 +23,9 @@
 #import "JMPopupView.h"
 #import "JasperMobileAppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
+#import "JMUtils.h"
+#import "JMThemesManager.h"
+#import "JMLocalization.h"
 
 static NSMutableArray* visiblePopupsArray = nil;
 
@@ -58,7 +61,7 @@ static NSMutableArray* visiblePopupsArray = nil;
         
         if (type == JMPopupViewType_OkCancelButtons) {
             UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kJMPopupViewDefaultWidth / 2, kJMPopupViewButtonsHeight)];
-            [cancelButton setTitle:JMCustomLocalizedString(@"dialog_button_cancel", nil) forState:UIControlStateNormal];
+            [cancelButton setTitle:JMLocalizedString(@"dialog_button_cancel") forState:UIControlStateNormal];
             cancelButton.titleLabel.font = [UIFont systemFontOfSize:15];
             [cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [cancelButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
@@ -67,7 +70,7 @@ static NSMutableArray* visiblePopupsArray = nil;
             [_backGroundView addSubview:cancelButton];
             
             UIButton *okButton = [[UIButton alloc] initWithFrame:CGRectMake(kJMPopupViewDefaultWidth / 2, 0, kJMPopupViewDefaultWidth / 2, kJMPopupViewButtonsHeight)];
-            [okButton setTitle:JMCustomLocalizedString(@"dialog_button_ok", nil) forState:UIControlStateNormal];
+            [okButton setTitle:JMLocalizedString(@"dialog_button_ok") forState:UIControlStateNormal];
             okButton.titleLabel.font = [UIFont systemFontOfSize:15];
             [okButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [okButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
@@ -148,7 +151,7 @@ static NSMutableArray* visiblePopupsArray = nil;
         return;
     }
 
-    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate *)[UIApplication sharedApplication].delegate;
     UIWindow *currentWindow = appDelegate.window;
     UIView *topView = [[currentWindow subviews] lastObject];
 

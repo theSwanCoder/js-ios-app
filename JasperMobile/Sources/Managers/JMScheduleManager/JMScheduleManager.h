@@ -33,6 +33,8 @@
 @since 2.3
 */
 
+#import "JaspersoftSDK.h"
+
 typedef void(^JMScheduleCompletion)(JSScheduleMetadata *__nullable, NSError *__nullable);
 
 @interface JMScheduleManager : NSObject

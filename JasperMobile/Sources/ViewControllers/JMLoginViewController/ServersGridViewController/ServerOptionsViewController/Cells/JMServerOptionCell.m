@@ -22,6 +22,7 @@
 
 
 #import "JMServerOptionCell.h"
+#import "JMThemesManager.h"
 
 @interface JMServerOptionCell ()
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;

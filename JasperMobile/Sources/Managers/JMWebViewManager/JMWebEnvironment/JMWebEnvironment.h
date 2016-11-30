@@ -27,40 +27,18 @@
 //
 
 
-@class JMJavascriptRequest;
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.4
 */
 
-typedef void(^JMWebEnvironmentRequestBooleanCompletion)(BOOL isSuccess, NSError * __nullable error);
-typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nullable params, NSError * __nullable error);
+#import "JMBaseWebEnvironment.h"
+#import "JMWebViewManager.h"
 
-@interface JMWebEnvironment : NSObject
-@property (nonatomic, strong) WKWebView * __nonnull webView;
-@property (nonatomic, copy) NSString * __nonnull identifier;
-@property (nonatomic, assign, getter=isCancel) BOOL cancel;
-- (instancetype __nullable)initWithId:(NSString *__nonnull)identifier;
-+ (instancetype __nullable)webEnvironmentWithId:(NSString *__nonnull)identifier;
-- (void)verifyEnvironmentReadyWithCompletion:(void(^ __nonnull)(BOOL isWebViewLoaded))completion;
-- (void)loadHTML:(NSString * __nonnull)HTMLString
-         baseURL:(NSURL * __nullable)baseURL
-      completion:(JMWebEnvironmentRequestBooleanCompletion __nullable)completion;
-- (void)removeCookies;
-- (void)addCookies;
-- (void)loadRequest:(NSURLRequest * __nonnull)request;
-- (void)loadLocalFileFromURL:(NSURL * __nonnull)fileURL
-                  fileFormat:(NSString * __nullable)fileFormat
-                     baseURL:(NSURL * __nullable)baseURL;
+@interface JMWebEnvironment : JMBaseWebEnvironment
+@property (nonatomic, assign) JMResourceFlowType flowType;
 
-- (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
-                   completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion;
-
-- (void)addListenerWithId:(NSString *__nonnull)listenerId
-                 callback:(JMWebEnvironmentRequestParametersCompletion __nonnull)callback;
-- (void)removeAllListeners;
-
-- (void)resetZoom;
-- (void)clean;
+- (void)verifyJasperMobileEnableWithCompletion:(void (^ __nonnull)(BOOL isEnable))completion;
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end

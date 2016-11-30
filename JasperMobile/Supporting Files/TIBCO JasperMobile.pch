@@ -1,48 +1,22 @@
 //
 // Prefix header for all source files of the 'JasperMobile' target in the 'JasperMobile' project
 //
-
 #import <Availability.h>
 
-#ifndef __IPHONE_7_0
-#warning "This project uses features only available in iOS SDK 7.0 and later."
+#ifndef __IPHONE_9_0
+#warning "This project uses features only available in iOS SDK 9.0 and later."
 #endif
 
 #ifdef __OBJC__
-    #import <UIKit/UIKit.h>
 
-    #import "NSObject+Additions.h"
-    #import "UIAlertController+Additions.h"
-
-    #import "JaspersoftSDK.h"
-
-    #import "JMBaseViewController.h"
-    #import "JMConstants.h"
-    #import "JMUtils.h"
-    #import "JMCoreDataManager.h"
-    #import "JMThemesManager.h"
-    #import "JMLocalization.h"
-    #import "SWRevealViewController.h"
-
-// Google Analitycs
-    #import "GAI.h"
-    #import "GAIDictionaryBuilder.h"
-    #import "GAIEcommerceProduct.h"
-    #import "GAIEcommerceProductAction.h"
-    #import "GAIEcommercePromotion.h"
-    #import "GAIFields.h"
-    #import "GAILogger.h"
-    #import "GAITrackedViewController.h"
-    #import "GAITracker.h"
-
-// Swift
-//    #import "TIBCO_JasperMobile-Swift.h"
-
-// Crashlytics
-    #import <Fabric/Fabric.h>
-    #import <Crashlytics/Crashlytics.h>
-
-// WebKit
-@import WebKit;
+#import <UIKit/UIKit.h>
+#import "JaspersoftSDK.h"
+#import "NSObject+Additions.h"
+#import "UIAlertController+Additions.h"
+#import "JMBaseViewController.h"
+#import "JMConstants.h"
+#import "JMUtils.h"
+#import "JMThemesManager.h"
+#import "JMLocalization.h"
 
 #endif

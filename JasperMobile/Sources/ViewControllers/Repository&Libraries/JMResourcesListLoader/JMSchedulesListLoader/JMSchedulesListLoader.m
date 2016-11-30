@@ -29,6 +29,9 @@
 #import "JMSchedulesListLoader.h"
 #import "JMResource.h"
 #import "JMSchedule.h"
+#import "NSObject+Additions.h"
+#import "JMUtils.h"
+#import "JMConstants.h"
 
 @interface JMSchedulesListLoader()
 @property (nonatomic, assign) NSInteger totalCount;
@@ -74,6 +77,19 @@
                                                      [strongSelf finishLoadingWithError:nil];
                                                  }
                                              }];
+}
+
+- (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
+{
+    switch (optionType) {
+        case JMResourcesListLoaderOptionType_Sort: {
+            // TODO: Here we can add new sort parameters
+            return nil;
+        }
+        case JMResourcesListLoaderOptionType_Filter: {
+            return nil;
+        }
+    }
 }
 
 - (JSResourceLookup *)resourceLookupFromScheduleLookup:(JSScheduleLookup *)scheduleLookup

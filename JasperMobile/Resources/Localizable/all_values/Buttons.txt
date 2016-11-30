@@ -1,5 +1,8 @@
 
 [[Buttons]]
+    [dialog_button_apply]
+        en = Apply
+        tags = ios, new
 	[dialog_button_applyUpdate]
 		en = Run Dashboard
 		de = Bedieneroberfläche ausführen
@@ -50,6 +53,9 @@
 		ja = 再試行
 		zh = 重试
 		tags = ios
+	[dialog_button_reload]
+		en = Reload
+		tags = ios,new
 	[dialog_button_run_report]
 		en = Run Report
 		de = Bericht ausführen

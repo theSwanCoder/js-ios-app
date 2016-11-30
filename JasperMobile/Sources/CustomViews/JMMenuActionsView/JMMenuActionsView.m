@@ -27,7 +27,9 @@
 #import "JMMenuAction.h"
 
 #import "UIColor+RGBComponent.h"
-
+#import "PopoverView.h"
+#import "JMThemesManager.h"
+#import "JMUtils.h"
 
 CGFloat static kJMMenuActionsViewCellPortraitHeight = 40;
 CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
@@ -36,7 +38,8 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSDictionary *dataSource;
 @property (nonatomic, strong) NSArray *availableMenuActions;
-
+@property (nonatomic, assign) JMMenuActionsViewAction availableActions;
+@property (nonatomic, assign) JMMenuActionsViewAction disabledActions;
 @end
 
 
@@ -69,14 +72,6 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
     tableView.dataSource = self;
     tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     return tableView;
-}
-
-- (void)setAvailableActions:(JMMenuActionsViewAction)availableActions
-{
-    _availableActions = availableActions;
-    [self refreshDatasourceForAvailableActions];
-    [self updateFrameFitContent];
-    [self.tableView reloadData];
 }
 
 - (void)setAvailableActions:(JMMenuActionsViewAction)availableActions disabledActions:(JMMenuActionsViewAction)disabledActions
@@ -147,10 +142,16 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
                         @(JMMenuActionsViewAction_Share)            : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Share
                                                                                                available:NO
                                                                                                  enabled:YES],
+                        @(JMMenuActionsViewAction_Bookmarks)            : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Bookmarks
+                                                                                               available:NO
+                                                                                                 enabled:YES],
                         @(JMMenuActionsViewAction_ShowExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ShowExternalDisplay
                                                                                                   available:NO
                                                                                                     enabled:YES],
                         @(JMMenuActionsViewAction_HideExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_HideExternalDisplay
+                                                                                                  available:NO
+                                                                                                    enabled:YES],
+                        @(JMMenuActionsViewAction_ShowReportChartTypes) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ShowReportChartTypes
                                                                                                   available:NO
                                                                                                     enabled:YES],
                         };
@@ -209,7 +210,7 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
         cell.selectedBackgroundView.backgroundColor = [UIColor darkGrayColor];
     }
     JMMenuAction *currentMenuAction = self.availableMenuActions[indexPath.row];
-    cell.textLabel.text = JMCustomLocalizedString(currentMenuAction.actionTitle, nil);
+    cell.textLabel.text = JMLocalizedString(currentMenuAction.actionTitle);
     
     cell.imageView.image = [UIImage imageNamed:currentMenuAction.actionImageName];
     cell.imageView.alpha = currentMenuAction.actionEnabled ? 1.0f : 0.5f;
@@ -260,7 +261,7 @@ CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
 {
     CGFloat maxTextWidth = .0f;
     for (JMMenuAction *menuAction in self.availableMenuActions) {
-        NSString *titleAction = JMCustomLocalizedString(menuAction.actionTitle, nil);
+        NSString *titleAction = JMLocalizedString(menuAction.actionTitle);
         NSDictionary *titleTextAttributes = @{NSFontAttributeName : [[JMThemesManager sharedManager] navigationBarTitleFont]};
         CGSize titleActionContainerSize = [titleAction sizeWithAttributes:titleTextAttributes];
         if (maxTextWidth < titleActionContainerSize.width) {

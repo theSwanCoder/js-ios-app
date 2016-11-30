@@ -27,6 +27,8 @@
 //
 
 #import "JMVisualizeManager.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
 
 @interface JMVisualizeManager()
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
@@ -100,14 +102,7 @@
 {
     if (!_visualizePath) {
         NSString *baseURL = self.restClient.serverProfile.serverUrl;
-        baseURL = [baseURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-        NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js?baseUrl=%@", self.restClient.serverProfile.serverUrl, baseURL];
-
-        BOOL isNeedNonOptimizedVisualize = [self isAmberServer];
-        if (isNeedNonOptimizedVisualize) {
-            visualizePath = [visualizePath stringByAppendingString:@"&_opt=false"];
-        }
-
+        NSString *visualizePath = [[NSString stringWithFormat:@"%@/client/visualize.js?baseUrl=%@", self.restClient.serverProfile.serverUrl, baseURL] queryEncodedString];
         _visualizePath = visualizePath;
     }
     return _visualizePath;

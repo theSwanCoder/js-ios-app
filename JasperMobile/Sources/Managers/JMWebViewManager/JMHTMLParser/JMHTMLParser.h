@@ -31,6 +31,8 @@
 @since 2.5
 */
 
+#import <Foundation/Foundation.h>
+
 @class JMHTMLScript;
 
 @interface JMHTMLParser : NSObject

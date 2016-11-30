@@ -20,18 +20,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
 //  JMExternalWindowDashboardControlsTableViewCell.h
 //  TIBCO JasperMobile
 //
 
-@protocol JMExternalWindowDashboardControlsTableViewCellDelegate;
-
 /**
 @author Olexandr Dakhno odahno@tibco.com
 @since 2.3
 */
+
+@import UIKit;
+
+@protocol JMExternalWindowDashboardControlsTableViewCellDelegate;
 
 @interface JMExternalWindowDashboardControlsTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;

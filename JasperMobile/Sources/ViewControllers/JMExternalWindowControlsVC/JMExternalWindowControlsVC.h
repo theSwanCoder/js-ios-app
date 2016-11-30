@@ -31,6 +31,7 @@
 @since 2.3
 */
 
+@import UIKit;
 
 @interface JMExternalWindowControlsVC : UIViewController
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;

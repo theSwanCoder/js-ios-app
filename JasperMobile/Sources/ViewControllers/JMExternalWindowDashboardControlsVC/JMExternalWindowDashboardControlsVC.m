@@ -28,6 +28,7 @@
 
 #import "JMExternalWindowDashboardControlsVC.h"
 #import "JMExternalWindowDashboardControlsTableViewCell.h"
+#import "JMLocalization.h"
 
 @interface JMExternalWindowDashboardControlsVC () <UITableViewDelegate, UITableViewDataSource, JMExternalWindowDashboardControlsTableViewCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -83,10 +84,10 @@
     BOOL isMaximized = ((NSNumber *)self.maximizedComponents[component.identifier]).boolValue;
     NSString *buttonTitle;
     if (isMaximized) {
-        buttonTitle = JMCustomLocalizedString(@"external_screen_button_title_manimize", nil);
+        buttonTitle = JMLocalizedString(@"external_screen_button_title_manimize");
         cell.backgroundColor = [UIColor lightGrayColor];
     } else {
-        buttonTitle = JMCustomLocalizedString(@"external_screen_button_title_maximize", nil);
+        buttonTitle = JMLocalizedString(@"external_screen_button_title_maximize");
         cell.backgroundColor = [UIColor whiteColor];
     }
     [cell.maximizeButton setTitle:buttonTitle

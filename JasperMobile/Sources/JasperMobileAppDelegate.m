@@ -36,6 +36,14 @@
 #import "JMOnboardIntroViewController.h"
 #import "UIImage+Additions.h"
 #import "JMExportManager.h"
+#import "JMConstants.h"
+#import "GAI.h"
+#import "SWRevealViewController.h"
+#import "JMThemesManager.h"
+#import "NSObject+Additions.h"
+#import "JMCoreDataManager.h"
+
+NSString *const JMAppDelegateWillDestroyExternalWindowNotification = @"JMAppDelegateWillDestroyExternalWindowNotification";
 
 static NSString * const kGAITrackingID      = @"UA-57445224-1";
 static NSString * const kGAITrackingDebugID = @"UA-76950527-1";
@@ -94,6 +102,11 @@ static const NSInteger kSplashViewTag = 100;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    if ([self isExternalScreenAvailable]) {
+        UIScreen *externalScreen = [UIScreen screens][1];
+        self.externalWindow = [self createWindowWithScreen:externalScreen];
+    }
+    [self setupScreenConnectionNotifications];
     [self removeSplashView];
 
     [[JMThemesManager sharedManager] applyCurrentTheme];
@@ -134,6 +147,8 @@ static const NSInteger kSplashViewTag = 100;
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    [self discardScreenConnectionNotifications];
+    [self destroyExternalWindow];
     [self addSplashView];
     [[JMExportManager sharedInstance] cancelAll];
 }
@@ -211,5 +226,80 @@ static const NSInteger kSplashViewTag = 100;
     }
 }
 
+#pragma mark - Work with external window
+
+- (BOOL)isExternalScreenAvailable
+{
+    // TODO: investigate a case when count more than 2
+    return [UIScreen screens].count == 2;
+}
+
+- (UIWindow *)createWindowWithScreen:(UIScreen *)screen
+{
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    UIWindow *window = [UIWindow new];
+    window.clipsToBounds = YES;
+    window.backgroundColor = [UIColor whiteColor];
+
+    UIScreenMode *desiredMode = screen.availableModes.firstObject;
+    CGRect rect = CGRectZero;
+    rect.size = desiredMode.size;
+    window.frame = rect;
+    window.screen = screen;
+    return window;
+}
+
+- (void)destroyExternalWindow
+{
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    [[NSNotificationCenter defaultCenter] postNotificationName:JMAppDelegateWillDestroyExternalWindowNotification
+                                                        object:nil];
+    self.externalWindow = nil;
+}
+
+#pragma mark - Notifications
+- (void)setupScreenConnectionNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+
+    [center addObserver:self
+               selector:@selector(handleScreenDidConnectNotification:)
+                   name:UIScreenDidConnectNotification
+                 object:nil];
+    [center addObserver:self
+               selector:@selector(handleScreenDidDisconnectNotification:)
+                   name:UIScreenDidDisconnectNotification
+                 object:nil];
+}
+
+- (void)discardScreenConnectionNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self
+                      name:UIScreenDidConnectNotification
+                    object:nil];
+    [center removeObserver:self
+                      name:UIScreenDidDisconnectNotification
+                    object:nil];
+}
+
+- (void)handleScreenDidConnectNotification:(NSNotification *)notification
+{
+    UIScreen *screen = notification.object;
+    if (!self.externalWindow) {
+        self.externalWindow = [self createWindowWithScreen:screen];
+    } else {
+        // TODO: how handle this case?
+        JMLog(@"external window already exists");
+    }
+}
+
+- (void)handleScreenDidDisconnectNotification:(NSNotification *)notification
+{
+    UIScreen *screen = notification.object;
+    if (screen == self.externalWindow.screen) {
+        [self destroyExternalWindow];
+    }
+}
 
 @end

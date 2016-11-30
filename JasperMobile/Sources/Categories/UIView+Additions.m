@@ -104,4 +104,22 @@
 //    self.frame = CGRectIntegral(viewFrame);
 }
 
+#pragma mark - Autolayout
+
+- (void)fillWithView:(UIView *)view
+{
+    [self addSubview:view];
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[nestedView]-0-|"
+                                                                 options:NSLayoutFormatAlignAllLeading
+                                                                 metrics:nil
+                                                                   views:@{@"nestedView": view}]];
+
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[nestedView]-0-|"
+                                                                 options:NSLayoutFormatAlignAllLeading
+                                                                 metrics:nil
+                                                                   views:@{@"nestedView": view}]];
+}
+
+
 @end

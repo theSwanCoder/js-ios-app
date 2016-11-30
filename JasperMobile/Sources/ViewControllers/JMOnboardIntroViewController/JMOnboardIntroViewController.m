@@ -32,6 +32,9 @@
 #import "JMIntroModelManager.h"
 #import "JMIntroModel.h"
 #import "JMIntroImageView.h"
+#import "JMLocalization.h"
+#import "JMConstants.h"
+#import "JMUtils.h"
 
 static const CGFloat kDefaultAnimationDuration = 0.4f;
 static const CGFloat kDefaultStepValue = 1.0f;
@@ -96,8 +99,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     [self addGestureRecognizer];
     
     [self setButtonTitleForPage:self.introPage];
-    self.titleLabel.text = [NSString stringWithFormat:JMCustomLocalizedString(@"intro_title", nil), kJMAppName];
-    self.descriptionLabel.text = JMCustomLocalizedString(@"intro_description", nil);
+    self.titleLabel.text = [NSString stringWithFormat:JMLocalizedString(@"intro_title"), kJMAppName];
+    self.descriptionLabel.text = JMLocalizedString(@"intro_description");
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -432,13 +435,13 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 
 - (void)setButtonTitleForPage:(JMOnboardIntroPage)introPage
 {
-    NSString *buttonTitle = JMCustomLocalizedString(@"intro_button_skip_skip", nil);
+    NSString *buttonTitle = JMLocalizedString(@"intro_button_skip_skip");
     switch (introPage) {
         case JMOnboardIntroPageWelcome:
         case JMOnboardIntroPageStayConnected:
         case JMOnboardIntroPageInstanceAccess: break;
         case JMOnboardIntroPageSeemlessIntegration: {
-            buttonTitle = [NSString stringWithFormat:JMCustomLocalizedString(@"intro_button_skip_startUsing", nil), kJMAppName];
+            buttonTitle = [NSString stringWithFormat:JMLocalizedString(@"intro_button_skip_startUsing"), kJMAppName];
             break;
         }
     };

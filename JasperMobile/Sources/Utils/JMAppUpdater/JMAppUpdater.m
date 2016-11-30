@@ -32,6 +32,10 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JMResource.h"
+#import "JMSessionManager.h"
+#import "JMCoreDataManager.h"
+#import "JMUtils.h"
+#import "UIAlertController+Additions.h"
 
 // Old constants used in previous versions of application
 static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated.versions";

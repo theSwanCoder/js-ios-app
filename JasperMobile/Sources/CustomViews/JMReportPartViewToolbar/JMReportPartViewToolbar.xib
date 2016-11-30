@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="22k-pU-spr" customClass="JMReportPartViewToolbar">
+            <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kbq-IM-eJM">
+                    <rect key="frame" x="10" y="0.0" width="44" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="Kbq-IM-eJM" secondAttribute="height" multiplier="1:1" id="uLA-MC-35G"/>
+                    </constraints>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" image="previous_action_item.png"/>
+                    <connections>
+                        <action selector="previousButtonDidTap:" destination="22k-pU-spr" eventType="touchUpInside" id="Fta-Wq-3rG"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ECe-kv-Vaj">
+                    <rect key="frame" x="714" y="0.0" width="44" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="ECe-kv-Vaj" secondAttribute="height" multiplier="1:1" id="nPY-Ri-Dwz"/>
+                    </constraints>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" image="next_action_item.png"/>
+                    <connections>
+                        <action selector="nextButtonDidTap:" destination="22k-pU-spr" eventType="touchUpInside" id="axt-Wz-NYX"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WKY-v4-X8f">
+                    <rect key="frame" x="64" y="11" width="640" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="WKY-v4-X8f" firstAttribute="leading" secondItem="Kbq-IM-eJM" secondAttribute="trailing" constant="10" id="3CJ-hf-SkD"/>
+                <constraint firstAttribute="bottom" secondItem="ECe-kv-Vaj" secondAttribute="bottom" id="9TH-da-QiS"/>
+                <constraint firstItem="ECe-kv-Vaj" firstAttribute="centerY" secondItem="22k-pU-spr" secondAttribute="centerY" id="GLu-T3-8i1"/>
+                <constraint firstItem="ECe-kv-Vaj" firstAttribute="top" secondItem="22k-pU-spr" secondAttribute="top" id="MvB-TS-Fav"/>
+                <constraint firstItem="Kbq-IM-eJM" firstAttribute="top" secondItem="22k-pU-spr" secondAttribute="top" id="WQW-O9-0sF"/>
+                <constraint firstItem="Kbq-IM-eJM" firstAttribute="centerY" secondItem="22k-pU-spr" secondAttribute="centerY" id="YyY-lz-tYN"/>
+                <constraint firstItem="WKY-v4-X8f" firstAttribute="centerY" secondItem="22k-pU-spr" secondAttribute="centerY" id="eHo-L9-4rD"/>
+                <constraint firstAttribute="bottom" secondItem="Kbq-IM-eJM" secondAttribute="bottom" id="eiM-cu-jTK"/>
+                <constraint firstAttribute="trailing" secondItem="ECe-kv-Vaj" secondAttribute="trailing" constant="10" id="ewz-Z4-qXZ"/>
+                <constraint firstItem="ECe-kv-Vaj" firstAttribute="leading" secondItem="WKY-v4-X8f" secondAttribute="trailing" constant="10" id="nbz-6A-ftb"/>
+                <constraint firstItem="Kbq-IM-eJM" firstAttribute="leading" secondItem="22k-pU-spr" secondAttribute="leading" constant="10" id="uKI-vk-ybN"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="nextButton" destination="ECe-kv-Vaj" id="GFh-cx-6RA"/>
+                <outlet property="previousButton" destination="Kbq-IM-eJM" id="RcN-l4-aGw"/>
+                <outlet property="titleLabel" destination="WKY-v4-X8f" id="I7w-5y-VJI"/>
+            </connections>
+            <point key="canvasLocation" x="297" y="347"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="next_action_item.png" width="30" height="30"/>
+        <image name="previous_action_item.png" width="30" height="30"/>
+    </resources>
+</document>

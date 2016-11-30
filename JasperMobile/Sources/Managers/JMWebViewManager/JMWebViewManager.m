@@ -29,10 +29,14 @@
 #import "JMWebViewManager.h"
 #import "JMUtils.h"
 #import "JMWebEnvironment.h"
+#import "JMVIZWebEnvironment.h"
+#import "JMRESTWebEnvironment.h"
+#import "JaspersoftSDK.h"
+#import "NSObject+Additions.h"
+
+NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManagerDidResetWebviewsNotification";
 
 @interface JMWebViewManager()
-//@property (nonatomic, strong, readwrite) WKWebView *primaryWebView;
-//@property (nonatomic, strong, readwrite) WKWebView *secondaryWebView;
 @property (nonatomic, strong) NSMutableArray *webEnvironments;
 @end
 
@@ -49,6 +53,7 @@
 - (void)dealloc
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 + (instancetype)sharedInstance {
@@ -70,59 +75,142 @@
                                                  selector:@selector(handleMemoryWarnings)
                                                      name:UIApplicationDidReceiveMemoryWarningNotification
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(cookiesDidChange:)
+                                                     name:JSRestClientDidChangeCookies
+                                                   object:nil];
     }
     return self;
 }
 
-#pragma mark - Public API
-- (JMWebEnvironment *)webEnvironmentForId:(NSString *)identifier
+#pragma mark - Custom Accessors
+- (NSArray *)cookies
 {
-//    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-//    JMLog(@"identifier: %@", identifier);
-    JMWebEnvironment *webEnvironment;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
-    NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
+    if(!_cookies) {
+        _cookies = self.restClient.cookies;
+    }
+    return _cookies;
+}
 
-    if ( filtredWebEnvironments.count == 0 ) {
-        webEnvironment = [self createNewWebEnvironmentWithId:identifier];
+#pragma mark - Public API
+- (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier
+{
+    return [self reusableWebEnvironmentWithId:identifier flowType:JMResourceFlowTypeUndefined];
+}
+
+- (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier flowType:(JMResourceFlowType)flowType
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"identifier: %@", identifier);
+
+    JMWebEnvironment *webEnvironment = [self findWebEnvironmentForId:identifier];
+    if (!webEnvironment) {
+        webEnvironment = [self createNewWebEnvironmentWithId:identifier flowType:flowType needReuse:YES];
         [self.webEnvironments addObject:webEnvironment];
-    } else if ( filtredWebEnvironments.count > 1 ) {
-        return nil;
-    } else {
-        webEnvironment = [filtredWebEnvironments firstObject];
     }
 
     return webEnvironment;
 }
 
-- (void)removeWebEnvironmentForId:(NSString *)identifier
+- (JMWebEnvironment * __nonnull)webEnvironment
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
-    NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
-
-    if ( filtredWebEnvironments.count == 0 ) {
-        return;
-    } else if ( filtredWebEnvironments.count > 1 ) {
-        // TODO: need error?
-    } else {
-        JMWebEnvironment *webEnvironment = filtredWebEnvironments.firstObject;
-        [self.webEnvironments removeObject:webEnvironment];
-    }
+    return [self webEnvironmentForFlowType:JMResourceFlowTypeUndefined];
 }
 
-- (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier
+- (JMWebEnvironment * __nonnull)webEnvironmentForFlowType:(JMResourceFlowType)flowType
 {
-    JMWebEnvironment *webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier];
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMWebEnvironment *webEnvironment = [self createNewWebEnvironmentWithId:nil flowType:flowType needReuse:NO];
+    return webEnvironment;
+}
+
+#pragma mark - Private API
+
+- (JMWebEnvironment *)createNewWebEnvironmentWithId:(NSString *)identifier flowType:(JMResourceFlowType)flowType needReuse:(BOOL)needReuse
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMWebEnvironment *webEnvironment;
+    switch (flowType) {
+        case JMResourceFlowTypeUndefined: {
+            webEnvironment = [JMWebEnvironment webEnvironmentWithId:identifier
+                                                         initialCookies:self.cookies];
+            break;
+        }
+        case JMResourceFlowTypeREST: {
+            webEnvironment = [JMRESTWebEnvironment webEnvironmentWithId:identifier
+                                                         initialCookies:self.cookies];
+            break;
+        }
+        case JMResourceFlowTypeVIZ: {
+            webEnvironment = [JMVIZWebEnvironment webEnvironmentWithId:identifier
+                                                        initialCookies:self.cookies];
+            break;
+        }
+    }
+    webEnvironment.reusable = needReuse;
+    webEnvironment.flowType = flowType;
     return webEnvironment;
 }
 
 - (void)reset
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    // TODO: need reset?
-//    [self.webEnvironments makeObjectsPerformSelector:@selector(reset)];
-
+    for(JMWebEnvironment *webEnvironment in self.webEnvironments) {
+        [webEnvironment.webView removeFromSuperview];
+    }
     self.webEnvironments = [NSMutableArray array];
+}
+
+#pragma mark - Notifications
+- (void)cookiesDidChange:(NSNotification *)notification
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    if ([notification.object isKindOfClass:[JSRESTBase class]]) {
+        // We need set cookies from correct restClient
+        JSRESTBase *restClient = notification.object;
+        self.cookies = restClient.cookies;
+        JMLog(@"new cookies: %@", self.cookies);
+        // TODO: what need we do if cookies if nil?
+        for (JMWebEnvironment *webEnvironment in self.webEnvironments) {
+            switch(webEnvironment.cookiesState) {
+                case JMWebEnvironmentCookiesStateEmpty: {
+                    // TODO: do not change this state
+                    break;
+                }
+                case JMWebEnvironmentCookiesStateValid: {
+                    webEnvironment.cookiesState = JMWebEnvironmentCookiesStateNotValid;
+                    break;
+                }
+                case JMWebEnvironmentCookiesStateNotValid: {
+                    webEnvironment.cookiesState = JMWebEnvironmentCookiesStateNotValid;
+                    break;
+                }
+                case JMWebEnvironmentCookiesStateNeedUpdate: {
+                    // TODO: do not change this state
+                    break;
+                }
+            }
+        }
+    } else {
+        // TODO: need handle this case?
+    }
+}
+
+#pragma mark - Helpers
+- (JMWebEnvironment *)findWebEnvironmentForId:(NSString *)identifier
+{
+    JMWebEnvironment *webEnvironment;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.identifier == %@", identifier];
+    NSArray *filtredWebEnvironments = [self.webEnvironments filteredArrayUsingPredicate:predicate];
+
+    if ( filtredWebEnvironments.count == 0 ) {
+        return nil;
+    } else if ( filtredWebEnvironments.count > 1 ) {
+        return nil;
+    } else {
+        webEnvironment = [filtredWebEnvironments firstObject];
+    }
+    return webEnvironment;
 }
 
 @end

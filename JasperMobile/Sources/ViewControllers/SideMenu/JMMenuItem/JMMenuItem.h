@@ -31,22 +31,29 @@
  @since 2.0
  */
 
-typedef NS_ENUM(NSInteger, JMSectionType){
-    JMSectionTypeLibrary,
-    JMSectionTypeRepository,
-    JMSectionTypeRecentViews,
-    JMSectionTypeSavedItems,
-    JMSectionTypeFavorites,
-    JMSectionTypeScheduling,
-    JMSectionTypeAbout,
-    JMSectionTypeFeedback,
-    JMSectionTypeSettings,
-    JMSectionTypeLogout,
-    JMSectionTypeNone
+@import UIKit;
+
+typedef NS_ENUM(NSInteger, JMMenuItemType){
+    JMMenuItemType_Library,
+    JMMenuItemType_Repository,
+    JMMenuItemType_SavedItems,
+    JMMenuItemType_Favorites,
+    JMMenuItemType_Scheduling,
+    JMMenuItemType_About,
+    JMMenuItemType_Feedback,
+    JMMenuItemType_Settings,
+    JMMenuItemType_Logout
 };
 
+typedef NS_ENUM(NSInteger, JMMenuItemControllerPresentationStyle){
+    JMMenuItemControllerPresentationStyle_Modal,
+    JMMenuItemControllerPresentationStyle_Navigate
+};
+
+
 @interface JMMenuItem : NSObject
-@property (nonatomic, readonly) JMSectionType sectionType;
+@property (nonatomic, readonly) JMMenuItemControllerPresentationStyle presentationStyle;
+@property (nonatomic, readonly) JMMenuItemType itemType;
 @property (nonatomic, readonly) NSString *itemTitle;
 @property (nonatomic, readonly) UIImage  *itemIcon;
 @property (nonatomic, readonly) UIImage  *selectedItemIcon;
@@ -54,9 +61,8 @@ typedef NS_ENUM(NSInteger, JMSectionType){
 @property (assign, nonatomic) BOOL selected;
 @property (assign, nonatomic) BOOL showNotes;
 
-- (instancetype)initWithSectionType:(JMSectionType)sectionType;
-+ (instancetype)menuItemWithSectionType:(JMSectionType)sectionType;
+- (instancetype)initWithItemType:(JMMenuItemType)itemType;
++ (instancetype)menuItemWithItemType:(JMMenuItemType)itemType;
 
-- (NSString *) vcIdentifierForSelectedItem;
 - (NSString *) nameForAnalytics;
 @end

@@ -27,6 +27,11 @@
 #import "JMFavorites+Helpers.h"
 #import "JMExportManager.h"
 #import "JMResourceLoaderOption.h"
+#import "JMConstants.h"
+#import "JMCoreDataManager.h"
+#import "JMLocalization.h"
+#import "JMUtils.h"
+#import "JMSessionManager.h"
 
 @implementation JMSavedResourcesListLoader
 
@@ -34,7 +39,19 @@
 {
     self = [super init];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setNeedsUpdate) name:kJMSavedResourcesDidChangedNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(exportedResourceDidLoad:)
+                                                     name:kJMExportedResourceDidLoadNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(exportedResourceDidCancel:)
+                                                     name:kJMExportedResourceDidCancelNotification
+                                                   object:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(setNeedsUpdate)
+                                                     name:kJMSavedResourcesDidChangedNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -79,7 +96,7 @@
             return [super listItemsWithOption:optionType];
         case JMResourcesListLoaderOptionType_Filter: {
             NSMutableArray *filterOptions = [NSMutableArray array];
-            JMResourceLoaderOption *filterByAllOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_all", nil)
+            JMResourceLoaderOption *filterByAllOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
                                                                                           value:[JMUtils supportedFormatsForReportSaving]];
             [filterOptions addObject:filterByAllOption];
 
@@ -144,6 +161,19 @@
         return sortDescriptor;
     }
     return nil;
+}
+
+#pragma mark - Exported Resource Notifications
+- (void)exportedResourceDidLoad:(NSNotification *)notification
+{
+    [self setNeedsUpdate];
+    [self updateIfNeeded];
+}
+
+- (void)exportedResourceDidCancel:(NSNotification *)notification
+{
+    [self setNeedsUpdate];
+    [self updateIfNeeded];
 }
 
 @end

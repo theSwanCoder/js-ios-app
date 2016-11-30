@@ -46,6 +46,6 @@
 @interface JMServerCollectionViewCell : UICollectionViewCell
 @property (nonatomic, strong) JMServerProfile *serverProfile;
 @property (nonatomic, weak) id <JMServerCollectionViewCellDelegate> delegate;
-
-
+- (void) editServerProfile:(id)sender;
+- (void) deleteServerProfile:(id)sender;
 @end

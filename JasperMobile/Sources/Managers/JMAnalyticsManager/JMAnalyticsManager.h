@@ -30,6 +30,7 @@
  @since 2.5
  */
 
+#import <Foundation/Foundation.h>
 
 @interface JMAnalyticsManager : NSObject
 + (instancetype __nullable)sharedManager;
@@ -37,4 +38,6 @@
 - (void)sendAnalyticsEventAboutLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
 - (void)sendAnalyticsEventAboutLogout;
 - (void)sendThumbnailEventIfNeed;
+
+- (NSString * __nonnull)mapClassNameToReadableName:(NSString * __nonnull)className;
 @end

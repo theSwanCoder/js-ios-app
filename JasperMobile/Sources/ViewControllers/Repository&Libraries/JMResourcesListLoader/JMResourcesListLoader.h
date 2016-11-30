@@ -31,6 +31,7 @@
  @since 1.9
  */
 
+#import <Foundation/Foundation.h>
 #import "JMResourceClientHolder.h"
 
 extern NSString * const kJMResourceListLoaderOptionItemTitleKey;
@@ -65,6 +66,7 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
 @property (nonatomic, strong) NSString *accessType;
 @property (nonatomic, assign) NSInteger filterBySelectedIndex;
 @property (nonatomic, assign) NSInteger sortBySelectedIndex;
+@property (nonatomic, assign) BOOL isLoadingNow;
 
 - (NSInteger)limitOfLoadingResources;
 
@@ -87,7 +89,6 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
 //
 - (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)option;
 - (id)parameterForQueryWithOptionType:(JMResourcesListLoaderOptionType)optionType;
-- (NSString *)titleForPopupWithOptionType:(JMResourcesListLoaderOptionType)optionType;
 
 - (void)finishLoadingWithError:(NSError *)error;
 @end

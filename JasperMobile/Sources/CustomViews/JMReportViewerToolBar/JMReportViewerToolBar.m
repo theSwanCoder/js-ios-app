@@ -21,6 +21,9 @@
  */
 
 #import "JMReportViewerToolBar.h"
+#import "JMThemesManager.h"
+#import "JaspersoftSDK.h"
+#import "JMLocalization.h"
 
 @interface JMReportViewerToolBar () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *pageCountLabel;
@@ -45,12 +48,41 @@
     self.currentPageField.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
     self.currentPageField.inputView = self.pickerView;
     self.currentPageField.inputAccessoryView = [self pickerToolbar];
+
+    [self addObsevers];
 }
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.pickerView.delegate = nil;
     self.pickerView.dataSource = nil;
+}
+
+#pragma mark - Notifications
+- (void)addObsevers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportLoaderDidChangeCountOfPages:)
+                                                 name:JSReportCountOfPagesDidChangeNotification
+                                               object:nil]; // TODO: restrict object with an correct report object
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportLoaderDidChangeCurrentPage:)
+                                                 name:JSReportCurrentPageDidChangeNotification
+                                               object:nil]; // TODO: restrict object with an correct report object
+}
+
+- (void)reportLoaderDidChangeCountOfPages:(NSNotification *)notification
+{
+    JSReport *report = notification.object;
+    self.countOfPages = report.countOfPages;
+}
+
+- (void)reportLoaderDidChangeCurrentPage:(NSNotification *)notification
+{
+    JSReport *report = notification.object;
+    self.currentPage = report.currentPage;
 }
 
 #pragma mark - Properties
@@ -80,7 +112,7 @@
 
 - (void) updatePages
 {
-    NSString *keyString = JMCustomLocalizedString(@"report_viewer_pagecount", nil);
+    NSString *keyString = JMLocalizedString(@"report_viewer_pagecount");
     self.pageCountLabel.text = [NSString stringWithFormat:keyString, self.countOfPages];
     self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
     

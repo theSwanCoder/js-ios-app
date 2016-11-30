@@ -33,3 +33,9 @@
     [status_validation]
         en = Validation...
         tags = ios,new
+    [min_value_title]
+		en = Min
+		tags = ios,new
+	[max_value_title]
+		en = Max
+		tags = ios,new

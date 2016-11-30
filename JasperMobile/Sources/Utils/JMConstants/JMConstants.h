@@ -33,6 +33,8 @@
  @since 1.6
  */
 
+#import <Foundation/Foundation.h>
+
 // Application name with trademarks
 extern NSString * const kJMAppName;
 
@@ -102,11 +104,11 @@ extern NSString * const kJMReportLoaderErrorDomain;
 extern NSString * const kJMPrivacyPolicyURI;
 
 // Limit of pages for saving report to HTML format
-NSInteger  const kJMSaveReportMaxRangePages;
+extern NSInteger  const kJMSaveReportMaxRangePages;
 
 // Limit of resource for loading from JRS
-NSInteger  const kJMResourceLimit;
-NSInteger  const kJMRecentResourcesLimit;
+extern NSInteger  const kJMResourceLimit;
+extern NSInteger  const kJMRecentResourcesLimit;
 
 // Name of the default theme file
 extern NSString * const kJMDefaultThemeFileName;

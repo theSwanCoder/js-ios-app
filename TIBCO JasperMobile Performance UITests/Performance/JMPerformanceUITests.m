@@ -8,7 +8,7 @@
 
 #import "JMPerformanceUITests.h"
 
-NSInteger static kJMRunReportTestCellIndex = 1;
+NSInteger static kJMRunReportTestCellIndex = 2;
 
 @implementation JMPerformanceUITests
 
@@ -19,7 +19,7 @@ NSInteger static kJMRunReportTestCellIndex = 1;
     [self logout];
     
     [self measureBlock:^{
-        [self loginWithTestProfile];
+        [self loginWithTestProfileIfNeed];
         
         [self givenThatLibraryPageOnScreen];
         [self logout];
@@ -30,7 +30,7 @@ NSInteger static kJMRunReportTestCellIndex = 1;
 - (void)testRunReport
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
+    [self givenThatListCellsAreVisible];
     
     [self runTestReport];
     [self backToLibrary];

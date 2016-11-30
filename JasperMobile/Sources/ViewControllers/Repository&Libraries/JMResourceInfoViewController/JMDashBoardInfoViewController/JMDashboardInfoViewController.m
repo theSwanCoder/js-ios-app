@@ -28,6 +28,8 @@
 
 #import "JMDashboardInfoViewController.h"
 #import "JMResource.h"
+#import "JMDashboardViewerVC.h"
+#import "JMUtils.h"
 
 @interface JMDashboardInfoViewController ()
 
@@ -57,6 +59,13 @@
     }
     
     if (nextVC) {
+        JMDashboardViewerVC *dashboardViewerVC = nextVC;
+        // TODO: add for legacy dashboards
+        if (self.resource.type == JMResourceTypeDashboard) {
+            dashboardViewerVC.configurator = [JMUtils dashboardViewerConfiguratorReusableWebView];
+        } else if (self.resource.type == JMResourceTypeLegacyDashboard) {
+            dashboardViewerVC.configurator = [JMUtils dashboardViewerConfiguratorNonReusableWebView];
+        }
         [self.navigationController pushViewController:nextVC animated:YES];
     }
 }

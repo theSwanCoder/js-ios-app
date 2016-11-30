@@ -95,17 +95,17 @@
 {
     switch(type) {
         case JMNewScheduleVCSectionTypeMain:
-            return JMCustomLocalizedString(@"schedules_new_job_section_main", nil);
+            return JMLocalizedString(@"schedules_new_job_section_main");
         case JMNewScheduleVCSectionTypeOutputOptions:
-            return JMCustomLocalizedString(@"schedules_new_job_section_output", nil);
+            return JMLocalizedString(@"schedules_new_job_section_output");
         case JMNewScheduleVCSectionTypeScheduleStart:
-            return JMCustomLocalizedString(@"schedules_new_job_section_start", nil);
+            return JMLocalizedString(@"schedules_new_job_section_start");
         case JMNewScheduleVCSectionTypeRecurrence:
-            return JMCustomLocalizedString(@"schedules_new_job_section_recurrence", nil);
+            return JMLocalizedString(@"schedules_new_job_section_recurrence");
         case JMNewScheduleVCSectionTypeScheduleEnd:
-            return JMCustomLocalizedString(@"schedules_new_job_section_end", nil);
+            return JMLocalizedString(@"schedules_new_job_section_end");
         case JMNewScheduleVCSectionTypeHolidays:
-            return JMCustomLocalizedString(@"schedules_new_job_section_holiday", nil);
+            return JMLocalizedString(@"schedules_new_job_section_holiday");
         default:
             return nil;
     }

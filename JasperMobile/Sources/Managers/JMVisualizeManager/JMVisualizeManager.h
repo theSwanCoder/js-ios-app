@@ -31,6 +31,8 @@
 @since 2.1
 */
 
+@import UIKit;
+
 @interface JMVisualizeManager : NSObject
 @property (nonatomic, strong) NSString *visualizePath;
 @property (nonatomic, strong) NSString *htmlString;

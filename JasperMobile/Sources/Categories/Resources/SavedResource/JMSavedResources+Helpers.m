@@ -26,7 +26,10 @@
 #import "JMFavorites+Helpers.h"
 #import "JMSessionManager.h"
 #import "JMResource.h"
-
+#import "JMCoreDataManager.h"
+#import "NSObject+Additions.h"
+#import "JMConstants.h"
+#import "JMUtils.h"
 
 NSString * const kJMSavedResources = @"SavedResources";
 NSString * const kJMSavedResourcesDefaultOrganization = @"organization_1";

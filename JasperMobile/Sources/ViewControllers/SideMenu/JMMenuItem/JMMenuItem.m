@@ -27,14 +27,15 @@
 //
 
 #import "JMMenuItem.h"
+#import "JMLocalization.h"
 
 @implementation JMMenuItem
 
-- (instancetype)initWithSectionType:(JMSectionType)sectionType
+- (instancetype)initWithItemType:(JMMenuItemType)itemType
 {
     self = [super init];
     if (self) {
-        _sectionType = sectionType;
+        _itemType = itemType;
         _itemTitle = [self titleWithResourceType];
         _showNotes = NO;
         _selected = NO;
@@ -42,9 +43,9 @@
     return self;
 }
 
-+ (instancetype)menuItemWithSectionType:(JMSectionType)sectionType
++ (instancetype)menuItemWithItemType:(JMMenuItemType)itemType
 {
-    return [[self alloc] initWithSectionType:sectionType];
+    return [[self alloc] initWithItemType:itemType];
 }
 
 - (void)setSelected:(BOOL)selected
@@ -62,54 +63,37 @@
     return self.showNotes ? [self selectedIconWithNoteWithResourceType] : [self selectedIconWithResourceType];
 }
 
-#pragma mark - Private API
-- (NSString *) vcIdentifierForSelectedItem
+- (JMMenuItemControllerPresentationStyle)presentationStyle
 {
-    switch (self.sectionType) {
-        case JMSectionTypeLibrary:
-            return @"JMLibraryNavigationViewController";
-        case JMSectionTypeRecentViews:
-            return @"JMRecentViewsNavigationViewController";
-        case JMSectionTypeSavedItems:
-            return @"JMSavedItemsNavigationViewController";
-        case JMSectionTypeFavorites:
-            return @"JMFavoritesNavigationViewController";
-        case JMSectionTypeScheduling:
-            return @"JMSchedulingListNC";
-        case JMSectionTypeRepository:
-            return @"JMRepositoryNavigationViewController";
-        case JMSectionTypeAbout:
-            return @"JMAboutNavigationViewController";
-        case JMSectionTypeSettings:
-            return @"JMServerOptionsViewController";
-        default:
-            return nil;
+    if (self.itemType == JMMenuItemType_About ||
+        self.itemType == JMMenuItemType_Settings) {
+        return JMMenuItemControllerPresentationStyle_Modal;
     }
+    return JMMenuItemControllerPresentationStyle_Navigate;
 }
 
+#pragma mark - Private API
 - (NSString *) titleWithResourceType
 {
-    switch (self.sectionType) {
-        case JMSectionTypeLibrary:
-            return JMCustomLocalizedString(@"menuitem_library_label", nil);
-        case JMSectionTypeRecentViews:
-            return JMCustomLocalizedString(@"menuitem_recentviews_label", nil);
-        case JMSectionTypeSavedItems:
-            return JMCustomLocalizedString(@"menuitem_saveditems_label", nil);
-        case JMSectionTypeFavorites:
-            return JMCustomLocalizedString(@"menuitem_favorites_label", nil);
-        case JMSectionTypeScheduling:
-            return JMCustomLocalizedString(@"menuitem_schedules_label", nil);
-        case JMSectionTypeRepository:
-            return JMCustomLocalizedString(@"menuitem_repository_label", nil);
-        case JMSectionTypeAbout:
-            return JMCustomLocalizedString(@"menuitem_about_label", nil);
-        case JMSectionTypeFeedback:
-            return JMCustomLocalizedString(@"menuitem_feedback_label", nil);
-        case JMSectionTypeSettings:
-            return JMCustomLocalizedString(@"menuitem_settings_label", nil);
-        case JMSectionTypeLogout:
-            return JMCustomLocalizedString(@"menuitem_logout_label", nil);
+    switch (self.itemType) {
+        case JMMenuItemType_Library:
+            return JMLocalizedString(@"menuitem_library_label");
+        case JMMenuItemType_SavedItems:
+            return JMLocalizedString(@"menuitem_saveditems_label");
+        case JMMenuItemType_Favorites:
+            return JMLocalizedString(@"menuitem_favorites_label");
+        case JMMenuItemType_Scheduling:
+            return JMLocalizedString(@"menuitem_schedules_label");
+        case JMMenuItemType_Repository:
+            return JMLocalizedString(@"menuitem_repository_label");
+        case JMMenuItemType_About:
+            return JMLocalizedString(@"menuitem_about_label");
+        case JMMenuItemType_Feedback:
+            return JMLocalizedString(@"menuitem_feedback_label");
+        case JMMenuItemType_Settings:
+            return JMLocalizedString(@"menuitem_settings_label");
+        case JMMenuItemType_Logout:
+            return JMLocalizedString(@"menuitem_logout_label");
         default:
             return nil;
     }
@@ -117,18 +101,16 @@
 
 - (UIImage *)iconWithResourceType
 {
-    switch (self.sectionType) {
-        case JMSectionTypeLibrary:
+    switch (self.itemType) {
+        case JMMenuItemType_Library:
             return [UIImage imageNamed:@"ic_library"];
-        case JMSectionTypeRecentViews:
-            return [UIImage imageNamed:@"ic_recent_views"];
-        case JMSectionTypeRepository:
+        case JMMenuItemType_Repository:
             return [UIImage imageNamed:@"ic_repository"];
-        case JMSectionTypeSavedItems:
+        case JMMenuItemType_SavedItems:
             return [UIImage imageNamed:@"ic_saved_items"];
-        case JMSectionTypeFavorites:
+        case JMMenuItemType_Favorites:
             return [UIImage imageNamed:@"ic_favorites"];
-        case JMSectionTypeScheduling:
+        case JMMenuItemType_Scheduling:
             return [UIImage imageNamed:@"ic_scheduling"];
         default:
             return nil;
@@ -137,18 +119,16 @@
 
 - (UIImage *)selectedIconWithResourceType
 {
-    switch (self.sectionType) {
-        case JMSectionTypeLibrary:
+    switch (self.itemType) {
+        case JMMenuItemType_Library:
             return [UIImage imageNamed:@"ic_library_selected"];
-        case JMSectionTypeRecentViews:
-            return [UIImage imageNamed:@"ic_recent_views_selected"];
-        case JMSectionTypeRepository:
+        case JMMenuItemType_Repository:
             return [UIImage imageNamed:@"ic_repository_selected"];
-        case JMSectionTypeSavedItems:
+        case JMMenuItemType_SavedItems:
             return [UIImage imageNamed:@"ic_saved_items_selected"];
-        case JMSectionTypeFavorites:
+        case JMMenuItemType_Favorites:
             return [UIImage imageNamed:@"ic_favorites_selected"];
-        case JMSectionTypeScheduling:
+        case JMMenuItemType_Scheduling:
             return [UIImage imageNamed:@"ic_scheduling_selected"];
         default:
             return nil;
@@ -157,16 +137,14 @@
 
 - (UIImage *)iconWithNoteWithResourceType
 {
-    switch (self.sectionType) {
-        case JMSectionTypeLibrary:
+    switch (self.itemType) {
+        case JMMenuItemType_Library:
             return [UIImage imageNamed:@"ic_library"];
-        case JMSectionTypeRecentViews:
-            return [UIImage imageNamed:@"ic_recent_views"];
-        case JMSectionTypeRepository:
+        case JMMenuItemType_Repository:
             return [UIImage imageNamed:@"ic_repository"];
-        case JMSectionTypeSavedItems:
+        case JMMenuItemType_SavedItems:
             return [UIImage imageNamed:@"ic_saved_items_note"];
-        case JMSectionTypeFavorites:
+        case JMMenuItemType_Favorites:
             return [UIImage imageNamed:@"ic_favorites"];
         default:
             return nil;
@@ -175,16 +153,14 @@
 
 - (UIImage *)selectedIconWithNoteWithResourceType
 {
-    switch (self.sectionType) {
-        case JMSectionTypeLibrary:
+    switch (self.itemType) {
+        case JMMenuItemType_Library:
             return [UIImage imageNamed:@"ic_library_selected"];
-        case JMSectionTypeRecentViews:
-            return [UIImage imageNamed:@"ic_recent_views_selected"];
-        case JMSectionTypeRepository:
+        case JMMenuItemType_Repository:
             return [UIImage imageNamed:@"ic_repository_selected"];
-        case JMSectionTypeSavedItems:
+        case JMMenuItemType_SavedItems:
             return [UIImage imageNamed:@"ic_saved_items_selected_note"];
-        case JMSectionTypeFavorites:
+        case JMMenuItemType_Favorites:
             return [UIImage imageNamed:@"ic_favorites_selected"];
         default:
             return nil;
@@ -193,22 +169,20 @@
 
 - (NSString *)nameForAnalytics
 {
-    switch (self.sectionType) {
-        case JMSectionTypeLibrary:
+    switch (self.itemType) {
+        case JMMenuItemType_Library:
             return @"Library";
-        case JMSectionTypeRecentViews:
-            return @"Recenlty Viewed";
-        case JMSectionTypeRepository:
+        case JMMenuItemType_Repository:
             return @"Repository";
-        case JMSectionTypeSavedItems:
+        case JMMenuItemType_SavedItems:
             return @"Saved Items";
-        case JMSectionTypeFavorites:
+        case JMMenuItemType_Favorites:
             return @"Favorites";
-        case JMSectionTypeScheduling:
+        case JMMenuItemType_Scheduling:
             return @"Scheduling";
-        case JMSectionTypeAbout:
+        case JMMenuItemType_About:
             return @"AboutApp";
-        case JMSectionTypeSettings:
+        case JMMenuItemType_Settings:
             return @"Settings";
         default:
             return nil;
@@ -227,7 +201,7 @@
     }
 
     JMMenuItem *otherMenuItem = object;
-    return _sectionType == otherMenuItem.sectionType;
+    return _itemType == otherMenuItem.itemType;
 }
 
 - (NSUInteger)hash

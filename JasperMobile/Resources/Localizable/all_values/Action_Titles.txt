@@ -190,3 +190,9 @@
 		pt = Compartilhar
 		zh = 分享
 		tags = ios
+	[action_title_bookmarks]
+		en = Bookmarks
+		tags = ios,new
+	[action_title_report_chart_types]
+		en = Show Chart Types
+		tags = ios,new

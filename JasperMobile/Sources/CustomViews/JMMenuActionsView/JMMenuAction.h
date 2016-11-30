@@ -33,6 +33,8 @@
 @since 2.1
 */
 
+@import Foundation;
+
 typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
     JMMenuActionsViewAction_None            = 0,
     JMMenuActionsViewAction_MakeFavorite    = 1 << 0,
@@ -53,8 +55,10 @@ typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
     JMMenuActionsViewAction_OpenIn          = 1 << 15,
     JMMenuActionsViewAction_Schedule        = 1 << 16,
     JMMenuActionsViewAction_Share           = 1 << 17,
-    JMMenuActionsViewAction_ShowExternalDisplay = 1 << 18,
-    JMMenuActionsViewAction_HideExternalDisplay = 1 << 19
+    JMMenuActionsViewAction_Bookmarks       = 1 << 18,
+    JMMenuActionsViewAction_ShowExternalDisplay = 1 << 19,
+    JMMenuActionsViewAction_HideExternalDisplay = 1 << 20,
+    JMMenuActionsViewAction_ShowReportChartTypes = 1 << 21
 };
 
 @interface JMMenuAction : NSObject

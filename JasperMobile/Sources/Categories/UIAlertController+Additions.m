@@ -26,6 +26,7 @@
 //
 
 #import "UIAlertController+Additions.h"
+#import "JMLocalization.h"
 
 @interface UIAlertController (UITextFieldDelegate) <UITextFieldDelegate>
 
@@ -44,8 +45,8 @@
 
 + (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:JMCustomLocalizedString(title, nil)
-                                                                             message:JMCustomLocalizedString(message, nil)
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:JMLocalizedString(title)
+                                                                             message:JMLocalizedString(message)
                                                                       preferredStyle:UIAlertControllerStyleAlert];
     return alertController;
 }
@@ -103,7 +104,7 @@
 - (void)addActionWithLocalizedTitle:(nonnull NSString *)title style:(UIAlertActionStyle)style handler:(UIAlertControllerCompletionBlock _Nullable)handler
 {
     __weak typeof(self) weakSelf = self;
-    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:JMCustomLocalizedString(title, nil) style:style handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:JMLocalizedString(title) style:style handler:^(UIAlertAction * _Nonnull action) {
         if (handler) {
             __strong typeof(self) strongSelf = weakSelf;
             if (strongSelf) {

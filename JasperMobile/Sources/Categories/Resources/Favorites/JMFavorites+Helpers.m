@@ -25,7 +25,9 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMSessionManager.h"
 #import "JMResource.h"
-
+#import "NSObject+Additions.h"
+#import "JMCoreDataManager.h"
+#import "JMConstants.h"
 
 NSString * const kJMFavorites = @"Favorites";
 

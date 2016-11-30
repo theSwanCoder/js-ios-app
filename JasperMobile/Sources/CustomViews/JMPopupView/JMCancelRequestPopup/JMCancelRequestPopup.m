@@ -27,6 +27,7 @@
 
 #import "JMCancelRequestPopup.h"
 #import "JMUtils.h"
+#import "JMLocalization.h"
 #import <QuartzCore/QuartzCore.h>
 
 static NSInteger _cancelRequestPopupCounter = 0;
@@ -71,9 +72,9 @@ static NSInteger _cancelRequestPopupCounter = 0;
     } else { // there is popup
         popup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:[self class]];
     }
-    popup.progressLabel.text = JMCustomLocalizedString(message, nil);
+    popup.progressLabel.text = JMLocalizedString(message);
     popup.cancelButton.hidden = NO;
-    [popup.cancelButton setTitle:JMCustomLocalizedString(@"dialog_button_cancel", nil) forState:UIControlStateNormal];
+    [popup.cancelButton setTitle:JMLocalizedString(@"dialog_button_cancel") forState:UIControlStateNormal];
     popup.cancelBlock = cancelBlock;
 }
 
@@ -91,7 +92,7 @@ static NSInteger _cancelRequestPopupCounter = 0;
     } else { // there is popup
         popup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:[self class]];
     }
-    popup.progressLabel.text = JMCustomLocalizedString(message, nil);
+    popup.progressLabel.text = JMLocalizedString(message);
     popup.cancelButton.hidden = YES;
     popup.cancelBlock = nil;
 }

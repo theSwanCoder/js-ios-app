@@ -28,6 +28,8 @@
 #import "JMReportInfoViewController.h"
 #import "JMScheduleVC.h"
 #import "JMResource.h"
+#import "JMReportViewerVC.h"
+#import "JMUtils.h"
 
 @interface JMReportInfoViewController ()
 
@@ -59,12 +61,14 @@
     }
     
     if (nextVC) {
+        JMReportViewerVC *reportViewerVC = (JMReportViewerVC *)nextVC;
+        reportViewerVC.configurator = [JMUtils reportViewerConfiguratorReusableWebView];
         [self.navigationController pushViewController:nextVC animated:YES];
     }
 }
 
 - (void)scheduleReport {
-    JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+    JMScheduleVC *newJobVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
     [newJobVC createNewScheduleMetadataWithResourceLookup:self.resource];
     [self.navigationController pushViewController:newJobVC animated:YES];
 }

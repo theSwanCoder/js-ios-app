@@ -31,6 +31,7 @@
 @since 2.5
 */
 
+@import UIKit;
 
 @interface JMSelectedItem : NSObject
 @property (nonatomic, copy, readonly) NSString *title;

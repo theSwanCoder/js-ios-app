@@ -32,6 +32,9 @@
 #import "JMIntroModelManager.h"
 #import "JMIntroModel.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMLocalization.h"
+#import "JMConstants.h"
+#import "JMUtils.h"
 
 @interface JMIntroModelManager()
 @property (nonatomic, copy) NSArray *pageData;
@@ -50,16 +53,16 @@
 
 - (void)setupModel {
 
-    NSString *description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro_model_firstScreen_description", nil), kJMAppName];
-    JMIntroModel *stayConnectedPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro_model_firstScreen_title", nil)
+    NSString *description = [NSString stringWithFormat:JMLocalizedString(@"intro_model_firstScreen_description"), kJMAppName];
+    JMIntroModel *stayConnectedPage = [[JMIntroModel alloc] initWithTitle:JMLocalizedString(@"intro_model_firstScreen_title")
                                                               description:description
                                                                     image:nil];
-    JMIntroModel *instantAccessPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro_model_secondScreen_title", nil)
-                                                              description:JMCustomLocalizedString(@"intro_model_secondScreen_description", nil)
+    JMIntroModel *instantAccessPage = [[JMIntroModel alloc] initWithTitle:JMLocalizedString(@"intro_model_secondScreen_title")
+                                                              description:JMLocalizedString(@"intro_model_secondScreen_description")
                                                                     image:nil];
 
-    description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro_model_thirdScreen_description", nil), [JMUtils minSupportedServerVersion]];
-    JMIntroModel *seemlessIntegrationPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro_model_thirdScreen_title", nil)
+    description = [NSString stringWithFormat:JMLocalizedString(@"intro_model_thirdScreen_description"), [JMUtils minSupportedServerVersion]];
+    JMIntroModel *seemlessIntegrationPage = [[JMIntroModel alloc] initWithTitle:JMLocalizedString(@"intro_model_thirdScreen_title")
                                                                     description:description
                                                                           image:nil];
     self.pageData = @[

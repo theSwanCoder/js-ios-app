@@ -27,7 +27,7 @@
 //
 
 #import "JMScheduleVCRow.h"
-
+#import "JMLocalization.h"
 
 @implementation JMScheduleVCRow
 
@@ -64,31 +64,31 @@
     NSString *title;
     switch(type) {
         case JMScheduleVCRowTypeLabel: {
-            title = JMCustomLocalizedString(@"schedules_new_job_label", nil);
+            title = JMLocalizedString(@"schedules_new_job_label");
             break;
         }
         case JMScheduleVCRowTypeDescription: {
-            title =JMCustomLocalizedString(@"schedules_new_job_description", nil);
+            title =JMLocalizedString(@"schedules_new_job_description");
             break;
         }
         case JMScheduleVCRowTypeOutputFileURI: {
-            title = JMCustomLocalizedString(@"schedules_new_job_baseOutputFilename", nil);
+            title = JMLocalizedString(@"schedules_new_job_baseOutputFilename");
             break;
         }
         case JMScheduleVCRowTypeOutputFolderURI: {
-            title = JMCustomLocalizedString(@"schedules_new_job_folderURI", nil);
+            title = JMLocalizedString(@"schedules_new_job_folderURI");
             break;
         }
         case JMScheduleVCRowTypeFormat: {
-            title = JMCustomLocalizedString(@"schedules_new_job_outputFormat", nil);
+            title = JMLocalizedString(@"schedules_new_job_outputFormat");
             break;
         }
         case JMScheduleVCRowTypeStartDate: {
-            title = JMCustomLocalizedString(@"schedules_new_job_startDate", nil);
+            title = JMLocalizedString(@"schedules_new_job_startDate");
             break;
         }
         case JMScheduleVCRowTypeEndDate: {
-            title = JMCustomLocalizedString(@"schedules_new_job_endDate", nil);
+            title = JMLocalizedString(@"schedules_new_job_endDate");
             break;
         }
         case JMScheduleVCRowTypeTimeZone: {
@@ -96,55 +96,55 @@
             break;
         }
         case JMScheduleVCRowTypeStartImmediately: {
-            title = JMCustomLocalizedString(@"schedules_new_job_startType", nil);
+            title = JMLocalizedString(@"schedules_new_job_startType");
             break;
         }
         case JMScheduleVCRowTypeRepeatType: {
-            title = JMCustomLocalizedString(@"schedules_new_job_repeat_type", nil);
+            title = JMLocalizedString(@"schedules_new_job_repeat_type");
             break;
         }
         case JMScheduleVCRowTypeRepeatCount: {
-            title = JMCustomLocalizedString(@"schedules_new_job_repeat_count", nil);
+            title = JMLocalizedString(@"schedules_new_job_repeat_count");
             break;
         }
         case JMScheduleVCRowTypeRepeatTimeInterval: {
-            title = JMCustomLocalizedString(@"schedules_new_job_recurrenceIntervalUnit", nil);
+            title = JMLocalizedString(@"schedules_new_job_recurrenceIntervalUnit");
             break;
         }
         case JMScheduleVCRowTypeRunIndefinitely: {
-            title = JMCustomLocalizedString(@"schedules_new_job_run_indefinitely", nil);
+            title = JMLocalizedString(@"schedules_new_job_run_indefinitely");
             break;
         }
         case JMScheduleVCRowTypeNumberOfRuns: {
-            title = JMCustomLocalizedString(@"schedules_new_job_occurrenceCount", nil);
+            title = JMLocalizedString(@"schedules_new_job_occurrenceCount");
             break;
         }
         case JMScheduleVCRowTypeCalendarEveryMonth: {
-            title = JMCustomLocalizedString(@"schedules_job_calendar_every_month", nil);
+            title = JMLocalizedString(@"schedules_job_calendar_every_month");
             break;
         }
         case JMScheduleVCRowTypeCalendarSelectedMonths: {
-            title = JMCustomLocalizedString(@"schedules_new_job_months", nil);
+            title = JMLocalizedString(@"schedules_new_job_months");
             break;
         }
         case JMScheduleVCRowTypeCalendarEveryDay: {
-            title = JMCustomLocalizedString(@"schedules_job_calendar_every_day", nil);
+            title = JMLocalizedString(@"schedules_job_calendar_every_day");
             break;
         }
         case JMScheduleVCRowTypeCalendarSelectedDays: {
-            title = JMCustomLocalizedString(@"schedules_new_job_weekDays", nil);
+            title = JMLocalizedString(@"schedules_new_job_weekDays");
             break;
         }
         case JMScheduleVCRowTypeCalendarDatesInMonth: {
-            title = JMCustomLocalizedString(@"schedules_new_job_monthDays", nil);
+            title = JMLocalizedString(@"schedules_new_job_monthDays");
             break;
         }
         case JMScheduleVCRowTypeCalendarHours: {
-            title = JMCustomLocalizedString(@"schedules_new_job_hours", nil);
+            title = JMLocalizedString(@"schedules_new_job_hours");
             break;
         }
         case JMScheduleVCRowTypeCalendarMinutes: {
-            title = JMCustomLocalizedString(@"schedules_new_job_minutes", nil);
+            title = JMLocalizedString(@"schedules_new_job_minutes");
             break;
         }
     }
@@ -155,11 +155,11 @@
 {
     switch(type) {
         case JMScheduleVCRowTypeCalendarDatesInMonth:
-            return JMCustomLocalizedString(@"schedules_new_job_monthDays_hint", nil);
+            return JMLocalizedString(@"schedules_new_job_monthDays_hint");
         case JMScheduleVCRowTypeCalendarHours:
-            return JMCustomLocalizedString(@"schedules_new_job_hours_hint", nil);
+            return JMLocalizedString(@"schedules_new_job_hours_hint");
         case JMScheduleVCRowTypeCalendarMinutes:
-            return JMCustomLocalizedString(@"schedules_new_job_minutes_hint", nil);
+            return JMLocalizedString(@"schedules_new_job_minutes_hint");
         default:
             return nil;
     }

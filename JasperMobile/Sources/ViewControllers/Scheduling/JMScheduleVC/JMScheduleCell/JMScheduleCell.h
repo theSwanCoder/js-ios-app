@@ -31,6 +31,8 @@
 @since 2.3
 */
 
+@import UIKit;
+
 @protocol JMScheduleCellDelegate;
 #import "JMScheduleVCRow.h"
 

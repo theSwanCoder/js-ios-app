@@ -25,7 +25,8 @@
 //  TIBCO JasperMobile
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+@import CoreData;
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com

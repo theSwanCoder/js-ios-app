@@ -29,6 +29,9 @@
 
 #import "JMReportExportTask.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMUtils.h"
+#import "NSObject+Additions.h"
+#import "JMConstants.h"
 
 @interface JMReportExportTask ()
 @property (nonatomic, strong, readwrite) JSReportPagesRange *pagesRange;

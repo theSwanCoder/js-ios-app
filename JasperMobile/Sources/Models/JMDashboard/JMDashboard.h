@@ -32,19 +32,18 @@
  @since 2.0
  */
 
+#import <Foundation/Foundation.h>
+#import "JaspersoftSDK.h"
 @class JMResource;
 
 @interface JMDashboard : NSObject
 // getters
 @property (nonatomic, strong, readonly) JMResource *resource;
 @property (nonatomic, copy, readonly) NSString *resourceURI;
-@property (nonatomic, strong, readonly) NSURLRequest *resourceRequest;
 @property (nonatomic, copy) NSArray <JSInputControlDescriptor *>*inputControls;
 @property (nonatomic, copy) NSArray <JSDashboardComponent *>*components;
 @property (nonatomic, weak) JSDashboardComponent *maximizedComponent;
 
 - (instancetype)initWithResource:(JMResource *)resource;
 + (instancetype)dashboardWithResource:(JMResource *)resource;
-
-- (void)updateResourceRequest;
 @end

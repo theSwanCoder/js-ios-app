@@ -24,6 +24,9 @@
 #import "JMRepositoryListLoader.h"
 #import "JMResource.h"
 #import "JMResourceLoaderOption.h"
+#import "NSObject+Additions.h"
+#import "JMUtils.h"
+#import "JMLocalization.h"
 
 @interface JMRepositoryListLoader ()
 @property (nonatomic, strong) NSMutableArray *rootFoldersURIs;
@@ -111,11 +114,15 @@
 - (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)optionType
 {
     switch (optionType) {
-        case JMResourcesListLoaderOptionType_Sort:
-            return [super listItemsWithOption:optionType];
+        case JMResourcesListLoaderOptionType_Sort:{
+            JMResourceLoaderOption *filterOption = [[super listItemsWithOption:optionType] firstObject];
+            return @[
+                     filterOption
+                     ];
+        }
         case JMResourcesListLoaderOptionType_Filter:
             return @[
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_all", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
                                                       value:@[
                                                               kJS_WS_TYPE_REPORT_UNIT,
                                                               kJS_WS_TYPE_DASHBOARD,

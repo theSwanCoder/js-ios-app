@@ -28,6 +28,10 @@
 #import <Foundation/Foundation.h>
 #import "JMServerProfile.h"
 #import "JMLoginViewController.h"
+#import "JMWebViewManager.h"
+
+@class JMReportViewerConfigurator;
+@class JMDashboardViewerConfigurator;
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
@@ -78,7 +82,7 @@ void jmDebugLog(NSString * __nonnull format, ...);
 /**
  Verify system version is 9
  */
-+ (BOOL)isSystemVersion9;
++ (BOOL)isSystemVersionEqualOrUp9;
 
 /**
  Returns YES if crash reports sending is available
@@ -135,9 +139,6 @@ void jmDebugLog(NSString * __nonnull format, ...);
 */
 + (BOOL)isServerAmber;
 
-
-+ (BOOL)isSupportNewRESTFlow;
-
 /**
  Returns YES if visualize is supported on current JRS instance
 
@@ -171,6 +172,16 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (JMServerProfile *__nullable)activeServerProfile;
 
 + (float)minSupportedServerVersion;
+
++ (JMResourceFlowType)flowTypeForReportViewer;
+
++ (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorReusableWebView;
+
++ (JMReportViewerConfigurator * __nonnull)reportViewerConfiguratorNonReusableWebView;
+
++ (JMDashboardViewerConfigurator * __nonnull)dashboardViewerConfiguratorReusableWebView;
+
++ (JMDashboardViewerConfigurator * __nonnull)dashboardViewerConfiguratorNonReusableWebView;
 
 + (BOOL)isCompactWidth;
 

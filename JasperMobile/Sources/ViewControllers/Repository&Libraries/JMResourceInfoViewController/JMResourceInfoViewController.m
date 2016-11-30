@@ -25,6 +25,11 @@
 #import "PopoverView.h"
 #import "UIViewController+Additions.h"
 #import "JMResource.h"
+#import "JMThemesManager.h"
+#import "JMUtils.h"
+#import "JMConstants.h"
+#import "JMLocalization.h"
+
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
@@ -207,7 +212,8 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 {
     JMMenuActionsView *actionsView = [JMMenuActionsView new];
     actionsView.delegate = self;
-    actionsView.availableActions = [self availableAction];
+    [actionsView setAvailableActions:[self availableAction]
+                     disabledActions:JMMenuActionsViewAction_None];
     CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), -10);
     
     self.popoverView = [PopoverView showPopoverAtPoint:point
@@ -237,7 +243,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     }
         
     NSDictionary *item = self.resourceProperties[indexPath.row];
-    cell.textLabel.text = JMCustomLocalizedString([NSString stringWithFormat:@"resource_%@_title", item[kJMTitleKey]], nil);
+    cell.textLabel.text = JMLocalizedString([NSString stringWithFormat:@"resource_%@_title", item[kJMTitleKey]]);
     cell.detailTextLabel.text = item[kJMValueKey];
     return cell;
 }

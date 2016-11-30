@@ -31,14 +31,21 @@
  @since 1.9
  */
 
-#import <Foundation/Foundation.h>
+@import UIKit;
 
 @interface JMServerOption : NSObject
 
-@property (nonatomic, strong) NSString *titleString;
+@property (nonatomic, strong, readonly) NSString *titleString;
 @property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) id        optionValue;
-@property (nonatomic, strong) NSString *cellIdentifier;
-@property (nonatomic, assign) BOOL      editable;       // By default YES
-
+@property (nonatomic, strong, readonly) NSString *cellIdentifier;
+@property (nonatomic, assign, readonly) BOOL      editable;       // By default YES
+- (instancetype)initWithTitle:(NSString *)title
+                  optionValue:(id)optionValue
+               cellIdentifier:(NSString *)cellIdentifier
+                     editable:(BOOL)editable;
++ (instancetype)optionWithTitle:(NSString *)title
+                    optionValue:(id)optionValue
+                 cellIdentifier:(NSString *)cellIdentifier
+                       editable:(BOOL)editable;
 @end

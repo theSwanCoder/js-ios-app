@@ -130,15 +130,15 @@
         } else if (bodyJSON[@"errorCode"] && bodyJSON[@"message"]) {
             errorMessage = bodyJSON[@"message"];
             if ([errorMessage rangeOfString:@"will never fire"].location != NSNotFound) {
-                errorMessage = JMCustomLocalizedString(@"error_report_job_trigger_no_fire", nil);
+                errorMessage = JMLocalizedString(@"error_report_job_trigger_no_fire");
             }
         }
         // TODO: enhance error
         if (errorMessage.length == 0) {
-            errorMessage = JMCustomLocalizedString(@"schedules_error_general", nil);
+            errorMessage = JMLocalizedString(@"schedules_error_general");
             
         }
-        error = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules_error_domain", nil)
+        error = [[NSError alloc] initWithDomain:JMLocalizedString(@"schedules_error_domain")
                                            code:0
                                        userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
 
@@ -157,24 +157,24 @@
     if (errorCode.length) {
         if ([errorCode isEqualToString:@"error.pattern"]) {
             if ([field isEqualToString:@"hours"]) {
-                errorMessage = JMCustomLocalizedString(@"schedules_error_wrong_hours", nil);
+                errorMessage = JMLocalizedString(@"schedules_error_wrong_hours");
             } else if ([field isEqualToString:@"minutes"]) {
-                errorMessage = JMCustomLocalizedString(@"schedules_error_wrong_minutes", nil);
+                errorMessage = JMLocalizedString(@"schedules_error_wrong_minutes");
             } else if ([field isEqualToString:@"monthDays"]) {
-                errorMessage = JMCustomLocalizedString(@"schedules_error_wrong_datesinmonth", nil);
+                errorMessage = JMLocalizedString(@"schedules_error_wrong_datesinmonth");
             }
         } else if ([errorCode isEqualToString:@"error.duplicate.report.job.output.filename"]) {
-            errorMessage = JMCustomLocalizedString(@"schedules_error_duplicate_filename", nil);
+            errorMessage = JMLocalizedString(@"schedules_error_duplicate_filename");
         } else if ([errorCode isEqualToString:@"error.length"]) {
-            errorMessage = JMCustomLocalizedString(@"schedules_error_length", nil);
+            errorMessage = JMLocalizedString(@"schedules_error_length");
         } else if ([errorCode isEqualToString:@"error.invalid.chars"]) {
-            errorMessage = JMCustomLocalizedString(@"schedules_error_general_invalid_chars", nil);
+            errorMessage = JMLocalizedString(@"schedules_error_general_invalid_chars");
         } else if ([errorCode isEqualToString:@"error.report.job.output.folder.inexistent"]) {
-            errorMessage = JMCustomLocalizedString(@"schedules_error_output_folder_inexistent", nil);
+            errorMessage = JMLocalizedString(@"schedules_error_output_folder_inexistent");
         } else if ([errorCode isEqualToString:@"error.before.current.date"]) {
-            errorMessage = JMCustomLocalizedString(@"schedules_error_date_past", nil);
+            errorMessage = JMLocalizedString(@"schedules_error_date_past");
         } else if ([errorCode isEqualToString:@"error.report.job.output.folder.notwriteable"]) {
-            errorMessage = JMCustomLocalizedString(@"schedules_error_notwriteable_output_folder", nil);
+            errorMessage = JMLocalizedString(@"schedules_error_notwriteable_output_folder");
         }
     } else if (defaultMessage) {
         errorMessage = defaultMessage;
@@ -198,7 +198,7 @@
     
     if (errorMessage.length && field.length) {
         NSString *fieldLocalizedKey = [NSString stringWithFormat:@"schedules_new_job_%@", field];
-        NSString *localizedField = JMCustomLocalizedString(fieldLocalizedKey, nil);
+        NSString *localizedField = JMLocalizedString(fieldLocalizedKey);
         if (localizedField.length == 0 || [localizedField isEqualToString:fieldLocalizedKey]) {
             NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:@"([a-z])([A-Z])" options:0 error:NULL];
             NSString *dividedFieldName = [regexp stringByReplacingMatchesInString:field options:0 range:NSMakeRange(0, field.length) withTemplate:@"$1 $2"];

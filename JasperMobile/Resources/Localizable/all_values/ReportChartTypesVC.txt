@@ -1,0 +1,5 @@
+
+[[ReportChartTypes]]
+	[report_chart_type_view_title]
+		en = Chart Types
+		tags = ios,new

@@ -20,18 +20,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
 //  JMExternalWindowDashboardControlsVC.h
 //  TIBCO JasperMobile
 //
 
-@protocol JMExternalWindowDashboardControlsVCDelegate;
-
 /**
 @author Olexandr Dakhno odahno@tibco.com
 @since 2.3
 */
+
+@import UIKit;
+#import "JaspersoftSDK.h"
+@protocol JMExternalWindowDashboardControlsVCDelegate;
 
 @interface JMExternalWindowDashboardControlsVC : UIViewController
 @property (nonatomic, copy) NSArray <JSDashboardComponent *>* components;

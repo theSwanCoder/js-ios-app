@@ -31,6 +31,8 @@
 @since 2.5
 */
 
+#import <Foundation/Foundation.h>
+
 typedef NS_ENUM(NSInteger, JMHTMLScriptType) {
     JMHTMLScriptTypeLink,
     JMHTMLScriptTypeSource,

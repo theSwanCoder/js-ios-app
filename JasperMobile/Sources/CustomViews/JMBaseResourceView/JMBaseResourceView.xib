@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="mik-OW-WC2" customClass="JMBaseResourceView">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ea-4g-rR4">
+                    <rect key="frame" x="0.0" y="-44" width="600" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="VsZ-e4-H2l"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Pb-da-CNZ">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FA9-zE-MNt" customClass="JMResourceContentView">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="FA9-zE-MNt" secondAttribute="trailing" id="Q0a-Ie-Sz0"/>
+                        <constraint firstItem="FA9-zE-MNt" firstAttribute="top" secondItem="8Pb-da-CNZ" secondAttribute="top" id="X1N-Oa-oAq"/>
+                        <constraint firstAttribute="bottom" secondItem="FA9-zE-MNt" secondAttribute="bottom" id="dp5-9r-Ta1"/>
+                        <constraint firstItem="FA9-zE-MNt" firstAttribute="leading" secondItem="8Pb-da-CNZ" secondAttribute="leading" id="ks3-jD-UaR"/>
+                    </constraints>
+                </view>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Ngh-gR-Mej">
+                    <rect key="frame" x="290" y="290" width="20" height="20"/>
+                </activityIndicatorView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8SV-3C-9i0">
+                    <rect key="frame" x="0.0" y="600" width="600" height="44"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="OxZ-UF-b2t"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="6Ea-4g-rR4" firstAttribute="top" secondItem="mik-OW-WC2" secondAttribute="top" constant="-44" id="6Ai-8G-d2G"/>
+                <constraint firstAttribute="trailing" secondItem="8Pb-da-CNZ" secondAttribute="trailing" id="7sL-5o-Fpg"/>
+                <constraint firstAttribute="trailing" secondItem="6Ea-4g-rR4" secondAttribute="trailing" id="D6m-Bx-IMr"/>
+                <constraint firstItem="6Ea-4g-rR4" firstAttribute="leading" secondItem="mik-OW-WC2" secondAttribute="leading" id="HRd-85-Ivw"/>
+                <constraint firstAttribute="trailing" secondItem="8SV-3C-9i0" secondAttribute="trailing" id="LNr-pV-Tlp"/>
+                <constraint firstItem="Ngh-gR-Mej" firstAttribute="centerX" secondItem="8Pb-da-CNZ" secondAttribute="centerX" id="Xeo-JE-yby"/>
+                <constraint firstItem="Ngh-gR-Mej" firstAttribute="centerY" secondItem="8Pb-da-CNZ" secondAttribute="centerY" id="Zhw-iu-5TU"/>
+                <constraint firstItem="8Pb-da-CNZ" firstAttribute="top" secondItem="6Ea-4g-rR4" secondAttribute="bottom" id="f7T-Kx-5ms"/>
+                <constraint firstItem="8Pb-da-CNZ" firstAttribute="leading" secondItem="mik-OW-WC2" secondAttribute="leading" id="jYd-on-hBT"/>
+                <constraint firstItem="8SV-3C-9i0" firstAttribute="top" secondItem="8Pb-da-CNZ" secondAttribute="bottom" id="u05-Nk-HTA"/>
+                <constraint firstItem="8SV-3C-9i0" firstAttribute="leading" secondItem="mik-OW-WC2" secondAttribute="leading" id="wNa-HM-H7Q"/>
+                <constraint firstAttribute="bottom" secondItem="8SV-3C-9i0" secondAttribute="bottom" constant="-44" id="zbU-Kr-ZTq"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <connections>
+                <outlet property="activityIndicator" destination="Ngh-gR-Mej" id="ofP-Gw-6ks"/>
+                <outlet property="bottomView" destination="8SV-3C-9i0" id="s4l-nQ-96K"/>
+                <outlet property="bottomViewBottomConstraint" destination="zbU-Kr-ZTq" id="n2t-dn-X4M"/>
+                <outlet property="container" destination="8Pb-da-CNZ" id="TL9-th-dEI"/>
+                <outlet property="contentView" destination="FA9-zE-MNt" id="G6f-ZG-1LT"/>
+                <outlet property="topView" destination="6Ea-4g-rR4" id="2cS-SZ-cbN"/>
+                <outlet property="topViewTopConstraint" destination="6Ai-8G-d2G" id="mhl-Vc-Vmh"/>
+            </connections>
+            <point key="canvasLocation" x="286" y="358"/>
+        </view>
+    </objects>
+</document>

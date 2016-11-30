@@ -27,6 +27,11 @@
 #import "JMServerCollectionViewCell.h"
 #import "JMServerOptionsViewController.h"
 #import "JMCancelRequestPopup.h"
+#import "JMLocalization.h"
+#import "JMThemesManager.h"
+#import "JMCoreDataManager.h"
+#import "JMConstants.h"
+#import "UIAlertController+Additions.h"
 
 NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
@@ -45,19 +50,19 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"servers_profile_title", nil);
+    self.title = JMLocalizedString(@"servers_profile_title");
     self.view.backgroundColor = [[JMThemesManager sharedManager] serversViewBackgroundColor];
     self.collectionView.backgroundColor = [UIColor clearColor];
     
-    self.errorLabel.text = JMCustomLocalizedString(@"servers_profile_list_empty", nil);
+    self.errorLabel.text = JMLocalizedString(@"servers_profile_list_empty");
     self.errorLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];
     
-    UIMenuItem *editItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers_action_profile_edit", nil) action:@selector(editServerProfile:)];
-    UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers_action_profile_delete", nil) action:@selector(deleteServerProfile:)];
-    UIMenuItem *cloneItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers_action_profile_clone", nil) action:@selector(cloneServerProfile:)];
+    UIMenuItem *editItem = [[UIMenuItem alloc] initWithTitle:JMLocalizedString(@"servers_action_profile_edit") action:@selector(editServerProfile:)];
+    UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:JMLocalizedString(@"servers_action_profile_delete") action:@selector(deleteServerProfile:)];
+    UIMenuItem *cloneItem = [[UIMenuItem alloc] initWithTitle:JMLocalizedString(@"servers_action_profile_clone") action:@selector(cloneServerProfile:)];
 
     [[UIMenuController sharedMenuController] setMenuItems:@[editItem, deleteItem, cloneItem]];
 }

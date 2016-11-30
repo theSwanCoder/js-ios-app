@@ -27,6 +27,8 @@
 //
 
 #import "JMEULAViewController.h"
+#import "JMUtils.h"
+#import "JMLocalization.h"
 
 @interface JMEULAViewController() <UIWebViewDelegate>
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
@@ -45,10 +47,10 @@
 {
     [super viewDidLoad];
 
-    self.title = JMCustomLocalizedString(@"about_eula_title", nil);
+    self.title = JMLocalizedString(@"about_eula_title");
 
     if (self.shouldUserAccept) {
-        UIBarButtonItem *acceptButton = [[UIBarButtonItem alloc] initWithTitle:@"Accept"
+        UIBarButtonItem *acceptButton = [[UIBarButtonItem alloc] initWithTitle:JMLocalizedString(@"action_title_accept")
                                                                          style:UIBarButtonItemStyleDone
                                                                         target:self
                                                                         action:@selector(agreeAction:)];

@@ -26,8 +26,10 @@
 //
 
 #import "JMMigrateTo_v_2_0.h"
+#import "JaspersoftSDK.h"
 #import "JMFavorites.h"
 #import "JMSavedResources.h"
+#import "JMConstants.h"
 
 
 @implementation JMMigrateTo_v_2_0

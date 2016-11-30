@@ -21,6 +21,7 @@
  */
 
 
+#import <AFNetworking/AFImageDownloader.h>
 #import "JMResourceCollectionViewCell.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMServerProfile+Helpers.h"
@@ -29,6 +30,9 @@
 #import "JMExportResource.h"
 #import "JMResource.h"
 #import "JMAnalyticsManager.h"
+#import "JMUtils.h"
+#import "JMThemesManager.h"
+#import "NSObject+Additions.h"
 
 NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
@@ -92,19 +96,38 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         resourceImage = [UIImage imageNamed:@"res_type_report"];
         if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
             NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.restClient generateThumbnailImageUrl:self.resource.resourceLookup.uri]]];
-            [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
-            __weak typeof(self)weakSelf = self;
-            [self.resourceImage setImageWithURLRequest:imageRequest
-                                      placeholderImage:resourceImage
-                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                   __strong typeof(self)strongSelf = weakSelf;
-                                                   if (image) {
-                                                       strongSelf.thumbnailImage = image;
-                                                       [strongSelf updateResourceImage:self.thumbnailImage thumbnails:YES];
-                                                       [[JMAnalyticsManager sharedManager] sendThumbnailEventIfNeed];
+
+
+            AFImageDownloader *downloader = [[UIImageView class] sharedImageDownloader];
+            id <AFImageRequestCache> imageCache = downloader.imageCache;
+            UIImage *cachedImage = [imageCache imageforRequest:imageRequest withAdditionalIdentifier:nil];
+            if (!cachedImage) {
+                [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
+                __weak typeof(self)weakSelf = self;
+                [self.resourceImage setImageWithURLRequest:imageRequest
+                                          placeholderImage:resourceImage
+                                                   success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                                       __strong typeof(self)strongSelf = weakSelf;
+                                                       if (image) {
+                                                           strongSelf.thumbnailImage = image;
+                                                           [strongSelf updateResourceImage:self.thumbnailImage thumbnails:YES];
+                                                           [[JMAnalyticsManager sharedManager] sendThumbnailEventIfNeed];
+                                                       } else {
+                                                           // cache empty image, to prevent next requests in case thumbnails are disabled
+                                                           [imageCache addImage:[UIImage new]
+                                                                     forRequest:imageRequest
+                                                       withAdditionalIdentifier:nil];
+                                                       }
                                                    }
-                                               }
-                                               failure:nil];
+                                                   failure:nil];
+            } else {
+                if (cachedImage.size.width == CGSizeZero.width && cachedImage.size.height == CGSizeZero.height) {
+                    self.resourceImage.image = [UIImage imageNamed:@"res_type_report"];
+                } else {
+                    self.thumbnailImage = cachedImage;
+                    [self updateResourceImage:self.thumbnailImage thumbnails:YES];
+                }
+            }
         }
     } else if (self.resource.type == JMResourceTypeSavedResource) {
         JMLog(@"saved items");

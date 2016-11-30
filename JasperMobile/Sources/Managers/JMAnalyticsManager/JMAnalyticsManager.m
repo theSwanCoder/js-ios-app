@@ -26,6 +26,22 @@
 //
 
 #import "JMAnalyticsManager.h"
+#import "NSObject+Additions.h"
+#import "JMUtils.h"
+#import "JMConstants.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+// Google Analitycs
+#import "GAI.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAIEcommerceProduct.h"
+#import "GAIEcommerceProductAction.h"
+#import "GAIEcommercePromotion.h"
+#import "GAIFields.h"
+#import "GAILogger.h"
+#import "GAITrackedViewController.h"
+#import "GAITracker.h"
+
 @interface JMAnalyticsManager()
 @property (nonatomic, assign, getter=isNeedSendThumbnailEvent) BOOL needSendThumbnailEvent;
 @end
@@ -139,6 +155,47 @@
         }];
         self.needSendThumbnailEvent = NO;
     }
+}
+
+- (NSString *)mapClassNameToReadableName:(NSString *)className
+{
+    NSString *readableName = className;
+    if ([className isEqualToString:@"JMReportViewerVC"]) {
+        readableName = @"Report viewer screen";
+    } else if ([className isEqualToString:@"JMDashboardViewerVC"]) {
+        readableName = @"Dashboard viewer screen";
+    } else if ([className isEqualToString:@"JMSavedResourceViewerViewController"]) {
+        readableName = @"Saved files screen";
+    } else if ([className isEqualToString:@"JMLibraryCollectionViewController"]) {
+        readableName = @"Library Screen";
+    } else if ([className isEqualToString:@"JMMultiSelectTableViewController"]) {
+        readableName = @"Multi select IC screen";
+    } else if ([className isEqualToString:@"JMSingleSelectTableViewController"]) {
+        readableName = @"Single select IC screen";
+    } else if ([className isEqualToString:@"JMRepositoryCollectionViewController"]) {
+        readableName = @"Repository screen";
+    } else if ([className isEqualToString:@"JMServersGridViewController"]) {
+        readableName = @"Account screen";
+    } else if ([className isEqualToString:@"JMShareViewController"]) {
+        readableName = @"Annotation screen";
+    } else if ([className isEqualToString:@"JMResourceInfoViewController"]) {
+        readableName = @"Resource Info screen";
+    } else if ([className isEqualToString:@"JMInputControlsViewController"]) {
+        readableName = @"Input controls screen";
+    } else if ([className isEqualToString:@"JMFavoritesCollectionViewController"]) {
+        readableName = @"Favorite screen";
+    } else if ([className isEqualToString:@"JMSchedulesCollectionViewController"]) {
+        readableName = @"Jobs";
+    } else if ([className isEqualToString:@"JMScheduleVC"]) {
+        readableName = @"Schedule screen";
+    } else if ([className isEqualToString:@"JMSavingReportViewController"]) {
+        readableName = @"Saving report screen";
+    } else if ([className isEqualToString:@"JMRecentViewsCollectionViewController"]) {
+        readableName = @"Recently viewed screen";
+    } else if ([className isEqualToString:@"JMScheduleInfoViewController"]) {
+        readableName = @"Schedule info screen";
+    }
+    return readableName;
 }
 
 @end

@@ -25,6 +25,11 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JMResourceLoaderOption.h"
+#import "JMConstants.h"
+#import "JMCoreDataManager.h"
+#import "JMLocalization.h"
+#import "JMUtils.h"
+#import "JMSessionManager.h"
 
 @implementation JMFavoritesListLoader
 
@@ -71,7 +76,7 @@
         }
         case JMResourcesListLoaderOptionType_Filter: {
             NSMutableArray *allFilterOptions = [@[
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_all", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
                                                       value:@[
                                                               kJS_WS_TYPE_REPORT_UNIT,
                                                               kJS_WS_TYPE_DASHBOARD,
@@ -80,18 +85,18 @@
                                                               kJS_WS_TYPE_FILE,
                                                               kJMSavedReportUnit
                                                       ]],
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_reportUnit", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
                                                       value:@[kJS_WS_TYPE_REPORT_UNIT]],
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_saved_reportUnit", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_saved_reportUnit")
                                                       value:@[kJMSavedReportUnit]],
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_folder", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_folder")
                                                       value:@[kJS_WS_TYPE_FOLDER]],
-                    [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_files", nil)
+                    [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_files")
                                                       value:@[kJS_WS_TYPE_FILE]],
             ] mutableCopy];
 
             if ([JMUtils isServerProEdition]) {
-                JMResourceLoaderOption *filterByDashboardOption = [JMResourceLoaderOption optionWithTitle:JMCustomLocalizedString(@"resources_filterby_type_dashboard", nil)
+                JMResourceLoaderOption *filterByDashboardOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_dashboard")
                                                                                                     value:@[
                                                                                                             kJS_WS_TYPE_DASHBOARD,
                                                                                                             kJS_WS_TYPE_DASHBOARD_LEGACY

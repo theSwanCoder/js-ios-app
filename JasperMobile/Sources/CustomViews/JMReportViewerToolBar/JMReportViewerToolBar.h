@@ -31,6 +31,8 @@
  @since 1.9
  */
 
+@import UIKit;
+
 @class JMReportViewerToolBar;
 @protocol JMReportViewerToolBarDelegate <NSObject>
 
