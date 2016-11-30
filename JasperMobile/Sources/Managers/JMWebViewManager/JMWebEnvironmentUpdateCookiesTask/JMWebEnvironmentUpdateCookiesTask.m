@@ -111,7 +111,7 @@
 - (void)removeCookiesWithCompletion:(void(^)(BOOL success))completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    if ([JMUtils isSystemVersion9]) {
+    if ([JMUtils isSystemVersionEqualOrUp9]) {
         NSSet *dataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
         WKWebsiteDataStore *websiteDataStore = self.requestExecutor.webView.configuration.websiteDataStore;
         [websiteDataStore fetchDataRecordsOfTypes:dataTypes

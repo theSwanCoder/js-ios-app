@@ -112,7 +112,7 @@
 
 - (void) updatePages
 {
-    NSString *keyString = JMCustomLocalizedString(@"report_viewer_pagecount", nil);
+    NSString *keyString = JMLocalizedString(@"report_viewer_pagecount");
     self.pageCountLabel.text = [NSString stringWithFormat:keyString, self.countOfPages];
     self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
     

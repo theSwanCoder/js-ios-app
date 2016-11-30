@@ -30,6 +30,9 @@
 		ja = レポートは空です。
 		zh = 报表为空。
 		tags = ios
+    [report_viewer_filters_not_applyed_title]
+        en = You must apply input values before the report can be displayed.
+        tags = ios,new
 	[report_viewer_emptyreport_message]
 		en = Tap 'Ok' if you want to change filters, or tap 'Cancel' to return to the previous report.
 		tags = ios,unused

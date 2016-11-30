@@ -94,11 +94,11 @@ NSString *const JMCacheReportsOptionDidChangeNotification = @"JMCacheReportsOpti
         // Check if alias is unique
         if (!self.isExistingServerProfile && ![self.serverProfile isValidNameForServerProfile:serverOption.optionValue]) {
             isValidData = NO;
-            serverOption.errorString = JMCustomLocalizedString(@"servers_name_errmsg_exists", nil);
+            serverOption.errorString = JMLocalizedString(@"servers_name_errmsg_exists");
         }
     } else {
         isValidData = NO;
-        serverOption.errorString = JMCustomLocalizedString(@"servers_name_errmsg_empty", nil);
+        serverOption.errorString = JMLocalizedString(@"servers_name_errmsg_empty");
     }
     
     serverOption = self.availableOptions[@(JMServerOptionTypeURL)];
@@ -106,11 +106,11 @@ NSString *const JMCacheReportsOptionDidChangeNotification = @"JMCacheReportsOpti
         NSURL *url = [NSURL URLWithString:serverOption.optionValue];
         if (!url || !url.scheme || !url.host) {
             isValidData = NO;
-            serverOption.errorString = JMCustomLocalizedString(@"servers_url_errmsg", nil);;
+            serverOption.errorString = JMLocalizedString(@"servers_url_errmsg");;
         }
     } else {
         isValidData = NO;
-        serverOption.errorString = JMCustomLocalizedString(@"servers_url_errmsg", nil);
+        serverOption.errorString = JMLocalizedString(@"servers_url_errmsg");
     }
     
     return isValidData;
@@ -178,9 +178,9 @@ NSString *const JMCacheReportsOptionDidChangeNotification = @"JMCacheReportsOpti
 - (NSString *)localizedString:(NSString *)key mandatory:(BOOL)mandatory
 {
     if (mandatory) {
-       return [NSString stringWithFormat:@"* %@",JMCustomLocalizedString(key, nil)];
+       return [NSString stringWithFormat:@"* %@",JMLocalizedString(key)];
     }
-    return JMCustomLocalizedString(key, nil);
+    return JMLocalizedString(key);
 }
 
 @end

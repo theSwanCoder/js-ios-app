@@ -32,6 +32,8 @@
 #import "JMLocalization.h"
 #import "JMThemesManager.h"
 #import "UIAlertController+Additions.h"
+#import "JMUtils.h"
+#import "JMSessionManager.h"
 
 
 @interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, JMServerOptionCellDelegate>
@@ -54,13 +56,14 @@
     if (self.serverOptionManager.isExistingServerProfile) {
         self.title = self.serverProfile.alias;
     } else {
-        self.title = JMCustomLocalizedString(@"servers_title_new", nil);
+        self.title = JMLocalizedString(@"servers_title_new");
     }
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     [self setupSaveButton];
     [self setupTableView];
     [self setupServerOptions];
+    [self setupNavigationItems];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -87,7 +90,7 @@
 
 - (void)setupSaveButton
 {
-    [self.saveButton setTitle:JMCustomLocalizedString(@"dialog_button_save", nil) forState:UIControlStateNormal];
+    [self.saveButton setTitle:JMLocalizedString(@"dialog_button_save") forState:UIControlStateNormal];
     [self.saveButton setTitleColor:[[JMThemesManager sharedManager] serverProfileSaveButtonTextColor] forState:UIControlStateNormal];
     self.saveButton.backgroundColor = [[JMThemesManager sharedManager] serverProfileSaveButtonBackgroundColor];
 }
@@ -107,6 +110,22 @@
     [serverOptions addObject:self.serverOptionManager.availableOptions[@(JMServerOptionTypeCacheReports)]];
 #endif
     self.serverOptions = serverOptions;
+}
+
+- (void)setupNavigationItems
+{
+#ifndef  __RELEASE__
+    UIBarButtonItem *obsoleteSessionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
+                                                                                           target:self
+                                                                                           action:@selector(makeSessionObsolete)];
+    self.navigationItem.leftBarButtonItem = obsoleteSessionButton;
+#endif
+}
+
+- (void)makeSessionObsolete
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    [[JMSessionManager sharedManager] obsolete];
 }
 
 #pragma mark - Custom Accessors

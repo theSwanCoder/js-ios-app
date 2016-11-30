@@ -54,7 +54,7 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"menuitem_about_label", nil);
+    self.title = JMLocalizedString(@"menuitem_about_label");
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     [self setupTextView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
@@ -140,28 +140,28 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
     };
 
     // Community Site
-    NSRange range = [attributedString.string rangeOfString:JMCustomLocalizedString(@"about_comminity_title", nil)];
+    NSRange range = [attributedString.string rangeOfString:JMLocalizedString(@"about_comminity_title")];
     [attributedString addAttributes:attributes range:range];
     [attributedString addAttribute:NSLinkAttributeName
                         value:kJMCommunitySiteInternalLink
                         range:range];
 
     // Privacy Policy
-    range = [attributedString.string rangeOfString:JMCustomLocalizedString(@"about_privacy_policy_title", nil)];
+    range = [attributedString.string rangeOfString:JMLocalizedString(@"about_privacy_policy_title")];
     [attributedString addAttributes:attributes range:range];
     [attributedString addAttribute:NSLinkAttributeName
                         value:kJMPrivacyPolicyInternalLink
                         range:range];
 
     // EULA
-    range = [attributedString.string rangeOfString:JMCustomLocalizedString(@"about_eula_title", nil)];
+    range = [attributedString.string rangeOfString:JMLocalizedString(@"about_eula_title")];
     [attributedString addAttributes:attributes range:range];
     [attributedString addAttribute:NSLinkAttributeName
                         value:kJMEULAInternalLink
                         range:range];
 
     // What's New
-    range = [attributedString.string rangeOfString:JMCustomLocalizedString(@"about_whats_new_title", nil)];
+    range = [attributedString.string rangeOfString:JMLocalizedString(@"about_whats_new_title")];
     [attributedString addAttributes:attributes range:range];
     [attributedString addAttribute:NSLinkAttributeName
                              value:kJMWhatsNewInternalLink
@@ -181,8 +181,8 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
     NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
     NSString *appVersionString = [NSString stringWithFormat:@"Version: %@ (%@)", [JMAppUpdater latestAppVersionAsString], build];
     CGFloat minVersion = [JMUtils minSupportedServerVersion];
-    NSString *comminityTitle = JMCustomLocalizedString(@"about_comminity_title", nil);
-    NSString *appAboutString = [NSString stringWithFormat:JMCustomLocalizedString(@"application_info", nil),
+    NSString *comminityTitle = JMLocalizedString(@"about_comminity_title");
+    NSString *appAboutString = [NSString stringWithFormat:JMLocalizedString(@"application_info"),
                     minVersion,
                     appVersionString,
                     comminityTitle];
@@ -193,28 +193,28 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
 - (NSAttributedString *)copyright
 {
     NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
-    NSString *copyrightString = [NSString stringWithFormat:JMCustomLocalizedString(@"about_copyright", nil), currentYear];
+    NSString *copyrightString = [NSString stringWithFormat:JMLocalizedString(@"about_copyright"), currentYear];
     return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n\n%@", copyrightString]
                                        attributes:[self commonAttributes]];
 }
 
 - (NSAttributedString *)privacyPolicy
 {
-    NSString *privacyPolicyString = JMCustomLocalizedString(@"about_privacy_policy_title", nil);
+    NSString *privacyPolicyString = JMLocalizedString(@"about_privacy_policy_title");
     return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n%@", privacyPolicyString]
                                        attributes:[self commonAttributes]];
 }
 
 - (NSAttributedString *)eula
 {
-    NSString *eulaString = JMCustomLocalizedString(@"about_eula_title", nil);
+    NSString *eulaString = JMLocalizedString(@"about_eula_title");
     return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n%@", eulaString]
                                        attributes:[self commonAttributes]];
 }
 
 - (NSAttributedString *)whatsNew
 {
-    NSString *whatsNewString = JMCustomLocalizedString(@"about_whats_new_title", nil);
+    NSString *whatsNewString = JMLocalizedString(@"about_whats_new_title");
     return [self createAttributedStringWithString:[NSString stringWithFormat:@"\n\n%@", whatsNewString]
                                        attributes:[self commonAttributes]];
 }

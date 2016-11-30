@@ -45,7 +45,7 @@
 
 @interface JMResourceViewerStateManager : NSObject
 @property (nonatomic, weak) UIView *contentView;
-@property (nonatomic, weak) UIView *nonExistingResourceView;
+@property (nonatomic, weak) UIView *warningsView;
 @property (nonatomic, strong) JMResourceViewerToolbarsHelper *toolbarsHelper;
 @property (nonatomic, strong) JMResourceViewerFavoritesHelper *favoritesHelper;
 @property (nonatomic, assign) BOOL needFavoriteButton;

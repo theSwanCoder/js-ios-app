@@ -7,6 +7,10 @@
 //
 
 #import "JMSaveReportPageUITests.h"
+#import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+SideMenu.h"
+#import "JMBaseUITestCase+SavedItems.h"
 
 @implementation JMSaveReportPageUITests
 
@@ -20,7 +24,13 @@
 //    > User should see Save Report screen
 - (void)testThatUserCanSeeSaveReportScreen
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    
+    [self openSaveReportPage];
+    [self verifyThatSaveReportPageOnScreen];
+    [self closeSaveReportPage];
+    
+    [self closeTestReportPage];
 }
 
 //Save Report title
@@ -31,7 +41,13 @@
 //    > User should see title like "Save Report"
 - (void)testThatScreenHasCorrectTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    
+    [self openSaveReportPage];
+    [self verifyThatSaveReportPageHasCorrectTitle];
+    [self closeSaveReportPage];
+    
+    [self closeTestReportPage];
 }
 
 //Save button
@@ -43,7 +59,9 @@
 //    > Report is saved successfully and Report View should appear
 - (void)testThatSaveButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    
+    [self saveTestReportInHTMLFormat];
 }
 
 //Back button like name of the report
@@ -55,7 +73,13 @@
 //    > Report View screen should appears
 - (void)testThatBackButtonHasCorrectName
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    
+    [self openSaveReportPage];
+    [self verifyThatSaveReportPageHasCorrectBackButtonName];
+    [self closeSaveReportPage];
+    
+    [self closeTestReportPage];
 }
 
 //Try to save the report with empty name
@@ -68,7 +92,15 @@
 //    > Report is not saved. User should see error message "This field is required"
 - (void)testThatErrorAppearsForSavingWithEmptyName
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];    
+    [self openSaveReportPage];
+    
+    [self saveTestReportWithName:@"" 
+                          format:@"html"];
+    [self verifyErrorOfSavingReportWithEmptyName];
+    
+    [self closeSaveReportPage];    
+    [self closeTestReportPage];
 }
 
 //Try to save the report if report name includes only spaces
@@ -81,7 +113,15 @@
 //    > Report is not saved. User should see error message "This field is required"
 - (void)testThatErrorAppearsForSavingWithSpacesInName
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];    
+    [self openSaveReportPage];
+    
+    [self saveTestReportWithName:@"  " 
+                          format:@"html"];
+    [self verifyErrorOfSavingReportWithEmptyName];
+    
+    [self closeSaveReportPage];    
+    [self closeTestReportPage];
 }
 
 //Try to save the report with not supported symbols
@@ -94,7 +134,15 @@
 //    > Report is not saved. User should see error message "Characters '-', '/', ':', ';', '(', ')', '$', '&', '@', ',', '?', '!', ''', '"' are not allowed"
 - (void)testThatErrorAppearsForSavingWithUnsupportedSymbolsInName
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];    
+    [self openSaveReportPage];
+    
+    [self saveTestReportWithName:@"-" 
+                          format:@"html"];
+    [self verifyErrorOfSavingReportWithWrongSymbolsInName];
+    
+    [self closeSaveReportPage];    
+    [self closeTestReportPage];
 }
 
 //Try to save the report if report name already exist
@@ -112,7 +160,20 @@
 //    2. Should appears dialogbox with title 'Error' and message 'This name already exist, do you want to overwrite it?'
 - (void)testThatErrorAppearsForSavingWithTheSameName
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    
+    [self saveTestReportInHTMLFormat];
+    
+    [self openTestReportPage];    
+    [self openSaveReportPage];
+    
+    [self saveTestReportWithName:kTestReportName
+                          format:@"html"];
+    [self verifyThatAlertItemExistsVisible];
+    [self cancelSavingTestReport];
+    
+    [self closeSaveReportPage];    
+    [self closeTestReportPage]; 
 }
 
 //Try to save the report if report name already exist - 'Cancel' button
@@ -130,7 +191,19 @@
 //    > Existing report should not be overwritten
 - (void)testThatErrorAppearsForSavingWithTheSameNameAndChooseCancelAction
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    
+    [self saveTestReportInHTMLFormat];
+    
+    [self openTestReportPage];    
+    [self openSaveReportPage];
+    
+    [self saveTestReportWithName:kTestReportName
+                          format:@"html"];
+    [self cancelSavingTestReport];
+    
+    [self closeSaveReportPage];    
+    [self closeTestReportPage]; 
 }
 
 //Try to save the report if report name already exist - 'OK' button
@@ -148,7 +221,22 @@
 //    > Existing report should be overwritten
 - (void)testThatReportCanBeOverwritten
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    
+    [self saveTestReportInHTMLFormat];
+    
+    [self openTestReportPage];    
+    [self openSaveReportPage];
+    
+    [self saveTestReportWithName:kTestReportName
+                          format:@"html"];
+    [self confirmOverridingTestReport];
+    
+    [self closeTestReportPage]; 
+    
+    [self verifyThatReportDidSaveWithReportName:kTestReportName
+                                         format:@"html"];
+    [self openLibrarySection];
 }
 
 //Save the report as html-file
@@ -162,7 +250,9 @@
 //    > Report is saved as html-file
 - (void)testThatReportCanBeSavedInHTMLformat
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    
+    [self saveTestReportInHTMLFormat];
 }
 
 //Save the report as pdf-file
@@ -176,7 +266,9 @@
 //    > Report is saved as pdf-file
 - (void)testThatReportCanBeSavedInPDFformat
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    
+    [self saveTestReportInPDFFormat];
 }
 
 //Save the report as xls-file
@@ -190,7 +282,9 @@
 //    > Report is saved as xls-file
 - (void)testThatReportCanBeSavedInXLSformat
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    
+    [self saveTestReportInXLSFormat];
 }
 
 //Save the report with same name but in different output formats
@@ -212,7 +306,10 @@
 //    > All report are saved with same name but in different output formats
 - (void)testThatReportCanBeSavedWithTheSameNameButDifferentFormat
 {
-//    XCTFail(@"Not implemented tests");
+    [self givenThatSavedItemsEmpty];
+    
+    [self saveTestReportInHTMLFormat];    
+    [self saveTestReportInXLSFormat];
 }
 
 //Cancel saving
@@ -227,6 +324,75 @@
 - (void)testThatSavingCanBeCanceled
 {
 //    XCTFail(@"Not implemented tests");
+}
+
+#pragma mark - Helpers
+
+- (void)cancelSavingTestReport
+{
+    XCUIElement *alert = [self waitAlertWithTitle:@"Error"
+                                          timeout:kUITestsBaseTimeout];
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel" 
+                                                      parentElement:alert
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
+}
+
+- (void)confirmOverridingTestReport
+{
+    XCUIElement *alert = [self waitAlertWithTitle:@"Error"
+                                          timeout:kUITestsBaseTimeout];
+    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"OK" 
+                                                      parentElement:alert
+                                                            timeout:kUITestsBaseTimeout];
+    [cancelButton tap];
+}
+
+#pragma mark - Verifying
+
+- (void)verifyThatSaveReportPageOnScreen
+{
+    // TODO: replace with accessibility id of view
+    [self waitNavigationBarWithLabel:@"Save Report"
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatSaveReportPageHasCorrectTitle
+{
+    [self waitNavigationBarWithLabel:@"Save Report"
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatSaveReportPageHasCorrectBackButtonName
+{
+    // TODO: need make general case for all devices, 'Back' on iPhones
+    [self waitBackButtonWithAccessibilityId:@"Back"
+                          onNavBarWithLabel:@"Save Report"
+                                    timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyErrorOfSavingReportWithEmptyName
+{
+    XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
+    XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
+    [self waitStaticTextWithText:@"This field is required." 
+                   parentElement:nameCell
+                         timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyErrorOfSavingReportWithWrongSymbolsInName
+{
+    XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
+    XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
+    [self waitStaticTextWithText:@"are not allowed." 
+                   parentElement:nameCell
+                         timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatAlertItemExistsVisible
+{    
+    [self waitAlertWithTitle:@"Error"
+                     timeout:kUITestsBaseTimeout];
 }
 
 @end

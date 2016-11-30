@@ -130,7 +130,7 @@
         [self.webView loadHTMLString:content
                              baseURL:baseURL];
     } else {
-        if ([JMUtils isSystemVersion9]) {
+        if ([JMUtils isSystemVersionEqualOrUp9]) {
             [self.webView loadFileURL:fileURL
               allowingReadAccessToURL:fileURL];
         } else {
@@ -280,7 +280,7 @@
 - (void)handleCookiesNotValidWithCompletion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
 {
     NSArray *cookies = [JMWebViewManager sharedInstance].cookies;
-    if ([JMUtils isSystemVersion9]) {
+    if ([JMUtils isSystemVersionEqualOrUp9]) {
         if (self.state == JMWebEnvironmentStateWebViewCreated) {
             [self recreateWebViewWithCookies:cookies];
             [self addOperationsForPreparingWebViewAndEnironment];
@@ -325,7 +325,7 @@
 - (void)handleCookiesNeedUpdateWithCompletion:(void(^)(void))completion
 {
     NSArray *cookies = [JMWebViewManager sharedInstance].cookies;
-    if ([JMUtils isSystemVersion9]) {
+    if ([JMUtils isSystemVersionEqualOrUp9]) {
         __weak __typeof(self) weakSelf = self;
         [self.operationQueue addOperation:[JMWebEnvironmentUpdateCookiesTask taskWithRESTClient:self.restClient
                                                                                 requestExecutor:self.requestExecutor

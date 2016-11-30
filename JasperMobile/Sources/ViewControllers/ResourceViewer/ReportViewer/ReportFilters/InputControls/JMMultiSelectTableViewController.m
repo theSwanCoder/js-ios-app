@@ -40,7 +40,7 @@
 {
     [super viewDidLoad];
     
-    self.titleLabel.text = JMCustomLocalizedString(@"report_viewer_options_multiselect_titlelabel_title", nil);
+    self.titleLabel.text = JMLocalizedString(@"report_viewer_options_multiselect_titlelabel_title");
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
 
     self.itemsSegmentedControl.tintColor = [[JMThemesManager sharedManager] reportOptionsItemsSegmentedTintColor];
@@ -50,11 +50,11 @@
 - (void) setupSegmentedControlAppearence
 {
     NSArray <JSInputControlOption *>*allOptions = self.cell.inputControlDescriptor.state.options;
-    NSString *availableTitle = JMCustomLocalizedString(@"report_viewer_options_multiselect_available_title", nil);
+    NSString *availableTitle = JMLocalizedString(@"report_viewer_options_multiselect_available_title");
     availableTitle = [availableTitle stringByAppendingFormat:@": %zd", allOptions.count];
     [self.itemsSegmentedControl setTitle:availableTitle forSegmentAtIndex:0];
     
-    NSString *selectedTitle = JMCustomLocalizedString(@"report_viewer_options_multiselect_selected_title", nil);
+    NSString *selectedTitle = JMLocalizedString(@"report_viewer_options_multiselect_selected_title");
     NSArray <JSInputControlOption *> *selectedOptions = [allOptions filteredArrayUsingPredicate:[self selectedValuesPredicate]];
     NSInteger selectedOptionsCount = selectedOptions.count;
     selectedTitle = [selectedTitle stringByAppendingFormat:@": %zd", selectedOptionsCount];

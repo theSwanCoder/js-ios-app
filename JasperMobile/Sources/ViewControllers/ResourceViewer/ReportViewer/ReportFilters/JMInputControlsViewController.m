@@ -56,7 +56,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"report_viewer_options_title", nil);
+    self.title = JMLocalizedString(@"report_viewer_options_title");
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     
     // Remove extra separators
@@ -66,7 +66,7 @@
     self.runReportButton.backgroundColor = [[JMThemesManager sharedManager] reportOptionsRunReportButtonBackgroundColor];
     [self.runReportButton setTitleColor:[[JMThemesManager sharedManager] reportOptionsRunReportButtonTextColor]
                                forState:UIControlStateNormal];
-    [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog_button_run_report", nil)
+    [self.runReportButton setTitle:JMLocalizedString(@"dialog_button_run_report")
                           forState:UIControlStateNormal];
 
     [self setupNavigationItems];
@@ -174,7 +174,7 @@
                                                                                                             if (strongSelf) {
                                                                                                                 [JMUtils validateReportName:text errorMessage:&errorMessage];
                                                                                                                 if (!errorMessage && ![strongSelf isUniqueNewReportOptionName:text]) {
-                                                                                                                    errorMessage = JMCustomLocalizedString(@"report_viewer_report_options_new_option_title_alreadyexist", nil);
+                                                                                                                    errorMessage = JMLocalizedString(@"report_viewer_report_options_new_option_title_alreadyexist");
                                                                                                                 }
                                                                                                             }
                                                                                                             return errorMessage;
@@ -186,7 +186,7 @@
                     }
                 }];
             } else {
-                NSString *errorMessage = JMCustomLocalizedString(@"report_viewer_report_options_create_permission_error", nil);
+                NSString *errorMessage = JMLocalizedString(@"report_viewer_report_options_create_permission_error");
                 NSError *error = [NSError errorWithDomain:@"dialod_title_error"
                                                      code:0
                                                  userInfo:@{
@@ -207,7 +207,7 @@
     [self checkParentFolderPermissionWithCompletion:^(BOOL reportOptionsEditingAvailable) {
         __strong typeof(self) strongSelf = weakSelf;
         if (reportOptionsEditingAvailable) {
-                NSString *confirmationMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_report_options_remove_confirmation_message", nil), strongSelf.activeReportOption.label];
+                NSString *confirmationMessage = [NSString stringWithFormat:JMLocalizedString(@"report_viewer_report_options_remove_confirmation_message"), strongSelf.activeReportOption.label];
                 UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod_title_confirmation"
                                                                                                   message:confirmationMessage
                                                                                         cancelButtonTitle:@"dialog_button_cancel"
@@ -239,7 +239,7 @@
                                      animated:YES
                                    completion:nil];
             } else {
-                NSString *errorMessage = JMCustomLocalizedString(@"report_viewer_report_options_remove_permission_error", nil);
+                NSString *errorMessage = JMLocalizedString(@"report_viewer_report_options_remove_permission_error");
                 NSError *error = [NSError errorWithDomain:@"dialod_title_error"
                                                      code:NSNotFound
                                                  userInfo:@{
@@ -498,14 +498,14 @@
     titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
     titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     titleLabel.backgroundColor = [UIColor clearColor];
-    NSString *sectionTitle = JMCustomLocalizedString(@"report_viewer_options_title", nil);
+    NSString *sectionTitle = JMLocalizedString(@"report_viewer_options_title");
 
     // empty 'none' option
     // we need this if an user marked 'always prompt' as true, but there are any input controls
     BOOL isEmptyNoneOption = (self.inputControls.count == 0 && self.reportOptions.count == 1);
     BOOL isSeveralReportOptions = [self isMultyReportOptions];
     if ( (isSeveralReportOptions || isEmptyNoneOption) && section == 0) {
-        sectionTitle = JMCustomLocalizedString(@"report_viewer_report_options_title", nil);
+        sectionTitle = JMLocalizedString(@"report_viewer_report_options_title");
     }
     titleLabel.text = [sectionTitle uppercaseString];
     [titleLabel sizeToFit];

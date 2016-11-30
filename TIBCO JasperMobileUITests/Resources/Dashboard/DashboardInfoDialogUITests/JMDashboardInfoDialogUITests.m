@@ -7,6 +7,10 @@
 //
 
 #import "JMDashboardInfoDialogUITests.h"
+#import "JMBaseUITestCase+Dashboard.h"
+#import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Favorites.h"
 
 @implementation JMDashboardInfoDialogUITests
 
@@ -27,7 +31,13 @@
 //    - Modified Date: appropriate date
 - (void)testThatUserCanSeeInfoDialog
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+
+    [self openInfoPageFromMenuActions];
+    [self verifyInfoPageContainsCorrectInfo];
+    [self closeInfoPageFromMenuActions];
+
+    [self closeTestDashboardPage];
 }
 
 //Cancel button on Info dialog
@@ -39,7 +49,12 @@
 //    > Dashboard View screen should appears
 - (void)testThatCnacelButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+
+    [self openInfoPageFromMenuActions];
+    [self closeInfoPageFromMenuActions];
+
+    [self closeTestDashboardPage];
 }
 
 //Title on the Info Dialog like title of the dashboard
@@ -50,7 +65,13 @@
 //    > User should see title on the Info Dialog like title of the dashboard
 - (void)testThatDialogHasCorrectTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+
+    [self openInfoPageFromMenuActions];
+    [self verifyInfoPageHasCorrectTitle];
+    [self closeInfoPageFromMenuActions];
+
+    [self closeTestDashboardPage];
 }
 
 //Favorite button
@@ -64,7 +85,48 @@
 //    > Star should be empty after removing the item from favorites
 - (void)testThatFavoriteButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashboardPage];
+
+    [self openInfoPageFromMenuActions];
+    [self markAsFavoriteFromNavigationBar:nil];
+    [self unmarkFromFavoritesFromNavigationBar:nil];
+    [self closeInfoPageFromMenuActions];
+
+    [self closeTestDashboardPage];
+}
+
+#pragma mark - Verifying
+
+- (void)verifyInfoPageContainsCorrectInfo
+{
+    XCUIElement *infoPage = self.application.otherElements[@"JMDashboardInfoViewControllerAccessibilityId"];
+    [self waitStaticTextWithAccessibilityId:@"Name"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Description"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"URI"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Type"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Version"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Creation Date"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+    [self waitStaticTextWithAccessibilityId:@"Modified Date"
+                              parentElement:infoPage
+                                    timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyInfoPageHasCorrectTitle
+{
+    [self waitNavigationBarWithLabel:kTestDashboardName
+                             timeout:kUITestsBaseTimeout];
 }
 
 @end

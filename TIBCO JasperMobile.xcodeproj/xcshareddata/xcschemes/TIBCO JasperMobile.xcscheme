@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0700"
+   LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -49,7 +49,7 @@
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
-            buildForTesting = "YES"
+            buildForTesting = "NO"
             buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
@@ -75,11 +75,70 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9356EC961A30752800ACE2C6"
-               BuildableName = "TIBCO JasperMobile Tests.xctest"
-               BlueprintName = "TIBCO JasperMobile Tests"
+               BlueprintIdentifier = "93DC8C381C6CCEEE000DEADF"
+               BuildableName = "TIBCO JasperMobileUITests.xctest"
+               BlueprintName = "TIBCO JasperMobileUITests"
                ReferencedContainer = "container:TIBCO JasperMobile.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "JMAppMenuUITests">
+               </Test>
+               <Test
+                  Identifier = "JMBaseUITestCase">
+               </Test>
+               <Test
+                  Identifier = "JMDashboardInfoDialogUITests">
+               </Test>
+               <Test
+                  Identifier = "JMDashboardPageUITests/testThatUserCanCancelLoadingDashboard">
+               </Test>
+               <Test
+                  Identifier = "JMDashboardPrintDialogUITests">
+               </Test>
+               <Test
+                  Identifier = "JMFavoriteInfoPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMNewSchedulePageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMNewServerProfilePageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMPrintReportUITests">
+               </Test>
+               <Test
+                  Identifier = "JMRecentlyViewedInfoPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMRecentlyViewedPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMReportPageUITests/testThatUserCanCancelLoadingReport">
+               </Test>
+               <Test
+                  Identifier = "JMRepositoryInfoPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMRepositoryPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMSaveReportPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMSavedItemInfoDialogUITests">
+               </Test>
+               <Test
+                  Identifier = "JMSavedItemInfoScreenUITests">
+               </Test>
+               <Test
+                  Identifier = "JMSavedItemsPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMServerProfilesUITests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
@@ -114,6 +173,13 @@
             ReferencedContainer = "container:TIBCO JasperMobile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "OS_ACTIVITY_MODE"
+            value = "disable"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

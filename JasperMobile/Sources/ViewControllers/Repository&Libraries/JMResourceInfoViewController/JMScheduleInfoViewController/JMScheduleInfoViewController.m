@@ -171,7 +171,7 @@
         __typeof(self) strongSelf = weakSelf;
         [strongSelf stopShowLoader];
         if (metadata) {
-            JMScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+            JMScheduleVC *newScheduleVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
             [newScheduleVC updateScheduleMetadata:metadata];
             newScheduleVC.exitBlock = ^(JSScheduleMetadata *scheduleMetadata) {
                 if (self.exitBlock) {

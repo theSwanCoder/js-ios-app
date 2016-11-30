@@ -30,7 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = JMCustomLocalizedString(@"report_viewer_report_search", nil);
+    self.title = JMLocalizedString(@"report_viewer_report_search");
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     
     UITextField *txfSearchField = [self.searchBar valueForKey:@"_searchField"];
@@ -40,14 +40,14 @@
     
     self.searchBar.tintColor = [UIColor darkGrayColor];
     [self.searchBar setBackgroundImage:[UIImage new]];
-    self.searchBar.placeholder = JMCustomLocalizedString(@"report_viewer_report_search_value_placeholder", nil);
+    self.searchBar.placeholder = JMLocalizedString(@"report_viewer_report_search_value_placeholder");
     self.searchBar.text = self.currentSearch.searchText;
     
     self.tableView.layer.cornerRadius = 4;
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    self.noResultLabel.text = JMCustomLocalizedString(@"resources_noresults_msg", nil);
+    self.noResultLabel.text = JMLocalizedString(@"resources_noresults_msg");
 
     [self refreshUI];
     if (self.currentSearch.selectedResult) {

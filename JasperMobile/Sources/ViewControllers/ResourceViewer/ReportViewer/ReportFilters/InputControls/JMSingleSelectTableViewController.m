@@ -46,8 +46,8 @@
     [super viewDidLoad];
     
     self.title = self.cell.inputControlDescriptor.label;
-    self.titleLabel.text = JMCustomLocalizedString(@"report_viewer_options_singleselect_titlelabel_title", nil);
-    self.noResultLabel.text = JMCustomLocalizedString(@"resources_noresults_msg", nil);
+    self.titleLabel.text = JMLocalizedString(@"report_viewer_options_singleselect_titlelabel_title");
+    self.noResultLabel.text = JMLocalizedString(@"resources_noresults_msg");
 
     self.titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
     self.noResultLabel.textColor = [[JMThemesManager sharedManager] reportOptionsNoResultLabelTextColor];
@@ -64,7 +64,7 @@
     
     self.icSearchBar.tintColor = [UIColor darkGrayColor];
     [self.icSearchBar setBackgroundImage:[UIImage new]];
-    self.icSearchBar.placeholder = JMCustomLocalizedString(@"report_viewer_options_search_value_placeholder", nil);
+    self.icSearchBar.placeholder = JMLocalizedString(@"report_viewer_options_search_value_placeholder");
 }
 
 - (void)viewWillDisappear:(BOOL)animated

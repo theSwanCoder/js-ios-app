@@ -36,5 +36,5 @@
 @optional
 - (UIView *)topToolbarView;
 - (UIView *)bottomToolbarView;
-- (UIView *)nonExistingResourceView;
+- (UIView *)warningsView;
 @end

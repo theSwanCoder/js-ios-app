@@ -7,8 +7,20 @@
 //
 
 #import "JMInputControlPageUITests.h"
+#import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+Helpers.h"
 
 @implementation JMInputControlPageUITests
+
+- (void)tearDown
+{
+    [self closeReportFiltersPage];
+    [self closeTestReportPage];
+    
+    [super tearDown];
+}
+
 
 #pragma mark - Tests
 
@@ -21,7 +33,12 @@
 //    > User should see Input Control screen
 -(void)testThatUserCanSeeInputControlsScreen
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openReportFiltersPage];
+    
+    [self startEditFilterWithMultiItems];
+    [self verifyThatInputControlsPageOnScreen];
+    [self stopEditFilterWithMultiItems];
 }
 
 //Title like name of the IC
@@ -33,7 +50,12 @@
 //    > User should see title like Product Name
 - (void)testThatInputControlsScreenTitleHasRightName
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openReportFiltersPage];
+    
+    [self startEditFilterWithMultiItems];
+    [self verifyThatInputControlsPageHasCorrectTitle];
+    [self stopEditFilterWithMultiItems];
 }
 
 //Subtitle for multiselect IC screen
@@ -45,7 +67,12 @@
 //    > User should see subtitle like "Select one or more items"
 - (void)testThatInputControlsScreenWithMultiSelecICHasSubtitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openReportFiltersPage];
+    
+    [self startEditFilterWithMultiItems];
+    [self verifyThatInputControlsPageForMultiSelectHasCorrectSubtitle];
+    [self stopEditFilterWithMultiItems];
 }
 
 //Subtitle for single select IC screen
@@ -57,7 +84,12 @@
 //    > User should see subtitle like "Select a single item"
 - (void)testThatInputControlsScreenWithSingleSelecICHasSubtitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportWithSingleSelectedControlPage];
+    [self openReportFiltersPage];
+    
+    [self startEditFilterWithSingleSelectedItem];
+    [self verifyThatInputControlsPageForSingleSelectHasCorrectSubtitle];
+    [self stopEditFilterWithSingleSelectedItem];
 }
 
 //Search result
@@ -75,7 +107,13 @@
 //    - see result after searching
 - (void)testThatSearchWorkOnInputControlsScreen
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openReportFiltersPage];
+    
+    [self startEditFilterWithMultiItems];
+    [self trySearchCorrectValue];
+    [self verifyCorrectSearchResult];
+    [self stopEditFilterWithMultiItems];
 }
 
 //Error message when no search result
@@ -88,7 +126,13 @@
 //    > User should see error message "No Results." when no search result
 - (void)testThatErrorMessagesAppearsForSearchWithoutResult
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openReportFiltersPage];
+    
+    [self startEditFilterWithMultiItems];
+    [self trySearchInCorrectValue];
+    [self verifyInCorrectSearchResult];
+    [self stopEditFilterWithMultiItems];
 }
 
 //Back button like "Filters"
@@ -101,7 +145,102 @@
 //    > Report View screen should appear
 - (void)testThatBackButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestReportPage];
+    [self openReportFiltersPage];
+    
+    [self startEditFilterWithMultiItems];
+    [self verifyThatInputControlPageHasCorrentBackButton];
+    [self stopEditFilterWithMultiItems];
+}
+
+#pragma mark - Helpers
+
+- (void)startEditFilterWithMultiItems
+{
+    XCUIElement *cellWithMandatoryFilter = [self findTableViewCellWithAccessibilityId:nil
+                                                                containsLabelWithText:@"Low Fat"];
+    [cellWithMandatoryFilter tap];
+}
+
+- (void)stopEditFilterWithMultiItems
+{
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
+                                                    onNavBarWithLabel:@"Low Fat"
+                                                              timeout:kUITestsBaseTimeout];
+    [backButton tap];
+}
+
+- (void)startEditFilterWithSingleSelectedItem
+{
+    XCUIElement *cell = [self findTableViewCellWithAccessibilityId:nil
+                                             containsLabelWithText:@"Country"];
+    [cell tap];
+}
+
+- (void)stopEditFilterWithSingleSelectedItem
+{
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
+                                                    onNavBarWithLabel:@"Country"
+                                                              timeout:kUITestsBaseTimeout];
+    [backButton tap];
+}
+
+- (void)trySearchCorrectValue
+{
+    //Search Values
+    [self searchInMultiSelectedInputControlWithText:@"true"];
+}
+
+- (void)trySearchInCorrectValue
+{
+    [self searchInMultiSelectedInputControlWithText:@"incorrect text value"];
+}
+
+#pragma mark - Verifying
+
+- (void)verifyThatInputControlsPageOnScreen
+{
+    [self verifyThatInputControlsPageHasCorrectTitle];
+}
+
+- (void)verifyThatInputControlsPageHasCorrectTitle
+{
+    [self waitNavigationBarWithLabel:@"Low Fat"
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatInputControlsPageForMultiSelectHasCorrectSubtitle
+{
+    [self waitStaticTextWithAccessibilityId:@"Select one or more items" 
+                              parentElement:nil 
+                                    timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatInputControlsPageForSingleSelectHasCorrectSubtitle
+{
+    [self waitStaticTextWithAccessibilityId:@"Select a single item" 
+                              parentElement:nil 
+                                    timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyCorrectSearchResult
+{
+    [self findTableViewCellWithAccessibilityId:nil
+                         containsLabelWithText:@"true"];
+}
+
+- (void)verifyInCorrectSearchResult
+{
+    [self waitStaticTextWithAccessibilityId:@"No Results." 
+                              parentElement:nil 
+                                    timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatInputControlPageHasCorrentBackButton
+{
+    [self waitBackButtonWithAccessibilityId:@"Filters"
+                          onNavBarWithLabel:@"Low Fat"
+                                    timeout:kUITestsBaseTimeout];
 }
 
 @end

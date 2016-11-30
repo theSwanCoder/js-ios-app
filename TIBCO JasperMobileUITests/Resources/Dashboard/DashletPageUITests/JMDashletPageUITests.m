@@ -7,8 +7,27 @@
 //
 
 #import "JMDashletPageUITests.h"
+#import "JMBaseUITestCase+Dashboard.h"
+#import "JMBaseUITestCase+Helpers.h"
+
+static NSString *const kDashletName = @"13. Top Fives Report";
 
 @implementation JMDashletPageUITests
+
+- (void)setUp
+{
+    [super setUp];
+    
+    [self openTestDashboardPage];
+}
+
+- (void)tearDown
+{
+    [self closeTestDashlet];
+    [self closeTestDashboardPage];
+    
+    [super tearDown];
+}
 
 #pragma mark - Tests
 
@@ -20,7 +39,7 @@
 //    > User should see selected dashlet on the separate screen
 - (void)testThatUserCanSeeSelectedDashlet
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashletWithHyperlinks];
 }
 
 //Back button like title of the dashboard
@@ -32,7 +51,8 @@
 //    > Dashboard View screen should appears
 - (void)testThatBackButtonHasCorrectTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashletWithHyperlinks];
+    [self verifyThatDashletPageHasCorrentBackButton];
 }
 
 //Title like name of the dashlet
@@ -43,7 +63,8 @@
 //    > User should see title like name of the dashlet
 - (void)testThatPageHasCorrectTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashletWithHyperlinks];
+    [self verifyThatDashletPageHasCorrectTitle];
 }
 
 //Zoom on Dashlet View screen
@@ -61,7 +82,14 @@
 //    > Interaction works as expect
 - (void)testThatZoomWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashletWithHyperlinks];
+    
+    XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
+    [self waitElementReady:webView
+                   timeout:kUITestsBaseTimeout];
+    [webView pinchWithScale:2
+                   velocity:1];
+    sleep(kUITestsElementAvailableTimeout);
 }
 
 //Hyperlinks
@@ -73,7 +101,11 @@
 //    > Hyperlink work as expected
 - (void)testThatHyperlinksWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashletWithHyperlinks];
+    
+    [self openTestHyperlinkPage];
+    [self verifyThatReportFromTestHypelinkOnScreen];
+    [self closeTestHyperlinkPage];
 }
 
 //Input Controls
@@ -86,7 +118,8 @@
 // TODO: Old version
 - (void)testThatInputControlsWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+//    TODO: remove this case, because of 'native input controls change' feature.
+    [self openTestDashletWithHyperlinks];
 }
 
 //Change Chart Type of report
@@ -101,7 +134,12 @@
 //    > Chart type of report should be changed. User should see chanched report on Dashboard View screen
 - (void)testThatChartTypeCanBeChanged
 {
-//    XCTFail(@"Not implemented tests");
+    [self openTestDashletWithChartTypes];
+    
+    XCUIElement *chartTypeElement = [self waitStaticTextWithAccessibilityId:@"Store Sales"
+                                                                    timeout:kUITestsBaseTimeout];
+    [chartTypeElement tap];
+    sleep(3);
 }
 
 //JIVE
@@ -115,6 +153,77 @@
 - (void)testThatJIVEWorkCorrectly
 {
 //    XCTFail(@"Not implemented tests");
+    [self openTestDashletWithHyperlinks];
+}
+
+#pragma mark - Helpers
+
+- (void)openTestDashletWithHyperlinks
+{
+    [self tapOnElementWithText:@"Customers"];
+    [self givenLoadingPopupNotVisible];
+}
+
+- (void)closeTestDashlet
+{
+    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Back"
+                                                              timeout:kUITestsBaseTimeout];
+    [backButton tap];
+    [self givenLoadingPopupNotVisible];
+}
+
+- (void)openTestDashletWithChartTypes
+{
+    [self tapOnElementWithText:@"Store Cost"];
+    [self givenLoadingPopupNotVisible];
+}
+
+- (void)openTestHyperlinkPage
+{
+    [self tapOnElementWithText:@"Ida Rodriguez"];
+    // We can have two times when loading up and down
+    // first time loading 'report info' and second one - loading report
+    [self givenLoadingPopupNotVisible];
+    [self givenLoadingPopupNotVisible];
+}
+
+- (void)tapOnElementWithText:(NSString *)text
+{
+    XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
+    XCUIElement *element = [self waitStaticTextWithText:text
+                                                       parentElement:webView
+                                                         timeout:kUITestsBaseTimeout];
+    if (element) {
+        [element tap];
+    } else {
+        XCTFail(@"Element with text '%@' not found", text);
+    }
+}
+
+- (void)closeTestHyperlinkPage
+{
+    [self tryBackToPreviousPage];
+}
+
+#pragma mark - Verifying
+
+- (void)verifyThatDashletPageHasCorrentBackButton
+{
+    [self waitBackButtonWithAccessibilityId:@"Back"
+                          onNavBarWithLabel:kDashletName
+                                    timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatDashletPageHasCorrectTitle
+{
+    [self waitNavigationBarWithLabel:kDashletName
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatReportFromTestHypelinkOnScreen
+{
+    [self waitNavigationBarWithLabel:@"09. Customer Detail Report"
+                             timeout:kUITestsBaseTimeout];
 }
 
 @end

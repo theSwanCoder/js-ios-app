@@ -13,8 +13,8 @@
 
 - (void)setSearchResult:(JSReportSearchResult *)searchResult
 {
-    self.textLabel.text = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_report_search_hitCount_format", nil), searchResult.hitCount];
-    self.detailTextLabel.text = [NSString stringWithFormat:JMCustomLocalizedString(@"report_viewer_report_search_page_format", nil), searchResult.page];
+    self.textLabel.text = [NSString stringWithFormat:JMLocalizedString(@"report_viewer_report_search_hitCount_format"), searchResult.hitCount];
+    self.detailTextLabel.text = [NSString stringWithFormat:JMLocalizedString(@"report_viewer_report_search_page_format"), searchResult.page];
 }
 
 @end

@@ -5,7 +5,7 @@
 
 #import "JMFiltersNetworkManagerTests.h"
 
-NSString *const kJMFiltersNetworkManagerDemoServerURL = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
+NSString *const kJMFiltersNetworkManagerDemoServerURL = @"https://mobiledemo.jaspersoft.com/jasperserver-pro";
 NSString *const kJMFiltersNetworkManagerDemoServerOrganization = @"";
 NSString *const kJMFiltersNetworkManagerDemoAccountName = @"phoneuser";
 NSString *const kJMFiltersNetworkManagerDemoAccountPassword = @"phoneuser";

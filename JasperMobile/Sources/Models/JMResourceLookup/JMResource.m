@@ -83,35 +83,35 @@
     NSString *localizedResourceType;
     switch (self.type) {
         case JMResourceTypeFile: {
-            localizedResourceType = JMCustomLocalizedString(@"resources_type_saved_reportUnit", nil);
+            localizedResourceType = JMLocalizedString(@"resources_type_saved_reportUnit");
             break;
         }
         case JMResourceTypeFolder: {
-            localizedResourceType = JMCustomLocalizedString(@"resources_type_folder", nil);
+            localizedResourceType = JMLocalizedString(@"resources_type_folder");
             break;
         }
         case JMResourceTypeSavedResource: {
-            localizedResourceType = JMCustomLocalizedString(@"resources_type_saved_reportUnit", nil);
+            localizedResourceType = JMLocalizedString(@"resources_type_saved_reportUnit");
             break;
         }
         case JMResourceTypeReport: {
-            localizedResourceType = JMCustomLocalizedString(@"resources_type_reportUnit", nil);
+            localizedResourceType = JMLocalizedString(@"resources_type_reportUnit");
             break;
         }
         case JMResourceTypeTempExportedReport: {
-            localizedResourceType = JMCustomLocalizedString(@"resources_type_saved_reportUnit", nil);
+            localizedResourceType = JMLocalizedString(@"resources_type_saved_reportUnit");
             break;
         }
         case JMResourceTypeDashboard: {
-            localizedResourceType = JMCustomLocalizedString(@"resources_type_dashboard", nil);
+            localizedResourceType = JMLocalizedString(@"resources_type_dashboard");
             break;
         }
         case JMResourceTypeLegacyDashboard: {
-            localizedResourceType = JMCustomLocalizedString(@"resources_type_dashboard_legacy", nil);
+            localizedResourceType = JMLocalizedString(@"resources_type_dashboard_legacy");
             break;
         }
         case JMResourceTypeSchedule: {
-            localizedResourceType = JMCustomLocalizedString(@"resources_type_schedule", nil);
+            localizedResourceType = JMLocalizedString(@"resources_type_schedule");
             break;
         }
     }

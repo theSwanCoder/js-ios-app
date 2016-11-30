@@ -62,7 +62,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = JMCustomLocalizedString(@"resource_viewer_share_title", nil);
+    self.title = JMLocalizedString(@"resource_viewer_share_title");
     
     UIBarButtonItem *shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share_action"] style:UIBarButtonItemStylePlain target:self action:@selector(shareButtonDidTapped:)];
     
@@ -181,7 +181,7 @@
                                            UIActivityTypeAssignToContact,
                                            UIActivityTypeAddToReadingList,
                                            UIActivityTypeAirDrop] mutableCopy];
-    if ([JMUtils isSystemVersion9]) {
+    if ([JMUtils isSystemVersionEqualOrUp9]) {
         [excludeActivities addObject:UIActivityTypeOpenInIBooks];
     }
     
@@ -205,12 +205,12 @@
     UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"resource_viewer_share_annotation_title"
                                                                                                   message:nil
                                                                             textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
-                                                                                textField.placeholder = JMCustomLocalizedString(@"resource_viewer_share_annotation_placeholder", nil);
+                                                                                textField.placeholder = JMLocalizedString(@"resource_viewer_share_annotation_placeholder");
                                                                                 textField.text = annotation.text;
                                                                             } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                 NSString *errorMessage = nil;
                                                                                 if (!text.length) {
-                                                                                    errorMessage = JMCustomLocalizedString(@"resource_viewer_share_annotation_empty_error", nil);
+                                                                                    errorMessage = JMLocalizedString(@"resource_viewer_share_annotation_empty_error");
                                                                                 }
                                                                                 return errorMessage;
                                                                             } textEditCompletionHandler:^(NSString * _Nullable text) {

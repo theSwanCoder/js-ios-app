@@ -62,6 +62,7 @@
 @property (nonatomic, strong) JMFiltersNetworkManager *filtersNetworkManager;
 @property (nonatomic, assign) BOOL shouldShowFiltersPage;
 @property (nonatomic, copy) void(^runReportCompletion)(BOOL success, NSError *error);
+@property (nonatomic, copy) NSString *warningMessage;
 @end
 
 @implementation JMReportViewerVC
@@ -88,7 +89,7 @@
     [super viewDidLoad];
 
     self.filtersNetworkManager = [JMFiltersNetworkManager managerWithRestClient:self.restClient];
-
+    self.warningMessage = JMLocalizedString(@"report_viewer_filters_not_applyed_title");
     [self setupSessionManager];
 
     [self.configurator setup];
@@ -304,10 +305,10 @@
     return toolbar;
 }
 
-- (UIView *)nonExistingResourceView
+- (UIView *)warningsView
 {
     UILabel *label = [UILabel new];
-    label.text = JMCustomLocalizedString(@"report_viewer_emptyreport_title", nil);
+    label.text = self.warningMessage;
     label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 0;
     return label;
@@ -689,7 +690,7 @@
     if ([self report].reportComponents.count) {
         availableAction |= JMMenuActionsViewAction_ShowReportChartTypes;
     }
-    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate *)[UIApplication sharedApplication].delegate;
     if ([appDelegate isExternalScreenAvailable]) {
         // TODO: extend by considering other states
         availableAction |= ([self stateManager].state == JMReportViewerStateResourceOnWExternalWindow) ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
@@ -777,7 +778,7 @@
 - (void)reportDidSavedSuccessfully
 {
     [ALToastView toastInView:self.navigationController.view
-                    withText:JMCustomLocalizedString(@"report_viewer_save_addedToQueue", nil)];
+                    withText:JMLocalizedString(@"report_viewer_save_addedToQueue")];
 }
 
 #pragma mark - Input Controls
@@ -801,16 +802,19 @@
                 break;
             }
             case JMFiltersVCResultTypeEmptyFilters : {
+                self.warningMessage = JMLocalizedString(@"report_viewer_emptyreport_title");
                 if ([strongSelf stateManager].state != JMReportViewerStateResourceReady) {
                     [strongSelf runReportWithDestination:strongSelf.initialDestination];
                 }
                 break;
             }
             case JMFiltersVCResultTypeReportParameters : {
+                self.warningMessage = JMLocalizedString(@"report_viewer_emptyreport_title");
                 [strongSelf updateReportWithParameters:result.reportParameters];
                 break;
             }
             case JMFiltersVCResultTypeFilterOption : {
+                self.warningMessage = JMLocalizedString(@"report_viewer_emptyreport_title");
                 [strongSelf runReportWithReportURI:result.filterOptionURI];
                 break;
             }
@@ -834,7 +838,7 @@
 
 - (void)scheduleReport
 {
-    JMScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
+    JMScheduleVC *newJobVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMScheduleVC"];
     [newJobVC createNewScheduleMetadataWithResourceLookup:self.resource];
     [self.navigationController pushViewController:newJobVC animated:YES];
 }

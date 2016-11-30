@@ -7,8 +7,27 @@
 //
 
 #import "JMDashboardPrintDialogUITests.h"
+#import "JMBaseUITestCase+Dashboard.h"
+#import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Printer.h"
 
 @implementation JMDashboardPrintDialogUITests
+
+- (void)setUp
+{
+    [super setUp];
+    
+    [self openTestDashboardPage];
+    [self openPrintDashboardPage];
+}
+
+- (void)tearDown
+{
+    [self closePrintDashboardPage];
+    [self closeTestDashboardPage];
+    
+    [super tearDown];
+}
 
 #pragma mark - Tests
 
@@ -20,7 +39,7 @@
 //    > User should see Print Dashboard dialog (screen for iPhone)
 - (void)testThatUserCanSeePrintDialog
 {
-//    XCTFail(@"Not implemented tests");
+    [self verifyThatPrintDashboardPageOnScreen];
 }
 
 //Cancel button on Print Options dialog
@@ -32,7 +51,7 @@
 //    > Dashboard View screen should appears
 - (void)testThatCancelButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self verifyThatPrintDashboardPageHasCancelButton];
 }
 
 //Printer Options title
@@ -43,7 +62,7 @@
 //    > User should see title like "Printer Options"
 - (void)testThatPrinterOptionsPageHasCorrectTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self verifyThatPrintDashboardPageHasCorrectTitle];
 }
 
 //Printer button
@@ -56,7 +75,9 @@
 //    > User can choose one of available printers
 - (void)testThatPrinterButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openSelectPrinterPage];
+    // We need come up something with a test printer on CI to test this
+    [self closeSelectPrinterPage];
 }
 
 //Printer Options back button
@@ -69,7 +90,9 @@
 //    > Printer Otions dialog should appears
 - (void)testThatPrinterOptionsBackButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openSelectPrinterPage];
+    [self verifyThatPrintersPageHasCorrentBackButton];
+    [self closeSelectPrinterPage];
 }
 
 //Printer title
@@ -81,7 +104,9 @@
 //    > User should see title like "Printer"
 - (void)testThatPageHasCorrectTitle
 {
-//    XCTFail(@"Not implemented tests");
+    [self openSelectPrinterPage];
+    [self verifyThatPrintersPageOnScreen];
+    [self closeSelectPrinterPage];
 }
 
 //Print button
@@ -93,7 +118,9 @@
 //    > Dashboard should be printed
 - (void)testThatPrintButtonWorkCorrectly
 {
-//    XCTFail(@"Not implemented tests");
+    [self openSelectPrinterPage];
+    // We need come up something with a test printer on CI to test this
+    [self closeSelectPrinterPage];
 }
 
 //Number of copies
@@ -106,7 +133,9 @@
 //    > Dashboard should be printed with appropriate number of copies
 - (void)testThatNumberOfCopiesCanBeSelected
 {
-//    XCTFail(@"Not implemented tests");
+    [self openSelectPrinterPage];
+    // We need come up something with a test printer on CI to test this
+    [self closeSelectPrinterPage];
 }
 
 //Double-sided option (disabled)
@@ -119,7 +148,9 @@
 //    > Dashboard should be printed only on one side of paper
 - (void)testThatDoubleSidedOptionEnabledIfPrinterHasSuchOption
 {
-//    XCTFail(@"Not implemented tests");
+    [self openSelectPrinterPage];
+    // We need come up something with a test printer on CI to test this
+    [self closeSelectPrinterPage];
 }
 
 //Double-sided option (enabled)
@@ -132,7 +163,42 @@
 //    > Dashboard should be printed only on one side of paper
 - (void)testThatDoubleSidedOptionDisabledIfPrinterHasNotSuchOption
 {
-//    XCTFail(@"Not implemented tests");
+    [self openSelectPrinterPage];
+    // We need come up something with a test printer on CI to test this
+    [self closeSelectPrinterPage];
+}
+
+#pragma mark - Verifying
+
+- (void)verifyThatPrintDashboardPageOnScreen
+{
+    [self verifyThatPrintDashboardPageHasCorrectTitle];
+}
+
+- (void)verifyThatPrintDashboardPageHasCorrectTitle
+{
+    [self waitNavigationBarWithLabel:@"Printer Options"
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatPrintDashboardPageHasCancelButton
+{
+    [self waitBackButtonWithAccessibilityId:@"Cancel"
+                          onNavBarWithLabel:@"Printer Options"
+                                    timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatPrintersPageHasCorrentBackButton
+{
+    [self waitBackButtonWithAccessibilityId:@"Printer Options"
+                          onNavBarWithLabel:@"Printer"
+                                    timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatPrintersPageOnScreen
+{
+    [self waitNavigationBarWithLabel:@"Printer"
+                             timeout:kUITestsBaseTimeout];
 }
 
 @end

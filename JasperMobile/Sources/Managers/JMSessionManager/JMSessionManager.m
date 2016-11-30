@@ -38,6 +38,7 @@
 #import "AFImageDownloader.h"
 #import "UIKit+AFNetworking.h"
 #import "JMConstants.h"
+#import "JMUtils.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -57,7 +58,7 @@ static JMSessionManager *_sharedManager = nil;
         _sharedManager = [JMSessionManager new];
         [[NSNotificationCenter defaultCenter] addObserver:_sharedManager selector:@selector(saveActiveSessionIfNeeded:) name:kJSSessionDidAuthorized object:_sharedManager.restClient];
     });
-    
+
     return _sharedManager;
 }
 
@@ -153,6 +154,47 @@ static JMSessionManager *_sharedManager = nil;
     [[JMWebViewManager sharedInstance] reset];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
+
+- (void)obsolete
+{
+    // USE ONLY FOR DEBUG PURPOSES
+    NSArray *cookies = [NSHTTPCookieStorage sharedHTTPCookieStorage].cookies;
+    JMLog(@"Current cookies: %@", cookies);
+    NSHTTPCookie *sessionCookie = [self selectSessionCookieFromCookies:cookies];
+    NSMutableArray *newCookies = [NSMutableArray arrayWithArray:cookies];
+    [newCookies removeObject:sessionCookie];
+    JMLog(@"sessionCookie: %@", sessionCookie);
+    NSHTTPCookie *newSessionCookie = [self changeValueForCookie:sessionCookie
+                                                      withValue:@"SomeNewValue"];
+    [newCookies addObject:newSessionCookie];
+    [self.restClient updateCookiesWithCookies:newCookies];
+    JMLog(@"Updated cookies: %@", newCookies);
+
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:sessionCookie];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:newSessionCookie];
+}
+
+- (NSHTTPCookie *)selectSessionCookieFromCookies:(NSArray <NSHTTPCookie *>*)cookies
+{
+    NSHTTPCookie *sessionCookie;
+    for (NSHTTPCookie *cookie in cookies) {
+        if ([cookie.name isEqualToString:@"JSESSIONID"]) {
+            sessionCookie = cookie;
+            break;
+        }
+    }
+    NSAssert(sessionCookie != nil, @"Session cookie was not found");
+    return sessionCookie;
+}
+
+- (NSHTTPCookie *)changeValueForCookie:(NSHTTPCookie *)cookie withValue:(NSString *)value
+{
+    NSMutableDictionary <NSHTTPCookiePropertyKey, id> *properties = [cookie.properties mutableCopy];
+    properties[NSHTTPCookieValue] = value;
+    NSHTTPCookie *newCookie = [NSHTTPCookie cookieWithProperties:properties];
+    return newCookie;
+}
+
 
 - (void) logout
 {

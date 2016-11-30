@@ -57,7 +57,7 @@ NSString * const kGoogleDriveActivityType = @"com.google.Drive";
 
 - (NSString *)activityViewController:(UIActivityViewController *)activityViewController subjectForActivityType:(nullable NSString *)activityType
 {
-    return [NSString stringWithFormat:JMCustomLocalizedString(@"resource_viewer_share_text", nil), kJMAppName];
+    return [NSString stringWithFormat:JMLocalizedString(@"resource_viewer_share_text"), kJMAppName];
 }
 
 - (nullable id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType

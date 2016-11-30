@@ -245,7 +245,7 @@
         UIViewController *previousViewController = viewControllers[index - 1];
         backItemTitle = previousViewController.title;
     } else {
-        backItemTitle = JMCustomLocalizedString(@"back_button_title", nil);
+        backItemTitle = JMLocalizedString(@"back_button_title");
     }
     UIBarButtonItem *item = [self backBarButtonWithTitle:backItemTitle
                                                   action:@selector(back)];
@@ -254,7 +254,7 @@
 
 - (UIBarButtonItem *)backBarButtonForNestedResource
 {
-    UIBarButtonItem *item = [self backBarButtonWithTitle:JMCustomLocalizedString(@"back_button_title", nil)
+    UIBarButtonItem *item = [self backBarButtonWithTitle:JMLocalizedString(@"back_button_title")
                                                   action:@selector(backFromNestedView)];
     return item;
 }
@@ -286,8 +286,8 @@
 
     CGFloat viewWidth = CGRectGetWidth(self.controller.navigationController.navigationBar.frame);
 
-    if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back_button_title", nil)]) {
-        return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back_button_title", nil)];
+    if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMLocalizedString(@"back_button_title")]) {
+        return [self croppedBackButtonTitle:JMLocalizedString(@"back_button_title")];
     }
     return backButtonTitle;
 }
@@ -330,12 +330,6 @@
         UIView *bottomToolbarView = [self.controller bottomToolbarView];
         [resourceView.bottomView fillWithView:bottomToolbarView];
     }
-
-    if ([self.controller respondsToSelector:@selector(nonExistingResourceView)]) {
-        UIView *nonExistingResourceView = [self.controller nonExistingResourceView];
-        [resourceView.contentView fillWithView:nonExistingResourceView];
-        self.nonExistingResourceView = nonExistingResourceView;
-    }
 }
 
 - (void)showMainView
@@ -368,15 +362,19 @@
 #pragma mark - Setup Resource Not Exist View
 - (void)showResourceNotExistView
 {
-    if (self.nonExistingResourceView) {
-        self.nonExistingResourceView.hidden = NO;
+    if ([self.controller respondsToSelector:@selector(warningsView)]) {
+        JMBaseResourceView *resourceView = (JMBaseResourceView *)self.controller.view;
+        UIView *warningsView = [self.controller warningsView];
+        [resourceView.contentView fillWithView:warningsView];
+        self.warningsView = warningsView;
     }
 }
 
 - (void)hideResourceNotExistView
 {
-    if (self.nonExistingResourceView) {
-        self.nonExistingResourceView.hidden = YES;
+    if (self.warningsView) {
+        [self.warningsView removeFromSuperview];
+        self.warningsView = nil;
     }
 }
 
