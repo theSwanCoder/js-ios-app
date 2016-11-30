@@ -85,7 +85,7 @@
     [self searchResourceWithName:kJMTestLibrarySearchTextExample
                inSectionWithName:@"Library"];
     NSInteger cellsCount = [self countOfListCells];
-    XCTAssertTrue(cellsCount == 1, @"Should be only one result");
+    XCTAssertTrue(cellsCount > 0, @"Should one or more results");
 
     // Reset search
     [self tryClearSearchBar];
@@ -108,7 +108,7 @@
             // verify result
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.hittable == true"];
             NSInteger filtredResultCount = [[self.application.cells allElementsBoundByIndex] filteredArrayUsingPredicate:predicate].count;
-            XCTAssertTrue(filtredResultCount == 0, @"Should be only one result");
+            XCTAssertTrue(filtredResultCount == 0, @"Should not be any results");
             
         } else {
             XCTFail(@"Search button doesn't exist.");
