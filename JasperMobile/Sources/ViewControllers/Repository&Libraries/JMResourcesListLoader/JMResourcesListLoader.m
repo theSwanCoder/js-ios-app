@@ -161,7 +161,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     if (resource.type == JMResourceTypeFolder) {
         [self.resourcesFolders addObject:resource];
     } else {
-        [self.resourcesItems addObject:resource];
+        // FIX for http://jira.jaspersoft.com/browse/JRS-11049
+        id value = [self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Filter];
+        NSSet *availableResourceTypes = [value isKindOfClass:[NSArray class]] ? [NSSet setWithArray:value] : [NSSet setWithObject:value];
+        if ([availableResourceTypes containsObject:resource.resourceLookup.resourceType]) {
+            [self.resourcesItems addObject:resource];
+        }
     }
     self.allResources = nil;
 }
@@ -267,7 +272,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
             NSArray *allOptions;
             if ([JMUtils isServerProEdition]) {
                 // reports
-                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_UNKNOW]; //We should send kJS_WS_TYPE_UNKNOW here according to http://jira.jaspersoft.com/browse/JRS-11049
+                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT];
                 JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
                                                                                                value:reportsValues];
                 // dashboards

@@ -57,7 +57,7 @@ NSInteger static kJMRunReportTestCellIndex = 2;
     }
     
     sleep(2);
-    [self verifyThatLoadingPopupNotVisible];
+    [self givenLoadingPopupNotVisible];
 }
 
 - (void)backToLibrary
