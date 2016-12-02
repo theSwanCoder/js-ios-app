@@ -51,9 +51,6 @@
 
     __weak __typeof(self) weakSelf = self;
     [self preparePreviewForPrintWithCompletion:^(id printItem) {
-        if (completion) {
-            completion();
-        }
         if (printItem) {
             __typeof(self) strongSelf = weakSelf;
             __weak __typeof(self) weakSelf = strongSelf;
@@ -68,7 +65,12 @@
                            if(error){
                                JMLog(@"FAILED! due to error in domain %@ with error code %ld", error.domain, (long)error.code);
                            }
+                           if (completion) {
+                               completion();
+                           }
                        }];
+        } else if (completion) {
+            completion();
         }
     }];
 }
@@ -98,7 +100,10 @@
             [self removeResourceWithURL:resourceURL];
         }
     } else if (self.resource.type == JMResourceTypeDashboard) {
-        // TODO: implement
+        if ([printItem isKindOfClass:[NSURL class]]) {
+            NSURL *resourceURL = printItem;
+            [self removeResourceWithURL:resourceURL];
+        }
     } else {
         // TODO: extend for other resources
     }

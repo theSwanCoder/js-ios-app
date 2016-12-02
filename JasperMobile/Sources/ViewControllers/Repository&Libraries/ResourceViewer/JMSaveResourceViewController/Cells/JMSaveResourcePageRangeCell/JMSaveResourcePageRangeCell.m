@@ -22,7 +22,7 @@
 
 
 //
-//  JMSaveReportPageRangeCell.h
+//  JMSaveResourcePageRangeCell.h
 //  TIBCO JasperMobile
 //
 
@@ -30,11 +30,10 @@
 @since 1.9.1
 */
 
-#import "JMSaveReportPageRangeCell.h"
+#import "JMSaveResourcePageRangeCell.h"
 #import "JMTextField.h"
-#import "JMThemesManager.h"
 
-@interface JMSaveReportPageRangeCell() <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+@interface JMSaveResourcePageRangeCell() <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (weak, nonatomic) UIPickerView *pickerView;
 @property (nonatomic, weak) IBOutlet JMTextField *textField;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
@@ -42,7 +41,7 @@
 @property (nonatomic, assign) NSRange availableRange;
 @end
 
-@implementation JMSaveReportPageRangeCell
+@implementation JMSaveResourcePageRangeCell
 
 #pragma mark - Lifecycle
 

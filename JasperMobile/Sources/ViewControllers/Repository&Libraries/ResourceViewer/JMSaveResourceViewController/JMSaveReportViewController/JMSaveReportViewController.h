@@ -22,37 +22,21 @@
 
 
 //
-//  JMSaveReportSection.m
+//  JMSaveReportViewController.h
 //  TIBCO JasperMobile
 //
 
 /**
-@since 1.9.1
-*/
+ @author Alexey Gubarev ogubarie@tibco.com
+ @author Aleksandr Dakhno odahno@tibco.com
 
-#import "JMSaveReportSection.h"
+ @since 1.9
+ */
 
-@implementation JMSaveReportSection
+#import "JMSaveResourceViewController.h"
+#import "JSReport.h"
 
-- (instancetype)init
-{
-    [NSException raise:@"Init with (- (instancetype)initWithSectionType:(JMSaveReportSectionType)sectionType title:(NSString *)title)"
-                format:@""];
-    return nil;
-}
+@interface JMSaveReportViewController : JMSaveResourceViewController
+@property (nonatomic, strong) JSReport *report;
 
-- (instancetype)initWithSectionType:(JMSaveReportSectionType)sectionType title:(NSString *)title
-{
-    self = [super init];
-    if (self) {
-        _sectionType = sectionType;
-        _title = title;
-    }
-    return self;
-}
-
-+ (JMSaveReportSection *)sectionWithType:(JMSaveReportSectionType)sectionType title:(NSString *)title
-{
-    return [[self.class alloc] initWithSectionType:sectionType title:title];
-}
 @end

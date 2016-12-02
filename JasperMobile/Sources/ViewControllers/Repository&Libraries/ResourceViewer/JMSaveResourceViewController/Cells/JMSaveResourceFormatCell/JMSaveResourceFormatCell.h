@@ -22,7 +22,7 @@
 
 
 //
-//  JMSavingReportViewController.h
+//  JMSaveResourceFormatCell.h
 //  TIBCO JasperMobile
 //
 
@@ -30,24 +30,10 @@
  @author Alexey Gubarev ogubarie@tibco.com
  @author Aleksandr Dakhno odahno@tibco.com
 
- @since 1.9
- */
+ @since 1.9.1
+*/
 
-@import UIKit;
-#import "JMEditabledViewController.h"
-#import "JaspersoftSDK.h"
+@interface JMSaveResourceFormatCell : UITableViewCell
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 
-@protocol JMSaveReportViewControllerDelegate <NSObject>
-
-@required
-- (void)reportDidSavedSuccessfully;
-
-@end
-
-extern NSString * const kJMSaveReportViewControllerSegue;
-
-@interface JMSavingReportViewController : JMEditabledViewController
-@property (nonatomic, weak) id <JMSaveReportViewControllerDelegate> delegate;
-@property (nonatomic, copy) void(^sessionExpiredBlock)(void);
-@property (nonatomic, strong) JSReport *report;
 @end

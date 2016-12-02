@@ -54,8 +54,10 @@
 #import "JasperMobileAppDelegate.h"
 #import "JMDashboardViewerExternalScreenManager.h"
 #import "JMExternalWindowDashboardControlsVC.h"
+#import "JMSaveDashboardViewController.h"
+#import "ALToastView.h"
 
-@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMResourceViewerStateManagerDelegate>
+@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMResourceViewerStateManagerDelegate, JMSaveResourceViewControllerDelegate>
 @end
 
 
@@ -243,7 +245,7 @@
                                                   // Get components
                                                   NSArray <JSDashboardComponent *> *components = result.objects;
 
-                                                  NSMutableArray <JSParameter *> *parameters = [NSMutableArray array];
+                                                  NSMutableArray <JSDashboardParameter *> *parameters = [NSMutableArray array];
                                                   for (JSDashboardComponent *component in components) {
                                                       if ([component.type isEqualToString:@"inputControl"]) {
                                                           NSString *URI = component.ownerResourceURI;
@@ -252,9 +254,9 @@
                                                               URI = [URI stringByReplacingOccurrencesOfString:@"/temp" withString:dashboardFilesURI];
                                                           }
                                                           NSPredicate *filterPredicate = [NSPredicate predicateWithFormat:@"SELF.name == %@", URI];
-                                                          JSParameter *parameter = [[parameters filteredArrayUsingPredicate:filterPredicate] lastObject];
+                                                          JSDashboardParameter *parameter = [[parameters filteredArrayUsingPredicate:filterPredicate] lastObject];
                                                           if (!parameter) {
-                                                              parameter = [JSParameter parameterWithName:URI value:[NSMutableArray array]];
+                                                              parameter = [JSDashboardParameter parameterWithName:URI value:[NSMutableArray array]];
                                                               [parameters addObject:parameter];
                                                           }
                                                           [parameter.value addObject:component.ownerResourceParameterName];
@@ -422,6 +424,10 @@
     }
     availableAction |= JMMenuActionsViewAction_Share | JMMenuActionsViewAction_Print;
 
+    if (self.restClient.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_JADE_6_2_0) {
+        availableAction |= JMMenuActionsViewAction_Save;
+    }
+
     JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate *)[UIApplication sharedApplication].delegate;
     if ([appDelegate isExternalScreenAvailable]) {
         // TODO: extend by considering other states
@@ -459,13 +465,11 @@
             break;
         }
         case JMMenuActionsViewAction_Print: {
-            self.configurator.printManager.controller = self;
-            UIImage *renderedImage = [[self contentView] renderedImage];
-            self.configurator.printManager.prepareBlock = (id)^{
-                return renderedImage;
-            };
-            [self.configurator.printManager printResource:self.resource
-                                               completion:nil];
+            [self printDashboard];
+            break;
+        }
+        case JMMenuActionsViewAction_Save: {
+            [self saveDashboard];
             break;
         }
         case JMMenuActionsViewAction_Share:{
@@ -484,7 +488,64 @@
         default:{break;}
     }
 }
-
+#pragma mark - JMSaveResourceViewControllerDelegate
+- (void)resourceDidSavedSuccessfully
+{
+    [ALToastView toastInView:self.navigationController.view
+                    withText:JMLocalizedString(@"resource_viewer_save_addedToQueue")];
+}
+    
+- (void)saveDashboard
+{
+    JMSaveDashboardViewController *saveDashboardVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMSaveDashboardViewController"];
+    saveDashboardVC.dashboard = self.dashboard;
+    saveDashboardVC.delegate = self;
+    [self.navigationController pushViewController:saveDashboardVC animated:YES];
+}
+    
+- (void)printDashboard
+{
+    self.configurator.printManager.controller = self;
+    
+    
+    if (self.restClient.serverInfo.versionAsFloat < kJS_SERVER_VERSION_CODE_JADE_6_2_0) {
+        UIImage *renderedImage = [[self contentView] renderedImage];
+        self.configurator.printManager.prepareBlock = (id)^{
+            return renderedImage;
+        };
+        [self.configurator.printManager printResource:self.resource
+                                           completion:nil];
+    } else {
+        JSDashboardSaver *dashboardSaver = [[JSDashboardSaver alloc] initWithDashboard:self.dashboard restClient:self.restClient];
+        [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:^{
+            [dashboardSaver cancel];
+        }];
+        
+        NSString *dashboardName = [[NSUUID UUID] UUIDString];
+        [dashboardSaver saveDashboardWithName:dashboardName
+                                       format:kJS_CONTENT_TYPE_PDF
+                                   completion:^(NSURL * _Nullable savedDashboardFolderURL, NSError * _Nullable error) {
+                                       [JMCancelRequestPopup dismiss];
+                                       if (error) {
+                                           if (error.code == JSSessionExpiredErrorCode) {
+                                               [JMUtils showLoginViewAnimated:YES completion:nil];
+                                           } else {
+                                               [JMUtils presentAlertControllerWithError:error completion:nil];
+                                           }
+                                       } else {
+                                           NSString *fullResourceName = [dashboardName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
+                                           NSURL *resourceURL = [savedDashboardFolderURL URLByAppendingPathComponent:fullResourceName];
+                                           
+                                           self.configurator.printManager.prepareBlock = (id)^{
+                                               return resourceURL;
+                                           };
+                                           [self.configurator.printManager printResource:self.resource
+                                                                              completion:nil];
+                                       }
+                                   }];
+    }
+}
+    
 #pragma mark - JMDashboardLoaderDelegate
 - (void)dashboardLoaderDidStartMaximizeDashlet:(id<JMDashboardLoader> __nonnull)loader
 {

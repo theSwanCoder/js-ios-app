@@ -22,7 +22,7 @@
 
 
 //
-//  JMSaveReportPageRangeCell.m
+//  JMSaveResourceSection.h
 //  TIBCO JasperMobile
 //
 
@@ -33,21 +33,15 @@
  @since 1.9.1
 */
 
-@import UIKit;
+typedef NS_ENUM(NSInteger, JMSaveResourceSectionType) {
+    JMSaveResourceSectionTypeName,
+    JMSaveResourceSectionTypeFormat,
+    JMSaveResourceSectionTypePageRange
+};
 
-@protocol JMSaveReportPageRangeCellDelegate;
-
-@interface JMSaveReportPageRangeCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (nonatomic, assign) NSInteger currentPage;
-@property (nonatomic, assign) BOOL editable;
-@property (nonatomic, weak) id<JMSaveReportPageRangeCellDelegate> cellDelegate;
-@end
-
-@protocol JMSaveReportPageRangeCellDelegate <NSObject>
-@required
-- (NSRange)availableRangeForPageRangeCell:(JMSaveReportPageRangeCell *)cell;
-
-@optional
-- (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSInteger)page;
+@interface JMSaveResourceSection : NSObject
+@property (nonatomic, assign) JMSaveResourceSectionType sectionType;
+@property (nonatomic, copy) NSString *title;
+- (instancetype)initWithSectionType:(JMSaveResourceSectionType)sectionType title:(NSString *)title;
++ (JMSaveResourceSection *)sectionWithType:(JMSaveResourceSectionType)sectionType title:(NSString *)title;
 @end

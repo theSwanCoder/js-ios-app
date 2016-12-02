@@ -74,10 +74,10 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     [self updateResourceImage];
     
     // Add file extension for saved & temp exported items
-    if (self.resource.type == JMResourceTypeSavedResource) {
-        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResource:self.resource];
+    if (self.resource.type == JMResourceTypeSavedReport || self.resource.type == JMResourceTypeSavedDashboard) {
+        JMSavedResources *savedReport = [JMSavedResources savedResourceFromResource:self.resource];
         self.resourceName.text = [resource.resourceLookup.label stringByAppendingPathExtension:savedReport.format];
-    } else if (self.resource.type == JMResourceTypeTempExportedReport) {
+    } else if (self.resource.type == JMResourceTypeTempExportedReport || self.resource.type == JMResourceTypeTempExportedDashboard) {
         JMExportResource *exportResource = (JMExportResource *)resource;
         self.resourceName.text = [exportResource.resourceLookup.label stringByAppendingPathExtension:exportResource.format];
     }
@@ -129,15 +129,14 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                 }
             }
         }
-    } else if (self.resource.type == JMResourceTypeSavedResource) {
-        JMLog(@"saved items");
-//        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
-//        self.thumbnailImage = [savedReport thumbnailImage];
-//        resourceImage = [UIImage imageNamed:[NSString stringWithFormat:@"res_type_%@", savedReport.format]];
-
+    } else if (self.resource.type == JMResourceTypeSavedReport || self.resource.type == JMResourceTypeSavedDashboard) {
+        //        JMSavedResources *savedReport = [JMSavedResources savedResourceFromResourceLookup:self.resourceLookup];
+        //        self.thumbnailImage = [savedReport thumbnailImage];
+        //        resourceImage = [UIImage imageNamed:[NSString stringWithFormat:@"res_type_%@", savedReport.format]];
+        
         // We temporary disabled showing thumbnails of saved items
         resourceImage = [UIImage imageNamed:@"res_type_report"];
-        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResource:self.resource];
+        JMSavedResources *savedReport = [JMSavedResources savedResourceFromResource:self.resource];
         if (savedReport) {
             if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
                 resourceImage = [UIImage imageNamed:@"res_type_file_html"];
@@ -145,9 +144,11 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                 resourceImage = [UIImage imageNamed:@"res_type_file_pdf"];
             } else if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
                 resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
+            } else if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_PNG]) {
+                resourceImage = [UIImage imageNamed:@"res_type_file_img"];
             }
         }
-    } else if (self.resource.type == JMResourceTypeTempExportedReport) {
+    } else if (self.resource.type == JMResourceTypeTempExportedReport || self.resource.type == JMResourceTypeTempExportedDashboard) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
         JMExportResource *exportResource = (JMExportResource *)self.resource;
         if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
@@ -156,6 +157,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
             resourceImage = [UIImage imageNamed:@"res_type_file_pdf"];
         } else if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
             resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
+        } else if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_PNG]) {
+            resourceImage = [UIImage imageNamed:@"res_type_file_img"];
         }
         self.contentView.alpha = 0.5;
     } else if (self.resource.type == JMResourceTypeDashboard || self.resource.type == JMResourceTypeLegacyDashboard) {

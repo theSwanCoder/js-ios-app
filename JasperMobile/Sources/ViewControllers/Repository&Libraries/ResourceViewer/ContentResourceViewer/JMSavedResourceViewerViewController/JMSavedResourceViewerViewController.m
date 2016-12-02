@@ -36,7 +36,7 @@
 #import "NSObject+Additions.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate>
-@property (nonatomic, strong) JMSavedResources *savedReports;
+@property (nonatomic, strong) JMSavedResources *savedResource;
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
 @property (nonatomic) JMExternalWindowControlsVC *controlViewController;
@@ -56,13 +56,13 @@
 }
 
 #pragma mark - Accessors
-- (JMSavedResources *)savedReports
+- (JMSavedResources *)savedResource
 {
-    if (!_savedReports) {
-        _savedReports = [JMSavedResources savedReportsFromResource:self.resource];
+    if (!_savedResource) {
+        _savedResource = [JMSavedResources savedResourceFromResource:self.resource];
     }
 
-    return _savedReports;
+    return _savedResource;
 }
 
 - (UIView *)contentView
@@ -98,7 +98,7 @@
     }
 
     // Analytics
-    NSString *label = [kJMAnalyticsResourceLabelSavedResource stringByAppendingFormat:@" (%@)", [self.savedReports.format uppercaseString]];
+    NSString *label = [kJMAnalyticsResourceLabelSavedResource stringByAppendingFormat:@" (%@)", [self.savedResource.format uppercaseString]];
     [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
             kJMAnalyticsCategoryKey : kJMAnalyticsEventCategoryResource,
             kJMAnalyticsActionKey   : kJMAnalyticsEventActionOpen,
@@ -138,17 +138,17 @@
                                                                                     NSString *errorMessage = nil;
                                                                                     __strong typeof(self) strongSelf = weakSelf;
                                                                                     if (strongSelf) {
-                                                                                        [JMUtils validateReportName:text errorMessage:&errorMessage];
-                                                                                        if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
-                                                                                            errorMessage = JMLocalizedString(@"report_viewer_save_name_errmsg_notunique");
+                                                                                        [JMUtils validateResourceName:text errorMessage:&errorMessage];
+                                                                                        if (!errorMessage && ![JMSavedResources isAvailableResourceName:text format:strongSelf.savedResource.format resourceType:strongSelf.resource.type]) {
+                                                                                            errorMessage = JMLocalizedString(@"resource_viewer_save_name_errmsg_notunique");
                                                                                         }
                                                                                     }
                                                                                     return errorMessage;
                                                                                 } textEditCompletionHandler:^(NSString * _Nullable text) {
                                                                                     __strong typeof(self) strongSelf = weakSelf;
-                                                                                    if ([strongSelf.savedReports renameReportTo:text]) {
+                                                                                    if ([strongSelf.savedResource renameResourceTo:text]) {
                                                                                         strongSelf.title = text;
-                                                                                        strongSelf.resource = [strongSelf.savedReports wrapperFromSavedReports];
+                                                                                        strongSelf.resource = [strongSelf.savedResource wrapperFromSavedResources];
                                                                                         [strongSelf setupRightBarButtonItems];
                                                                                         [strongSelf startResourceViewing];
                                                                                     }
@@ -167,7 +167,7 @@
                 shouldCloseViewer = [strongSelf.delegate resourceViewer:strongSelf shouldCloseViewerAfterDeletingResource:strongSelf.resource];
             }
             [strongSelf cancelResourceViewingAndExit:shouldCloseViewer];
-            [strongSelf.savedReports removeReport];
+            [strongSelf.savedResource removeResource];
             
             if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:didDeleteResource:)]) {
                 [strongSelf.delegate resourceViewer:strongSelf didDeleteResource:strongSelf.resource];
@@ -180,7 +180,7 @@
         if (self.resource.type == JMResourceTypeFile) {
             url = self.savedResourceURL;
         } else {
-            url = [NSURL fileURLWithPath:[JMSavedResources absolutePathToSavedReport:self.savedReports]];
+            url = [NSURL fileURLWithPath:[JMSavedResources absolutePathToSavedResource:self.savedResource]];
         }
         self.documentController = [self setupDocumentControllerWithURL:url
                                                          usingDelegate:self];
@@ -205,17 +205,17 @@
 #pragma mark - Viewers
 - (void)showSavedResource
 {
-    NSString *reportDirectory = [JMSavedResources pathToFolderForSavedReport:self.savedReports];
+    NSString *reportDirectory = [JMSavedResources pathToFolderForSavedResource:self.savedResource];
     
     NSString *tempAppDirectory = NSTemporaryDirectory();
     NSString *tempReportDirectory = [tempAppDirectory stringByAppendingPathComponent:[[NSUUID UUID] UUIDString]];
     
     NSError *error = nil;
     if ([[NSFileManager defaultManager] copyItemAtPath:reportDirectory toPath:tempReportDirectory error:&error]) {
-        NSString *tempReportPath = [tempReportDirectory stringByAppendingPathComponent:[self.savedReports.label stringByAppendingPathExtension:self.savedReports.format]];
+        NSString *tempReportPath = [tempReportDirectory stringByAppendingPathComponent:[self.savedResource.label stringByAppendingPathExtension:self.savedResource.format]];
         self.savedResourceURL = [NSURL fileURLWithPath:tempReportPath];
         [self showResourceWithURL:self.savedResourceURL
-                   resourceFormat:self.savedReports.format
+                   resourceFormat:self.savedResource.format
                           baseURL:nil];
     }
     if (error) {
@@ -500,9 +500,9 @@
 {
     NSString *additinalString = @"";
     if (self.resource.type == JMResourceTypeFile) {
-        additinalString = [NSString stringWithFormat:@" (Content Resource: %@)", [self.savedReports.format uppercaseString]];
+        additinalString = [NSString stringWithFormat:@" (Content Resource: %@)", [self.savedResource.format uppercaseString]];
     } else {
-        additinalString = [NSString stringWithFormat:@" (Exported Resource: %@)", [self.savedReports.format uppercaseString]];
+        additinalString = [NSString stringWithFormat:@" (Exported Resource: %@)", [self.savedResource.format uppercaseString]];
     }
     return additinalString;
 }

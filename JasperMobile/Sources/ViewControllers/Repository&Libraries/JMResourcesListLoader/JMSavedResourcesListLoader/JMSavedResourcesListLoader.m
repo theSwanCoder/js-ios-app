@@ -70,7 +70,7 @@
     } else {
         NSMutableArray *commonResourcesArray = [NSMutableArray array];
         for(JMSavedResources *savedResource in fetchedObjects) {
-            [commonResourcesArray addObject:[savedResource wrapperFromSavedReports]];
+            [commonResourcesArray addObject:[savedResource wrapperFromSavedResources]];
         }
         
         NSArray *exportedResources = [[[JMExportManager sharedInstance] exportedResources] filteredArrayUsingPredicate:[self predicate]];
@@ -96,11 +96,15 @@
             return [super listItemsWithOption:optionType];
         case JMResourcesListLoaderOptionType_Filter: {
             NSMutableArray *filterOptions = [NSMutableArray array];
+            
+            NSMutableSet *formatsSet = [NSMutableSet setWithArray:[JMUtils supportedFormatsForReportSaving]];
+            [formatsSet addObjectsFromArray:[JMUtils supportedFormatsForDashboardSaving]];
+            NSArray *formatsArray = formatsSet.allObjects;
             JMResourceLoaderOption *filterByAllOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_all")
-                                                                                          value:[JMUtils supportedFormatsForReportSaving]];
+                                                                                          value:formatsArray];
             [filterOptions addObject:filterByAllOption];
-
-            for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
+            
+            for (NSString *format in formatsArray) {
                 JMResourceLoaderOption *filterByOption = [JMResourceLoaderOption optionWithTitle:[format uppercaseString]
                                                                                            value:@[format]];
                 [filterOptions addObject:filterByOption];

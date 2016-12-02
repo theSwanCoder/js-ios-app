@@ -22,7 +22,7 @@
 
 
 //
-//  JMSaveReportNameCell.m
+//  JMSaveResourceSection.m
 //  TIBCO JasperMobile
 //
 
@@ -30,33 +30,29 @@
 @since 1.9.1
 */
 
-#import "JMSaveReportNameCell.h"
-#import "JMThemesManager.h"
-#import "JMLocalization.h"
+#import "JMSaveResourceSection.h"
 
-@implementation JMSaveReportNameCell
+@implementation JMSaveResourceSection
 
-- (void)awakeFromNib
+- (instancetype)init
 {
-    [super awakeFromNib];
-    
-    self.errorLabel.font = [[JMThemesManager sharedManager] tableViewCellErrorFont];
-    self.errorLabel.textColor = [[JMThemesManager sharedManager] tableViewCellErrorColor];
-    self.textField.placeholder = JMLocalizedString(@"report_viewer_save_name");
+    [NSException raise:@"Init with (- (instancetype)initWithSectionType:(JMSaveResourceSectionType)sectionType title:(NSString *)title)"
+                format:@""];
+    return nil;
 }
 
-#pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+- (instancetype)initWithSectionType:(JMSaveResourceSectionType)sectionType title:(NSString *)title
 {
-    [textField resignFirstResponder];
-    return NO;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if ([self.cellDelegate respondsToSelector:@selector(nameCell:didChangeReportName:)]) {
-        [self.cellDelegate nameCell:self didChangeReportName:textField.text];
+    self = [super init];
+    if (self) {
+        _sectionType = sectionType;
+        _title = title;
     }
+    return self;
 }
 
++ (JMSaveResourceSection *)sectionWithType:(JMSaveResourceSectionType)sectionType title:(NSString *)title
+{
+    return [[self.class alloc] initWithSectionType:sectionType title:title];
+}
 @end

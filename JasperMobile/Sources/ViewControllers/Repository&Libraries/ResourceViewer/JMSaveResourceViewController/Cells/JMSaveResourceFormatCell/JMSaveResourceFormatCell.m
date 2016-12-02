@@ -22,40 +22,21 @@
 
 
 //
-//  JMSaveReportPagesCell.m
+//  JMSaveResourceFormatCell.m
 //  TIBCO JasperMobile
 //
 
-#import "JMSaveReportPagesCell.h"
-#import "JMThemesManager.h"
-#import "JMLocalization.h"
+/**
+@since 1.9.1
+*/
 
-@interface JMSaveReportPagesCell()
-@property (nonatomic, weak) IBOutlet UISwitch *pagesTypeSwitch;
-@end
+#import "JMSaveResourceFormatCell.h"
 
-@implementation JMSaveReportPagesCell
-
+@implementation JMSaveResourceFormatCell
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
     self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
-    self.titleLabel.text = JMLocalizedString(@"report_viewer_save_pages_all");
-    self.pagesTypeSwitch.onTintColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
-}
-
-#pragma mark - Private API
--(void)setPagesType:(JMSaveReportPagesType)pagesType{
-    _pagesType = pagesType;
-    self.pagesTypeSwitch.on = (pagesType == JMSaveReportPagesType_All);
-}
-
-#pragma mark - Actions
-- (IBAction)switchValueChanged:(id)sender
-{
-    self.pagesType = self.pagesTypeSwitch.on ? JMSaveReportPagesType_All : JMSaveReportPagesType_Range;
-    [self.cellDelegate pagesCell:self didChangedPagesType:self.pagesType];
 }
 @end

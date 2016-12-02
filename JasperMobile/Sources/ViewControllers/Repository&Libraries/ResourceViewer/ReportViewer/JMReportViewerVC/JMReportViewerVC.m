@@ -23,7 +23,7 @@
 #import "JMReportViewerVC.h"
 #import "JMBaseResourceView.h"
 #import "JMReportViewerConfigurator.h"
-#import "JMSavingReportViewController.h"
+#import "JMSaveReportViewController.h"
 #import "ALToastView.h"
 #import "JMInputControlsViewController.h"
 #import "JMReportViewerToolBar.h"
@@ -53,7 +53,7 @@
 #import "JasperMobileAppDelegate.h"
 #import "JMReportViewerExternalScreenManager.h"
 
-@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
+@interface JMReportViewerVC () <JMSaveResourceViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
 @property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
 // TODO: temporary solution, remove in the next release
 @property (nonatomic, strong) JMFiltersNetworkManager *filtersNetworkManager;
@@ -130,21 +130,6 @@
         }
     }];
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    [super prepareForSegue:segue sender:sender];
-    if ([segue.identifier isEqualToString:kJMSaveReportViewControllerSegue]) {
-        JMSavingReportViewController *destinationViewController = segue.destinationViewController;
-        destinationViewController.report = [self report];
-        destinationViewController.delegate = self;
-        __weak __typeof(self) weakSelf = self;
-        destinationViewController.sessionExpiredBlock = ^{
-            __weak __typeof(self) strongSelf = weakSelf;
-            [strongSelf.sessionManager handleSessionDidChangeWithAlert:YES];
-        };
-    }
 }
 
 #pragma mark - Setups
@@ -723,7 +708,7 @@
             break;
         }
         case JMMenuActionsViewAction_Save: {
-            [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
+            [self saveReport];
             break;
         }
         case JMMenuActionsViewAction_Schedule: {
@@ -761,11 +746,11 @@
     }
 }
 
-#pragma mark - JMSaveReportControllerDelegate
-- (void)reportDidSavedSuccessfully
+#pragma mark - JMSaveResourceViewControllerDelegate
+- (void)resourceDidSavedSuccessfully
 {
     [ALToastView toastInView:self.navigationController.view
-                    withText:JMLocalizedString(@"report_viewer_save_addedToQueue")];
+                    withText:JMLocalizedString(@"resource_viewer_save_addedToQueue")];
 }
 
 #pragma mark - Input Controls
@@ -814,6 +799,20 @@
     };
 
     [self.navigationController pushViewController:inputControlsViewController animated:YES];
+}
+    
+- (void)saveReport
+{
+    JMSaveReportViewController *saveReportVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMSaveReportViewController"];
+    saveReportVC.report = self.report;
+    saveReportVC.delegate = self;
+    __weak __typeof(self) weakSelf = self;
+    saveReportVC.sessionExpiredBlock = ^{
+        __weak __typeof(self) strongSelf = weakSelf;
+        [strongSelf.sessionManager handleSessionDidChangeWithAlert:YES];
+    };
+
+    [self.navigationController pushViewController:saveReportVC animated:YES];
 }
 
 #pragma mark - Scheduling

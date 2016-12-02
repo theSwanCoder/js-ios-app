@@ -22,28 +22,39 @@
 
 
 //
-//  JMSaveReportSection.h
+//  JMSaveResourceNameCell.m
 //  TIBCO JasperMobile
 //
 
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @author Aleksandr Dakhno odahno@tibco.com
-
- @since 1.9.1
+@since 1.9.1
 */
 
-@import Foundation;
+#import "JMSaveResourceNameCell.h"
 
-typedef NS_ENUM(NSInteger, JMSaveReportSectionType) {
-    JMSaveReportSectionTypeName,
-    JMSaveReportSectionTypeFormat,
-    JMSaveReportSectionTypePageRange
-};
+@implementation JMSaveResourceNameCell
 
-@interface JMSaveReportSection : NSObject
-@property (nonatomic, assign) JMSaveReportSectionType sectionType;
-@property (nonatomic, copy) NSString *title;
-- (instancetype)initWithSectionType:(JMSaveReportSectionType)sectionType title:(NSString *)title;
-+ (JMSaveReportSection *)sectionWithType:(JMSaveReportSectionType)sectionType title:(NSString *)title;
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+
+    self.errorLabel.font = [[JMThemesManager sharedManager] tableViewCellErrorFont];
+    self.errorLabel.textColor = [[JMThemesManager sharedManager] tableViewCellErrorColor];
+    self.textField.placeholder = JMLocalizedString(@"resource_viewer_save_name");
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return NO;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if ([self.cellDelegate respondsToSelector:@selector(nameCell:didChangeResourceName:)]) {
+        [self.cellDelegate nameCell:self didChangeResourceName:textField.text];
+    }
+}
+
 @end

@@ -22,33 +22,20 @@
 
 
 //
-//  JMSaveReportPagesCell.h
+//  JMSaveDashboardViewController.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
  
- @since 2.1
+ @since 2.6
  */
 
-#import <UIKit/UIKit.h>
+#import "JMSaveResourceViewController.h"
+#import "JMDashboard.h"
 
-typedef NS_ENUM(NSInteger, JMSaveReportPagesType) {
-    JMSaveReportPagesType_All = 0,
-    JMSaveReportPagesType_Range
-};
-
-@class JMSaveReportPagesCell;
-@protocol JMSaveReportPagesCellDelegate <NSObject>
-@required
-- (void)pagesCell:(JMSaveReportPagesCell *)pagesCell didChangedPagesType:(JMSaveReportPagesType)pagesType;
-
-@end
-
-@interface JMSaveReportPagesCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (nonatomic, assign) JMSaveReportPagesType pagesType;
-@property (nonatomic, weak) id <JMSaveReportPagesCellDelegate> cellDelegate;
+@interface JMSaveDashboardViewController : JMSaveResourceViewController
+@property (nonatomic, strong) JMDashboard *dashboard;
 
 @end
