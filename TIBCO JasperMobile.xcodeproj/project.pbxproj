@@ -166,6 +166,7 @@
 		089F043F1DF590EF00812A88 /* JMResourceViewerFavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662491DF02D0400B8009B /* JMResourceViewerFavoritesHelper.m */; };
 		089F04401DF590F800812A88 /* JMResourceViewerMenuHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886624C1DF02D0400B8009B /* JMResourceViewerMenuHelper.m */; };
 		089F04411DF5910000812A88 /* JMResourceViewerToolbarsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886624F1DF02D0400B8009B /* JMResourceViewerToolbarsHelper.m */; };
+		089F04421DF5B90200812A88 /* JMExportResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66431C3D465200ED683B /* JMExportResource.m */; };
 		089F664A1C3D465200ED683B /* JMExportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66401C3D465200ED683B /* JMExportManager.m */; };
 		089F664B1C3D465200ED683B /* JMExportResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66431C3D465200ED683B /* JMExportResource.m */; };
 		089F664C1C3D465200ED683B /* JMExportTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66461C3D465200ED683B /* JMExportTask.m */; };
@@ -4308,6 +4309,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				089F04421DF5B90200812A88 /* JMExportResource.m in Sources */,
 				089F04411DF5910000812A88 /* JMResourceViewerToolbarsHelper.m in Sources */,
 				089F04401DF590F800812A88 /* JMResourceViewerMenuHelper.m in Sources */,
 				089F043F1DF590EF00812A88 /* JMResourceViewerFavoritesHelper.m in Sources */,
