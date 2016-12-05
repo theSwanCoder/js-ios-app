@@ -140,6 +140,29 @@
 		089B15FF1AA756BD0021A915 /* JMMenuItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15811AA756BD0021A915 /* JMMenuItemTableViewCell.m */; };
 		089B16001AA756BD0021A915 /* JMMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15841AA756BD0021A915 /* JMMenuViewController.m */; };
 		089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16151AA757EA0021A915 /* jaspermobile.js */; };
+		089F042B1DF58B7300812A88 /* JMDashboardViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886623C1DF02D0400B8009B /* JMDashboardViewerConfigurator.m */; };
+		089F042C1DF58B8500812A88 /* JMFiltersNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662CF1DF02D0400B8009B /* JMFiltersNetworkManager.m */; };
+		089F042D1DF58B9100812A88 /* JMReportViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662901DF02D0400B8009B /* JMReportViewerConfigurator.m */; };
+		089F042E1DF58C6800812A88 /* JMDashboardViewerExternalScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886623F1DF02D0400B8009B /* JMDashboardViewerExternalScreenManager.m */; };
+		089F042F1DF58C7600812A88 /* JMDashboardViewerStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662421DF02D0400B8009B /* JMDashboardViewerStateManager.m */; };
+		089F04301DF58C8500812A88 /* JMLegacyDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662351DF02D0400B8009B /* JMLegacyDashboardLoader.m */; };
+		089F04311DF58C8A00812A88 /* JMReportViewerExternalScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662931DF02D0400B8009B /* JMReportViewerExternalScreenManager.m */; };
+		089F04321DF58C9000812A88 /* JMReportViewerStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662961DF02D0400B8009B /* JMReportViewerStateManager.m */; };
+		089F04331DF58C9500812A88 /* JMResourceViewerDocumentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662531DF02D0400B8009B /* JMResourceViewerDocumentManager.m */; };
+		089F04341DF58C9B00812A88 /* JMResourceViewerHyperlinksManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662591DF02D0400B8009B /* JMResourceViewerHyperlinksManager.m */; };
+		089F04351DF58CA000812A88 /* JMResourceViewerInfoPageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886625C1DF02D0400B8009B /* JMResourceViewerInfoPageManager.m */; };
+		089F04361DF58CA500812A88 /* JMResourceViewerPrintManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886625F1DF02D0400B8009B /* JMResourceViewerPrintManager.m */; };
+		089F04371DF58CAA00812A88 /* JMResourceViewerSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662641DF02D0400B8009B /* JMResourceViewerSessionManager.m */; };
+		089F04381DF58CAF00812A88 /* JMResourceViewerShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662671DF02D0400B8009B /* JMResourceViewerShareManager.m */; };
+		089F04391DF58CB400812A88 /* JMRestReportLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886628A1DF02D0400B8009B /* JMRestReportLoader.m */; };
+		089F043A1DF58CBA00812A88 /* JMVisDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662391DF02D0400B8009B /* JMVisDashboardLoader.m */; };
+		089F043B1DF58CBF00812A88 /* JMVisualizeReportLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886628D1DF02D0400B8009B /* JMVisualizeReportLoader.m */; };
+		089F043C1DF5909100812A88 /* JMReportChartType.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662821DF02D0400B8009B /* JMReportChartType.m */; };
+		089F043D1DF5909A00812A88 /* JMResourceViewerExternalScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662561DF02D0400B8009B /* JMResourceViewerExternalScreenManager.m */; };
+		089F043E1DF590A200812A88 /* JMResourceViewerStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886626A1DF02D0400B8009B /* JMResourceViewerStateManager.m */; };
+		089F043F1DF590EF00812A88 /* JMResourceViewerFavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 088662491DF02D0400B8009B /* JMResourceViewerFavoritesHelper.m */; };
+		089F04401DF590F800812A88 /* JMResourceViewerMenuHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886624C1DF02D0400B8009B /* JMResourceViewerMenuHelper.m */; };
+		089F04411DF5910000812A88 /* JMResourceViewerToolbarsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0886624F1DF02D0400B8009B /* JMResourceViewerToolbarsHelper.m */; };
 		089F664A1C3D465200ED683B /* JMExportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66401C3D465200ED683B /* JMExportManager.m */; };
 		089F664B1C3D465200ED683B /* JMExportResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66431C3D465200ED683B /* JMExportResource.m */; };
 		089F664C1C3D465200ED683B /* JMExportTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66461C3D465200ED683B /* JMExportTask.m */; };
@@ -4248,6 +4271,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				089F04411DF5910000812A88 /* JMResourceViewerToolbarsHelper.m in Sources */,
+				089F04401DF590F800812A88 /* JMResourceViewerMenuHelper.m in Sources */,
+				089F043F1DF590EF00812A88 /* JMResourceViewerFavoritesHelper.m in Sources */,
+				089F043E1DF590A200812A88 /* JMResourceViewerStateManager.m in Sources */,
+				089F043D1DF5909A00812A88 /* JMResourceViewerExternalScreenManager.m in Sources */,
+				089F043C1DF5909100812A88 /* JMReportChartType.m in Sources */,
+				089F043B1DF58CBF00812A88 /* JMVisualizeReportLoader.m in Sources */,
+				089F043A1DF58CBA00812A88 /* JMVisDashboardLoader.m in Sources */,
+				089F04391DF58CB400812A88 /* JMRestReportLoader.m in Sources */,
+				089F04381DF58CAF00812A88 /* JMResourceViewerShareManager.m in Sources */,
+				089F04371DF58CAA00812A88 /* JMResourceViewerSessionManager.m in Sources */,
+				089F04361DF58CA500812A88 /* JMResourceViewerPrintManager.m in Sources */,
+				089F04351DF58CA000812A88 /* JMResourceViewerInfoPageManager.m in Sources */,
+				089F04341DF58C9B00812A88 /* JMResourceViewerHyperlinksManager.m in Sources */,
+				089F04331DF58C9500812A88 /* JMResourceViewerDocumentManager.m in Sources */,
+				089F04321DF58C9000812A88 /* JMReportViewerStateManager.m in Sources */,
+				089F04311DF58C8A00812A88 /* JMReportViewerExternalScreenManager.m in Sources */,
+				089F04301DF58C8500812A88 /* JMLegacyDashboardLoader.m in Sources */,
+				089F042F1DF58C7600812A88 /* JMDashboardViewerStateManager.m in Sources */,
+				089F042E1DF58C6800812A88 /* JMDashboardViewerExternalScreenManager.m in Sources */,
+				089F042D1DF58B9100812A88 /* JMReportViewerConfigurator.m in Sources */,
+				089F042C1DF58B8500812A88 /* JMFiltersNetworkManager.m in Sources */,
+				089F042B1DF58B7300812A88 /* JMDashboardViewerConfigurator.m in Sources */,
 				93DB0C921D4CCD3E00B94469 /* JMUtils.m in Sources */,
 				93DB0C8E1D4CCA8300B94469 /* JMHTMLScript.m in Sources */,
 				93DB0CBF1D4D10E900B94469 /* JMExportManager.m in Sources */,
@@ -4785,7 +4831,6 @@
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -4830,7 +4875,6 @@
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -4871,7 +4915,6 @@
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
