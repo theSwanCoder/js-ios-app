@@ -55,8 +55,6 @@
 #pragma mark - Reports
 - (void)openInfoPageForTestReportFromSectionWithName:(NSString *)sectionName
 {
-    [self givenThatReportCellsOnScreen];
-    
     XCUIElement *reportCell = [self searchTestReportInSectionWithName:sectionName];
     [self openInfoPageFromCell:reportCell];
     [self verifyThatReportInfoPageOnScreen];
