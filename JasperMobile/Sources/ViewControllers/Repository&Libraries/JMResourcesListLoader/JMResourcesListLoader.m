@@ -160,13 +160,8 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 {
     if (resource.type == JMResourceTypeFolder) {
         [self.resourcesFolders addObject:resource];
-    } else {
-        // FIX for http://jira.jaspersoft.com/browse/JRS-11049
-        id value = [self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Filter];
-        NSSet *availableResourceTypes = [value isKindOfClass:[NSArray class]] ? [NSSet setWithArray:value] : [NSSet setWithObject:value];
-        if ([availableResourceTypes containsObject:resource.resourceLookup.resourceType]) {
-            [self.resourcesItems addObject:resource];
-        }
+    } else if ([self validateResourceFilteringBeforeAdding:resource]) {
+        [self.resourcesItems addObject:resource];
     }
     self.allResources = nil;
 }
@@ -176,6 +171,14 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     for (id resource in resources) {
         [self addResourcesWithResource:resource];
     }
+}
+
+- (BOOL)validateResourceFilteringBeforeAdding:(JMResource *)resource
+{
+    // FIX for http://jira.jaspersoft.com/browse/JRS-11049
+    id value = [self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Filter];
+    NSSet *availableResourceTypes = [value isKindOfClass:[NSArray class]] ? [NSSet setWithArray:value] : [NSSet setWithObject:value];
+    return [availableResourceTypes containsObject:resource.resourceLookup.resourceType];
 }
 
 #pragma mark - JMPagination

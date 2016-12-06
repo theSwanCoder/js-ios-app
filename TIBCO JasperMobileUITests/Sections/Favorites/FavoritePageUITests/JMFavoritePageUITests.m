@@ -82,6 +82,8 @@
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
 
     [self openFavoritesSection];
+    [self givenThatReportCellsOnScreen];
+    
     [self searchResourceWithName:kTestReportName
     inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 

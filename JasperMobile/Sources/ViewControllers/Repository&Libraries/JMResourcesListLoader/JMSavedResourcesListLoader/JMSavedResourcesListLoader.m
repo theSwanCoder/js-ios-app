@@ -114,6 +114,21 @@
     }
 }
 
+- (BOOL)validateResourceFilteringBeforeAdding:(JMResource *)resource
+{
+    id value = [self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Filter];
+    NSSet *availableFormats = [value isKindOfClass:[NSArray class]] ? [NSSet setWithArray:value] : [NSSet setWithObject:value];
+    
+    NSString *resourceFormat;
+    if ([resource isKindOfClass:[JMExportResource class]]) {
+        resourceFormat = ((JMExportResource *)resource).format;
+    } else {
+        JMSavedResources *savedResource = [JMSavedResources savedResourceFromResource:resource];
+        resourceFormat = savedResource.format;
+    }
+    return [availableFormats containsObject:resourceFormat];
+}
+
 #pragma mark - Utils
 - (NSFetchRequest *)fetchRequest
 {

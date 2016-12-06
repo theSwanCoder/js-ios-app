@@ -66,6 +66,8 @@
     [self saveTestReportInHTMLFormat];
     [self openSavedItemsSection];
 
+    [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
+    
     [self searchResourceWithName:kTestReportName
     inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     [self verifyTestReportInHTMLFormatIsInSearchResult];

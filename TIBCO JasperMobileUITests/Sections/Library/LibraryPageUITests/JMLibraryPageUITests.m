@@ -82,6 +82,8 @@
 {
     // start find some text
     [self switchViewFromGridToListInSectionWithTitle:@"Library"];
+    [self givenThatReportCellsOnScreen];
+
     [self searchResourceWithName:kJMTestLibrarySearchTextExample
                inSectionWithName:@"Library"];
     NSInteger cellsCount = [self countOfListCells];
