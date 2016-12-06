@@ -57,7 +57,7 @@
 @property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
 // TODO: temporary solution, remove in the next release
 @property (nonatomic, strong) JMFiltersNetworkManager *filtersNetworkManager;
-@property (nonatomic, assign) BOOL shouldShowFiltersPage;
+@property (nonatomic, assign) BOOL shouldShowFiltersActionInMenu;
 @property (nonatomic, copy) void(^runReportCompletion)(BOOL success, NSError *error);
 @property (nonatomic, copy) NSString *warningMessage;
 @end
@@ -402,9 +402,7 @@
                     [strongSelf handleError:error];
                 } else {
                     [[strongSelf stateManager] setupPageForState:JMReportViewerStateInitial];
-                    if (inputControls.count > 0) {
-                        strongSelf.shouldShowFiltersPage = YES;
-                    }
+                    strongSelf.shouldShowFiltersActionInMenu = inputControls.count > 0;
                     if (isAlwaysPrompt && inputControls.count > 0) {
                         [strongSelf showFiltersVCWithInitialParameters:strongSelf.initialReportParameters];
                     } else {
@@ -652,7 +650,7 @@
 {
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info;
 
-    if (self.shouldShowFiltersPage) {
+    if (self.shouldShowFiltersActionInMenu) {
         availableAction |= JMMenuActionsViewAction_Edit;
     }
 
