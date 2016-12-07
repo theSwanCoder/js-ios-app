@@ -115,10 +115,12 @@
 - (void)setupNavigationItems
 {
 #ifndef  __RELEASE__
-    UIBarButtonItem *obsoleteSessionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
-                                                                                           target:self
-                                                                                           action:@selector(makeSessionObsolete)];
-    self.navigationItem.leftBarButtonItem = obsoleteSessionButton;
+    if (self.restClient) {
+        UIBarButtonItem *obsoleteSessionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
+                                                                                               target:self
+                                                                                               action:@selector(makeSessionObsolete)];
+        self.navigationItem.rightBarButtonItem = obsoleteSessionButton;
+    }
 #endif
 }
 
