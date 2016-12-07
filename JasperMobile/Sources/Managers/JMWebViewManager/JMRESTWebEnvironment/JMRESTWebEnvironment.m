@@ -51,13 +51,14 @@
 
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"STATIC_DEPENDENCIES" withString:staticDependencies];
 
+    __weak __typeof(self) weakSelf = self;
     JMWebEnvironmentLoadingTask *loadingTask = [JMWebEnvironmentLoadingTask taskWithRequestExecutor:self.requestExecutor
                                                                                          HTMLString:htmlString
-                                                                                            baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
-    __weak __typeof(self) weakSelf = self;
-    loadingTask.completion = ^{
-        weakSelf.cookiesState = JMWebEnvironmentCookiesStateValid;
-    };
+                                                                                            baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
+                                                                                         completion:^{
+                                                                                             __strong __typeof(self) strongSelf = weakSelf;
+                                                                                             strongSelf.cookiesState = JMWebEnvironmentCookiesStateValid;
+                                                                                         }];
     return loadingTask;
 }
 

@@ -48,7 +48,6 @@ NSString *const JMResourceContentViewDidLayoutSubviewsNotification = @"JMResourc
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     [[NSNotificationCenter defaultCenter] postNotificationName:JMResourceContentViewDidLayoutSubviewsNotification
                                                         object:self];
 }

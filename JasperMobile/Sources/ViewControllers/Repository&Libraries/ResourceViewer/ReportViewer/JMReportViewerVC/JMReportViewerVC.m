@@ -788,10 +788,6 @@
                 [strongSelf runReportWithReportURI:result.filterOptionURI];
                 break;
             }
-            case JMFiltersVCResultTypeSessionExpired: {
-                [strongSelf.sessionManager handleSessionDidChangeWithAlert:NO];
-                break;
-            }
         }
         [strongSelf.navigationController popViewControllerAnimated:YES];
     };

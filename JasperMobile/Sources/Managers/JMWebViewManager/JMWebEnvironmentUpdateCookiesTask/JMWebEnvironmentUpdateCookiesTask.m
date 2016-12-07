@@ -27,7 +27,7 @@
 
 #import "JMWebEnvironmentUpdateCookiesTask.h"
 #import "JMJavascriptRequestExecutor.h"
-#import "JMUtils.h"
+
 
 @interface JMWebEnvironmentUpdateCookiesTask()
 @property (nonatomic, strong) JMJavascriptRequestExecutor *requestExecutor;
@@ -74,7 +74,7 @@
         if (strongSelf.isCancelled) {
             return;
         }
-        JMLog(@"%@ - end updating cookies", self);
+        JMLog(@"%@ - end updating cookies", strongSelf);
         strongSelf.state = JMAsyncTaskStateFinished;
         if (strongSelf.completion) {
             strongSelf.completion();
@@ -112,30 +112,36 @@
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     if ([JMUtils isSystemVersionEqualOrUp9]) {
-        NSSet *dataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
-        WKWebsiteDataStore *websiteDataStore = self.requestExecutor.webView.configuration.websiteDataStore;
-        [websiteDataStore fetchDataRecordsOfTypes:dataTypes
-                                completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {
-                                    for (WKWebsiteDataRecord *record in records) {
-                                        NSURL *serverURL = [NSURL URLWithString:self.RESTClient.serverProfile.serverUrl];
-                                        if ([record.displayName containsString:serverURL.host]) {
-                                            [websiteDataStore removeDataOfTypes:record.dataTypes
-                                                                 forDataRecords:@[record]
-                                                              completionHandler:^{
-                                                                  JMLog(@"record (%@) removed successfully", record);
-                                                              }];
-                                        }
-                                    }
-                                    if (completion) {
-                                        completion(YES);
-                                    }
-                                }];
+        [self removeCookiesForNewVersionWithCompletion:completion];
     } else {
-        [self removeCookiesForOldVersionWitchCompletion:completion];
+        [self removeCookiesForOldVersionWithCompletion:completion];
     }
 }
 
-- (void)removeCookiesForOldVersionWitchCompletion:(void(^)(BOOL success))completion
+- (void)removeCookiesForNewVersionWithCompletion:(void(^)(BOOL success))completion
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    NSSet *dataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
+    WKWebsiteDataStore *websiteDataStore = self.requestExecutor.webView.configuration.websiteDataStore;
+    [websiteDataStore fetchDataRecordsOfTypes:dataTypes
+                            completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {
+                                for (WKWebsiteDataRecord *record in records) {
+                                    NSURL *serverURL = [NSURL URLWithString:self.RESTClient.serverProfile.serverUrl];
+                                    if ([record.displayName containsString:serverURL.host]) {
+                                        [websiteDataStore removeDataOfTypes:record.dataTypes
+                                                             forDataRecords:@[record]
+                                                          completionHandler:^{
+                                                              JMLog(@"record (%@) removed successfully", record);
+                                                          }];
+                                    }
+                                }
+                                if (completion) {
+                                    completion(YES);
+                                }
+                            }];
+}
+
+- (void)removeCookiesForOldVersionWithCompletion:(void(^)(BOOL success))completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     NSString *libraryPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject;

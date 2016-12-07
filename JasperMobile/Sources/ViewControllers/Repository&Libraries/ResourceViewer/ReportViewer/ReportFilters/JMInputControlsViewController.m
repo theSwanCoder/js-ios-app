@@ -46,7 +46,6 @@
 @property (nonatomic, strong) NSArray <JSInputControlDescriptor *> *inputControls;
 @property (nonatomic, strong) JSResourceLookup *parentFolderLookup;
 @property (nonatomic, strong) JMFiltersNetworkManager *networkManager;
-@property (nonatomic, assign, getter=isCookiesDidUpdate) BOOL cookiesDidUpdate;
 @end
 
 @implementation JMInputControlsViewController
@@ -73,54 +72,8 @@
 
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
 
-    [self addObservers];
-
     self.networkManager = [JMFiltersNetworkManager managerWithRestClient:self.restClient];
     [self startPoint];
-}
-
-
-#pragma mark - Notifications
-
-- (void)addObservers
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(cookiesDidChange:)
-                                                 name:JSRestClientDidChangeCookies
-                                               object:nil];
-}
-
-- (void)cookiesDidChange:(NSNotification *)notification
-{
-    self.cookiesDidUpdate = YES;
-    [self showSessionExpiredAlert];
-}
-
-- (void)showSessionExpiredAlert
-{
-    __weak typeof(self) weakSelf = self;
-    // TODO: add translations
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was expired"
-                                                                                      message:@"Reload?"
-                                                                            cancelButtonTitle:@"dialog_button_cancel"
-                                                                      cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                                          __strong typeof(self) strongSelf = weakSelf;
-                                                                          // back to collection view
-                                                                          [strongSelf.navigationController popToRootViewControllerAnimated:YES];
-                                                                      }];
-    [alertController addActionWithLocalizedTitle:@"dialog_button_reload"
-                                           style:UIAlertActionStyleDefault
-                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                             __strong typeof(self) strongSelf = weakSelf;
-                                             if (strongSelf.completionBlock) {
-                                                 JMFiltersVCResult *result = [JMFiltersVCResult new];
-                                                 result.type = JMFiltersVCResultTypeSessionExpired;
-                                                 strongSelf.completionBlock(result);
-                                             } else {
-                                                 // TODO: We need completion block anyway
-                                             }
-                                         }];
-    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - Setup
@@ -368,9 +321,6 @@
             if ([self validateInputControls]) { // Local validation
                 [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) { // Server validation
                     if (dataIsValid) {
-                        if (self.cookiesDidUpdate) {
-                            return;
-                        }
                         if (self.completionBlock) {
                             // parameters
                             NSArray <JSReportParameter *> *reportParameters = [JSUtils reportParametersFromInputControls:self.activeReportOption.inputControls];

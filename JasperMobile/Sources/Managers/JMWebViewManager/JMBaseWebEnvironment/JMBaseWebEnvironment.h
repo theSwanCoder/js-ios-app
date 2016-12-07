@@ -39,6 +39,7 @@ typedef void(^JMWebEnvironmentRequestParametersCompletion)(NSDictionary *__nulla
 typedef void(^JMWebEnvironmentLoadingCompletion)(BOOL isReady, NSError * __nullable error);
 
 @protocol JMJavascriptRequestExecutionProtocol <NSObject>
+- (BOOL)canSendJavascriptRequest;
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion;
 - (void)addListener:(id __nonnull)listener
@@ -59,18 +60,16 @@ typedef void(^JMWebEnvironmentLoadingCompletion)(BOOL isReady, NSError * __nulla
 @end
 
 typedef NS_ENUM(NSInteger, JMWebEnvironmentState) {
-    JMWebEnvironmentStateInitial,           // state without webview
-    JMWebEnvironmentStateWebViewCreated,    // state when webview was created
-    JMWebEnvironmentStateWebViewConfigured, // state when webview has html loaded
-    JMWebEnvironmentStateEnvironmentReady,  // state when webview has scripts loaded
-    JMWebEnvironmentStateCancel             // cancel signal was sent
+    JMWebEnvironmentStateWithoutWebView,   // state without webview
+    JMWebEnvironmentStateEmptyWebView,     // state when webview was created
+    JMWebEnvironmentStateWebViewReady,     // state when webview has html loaded
+    JMWebEnvironmentStateEnvironmentReady, // state when webview has scripts loaded
+    JMWebEnvironmentStateCancel            // cancel signal was sent
 };
 
 typedef NS_ENUM(NSInteger, JMWebEnvironmentCookiesState) {
-    JMWebEnvironmentCookiesStateEmpty,
-    JMWebEnvironmentCookiesStateValid,     // This state means that cookies are valid
-    JMWebEnvironmentCookiesStateNotValid,  // This state means that some other code made cookies invalid
-    JMWebEnvironmentCookiesStateNeedUpdate // This state means that there is auth error (after some request)
+    JMWebEnvironmentCookiesStateValid,
+    JMWebEnvironmentCookiesStateInvalid
 };
 
 @interface JMBaseWebEnvironment : NSObject <JMJavascriptRequestExecutionProtocol, JMWebEnvironmentLoadingProtocol>
