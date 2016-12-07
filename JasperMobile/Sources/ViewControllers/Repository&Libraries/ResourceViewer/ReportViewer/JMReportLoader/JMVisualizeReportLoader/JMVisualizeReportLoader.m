@@ -104,6 +104,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
        completion:(nonnull JSReportLoaderCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     JSReportDestination *destination = [JSReportDestination new];
 
     if (initialPage) {
@@ -126,6 +127,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
                     completion:(nonnull JSReportLoaderCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     JSResourceLookup *resourceLookup = [JSResourceLookup new];
     resourceLookup.uri = reportURI;
     JSReport *report = [JSReport reportWithResourceLookup:resourceLookup];
@@ -140,6 +142,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
        completion:(nonnull JSReportLoaderCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.report != nil, @"Report is nil");
     NSAssert(page != nil, @"page is nil");
@@ -181,6 +184,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
                    completion:(nonnull JSReportLoaderCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.report != nil, @"Report is nil");
 
@@ -212,6 +216,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
 - (void)refreshReportWithCompletion:(nonnull JSReportLoaderCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.report != nil, @"Report is nil");
 
@@ -258,6 +263,7 @@ initialParameters:(nullable NSArray <JSReportParameter *> *)initialParameters
 - (void)cancel
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     self.state = JSReportLoaderStateCancel;
     [self removeListenersForVisualizeEvents];
 
@@ -293,6 +299,7 @@ initialDestination:(nullable JSReportDestination *)destination
         completion:(nonnull JSReportLoaderCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(report != nil, @"Report is nil");
 
@@ -312,6 +319,7 @@ initialDestination:(nullable JSReportDestination *)destination
                 completion:(nonnull JSReportLoaderCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.report != nil, @"Report is nil");
 
@@ -351,6 +359,7 @@ initialDestination:(nullable JSReportDestination *)destination
 - (void)navigateToPart:(JSReportPart *__nonnull)part completion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     NSAssert(completion != nil, @"Completion is nil");
     NSAssert(self.report != nil, @"Report is nil");
 
@@ -390,12 +399,12 @@ initialDestination:(nullable JSReportDestination *)destination
 - (void)resetWithCompletion:(JSReportLoaderBaseCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    JSReportLoaderBaseCompletionBlock heapBlock = [completion copy];
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     [self destroyWithCompletion:^{
         self.report = nil;
         self.state = JSReportLoaderStateInitial;
-        if (heapBlock) {
-            heapBlock();
+        if (completion) {
+            completion();
         }
     }];
 }
@@ -403,12 +412,25 @@ initialDestination:(nullable JSReportDestination *)destination
 - (void)destroyWithCompletion:(JSReportLoaderBaseCompletionBlock)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
+
+    [self removeListenersForVisualizeEvents];
+
     if (self.state == JSReportLoaderStateCancel) {
+        if (completion) {
+            completion();
+        }
         return;
     }
 
-    [self removeListenersForVisualizeEvents];
-    JSReportLoaderBaseCompletionBlock heapBlock = [completion copy];
+
+    if (![self.webEnvironment canSendJavascriptRequest]) {
+        if (completion) {
+            completion();
+        }
+        return;
+    }
+
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.destroy"
                                                                inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:nil];
@@ -422,8 +444,8 @@ initialDestination:(nullable JSReportDestination *)destination
             JMLog(@"callback: %@", parameters);
             self.state = JSReportLoaderStateInitial;
         }
-        if (heapBlock) {
-            heapBlock();
+        if (completion) {
+            completion();
         }
     }];
 }
@@ -488,6 +510,7 @@ initialDestination:(nullable JSReportDestination *)destination
                             completion:(JSReportLoaderCompletionBlock __nonnull)completion
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"self.state: %@", [self stateNameForState:self.state]);
     NSAssert(completion != nil, @"Completion is nil");
 
     if (!self.report) {
@@ -955,6 +978,40 @@ initialDestination:(nullable JSReportDestination *)destination
                                                code:errorCode
                                            userInfo:error.userInfo];
     return loaderError;
+}
+
+#pragma mark - Debug Helpers
+
+- (NSString *)stateNameForState:(JSReportLoaderState)state
+{
+    NSString *stateName;
+    switch(state) {
+        case JSReportLoaderStateInitial: {
+            stateName = @"JSReportLoaderStateInitial";
+            break;
+        }
+        case JSReportLoaderStateConfigured: {
+            stateName = @"JSReportLoaderStateConfigured";
+            break;
+        }
+        case JSReportLoaderStateLoading: {
+            stateName = @"JSReportLoaderStateLoading";
+            break;
+        }
+        case JSReportLoaderStateReady: {
+            stateName = @"JSReportLoaderStateReady";
+            break;
+        }
+        case JSReportLoaderStateFailed: {
+            stateName = @"JSReportLoaderStateFailed";
+            break;
+        }
+        case JSReportLoaderStateCancel: {
+            stateName = @"JSReportLoaderStateCancel";
+            break;
+        }
+    }
+    return stateName;
 }
 
 @end

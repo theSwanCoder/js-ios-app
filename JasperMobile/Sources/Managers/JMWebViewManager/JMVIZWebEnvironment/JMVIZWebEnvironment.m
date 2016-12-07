@@ -70,13 +70,14 @@
 
 - (NSOperation *__nullable)taskForPreparingWebView
 {
+    __weak __typeof(self) weakSelf = self;
     JMWebEnvironmentLoadingTask *loadingTask = [JMWebEnvironmentLoadingTask taskWithRequestExecutor:self.requestExecutor
                                                                                          HTMLString:self.visualizeManager.htmlString
-                                                                                            baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
-    __weak __typeof(self) weakSelf = self;
-    loadingTask.completion = ^{
-        weakSelf.cookiesState = JMWebEnvironmentCookiesStateValid;
-    };
+                                                                                            baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
+                                                                                         completion:^{
+                                                                                             __strong __typeof(self) strongSelf = weakSelf;
+                                                                                             strongSelf.cookiesState = JMWebEnvironmentCookiesStateValid;
+                                                                                         }];
     return loadingTask;
 }
 
@@ -95,17 +96,11 @@
     JMJavascriptRequestTask *requestTask = [JMJavascriptRequestTask taskWithRequestExecutor:self.requestExecutor
                                                                                     request:requireJSLoadRequest
                                                                                  completion:^(NSDictionary *params, NSError *error) {
-                                                                                     if (!weakSelf) {
-                                                                                         return;
-                                                                                     }
+                                                                                     __strong __typeof(self) strongSelf = weakSelf;
                                                                                      if (error) {
                                                                                          JMLog(@"Error of loading scripts: %@", error);
                                                                                      } else {
-//                                                                                         JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:weakSelf.restClient.serverProfile];
-//                                                                                         if (activeProfile.cacheReports.boolValue) {
-//                                                                                             [weakSelf createContainers];
-//                                                                                         }
-                                                                                         weakSelf.state = JMWebEnvironmentStateEnvironmentReady;
+                                                                                         strongSelf.state = JMWebEnvironmentStateEnvironmentReady;
                                                                                      }
                                                                                  }];
     return requestTask;

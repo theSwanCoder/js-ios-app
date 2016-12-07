@@ -36,6 +36,7 @@
 @property (nonatomic, strong) NSString *HTMLString;
 @property (nonatomic, strong) NSURL *baseURL;
 @property (nonatomic, strong) NSURLRequest *URLRequest;
+@property (nonatomic, copy, nullable) void(^completion)(void);
 @end
 
 @implementation JMWebEnvironmentLoadingTask
@@ -45,13 +46,14 @@
 - (instancetype)initWithRequestExecutor:(JMJavascriptRequestExecutor *)requestExecutor
                              HTMLString:(NSString *)HTMLString
                                 baseURL:(NSURL *)baseURL
+                             completion:(void(^__nullable)(void))completion
 {
     self = [super init];
     if (self) {
         _requestExecutor = requestExecutor;
         _HTMLString = HTMLString;
         _baseURL = baseURL;
-        self.state = JMAsyncTaskStateReady;
+        _completion = completion;
     }
     return self;
 }
@@ -59,29 +61,34 @@
 + (instancetype)taskWithRequestExecutor:(JMJavascriptRequestExecutor *)requestExecutor
                              HTMLString:(NSString *)HTMLString
                                 baseURL:(NSURL *)baseURL
+                             completion:(void(^)(void))completion
 {
     return [[self alloc] initWithRequestExecutor:requestExecutor
                                       HTMLString:HTMLString
-                                         baseURL:baseURL];
+                                         baseURL:baseURL
+                                      completion:completion];
 }
 
 - (instancetype)initWithRequestExecutor:(JMJavascriptRequestExecutor *)requestExecutor
                              URLRequest:(NSURLRequest *)URLRequest
+                             completion:(void(^)(void))completion
 {
     self = [super init];
     if (self) {
         _requestExecutor = requestExecutor;
         _URLRequest = URLRequest;
-        self.state = JMAsyncTaskStateReady;
+        _completion = completion;
     }
     return self;
 }
 
 + (instancetype)taskWithRequestExecutor:(JMJavascriptRequestExecutor *)requestExecutor
                              URLRequest:(NSURLRequest *)URLRequest
+                             completion:(void(^)(void))completion
 {
     return [[self alloc] initWithRequestExecutor:requestExecutor
-                                      URLRequest:URLRequest];
+                                      URLRequest:URLRequest
+                                      completion:completion];
 }
 
 #pragma mark - Overridden methods NSOperation
