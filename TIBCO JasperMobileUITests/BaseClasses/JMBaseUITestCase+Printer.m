@@ -24,4 +24,38 @@
     [backButton tap];
 }
 
+#pragma mark - Verifying
+
+- (void)verifyThatPrintPageOnScreen
+{
+    [self waitNavigationBarWithLabel:@"Printer Options"
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatPrintPageHasCorrectTitle
+{
+    [self waitNavigationBarWithLabel:@"Printer Options"
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatPrintPageHasCancelButton
+{
+    [self waitBackButtonWithAccessibilityId:@"Cancel"
+                          onNavBarWithLabel:@"Printer Options"
+                                    timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatPrintersPageOnScreen
+{
+    [self waitNavigationBarWithLabel:@"Printer"
+                             timeout:kUITestsBaseTimeout];
+}
+
+- (void)verifyThatPrintersPageHasCorrectBackButton
+{
+    [self waitBackButtonWithAccessibilityId:@"Printer Options"
+                          onNavBarWithLabel:@"Printer"
+                                    timeout:kUITestsBaseTimeout];
+}
+
 @end

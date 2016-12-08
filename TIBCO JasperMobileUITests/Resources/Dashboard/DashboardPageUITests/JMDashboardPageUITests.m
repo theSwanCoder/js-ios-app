@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Favorites.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Printer.h"
 
 @implementation JMDashboardPageUITests
 
@@ -109,7 +110,21 @@
     [self openTestDashboardPage];
 
     [self openPrintDashboardPage];
-    [self closePrintDashboardPage];
+    
+    XCUIElement *errorAlert = [self findAlertWithTitle:@"JSErrorDomain"];
+    if (errorAlert.exists) {
+    // TODO: should this case be considered as a failure?
+        XCUIElement *okButton = [self findButtonWithTitle:JMLocalizedString(@"dialog_button_ok")
+                                            parentElement:errorAlert];
+        if (okButton.exists) {
+            [okButton tap];
+        } else {
+            XCTFail(@"Error alert should have '%@' button", JMLocalizedString(@"dialog_button_ok"));
+        }
+    } else {
+        [self verifyThatPrintPageOnScreen];
+        [self closePrintDashboardPage];
+    }
 
     [self closeTestDashboardPage];
 }

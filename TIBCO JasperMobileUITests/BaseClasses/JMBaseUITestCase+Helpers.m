@@ -21,6 +21,13 @@
                  timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"element is nil: %@", (element == nil) ? @"YES" : @"NO");
+    NSLog(@"element.exists: %@", (element.exists) ? @"YES" : @"NO");
+    NSLog(@"should be visible: %@", visible ? @"YES" : @"NO");
+    if ((element == nil) && visible) {
+        XCTFail(@"Element should visible");
+    }
+
     if (element.exists == visible) {
         return;
     }
@@ -56,9 +63,6 @@
         element = allElements.firstObject;
     } while (element == nil && remain >= 0);
 
-    if (element == nil) {
-        XCTFail(@"Element with id '%@' not found", accessibilityId);
-    }
     return element;
 }
 
@@ -77,9 +81,6 @@
         button = allElements.firstObject;
     } while (button == nil && remain >= 0);
 
-    if (button == nil) {
-        XCTFail(@"Button with id '%@' not found", accessibilityId);
-    }
     return button;
 }
 
@@ -99,9 +100,6 @@
         button = allElements.firstObject;
     } while (button == nil && remain >= 0);
 
-    if (button == nil) {
-        XCTFail(@"Button with title '%@' not found", title);
-    }
     return button;
 }
 
@@ -113,17 +111,9 @@
     XCUIElement *alert;
     do {
         remain -= kUITestsElementAvailableTimeout;
-        sleep(kUITestsElementAvailableTimeout);
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title like %@", title];
-        XCUIElementQuery *elementQuery = [self.application.alerts matchingPredicate:predicate];
-        NSArray *allElements = elementQuery.allElementsBoundByAccessibilityElement;
-        NSLog(@"All found alerts with title '%@': %@", title, allElements);
-        alert = allElements.firstObject;
+        alert = [self findAlertWithTitle:title];;
     } while (alert == nil && remain >= 0);
 
-    if (alert == nil) {
-        XCTFail(@"Alert with title '%@' not found", title);
-    }
     return alert;
 }
 
@@ -147,9 +137,6 @@
         staticText = elements.firstObject;
     } while (staticText == nil && remain >= 0);
 
-    if (staticText == nil) {
-        XCTFail(@"Static text with text '%@' not found", text);
-    }
     return staticText;
 }
 
@@ -176,6 +163,7 @@
                                     timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"Label: %@", label);
     XCUIElement *navBar = [self findNavigationBarWithLabel:label];
     [self waitElementReady:navBar
                    timeout:timeout];
@@ -693,7 +681,7 @@
     XCUIElement *element = [self findStaticTextWithText:text
                                           parentElement:parentElement];
 
-    if (!element) {
+    if (!element && visible) {
         element = [self waitStaticTextInHierarchyWithText:text
                                             parentElement:parentElement
                                                   timeout:timeout];
@@ -848,12 +836,23 @@
 - (XCUIElement *)findAlertWithTitle:(NSString *)title
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElementQuery *alertsQuery = self.application.alerts;
-    XCUIElement *alert = [alertsQuery matchingIdentifier:title].element;
+    sleep(kUITestsElementAvailableTimeout);
+    
+    NSLog(@"All alerts : %@", self.application.alerts.allElementsBoundByAccessibilityElement);
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *evaluatedObject, NSDictionary<NSString *, id> *bindings) {
+        BOOL isEqualIdentifiers = [evaluatedObject.identifier isEqualToString:title];
+        BOOL isEqualLabel = [evaluatedObject.label isEqualToString:title];
+        return isEqualIdentifiers || isEqualLabel;
+    }];
+    XCUIElementQuery *elementQuery = [self.application.alerts matchingPredicate:predicate];
+    NSArray *allElements = elementQuery.allElementsBoundByAccessibilityElement;
+    XCUIElement *alert = allElements.firstObject;
+    NSLog(@"All found alerts (with title %@): %@", title, allElements);
     return alert;
 }
 
-- (XCUIElement *)waitAlertWithTitle:(NSString *)title timeout:(NSTimeInterval)timeout
+- (XCUIElement *)waitAlertWithTitle:(NSString *)title
+                            timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *alert = [self findAlertWithTitle:title];

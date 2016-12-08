@@ -47,26 +47,26 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
         [self givenLoadingPopupNotVisible];
         
         // Could be several hover items which visible while dashlet in loading process (in test dashboard - 5)
-        [self waitStaticTextWithAccessibilityId:@"Loading..."
-                                  parentElement:nil
-                                        visible:false
-                                        timeout:kUITestsBaseTimeout];
-        [self waitStaticTextWithAccessibilityId:@"Loading..."
-                                  parentElement:nil
-                                        visible:false
-                                        timeout:kUITestsBaseTimeout];
-        [self waitStaticTextWithAccessibilityId:@"Loading..."
-                                  parentElement:nil
-                                        visible:false
-                                        timeout:kUITestsBaseTimeout];
-        [self waitStaticTextWithAccessibilityId:@"Loading..."
-                                  parentElement:nil
-                                        visible:false
-                                        timeout:kUITestsBaseTimeout];
-        [self waitStaticTextWithAccessibilityId:@"Loading..."
-                                  parentElement:nil
-                                        visible:false
-                                        timeout:kUITestsBaseTimeout];
+        [self waitStaticTextWithText:@"Loading..."
+                       parentElement:nil
+                             visible:false
+                             timeout:kUITestsBaseTimeout];
+        [self waitStaticTextWithText:@"Loading..."
+                       parentElement:nil
+                             visible:false
+                             timeout:kUITestsBaseTimeout];
+        [self waitStaticTextWithText:@"Loading..."
+                       parentElement:nil
+                             visible:false
+                             timeout:kUITestsBaseTimeout];
+        [self waitStaticTextWithText:@"Loading..."
+                       parentElement:nil
+                             visible:false
+                             timeout:kUITestsBaseTimeout];
+        [self waitStaticTextWithText:@"Loading..."
+                       parentElement:nil
+                             visible:false
+                             timeout:kUITestsBaseTimeout];
     }
 }
 
@@ -96,6 +96,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 {
     [self openMenuActions];
     [self selectActionWithName:@"Print"];
+    [self givenLoadingPopupNotVisible];
 }
 
 - (void)closePrintDashboardPage

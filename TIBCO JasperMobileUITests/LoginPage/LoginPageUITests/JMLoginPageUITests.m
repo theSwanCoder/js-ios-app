@@ -391,10 +391,10 @@
       isSecureField:true];
 }
 
-    - (void)closeErrorAlertWithTitle:(NSString *)title
+- (void)closeErrorAlertWithTitle:(NSString *)title
 {
     XCUIElement *alert = [self findAlertWithTitle:title];
-    XCUIElement *okButton = [self findButtonWithTitle:@"OK"
+    XCUIElement *okButton = [self findButtonWithTitle:JMLocalizedString(@"dialog_button_ok")
                                         parentElement:alert];
     if (okButton) {
         [okButton tap];

@@ -11,4 +11,9 @@
 - (void)openSelectPrinterPage;
 - (void)closeSelectPrinterPage;
 
+- (void)verifyThatPrintPageOnScreen;
+- (void)verifyThatPrintPageHasCorrectTitle;
+- (void)verifyThatPrintPageHasCancelButton;
+- (void)verifyThatPrintersPageOnScreen;
+- (void)verifyThatPrintersPageHasCorrectBackButton;
 @end
