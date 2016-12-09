@@ -332,20 +332,30 @@
 {
     XCUIElement *alert = [self waitAlertWithTitle:@"Error"
                                           timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel" 
-                                                      parentElement:alert
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_cancel")
+                                                parentElement:alert
+                                                      timeout:0];
+    if (cancelButton) {
+        [cancelButton tap];
+    } else {
+        XCTFail(@"Cancel button isn't found");
+    }
 }
 
 - (void)confirmOverridingTestReport
 {
     XCUIElement *alert = [self waitAlertWithTitle:@"Error"
                                           timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"OK" 
-                                                      parentElement:alert
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_ok")
+                                                parentElement:alert
+                                                      timeout:0];
+    if (okButton) {
+        [okButton tap];
+    } else {
+        XCTFail(@"OK button isn't found");
+    }
 }
 
 #pragma mark - Verifying
@@ -366,27 +376,32 @@
 - (void)verifyThatSaveReportPageHasCorrectBackButtonName
 {
     // TODO: need make general case for all devices, 'Back' on iPhones
-    [self waitBackButtonWithAccessibilityId:@"Back"
-                          onNavBarWithLabel:@"Save Report"
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Save Report"
+                                                   timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeButton
+                             text:JMLocalizedString(@"back_button_title")
+                    parentElement:navBar
+                          timeout:0];
 }
 
 - (void)verifyErrorOfSavingReportWithEmptyName
 {
     XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
     XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
-    [self waitStaticTextWithText:@"This field is required." 
-                   parentElement:nameCell
-                         timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"This field is required."
+                    parentElement:nameCell
+                          timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyErrorOfSavingReportWithWrongSymbolsInName
 {
     XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
     XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
-    [self waitStaticTextWithText:@"are not allowed." 
-                   parentElement:nameCell
-                         timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"are not allowed."
+                    parentElement:nameCell
+                          timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatAlertItemExistsVisible

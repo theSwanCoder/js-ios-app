@@ -46,8 +46,12 @@
 //    - After:
 - (void)testThatRepositoryPageHasSideMenuButton
 {
-    [self waitMenuButtonWithTimeout:kUITestsBaseTimeout
-                  inSectionWithName:@"Repository"];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Repository"
+                                                   timeout:kUITestsBaseTimeout];
+    XCUIElement *menuButton = [self findMenuButtonOnParentElement:navBar];
+    if (!menuButton) {
+        XCTFail(@"Menu button isn't found in Repository section");
+    }
 }
     
 //  Repository Title
@@ -99,9 +103,15 @@
     [self givenThatCollectionViewContainsListOfCells];
     
     [self openFolderWithName:kTestFolderName];
-    [self waitBackButtonWithAccessibilityId:@"Repository"
-                          onNavBarWithLabel:kTestFolderName
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestFolderName
+                                                   timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Repository"
+                                              parentElement:navBar
+                                                    timeout:0];
+    if (!backButton) {
+        XCTFail(@"Back button not found");
+    }
     [self backToFolderWithName:@"Repository"];
 }
 
@@ -145,9 +155,9 @@
     [self searchResourceWithName:@"NoSearchResults"
                inSectionWithName:@"Repository"];
 
-    XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
-                                                parentElement:nil
-                                                      timeout:kUITestsBaseTimeout];
+    XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                          text:@"No Results."
+                                                       timeout:kUITestsBaseTimeout];
     if (!noResultLabel.exists) {
         XCTFail(@"There isn't 'No Results.' label");
     }
@@ -231,9 +241,9 @@
         [self openFolderWithName:@"Monitoring"];
         [self givenThatCellsAreVisible];
         [self openFolderWithName:@"Monitoring Domains"];
-        XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
-                                                    parentElement:nil
-                                                          timeout:kUITestsBaseTimeout];
+        XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                              text:@"No Results."
+                                                           timeout:kUITestsBaseTimeout];
         if (!noResultLabel.exists) {
             XCTFail(@"There isn't 'No Results.' label");
         }

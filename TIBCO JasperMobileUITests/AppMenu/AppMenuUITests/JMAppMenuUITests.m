@@ -75,15 +75,18 @@
     // Check About item
     [self selectAbout];
     // Close About page
-    XCUIElement *doneButton = [self waitDoneButtonWithTimeout:kUITestsBaseTimeout];
-    [doneButton tap];
+    XCUIElement *doneButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Done"
+                                                    timeout:kUITestsBaseTimeout];
+    if (doneButton.exists) {
+        [doneButton tap];
+    } else {
+        XCTFail(@"Done button wasn't found");
+    }
 
     // Check Settings item
     [self selectSettings];
-    // Close Settings page
-    XCUIElement *cancelButton = [self waitButtonWithTitle:@"Cancel"
-                                                  timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self closeSettingsPage];
 }
 
 - (void)testThatServerProfileInfoIsAppeared
@@ -93,19 +96,13 @@
 
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
 
-    [self waitStaticTextWithText:testServerProfile.username
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyLabelWithTextExist:testServerProfile.username];
 
     NSString *fullServerNameString = [NSString stringWithFormat:@"%@ (v.%@)", testServerProfile.name, @"6.3.0"];
-    [self waitStaticTextWithText:fullServerNameString
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyLabelWithTextExist:fullServerNameString];
 
     if (testServerProfile.organization.length > 0) {
-        [self waitStaticTextWithText:testServerProfile.organization
-                       parentElement:nil
-                             timeout:kUITestsBaseTimeout];
+        [self verifyLabelWithTextExist:testServerProfile.organization];
     }
 
     [self hideSideMenuInSectionWithName:@"Library"];
@@ -133,4 +130,29 @@
         XCTFail(@"'Main' window doesn't exist.");
     }
 }
+
+- (void)verifyLabelWithTextExist:(NSString *)labelText
+{
+    XCUIElement *usernameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                          text:labelText
+                                                       timeout:kUITestsBaseTimeout];
+    if (!usernameLabel.exists) {
+        XCTFail(@"Label with text: %@, wasn't fount", labelText);
+    }
+}
+
+- (void)closeSettingsPage
+{
+    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_cancel")
+                                                parentElement:navBar
+                                                      timeout:0];
+    if (cancelButton.exists) {
+        [cancelButton tap];
+    } else {
+        XCTFail(@"Cancel button wasn't found");
+    }
+}
+
 @end

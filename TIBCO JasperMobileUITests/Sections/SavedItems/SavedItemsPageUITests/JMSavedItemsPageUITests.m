@@ -370,10 +370,9 @@
 
 - (void)verifyThatNoResultsOnScreen
 {
-    XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Saved Items."
-                                                parentElement:nil
-                                                      timeout:kUITestsBaseTimeout];
-    
+    XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                          text:@"No Saved Items."
+                                                       timeout:kUITestsBaseTimeout];
     if (!noResultLabel.exists) {
         XCTFail(@"Message 'No Saved Item' is missed");
     }
@@ -425,9 +424,10 @@
                                          format:@"html"];
     
     NSString *fullName = [NSString stringWithFormat:@"%@.html", kTestReportName];
-    XCUIElement *nameLabel = [self waitStaticTextWithText:fullName
-                                            parentElement:cell
-                                                  timeout:kUITestsBaseTimeout];
+    XCUIElement *nameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                      text:fullName
+                                             parentElement:cell
+                                                   timeout:kUITestsBaseTimeout];
     if (!nameLabel.exists) {
         XCTFail(@"Cell has incorrect format");
     }
@@ -440,9 +440,10 @@
                                          format:@"pdf"];
     
     NSString *fullName = [NSString stringWithFormat:@"%@.pdf", kTestReportName];
-    XCUIElement *nameLabel = [self waitStaticTextWithText:fullName
-                                            parentElement:cell
-                                                  timeout:kUITestsBaseTimeout];
+    XCUIElement *nameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                      text:fullName
+                                             parentElement:cell
+                                                   timeout:kUITestsBaseTimeout];
     if (!nameLabel.exists) {
         XCTFail(@"Cell has incorrect format");
     }

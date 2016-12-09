@@ -187,11 +187,12 @@
 - (void)verifyThatInfoPageHasCancelButton
 {
     XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:navBar
-                                                            timeout:kUITestsBaseTimeout];
-    if (!cancelButton) {
-        XCTFail(@"Cancel button should be on navigation bar");
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_cancel")
+                                                parentElement:navBar
+                                                      timeout:0];
+    if (!cancelButton.exists) {
+        XCTFail(@"Cancel button wasn't found");
     }
 }
 

@@ -15,10 +15,15 @@
 #pragma mark - Info Page
 - (void)openInfoPageFromCell:(XCUIElement *)cell
 {
-    XCUIElement *infoButton = [self waitButtonWithAccessibilityId:@"More Info"
-                                                    parentElement:cell
-                                                          timeout:kUITestsBaseTimeout];
-    [infoButton tap];
+    XCUIElement *infoButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                 identifier:@"More Info"
+                                              parentElement:cell
+                                                    timeout:kUITestsBaseTimeout];
+    if (infoButton.exists) {
+        [infoButton tap];
+    } else {
+        XCTFail(@"Info button doesn't exist");
+    }
 }
 
 - (void)closeInfoPageFromCell
@@ -40,16 +45,25 @@
 - (void)closeInfoPageWithCancelButton
 {
     XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:navBar
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_cancel")
+                                                parentElement:navBar
+                                                      timeout:kUITestsBaseTimeout];
+    if (cancelButton.exists) {
+        [cancelButton tap];
+    } else {
+        XCTFail(@"Cancel button wasn't found");
+    }
 }
 
 - (void)verifyInfoPageOnScreenForPageWithAccessibilityId:(NSString *)accessibilityId
 {
-    [self waitElementWithAccessibilityId:accessibilityId
-                                 timeout:kUITestsBaseTimeout];
+    XCUIElement *infoPage = [self waitElementMatchingType:XCUIElementTypeOther
+                                               identifier:accessibilityId
+                                                  timeout:kUITestsBaseTimeout];
+    if (!infoPage.exists) {
+        XCTFail(@"Info page with id (%@) wasn't found", accessibilityId);
+    }
 }
 
 #pragma mark - Reports
@@ -62,8 +76,11 @@
 
 - (void)verifyThatInfoPageForTestReportHasBackButton
 {
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"
-                                                    onNavBarWithLabel:kTestReportName];
+    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestReportName];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Back"
+                                              parentElement:navBar
+                                                    timeout:0];
     if (!backButton.exists) {
         XCTFail(@"Back button doesn't exist on 'Info' page for test report");
     }
@@ -97,8 +114,11 @@
 
 - (void)verifyThatInfoPageForTestDashboardHasBackButton
 {
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"
-                                                    onNavBarWithLabel:kTestDashboardName];
+    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestDashboardName];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Back"
+                                              parentElement:navBar
+                                                    timeout:0];
     if (!backButton.exists) {
         XCTFail(@"Back button doesn't exist on 'Info' page for test dashboard");
     }
@@ -133,8 +153,11 @@
 
 - (void)verifyThatInfoPageForTestFolderHasBackButton
 {
-    XCUIElement *backButton = [self findBackButtonWithAccessibilityId:@"Back"
-                                                    onNavBarWithLabel:kTestFolderName];
+    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestFolderName];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Back"
+                                              parentElement:navBar
+                                                    timeout:0];
     if (!backButton.exists) {
         XCTFail(@"Back button doesn't exist on 'Info' page for test folder");
     }

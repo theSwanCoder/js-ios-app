@@ -63,9 +63,15 @@
     [self openTestReportPage];
     [self openReportFiltersPage];
     
-    XCUIElement *runButton = [self waitButtonWithAccessibilityId:@"Run Report"
-                                                         timeout:kUITestsBaseTimeout];
-    [runButton tap];
+    XCUIElement *runButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                      text:@"Run Report"
+                                                   timeout:kUITestsBaseTimeout];
+    if (runButton.exists) {
+        [runButton tap];
+    } else {
+        XCTFail(@"Run button wasn't found");
+    }
+
     [self givenLoadingPopupNotVisible];
 }
 
@@ -185,10 +191,8 @@
 
 - (void)stopEditMandatoryFilter
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"ProductFamily"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    [self tapBackButtonWithText:@"Filters"
+              onNavBarWithLabel:@"ProductFamily"];
 }
 
 - (void)unmarkAllControlItemsForMandatoryFilter
@@ -215,10 +219,8 @@
 
 - (void)stopEditFilterWithMultiItems
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"Low Fat"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    [self tapBackButtonWithText:@"Filters"
+              onNavBarWithLabel:@"Low Fat"];
 }
 
 - (void)markTestControlItemForFilterWithMultipleSelectedItems
@@ -244,10 +246,8 @@
 
 - (void)stopEditFilterWithSingleSelectedItem
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"Country"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    [self tapBackButtonWithText:@"Filters"
+              onNavBarWithLabel:@"Country"];
 }
 
 - (void)markTestControlItemForFilterWithSingleSelectedItems
@@ -261,18 +261,24 @@
 {
     XCUIElement *cell = [self findTableViewCellWithAccessibilityId:nil
                                              containsLabelWithText:@"Store Sales 2013 is greater than"];
-    XCUIElement *textField = [self waitStaticTextWithAccessibilityId:@"19" 
-                                                       parentElement:cell 
-                                                             timeout:kUITestsBaseTimeout];
+    XCUIElement *textField = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                      text:@"19"
+                                             parentElement:cell
+                                                   timeout:kUITestsBaseTimeout];
     [textField tap];
+
 }
 
 #pragma mark - Verifying
 
 - (void)verifyThatReportFiltersPageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMInputControlsViewControllerAccessibilityIdentifier"
-                                 timeout:kUITestsBaseTimeout];
+    XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeOther
+                                              identifier:@"JMInputControlsViewControllerAccessibilityIdentifier"
+                                                 timeout:kUITestsBaseTimeout];
+    if (!element.exists) {
+        XCTFail(@"Element wasn't found");
+    }
 }
 
 - (void)verifyThatReportFiltersPageHasCorrectTitle
@@ -283,9 +289,10 @@
 
 - (void)verifyThatFiltersPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Back"
-                          onNavBarWithLabel:@"Filters"
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self backButtonWithText:@"Back" onNavBarWithLabel:@"Filters"];
+    if (!backButton.exists) {
+        XCTFail(@"Back button wasn't found");
+    }
 }
 
 - (void)verifyMandatoryCellContainsErrorMessage
@@ -300,6 +307,29 @@
     XCUIElement *cellWithMandatoryFilter = [self findTableViewCellWithAccessibilityId:nil
                                                                 containsLabelWithText:@"This filed is mandatory so you must enter data."];
     XCTAssertNil(cellWithMandatoryFilter, @"Cell should not contain error message");
+}
+
+#pragma mark - Helpers
+
+- (void)tapBackButtonWithText:(NSString *)backButtonText onNavBarWithLabel:(NSString *)navBarLabel
+{
+    XCUIElement *backButton = [self backButtonWithText:backButtonText
+                                     onNavBarWithLabel:navBarLabel];
+    if (backButton.exists) {
+        [backButton tap];
+    } else {
+        XCTFail(@"Back button wasn't found");
+    }
+}
+
+- (XCUIElement *)backButtonWithText:(NSString *)backButtonText onNavBarWithLabel:(NSString *)navBarLabel
+{
+    XCUIElement *navBar = [self findNavigationBarWithLabel:navBarLabel];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:backButtonText
+                                              parentElement:navBar
+                                                    timeout:kUITestsBaseTimeout];
+    return backButton;
 }
 
 @end

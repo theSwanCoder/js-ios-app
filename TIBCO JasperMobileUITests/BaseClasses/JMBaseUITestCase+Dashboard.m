@@ -47,26 +47,31 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
         [self givenLoadingPopupNotVisible];
         
         // Could be several hover items which visible while dashlet in loading process (in test dashboard - 5)
-        [self waitStaticTextWithText:@"Loading..."
-                       parentElement:nil
-                             visible:false
-                             timeout:kUITestsBaseTimeout];
-        [self waitStaticTextWithText:@"Loading..."
-                       parentElement:nil
-                             visible:false
-                             timeout:kUITestsBaseTimeout];
-        [self waitStaticTextWithText:@"Loading..."
-                       parentElement:nil
-                             visible:false
-                             timeout:kUITestsBaseTimeout];
-        [self waitStaticTextWithText:@"Loading..."
-                       parentElement:nil
-                             visible:false
-                             timeout:kUITestsBaseTimeout];
-        [self waitStaticTextWithText:@"Loading..."
-                       parentElement:nil
-                             visible:false
-                             timeout:kUITestsBaseTimeout];
+        [self waitElementMatchingType:XCUIElementTypeStaticText
+                                 text:@"Loading..."
+                        parentElement:nil
+                          shouldExist:NO
+                              timeout:kUITestsBaseTimeout];
+        [self waitElementMatchingType:XCUIElementTypeStaticText
+                                 text:@"Loading..."
+                        parentElement:nil
+                          shouldExist:NO
+                              timeout:kUITestsBaseTimeout];
+        [self waitElementMatchingType:XCUIElementTypeStaticText
+                                 text:@"Loading..."
+                        parentElement:nil
+                          shouldExist:NO
+                              timeout:kUITestsBaseTimeout];
+        [self waitElementMatchingType:XCUIElementTypeStaticText
+                                 text:@"Loading..."
+                        parentElement:nil
+                          shouldExist:NO
+                              timeout:kUITestsBaseTimeout];
+        [self waitElementMatchingType:XCUIElementTypeStaticText
+                                 text:@"Loading..."
+                        parentElement:nil
+                          shouldExist:NO
+                              timeout:kUITestsBaseTimeout];
     }
 }
 
@@ -77,11 +82,18 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (void)cancelOpeningTestDashboardPage
 {
-    XCUIElement *loadingPopup = [self findElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:loadingPopup
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    XCUIElement *loadingPopup = [self waitElementMatchingType:XCUIElementTypeOther
+                                                   identifier:@"JMCancelRequestPopupAccessibilityId"
+                                                      timeout:kUITestsBaseTimeout];
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_cancel")
+                                                parentElement:loadingPopup
+                                                      timeout:0];
+    if (cancelButton.exists) {
+        [cancelButton tap];
+    } else {
+        XCTFail(@"Cancel button wasn't found");
+    }
 }
 
 - (void)refreshDashboard
@@ -104,10 +116,15 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     // verify that 'print report' page is on the screen
     XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
                                                         timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:printNavBar
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_cancel")
+                                                parentElement:printNavBar
+                                                      timeout:0];
+    if (cancelButton.exists) {
+        [cancelButton tap];
+    } else {
+        XCTFail(@"Cancel button wasn't found");
+    }
 }
 
 #pragma mark - Helpers
@@ -149,27 +166,34 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)verifyThatDashboardInfoPageContainsCorrectDataForDashboardWithName:(NSString *)dashboardName
 {
     XCUIElement *infoPage = self.application.otherElements[@"JMDashboardInfoViewControllerAccessibilityId"];
-    [self waitStaticTextWithAccessibilityId:@"Name"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Description"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"URI"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Type"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Version"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Creation Date"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Modified Date"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Name"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Description"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"URI"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Type"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Version"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Creation Date"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Modified Date"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
 }
 
 @end

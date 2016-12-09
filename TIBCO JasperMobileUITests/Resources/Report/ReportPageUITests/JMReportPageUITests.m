@@ -99,8 +99,9 @@
     [self selectActionWithName:@"Save"];
 
     // verify that 'save report' page is on the screen
-    [self waitElementWithAccessibilityId:@"JMSaveReportViewControllerAccessibilityIdentifier"
-                                 timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeOther
+                       identifier:@"JMSaveReportViewControllerAccessibilityIdentifier"
+                          timeout:kUITestsBaseTimeout];
     // back from save report page
     [self tryBackToPreviousPage];
     
@@ -122,6 +123,7 @@
     [self openTestReportPage];
 
     [self openPrintReportPage];
+    
     // verify that 'print report' page is on the screen
     XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
                                                         timeout:kUITestsBaseTimeout];
@@ -199,8 +201,9 @@
     isFilterPage = filtersNavBar.exists;
 
     // verify that 'edit values' page is on the screen
-    [self waitElementWithAccessibilityId:@"JMInputControlsViewControllerAccessibilityIdentifier"
-                                 timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeOther
+                       identifier:@"JMInputControlsViewControllerAccessibilityIdentifier"
+                          timeout:kUITestsBaseTimeout];
 
     return isFilterPage;
 }
@@ -213,17 +216,23 @@
 
 - (void)verifyThatReportInfoPageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMReportInfoViewControllerAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeOther
+                       identifier:@"JMReportInfoViewControllerAccessibilityId"
+                          timeout:kUITestsBaseTimeout];
 }
 
 - (void)closeReportInfoPage
 {
     XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:navBar
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_cancel")
+                                                parentElement:navBar
+                                                      timeout:0];
+    if (cancelButton.exists) {
+        [cancelButton tap];
+    } else {
+        XCTFail(@"Cancel button wasn't found");
+    }
 }
 
 @end

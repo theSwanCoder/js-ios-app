@@ -6,10 +6,9 @@
 #import "JMBaseUITestCase.h"
 
 @interface JMBaseUITestCase (Helpers)
+
+// Waitings
 - (void)waitElementReady:(XCUIElement *)element
-                 timeout:(NSTimeInterval)timeout;
-- (void)waitElementReady:(XCUIElement *)element
-                 visible:(BOOL)visible
                  timeout:(NSTimeInterval)timeout;
 
 // NavigationBars
@@ -17,94 +16,36 @@
 - (XCUIElement *)waitNavigationBarWithLabel:(NSString *)label
                                     timeout:(NSTimeInterval)timeout;
 
-// Other elements
-- (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId;
-- (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
-                                        timeout:(NSTimeInterval)timeout;
+// Elements with identifiers
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                              identifier:(NSString *)identifier
+                                 timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                              identifier:(NSString *)identifier
+                           parentElement:(XCUIElement *)parentElement
+                                 timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                              identifier:(NSString *)identifier
+                           parentElement:(XCUIElement *)parentElement
+                             shouldExist:(BOOL)shouldExist
+                                 timeout:(NSTimeInterval)timeout;
 
-- (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId
-                                  parentElement:(XCUIElement *)parentElement;
-- (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
-                                  parentElement:(XCUIElement *)parentElement
-                                        timeout:(NSTimeInterval)timeout;
+// Elements with text
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                                    text:(NSString *)text
+                                 timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                                    text:(NSString *)text
+                           parentElement:(XCUIElement *)parentElement
+                                 timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                                    text:(NSString *)text
+                           parentElement:(XCUIElement *)parentElement
+                             shouldExist:(BOOL)shouldExist
+                                 timeout:(NSTimeInterval)timeout;
 
-- (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
-                                  parentElement:(XCUIElement *)parentElement
-                                        visible:(BOOL)visible
-                                        timeout:(NSTimeInterval)timeout;
-// Buttons
-- (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId;
-- (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
-                                       timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 parentElement:(XCUIElement *)parentElement;
-- (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 parentElement:(XCUIElement *)parentElement
-                                       timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)findButtonWithTitle:(NSString *)title;
-- (XCUIElement *)waitButtonWithTitle:(NSString *)title
-                             timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)findButtonWithTitle:(NSString *)title
-                       parentElement:(XCUIElement *)parentElement;
-- (XCUIElement *)waitButtonWithTitle:(NSString *)title
-                       parentElement:(XCUIElement *)parentElement
-                             timeout:(NSTimeInterval)timeout;
-// Back buttons
-- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId;
-- (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
-                                           timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 onNavBarWithLabel:(NSString *)label;
-- (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 onNavBarWithLabel:(NSString *)label
-                                           timeout:(NSTimeInterval)timeout;
-// Text Fields
-- (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                          timeout:(NSTimeInterval)timeout;
-
-- (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                 placeholderValue:(NSString *)placeholderValue
-                                    parentElement:(XCUIElement *)parentElement
-                                          timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                    parentElement:(XCUIElement *)parentElement
-                                          timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)waitSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                                timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)waitSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                          parentElement:(XCUIElement *)parentElement
-                                                timeout:(NSTimeInterval)timeout;
-// Static Text
-- (XCUIElement *)findStaticTextWithAccessibilityId:(NSString *)accessibilityId;
-- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
-                                           timeout:(NSTimeInterval)timeout;
-
-- (XCUIElement *)findStaticTextWithAccessibilityId:(NSString *)accessibilityId
-                                     parentElement:(XCUIElement *)parentElement;
-- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
-                                     parentElement:(XCUIElement *)parentElement
-                                           timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
-                                     parentElement:(XCUIElement *)parentElement
-                                           visible:(BOOL)visible
-                                           timeout:(NSTimeInterval)timeout;
-
-- (XCUIElement *)findStaticTextWithText:(NSString *)text;
-- (XCUIElement *)findStaticTextWithText:(NSString *)text
-                          parentElement:(XCUIElement *)parentElement;
-- (XCUIElement *)waitStaticTextWithText:(NSString *)text
-                          parentElement:(XCUIElement *)parentElement
-                                timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)waitStaticTextWithText:(NSString *)text
-                          parentElement:(XCUIElement *)parentElement
-                                visible:(BOOL)visible
-                                timeout:(NSTimeInterval)timeout;
-
-// Other buttons
-- (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout
-                         inSectionWithName:(NSString *)sectionName;
-- (XCUIElement *)findMenuButtonInSectionWithName:(NSString *)sectionName;
-- (XCUIElement *)waitDoneButtonWithTimeout:(NSTimeInterval)timeout;
+// Menu Button
+- (XCUIElement *)findMenuButtonOnParentElement:(XCUIElement *)parentElement;
 
 // Cells
 - (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId;

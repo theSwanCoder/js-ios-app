@@ -224,8 +224,13 @@
 
 - (void)verifyThatPrintersPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Printer Options"
-                          onNavBarWithLabel:@"Printer"
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self findNavigationBarWithLabel:@"Printer"];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Printer Options"
+                                              parentElement:navBar
+                                                    timeout:kUITestsBaseTimeout];
+    if (!backButton.exists) {
+        XCTFail(@"Back button wasn't found");
+    }
 }
 @end

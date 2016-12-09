@@ -187,8 +187,14 @@
 
 - (void)verifyThatBackButtonOnInfoPageHasCorrectTitle
 {
-    [self waitButtonWithAccessibilityId:@"Back"
-                                timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:@"Back"
+                                                parentElement:navBar
+                                                      timeout:0];
+    if (!backButton.exists) {
+        XCTFail(@"Back button wasn't found");
+    }
 }
 
 - (void)verifyThatInfoPageHasCorrectTitle

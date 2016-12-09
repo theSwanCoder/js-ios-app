@@ -81,12 +81,19 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)cancelOpeningTestReportPage
 {
-    // TODO: the same code is for dashboard - may be make it general?
-    XCUIElement *loadingPopup = [self waitElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"
-                                                             timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self findButtonWithTitle:@"Cancel"
-                                            parentElement:loadingPopup];
-    [cancelButton tap];
+    // TODO: the same code is for dashboard - may be make it common?
+    XCUIElement *loadingPopup = [self waitElementMatchingType:XCUIElementTypeOther
+                                                   identifier:@"JMCancelRequestPopupAccessibilityId"
+                                                      timeout:kUITestsBaseTimeout];;
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_cancel")
+                                                parentElement:loadingPopup
+                                                      timeout:0];
+    if (cancelButton.exists) {
+        [cancelButton tap];
+    } else {
+        XCTFail(@"Cancel button wasn't found");
+    }
 }
 
 - (void)openReportFiltersPage
@@ -127,9 +134,14 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
                                                  containsLabelWithText:format];
     [htmlCell tap];
 
-    XCUIElement *saveButton = [self waitButtonWithAccessibilityId:@"Save"
-                                                          timeout:kUITestsBaseTimeout];
-    [saveButton tap];
+    XCUIElement *saveButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Save"
+                                                    timeout:kUITestsBaseTimeout];
+    if (saveButton.exists) {
+        [saveButton tap];
+    } else {
+        XCTFail(@"Save button wasn't found");
+    }
 }
 
 - (XCUIElement *)findNameFieldOnSaveReportPage
@@ -244,10 +256,15 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     // verify that 'print report' page is on the screen
     XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
                                                         timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:printNavBar
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_cancel")
+                                                parentElement:printNavBar
+                                                      timeout:kUITestsBaseTimeout];
+    if (cancelButton.exists) {
+        [cancelButton tap];
+    } else {
+        XCTFail(@"Cancel button wasn't found");
+    }
 }
 
 #pragma mark - Verifying
@@ -260,27 +277,34 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)verifyThatReportInfoPageContainsCorrectDataForReportWithName:(NSString *)reportName
 {
     XCUIElement *infoPage = self.application.otherElements[@"JMReportInfoViewControllerAccessibilityId"];
-    [self waitStaticTextWithAccessibilityId:@"Name"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Description"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"URI"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Type"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Version"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Creation Date"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Modified Date"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Name"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Description"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"URI"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Type"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Version"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Creation Date"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Modified Date"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
 }
 
 @end

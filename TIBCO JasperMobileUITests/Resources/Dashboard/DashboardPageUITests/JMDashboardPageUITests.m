@@ -114,8 +114,11 @@
     XCUIElement *errorAlert = [self findAlertWithTitle:@"JSErrorDomain"];
     if (errorAlert.exists) {
     // TODO: should this case be considered as a failure?
-        XCUIElement *okButton = [self findButtonWithTitle:JMLocalizedString(@"dialog_button_ok")
-                                            parentElement:errorAlert];
+        XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_ok")
+                                                parentElement:errorAlert
+                                                      timeout:0];
+
         if (okButton.exists) {
             [okButton tap];
         } else {
@@ -180,9 +183,12 @@
 
 - (void)verifyBackButtonHasCorrectTitle
 {
-    [self waitBackButtonWithAccessibilityId:@"Library"
-                          onNavBarWithLabel:kTestDashboardName
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestDashboardName
+                                                   timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeButton
+                             text:@"Library"
+                    parentElement:navBar
+                          timeout:0];
 }
 
 @end

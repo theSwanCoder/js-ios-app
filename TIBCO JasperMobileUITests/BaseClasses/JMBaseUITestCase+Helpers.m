@@ -11,134 +11,230 @@
                  timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self waitElementReady:element
-                   visible:true
-                   timeout:timeout];
+    NSTimeInterval remain = timeout;
+    BOOL elementExist;
+    do {
+        remain -= kUITestsElementAvailableTimeout;
+        sleep(kUITestsElementAvailableTimeout);
+        elementExist = element.exists;
+        NSLog(@"remain: %@", @(remain));
+    } while ( remain >= 0 && !elementExist);
+
+    if (!element.exists) {
+        XCTFail(@"Element isn't exist");
+    }
 }
 
-- (void)waitElementReady:(XCUIElement *)element
-                 visible:(BOOL)visible
-                 timeout:(NSTimeInterval)timeout
+#pragma mark - Elements with identifiers
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                              identifier:(NSString *)identifier
+                                 timeout:(NSTimeInterval)timeout
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"element is nil: %@", (element == nil) ? @"YES" : @"NO");
-    NSLog(@"element.exists: %@", (element.exists) ? @"YES" : @"NO");
-    NSLog(@"should be visible: %@", visible ? @"YES" : @"NO");
-    if ((element == nil) && visible) {
-        XCTFail(@"Element should visible");
-    }
-
-    if (element.exists == visible) {
-        return;
-    }
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", @"exists", visible ? @1 : @0];
-    [self expectationForPredicate:predicate
-              evaluatedWithObject:element
-                          handler:^BOOL {
-                              NSLog(@"\nElement %@ was fulfilled", element);
-                              return YES;
-                          }];
-
-    [self waitForExpectationsWithTimeout:timeout
-                                 handler:^(NSError *error) {
-                                     NSLog(@"\nElement: %@, \nError of waiting: %@", element, error);
-                                     if (error) {
-                                         XCTFail(@"Error of waiting: %@", error);
-                                     }
-                                 }];
+    return [self waitElementMatchingType:elementType
+                              identifier:identifier
+                           parentElement:nil
+                             shouldExist:YES
+                                 timeout:timeout];
 }
 
-- (XCUIElement *)waitElementInHierarchyWithAccessibilityId:(NSString *)accessibilityId
-                                                   timeout:(NSTimeInterval)timeout
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                              identifier:(NSString *)identifier
+                           parentElement:(XCUIElement *)parentElement
+                                 timeout:(NSTimeInterval)timeout
+{
+    return [self waitElementMatchingType:elementType
+                              identifier:identifier
+                           parentElement:parentElement
+                             shouldExist:YES
+                                 timeout:timeout];
+}
+
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                              identifier:(NSString *)identifier
+                           parentElement:(XCUIElement *)parentElement
+                             shouldExist:(BOOL)shouldExist
+                                 timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
     XCUIElement *element;
+    BOOL elementExist;
     do {
         remain -= kUITestsElementAvailableTimeout;
         sleep(kUITestsElementAvailableTimeout);
-        XCUIElementQuery *elementQuery = [self.application.otherElements matchingIdentifier:accessibilityId];
-        NSArray *allElements = elementQuery.allElementsBoundByAccessibilityElement;
-        NSLog(@"For id '%@' all found elements: %@", accessibilityId, allElements);
-        element = allElements.firstObject;
-    } while (element == nil && remain >= 0);
+        element = [self elementMatchingType:elementType
+                                 identifier:identifier
+                              parentElement:parentElement];
+        elementExist = element.exists;
+        NSLog(@"remain: %@", @(remain));
+        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
+    } while ( remain >= 0 && elementExist != shouldExist );
 
     return element;
 }
 
-- (XCUIElement *)waitButtonInHierarchyWithAccessiblitiyId:(NSString *)accessibilityId
-                                                  timeout:(NSTimeInterval)timeout
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                          identifier:(NSString *)identifier
+                       parentElement:(XCUIElement *)parentElement
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSTimeInterval remain = timeout;
-    XCUIElement *button;
-    do {
-        remain -= kUITestsElementAvailableTimeout;
-        sleep(kUITestsElementAvailableTimeout);
-        XCUIElementQuery *elementQuery = [self.application.buttons matchingIdentifier:accessibilityId];
-        NSArray *allElements = elementQuery.allElementsBoundByAccessibilityElement;
-        NSLog(@"For id '%@' all found elements: %@", accessibilityId, allElements);
-        button = allElements.firstObject;
-    } while (button == nil && remain >= 0);
-
-    return button;
-}
-
-- (XCUIElement *)waitButtonInHierarchyWithTitle:(NSString *)title
-                                        timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSTimeInterval remain = timeout;
-    XCUIElement *button;
-    do {
-        remain -= kUITestsElementAvailableTimeout;
-        sleep(kUITestsElementAvailableTimeout);
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K like %@", @"label", title];
-        XCUIElementQuery *elementQuery = [self.application.buttons matchingPredicate:predicate];
-        NSArray *allElements = elementQuery.allElementsBoundByAccessibilityElement;
-        NSLog(@"For title '%@' all found elements: %@", title, allElements);
-        button = allElements.firstObject;
-    } while (button == nil && remain >= 0);
-
-    return button;
-}
-
-- (XCUIElement *)waitAlertInHierarchyWithTitle:(NSString *)title
-                                       timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSTimeInterval remain = timeout;
-    XCUIElement *alert;
-    do {
-        remain -= kUITestsElementAvailableTimeout;
-        alert = [self findAlertWithTitle:title];;
-    } while (alert == nil && remain >= 0);
-
-    return alert;
-}
-
-- (XCUIElement *)waitStaticTextInHierarchyWithText:(NSString *)text
-                                     parentElement:(XCUIElement *)parentElement
-                                           timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSTimeInterval remain = timeout;
-    XCUIElement *staticText;
-    do {
-        remain -= kUITestsElementAvailableTimeout;
-        sleep(kUITestsElementAvailableTimeout);
-        if (parentElement == nil) {
-            parentElement = self.application;
+    if (parentElement == nil) {
+        parentElement = self.application;
+    }
+    XCUIElementQuery *elementsQuery;
+    switch (elementType) {
+        case XCUIElementTypeOther: {
+            elementsQuery = [parentElement.otherElements matchingType:XCUIElementTypeOther
+                                                           identifier:identifier];
+            break;
         }
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"label CONTAINS %@", text];
-        XCUIElementQuery *query = [parentElement.staticTexts matchingPredicate:predicate];
-        NSArray *elements = query.allElementsBoundByAccessibilityElement;
-        NSLog(@"All static texts: %@", elements);
-        staticText = elements.firstObject;
-    } while (staticText == nil && remain >= 0);
-
-    return staticText;
+        case XCUIElementTypeButton: {
+            elementsQuery = [parentElement.buttons matchingType:XCUIElementTypeButton
+                                                     identifier:identifier];
+            break;
+        }
+        case XCUIElementTypeStaticText: {
+            elementsQuery = [parentElement.staticTexts matchingType:XCUIElementTypeStaticText
+                                                         identifier:identifier];
+            break;
+        }
+        case XCUIElementTypeSecureTextField: {
+            elementsQuery = [parentElement.secureTextFields matchingType:XCUIElementTypeSecureTextField
+                                                              identifier:identifier];
+            break;
+        }
+        case XCUIElementTypeTextField: {
+            elementsQuery = [parentElement.textFields matchingType:XCUIElementTypeTextField
+                                                        identifier:identifier];
+            break;
+        }
+        default: {
+            XCTFail(@"Unknown type");
+            break;
+        }
+    }
+    NSArray *allMatchingElements = elementsQuery.allElementsBoundByAccessibilityElement;
+    if (allMatchingElements.count == 0) {
+        return nil;
+    } else if (allMatchingElements.count > 1) {
+        // TODO: should this be interpreted as an error?
+        NSLog(@"Several other elements with id: %@", identifier);
+    }
+    return allMatchingElements.firstObject;
 }
+
+
+#pragma mark - Elements with text
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                                    text:(NSString *)text
+                                 timeout:(NSTimeInterval)timeout
+{
+    return [self waitElementMatchingType:elementType
+                                    text:text
+                           parentElement:nil
+                             shouldExist:YES
+                                 timeout:timeout];
+}
+
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                                    text:(NSString *)text
+                           parentElement:(XCUIElement *)parentElement
+                                 timeout:(NSTimeInterval)timeout
+{
+    return [self waitElementMatchingType:elementType
+                                    text:text
+                           parentElement:parentElement
+                             shouldExist:YES
+                                 timeout:timeout];
+}
+
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                                    text:(NSString *)text
+                           parentElement:(XCUIElement *)parentElement
+                             shouldExist:(BOOL)shouldExist
+                                 timeout:(NSTimeInterval)timeout
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSTimeInterval remain = timeout;
+    XCUIElement *element;
+    BOOL elementExist;
+    do {
+        remain -= kUITestsElementAvailableTimeout;
+        sleep(kUITestsElementAvailableTimeout);
+        element = [self elementMatchingType:elementType
+                                 text:text
+                              parentElement:parentElement];
+        elementExist = element.exists;
+        NSLog(@"remain: %@", @(remain));
+        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
+    } while ( remain >= 0 && elementExist != shouldExist);
+
+    return element;
+}
+
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                                text:(NSString *)text
+                       parentElement:(XCUIElement *)parentElement
+{
+    if (parentElement == nil) {
+        parentElement = self.application;
+    }
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"label CONTAINS %@", text];
+
+    XCUIElementQuery *elementsQuery;
+    switch (elementType) {
+        case XCUIElementTypeOther: {
+            elementsQuery = [parentElement.otherElements matchingPredicate:predicate];
+            break;
+        }
+        case XCUIElementTypeButton: {
+            elementsQuery = [parentElement.buttons matchingPredicate:predicate];
+            break;
+        }
+        case XCUIElementTypeStaticText: {
+            elementsQuery = [parentElement.staticTexts matchingPredicate:predicate];
+            break;
+        }
+        case XCUIElementTypeSecureTextField: {
+            elementsQuery = [parentElement.secureTextFields matchingPredicate:predicate];
+            break;
+        }
+        case XCUIElementTypeTextField: {
+            elementsQuery = [parentElement.textFields matchingPredicate:predicate];
+            break;
+        }
+        default: {
+            XCTFail(@"Unknown type");
+            break;
+        }
+    }
+    NSArray *allMatchingElements = elementsQuery.allElementsBoundByAccessibilityElement;
+    if (allMatchingElements.count == 0) {
+        return nil;
+    } else if (allMatchingElements.count > 1) {
+        // TODO: should this be interpreted as an error?
+        NSLog(@"Several other elements with 'text': %@", text);
+    }
+    return allMatchingElements.firstObject;
+}
+
+#pragma mark - Menu Button
+- (XCUIElement *)findMenuButtonOnParentElement:(XCUIElement *)parentElement
+{
+    XCUIElement *menuButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                 identifier:@"menu icon"
+                                              parentElement:parentElement
+                                                    timeout:0];
+    if (!menuButton) {
+        menuButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                        identifier:@"menu icon note"
+                                     parentElement:parentElement
+                                           timeout:0];
+    }
+    return menuButton;
+}
+
+#pragma mark -  NavigationBars
 
 - (XCUIElement *)findNavigationBarWithLabel:(NSString *)label
 {
@@ -168,561 +264,6 @@
     [self waitElementReady:navBar
                    timeout:timeout];
     return navBar;
-}
-
-#pragma mark - General Elements
-- (XCUIElement *)elementWithAccessibilityId:(NSString *)accessibilityId
-                              parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if (!parentElement) {
-        parentElement = self.application;
-    }
-    XCUIElementQuery *elementsQuery = [parentElement.otherElements matchingType:XCUIElementTypeOther
-                                                                     identifier:accessibilityId];
-    NSArray *allMatchingElements = elementsQuery.allElementsBoundByAccessibilityElement;
-    if (allMatchingElements.count == 0) {
-        return nil;
-    } else if (allMatchingElements.count > 1) {
-        // TODO: should this be interpreted as an error?
-        NSLog(@"Several other elements with id: %@", accessibilityId);
-    }
-    return allMatchingElements.firstObject;
-}
-
-- (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self findElementWithAccessibilityId:accessibilityId
-                                  parentElement:nil];
-}
-
-- (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
-                                        timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self waitElementWithAccessibilityId:accessibilityId
-                                  parentElement:nil
-                                        timeout:timeout];
-}
-
-- (XCUIElement *)findElementWithAccessibilityId:(NSString *)accessibilityId
-                                  parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *element = [self elementWithAccessibilityId:accessibilityId
-                                              parentElement:parentElement];
-    if (!element.exists) {
-        return nil;
-    }
-    return element;
-}
-
-- (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
-                                  parentElement:(XCUIElement *)parentElement
-                                        timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self waitElementWithAccessibilityId:accessibilityId
-                                  parentElement:parentElement
-                                        visible:true
-                                        timeout:timeout];
-}
-
-- (XCUIElement *)waitElementWithAccessibilityId:(NSString *)accessibilityId
-                                  parentElement:(XCUIElement *)parentElement
-                                        visible:(BOOL)visible
-                                        timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *element = [self elementWithAccessibilityId:accessibilityId
-                                              parentElement:parentElement];
-    if (!element && visible) {
-        element = [self waitElementInHierarchyWithAccessibilityId:accessibilityId
-                                                          timeout:timeout];
-    }
-    
-    if (element) {
-        [self waitElementReady:element
-                       visible:visible
-                       timeout:timeout];
-    }
-    
-    return element;
-}
-
-#pragma mark - General Buttons
-
-- (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self findButtonWithAccessibilityId:accessibilityId
-                                 parentElement:nil];
-}
-
-- (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
-                                       timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self waitButtonWithAccessibilityId:accessibilityId
-                                 parentElement:nil
-                                       timeout:timeout];
-}
-
-- (XCUIElement *)buttonWithAccessibilityId:(NSString *)accessibilityId
-                             parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if (parentElement == nil) {
-        parentElement = self.application;
-    }
-    XCUIElementQuery *buttonsQuery = [parentElement.buttons matchingType:XCUIElementTypeButton 
-                                                              identifier:accessibilityId];
-    NSArray *allMatchingButtons = buttonsQuery.allElementsBoundByAccessibilityElement;
-    if (allMatchingButtons.count == 0) {
-        return nil;
-    } else if (allMatchingButtons.count > 1) {
-        // TODO: should this be interpreted as an error?
-        NSLog(@"Several button with id: %@", accessibilityId);
-    }
-    return allMatchingButtons.firstObject;
-}
-
-- (XCUIElement *)findButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *button = [self buttonWithAccessibilityId:accessibilityId
-                                            parentElement:parentElement];
-    if (!button.exists || !button.isHittable) {
-        return nil;
-    }
-    return button;
-}
-
-- (XCUIElement *)waitButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 parentElement:(XCUIElement *)parentElement
-                                       timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *button = [self buttonWithAccessibilityId:accessibilityId
-                                            parentElement:parentElement];
-    if (!button) {
-        button = [self waitButtonInHierarchyWithAccessiblitiyId:accessibilityId
-                                                        timeout:timeout];
-    }
-    [self waitElementReady:button
-                   timeout:timeout];
-    [self waitButtonIsHittable:button];
-    return button;
-}
-
-- (XCUIElement *)findButtonWithTitle:(NSString *)title
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self findButtonWithTitle:title
-                       parentElement:nil];
-}
-
-- (XCUIElement *)waitButtonWithTitle:(NSString *)title
-                             timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self waitButtonWithTitle:title
-                       parentElement:nil
-                             timeout:timeout];
-}
-
-- (XCUIElement *)findButtonWithTitle:(NSString *)title
-                       parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *button = [self buttonWithTitle:title
-                                  parentElement:parentElement];
-    if (!button) {
-        return nil;
-    }
-    if (!button.exists || !button.isHittable) {
-        // API looks like it is sync, but we need this here because an element has to be prepeared before return
-        [self waitElementReady:button
-                       timeout:kUITestsBaseTimeout];
-        [self waitButtonIsHittable:button];
-    }
-    return button;
-}
-
-- (XCUIElement *)waitButtonWithTitle:(NSString *)title
-                       parentElement:(XCUIElement *)parentElement
-                             timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *button = [self buttonWithTitle:title
-                                  parentElement:parentElement];
-    if (!button) {
-        button = [self waitButtonInHierarchyWithTitle:title
-                                              timeout:timeout];
-    }
-    [self waitElementReady:button
-                   timeout:timeout];
-    [self waitButtonIsHittable:button];
-    return button;
-}
-
-- (XCUIElement *)buttonWithTitle:(NSString *)title
-                   parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if (parentElement == nil) {
-        parentElement = self.application;
-    }
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K like %@", @"label", title];
-    XCUIElementQuery *buttonsQuery = [parentElement.buttons matchingPredicate:predicate];
-    NSArray *allMatchingButtons = buttonsQuery.allElementsBoundByAccessibilityElement;
-    NSLog(@"allMatchingButtons: %@", allMatchingButtons);
-    if (allMatchingButtons.count == 0) {
-        return nil;
-    } else if (allMatchingButtons.count > 1) {
-        // TODO: should this be interpreted as an error?
-        NSLog(@"Several button with the same title: %@", title);
-    }
-    return allMatchingButtons.firstObject;
-}
-
-- (void)waitButtonIsHittable:(XCUIElement *)button
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
-    [self expectationForPredicate:hittablePredicate
-              evaluatedWithObject:button
-                          handler:^BOOL {
-                              NSLog(@"\nElement %@ was fulfilled", button);
-                              return YES;
-                          }];
-    [self waitForExpectationsWithTimeout:kUITestsBaseTimeout
-                                 handler:^(NSError *error) {
-                                     NSLog(@"\nElement: %@, \nError of waiting: %@", button, error);
-                                     if (error) {
-                                         XCTFail(@"Error of waiting: %@", error);
-                                     }
-                                 }];
-}
-
-#pragma mark - Back buttons
-- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self findBackButtonWithAccessibilityId:accessibilityId
-                                 onNavBarWithLabel:nil];
-}
-
-- (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
-                                           timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self waitBackButtonWithAccessibilityId:accessibilityId
-                                 onNavBarWithLabel:nil
-                                           timeout:timeout];
-}
-
-- (XCUIElement *)findBackButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 onNavBarWithLabel:(NSString *)label
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:label
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *button = [self findButtonWithAccessibilityId:accessibilityId
-                                                parentElement:navBar];
-    return button;
-}
-
-- (XCUIElement *)waitBackButtonWithAccessibilityId:(NSString *)accessibilityId
-                                 onNavBarWithLabel:(NSString *)label
-                                           timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:label
-                                                   timeout:timeout];
-    XCUIElement *button = [self waitButtonWithAccessibilityId:accessibilityId
-                                                parentElement:navBar
-                                                      timeout:timeout];
-    return button;
-}
-
-#pragma mark - Text Fields
-
-- (XCUIElement *)findTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                 placeholderValue:(NSString *)placeholderValue
-                                    parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if (parentElement == nil) {
-        parentElement = self.application;
-    }
-
-    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *evaluatedObject, NSDictionary<NSString *, id> *bindings) {
-        
-        if (placeholderValue) {
-            BOOL isAccessibilityIdsEquals = [evaluatedObject.identifier isEqualToString:accessibilityId];
-            BOOL isPlaceholderValuesEquals = [evaluatedObject.placeholderValue isEqualToString:placeholderValue];
-            return isAccessibilityIdsEquals || isPlaceholderValuesEquals;
-        } else {
-            return [evaluatedObject.identifier isEqualToString:accessibilityId];
-        }
-        
-    }];
-    XCUIElementQuery *textFieldsQuery = [parentElement.textFields matchingPredicate:predicate];
-    NSArray *allMatchingTextFields = textFieldsQuery.allElementsBoundByAccessibilityElement;
-
-    if (allMatchingTextFields.count == 0) {
-        return nil;
-    } else if (allMatchingTextFields.count > 1) {
-        // TODO: should this be interpreted as an error?
-        NSLog(@"Several text fields with id: %@", accessibilityId);
-    }
-    return allMatchingTextFields.firstObject;
-}
-
-- (XCUIElement *)findTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                    parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self findTextFieldWithAccessibilityId:accessibilityId
-                                 placeholderValue:nil
-                                    parentElement:parentElement];
-}
-
-- (XCUIElement *)findSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                          parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if (parentElement == nil) {
-        parentElement = self.application;
-    }
-    XCUIElementQuery *textFieldsQuery = [parentElement.secureTextFields matchingType:XCUIElementTypeSecureTextField 
-                                                         identifier:accessibilityId];
-    NSArray *allMatchingTextFields = textFieldsQuery.allElementsBoundByAccessibilityElement;
-    if (allMatchingTextFields.count == 0) {
-        return nil;
-    } else if (allMatchingTextFields.count > 1) {
-        // TODO: should this be interpreted as an error?
-        NSLog(@"Several text fields with id: %@", accessibilityId);
-    }
-    return allMatchingTextFields.firstObject;
-}
-
-- (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                          timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self waitTextFieldWithAccessibilityId:accessibilityId
-                                    parentElement:nil
-                                          timeout:timeout];
-}
-
-- (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                 placeholderValue:(NSString *)placeholderValue
-                                    parentElement:(XCUIElement *)parentElement
-                                          timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *textField = [self findTextFieldWithAccessibilityId:accessibilityId
-                                                   placeholderValue:placeholderValue
-                                                      parentElement:parentElement];
-    [self waitElementReady:textField
-                   timeout:timeout];
-    return textField;
-}
-
-- (XCUIElement *)waitTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                    parentElement:(XCUIElement *)parentElement
-                                          timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self waitTextFieldWithAccessibilityId:accessibilityId
-                                 placeholderValue:nil
-                                    parentElement:parentElement
-                                          timeout:timeout];
-}
-
-- (XCUIElement *)waitSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                                timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self waitSecureTextFieldWithAccessibilityId:accessibilityId
-                                          parentElement:nil
-                                                timeout:timeout];
-}
-
-- (XCUIElement *)waitSecureTextFieldWithAccessibilityId:(NSString *)accessibilityId
-                                          parentElement:(XCUIElement *)parentElement
-                                                timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *textField = [self findSecureTextFieldWithAccessibilityId:accessibilityId
-                                                            parentElement:parentElement];
-    [self waitElementReady:textField
-                   timeout:timeout];
-    return textField;
-}
-
-#pragma mark - Static Text
-
-- (XCUIElement *)findStaticTextWithAccessibilityId:(NSString *)accessibilityId
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self findStaticTextWithAccessibilityId:accessibilityId
-                                     parentElement:nil];
-}
-
-- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
-                                           timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self waitStaticTextWithAccessibilityId:accessibilityId
-                                     parentElement:nil
-                                           timeout:timeout];
-}
-
-- (XCUIElement *)findStaticTextWithAccessibilityId:(NSString *)accessibilityId
-                                     parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if (parentElement == nil) {
-        parentElement = self.application;
-    }
-   
-    XCUIElementQuery *query = [parentElement.staticTexts matchingType:XCUIElementTypeStaticText
-                                                                  identifier:accessibilityId];
-    NSArray *allMatchingElements = query.allElementsBoundByAccessibilityElement;
-    if (allMatchingElements.count == 0) {
-        return nil;
-    } else if (allMatchingElements.count > 1) {
-        // TODO: should this be interpreted as an error?
-        NSLog(@"Several button with id: %@", accessibilityId);
-    }    
-    return allMatchingElements.firstObject;
-}
-
-- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
-                                     parentElement:(XCUIElement *)parentElement
-                                           timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *element = [self findStaticTextWithAccessibilityId:accessibilityId
-                                                     parentElement:parentElement];
-    if (!element.exists) {
-        XCTFail(@"Static text wasn't found");
-    }
-    [self waitElementReady:element
-                   timeout:timeout];
-    return element;
-}
-
-- (XCUIElement *)waitStaticTextWithAccessibilityId:(NSString *)accessibilityId
-                                     parentElement:(XCUIElement *)parentElement
-                                           visible:(BOOL)visible
-                                           timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *element = [self findStaticTextWithAccessibilityId:accessibilityId
-                                                     parentElement:parentElement];
-    [self waitElementReady:element
-                   visible:visible
-                   timeout:timeout];
-    return element;
-}
-
-- (XCUIElement *)findStaticTextWithText:(NSString *)text
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self findStaticTextWithText:text
-                          parentElement:nil];
-}
-
-- (XCUIElement *)findStaticTextWithText:(NSString *)text
-                          parentElement:(XCUIElement *)parentElement
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    if (parentElement == nil) {
-        parentElement = self.application;
-    }
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"label CONTAINS %@", text];
-    XCUIElementQuery *query = [parentElement.staticTexts matchingPredicate:predicate];
-    NSArray *elements = query.allElementsBoundByAccessibilityElement;
-    NSLog(@"All 'static text' with text '%@':%@", text, elements);
-    if (elements.count == 0) {
-        return nil;
-    } else if (elements.count > 1) {
-        // TODO: shold this case be interpreted as an error?
-    }
-    XCUIElement *element = elements.firstObject;
-    return element;
-}
-
-- (XCUIElement *)waitStaticTextWithText:(NSString *)text
-                          parentElement:(XCUIElement *)parentElement
-                                timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *element = [self waitStaticTextWithText:text
-                                          parentElement:parentElement
-                                                visible:YES
-                                                timeout:timeout];
-    
-    return element;
-}
-
-- (XCUIElement *)waitStaticTextWithText:(NSString *)text
-                          parentElement:(XCUIElement *)parentElement
-                                visible:(BOOL)visible
-                                timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *element = [self findStaticTextWithText:text
-                                          parentElement:parentElement];
-
-    if (!element && visible) {
-        element = [self waitStaticTextInHierarchyWithText:text
-                                            parentElement:parentElement
-                                                  timeout:timeout];
-    }
-    [self waitElementReady:element
-                   visible:visible
-                   timeout:timeout];
-    return element;
-}
-
-#pragma mark - Other buttons
-
-- (XCUIElement *)waitMenuButtonWithTimeout:(NSTimeInterval)timeout
-                         inSectionWithName:(NSString *)sectionName
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:sectionName];
-    [self waitElementReady:menuButton
-                   timeout:timeout];
-    return menuButton;
-}
-
-- (XCUIElement *)findMenuButtonInSectionWithName:(NSString *)sectionName
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionName
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *menuButton = [self findButtonWithAccessibilityId:@"menu icon"
-                                                    parentElement:navBar];
-    if (!menuButton) {
-        menuButton = [self findButtonWithAccessibilityId:@"menu icon note"
-                                           parentElement:navBar];
-    }
-    return menuButton;
-}
-
-- (XCUIElement *)waitDoneButtonWithTimeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return [self waitButtonWithAccessibilityId:@"Done"
-                                       timeout:timeout];
 }
 
 #pragma mark - Cells
@@ -767,8 +308,11 @@
     }
 
     NSPredicate *labelPredicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *cell, NSDictionary<NSString *, id> *bindings) {
-        XCUIElement *label = [self findStaticTextWithAccessibilityId:labelAccessibilityId
-                                                       parentElement:cell];
+        XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                identifier:labelAccessibilityId
+                                             parentElement:cell
+                                               shouldExist:YES
+                                                   timeout:0];
         if (!label.exists) {
             return NO;
         }
@@ -801,8 +345,11 @@
     }
 
     NSPredicate *labelPredicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *cell, NSDictionary<NSString *, id> *bindings) {
-        XCUIElement *labelElement = [self findStaticTextWithAccessibilityId:labelText
-                                                       parentElement:cell];
+        XCUIElement *labelElement = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                             text:labelText
+                                                    parentElement:cell
+                                                      shouldExist:YES
+                                                          timeout:0];
         return labelElement.exists;
     }];
 
@@ -826,12 +373,30 @@
     [searchField tap];
     [searchField typeText:searchText];
 
-    XCUIElement *searchButton = [self waitButtonWithAccessibilityId:@"Search"
-                                                            timeout:kUITestsBaseTimeout];
+    XCUIElement *searchButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                   identifier:@"Search"
+                                                parentElement:nil
+                                                  shouldExist:YES
+                                                      timeout:kUITestsBaseTimeout];
+
     [searchButton tap];
 }
 
 #pragma mark - Alerts
+
+- (XCUIElement *)waitAlertInHierarchyWithTitle:(NSString *)title
+                                       timeout:(NSTimeInterval)timeout
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSTimeInterval remain = timeout;
+    XCUIElement *alert;
+    do {
+        remain -= kUITestsElementAvailableTimeout;
+        alert = [self findAlertWithTitle:title];;
+    } while (alert == nil && remain >= 0);
+
+    return alert;
+}
 
 - (XCUIElement *)findAlertWithTitle:(NSString *)title
 {
@@ -874,5 +439,30 @@
     XCUIElement *image = [alertsQuery matchingIdentifier:accessibilityId].element;
     return image;
 }
+
+#pragma mark - Helpers
+
+//- (void)waitElementReady:(XCUIElement *)element
+//                 timeout:(NSTimeInterval)timeout
+//{
+//    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+//    XCTAssertNotNil(element, @"Element shouldn't be nil");
+//
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", @"exists", @1];
+//    [self expectationForPredicate:predicate
+//              evaluatedWithObject:element
+//                          handler:^BOOL {
+//                              NSLog(@"\nElement %@ was fulfilled", element);
+//                              return YES;
+//                          }];
+//
+//    [self waitForExpectationsWithTimeout:timeout
+//                                 handler:^(NSError *error) {
+//                                     NSLog(@"\nElement: %@, \nError of waiting: %@", element, error);
+//                                     if (error) {
+//                                         XCTFail(@"Error of waiting: %@", error);
+//                                     }
+//                                 }];
+//}
 
 @end

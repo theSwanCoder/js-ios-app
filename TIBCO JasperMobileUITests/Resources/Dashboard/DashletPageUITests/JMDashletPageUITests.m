@@ -136,9 +136,14 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 {
     [self openTestDashletWithChartTypes];
     
-    XCUIElement *chartTypeElement = [self waitStaticTextWithAccessibilityId:@"Store Sales"
-                                                                    timeout:kUITestsBaseTimeout];
-    [chartTypeElement tap];
+    XCUIElement *chartTypeElement = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                             text:@"Store Sales"
+                                                          timeout:kUITestsBaseTimeout];
+    if (chartTypeElement.exists) {
+        [chartTypeElement tap];
+    } else {
+        XCTFail(@"Chart type element wasn't found");
+    }
     sleep(3);
 }
 
@@ -166,9 +171,14 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)closeTestDashlet
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Back"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Back"
+                                                    timeout:kUITestsBaseTimeout];
+    if (backButton.exists) {
+        [backButton tap];
+    } else {
+        XCTFail(@"Back button wasn't found");
+    }
     [self givenLoadingPopupNotVisible];
 }
 
@@ -190,9 +200,10 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 - (void)tapOnElementWithText:(NSString *)text
 {
     XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
-    XCUIElement *element = [self waitStaticTextWithText:text
-                                                       parentElement:webView
-                                                         timeout:kUITestsBaseTimeout];
+    XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                    text:text
+                                           parentElement:webView
+                                                 timeout:kUITestsBaseTimeout];
     if (element) {
         [element tap];
     } else {
@@ -209,9 +220,16 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)verifyThatDashletPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Back"
-                          onNavBarWithLabel:kDashletName
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self findNavigationBarWithLabel:kDashletName];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:@"Back"
+                                                parentElement:navBar
+                                                      timeout:kUITestsBaseTimeout];
+    if (backButton.exists) {
+        [backButton tap];
+    } else {
+        XCTFail(@"Back button wasn't found");
+    }
 }
 
 - (void)verifyThatDashletPageHasCorrectTitle

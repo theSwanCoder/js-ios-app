@@ -24,11 +24,12 @@
 {
     XCUIElement *navBar;
     if (label) {
-        navBar = [self waitNavigationBarWithLabel:label
-                                          timeout:kUITestsBaseTimeout];
+        navBar = [self findNavigationBarWithLabel:label];
     }
-    XCUIElement *actionsButton = [self findButtonWithAccessibilityId:@"Share"
-                                                       parentElement:navBar];
+    XCUIElement *actionsButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                    identifier:@"Share"
+                                                 parentElement:navBar
+                                                       timeout:0];
     return actionsButton;
 }
 
@@ -41,11 +42,15 @@
 - (XCUIElement *)waitActionsButtonOnNavBarWithLabel:(NSString *)label
                                             timeout:(NSTimeInterval)timeout
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:label
-                                                   timeout:timeout];
-    XCUIElement *actionsButton = [self waitButtonWithAccessibilityId:@"Share"
-                                                       parentElement:navBar
-                                                             timeout:timeout];
+    XCUIElement *navBar;
+    if (label) {
+        navBar = [self waitNavigationBarWithLabel:label
+                                          timeout:kUITestsBaseTimeout];
+    }
+    XCUIElement *actionsButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                    identifier:@"Share"
+                                                 parentElement:navBar
+                                                       timeout:0];
     return actionsButton;
 }
 
@@ -56,10 +61,13 @@
 
 - (void)selectActionWithName:(NSString *)actionName
 {
-    XCUIElement *menuActionsView = [self waitElementWithAccessibilityId:@"JMMenuActionsViewAccessibilityId"
-                                                                timeout:kUITestsBaseTimeout];
-
-    XCUIElement *saveButton = menuActionsView.staticTexts[actionName];
+    XCUIElement *menuActionsView = [self waitElementMatchingType:XCUIElementTypeOther
+                                                      identifier:@"JMMenuActionsViewAccessibilityId"
+                                                         timeout:kUITestsBaseTimeout];
+    XCUIElement *saveButton = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                       text:actionName
+                                              parentElement:menuActionsView
+                                                    timeout:0];
     if (saveButton) {
         [saveButton tap];
     } else {

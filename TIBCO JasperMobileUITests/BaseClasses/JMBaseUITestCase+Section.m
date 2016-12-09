@@ -16,10 +16,14 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *gridButton = [self findButtonWithAccessibilityId:@"grid button"
-                                                    parentElement:navBar];
+    XCUIElement *gridButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                 identifier:@"grid button"
+                                              parentElement:navBar
+                                                    timeout:0];
     if (gridButton) {
         [gridButton tap];
+    } else {
+        XCTFail(@"Grid button wasn't found");
     }
 }
 
@@ -27,10 +31,14 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *listButton = [self findButtonWithAccessibilityId:@"horizontal list button"
-                                                    parentElement:navBar];
+    XCUIElement *listButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                 identifier:@"horizontal list button"
+                                              parentElement:navBar
+                                                    timeout:0];
     if (listButton) {
         [listButton tap];
+    } else {
+        XCTFail(@"List button wasn't found");
     }
 }
 
@@ -41,17 +49,24 @@
     XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
     [searchResourcesSearchField tap];
 
-    XCUIElement *clearTextButton = [self findButtonWithTitle:@"Clear text"
-                                               parentElement:searchResourcesSearchField];
+    XCUIElement *clearTextButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                            text:@"Clear text"
+                                                   parentElement:searchResourcesSearchField
+                                                         timeout:0];
     if (clearTextButton) {
         [clearTextButton tap];
     }
 
     [searchResourcesSearchField typeText:resourceName];
 
-    XCUIElement *searchButton = [self waitButtonWithAccessibilityId:@"Search"
-                                                            timeout:kUITestsBaseTimeout];
-    [searchButton tap];
+    XCUIElement *searchButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                   identifier:@"Search"
+                                                      timeout:kUITestsBaseTimeout];
+    if (searchButton.exists) {
+        [searchButton tap];
+    } else {
+        XCTFail(@"Search button wasn't found");
+    }
 }
 
 - (void)searchResourceWithName:(NSString *)resourceName inSectionWithName:(NSString *)sectionName
@@ -81,21 +96,25 @@
     XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
     [searchResourcesSearchField tap];
 
-    XCUIElement *clearTextButton = [self findButtonWithTitle:@"Clear text"
-                                               parentElement:searchResourcesSearchField];
+    XCUIElement *clearTextButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                            text:@"Clear text"
+                                                   parentElement:searchResourcesSearchField
+                                                         timeout:0];
     if (clearTextButton) {
         [clearTextButton tap];
     }
 
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                            timeout:kUITestsBaseTimeout];
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                   identifier:@"Cancel"
+                                                      timeout:kUITestsBaseTimeout];
     [cancelButton tap];
 }
 
 - (XCUIElement *)searchFieldFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *section = [self waitElementWithAccessibilityId:accessibilityId
-                                                        timeout:kUITestsBaseTimeout];
+    XCUIElement *section = [self waitElementMatchingType:XCUIElementTypeOther
+                                              identifier:accessibilityId
+                                                 timeout:kUITestsBaseTimeout];
     XCUIElement *searchField = section.searchFields[@"Search resources"];
     [self waitElementReady:searchField
                    timeout:kUITestsBaseTimeout];
@@ -293,8 +312,9 @@
 
 - (XCUIElement *)collectionViewElementFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *section = [self waitElementWithAccessibilityId:accessibilityId
-                                                        timeout:kUITestsBaseTimeout];
+    XCUIElement *section = [self waitElementMatchingType:XCUIElementTypeOther
+                                              identifier:accessibilityId
+                                                 timeout:kUITestsBaseTimeout];
     return section;
 }
 

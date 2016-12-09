@@ -28,9 +28,13 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:nil
                                                    timeout:timeout];
-    [self waitButtonWithAccessibilityId:@"menu icon note"
-                          parentElement:navBar
-                                timeout:timeout];
+    XCUIElement *menuIconNote = [self waitElementMatchingType:XCUIElementTypeButton
+                                                   identifier:@"menu icon note"
+                                                parentElement:navBar
+                                                      timeout:timeout];
+    if (!menuIconNote.exists) {
+        XCTFail(@"Menu icon with note wasn't appeared");
+    }
 }
 
 - (void)openLibrarySection
@@ -119,7 +123,12 @@
 
 - (XCUIElement *)sideMenuElement
 {
-    XCUIElement *menuView = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];
+    XCUIElement *menuView = [self waitElementMatchingType:XCUIElementTypeOther
+                                               identifier:@"JMSideApplicationMenuAccessibilityId"
+                                                  timeout:0];
+    if (!menuView.exists) {
+        XCTFail(@"Menu view wasn't found");
+    }
     return menuView;
 }
 
@@ -135,23 +144,26 @@
 
 - (void)selectMenuItemForPageWithName:(NSString *)pageName
 {
-    XCUIElement *pageMenuItem = [self findMenuItemForPageName:pageName];
+    XCUIElement *pageMenuItem = [self findSideMenuItemForActionName:pageName];
     if (!pageMenuItem.exists) {
         NSString *pageNameWithNote = [NSString stringWithFormat:@"%@ note", pageName];
-        pageMenuItem = [self findMenuItemForPageName:pageNameWithNote];
+        pageMenuItem = [self findSideMenuItemForActionName:pageNameWithNote];
     }
     [pageMenuItem tap];
 }
 
-- (XCUIElement *)findMenuItemForPageName:(NSString *)pageName
+- (XCUIElement *)findSideMenuItemForActionName:(NSString *)pageName
 {
-    XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                                         timeout:kUITestsBaseTimeout];
+    XCUIElement *menuView = [self waitElementMatchingType:XCUIElementTypeOther
+                                               identifier:@"JMSideApplicationMenuAccessibilityId"
+                                                  timeout:kUITestsBaseTimeout];
     XCUIElement *pageMenuItem;
     NSArray *allMenuItems = menuView.cells.allElementsBoundByAccessibilityElement;
     for (XCUIElement *menuItem in allMenuItems) {
-        XCUIElement *label = [self findStaticTextWithText:pageName
-                                            parentElement:menuItem];
+        XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                      text:pageName
+                                             parentElement:menuItem
+                                                   timeout:0];;
         if (label.exists) {
             pageMenuItem = menuItem;
             break;
@@ -162,13 +174,19 @@
 
 - (void)givenSideMenuVisible
 {
-    [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
+    XCUIElement *menuView = [self waitElementMatchingType:XCUIElementTypeOther
+                                               identifier:@"JMSideApplicationMenuAccessibilityId"
+                                                  timeout:kUITestsBaseTimeout];
+    if (!menuView.exists) {
+        XCTFail(@"Side menu should be visible");
+    }
 }
 
 - (void)givenSideMenuNotVisible
 {
-    XCUIElement *sideMenu = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];
+    XCUIElement *sideMenu = [self waitElementMatchingType:XCUIElementTypeOther
+                                               identifier:@"JMSideApplicationMenuAccessibilityId"
+                                                  timeout:kUITestsBaseTimeout];
     if (sideMenu.exists) {
         XCTFail(@"Side menu should not be visible");
     }
@@ -176,8 +194,14 @@
 
 - (void)tryTapSideApplicationMenuInSectionWithName:(NSString *)sectionName
 {
-    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:sectionName];
-    [menuButton tap];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionName
+                                                   timeout:kUITestsBaseTimeout];
+    XCUIElement *menuButton = [self findMenuButtonOnParentElement:navBar];
+    if (menuButton.exists) {
+        [menuButton tap];
+    } else {
+        XCTFail(@"Menu button wasn't found");
+    }
 }
 
 @end

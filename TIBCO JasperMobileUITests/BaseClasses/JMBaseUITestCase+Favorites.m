@@ -85,18 +85,28 @@
 
 - (void)markAsFavoriteFromNavigationBar:(XCUIElement *)navigationBar
 {
-    XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"make favorite item"
-                                                        parentElement:navigationBar
-                                                              timeout:kUITestsBaseTimeout];
-    [favoriteButton tap];
+    XCUIElement *favoriteButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                     identifier:@"make favorite item"
+                                                  parentElement:navigationBar
+                                                        timeout:kUITestsBaseTimeout];
+    if (favoriteButton.exists) {
+        [favoriteButton tap];
+    } else {
+        XCTFail(@"Favorite button doesn't exist");
+    }
 }
 
 - (void)unmarkFromFavoritesFromNavigationBar:(XCUIElement *)navigationBar
 {
-    XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"favorited item"
-                                                        parentElement:navigationBar
-                                                              timeout:kUITestsBaseTimeout];
-    [favoriteButton tap];
+    XCUIElement *favoriteButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                     identifier:@"favorited item"
+                                                  parentElement:navigationBar
+                                                        timeout:kUITestsBaseTimeout];
+    if (favoriteButton.exists) {
+        [favoriteButton tap];
+    } else {
+        XCTFail(@"Favorite button doesn't exist");
+    }
 }
 
 #pragma mark - Helpers

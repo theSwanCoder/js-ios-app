@@ -110,8 +110,11 @@
 
 - (void)verifyThatInfoPageHasCancelButton
 {
-    XCUIElement *cancelButton = [self findBackButtonWithAccessibilityId:@"Cancel"
-                                                      onNavBarWithLabel:kTestReportName];
+    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestReportName];
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:@"Cancel"
+                                                parentElement:navBar
+                                                      timeout:0];
     if (!cancelButton.exists) {
         XCTFail(@"Cancel button isn't exist on Info Dialog");
     }

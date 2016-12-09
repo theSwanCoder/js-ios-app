@@ -164,10 +164,8 @@
 
 - (void)stopEditFilterWithMultiItems
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"Low Fat"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    [self tapBackButtonWithText:@"Filters"
+              onNavBarWithLabel:@"Low Fat"];
 }
 
 - (void)startEditFilterWithSingleSelectedItem
@@ -179,10 +177,8 @@
 
 - (void)stopEditFilterWithSingleSelectedItem
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"Country"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    [self tapBackButtonWithText:@"Filters"
+              onNavBarWithLabel:@"Country"];
 }
 
 - (void)trySearchCorrectValue
@@ -211,16 +207,12 @@
 
 - (void)verifyThatInputControlsPageForMultiSelectHasCorrectSubtitle
 {
-    [self waitStaticTextWithAccessibilityId:@"Select one or more items" 
-                              parentElement:nil 
-                                    timeout:kUITestsBaseTimeout];
+    [self verifyStaticTextExistsWithText:@"Select one or more items"];
 }
 
 - (void)verifyThatInputControlsPageForSingleSelectHasCorrectSubtitle
 {
-    [self waitStaticTextWithAccessibilityId:@"Select a single item" 
-                              parentElement:nil 
-                                    timeout:kUITestsBaseTimeout];
+    [self verifyStaticTextExistsWithText:@"Select a single item"];
 }
 
 - (void)verifyCorrectSearchResult
@@ -231,16 +223,49 @@
 
 - (void)verifyInCorrectSearchResult
 {
-    [self waitStaticTextWithAccessibilityId:@"No Results." 
-                              parentElement:nil 
-                                    timeout:kUITestsBaseTimeout];
+    [self verifyStaticTextExistsWithText:@"No Results."];
 }
 
 - (void)verifyThatInputControlPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Filters"
-                          onNavBarWithLabel:@"Low Fat"
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self backButtonWithText:@"Filters"
+                                     onNavBarWithLabel:@"Low Fat"];
+    if (!backButton.exists) {
+        XCTFail(@"Back button wasn't found");
+    }
+}
+
+#pragma mark - Helpers
+
+- (void)tapBackButtonWithText:(NSString *)backButtonText onNavBarWithLabel:(NSString *)navBarLabel
+{
+    XCUIElement *backButton = [self backButtonWithText:backButtonText
+                                     onNavBarWithLabel:navBarLabel];
+    if (backButton.exists) {
+        [backButton tap];
+    } else {
+        XCTFail(@"Back button wasn't found");
+    }
+}
+
+- (XCUIElement *)backButtonWithText:(NSString *)backButtonText onNavBarWithLabel:(NSString *)navBarLabel
+{
+    XCUIElement *navBar = [self findNavigationBarWithLabel:navBarLabel];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:backButtonText
+                                              parentElement:navBar
+                                                    timeout:kUITestsBaseTimeout];
+    return backButton;
+}
+
+- (void)verifyStaticTextExistsWithText:(NSString *)text
+{
+    XCUIElement *staticText = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                       text:text
+                                                    timeout:kUITestsBaseTimeout];
+    if (!staticText.exists) {
+        XCTFail(@"Static text wasn't found");
+    }
 }
 
 @end

@@ -210,20 +210,30 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestReportName
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"make favorite item"
-                                                        parentElement:navBar
-                                                              timeout:kUITestsBaseTimeout];
-    [favoriteButton tap];
+    XCUIElement *favoriteButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                     identifier:@"make favorite item"
+                                                  parentElement:navBar
+                                                        timeout:kUITestsBaseTimeout];
+    if (favoriteButton.exists) {
+        [favoriteButton tap];
+    } else {
+        XCTFail(@"Favorite button wasn't found");
+    }
 }
 
 - (void)unmarkSavedAsFavoriteFromInfoPage
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestReportName
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"favorited item"
-                                                        parentElement:navBar
-                                                              timeout:kUITestsBaseTimeout];
-    [favoriteButton tap];
+    XCUIElement *favoriteButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                     identifier:@"favorited item"
+                                                  parentElement:navBar
+                                                        timeout:kUITestsBaseTimeout];
+    if (favoriteButton.exists) {
+        [favoriteButton tap];
+    } else {
+        XCTFail(@"Unfavorite button wasn't found");
+    }
 }
 
 - (void)markTestSavedItemAsFavoriteFromMenuOnInfoPage
@@ -273,9 +283,16 @@
 
 - (void)confirmDeleteAction
 {
-    XCUIElement *okButton = [self waitButtonWithAccessibilityId:@"OK"
-                                                        timeout:kUITestsBaseTimeout];
-    [okButton tap];
+    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
+    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                         text:JMLocalizedString(@"dialog_button_ok")
+                                                parentElement:navBar
+                                                      timeout:0];
+    if (okButton.exists) {
+        [okButton tap];
+    } else {
+        XCTFail(@"OK button wasn't found");
+    }
 }
 
 - (XCUIElement *)savedItemWithName:(NSString *)itemName

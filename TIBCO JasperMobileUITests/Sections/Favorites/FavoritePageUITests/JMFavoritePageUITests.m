@@ -115,9 +115,7 @@
     [self searchResourceWithName:@"Search without result text"
     inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 
-    [self waitStaticTextWithText:@"No Favorited Items"
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyThatCorrectMessageAppearForEmptyResult];
 
     [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
@@ -250,32 +248,34 @@
     
     [self selectFilterBy:@"Saved Items"
     inSectionWithTitle:@"Favorites"];
-    [self waitStaticTextWithText:@"No Favorited Items"
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyThatCorrectMessageAppearForEmptyResult];
     
     [self selectFilterBy:@"Dashboards"
     inSectionWithTitle:@"Favorites"];
-    [self waitStaticTextWithText:@"No Favorited Items"
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyThatCorrectMessageAppearForEmptyResult];
     
     [self selectFilterBy:@"Folders"
     inSectionWithTitle:@"Favorites"];
-    [self waitStaticTextWithText:@"No Favorited Items"
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyThatCorrectMessageAppearForEmptyResult];
     
     [self selectFilterBy:@"Content Resources"
     inSectionWithTitle:@"Favorites"];
-    [self waitStaticTextWithText:@"No Favorited Items"
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyThatCorrectMessageAppearForEmptyResult];
     
     [self selectFilterBy:@"All"
       inSectionWithTitle:@"Favorites"];
 
     [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+}
+
+- (void)verifyThatCorrectMessageAppearForEmptyResult
+{
+    XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                    text:@"No Favorited Items"
+                                                 timeout:kUITestsBaseTimeout];
+    if (!element.exists) {
+        XCTFail(@"Label 'No Favorited Items' wasn't found");
+    }
 }
 
 //    Pull down to refresh all items
@@ -442,13 +442,18 @@
 - (void)verifyThatFavoritePageOnScreen
 {
     // TODO: replace with specific element - JMFavoritesPageAccessibilityId
-    [self waitElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
+    XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeOther
+                                              identifier:@"JMBaseCollectionContentViewAccessibilityId"
+                                                 timeout:kUITestsBaseTimeout];
+    if (!element.exists) {
+        XCTFail(@"Favorite page wasn't found");
+    }
 }
 
 - (void)verifyThatFavoritePageHasSideMenuButton
 {
-    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:@"Favorites"];
+    XCUIElement *navBar = [self findNavigationBarWithLabel:@"Favorites"];
+    XCUIElement *menuButton = [self findMenuButtonOnParentElement:navBar];
     if (!menuButton || !menuButton.exists) {
         XCTFail(@"There isn't menu button");
     }

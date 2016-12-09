@@ -11,17 +11,29 @@
 
 - (void)openSelectPrinterPage
 {
-    XCUIElement *selectPrinter = [self waitStaticTextWithAccessibilityId:@"Select Printer"
-                                                                 timeout:kUITestsBaseTimeout];
-    [selectPrinter tap];
+    XCUIElement *selectPrinter = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                          text:@"Select Printer"
+                                                       timeout:kUITestsBaseTimeout];
+    if (selectPrinter.exists) {
+        [selectPrinter tap];
+    } else {
+        XCTFail(@"Select printer button doesn't exist");
+    }
 }
 
 - (void)closeSelectPrinterPage
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Printer Options"
-                                                    onNavBarWithLabel:@"Printer"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Printer"
+                                                   timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Printer Options"
+                                              parentElement:navBar
+                                                    timeout:0];
+    if (backButton.exists) {
+        [backButton tap];
+    } else {
+        XCTFail(@"Back button wasn't found");
+    }
 }
 
 #pragma mark - Verifying
@@ -40,9 +52,18 @@
 
 - (void)verifyThatPrintPageHasCancelButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Cancel"
-                          onNavBarWithLabel:@"Printer Options"
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Printer Options"
+                                                   timeout:kUITestsBaseTimeout];
+    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Cancel"
+                                              parentElement:navBar
+                                                    timeout:0];
+    if (cancelButton.exists) {
+        [cancelButton tap];
+    } else {
+        XCTFail(@"Cancel button wasn't found");
+    }
+
 }
 
 - (void)verifyThatPrintersPageOnScreen
@@ -53,9 +74,15 @@
 
 - (void)verifyThatPrintersPageHasCorrectBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Printer Options"
-                          onNavBarWithLabel:@"Printer"
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Printer"
+                                                   timeout:kUITestsBaseTimeout];
+    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                       text:@"Printer Options"
+                                              parentElement:navBar
+                                                    timeout:0];
+    if (!backButton.exists) {
+        XCTFail(@"Back button wasn't found");
+    }
 }
 
 @end
