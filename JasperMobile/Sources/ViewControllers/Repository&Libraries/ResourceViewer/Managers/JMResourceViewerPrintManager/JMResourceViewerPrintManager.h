@@ -38,5 +38,7 @@
 @interface JMResourceViewerPrintManager : NSObject
 @property (nonatomic, weak, nullable) UIViewController * controller;
 @property (nonatomic, copy, nullable) id __nullable (^prepareBlock)(void);
-- (void)printResource:(JMResource * __nonnull)resource completion:(void(^ __nullable)(void))completion;
+- (void)printResource:(JMResource * __nonnull)resource
+ prepearingCompletion:(void(^ __nullable)(void))prepearingCompletion
+      printCompletion:(void(^ __nullable)(void))printCompletion;
 @end
