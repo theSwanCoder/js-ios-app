@@ -87,7 +87,7 @@
     [self searchResourceWithName:kTestReportName
     inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 
     [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
@@ -160,7 +160,7 @@
     [self verifyThatCollectionViewContainsGridOfCells];
 
     [self openLibrarySection];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     [self verifyThatCollectionViewContainsListOfCells];
     
     [self openFavoritesSection];

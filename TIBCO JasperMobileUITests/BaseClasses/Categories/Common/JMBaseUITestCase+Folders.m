@@ -28,7 +28,7 @@ NSString *const kTestFolderName = @"Public";
     [self searchResourceWithName:@"Samples"
                inSectionWithName:sectionName];
 
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 
     XCUIElement *testCell = [self folderCellWithName:@"Samples"];
     return testCell;

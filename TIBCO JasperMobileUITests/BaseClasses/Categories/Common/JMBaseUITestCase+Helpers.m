@@ -113,6 +113,7 @@
         }
     }
     NSArray *allMatchingElements = elementsQuery.allElementsBoundByAccessibilityElement;
+    NSLog(@"All matching elements: %@", allMatchingElements);
     if (allMatchingElements.count == 0) {
         return nil;
     } else if (allMatchingElements.count > 1) {
@@ -209,6 +210,7 @@
         }
     }
     NSArray *allMatchingElements = elementsQuery.allElementsBoundByAccessibilityElement;
+    NSLog(@"All matching elements: %@", allMatchingElements);
     if (allMatchingElements.count == 0) {
         return nil;
     } else if (allMatchingElements.count > 1) {

@@ -134,7 +134,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self searchResourceWithName:kTestDashboardName
                inSectionWithName:sectionName];
 
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 
     XCUIElement *testCell = [self testDashboardCell];
     return testCell;
@@ -142,7 +142,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (void)tryOpenTestDashboard
 {
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     XCUIElement *testCell = [self testDashboardCell];
     [testCell tap];
 }
@@ -194,6 +194,13 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
                              text:@"Modified Date"
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
+}
+
+- (void)givenThatDashboardCellsOnScreen
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self selectFilterBy:@"Dashboards" inSectionWithTitle:@"Library"];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
 }
 
 @end

@@ -10,6 +10,8 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMUITestServerProfileManager.h"
 #import "JMUITestServerProfile.h"
+#import "JMBaseUITestCase+LoginPage.h"
+#import "JMBaseUITestCase+Section.h"
 
 @implementation JMServerProfilesUITests
 
@@ -17,7 +19,7 @@
 - (void)testThatListOfServerProfilesVisible
 {
     [self tryOpenServerProfilesPage];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     XCUIElement *collectionView = self.application.collectionViews.allElementsBoundByIndex.firstObject;
     if (collectionView.exists) {
         [collectionView swipeUp];

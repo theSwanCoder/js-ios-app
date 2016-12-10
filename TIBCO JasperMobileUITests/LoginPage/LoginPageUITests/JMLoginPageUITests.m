@@ -11,6 +11,8 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMUITestServerProfileManager.h"
 #import "JMUITestServerProfile.h"
+#import "JMBaseUITestCase+LoginPage.h"
+#import "JMBaseUITestCase+TextFields.h"
 
 @implementation JMLoginPageUITests
 

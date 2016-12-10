@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+TextFields.h"
 
 @implementation JMSavedItemPageUITests
 

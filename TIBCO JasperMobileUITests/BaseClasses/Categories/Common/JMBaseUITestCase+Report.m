@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+TextFields.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";
@@ -162,7 +163,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self searchResourceWithName:kTestReportName
                inSectionWithName:sectionName];
 
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 
     XCUIElement *testCell = [self testReportCell];
     return testCell;
@@ -171,7 +172,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)tryOpenTestReport
 {
     [self searchTestReportInSectionWithName:@"Library"];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 
     XCUIElement *testCell = [self testReportCell];
     [testCell tap];
@@ -191,7 +192,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)tryOpenTestReportWithMandatoryFilters
 {
     [self searchTestReportWithMandatoryFilters];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 
     XCUIElement *testCell = [self testReportWithMandatoryFiltersCell];
     [testCell tap];
@@ -218,7 +219,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)tryOpenTestReportWithSingleSelectedControl
 {
     [self searchTestReportWithSingleSelectedControl];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     
     XCUIElement *testCell = [self testReportWithSingleSelectedControl];
     [testCell tap];
@@ -305,6 +306,13 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
                              text:@"Modified Date"
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
+}
+
+- (void)givenThatReportCellsOnScreen
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self selectFilterBy:@"Reports" inSectionWithTitle:@"Library"];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
 }
 
 @end

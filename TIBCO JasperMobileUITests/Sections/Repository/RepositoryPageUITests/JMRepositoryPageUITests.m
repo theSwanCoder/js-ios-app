@@ -79,8 +79,7 @@
 //    - After:
 - (void)testThatOpendFolderHasCorrectTitle
 {
-    [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Repository"];
     
     [self openFolderWithName:kTestFolderName];
     [self verifyCorrectTitleForFolderWithName:kTestFolderName];
@@ -99,8 +98,7 @@
 //    - After:
 - (void)testThatOpenedFolderHasBackButtonWithCorrectTitle
 {
-    [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Repository"];
     
     [self openFolderWithName:kTestFolderName];
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestFolderName
@@ -134,11 +132,11 @@
 {
     [self searchResourceWithName:@"Samples"
                inSectionWithName:@"Repository"];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     
     [self searchResourceWithName:@"Templates"
                inSectionWithName:@"Repository"];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 }
 
 //  Error message when no search result
@@ -184,7 +182,7 @@
     
     [self openLibrarySection];
     [self openRepositorySection];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     [self verifyThatCollectionViewContainsGridOfCells];
     
     [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
@@ -239,7 +237,7 @@
     if (cellsCount > 0) {
         // Some instances hasn't the folder
         [self openFolderWithName:@"Monitoring"];
-        [self givenThatCellsAreVisible];
+        [self verifyThatCollectionViewContainsCells];
         [self openFolderWithName:@"Monitoring Domains"];
         XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                               text:@"No Results."

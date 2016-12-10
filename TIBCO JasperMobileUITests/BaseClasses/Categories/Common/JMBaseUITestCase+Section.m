@@ -7,6 +7,7 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+SideMenu.h"
+#import "JMBaseUITestCase+OtherElements.h"
 
 
 @implementation JMBaseUITestCase (Section)
@@ -123,13 +124,23 @@
 
 #pragma mark - Cells
 
-- (void)givenThatCollectionViewContainsListOfCells
+- (void)givenThatCollectionViewContainsListOfCellsInSectionWithName:(NSString *)sectionName
 {
     NSInteger countOfListCells = [self countOfListCells];
     if (countOfListCells > 0) {
         return;
     } else {
-        [self switchViewFromListToGridInSectionWithTitle:@"Library"];
+        [self switchViewFromListToGridInSectionWithTitle:sectionName];
+    }
+}
+
+- (void)givenThatCollectionViewContainsGridOfCellsInSectionWithName:(NSString *)sectionName
+{
+    NSInteger countOfGridCells = [self countOfGridCells];
+    if (countOfGridCells > 0) {
+        return;
+    } else {
+        [self switchViewFromGridToListInSectionWithTitle:sectionName];
     }
 }
 
@@ -178,6 +189,7 @@
 - (void)verifyThatCollectionViewNotContainsCells
 {
     // TODO: implement
+    XCTFail(@"Not implemented");
 }
 
 #pragma mark - Helpers - Menu Sort By
@@ -324,6 +336,50 @@
 {
     [self waitNavigationBarWithLabel:sectionTitle
                              timeout:kUITestsBaseTimeout];
+}
+
+#pragma mark - Sections
+
+- (XCUIElement *)libraryPageViewElement
+{
+    XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeOther
+                                              identifier:@"JMBaseCollectionContentViewAccessibilityId"
+                                                 timeout:0];
+    return element;
+}
+
+- (void)givenThatLibraryPageOnScreen
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    // Verify Library Page
+    [self verifyThatCurrentPageIsLibrary];
+}
+
+- (void)givenThatRepositoryPageOnScreen
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self verifyThatCurrentPageIsRepository];
+}
+
+
+- (void)verifyThatCurrentPageIsLibrary
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    // TODO: replace with specific element - JMLibraryPageAccessibilityId
+    [self verifyThatElementWithIdExist:@"JMBaseCollectionContentViewAccessibilityId"];
+}
+
+- (void)verifyThatCurrentPageIsRepository
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    XCUIElement *repositoryNavBar = self.application.navigationBars[@"Repository"];
+    NSPredicate *repositoryPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+
+    [self expectationForPredicate:repositoryPagePredicate
+              evaluatedWithObject:repositoryNavBar
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:kUITestsBaseTimeout
+                                 handler:nil];
 }
 
 @end

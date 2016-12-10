@@ -40,4 +40,5 @@ extern NSString *const kTestReportWithSingleSelectedControlName;
 - (void)verifyThatReportInfoPageOnScreen;
 - (void)verifyThatReportInfoPageContainsCorrectDataForReportWithName:(NSString *)reportName;
 
+- (void)givenThatReportCellsOnScreen;
 @end
