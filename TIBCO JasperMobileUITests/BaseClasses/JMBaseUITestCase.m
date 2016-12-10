@@ -38,9 +38,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
         XCTFail(@"Failed to launch application");
     }
 
-    [self skipRateAlertIfNeed];
-    [self skipIntroPageIfNeed];
-
     if ([self shouldLoginBeforeStartTest]) {
         NSLog(@"Try to log in before performing tests");
         [self loginWithTestProfileIfNeed];
@@ -81,48 +78,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return YES;
-}
-
-#pragma mark - Helpers
-
-- (void)skipIntroPageIfNeed
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"Try to skip intro page");
-    XCUIElement *skipIntroButton;
-    NSInteger attemptsCount = 2;
-    for (NSInteger i = 0; i < attemptsCount; i++) {
-        sleep(kUITestsElementAvailableTimeout);
-        skipIntroButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                   text:@"Skip Intro"
-                                                timeout:0];
-        if (skipIntroButton.exists) {
-            NSLog(@"%@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
-            [skipIntroButton tap];
-            break;
-        }
-    }
-}
-
-- (void)skipRateAlertIfNeed
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"Try to skip rate dialog");
-    XCUIElement *rateAlert;
-    NSInteger attemptsCount = 2;
-    for (NSInteger i = 0; i < attemptsCount; i++) {
-        sleep(kUITestsElementAvailableTimeout);
-        rateAlert = self.application.alerts[@"Rate TIBCO JasperMobile"];
-        if (rateAlert.exists) {
-            XCUIElement *rateAppLateButton = rateAlert.buttons[@"No, thanks"];
-            if (rateAppLateButton.exists) {
-                [rateAppLateButton tap];
-                break;
-            } else {
-                XCTFail(@"There is an rate dialog, but 'No, thanks' button isn't in hierarchy");
-            }
-        }
-    }
 }
 
 #pragma mark - Helper Actions

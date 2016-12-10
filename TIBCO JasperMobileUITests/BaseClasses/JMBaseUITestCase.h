@@ -25,9 +25,6 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)tryBackToPreviousPageWithTitle:(NSString *)pageTitle;
 
 //
-- (void)skipIntroPageIfNeed;
-- (void)skipRateAlertIfNeed;
-//
 - (void)givenLoadingPopupVisible;
 - (void)givenLoadingPopupNotVisible;
 

@@ -386,11 +386,7 @@
 - (void)waitLoginProcessDidFinish
 {
     [self givenLoadingPopupNotVisible];
-
     [self verifyThatLoginWasSuccess];
-
-    [self skipRateAlertIfNeed];
-    [self skipIntroPageIfNeed];
 }
 
 - (void)enterUsername:(NSString *)username
