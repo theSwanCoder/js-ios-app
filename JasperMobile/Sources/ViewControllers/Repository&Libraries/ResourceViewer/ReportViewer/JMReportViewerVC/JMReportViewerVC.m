@@ -577,6 +577,11 @@
     return [JMResourceViewerSessionManager new];
 }
 
+- (BOOL)shouldWorkWithChartTypes
+{
+    return [JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6];
+}
+
 #pragma mark - JMReportViewerToolBarDelegate
 - (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage
 {
@@ -661,7 +666,7 @@
     availableAction |= JMMenuActionsViewAction_Share | JMMenuActionsViewAction_Print;
 
     // TODO: For now use for show chart types, but there could be other components
-    if ([self report].reportComponents.count) {
+    if ([self report].reportComponents.count && [self shouldWorkWithChartTypes]) {
         availableAction |= JMMenuActionsViewAction_ShowReportChartTypes;
     }
     JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate *)[UIApplication sharedApplication].delegate;
