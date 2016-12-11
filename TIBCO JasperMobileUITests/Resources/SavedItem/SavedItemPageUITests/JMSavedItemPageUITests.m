@@ -17,6 +17,20 @@
 
 @implementation JMSavedItemPageUITests
 
+- (void)setUp
+{
+    [super setUp];
+
+    [self givenThatSavedItemsEmpty];
+}
+
+- (void)tearDown
+{
+    [self givenThatSavedItemsEmpty];
+
+    [super tearDown];
+}
+
 #pragma mark - Tests
 
 //User should see the saved report as HTML
@@ -26,13 +40,10 @@
 //    > User should see Saved Report View Screen
 - (void)testThatUserCanSeeSavedItemAsHTML
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
 
     [self openTestSavedItemInHTMLFormat];
     [self closeTestSavedItem];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //User should see the saved report as PDF
@@ -42,13 +53,10 @@
 //    > User should see Saved Report View Screen
 - (void)testThatUserCanSeeSavedItemAsPDF
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInPDFFormat];
     
     [self openTestSavedItemInPDFFormat];
     [self closeTestSavedItem];
-    
-    [self deleteTestReportInPDFFormat];
 }
 
 //Back button like "Saved Items"
@@ -59,14 +67,11 @@
 //    > Saved Items screen should appears
 - (void)testThatBackButtonHasCorrectTitle
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     
     [self openTestSavedItemInHTMLFormat];
     [self verifyThatBackButtonHasCorrectTitle];
     [self closeTestSavedItem];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Saved Report View title
@@ -76,14 +81,11 @@
 //        > User should see title like name of the saved report
 - (void)testThatPageHasCorrectTitle
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     
     [self openTestSavedItemInHTMLFormat];
     [self verifyThatSavedItemPageHasCorrectTitle];
     [self closeTestSavedItem];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Favorite button
@@ -95,7 +97,6 @@
 //    > Star should be empty after removing the item from favorites
 - (void)testThatFavoriteButtonWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     
     [self openTestSavedItemInHTMLFormat];
@@ -104,8 +105,6 @@
     [self unmarkTestSavedItemAsFavoriteFromViewerPage];
     
     [self closeTestSavedItem];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Cancel deleting
@@ -117,7 +116,6 @@
 //    > Report isn't deleted
 - (void)testThatDeletingCanBeCanceled
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
 
@@ -126,7 +124,6 @@
     [self cancelDeletingAction];
 
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Cancel rename
@@ -139,7 +136,6 @@
 //    > Report isn't renamed
 - (void)testThatRenamingCanBeCanceled
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
@@ -148,7 +144,6 @@
     [self cancelRenamingAction];
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Rename the saved file
@@ -161,7 +156,6 @@
 //    > Rename report dialog should disappear and Saved Item View screen should be displayed
 - (void)testThatRenameWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
@@ -170,7 +164,6 @@
     [self performRenameAction];
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Try to rename the saved file with empty name
@@ -183,7 +176,6 @@
 //    > "OK" button disabled. Report is not saved.
 - (void)testThatRenameNotWorkWithEmptyName
 { 
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
@@ -192,7 +184,6 @@
     [self performRenameActionWithEmptyName];
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Try to rename the saved file if saved file name includes only spaces
@@ -205,7 +196,6 @@
 //    > "OK" button disabled. Report is not saved.
 - (void)testThatRenameNotWorkWithSpacesInName
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
@@ -214,7 +204,6 @@
     [self performRenameActionWithSpacesInName];
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Try to rename the saved file if report name already exist
@@ -226,7 +215,6 @@
 //    > Report is not saved. User should see error message "This name has been already taken, please choose different name"
 - (void)testThatRenameNotWorkForExistingName
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
@@ -235,7 +223,6 @@
     [self performRenameActionWithTheSameName];
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Rename the saved item with same name in different output formats
@@ -258,14 +245,11 @@
 //    > Info dialog (screen for iPhone) about the report should appear
 - (void)testThatInfoButtonWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     
     [self showInfoPageTestSavedItemFromSavedItemsSection];
     [self verifyThatInfoPageOnScreen];
     [self closeInfoPageTestSavedItemFromSavedItemsSection];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Zoom on Report View screen
@@ -280,7 +264,6 @@
 //    > Report shouldn't be scalled
 - (void)testThatZoomWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
     [self saveTestReportInHTMLFormat];
     [self openTestSavedItemInHTMLFormat];
     
@@ -292,7 +275,6 @@
     sleep(kUITestsElementAvailableTimeout);
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 #pragma mark - Helpers

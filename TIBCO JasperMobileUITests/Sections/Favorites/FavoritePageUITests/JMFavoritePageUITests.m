@@ -14,6 +14,7 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Search.h"
 
 @implementation JMFavoritePageUITests
 
@@ -85,8 +86,8 @@
     [self openFavoritesSection];
     [self givenThatReportCellsOnScreen];
     
-    [self searchResourceWithName:kTestReportName
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self performSearchResourceWithName:kTestReportName
+           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 
     [self verifyThatCollectionViewContainsCells];
 
@@ -113,8 +114,8 @@
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
     
     [self openFavoritesSection];
-    [self searchResourceWithName:@"Search without result text"
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self performSearchResourceWithName:@"Search without result text"
+           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 
     [self verifyThatCorrectMessageAppearForEmptyResult];
 

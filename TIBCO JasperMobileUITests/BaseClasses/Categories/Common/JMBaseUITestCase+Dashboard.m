@@ -10,6 +10,7 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Search.h"
 
 NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
@@ -116,8 +117,8 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (XCUIElement *)searchTestDashboardInSectionWithName:(NSString *)sectionName
 {
-    [self searchResourceWithName:kTestDashboardName
-               inSectionWithName:sectionName];
+    [self performSearchResourceWithName:kTestDashboardName
+                      inSectionWithName:sectionName];
 
     [self verifyThatCollectionViewContainsCells];
 

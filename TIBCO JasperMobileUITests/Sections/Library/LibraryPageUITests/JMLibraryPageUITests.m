@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+Search.h"
 
 @implementation JMLibraryPageUITests
 
@@ -85,8 +86,8 @@
     [self switchViewFromGridToListInSectionWithTitle:@"Library"];
     [self givenThatReportCellsOnScreen];
 
-    [self searchResourceWithName:kJMTestLibrarySearchTextExample
-               inSectionWithName:@"Library"];
+    [self performSearchResourceWithName:kJMTestLibrarySearchTextExample
+                      inSectionWithName:@"Library"];
     NSInteger cellsCount = [self countOfListCells];
     XCTAssertTrue(cellsCount > 0, @"Should one or more results");
 

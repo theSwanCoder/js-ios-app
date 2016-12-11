@@ -7,6 +7,7 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Search.h"
 
 NSString *const kTestFolderName = @"Public";
 
@@ -25,8 +26,8 @@ NSString *const kTestFolderName = @"Public";
 
 - (XCUIElement *)searchTestFolderInSectionWithName:(NSString *)sectionName
 {
-    [self searchResourceWithName:@"Samples"
-               inSectionWithName:sectionName];
+    [self performSearchResourceWithName:@"Samples"
+                      inSectionWithName:sectionName];
 
     [self verifyThatCollectionViewContainsCells];
 

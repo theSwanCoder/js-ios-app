@@ -14,6 +14,7 @@
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+TextFields.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Search.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";
@@ -143,24 +144,24 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 #pragma mark - Helpers
 
-- (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName
-{
-    [self performSearchResourceWithName:kTestReportName
-                      inSectionWithName:sectionName];
-    
-    // TODO: replace with real check 'loading' message
-    sleep(1);
-    
-    [self verifyThatCollectionViewContainsCells];
-
-    XCUIElement *testCell = [self testReportCell];
-    return testCell;
-}
-
 - (void)tryOpenTestReport
 {
     XCUIElement *testCell = [self searchTestReportInSectionWithName:@"Library"];
     [testCell tap];
+}
+
+- (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName
+{
+    [self performSearchResourceWithName:kTestReportName
+                      inSectionWithName:sectionName];
+
+    // TODO: replace with real check 'loading' message
+    sleep(1);
+
+    [self verifyThatCollectionViewContainsCells];
+
+    XCUIElement *testCell = [self testReportCell];
+    return testCell;
 }
 
 - (XCUIElement *)testReportCell
@@ -186,8 +187,8 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)searchTestReportWithMandatoryFilters
 {
     // TODO: replace with specific element - JMLibraryPageAccessibilityId
-    [self searchResourceWithName:kTestReportWithMandatoryFiltersName
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self performSearchResourceWithName:kTestReportWithMandatoryFiltersName
+           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 }
 
 - (XCUIElement *)testReportWithMandatoryFiltersCell
@@ -213,8 +214,8 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)searchTestReportWithSingleSelectedControl
 {
     // TODO: replace with specific element - JMLibraryPageAccessibilityId
-    [self searchResourceWithName:kTestReportWithSingleSelectedControlName
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self performSearchResourceWithName:kTestReportWithSingleSelectedControlName
+           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 }
 
 - (XCUIElement *)testReportWithSingleSelectedControl

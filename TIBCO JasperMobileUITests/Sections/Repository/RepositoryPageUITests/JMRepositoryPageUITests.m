@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+Folders.h"
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Search.h"
 
 @implementation JMRepositoryPageUITests
 
@@ -125,12 +126,12 @@
 //    - After:
 - (void)testThatSearchOnRepositoryPageWorkCorrectly
 {
-    [self searchResourceWithName:@"Samples"
-               inSectionWithName:@"Repository"];
+    [self performSearchResourceWithName:@"Samples"
+                      inSectionWithName:@"Repository"];
     [self verifyThatCollectionViewContainsCells];
     
-    [self searchResourceWithName:@"Templates"
-               inSectionWithName:@"Repository"];
+    [self performSearchResourceWithName:@"Templates"
+                      inSectionWithName:@"Repository"];
     [self verifyThatCollectionViewContainsCells];
 }
 
@@ -145,8 +146,8 @@
 //    - After:
 - (void)testThatSearchWithEmptyResultOnRepositoryPageHasCorrectMessage
 {
-    [self searchResourceWithName:@"NoSearchResults"
-               inSectionWithName:@"Repository"];
+    [self performSearchResourceWithName:@"NoSearchResults"
+                      inSectionWithName:@"Repository"];
 
     XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                           text:@"No Results."
@@ -225,8 +226,8 @@
 - (void)testThatEmptyFolderHasCorrectMessage
 {
     [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
-    [self searchResourceWithName:@"Monitoring"
-               inSectionWithName:@"Repository"];
+    [self performSearchResourceWithName:@"Monitoring"
+                      inSectionWithName:@"Repository"];
 
     NSInteger cellsCount = [self countOfListCells];
     if (cellsCount > 0) {

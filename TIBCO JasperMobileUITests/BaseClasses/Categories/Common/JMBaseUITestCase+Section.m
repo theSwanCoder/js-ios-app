@@ -32,85 +32,6 @@
                 shouldCheck:NO];
 }
 
-#pragma mark - Search
-- (void)performSearchResourceWithName:(NSString *)resourceName
-         inSectionWithAccessibilityId:(NSString *)sectionId
-{
-    XCUIElement *searchField = [self searchFieldFromSectionWithAccessibilityId:sectionId];
-    [searchField tap];
-
-    // Clear text if exist
-    XCUIElement *clearTextButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                            text:@"Clear text"
-                                                   parentElement:searchField
-                                                         timeout:0];
-    if (clearTextButton.exists) {
-        [clearTextButton tap];
-    }
-
-    [searchField typeText:resourceName];
-
-    [self tapButtonWithText:@"Search"
-              parentElement:nil
-                shouldCheck:YES];
-}
-
-- (void)performSearchResourceWithName:(NSString *)resourceName
-                    inSectionWithName:(NSString *)sectionName
-{
-    if ([sectionName isEqualToString:@"Library"]) {
-        [self openLibrarySection];
-        // TODO: replace with specific element - JMLibraryPageAccessibilityId
-        [self performSearchResourceWithName:resourceName
-               inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else if ([sectionName isEqualToString:@"Repository"]) {
-        [self openRepositorySection];
-        // TODO: replace with specific element - JMRepositoryPageAccessibilityId
-        [self performSearchResourceWithName:resourceName
-               inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else if ([sectionName isEqualToString:@"Favorites"]) {
-        [self openFavoritesSection];
-        // TODO: replace with specific element - JMRepositoryPageAccessibilityId
-        [self performSearchResourceWithName:resourceName
-               inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else {
-        XCTFail(@"Wrong section for searching test dashboard: %@", sectionName);
-    }
-}
-
-- (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
-{
-    XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
-    [searchResourcesSearchField tap];
-
-    [self tapButtonWithText:@"Clear text"
-              parentElement:searchResourcesSearchField
-                shouldCheck:NO];
-
-    [self tapCancelButtonOnNavBarWithTitle:nil];
-}
-
-- (XCUIElement *)searchFieldFromSectionWithAccessibilityId:(NSString *)accessibilityId
-{
-    XCUIElement *section = [self waitElementMatchingType:XCUIElementTypeOther
-                                              identifier:accessibilityId
-                                                 timeout:kUITestsBaseTimeout];
-    XCUIElement *searchField;
-    if (section.exists) {
-        searchField = [self waitElementMatchingType:XCUIElementTypeSearchField
-                                               text:accessibilityId
-                                      parentElement:section
-                                            timeout:kUITestsBaseTimeout];
-        if (!searchField.exists) {
-            XCTFail(@"Search field wasn't found");
-        }
-    } else {
-        XCTFail(@"Section wasn't found");
-    }
-    
-    return searchField;
-}
-
 #pragma mark - Cells
 
 - (void)givenThatCollectionViewContainsListOfCellsInSectionWithName:(NSString *)sectionName
@@ -184,6 +105,22 @@
     }
 }
 
+- (void)selectSortBy:(NSString *)sortTypeString inSectionWithTitle:(NSString *)sectionTitle
+{
+    [self openSortMenuInSectionWithTitle:sectionTitle];
+    XCUIElement *sortOptionsViewElement = [self.application.tables elementBoundByIndex:0];
+    if (sortOptionsViewElement.exists) {
+        XCUIElement *sortOptionElement = sortOptionsViewElement.staticTexts[sortTypeString];
+        if (sortOptionElement.exists) {
+            [sortOptionElement tap];
+        } else {
+            XCTFail(@"'%@' Sort Option isn't visible", sortTypeString);
+        }
+    } else {
+        XCTFail(@"Sort Options View isn't visible");
+    }
+}
+
 - (void)tryOpenSortMenuFromMenuActions
 {
     XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
@@ -215,22 +152,6 @@
         }
     } else {
         XCTFail(@"Navigation bar isn't visible");
-    }
-}
-
-- (void)selectSortBy:(NSString *)sortTypeString inSectionWithTitle:(NSString *)sectionTitle
-{
-    [self openSortMenuInSectionWithTitle:sectionTitle];
-    XCUIElement *sortOptionsViewElement = [self.application.tables elementBoundByIndex:0];
-    if (sortOptionsViewElement.exists) {
-        XCUIElement *sortOptionElement = sortOptionsViewElement.staticTexts[sortTypeString];
-        if (sortOptionElement.exists) {
-            [sortOptionElement tap];
-        } else {
-            XCTFail(@"'%@' Sort Option isn't visible", sortTypeString);
-        }
-    } else {
-        XCTFail(@"Sort Options View isn't visible");
     }
 }
 

@@ -12,14 +12,6 @@
 - (void)switchViewFromListToGridInSectionWithTitle:(NSString *)sectionTitle;
 - (void)switchViewFromGridToListInSectionWithTitle:(NSString *)sectionTitle;
 
-// Search
-- (void)performSearchResourceWithName:(NSString *)resourceName
-         inSectionWithAccessibilityId:(NSString *)sectionId;
-- (void)performSearchResourceWithName:(NSString *)resourceName
-                    inSectionWithName:(NSString *)sectionName;
-
-- (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionId;
-
 // Cells
 - (void)givenThatCollectionViewContainsListOfCellsInSectionWithName:(NSString *)sectionName;
 - (void)givenThatCollectionViewContainsGridOfCellsInSectionWithName:(NSString *)sectionName;

@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+SavedItems.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Search.h"
 
 @implementation JMSavedItemsPageUITests
 
@@ -68,8 +69,8 @@
 
     [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
     
-    [self searchResourceWithName:kTestReportName
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self performSearchResourceWithName:kTestReportName
+           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     [self verifyTestReportInHTMLFormatIsInSearchResult];
     [self clearSearchResultInSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     
@@ -87,8 +88,8 @@
     [self saveTestReportInHTMLFormat];
     [self openSavedItemsSection];
 
-    [self searchResourceWithName:@"Wrong Test Saved Item"
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self performSearchResourceWithName:@"Not Existed Test Saved Item"
+           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     [self verifyThatNoResultsOnScreen];
     [self clearSearchResultInSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 
