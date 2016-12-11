@@ -8,16 +8,12 @@
 
 #import "JMBaseUITestCase.h"
 #import "JMBaseUITestCase+Helpers.h"
-#import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Section.h"
-#import "JMUITestServerProfile.h"
-#import "JMUITestServerProfileManager.h"
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+Buttons.h"
-#import "JMBaseUITestCase+OtherElements.h"
 
-NSTimeInterval kUITestsBaseTimeout = 20;
-NSTimeInterval kUITestsResourceWaitingTimeout = 30;
+NSTimeInterval kUITestsBaseTimeout = 15;
+NSTimeInterval kUITestsResourceWaitingTimeout = 60;
 NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 @implementation JMBaseUITestCase

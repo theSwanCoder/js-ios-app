@@ -33,7 +33,6 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self selectActionWithName:@"Run"];
 
     [self givenLoadingPopupNotVisible];
-    [self givenLoadingPopupNotVisible];
 
     [self tryBackToPreviousPage];
 }
@@ -46,7 +45,6 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
     [self givenLoadingPopupNotVisible];
-    [self givenLoadingPopupNotVisible];
 }
 
 - (void)openTestReportWithSingleSelectedControlPage
@@ -57,7 +55,6 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
     [self givenLoadingPopupNotVisible];
-    [self givenLoadingPopupNotVisible];
 }
 
 - (void)openTestReportPageWithWaitingFinish:(BOOL)waitingFinish
@@ -67,7 +64,6 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     if (waitingFinish) {
         // We can have two times when loading up and down
         // first time loading 'report info' and second one - loading report
-        [self givenLoadingPopupNotVisible];
         [self givenLoadingPopupNotVisible];
     }
 }

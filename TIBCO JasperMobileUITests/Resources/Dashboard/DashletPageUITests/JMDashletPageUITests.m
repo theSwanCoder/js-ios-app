@@ -188,7 +188,6 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
     [self givenLoadingPopupNotVisible];
-    [self givenLoadingPopupNotVisible];
 }
 
 - (void)tapOnElementWithText:(NSString *)text

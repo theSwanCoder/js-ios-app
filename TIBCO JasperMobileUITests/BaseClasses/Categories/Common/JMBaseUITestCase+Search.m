@@ -76,7 +76,7 @@
     XCUIElement *searchField;
     if (section.exists) {
         searchField = [self waitElementMatchingType:XCUIElementTypeSearchField
-                                               text:accessibilityId
+                                               text:@"Search resources"
                                       parentElement:section
                                             timeout:kUITestsBaseTimeout];
         if (!searchField.exists) {

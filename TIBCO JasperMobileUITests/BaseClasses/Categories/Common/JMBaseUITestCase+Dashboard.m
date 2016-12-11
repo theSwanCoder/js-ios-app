@@ -29,7 +29,6 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self selectActionWithName:@"Run"];
 
     [self givenLoadingPopupNotVisible];
-    [self givenLoadingPopupNotVisible];
 
     [self tryBackToPreviousPage];
 }
@@ -53,27 +52,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
                                  text:@"Loading..."
                         parentElement:nil
                           shouldExist:NO
-                              timeout:kUITestsBaseTimeout];
-        [self waitElementMatchingType:XCUIElementTypeStaticText
-                                 text:@"Loading..."
-                        parentElement:nil
-                          shouldExist:NO
-                              timeout:kUITestsBaseTimeout];
-        [self waitElementMatchingType:XCUIElementTypeStaticText
-                                 text:@"Loading..."
-                        parentElement:nil
-                          shouldExist:NO
-                              timeout:kUITestsBaseTimeout];
-        [self waitElementMatchingType:XCUIElementTypeStaticText
-                                 text:@"Loading..."
-                        parentElement:nil
-                          shouldExist:NO
-                              timeout:kUITestsBaseTimeout];
-        [self waitElementMatchingType:XCUIElementTypeStaticText
-                                 text:@"Loading..."
-                        parentElement:nil
-                          shouldExist:NO
-                              timeout:kUITestsBaseTimeout];
+                              timeout:kUITestsResourceWaitingTimeout];
     }
 }
 
