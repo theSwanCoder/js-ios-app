@@ -155,11 +155,11 @@
         [self verifyThatCollectionViewContainsGridOfCells];
         
         // Change Page to Repository
-        [self openRepositorySection];
+        [self openRepositorySectionIfNeed];
         [self givenThatRepositoryPageOnScreen];
         
         // Change Page to Library
-        [self openLibrarySection];
+        [self openLibrarySectionIfNeed];
         [self givenThatLibraryPageOnScreen];
         [self verifyThatCollectionViewContainsCells];
         

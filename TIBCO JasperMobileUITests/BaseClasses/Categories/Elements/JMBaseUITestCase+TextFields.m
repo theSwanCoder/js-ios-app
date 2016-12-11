@@ -13,8 +13,9 @@
 - (void)closeKeyboardWithDoneButton
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self verifyButtonExistWithText:@"Done"
-                      parentElement:nil];
+    [self tapButtonWithText:@"Done"
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 - (void)enterText:(NSString *)text intoTextFieldWithAccessibilityId:(NSString *)accessibilityId

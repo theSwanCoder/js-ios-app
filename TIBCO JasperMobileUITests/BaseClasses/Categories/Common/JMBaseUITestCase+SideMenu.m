@@ -32,7 +32,7 @@
                     parentElement:navBar];
 }
 
-- (void)openLibrarySection
+- (void)openLibrarySectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Library"];
     if (navigationBar.exists) {
@@ -42,7 +42,7 @@
           fromSectionWithName:nil];
 }
 
-- (void)openRepositorySection
+- (void)openRepositorySectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Repository"];
     if (navigationBar.exists) {
@@ -52,7 +52,7 @@
           fromSectionWithName:nil];
 }
 
-- (void)openRecentlyViewedSection
+- (void)openRecentlyViewedSectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Recently Viewed"];
     if (navigationBar.exists) {
@@ -62,7 +62,7 @@
           fromSectionWithName:nil];
 }
 
-- (void)openSavedItemsSection
+- (void)openSavedItemsSectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Saved Items"];
     if (navigationBar.exists) {
@@ -72,7 +72,7 @@
           fromSectionWithName:nil];
 }
 
-- (void)openFavoritesSection
+- (void)openFavoritesSectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Favorites"];
     if (navigationBar.exists) {
@@ -82,7 +82,7 @@
           fromSectionWithName:nil];
 }
 
-- (void)openSchedulesSection
+- (void)openSchedulesSectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Schedules"];
     if (navigationBar.exists) {

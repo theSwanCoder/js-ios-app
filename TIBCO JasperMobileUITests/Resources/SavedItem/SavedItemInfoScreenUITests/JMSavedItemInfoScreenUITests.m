@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+SideMenu.h"
 
 @implementation JMSavedItemInfoScreenUITests
 
@@ -150,18 +151,18 @@
 
 - (void)createTestSavedItemInHTMLFormatAndOpenInfoPage
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-
-    [self showInfoPageTestSavedItemFromSavedItemsSection];
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
+    [self openInfoPageTestSavedItemFromSavedItemsSection];
 }
 
 - (void)createTestSavedItemInPDFFormatAndOpenInfoPage
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    [self saveTestReportInPDFFormat];
-
-    [self showInfoPageTestSavedItemFromSavedItemsSection];
+    [self saveTestReportInPDFFormatNeedOpen:NO];
+    [self openInfoPageTestSavedItemFromSavedItemsSection];
 }
 
 - (void)closeInfoPageAndDeleteTestSavedItemInHTMLFormat

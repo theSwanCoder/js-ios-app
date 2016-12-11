@@ -20,7 +20,7 @@
 {
     [super setUp];
 
-    [self openRepositorySection];
+    [self openRepositorySectionIfNeed];
 }
 
 #pragma mark - Tests
@@ -175,9 +175,9 @@
 {
     [self switchViewFromListToGridInSectionWithTitle:@"Repository"];
     [self verifyThatCollectionViewContainsGridOfCells];
-    
-    [self openLibrarySection];
-    [self openRepositorySection];
+
+    [self openLibrarySectionIfNeed];
+    [self openRepositorySectionIfNeed];
     [self verifyThatCollectionViewContainsCells];
     [self verifyThatCollectionViewContainsGridOfCells];
     

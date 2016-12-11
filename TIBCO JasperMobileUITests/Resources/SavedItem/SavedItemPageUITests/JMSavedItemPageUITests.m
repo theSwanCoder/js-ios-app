@@ -14,6 +14,7 @@
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+TextFields.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+SideMenu.h"
 
 @implementation JMSavedItemPageUITests
 
@@ -21,6 +22,7 @@
 {
     [super setUp];
 
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
 }
 
@@ -40,9 +42,7 @@
 //    > User should see Saved Report View Screen
 - (void)testThatUserCanSeeSavedItemAsHTML
 {
-    [self saveTestReportInHTMLFormat];
-
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     [self closeTestSavedItem];
 }
 
@@ -53,9 +53,7 @@
 //    > User should see Saved Report View Screen
 - (void)testThatUserCanSeeSavedItemAsPDF
 {
-    [self saveTestReportInPDFFormat];
-    
-    [self openTestSavedItemInPDFFormat];
+    [self saveTestReportInPDFFormatNeedOpen:YES];
     [self closeTestSavedItem];
 }
 
@@ -67,9 +65,7 @@
 //    > Saved Items screen should appears
 - (void)testThatBackButtonHasCorrectTitle
 {
-    [self saveTestReportInHTMLFormat];
-    
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     [self verifyThatBackButtonHasCorrectTitle];
     [self closeTestSavedItem];
 }
@@ -81,9 +77,7 @@
 //        > User should see title like name of the saved report
 - (void)testThatPageHasCorrectTitle
 {
-    [self saveTestReportInHTMLFormat];
-    
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     [self verifyThatSavedItemPageHasCorrectTitle];
     [self closeTestSavedItem];
 }
@@ -97,9 +91,7 @@
 //    > Star should be empty after removing the item from favorites
 - (void)testThatFavoriteButtonWorkCorrectly
 {
-    [self saveTestReportInHTMLFormat];
-    
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
 
     [self markTestSavedItemAsFavoriteFromViewerPage];
     [self unmarkTestSavedItemAsFavoriteFromViewerPage];
@@ -116,8 +108,7 @@
 //    > Report isn't deleted
 - (void)testThatDeletingCanBeCanceled
 {
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
 
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Delete"];
@@ -136,8 +127,7 @@
 //    > Report isn't renamed
 - (void)testThatRenamingCanBeCanceled
 {
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Rename"];
@@ -156,8 +146,7 @@
 //    > Rename report dialog should disappear and Saved Item View screen should be displayed
 - (void)testThatRenameWorkCorrectly
 {
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Rename"];
@@ -175,9 +164,8 @@
 //    < Tap "OK" button
 //    > "OK" button disabled. Report is not saved.
 - (void)testThatRenameNotWorkWithEmptyName
-{ 
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+{
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Rename"];
@@ -196,8 +184,7 @@
 //    > "OK" button disabled. Report is not saved.
 - (void)testThatRenameNotWorkWithSpacesInName
 {
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Rename"];
@@ -215,8 +202,7 @@
 //    > Report is not saved. User should see error message "This name has been already taken, please choose different name"
 - (void)testThatRenameNotWorkForExistingName
 {
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Rename"];
@@ -245,9 +231,9 @@
 //    > Info dialog (screen for iPhone) about the report should appear
 - (void)testThatInfoButtonWorkCorrectly
 {
-    [self saveTestReportInHTMLFormat];
-    
-    [self showInfoPageTestSavedItemFromSavedItemsSection];
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
+
+    [self openInfoPageTestSavedItemFromSavedItemsSection];
     [self verifyThatInfoPageOnScreen];
     [self closeInfoPageTestSavedItemFromSavedItemsSection];
 }
@@ -264,8 +250,7 @@
 //    > Report shouldn't be scalled
 - (void)testThatZoomWorkCorrectly
 {
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
     [self waitElementReady:webView
@@ -281,12 +266,16 @@
 
 - (void)cancelDeletingAction
 {
-    [self tapCancelButtonOnNavBarWithTitle:nil];
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 - (void)cancelRenamingAction
 {
-    [self tapCancelButtonOnNavBarWithTitle:nil];
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 - (void)performRenameAction

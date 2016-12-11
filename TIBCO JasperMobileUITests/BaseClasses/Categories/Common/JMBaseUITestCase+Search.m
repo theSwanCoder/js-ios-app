@@ -37,17 +37,17 @@
                     inSectionWithName:(NSString *)sectionName
 {
     if ([sectionName isEqualToString:@"Library"]) {
-        [self openLibrarySection];
+        [self openLibrarySectionIfNeed];
         // TODO: replace with specific element - JMLibraryPageAccessibilityId
         [self performSearchResourceWithName:resourceName
                inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     } else if ([sectionName isEqualToString:@"Repository"]) {
-        [self openRepositorySection];
+        [self openRepositorySectionIfNeed];
         // TODO: replace with specific element - JMRepositoryPageAccessibilityId
         [self performSearchResourceWithName:resourceName
                inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     } else if ([sectionName isEqualToString:@"Favorites"]) {
-        [self openFavoritesSection];
+        [self openFavoritesSectionIfNeed];
         // TODO: replace with specific element - JMRepositoryPageAccessibilityId
         [self performSearchResourceWithName:resourceName
                inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];

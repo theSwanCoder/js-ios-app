@@ -99,7 +99,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 #pragma mark - Saving
 
-- (void)openSaveReportPage
+- (void)openSavingReportPage
 {
     [self openMenuActions];
     [self selectActionWithName:@"Save"];
@@ -114,14 +114,17 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 {
     // TODO: may be move into separate category for saved report
 
+    // Enter name of saving item
     XCUIElement *textField = [self findNameFieldOnSaveReportPage];
     [self enterText:name
       intoTextField:textField];
 
+    // Select format
     XCUIElement *htmlCell = [self findTableViewCellWithAccessibilityId:nil
                                                  containsLabelWithText:format];
     [htmlCell tap];
 
+    // Perform saving
     [self tapButtonWithText:@"Save"
               parentElement:nil
                 shouldCheck:YES];

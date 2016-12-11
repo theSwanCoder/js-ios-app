@@ -16,6 +16,23 @@
 
 @implementation JMSavedItemsPageUITests
 
+#pragma mark - Setup
+
+- (void)setUp
+{
+    [super setUp];
+
+    [self openSavedItemsSectionIfNeed];
+    [self givenThatSavedItemsEmpty];
+}
+
+- (void)tearDown
+{
+    [self givenThatSavedItemsEmpty];
+
+    [super tearDown];
+}
+
 #pragma mark - Tests
 
 //User should see Saved Items screen
@@ -24,7 +41,6 @@
 //    > User should see Saved Items screen
 - (void)testThatUserCanSeeSavedItemsPage
 {
-    [self openSavedItemsSection];
     [self verifyThatSavedItemsSectionOnScreen];
 }
 
@@ -34,8 +50,6 @@
 //    > User should see Left Panel button on the Saved Items screen
 - (void)testThatMenuButtonWorkCorrectly
 {
-    [self openSavedItemsSection];
-
     [self showSideMenuInSectionWithName:@"Saved Items"];
     [self verifySideMenuVisible];
     [self hideSideMenuInSectionWithName:@"Saved Items"];
@@ -47,7 +61,6 @@
 //    > User should see title like "Saved Items"
 - (void)testThatPageHasCorrectTitle
 {
-    [self openSavedItemsSection];
     [self verifyThatSavedItemsSectionHasCorrectTitle];
 }
 
@@ -63,18 +76,15 @@
 //    - see result after searching
 - (void)testThatSearchWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openSavedItemsSection];
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
 
-    [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
+    [self selectFilterBy:@"HTML"
+      inSectionWithTitle:@"Saved Items"];
     
     [self performSearchResourceWithName:kTestReportName
            inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     [self verifyTestReportInHTMLFormatIsInSearchResult];
     [self clearSearchResultInSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Error message when no search result
@@ -84,16 +94,12 @@
 //    > User can see error message when no search result
 - (void)testThatCorrectMessageAppearsInCaseSearchWithoutResult
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openSavedItemsSection];
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
 
     [self performSearchResourceWithName:@"Not Existed Test Saved Item"
            inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     [self verifyThatNoResultsOnScreen];
     [self clearSearchResultInSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Viev type button
@@ -106,17 +112,13 @@
 //    > User can see items as list (user can see icon, label and description of item) and View Type button should be switched
 - (void)testThatViewTypeButtonWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openSavedItemsSection];
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
 
     [self verifyThatListOfCellsVisible];
     [self switchViewFromListToGridInSectionWithTitle:@"Saved Items"];
     [self verifyThatGridOfCellsVisible];
     [self switchViewFromGridToListInSectionWithTitle:@"Saved Items"];
     [self verifyThatListOfCellsVisible];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Sorting button
@@ -133,15 +135,16 @@
 //    > User can sorted by Modified Date
 - (void)testThatSortButtonWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openSavedItemsSection];
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
 
-    [self selectSortBy:@"Name" inSectionWithTitle:@"Saved Items"];
-    [self selectSortBy:@"Creation Date" inSectionWithTitle:@"Library"];
-    [self selectSortBy:@"Modified Date" inSectionWithTitle:@"Library"];
+    // TODO: improve this test
 
-    [self deleteTestReportInHTMLFormat];
+    [self selectSortBy:@"Name"
+    inSectionWithTitle:@"Saved Items"];
+    [self selectSortBy:@"Creation Date"
+    inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Modified Date"
+    inSectionWithTitle:@"Library"];
 }
 
 //Filter button
@@ -160,16 +163,26 @@
 //    > User can see only XLS-files
 - (void)testThatFilterButtonWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openSavedItemsSection];
-    
-    [self selectFilterBy:@"All" inSectionWithTitle:@"Saved Items"];
-    [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
-    [self selectFilterBy:@"PDF" inSectionWithTitle:@"Saved Items"];
-    [self selectFilterBy:@"XLS" inSectionWithTitle:@"Saved Items"];
-    
-    [self deleteTestReportInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
+
+    // TODO: improve this test
+    // add saving into pdf and xls formats
+
+    [self selectFilterBy:@"All"
+      inSectionWithTitle:@"Saved Items"];
+    // Verify 3 cells visible
+
+    [self selectFilterBy:@"HTML"
+      inSectionWithTitle:@"Saved Items"];
+    // Verify 1 cell for html file visible
+
+    [self selectFilterBy:@"PDF"
+      inSectionWithTitle:@"Saved Items"];
+    // Verify 1 cell for pdf file visible
+
+    [self selectFilterBy:@"XLS"
+      inSectionWithTitle:@"Saved Items"];
+    // Verify 1 cell for xls file visible
 }
 
 //Appropriate icon for HTML-file
@@ -185,13 +198,8 @@
 //    > User should see Appropriate icon for HTML-file
 - (void)testThatHTMLFileHasCorrectIcon
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openSavedItemsSection];
-    
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
     [self verifyThatCellHasIconForHTMLFormat];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //File extension for HTML-file
@@ -207,13 +215,8 @@
 //    > User should see file extension for HTML-file as .html
 - (void)testThatHTMLFileHasCorrectFormat
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openSavedItemsSection];
-    
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
     [self verifyThatTestSavedItemHasHTMLFormat];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Appropriate icon for PDF-file
@@ -229,13 +232,8 @@
 //    > User should see Appropriate icon for PDF-file
 - (void)testThatPDFfileHasCorrectIcon
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInPDFFormat];
-    [self openSavedItemsSection];
-
+    [self saveTestReportInPDFFormatNeedOpen:NO];
     [self verifyThatCellHasIconForPDFFormat];
-
-    [self deleteTestReportInPDFFormat];
 }
 
 //File extension for PDF-file
@@ -251,13 +249,8 @@
 //    > User should see file extension for PDF-file as .pdf
 - (void)testThatPDFfileHasCorrectFormat
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInPDFFormat];
-    [self openSavedItemsSection];
-    
+    [self saveTestReportInPDFFormatNeedOpen:NO];
     [self verifyThatTestSavedItemHasPDFFormat];
-    
-    [self deleteTestReportInPDFFormat];
 }
 
 //Pull down to refresh all items
@@ -267,16 +260,10 @@
 //    > Saved Items screen should refresh
 - (void)testThatPullDownToRefreshWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self saveTestReportInPDFFormat];
-    
-    [self openSavedItemsSection];
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
+    [self saveTestReportInPDFFormatNeedOpen:NO];
     
     [self performPullDownToRefresh];
-    
-    [self deleteTestReportInHTMLFormat];
-    [self deleteTestReportInPDFFormat];
 }
 
 //Scrolling of the list/grid
@@ -287,13 +274,9 @@
 //    > Scroll should work as expected
 - (void)testThatScrollingWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openSavedItemsSection];
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
     
     [self performSwipeToScrool];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //User should see only saved files which he/she saved they

@@ -24,7 +24,7 @@ extern NSString *const kTestReportWithSingleSelectedControlName;
 - (void)openReportFiltersPage;
 - (void)closeReportFiltersPage;
 
-- (void)openSaveReportPage;
+- (void)openSavingReportPage;
 - (void)closeSaveReportPage;
 
 - (void)saveTestReportWithName:(NSString *)name

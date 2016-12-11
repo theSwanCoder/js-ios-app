@@ -46,7 +46,7 @@
     [self selectFilterBy:@"Reports"
       inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
 
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self closeInfoPageForTestReport];
@@ -61,7 +61,7 @@
     [self selectFilterBy:@"Dashboards"
       inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
 
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self closeInfoPageForTestDashboard];
@@ -100,7 +100,7 @@
     [self selectFilterBy:@"Reports"
       inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestReportHasBackButton];
@@ -116,7 +116,7 @@
     [self selectFilterBy:@"Dashboards"
       inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestDashboardHasBackButton];
@@ -155,7 +155,7 @@
     [self selectFilterBy:@"Reports"
       inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestReportHasCorrectTitle];
@@ -171,7 +171,7 @@
     [self selectFilterBy:@"Dashboards"
       inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestDashboardHasCorrectTitle];
@@ -228,7 +228,7 @@
     [self selectFilterBy:@"Reports"
       inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestReportContainsCorrectData];
@@ -262,7 +262,7 @@
     [self selectFilterBy:@"Dashboards"
       inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestDashboardContainsCorrectData];
@@ -419,7 +419,7 @@
     [self selectFilterBy:@"Reports"
       inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self unmarkFromFavoritesFromMenuActions];
@@ -436,7 +436,7 @@
     [self selectFilterBy:@"Dashboards"
       inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self unmarkFromFavoritesFromMenuActions];
@@ -478,7 +478,7 @@
     [self selectFilterBy:@"Reports"
       inSectionWithTitle:@"Library"];
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self openTestReportFromInfoPage];
@@ -494,7 +494,7 @@
     [self selectFilterBy:@"Dashboards"
       inSectionWithTitle:@"Library"];
     [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self openTestDashboardFromInfoPage];

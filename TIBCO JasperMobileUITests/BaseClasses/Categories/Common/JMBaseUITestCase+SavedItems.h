@@ -10,7 +10,7 @@
 
 - (void)givenThatSavedItemsEmpty;
 
-- (void)deleteAllExportedResourcesIfNeed;
+- (void)deleteAllSavedItemsIfNeed;
 - (void)deleteSavedItemWithName:(NSString *)itemName
                          format:(NSString *)format;
 - (void)verifyExistSavedItemWithName:(NSString *)itemName
@@ -18,24 +18,25 @@
 
 - (void)verifyThatReportDidSaveWithReportName:(NSString *)reportName format:(NSString *)format;
 
-- (void)saveTestReportInHTMLFormat;
+- (void)saveTestReportInHTMLFormatNeedOpen:(BOOL)needOpen;
+- (void)openTestSavedItemInHTMLFormat;
 - (void)deleteTestReportInHTMLFormat;
 
-- (void)saveTestReportInPDFFormat;
+- (void)saveTestReportInPDFFormatNeedOpen:(BOOL)needOpen;
+- (void)openTestSavedItemInPDFFormat;
 - (void)deleteTestReportInPDFFormat;
 
-- (void)saveTestReportInXLSFormat;
+- (void)saveTestReportInXLSFormatNeedOpen:(BOOL)needOpen;
+- (void)openTestSavedItemInXLSFormat;
 - (void)deleteTestReportInXLSFormat;
 
-- (void)openTestSavedItemInHTMLFormat;
-- (void)openTestSavedItemInPDFFormat;
 - (void)openTestSavedItemFromInfoPage;
 - (void)closeTestSavedItem;
 
-- (void)showInfoPageTestSavedItemFromViewer;
+- (void)openInfoPageTestSavedItemFromViewer;
 - (void)closeInfoPageTestSavedItemFromViewer;
 
-- (void)showInfoPageTestSavedItemFromSavedItemsSection;
+- (void)openInfoPageTestSavedItemFromSavedItemsSection;
 - (void)closeInfoPageTestSavedItemFromSavedItemsSection;
 
 - (void)markSavedAsFavoriteFromInfoPage;
