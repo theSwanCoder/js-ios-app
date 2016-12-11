@@ -113,15 +113,16 @@ static const NSInteger kSplashViewTag = 100;
     [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:^(BOOL isSessionRestored) {
 
         LoginCompletionBlock loginCompletionBlock = ^{
+#ifdef __RELEASE__
             // Configure Appirater
             [Appirater setAppId:@"467317446"];
             [Appirater setDaysUntilPrompt:0];
             [Appirater setUsesUntilPrompt:5];
             [Appirater setTimeBeforeReminding:2];
             [Appirater setDebug:NO];
-            [Appirater appLaunched:YES];
 
             [self showOnboardIntroIfNeeded];
+#endif
         };
 
         if (isSessionRestored) {

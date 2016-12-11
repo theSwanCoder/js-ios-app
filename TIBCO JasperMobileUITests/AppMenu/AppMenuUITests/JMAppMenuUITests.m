@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMUITestServerProfileManager.h"
 #import "JMUITestServerProfile.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMAppMenuUITests
 
@@ -75,15 +76,11 @@
     // Check About item
     [self selectAbout];
     // Close About page
-    XCUIElement *doneButton = [self waitDoneButtonWithTimeout:kUITestsBaseTimeout];
-    [doneButton tap];
+    [self tapDoneButtonOnNavBarWithTitle:nil];
 
     // Check Settings item
     [self selectSettings];
-    // Close Settings page
-    XCUIElement *cancelButton = [self waitButtonWithTitle:@"Cancel"
-                                                  timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self closeSettingsPage];
 }
 
 - (void)testThatServerProfileInfoIsAppeared
@@ -93,19 +90,13 @@
 
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
 
-    [self waitStaticTextWithText:testServerProfile.username
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyLabelWithTextExist:testServerProfile.username];
 
     NSString *fullServerNameString = [NSString stringWithFormat:@"%@ (v.%@)", testServerProfile.name, @"6.3.0"];
-    [self waitStaticTextWithText:fullServerNameString
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyLabelWithTextExist:fullServerNameString];
 
     if (testServerProfile.organization.length > 0) {
-        [self waitStaticTextWithText:testServerProfile.organization
-                       parentElement:nil
-                             timeout:kUITestsBaseTimeout];
+        [self verifyLabelWithTextExist:testServerProfile.organization];
     }
 
     [self hideSideMenuInSectionWithName:@"Library"];
@@ -133,4 +124,20 @@
         XCTFail(@"'Main' window doesn't exist.");
     }
 }
+
+- (void)verifyLabelWithTextExist:(NSString *)labelText
+{
+    XCUIElement *usernameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                          text:labelText
+                                                       timeout:kUITestsBaseTimeout];
+    if (!usernameLabel.exists) {
+        XCTFail(@"Label with text: %@, wasn't fount", labelText);
+    }
+}
+
+- (void)closeSettingsPage
+{
+    [self tapCancelButtonOnNavBarWithTitle:nil];
+}
+
 @end

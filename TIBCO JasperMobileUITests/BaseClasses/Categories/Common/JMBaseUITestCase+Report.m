@@ -12,6 +12,9 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+TextFields.h"
+#import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Search.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";
@@ -30,46 +33,37 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self selectActionWithName:@"Run"];
 
     [self givenLoadingPopupNotVisible];
-    [self givenLoadingPopupNotVisible];
 
     [self tryBackToPreviousPage];
 }
 
 - (void)openTestReportWithMandatoryFiltersPage
 {
-    [self givenThatLibraryPageOnScreen];
     [self givenThatReportCellsOnScreen];
 
     [self tryOpenTestReportWithMandatoryFilters];
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
     [self givenLoadingPopupNotVisible];
-    [self givenLoadingPopupNotVisible];
 }
 
 - (void)openTestReportWithSingleSelectedControlPage
 {
-    [self givenThatLibraryPageOnScreen];
     [self givenThatReportCellsOnScreen];
     
     [self tryOpenTestReportWithSingleSelectedControl];
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
     [self givenLoadingPopupNotVisible];
-    [self givenLoadingPopupNotVisible];
 }
 
 - (void)openTestReportPageWithWaitingFinish:(BOOL)waitingFinish
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatReportCellsOnScreen];
-
     [self tryOpenTestReport];
 
     if (waitingFinish) {
         // We can have two times when loading up and down
         // first time loading 'report info' and second one - loading report
-        [self givenLoadingPopupNotVisible];
         [self givenLoadingPopupNotVisible];
     }
 }
@@ -81,12 +75,13 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)cancelOpeningTestReportPage
 {
-    // TODO: the same code is for dashboard - may be make it general?
-    XCUIElement *loadingPopup = [self waitElementWithAccessibilityId:@"JMCancelRequestPopupAccessibilityId"
-                                                             timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self findButtonWithTitle:@"Cancel"
-                                            parentElement:loadingPopup];
-    [cancelButton tap];
+    // TODO: the same code is for dashboard - may be make it common?
+    XCUIElement *loadingPopup = [self waitElementMatchingType:XCUIElementTypeOther
+                                                   identifier:@"JMCancelRequestPopupAccessibilityId"
+                                                      timeout:kUITestsBaseTimeout];;
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
+              parentElement:loadingPopup
+                shouldCheck:YES];
 }
 
 - (void)openReportFiltersPage
@@ -104,7 +99,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 #pragma mark - Saving
 
-- (void)openSaveReportPage
+- (void)openSavingReportPage
 {
     [self openMenuActions];
     [self selectActionWithName:@"Save"];
@@ -119,17 +114,20 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 {
     // TODO: may be move into separate category for saved report
 
+    // Enter name of saving item
     XCUIElement *textField = [self findNameFieldOnSaveReportPage];
     [self enterText:name
       intoTextField:textField];
 
+    // Select format
     XCUIElement *htmlCell = [self findTableViewCellWithAccessibilityId:nil
                                                  containsLabelWithText:format];
     [htmlCell tap];
 
-    XCUIElement *saveButton = [self waitButtonWithAccessibilityId:@"Save"
-                                                          timeout:kUITestsBaseTimeout];
-    [saveButton tap];
+    // Perform saving
+    [self tapButtonWithText:@"Save"
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 - (XCUIElement *)findNameFieldOnSaveReportPage
@@ -145,24 +143,24 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 #pragma mark - Helpers
 
+- (void)tryOpenTestReport
+{
+    XCUIElement *testCell = [self searchTestReportInSectionWithName:@"Library"];
+    [testCell tap];
+}
+
 - (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName
 {
-    [self searchResourceWithName:kTestReportName
-               inSectionWithName:sectionName];
+    [self performSearchResourceWithName:kTestReportName
+                      inSectionWithName:sectionName];
 
-    [self givenThatCellsAreVisible];
+    // TODO: replace with real check 'loading' message
+    sleep(1);
+
+    [self verifyThatCollectionViewContainsCells];
 
     XCUIElement *testCell = [self testReportCell];
     return testCell;
-}
-
-- (void)tryOpenTestReport
-{
-    [self searchTestReportInSectionWithName:@"Library"];
-    [self givenThatCellsAreVisible];
-
-    XCUIElement *testCell = [self testReportCell];
-    [testCell tap];
 }
 
 - (XCUIElement *)testReportCell
@@ -171,7 +169,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
                                            containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
                                                                   labelText:kTestReportName];
     if (!testCell) {
-        XCTFail(@"There isn't test cell");
+        XCTFail(@"Test cell wasn't found");
     }
     return testCell;
 }
@@ -179,7 +177,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)tryOpenTestReportWithMandatoryFilters
 {
     [self searchTestReportWithMandatoryFilters];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 
     XCUIElement *testCell = [self testReportWithMandatoryFiltersCell];
     [testCell tap];
@@ -188,8 +186,8 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)searchTestReportWithMandatoryFilters
 {
     // TODO: replace with specific element - JMLibraryPageAccessibilityId
-    [self searchResourceWithName:kTestReportWithMandatoryFiltersName
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self performSearchResourceWithName:kTestReportWithMandatoryFiltersName
+           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 }
 
 - (XCUIElement *)testReportWithMandatoryFiltersCell
@@ -206,7 +204,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)tryOpenTestReportWithSingleSelectedControl
 {
     [self searchTestReportWithSingleSelectedControl];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     
     XCUIElement *testCell = [self testReportWithSingleSelectedControl];
     [testCell tap];
@@ -215,8 +213,8 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)searchTestReportWithSingleSelectedControl
 {
     // TODO: replace with specific element - JMLibraryPageAccessibilityId
-    [self searchResourceWithName:kTestReportWithSingleSelectedControlName
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self performSearchResourceWithName:kTestReportWithSingleSelectedControlName
+           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
 }
 
 - (XCUIElement *)testReportWithSingleSelectedControl
@@ -242,12 +240,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)closePrintReportPage
 {
     // verify that 'print report' page is on the screen
-    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
-                                                        timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:printNavBar
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self tapCancelButtonOnNavBarWithTitle:@"Printer Options"];
 }
 
 #pragma mark - Verifying
@@ -260,27 +253,42 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)verifyThatReportInfoPageContainsCorrectDataForReportWithName:(NSString *)reportName
 {
     XCUIElement *infoPage = self.application.otherElements[@"JMReportInfoViewControllerAccessibilityId"];
-    [self waitStaticTextWithAccessibilityId:@"Name"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Description"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"URI"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Type"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Version"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Creation Date"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Modified Date"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Name"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Description"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"URI"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Type"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Version"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Creation Date"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Modified Date"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+}
+
+- (void)givenThatReportCellsOnScreen
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
 }
 
 @end

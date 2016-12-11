@@ -10,6 +10,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMInputControlPageUITests
 
@@ -21,6 +22,12 @@
     [super tearDown];
 }
 
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 7;
+}
 
 #pragma mark - Tests
 
@@ -164,10 +171,11 @@
 
 - (void)stopEditFilterWithMultiItems
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"Low Fat"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat"
+                                                   timeout:kUITestsBaseTimeout];
+    [self tapButtonWithText:@"Filters"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)startEditFilterWithSingleSelectedItem
@@ -179,10 +187,11 @@
 
 - (void)stopEditFilterWithSingleSelectedItem
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"Country"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Country"
+                                                   timeout:kUITestsBaseTimeout];
+    [self tapButtonWithText:@"Filters"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)trySearchCorrectValue
@@ -211,16 +220,12 @@
 
 - (void)verifyThatInputControlsPageForMultiSelectHasCorrectSubtitle
 {
-    [self waitStaticTextWithAccessibilityId:@"Select one or more items" 
-                              parentElement:nil 
-                                    timeout:kUITestsBaseTimeout];
+    [self verifyStaticTextExistsWithText:@"Select one or more items"];
 }
 
 - (void)verifyThatInputControlsPageForSingleSelectHasCorrectSubtitle
 {
-    [self waitStaticTextWithAccessibilityId:@"Select a single item" 
-                              parentElement:nil 
-                                    timeout:kUITestsBaseTimeout];
+    [self verifyStaticTextExistsWithText:@"Select a single item"];
 }
 
 - (void)verifyCorrectSearchResult
@@ -231,16 +236,27 @@
 
 - (void)verifyInCorrectSearchResult
 {
-    [self waitStaticTextWithAccessibilityId:@"No Results." 
-                              parentElement:nil 
-                                    timeout:kUITestsBaseTimeout];
+    [self verifyStaticTextExistsWithText:@"No Results."];
 }
 
 - (void)verifyThatInputControlPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Filters"
-                          onNavBarWithLabel:@"Low Fat"
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat"
+                                                   timeout:kUITestsBaseTimeout];
+    [self verifyButtonExistWithText:@"Filters"
+                      parentElement:navBar];
+}
+
+#pragma mark - Helpers
+
+- (void)verifyStaticTextExistsWithText:(NSString *)text
+{
+    XCUIElement *staticText = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                       text:text
+                                                    timeout:kUITestsBaseTimeout];
+    if (!staticText.exists) {
+        XCTFail(@"Static text wasn't found");
+    }
 }
 
 @end

@@ -505,45 +505,20 @@
     
 - (void)printDashboard
 {
+    JMDashboardViewerState currentState = [self stateManager].state;
+    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
     self.configurator.printManager.controller = self;
-    
-    
     if (self.restClient.serverInfo.versionAsFloat < kJS_SERVER_VERSION_CODE_JADE_6_2_0) {
         UIImage *renderedImage = [[self contentView] renderedImage];
         self.configurator.printManager.prepareBlock = (id)^{
             return renderedImage;
         };
-        [self.configurator.printManager printResource:self.resource
-                                           completion:nil];
-    } else {
-        JSDashboardSaver *dashboardSaver = [[JSDashboardSaver alloc] initWithDashboard:self.dashboard restClient:self.restClient];
-        [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:^{
-            [dashboardSaver cancel];
-        }];
-        
-        NSString *dashboardName = [[NSUUID UUID] UUIDString];
-        [dashboardSaver saveDashboardWithName:dashboardName
-                                       format:kJS_CONTENT_TYPE_PDF
-                                   completion:^(NSURL * _Nullable savedDashboardFolderURL, NSError * _Nullable error) {
-                                       [JMCancelRequestPopup dismiss];
-                                       if (error) {
-                                           if (error.code == JSSessionExpiredErrorCode) {
-                                               [JMUtils showLoginViewAnimated:YES completion:nil];
-                                           } else {
-                                               [JMUtils presentAlertControllerWithError:error completion:nil];
-                                           }
-                                       } else {
-                                           NSString *fullResourceName = [dashboardName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
-                                           NSURL *resourceURL = [savedDashboardFolderURL URLByAppendingPathComponent:fullResourceName];
-                                           
-                                           self.configurator.printManager.prepareBlock = (id)^{
-                                               return resourceURL;
-                                           };
-                                           [self.configurator.printManager printResource:self.resource
-                                                                              completion:nil];
-                                       }
-                                   }];
     }
+    [self.configurator.printManager printResource:self.resource
+                             prepearingCompletion:^{
+                                 [[self stateManager] setupPageForState:currentState];
+                             }
+            printCompletion:nil];
 }
     
 #pragma mark - JMDashboardLoaderDelegate

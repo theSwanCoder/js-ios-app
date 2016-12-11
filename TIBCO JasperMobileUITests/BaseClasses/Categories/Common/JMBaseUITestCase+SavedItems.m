@@ -10,21 +10,20 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (SavedItems)
 
 - (void)givenThatSavedItemsEmpty
 {
-    [self openSavedItemsSection];
     [self switchViewFromGridToListInSectionWithTitle:@"Saved Items"];
     [self selectFilterBy:@"All"
       inSectionWithTitle:@"Saved Items"];
-    [self deleteAllExportedResourcesIfNeed];
-    [self openLibrarySection];
+    [self deleteAllSavedItemsIfNeed];
 }
 
-- (void)deleteAllExportedResourcesIfNeed
+- (void)deleteAllSavedItemsIfNeed
 {
     NSInteger countOfSavedItems = [self countCellsWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"];
     if (countOfSavedItems > 0) {
@@ -51,32 +50,49 @@
 - (void)verifyThatReportDidSaveWithReportName:(NSString *)reportName
                                        format:(NSString *)format
 {
-    [self waitNotificationOnMenuButtonWithTimeout:kUITestsBaseTimeout];
-    [self openSavedItemsSection];
+    [self waitNotificationOnMenuButtonWithTimeout:kUITestsResourceWaitingTimeout];
+    [self openSavedItemsSectionIfNeed];
     [self verifyExistSavedItemWithName:reportName
                                 format:format];
 }
 
-- (void)saveTestReportInHTMLFormat
+#pragma mark - HTML
+- (void)saveTestReportInHTMLFormatNeedOpen:(BOOL)needOpen
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatReportCellsOnScreen];
-    [self openTestReportPage];
-    [self openSaveReportPage];
-
-    [self saveTestReportWithName:kTestReportName
-                          format:@"html"];
-
-    [self closeTestReportPage];
-
+    [self openLibrarySectionIfNeed];
+    [self saveTestReportInHTMLFormat];
     [self verifyThatReportDidSaveWithReportName:kTestReportName
                                          format:@"html"];
-    [self openLibrarySection];
+    if (needOpen) {
+        [self openTestSavedItemInHTMLFormat];
+    }
+}
+
+- (void)saveTestReportInHTMLFormat
+{
+    [self openTestReportPage];
+    [self openSavingReportPage];
+    [self saveTestReportWithName:kTestReportName
+                          format:@"html"];
+    [self closeTestReportPage];
+}
+
+- (void)openTestSavedItemInHTMLFormat
+{
+    [self openSavedItemsSectionIfNeed];
+
+    [self selectFilterBy:@"HTML"
+      inSectionWithTitle:@"Saved Items"];
+
+    XCUIElement *testItem = [self savedItemWithName:kTestReportName
+                                             format:@"html"];
+    [testItem tap];
+    [self givenLoadingPopupNotVisible];
 }
 
 - (void)deleteTestReportInHTMLFormat
 {
-    [self openSavedItemsSection];
+    [self openSavedItemsSectionIfNeed];
     
     [self selectFilterBy:@"HTML"
       inSectionWithTitle:@"Saved Items"];
@@ -85,27 +101,47 @@
     
     [self deleteSavedItemWithName:kTestReportName
                            format:@"html"];
-    [self openLibrarySection];
+    [self openLibrarySectionIfNeed];
+}
+
+#pragma mark - PDF
+
+- (void)saveTestReportInPDFFormatNeedOpen:(BOOL)needOpen
+{
+    [self openLibrarySectionIfNeed];
+    [self saveTestReportInPDFFormat];
+    [self verifyThatReportDidSaveWithReportName:kTestReportName
+                                         format:@"pdf"];
+    if (needOpen) {
+        [self openTestSavedItemInPDFFormat];
+    }
 }
 
 - (void)saveTestReportInPDFFormat
 {
     [self openTestReportPage];
-    [self openSaveReportPage];
-
+    [self openSavingReportPage];
     [self saveTestReportWithName:kTestReportName
                           format:@"pdf"];
-
     [self closeTestReportPage];
+}
 
-    [self verifyThatReportDidSaveWithReportName:kTestReportName
-                                         format:@"pdf"];
-    [self openLibrarySection];
+- (void)openTestSavedItemInPDFFormat
+{
+    [self openSavedItemsSectionIfNeed];
+
+    [self selectFilterBy:@"PDF"
+      inSectionWithTitle:@"Saved Items"];
+
+    XCUIElement *testItem = [self savedItemWithName:kTestReportName
+                                             format:@"pdf"];
+    [testItem tap];
+    [self givenLoadingPopupNotVisible];
 }
 
 - (void)deleteTestReportInPDFFormat
 {
-    [self openSavedItemsSection];
+    [self openSavedItemsSectionIfNeed];
     
     [self selectFilterBy:@"PDF"
       inSectionWithTitle:@"Saved Items"];
@@ -114,60 +150,59 @@
     
     [self deleteSavedItemWithName:kTestReportName
                            format:@"pdf"];
-    [self openLibrarySection];
+    [self openLibrarySectionIfNeed];
+}
+
+#pragma mark - XLS
+
+- (void)saveTestReportInXLSFormatNeedOpen:(BOOL)needOpen
+{
+    [self openLibrarySectionIfNeed];
+    [self saveTestReportInXLSFormat];
+    [self verifyThatReportDidSaveWithReportName:kTestReportName
+                                         format:@"xls"];
+    if (needOpen) {
+        [self openTestSavedItemInXLSFormat];
+    }
 }
 
 - (void)saveTestReportInXLSFormat
 {
     [self openTestReportPage];
-    [self openSaveReportPage];
+    [self openSavingReportPage];
 
     [self saveTestReportWithName:kTestReportName
                           format:@"xls"];
 
     [self closeTestReportPage];
+}
 
-    [self verifyThatReportDidSaveWithReportName:kTestReportName
-                                         format:@"xls"];
-    [self openLibrarySection];
+- (void)openTestSavedItemInXLSFormat
+{
+    [self openSavedItemsSectionIfNeed];
+
+    [self selectFilterBy:@"XLS"
+      inSectionWithTitle:@"Saved Items"];
+
+    XCUIElement *testItem = [self savedItemWithName:kTestReportName
+                                             format:@"xls"];
+    [testItem tap];
+    [self givenLoadingPopupNotVisible];
 }
 
 - (void)deleteTestReportInXLSFormat
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatReportCellsOnScreen];
-    [self openSavedItemsSection];
+    [self openSavedItemsSectionIfNeed];
 
-    [self selectFilterBy:@"XLS" inSectionWithTitle:@"Saved Items"];
+    [self selectFilterBy:@"XLS"
+      inSectionWithTitle:@"Saved Items"];
     
     [self deleteSavedItemWithName:kTestReportName
                            format:@"xls"];
-    [self openLibrarySection];
+    [self openLibrarySectionIfNeed];
 }
 
-- (void)openTestSavedItemInHTMLFormat
-{
-    [self openSavedItemsSection];
-    
-    [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
-    
-    XCUIElement *testItem = [self savedItemWithName:kTestReportName
-                                              format:@"html"];
-    [testItem tap];
-    [self givenLoadingPopupNotVisible];
-}
-
-- (void)openTestSavedItemInPDFFormat
-{
-    [self openSavedItemsSection];
-    
-    [self selectFilterBy:@"PDF" inSectionWithTitle:@"Saved Items"];
-    
-    XCUIElement *testItem = [self savedItemWithName:kTestReportName
-                                             format:@"pdf"];
-    [testItem tap];
-    [self givenLoadingPopupNotVisible];
-}
+#pragma mark - Common
 
 - (void)openTestSavedItemFromInfoPage
 {
@@ -180,7 +215,7 @@
     [self tryBackToPreviousPage];
 }
 
-- (void)showInfoPageTestSavedItemFromViewer
+- (void)openInfoPageTestSavedItemFromViewer
 {
     [self openInfoPageFromMenuActions];
 }
@@ -190,9 +225,9 @@
     [self closeInfoPageFromMenuActions];
 }
 
-- (void)showInfoPageTestSavedItemFromSavedItemsSection
+- (void)openInfoPageTestSavedItemFromSavedItemsSection
 {
-    [self openSavedItemsSection];
+    [self openSavedItemsSectionIfNeed];
     
     [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
     
@@ -210,20 +245,18 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestReportName
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"make favorite item"
-                                                        parentElement:navBar
-                                                              timeout:kUITestsBaseTimeout];
-    [favoriteButton tap];
+    [self tapButtonWithText:@"make favorite item"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)unmarkSavedAsFavoriteFromInfoPage
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestReportName
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"favorited item"
-                                                        parentElement:navBar
-                                                              timeout:kUITestsBaseTimeout];
-    [favoriteButton tap];
+    [self tapButtonWithText:@"favorited item"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)markTestSavedItemAsFavoriteFromMenuOnInfoPage
@@ -258,7 +291,7 @@
                                                   forIndex:0];
     [self deleteSavedItem:firstItem];
 
-    [self deleteAllExportedResourcesIfNeed];
+    [self deleteAllSavedItemsIfNeed];
 }
 
 - (void)deleteSavedItem:(XCUIElement *)savedItem
@@ -273,9 +306,9 @@
 
 - (void)confirmDeleteAction
 {
-    XCUIElement *okButton = [self waitButtonWithAccessibilityId:@"OK"
-                                                        timeout:kUITestsBaseTimeout];
-    [okButton tap];
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 - (XCUIElement *)savedItemWithName:(NSString *)itemName

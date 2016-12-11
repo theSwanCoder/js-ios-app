@@ -11,18 +11,19 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (Favorites)
 
 - (void)givenThatFavoritesSectionIsEmpty
 {
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     [self selectFilterBy:@"All"
       inSectionWithTitle:@"Favorites"];
     [self switchViewFromGridToListInSectionWithTitle:@"Favorites"];
     [self unmarkAllFavoritesResourcesIfNeed];
-    [self openLibrarySection];
+    [self openLibrarySectionIfNeed];
 }
 
 - (void)unmarkAllFavoritesResourcesIfNeed
@@ -85,18 +86,16 @@
 
 - (void)markAsFavoriteFromNavigationBar:(XCUIElement *)navigationBar
 {
-    XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"make favorite item"
-                                                        parentElement:navigationBar
-                                                              timeout:kUITestsBaseTimeout];
-    [favoriteButton tap];
+    [self tapButtonWithText:@"make favorite item"
+              parentElement:navigationBar
+                shouldCheck:YES];
 }
 
 - (void)unmarkFromFavoritesFromNavigationBar:(XCUIElement *)navigationBar
 {
-    XCUIElement *favoriteButton = [self waitButtonWithAccessibilityId:@"favorited item"
-                                                        parentElement:navigationBar
-                                                              timeout:kUITestsBaseTimeout];
-    [favoriteButton tap];
+    [self tapButtonWithText:@"favorited item"
+              parentElement:navigationBar
+                shouldCheck:YES];
 }
 
 #pragma mark - Helpers

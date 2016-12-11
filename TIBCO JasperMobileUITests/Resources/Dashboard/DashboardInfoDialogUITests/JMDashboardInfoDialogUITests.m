@@ -100,27 +100,34 @@
 - (void)verifyInfoPageContainsCorrectInfo
 {
     XCUIElement *infoPage = self.application.otherElements[@"JMDashboardInfoViewControllerAccessibilityId"];
-    [self waitStaticTextWithAccessibilityId:@"Name"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Description"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"URI"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Type"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Version"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Creation Date"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
-    [self waitStaticTextWithAccessibilityId:@"Modified Date"
-                              parentElement:infoPage
-                                    timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Name"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Description"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"URI"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Type"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Version"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Creation Date"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"Modified Date"
+                    parentElement:infoPage
+                          timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyInfoPageHasCorrectTitle

@@ -24,4 +24,6 @@ extern NSString *const kTestDashboardName;
 // Verifying
 - (void)verifyThatDashboardInfoPageOnScreen;
 - (void)verifyThatDashboardInfoPageContainsCorrectDataForDashboardWithName:(NSString *)dashboardName;
+
+- (void)givenThatDashboardCellsOnScreen;
 @end

@@ -7,6 +7,8 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+Dashboard.h"
 
 
 @implementation JMLibraryPageUITests (Helpers)

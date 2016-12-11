@@ -5,7 +5,7 @@
 
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
-#import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (SideMenu)
@@ -28,12 +28,11 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:nil
                                                    timeout:timeout];
-    [self waitButtonWithAccessibilityId:@"menu icon note"
-                          parentElement:navBar
-                                timeout:timeout];
+    [self verifyButtonExistWithId:@"menu icon note"
+                    parentElement:navBar];
 }
 
-- (void)openLibrarySection
+- (void)openLibrarySectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Library"];
     if (navigationBar.exists) {
@@ -43,7 +42,7 @@
           fromSectionWithName:nil];
 }
 
-- (void)openRepositorySection
+- (void)openRepositorySectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Repository"];
     if (navigationBar.exists) {
@@ -53,7 +52,7 @@
           fromSectionWithName:nil];
 }
 
-- (void)openRecentlyViewedSection
+- (void)openRecentlyViewedSectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Recently Viewed"];
     if (navigationBar.exists) {
@@ -63,7 +62,7 @@
           fromSectionWithName:nil];
 }
 
-- (void)openSavedItemsSection
+- (void)openSavedItemsSectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Saved Items"];
     if (navigationBar.exists) {
@@ -73,7 +72,7 @@
           fromSectionWithName:nil];
 }
 
-- (void)openFavoritesSection
+- (void)openFavoritesSectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Favorites"];
     if (navigationBar.exists) {
@@ -83,7 +82,7 @@
           fromSectionWithName:nil];
 }
 
-- (void)openSchedulesSection
+- (void)openSchedulesSectionIfNeed
 {
     XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Schedules"];
     if (navigationBar.exists) {
@@ -119,7 +118,12 @@
 
 - (XCUIElement *)sideMenuElement
 {
-    XCUIElement *menuView = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];
+    XCUIElement *menuView = [self waitElementMatchingType:XCUIElementTypeOther
+                                               identifier:@"JMSideApplicationMenuAccessibilityId"
+                                                  timeout:0];
+    if (!menuView.exists) {
+        XCTFail(@"Menu view wasn't found");
+    }
     return menuView;
 }
 
@@ -135,23 +139,26 @@
 
 - (void)selectMenuItemForPageWithName:(NSString *)pageName
 {
-    XCUIElement *pageMenuItem = [self findMenuItemForPageName:pageName];
+    XCUIElement *pageMenuItem = [self findSideMenuItemForActionName:pageName];
     if (!pageMenuItem.exists) {
         NSString *pageNameWithNote = [NSString stringWithFormat:@"%@ note", pageName];
-        pageMenuItem = [self findMenuItemForPageName:pageNameWithNote];
+        pageMenuItem = [self findSideMenuItemForActionName:pageNameWithNote];
     }
     [pageMenuItem tap];
 }
 
-- (XCUIElement *)findMenuItemForPageName:(NSString *)pageName
+- (XCUIElement *)findSideMenuItemForActionName:(NSString *)pageName
 {
-    XCUIElement *menuView = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                                         timeout:kUITestsBaseTimeout];
+    XCUIElement *menuView = [self waitElementMatchingType:XCUIElementTypeOther
+                                               identifier:@"JMSideApplicationMenuAccessibilityId"
+                                                  timeout:kUITestsBaseTimeout];
     XCUIElement *pageMenuItem;
     NSArray *allMenuItems = menuView.cells.allElementsBoundByAccessibilityElement;
     for (XCUIElement *menuItem in allMenuItems) {
-        XCUIElement *label = [self findStaticTextWithText:pageName
-                                            parentElement:menuItem];
+        XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                      text:pageName
+                                             parentElement:menuItem
+                                                   timeout:0];;
         if (label.exists) {
             pageMenuItem = menuItem;
             break;
@@ -162,13 +169,21 @@
 
 - (void)givenSideMenuVisible
 {
-    [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
+    XCUIElement *menuView = [self waitElementMatchingType:XCUIElementTypeOther
+                                               identifier:@"JMSideApplicationMenuAccessibilityId"
+                                                  timeout:kUITestsBaseTimeout];
+    if (!menuView.exists) {
+        XCTFail(@"Side menu should be visible");
+    }
 }
 
 - (void)givenSideMenuNotVisible
 {
-    XCUIElement *sideMenu = [self findElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"];
+    XCUIElement *sideMenu = [self waitElementMatchingType:XCUIElementTypeOther
+                                               identifier:@"JMSideApplicationMenuAccessibilityId"
+                                            parentElement:nil
+                                              shouldExist:NO
+                                                  timeout:kUITestsBaseTimeout];
     if (sideMenu.exists) {
         XCTFail(@"Side menu should not be visible");
     }
@@ -176,8 +191,12 @@
 
 - (void)tryTapSideApplicationMenuInSectionWithName:(NSString *)sectionName
 {
-    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:sectionName];
-    [menuButton tap];
+    XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:sectionName];
+    if (menuButton.exists) {
+        [menuButton tap];
+    } else {
+        XCTFail(@"Menu button wasn't found");
+    }
 }
 
 @end

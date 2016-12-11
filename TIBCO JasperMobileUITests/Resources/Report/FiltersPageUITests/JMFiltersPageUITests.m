@@ -10,6 +10,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMFiltersPageUITests
 
@@ -19,6 +20,13 @@
     [self closeTestReportPage];
 
     [super tearDown];
+}
+
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 9;
 }
 
 #pragma mark - Tests
@@ -62,10 +70,10 @@
 {
     [self openTestReportPage];
     [self openReportFiltersPage];
-    
-    XCUIElement *runButton = [self waitButtonWithAccessibilityId:@"Run Report"
-                                                         timeout:kUITestsBaseTimeout];
-    [runButton tap];
+
+    [self tapButtonWithText:@"Run Report"
+              parentElement:nil
+                shouldCheck:YES];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -185,10 +193,11 @@
 
 - (void)stopEditMandatoryFilter
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"ProductFamily"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"ProductFamily"
+                                                   timeout:kUITestsBaseTimeout];
+    [self tapButtonWithText:@"Filters"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)unmarkAllControlItemsForMandatoryFilter
@@ -215,10 +224,11 @@
 
 - (void)stopEditFilterWithMultiItems
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"Low Fat"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat"
+                                                   timeout:kUITestsBaseTimeout];
+    [self tapButtonWithText:@"Filters"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)markTestControlItemForFilterWithMultipleSelectedItems
@@ -244,10 +254,11 @@
 
 - (void)stopEditFilterWithSingleSelectedItem
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Filters"
-                                                    onNavBarWithLabel:@"Country"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Country"
+                                                   timeout:kUITestsBaseTimeout];
+    [self tapButtonWithText:@"Filters"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)markTestControlItemForFilterWithSingleSelectedItems
@@ -261,18 +272,24 @@
 {
     XCUIElement *cell = [self findTableViewCellWithAccessibilityId:nil
                                              containsLabelWithText:@"Store Sales 2013 is greater than"];
-    XCUIElement *textField = [self waitStaticTextWithAccessibilityId:@"19" 
-                                                       parentElement:cell 
-                                                             timeout:kUITestsBaseTimeout];
+    XCUIElement *textField = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                      text:@"19"
+                                             parentElement:cell
+                                                   timeout:kUITestsBaseTimeout];
     [textField tap];
+
 }
 
 #pragma mark - Verifying
 
 - (void)verifyThatReportFiltersPageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMInputControlsViewControllerAccessibilityIdentifier"
-                                 timeout:kUITestsBaseTimeout];
+    XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeOther
+                                              identifier:@"JMInputControlsViewControllerAccessibilityIdentifier"
+                                                 timeout:kUITestsBaseTimeout];
+    if (!element.exists) {
+        XCTFail(@"Element wasn't found");
+    }
 }
 
 - (void)verifyThatReportFiltersPageHasCorrectTitle
@@ -283,9 +300,8 @@
 
 - (void)verifyThatFiltersPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Back"
-                          onNavBarWithLabel:@"Filters"
-                                    timeout:kUITestsBaseTimeout];
+    [self verifyBackButtonExistWithAlternativeTitle:nil
+                                  onNavBarWithTitle:@"Filters"];
 }
 
 - (void)verifyMandatoryCellContainsErrorMessage
