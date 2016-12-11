@@ -13,6 +13,7 @@
 #import "JMUITestServerProfile.h"
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+TextFields.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMLoginPageUITests
 
@@ -356,15 +357,8 @@
     XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
                                                        identifier:@"JMLoginPageAccessibilityId"
                                                           timeout:0];
-    XCUIElement *demoButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                 identifier:@"JMLoginPageTryButtonAccessibilityId"
-                                              parentElement:loginPageElement
-                                                    timeout:0];
-    if (demoButton) {
-        [demoButton tap];
-    } else {
-        XCTFail(@"There isn't an 'Try Demo' button on Login Page");
-    }
+    [self verifyButtonExistWithId:@"JMLoginPageTryButtonAccessibilityId"
+                    parentElement:loginPageElement];
 }
 
 - (void)tapLoginButton
@@ -372,15 +366,8 @@
     XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
                                                        identifier:@"JMLoginPageAccessibilityId"
                                                           timeout:0];
-    XCUIElement *loginButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                  identifier:@"JMLoginPageLoginButtonAccessibilityId"
-                                               parentElement:loginPageElement
-                                                     timeout:0];
-    if (loginButton) {
-        [loginButton tap];
-    } else {
-        XCTFail(@"There isn't an 'Login' button on Login Page");
-    }
+    [self verifyButtonExistWithId:@"JMLoginPageLoginButtonAccessibilityId"
+                    parentElement:loginPageElement];
 }
 
 - (void)waitLoginProcessDidFinish
@@ -414,15 +401,9 @@
 - (void)closeErrorAlertWithTitle:(NSString *)title
 {
     XCUIElement *alert = [self findAlertWithTitle:title];
-    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                     text:JMLocalizedString(@"dialog_button_ok")
-                                            parentElement:alert
-                                                  timeout:0];
-    if (okButton) {
-        [okButton tap];
-    } else {
-        XCTFail(@"Error of finding 'OK' button");
-    }
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+              parentElement:alert
+                shouldCheck:YES];
 }
 
 @end

@@ -4,6 +4,7 @@
 //
 
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMBaseUITestCase (Helpers)
 
@@ -107,6 +108,11 @@
                                                         identifier:identifier];
             break;
         }
+        case XCUIElementTypeSearchField: {
+            elementsQuery = [parentElement.searchFields matchingType:XCUIElementTypeSearchField
+                                                          identifier:identifier];
+            break;
+        }
         default: {
             XCTFail(@"Unknown type");
             break;
@@ -204,6 +210,10 @@
             elementsQuery = [parentElement.textFields matchingPredicate:predicate];
             break;
         }
+        case XCUIElementTypeSearchField: {
+            elementsQuery = [parentElement.searchFields matchingPredicate:predicate];
+            break;
+        }
         default: {
             XCTFail(@"Unknown type");
             break;
@@ -218,22 +228,6 @@
         NSLog(@"Several other elements with 'text': %@", text);
     }
     return allMatchingElements.firstObject;
-}
-
-#pragma mark - Menu Button
-- (XCUIElement *)findMenuButtonOnParentElement:(XCUIElement *)parentElement
-{
-    XCUIElement *menuButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                 identifier:@"menu icon"
-                                              parentElement:parentElement
-                                                    timeout:0];
-    if (!menuButton) {
-        menuButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                        identifier:@"menu icon note"
-                                     parentElement:parentElement
-                                           timeout:0];
-    }
-    return menuButton;
 }
 
 #pragma mark -  NavigationBars
@@ -374,14 +368,9 @@
 
     [searchField tap];
     [searchField typeText:searchText];
-
-    XCUIElement *searchButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                   identifier:@"Search"
-                                                parentElement:nil
-                                                  shouldExist:YES
-                                                      timeout:kUITestsBaseTimeout];
-
-    [searchButton tap];
+    [self tapButtonWithText:@"Search"
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 #pragma mark - Alerts
@@ -441,30 +430,5 @@
     XCUIElement *image = [alertsQuery matchingIdentifier:accessibilityId].element;
     return image;
 }
-
-#pragma mark - Helpers
-
-//- (void)waitElementReady:(XCUIElement *)element
-//                 timeout:(NSTimeInterval)timeout
-//{
-//    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-//    XCTAssertNotNil(element, @"Element shouldn't be nil");
-//
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", @"exists", @1];
-//    [self expectationForPredicate:predicate
-//              evaluatedWithObject:element
-//                          handler:^BOOL {
-//                              NSLog(@"\nElement %@ was fulfilled", element);
-//                              return YES;
-//                          }];
-//
-//    [self waitForExpectationsWithTimeout:timeout
-//                                 handler:^(NSError *error) {
-//                                     NSLog(@"\nElement: %@, \nError of waiting: %@", element, error);
-//                                     if (error) {
-//                                         XCTFail(@"Error of waiting: %@", error);
-//                                     }
-//                                 }];
-//}
 
 @end

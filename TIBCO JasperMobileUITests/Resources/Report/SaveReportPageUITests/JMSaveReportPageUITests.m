@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+SavedItems.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMSaveReportPageUITests
 
@@ -332,30 +333,18 @@
 {
     XCUIElement *alert = [self waitAlertWithTitle:@"Error"
                                           timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                parentElement:alert
-                                                      timeout:0];
-    if (cancelButton) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button isn't found");
-    }
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
+              parentElement:alert
+                shouldCheck:YES];
 }
 
 - (void)confirmOverridingTestReport
 {
     XCUIElement *alert = [self waitAlertWithTitle:@"Error"
                                           timeout:kUITestsBaseTimeout];
-    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_ok")
-                                                parentElement:alert
-                                                      timeout:0];
-    if (okButton) {
-        [okButton tap];
-    } else {
-        XCTFail(@"OK button isn't found");
-    }
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+              parentElement:alert
+                shouldCheck:YES];
 }
 
 #pragma mark - Verifying
@@ -376,12 +365,8 @@
 - (void)verifyThatSaveReportPageHasCorrectBackButtonName
 {
     // TODO: need make general case for all devices, 'Back' on iPhones
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Save Report"
-                                                   timeout:kUITestsBaseTimeout];
-    [self waitElementMatchingType:XCUIElementTypeButton
-                             text:JMLocalizedString(@"back_button_title")
-                    parentElement:navBar
-                          timeout:0];
+    [self verifyBackButtonExistWithAlternativeTitle:nil
+                                  onNavBarWithTitle:@"Save Report"];
 }
 
 - (void)verifyErrorOfSavingReportWithEmptyName

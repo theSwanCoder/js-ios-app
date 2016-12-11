@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMUITestServerProfileManager.h"
 #import "JMUITestServerProfile.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMAppMenuUITests
 
@@ -75,14 +76,7 @@
     // Check About item
     [self selectAbout];
     // Close About page
-    XCUIElement *doneButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Done"
-                                                    timeout:kUITestsBaseTimeout];
-    if (doneButton.exists) {
-        [doneButton tap];
-    } else {
-        XCTFail(@"Done button wasn't found");
-    }
+    [self tapDoneButtonOnNavBarWithTitle:nil];
 
     // Check Settings item
     [self selectSettings];
@@ -143,16 +137,7 @@
 
 - (void)closeSettingsPage
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                parentElement:navBar
-                                                      timeout:0];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 @end

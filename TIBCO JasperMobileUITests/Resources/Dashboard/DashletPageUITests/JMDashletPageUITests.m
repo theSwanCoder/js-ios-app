@@ -9,6 +9,7 @@
 #import "JMDashletPageUITests.h"
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 static NSString *const kDashletName = @"13. Top Fives Report";
 
@@ -158,7 +159,6 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 - (void)testThatJIVEWorkCorrectly
 {
 //    XCTFail(@"Not implemented tests");
-    [self openTestDashletWithHyperlinks];
 }
 
 #pragma mark - Helpers
@@ -171,14 +171,8 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)closeTestDashlet
 {
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Back"
-                                                    timeout:kUITestsBaseTimeout];
-    if (backButton.exists) {
-        [backButton tap];
-    } else {
-        XCTFail(@"Back button wasn't found");
-    }
+    [self tapBackButtonWithAlternativeTitle:nil
+                          onNavBarWithTitle:nil];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -220,16 +214,8 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)verifyThatDashletPageHasCorrentBackButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:kDashletName];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:@"Back"
-                                                parentElement:navBar
-                                                      timeout:kUITestsBaseTimeout];
-    if (backButton.exists) {
-        [backButton tap];
-    } else {
-        XCTFail(@"Back button wasn't found");
-    }
+    [self verifyBackButtonExistWithAlternativeTitle:nil
+                                  onNavBarWithTitle:kDashletName];
 }
 
 - (void)verifyThatDashletPageHasCorrectTitle

@@ -13,6 +13,7 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+TextFields.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";
@@ -38,7 +39,6 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openTestReportWithMandatoryFiltersPage
 {
-    [self givenThatLibraryPageOnScreen];
     [self givenThatReportCellsOnScreen];
 
     [self tryOpenTestReportWithMandatoryFilters];
@@ -50,7 +50,6 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openTestReportWithSingleSelectedControlPage
 {
-    [self givenThatLibraryPageOnScreen];
     [self givenThatReportCellsOnScreen];
     
     [self tryOpenTestReportWithSingleSelectedControl];
@@ -62,9 +61,6 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openTestReportPageWithWaitingFinish:(BOOL)waitingFinish
 {
-    [self givenThatLibraryPageOnScreen];
-    [self givenThatReportCellsOnScreen];
-
     [self tryOpenTestReport];
 
     if (waitingFinish) {
@@ -86,15 +82,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     XCUIElement *loadingPopup = [self waitElementMatchingType:XCUIElementTypeOther
                                                    identifier:@"JMCancelRequestPopupAccessibilityId"
                                                       timeout:kUITestsBaseTimeout];;
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                parentElement:loadingPopup
-                                                      timeout:0];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
+              parentElement:loadingPopup
+                shouldCheck:YES];
 }
 
 - (void)openReportFiltersPage
@@ -135,14 +125,9 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
                                                  containsLabelWithText:format];
     [htmlCell tap];
 
-    XCUIElement *saveButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Save"
-                                                    timeout:kUITestsBaseTimeout];
-    if (saveButton.exists) {
-        [saveButton tap];
-    } else {
-        XCTFail(@"Save button wasn't found");
-    }
+    [self tapButtonWithText:@"Save"
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 - (XCUIElement *)findNameFieldOnSaveReportPage
@@ -160,9 +145,12 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName
 {
-    [self searchResourceWithName:kTestReportName
-               inSectionWithName:sectionName];
-
+    [self performSearchResourceWithName:kTestReportName
+                      inSectionWithName:sectionName];
+    
+    // TODO: replace with real check 'loading' message
+    sleep(1);
+    
     [self verifyThatCollectionViewContainsCells];
 
     XCUIElement *testCell = [self testReportCell];
@@ -171,10 +159,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)tryOpenTestReport
 {
-    [self searchTestReportInSectionWithName:@"Library"];
-    [self verifyThatCollectionViewContainsCells];
-
-    XCUIElement *testCell = [self testReportCell];
+    XCUIElement *testCell = [self searchTestReportInSectionWithName:@"Library"];
     [testCell tap];
 }
 
@@ -184,7 +169,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
                                            containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
                                                                   labelText:kTestReportName];
     if (!testCell) {
-        XCTFail(@"There isn't test cell");
+        XCTFail(@"Test cell wasn't found");
     }
     return testCell;
 }
@@ -255,17 +240,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)closePrintReportPage
 {
     // verify that 'print report' page is on the screen
-    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
-                                                        timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                parentElement:printNavBar
-                                                      timeout:kUITestsBaseTimeout];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self tapCancelButtonOnNavBarWithTitle:@"Printer Options"];
 }
 
 #pragma mark - Verifying
@@ -311,7 +286,8 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)givenThatReportCellsOnScreen
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self selectFilterBy:@"Reports" inSectionWithTitle:@"Library"];
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
     [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
 }
 

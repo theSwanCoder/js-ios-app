@@ -13,6 +13,7 @@
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+TextFields.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMSavedItemPageUITests
 
@@ -298,26 +299,12 @@
 
 - (void)cancelDeletingAction
 {
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:@"Cancel"
-                                                      timeout:kUITestsBaseTimeout];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found for canceling of 'delete' action");
-    }
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 - (void)cancelRenamingAction
 {
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:@"Cancel"
-                                                      timeout:kUITestsBaseTimeout];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found for canceling of 'rename' action");
-    }
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 - (void)performRenameAction
@@ -326,15 +313,10 @@
     [self waitElementReady:textField
                    timeout:kUITestsBaseTimeout];
     [textField typeText:@"1"];
-    
-    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                     text:JMLocalizedString(@"dialog_button_ok")
-                                                  timeout:kUITestsBaseTimeout];
-    if (okButton.exists) {
-        [okButton tap];
-    } else {
-        XCTFail(@"OK button wasn't found");
-    }
+
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 - (void)performRenameActionWithEmptyName
@@ -345,21 +327,9 @@
     [textField typeText:@"1"]; 
     [self deleteTextFromTextField:textField];
 
-    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                     text:JMLocalizedString(@"dialog_button_ok")
-                                                  timeout:0];
-    if (okButton.isEnabled) {
-        XCTFail(@"OK button should be inactive");
-    }
-    
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                      timeout:kUITestsBaseTimeout];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self verifyOKButtonEnabled];
+
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 - (void)performRenameActionWithSpacesInName
@@ -370,22 +340,10 @@
     [textField typeText:@"1"]; 
     [self deleteTextFromTextField:textField];
     [textField typeText:@"  "];
-    
-    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                     text:JMLocalizedString(@"dialog_button_ok")
-                                                  timeout:0];
-    if (okButton.isEnabled) {
-        XCTFail(@"OK button should be inactive");
-    }
 
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                      timeout:kUITestsBaseTimeout];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self verifyOKButtonEnabled];
+
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 - (void)performRenameActionWithTheSameName
@@ -396,37 +354,18 @@
     [textField typeText:@"1"]; 
     [self deleteTextFromTextField:textField];
     [textField typeText:kTestReportName];
-    
-    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                     text:JMLocalizedString(@"dialog_button_ok")
-                                                  timeout:0];
-    if (okButton.isEnabled) {
-        XCTFail(@"OK button should be inactive");
-    }
 
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                      timeout:kUITestsBaseTimeout];
-    if (cancelButton) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self verifyOKButtonEnabled];
+
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 #pragma mark - Verifying
 
 - (void)verifyThatBackButtonHasCorrectTitle
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestReportName
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Back"
-                                              parentElement:navBar
-                                                    timeout:0];
-    if (!backButton.exists) {
-        XCTFail(@"Back button wasn't found");
-    }
+    [self verifyBackButtonExistWithAlternativeTitle:nil
+                                  onNavBarWithTitle:kTestReportName];
 }
 
 - (void)verifyThatSavedItemPageHasCorrectTitle
@@ -438,6 +377,18 @@
 - (void)verifyThatInfoPageOnScreen
 {
     [self verifyThatSavedItemInfoPageOnScreen];
+}
+
+#pragma mark - Helpers
+
+- (void)verifyOKButtonEnabled
+{
+    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                     text:JMLocalizedString(@"dialog_button_ok")
+                                                  timeout:0];
+    if (okButton.isEnabled) {
+        XCTFail(@"OK button should be inactive");
+    }
 }
 
 @end

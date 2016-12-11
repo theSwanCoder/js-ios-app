@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (Favorites)
@@ -85,28 +86,16 @@
 
 - (void)markAsFavoriteFromNavigationBar:(XCUIElement *)navigationBar
 {
-    XCUIElement *favoriteButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                     identifier:@"make favorite item"
-                                                  parentElement:navigationBar
-                                                        timeout:kUITestsBaseTimeout];
-    if (favoriteButton.exists) {
-        [favoriteButton tap];
-    } else {
-        XCTFail(@"Favorite button doesn't exist");
-    }
+    [self tapButtonWithText:@"make favorite item"
+              parentElement:navigationBar
+                shouldCheck:YES];
 }
 
 - (void)unmarkFromFavoritesFromNavigationBar:(XCUIElement *)navigationBar
 {
-    XCUIElement *favoriteButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                     identifier:@"favorited item"
-                                                  parentElement:navigationBar
-                                                        timeout:kUITestsBaseTimeout];
-    if (favoriteButton.exists) {
-        [favoriteButton tap];
-    } else {
-        XCTFail(@"Favorite button doesn't exist");
-    }
+    [self tapButtonWithText:@"favorited item"
+              parentElement:navigationBar
+                shouldCheck:YES];
 }
 
 #pragma mark - Helpers

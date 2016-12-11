@@ -44,9 +44,6 @@
                              shouldExist:(BOOL)shouldExist
                                  timeout:(NSTimeInterval)timeout;
 
-// Menu Button
-- (XCUIElement *)findMenuButtonOnParentElement:(XCUIElement *)parentElement;
-
 // Cells
 - (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId;
 - (XCUIElement *)cellWithAccessibilityId:(NSString *)accessibilityId forIndex:(NSUInteger)index;

@@ -5,6 +5,7 @@
 
 #import "JMBaseUITestCase+TextFields.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (TextFields)
@@ -12,15 +13,8 @@
 - (void)closeKeyboardWithDoneButton
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *doneButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Done"
-                                                    timeout:kUITestsBaseTimeout];
-    if (doneButton.exists) {
-        [doneButton tap];
-    } else {
-        XCTFail(@"Done button wasn't found");
-    }
-
+    [self verifyButtonExistWithText:@"Done"
+                      parentElement:nil];
 }
 
 - (void)enterText:(NSString *)text intoTextFieldWithAccessibilityId:(NSString *)accessibilityId

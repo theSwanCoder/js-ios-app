@@ -85,30 +85,15 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 - (void)tryBackToPreviousPage
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Back"
-                                                    timeout:0];
-    if (!backButton.exists) {
-        backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                              text:@"Library"
-                                           timeout:0];
-    }
-    [backButton tap];
+    [self tapBackButtonWithAlternativeTitle:@"Library"
+                          onNavBarWithTitle:nil];
 }
 
 - (void)tryBackToPreviousPageWithTitle:(NSString *)pageTitle
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:pageTitle
-                                                parentElement:navBar
-                                                      timeout:0];
-    if (backButton.exists) {
-        [backButton tap];
-    } else {
-        XCTFail(@"Back button with title: %@, wasn't found", pageTitle);
-    }
+    [self tapBackButtonWithAlternativeTitle:pageTitle
+                          onNavBarWithTitle:nil];
 }
 
 #pragma mark - Verifies - Loading Popup

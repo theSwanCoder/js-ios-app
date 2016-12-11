@@ -9,21 +9,16 @@
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Folders.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMBaseUITestCase (InfoPage)
 
 #pragma mark - Info Page
 - (void)openInfoPageFromCell:(XCUIElement *)cell
 {
-    XCUIElement *infoButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                 identifier:@"More Info"
-                                              parentElement:cell
-                                                    timeout:kUITestsBaseTimeout];
-    if (infoButton.exists) {
-        [infoButton tap];
-    } else {
-        XCTFail(@"Info button doesn't exist");
-    }
+    [self tapButtonWithText:@"More Info"
+              parentElement:cell
+                shouldCheck:YES];
 }
 
 - (void)closeInfoPageFromCell
@@ -44,16 +39,7 @@
 
 - (void)closeInfoPageWithCancelButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                parentElement:navBar
-                                                      timeout:kUITestsBaseTimeout];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 - (void)verifyInfoPageOnScreenForPageWithAccessibilityId:(NSString *)accessibilityId
@@ -76,14 +62,8 @@
 
 - (void)verifyThatInfoPageForTestReportHasBackButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestReportName];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Back"
-                                              parentElement:navBar
-                                                    timeout:0];
-    if (!backButton.exists) {
-        XCTFail(@"Back button doesn't exist on 'Info' page for test report");
-    }
+    [self tapBackButtonWithAlternativeTitle:nil
+                          onNavBarWithTitle:kTestReportName];
 }
 
 - (void)verifyThatInfoPageForTestReportHasCorrectTitle
@@ -114,14 +94,8 @@
 
 - (void)verifyThatInfoPageForTestDashboardHasBackButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestDashboardName];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Back"
-                                              parentElement:navBar
-                                                    timeout:0];
-    if (!backButton.exists) {
-        XCTFail(@"Back button doesn't exist on 'Info' page for test dashboard");
-    }
+    [self tapBackButtonWithAlternativeTitle:nil
+                          onNavBarWithTitle:kTestDashboardName];
 }
 
 - (void)verifyThatInfoPageForTestDashboardHasCorrectTitle
@@ -153,14 +127,8 @@
 
 - (void)verifyThatInfoPageForTestFolderHasBackButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestFolderName];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Back"
-                                              parentElement:navBar
-                                                    timeout:0];
-    if (!backButton.exists) {
-        XCTFail(@"Back button doesn't exist on 'Info' page for test folder");
-    }
+    [self tapBackButtonWithAlternativeTitle:nil
+                          onNavBarWithTitle:kTestFolderName];
 }
 
 - (void)verifyThatInfoPageForTestFolderHasCorrectTitle

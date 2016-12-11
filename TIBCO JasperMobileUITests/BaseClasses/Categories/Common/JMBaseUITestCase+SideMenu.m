@@ -5,7 +5,7 @@
 
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
-#import "JMBaseUITestCase+ActionsMenu.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (SideMenu)
@@ -28,13 +28,8 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:nil
                                                    timeout:timeout];
-    XCUIElement *menuIconNote = [self waitElementMatchingType:XCUIElementTypeButton
-                                                   identifier:@"menu icon note"
-                                                parentElement:navBar
-                                                      timeout:timeout];
-    if (!menuIconNote.exists) {
-        XCTFail(@"Menu icon with note wasn't appeared");
-    }
+    [self verifyButtonExistWithId:@"menu icon note"
+                    parentElement:navBar];
 }
 
 - (void)openLibrarySection
@@ -186,6 +181,8 @@
 {
     XCUIElement *sideMenu = [self waitElementMatchingType:XCUIElementTypeOther
                                                identifier:@"JMSideApplicationMenuAccessibilityId"
+                                            parentElement:nil
+                                              shouldExist:NO
                                                   timeout:kUITestsBaseTimeout];
     if (sideMenu.exists) {
         XCTFail(@"Side menu should not be visible");
@@ -194,9 +191,7 @@
 
 - (void)tryTapSideApplicationMenuInSectionWithName:(NSString *)sectionName
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionName
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *menuButton = [self findMenuButtonOnParentElement:navBar];
+    XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:sectionName];
     if (menuButton.exists) {
         [menuButton tap];
     } else {

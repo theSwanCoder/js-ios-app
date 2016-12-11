@@ -5,6 +5,7 @@
 
 #import "JMBaseUITestCase+Printer.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (Printer)
@@ -25,15 +26,9 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Printer"
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Printer Options"
-                                              parentElement:navBar
-                                                    timeout:0];
-    if (backButton.exists) {
-        [backButton tap];
-    } else {
-        XCTFail(@"Back button wasn't found");
-    }
+    [self tapButtonWithText:@"Printer Options"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 #pragma mark - Verifying
@@ -52,18 +47,7 @@
 
 - (void)verifyThatPrintPageHasCancelButton
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Printer Options"
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Cancel"
-                                              parentElement:navBar
-                                                    timeout:0];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
-
+    [self verifyCancelButtonExistOnNavBarWithTitle:@"Printer Options"];
 }
 
 - (void)verifyThatPrintersPageOnScreen
@@ -76,13 +60,8 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Printer"
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Printer Options"
-                                              parentElement:navBar
-                                                    timeout:0];
-    if (!backButton.exists) {
-        XCTFail(@"Back button wasn't found");
-    }
+    [self verifyButtonExistWithText:@"Printer Options"
+                      parentElement:navBar];
 }
 
 @end

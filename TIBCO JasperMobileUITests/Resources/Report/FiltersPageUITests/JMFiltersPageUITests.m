@@ -10,6 +10,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMFiltersPageUITests
 
@@ -62,16 +63,10 @@
 {
     [self openTestReportPage];
     [self openReportFiltersPage];
-    
-    XCUIElement *runButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                      text:@"Run Report"
-                                                   timeout:kUITestsBaseTimeout];
-    if (runButton.exists) {
-        [runButton tap];
-    } else {
-        XCTFail(@"Run button wasn't found");
-    }
 
+    [self tapButtonWithText:@"Run Report"
+              parentElement:nil
+                shouldCheck:YES];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -191,8 +186,11 @@
 
 - (void)stopEditMandatoryFilter
 {
-    [self tapBackButtonWithText:@"Filters"
-              onNavBarWithLabel:@"ProductFamily"];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"ProductFamily"
+                                                   timeout:kUITestsBaseTimeout];
+    [self tapButtonWithText:@"Filters"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)unmarkAllControlItemsForMandatoryFilter
@@ -219,8 +217,11 @@
 
 - (void)stopEditFilterWithMultiItems
 {
-    [self tapBackButtonWithText:@"Filters"
-              onNavBarWithLabel:@"Low Fat"];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat"
+                                                   timeout:kUITestsBaseTimeout];
+    [self tapButtonWithText:@"Filters"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)markTestControlItemForFilterWithMultipleSelectedItems
@@ -246,8 +247,11 @@
 
 - (void)stopEditFilterWithSingleSelectedItem
 {
-    [self tapBackButtonWithText:@"Filters"
-              onNavBarWithLabel:@"Country"];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Country"
+                                                   timeout:kUITestsBaseTimeout];
+    [self tapButtonWithText:@"Filters"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)markTestControlItemForFilterWithSingleSelectedItems
@@ -289,10 +293,8 @@
 
 - (void)verifyThatFiltersPageHasCorrentBackButton
 {
-    XCUIElement *backButton = [self backButtonWithText:@"Back" onNavBarWithLabel:@"Filters"];
-    if (!backButton.exists) {
-        XCTFail(@"Back button wasn't found");
-    }
+    [self verifyBackButtonExistWithAlternativeTitle:nil
+                                  onNavBarWithTitle:@"Filters"];
 }
 
 - (void)verifyMandatoryCellContainsErrorMessage
@@ -307,29 +309,6 @@
     XCUIElement *cellWithMandatoryFilter = [self findTableViewCellWithAccessibilityId:nil
                                                                 containsLabelWithText:@"This filed is mandatory so you must enter data."];
     XCTAssertNil(cellWithMandatoryFilter, @"Cell should not contain error message");
-}
-
-#pragma mark - Helpers
-
-- (void)tapBackButtonWithText:(NSString *)backButtonText onNavBarWithLabel:(NSString *)navBarLabel
-{
-    XCUIElement *backButton = [self backButtonWithText:backButtonText
-                                     onNavBarWithLabel:navBarLabel];
-    if (backButton.exists) {
-        [backButton tap];
-    } else {
-        XCTFail(@"Back button wasn't found");
-    }
-}
-
-- (XCUIElement *)backButtonWithText:(NSString *)backButtonText onNavBarWithLabel:(NSString *)navBarLabel
-{
-    XCUIElement *navBar = [self findNavigationBarWithLabel:navBarLabel];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:backButtonText
-                                              parentElement:navBar
-                                                    timeout:kUITestsBaseTimeout];
-    return backButton;
 }
 
 @end

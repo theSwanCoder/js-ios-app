@@ -13,12 +13,12 @@
 - (void)switchViewFromGridToListInSectionWithTitle:(NSString *)sectionTitle;
 
 // Search
-- (void)searchResourceWithName:(NSString *)resourceName
-  inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
-- (void)searchResourceWithName:(NSString *)resourceName
-             inSectionWithName:(NSString *)sectionName;
+- (void)performSearchResourceWithName:(NSString *)resourceName
+         inSectionWithAccessibilityId:(NSString *)sectionId;
+- (void)performSearchResourceWithName:(NSString *)resourceName
+                    inSectionWithName:(NSString *)sectionName;
 
-- (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
+- (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionId;
 
 // Cells
 - (void)givenThatCollectionViewContainsListOfCellsInSectionWithName:(NSString *)sectionName;

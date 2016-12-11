@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Folders.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMRepositoryPageUITests
 
@@ -46,9 +47,7 @@
 //    - After:
 - (void)testThatRepositoryPageHasSideMenuButton
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Repository"
-                                                   timeout:kUITestsBaseTimeout];
-    XCUIElement *menuButton = [self findMenuButtonOnParentElement:navBar];
+    XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:@"Repository"];
     if (!menuButton) {
         XCTFail(@"Menu button isn't found in Repository section");
     }
@@ -103,13 +102,9 @@
     [self openFolderWithName:kTestFolderName];
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestFolderName
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:@"Repository"
-                                              parentElement:navBar
-                                                    timeout:0];
-    if (!backButton) {
-        XCTFail(@"Back button not found");
-    }
+    [self verifyButtonExistWithText:@"Repository"
+                      parentElement:navBar];
+
     [self backToFolderWithName:@"Repository"];
 }
 

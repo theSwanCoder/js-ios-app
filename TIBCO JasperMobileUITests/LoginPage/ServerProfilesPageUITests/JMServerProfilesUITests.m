@@ -12,6 +12,7 @@
 #import "JMUITestServerProfile.h"
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMServerProfilesUITests
 
@@ -120,27 +121,14 @@
         [menu tap];
         [self givenThatNewProfilePageOnScreen];
         // Save a new created profile
-        XCUIElement *saveButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                           text:@"Save"
-                                                        timeout:kUITestsBaseTimeout];
-        if (saveButton.exists) {
-            [saveButton tap];
-        } else {
-            XCTFail(@"Save button wasn't found");
-        }
+        [self verifyButtonExistWithText:@"Save"
+                          parentElement:nil];
 
         // Confirm if need http end point
         XCUIElement *securityWarningAlert = [self waitAlertWithTitle:@"Warning"
                                                              timeout:kUITestsBaseTimeout];
-        XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                             text:JMLocalizedString(@"dialog_button_ok")
-                                                    parentElement:securityWarningAlert
-                                                          timeout:0];
-        if (okButton.exists) {
-            [okButton tap];
-        } else {
-            XCTFail(@"OK button wasn't found");
-        }
+        [self verifyButtonExistWithText:JMLocalizedString(@"dialog_button_ok")
+                          parentElement:securityWarningAlert];
     } else {
         XCTFail(@"'Clone Profile' menu item doesn't exist.");
     }
@@ -184,16 +172,10 @@
     XCUIElement *menu = self.application.menuItems[@"Delete"];
     if (menu) {
         [menu tap];
-        XCUIElement *alertView = [self.application.alerts[@"Confirmation"].collectionViews elementBoundByIndex:0];
-        XCUIElement *deleteButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:@"Delete"
-                                                    parentElement:alertView
-                                                      timeout:kUITestsBaseTimeout];
-        if (deleteButton.exists) {
-            [deleteButton tap];
-        } else {
-            XCTFail(@"Delete button wasn't found");
-        }
+        XCUIElement *alertView = [self waitAlertWithTitle:@"Confirmation"
+                                                  timeout:kUITestsBaseTimeout];
+        [self verifyButtonExistWithText:@"Delete"
+                          parentElement:alertView];
     } else {
         XCTFail(@"Delete menu item doesn't exist.");
     }

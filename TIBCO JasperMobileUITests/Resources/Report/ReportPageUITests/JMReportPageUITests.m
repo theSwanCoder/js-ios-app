@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Favorites.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMReportPageUITests
 
@@ -223,16 +224,7 @@
 
 - (void)closeReportInfoPage
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                parentElement:navBar
-                                                      timeout:0];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 @end

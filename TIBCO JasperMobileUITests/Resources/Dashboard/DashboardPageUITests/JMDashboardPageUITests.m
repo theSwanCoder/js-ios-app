@@ -13,6 +13,7 @@
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+Printer.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMDashboardPageUITests
 
@@ -115,16 +116,8 @@
     XCUIElement *errorAlert = [self findAlertWithTitle:@"JSErrorDomain"];
     if (errorAlert.exists) {
     // TODO: should this case be considered as a failure?
-        XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_ok")
-                                                parentElement:errorAlert
-                                                      timeout:0];
-
-        if (okButton.exists) {
-            [okButton tap];
-        } else {
-            XCTFail(@"Error alert should have '%@' button", JMLocalizedString(@"dialog_button_ok"));
-        }
+        [self verifyButtonExistWithText:JMLocalizedString(@"dialog_button_ok")
+                          parentElement:errorAlert];
     } else {
         [self verifyThatPrintPageOnScreen];
         [self closePrintDashboardPage];
@@ -186,10 +179,8 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestDashboardName
                                                    timeout:kUITestsBaseTimeout];
-    [self waitElementMatchingType:XCUIElementTypeButton
-                             text:@"Library"
-                    parentElement:navBar
-                          timeout:0];
+    [self verifyButtonExistWithText:@"Library"
+                      parentElement:navBar];
 }
 
 @end

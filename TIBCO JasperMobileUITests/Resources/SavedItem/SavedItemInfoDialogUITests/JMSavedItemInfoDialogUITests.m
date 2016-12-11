@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+SavedItems.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMSavedItemInfoDialogUITests
 
@@ -186,14 +187,7 @@
 
 - (void)verifyThatInfoPageHasCancelButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                parentElement:navBar
-                                                      timeout:0];
-    if (!cancelButton.exists) {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self verifyCancelButtonExistOnNavBarWithTitle:nil];
 }
 
 - (void)verifyThatInfoPageHasCorrectTitle

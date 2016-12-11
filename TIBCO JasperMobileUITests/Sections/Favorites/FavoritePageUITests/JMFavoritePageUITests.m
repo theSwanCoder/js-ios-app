@@ -13,6 +13,7 @@
 #import "JMBaseUITestCase+Favorites.h"
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+Dashboard.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMFavoritePageUITests
 
@@ -452,8 +453,7 @@
 
 - (void)verifyThatFavoritePageHasSideMenuButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:@"Favorites"];
-    XCUIElement *menuButton = [self findMenuButtonOnParentElement:navBar];
+    XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:@"Favorites"];
     if (!menuButton || !menuButton.exists) {
         XCTFail(@"There isn't menu button");
     }

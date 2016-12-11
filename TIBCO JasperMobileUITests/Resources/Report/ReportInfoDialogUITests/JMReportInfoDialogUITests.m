@@ -9,9 +9,9 @@
 #import "JMReportInfoDialogUITests.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+InfoPage.h"
-#import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Favorites.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMReportInfoDialogUITests
 
@@ -110,14 +110,7 @@
 
 - (void)verifyThatInfoPageHasCancelButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:kTestReportName];
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:@"Cancel"
-                                                parentElement:navBar
-                                                      timeout:0];
-    if (!cancelButton.exists) {
-        XCTFail(@"Cancel button isn't exist on Info Dialog");
-    }
+    [self verifyCancelButtonExistOnNavBarWithTitle:kTestReportName];
 }
     
 @end

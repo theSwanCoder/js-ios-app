@@ -10,6 +10,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMInputControlPageUITests
 
@@ -164,8 +165,11 @@
 
 - (void)stopEditFilterWithMultiItems
 {
-    [self tapBackButtonWithText:@"Filters"
-              onNavBarWithLabel:@"Low Fat"];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat"
+                                                   timeout:kUITestsBaseTimeout];
+    [self tapButtonWithText:@"Filters"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)startEditFilterWithSingleSelectedItem
@@ -177,8 +181,11 @@
 
 - (void)stopEditFilterWithSingleSelectedItem
 {
-    [self tapBackButtonWithText:@"Filters"
-              onNavBarWithLabel:@"Country"];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Country"
+                                                   timeout:kUITestsBaseTimeout];
+    [self tapButtonWithText:@"Filters"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)trySearchCorrectValue
@@ -228,35 +235,13 @@
 
 - (void)verifyThatInputControlPageHasCorrentBackButton
 {
-    XCUIElement *backButton = [self backButtonWithText:@"Filters"
-                                     onNavBarWithLabel:@"Low Fat"];
-    if (!backButton.exists) {
-        XCTFail(@"Back button wasn't found");
-    }
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat"
+                                                   timeout:kUITestsBaseTimeout];
+    [self verifyButtonExistWithText:@"Filters"
+                      parentElement:navBar];
 }
 
 #pragma mark - Helpers
-
-- (void)tapBackButtonWithText:(NSString *)backButtonText onNavBarWithLabel:(NSString *)navBarLabel
-{
-    XCUIElement *backButton = [self backButtonWithText:backButtonText
-                                     onNavBarWithLabel:navBarLabel];
-    if (backButton.exists) {
-        [backButton tap];
-    } else {
-        XCTFail(@"Back button wasn't found");
-    }
-}
-
-- (XCUIElement *)backButtonWithText:(NSString *)backButtonText onNavBarWithLabel:(NSString *)navBarLabel
-{
-    XCUIElement *navBar = [self findNavigationBarWithLabel:navBarLabel];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                       text:backButtonText
-                                              parentElement:navBar
-                                                    timeout:kUITestsBaseTimeout];
-    return backButton;
-}
 
 - (void)verifyStaticTextExistsWithText:(NSString *)text
 {

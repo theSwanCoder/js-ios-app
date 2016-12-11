@@ -5,6 +5,7 @@
 
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (ActionsMenu)
@@ -26,10 +27,9 @@
     if (label) {
         navBar = [self findNavigationBarWithLabel:label];
     }
-    XCUIElement *actionsButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                    identifier:@"Share"
-                                                 parentElement:navBar
-                                                       timeout:0];
+    XCUIElement *actionsButton = [self buttonWithId:@"Share"
+                                      parentElement:navBar
+                                        shouldCheck:YES];
     return actionsButton;
 }
 
@@ -47,10 +47,11 @@
         navBar = [self waitNavigationBarWithLabel:label
                                           timeout:kUITestsBaseTimeout];
     }
-    XCUIElement *actionsButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                    identifier:@"Share"
-                                                 parentElement:navBar
-                                                       timeout:0];
+
+    XCUIElement *actionsButton = [self buttonWithId:@"Share"
+                                      parentElement:navBar
+                                        shouldCheck:YES];
+
     return actionsButton;
 }
 

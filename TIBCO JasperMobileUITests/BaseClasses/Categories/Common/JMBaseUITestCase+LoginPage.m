@@ -109,15 +109,9 @@
             [menu tap];
             XCUIElement *alert = [self waitAlertWithTitle:@"Confirmation"
                                                   timeout:kUITestsBaseTimeout];
-            XCUIElement *deleteButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                                 text:@"Delete"
-                                                        parentElement:alert
-                                                              timeout:0];
-            if (deleteButton.exists) {
-                [deleteButton tap];
-            } else {
-                XCTFail(@"Delete button wasn't found");
-            }
+            [self tapButtonWithText:@"Delete"
+                      parentElement:alert
+                        shouldCheck:YES];
         } else {
             XCTFail(@"Delete menu item doesn't exist.");
         }
@@ -171,7 +165,8 @@
 
     if (alert.exists) {
         [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
-                  parentElement:alert];
+                  parentElement:alert
+                    shouldCheck:YES];
 
         if (actionBlock) {
             actionBlock();
@@ -226,7 +221,8 @@
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self tapButtonWithId:@"JMServerProfilesPageAddNewProfileButtonAccessibilityId"
-            parentElement:nil];
+            parentElement:nil
+              shouldCheck:YES];
 }
 
 - (void)tryCreateNewTestServerProfile
@@ -264,7 +260,8 @@
 
     // Save a new created profile
     [self tapButtonWithText:@"Save"
-              parentElement:nil];
+              parentElement:nil
+                shouldCheck:YES];
 
     // Confirm if need http end point
     [self closeSecurityWarningAlert];
@@ -276,7 +273,8 @@
     XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
     if (securityWarningAlert.exists) {
         [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
-                  parentElement:securityWarningAlert];
+                  parentElement:securityWarningAlert
+                    shouldCheck:YES];
     }
 }
 
@@ -319,7 +317,8 @@
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self tapButtonWithId:@"JMLoginPageLoginButtonAccessibilityId"
-            parentElement:nil];
+            parentElement:nil
+              shouldCheck:YES];
 }
 
 - (void)givenThatLoginPageOnScreen

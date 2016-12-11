@@ -10,6 +10,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (SavedItems)
@@ -59,7 +60,6 @@
 
 - (void)saveTestReportInHTMLFormat
 {
-    [self givenThatLibraryPageOnScreen];
     [self givenThatReportCellsOnScreen];
     [self openTestReportPage];
     [self openSaveReportPage];
@@ -210,30 +210,18 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestReportName
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *favoriteButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                     identifier:@"make favorite item"
-                                                  parentElement:navBar
-                                                        timeout:kUITestsBaseTimeout];
-    if (favoriteButton.exists) {
-        [favoriteButton tap];
-    } else {
-        XCTFail(@"Favorite button wasn't found");
-    }
+    [self tapButtonWithText:@"make favorite item"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)unmarkSavedAsFavoriteFromInfoPage
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestReportName
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *favoriteButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                     identifier:@"favorited item"
-                                                  parentElement:navBar
-                                                        timeout:kUITestsBaseTimeout];
-    if (favoriteButton.exists) {
-        [favoriteButton tap];
-    } else {
-        XCTFail(@"Unfavorite button wasn't found");
-    }
+    [self tapButtonWithText:@"favorited item"
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (void)markTestSavedItemAsFavoriteFromMenuOnInfoPage
@@ -284,15 +272,9 @@
 - (void)confirmDeleteAction
 {
     XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_ok")
-                                                parentElement:navBar
-                                                      timeout:0];
-    if (okButton.exists) {
-        [okButton tap];
-    } else {
-        XCTFail(@"OK button wasn't found");
-    }
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+              parentElement:navBar
+                shouldCheck:YES];
 }
 
 - (XCUIElement *)savedItemWithName:(NSString *)itemName

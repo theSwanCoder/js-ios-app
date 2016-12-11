@@ -8,6 +8,7 @@
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+OtherElements.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (Section)
@@ -17,76 +18,61 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *gridButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                 identifier:@"grid button"
-                                              parentElement:navBar
-                                                    timeout:0];
-    if (gridButton) {
-        [gridButton tap];
-    } else {
-        XCTFail(@"Grid button wasn't found");
-    }
+    [self tapButtonWithText:@"grid button"
+              parentElement:navBar
+                shouldCheck:NO];
 }
 
 - (void)switchViewFromGridToListInSectionWithTitle:(NSString *)sectionTitle
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *listButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                 identifier:@"horizontal list button"
-                                              parentElement:navBar
-                                                    timeout:0];
-    if (listButton) {
-        [listButton tap];
-    } else {
-        XCTFail(@"List button wasn't found");
-    }
+    [self tapButtonWithText:@"horizontal list button"
+              parentElement:navBar
+                shouldCheck:NO];
 }
 
 #pragma mark - Search
-- (void)searchResourceWithName:(NSString *)resourceName
-  inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
+- (void)performSearchResourceWithName:(NSString *)resourceName
+         inSectionWithAccessibilityId:(NSString *)sectionId
 {
-    XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
-    [searchResourcesSearchField tap];
+    XCUIElement *searchField = [self searchFieldFromSectionWithAccessibilityId:sectionId];
+    [searchField tap];
 
+    // Clear text if exist
     XCUIElement *clearTextButton = [self waitElementMatchingType:XCUIElementTypeButton
                                                             text:@"Clear text"
-                                                   parentElement:searchResourcesSearchField
+                                                   parentElement:searchField
                                                          timeout:0];
-    if (clearTextButton) {
+    if (clearTextButton.exists) {
         [clearTextButton tap];
     }
 
-    [searchResourcesSearchField typeText:resourceName];
+    [searchField typeText:resourceName];
 
-    XCUIElement *searchButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                   identifier:@"Search"
-                                                      timeout:kUITestsBaseTimeout];
-    if (searchButton.exists) {
-        [searchButton tap];
-    } else {
-        XCTFail(@"Search button wasn't found");
-    }
+    [self tapButtonWithText:@"Search"
+              parentElement:nil
+                shouldCheck:YES];
 }
 
-- (void)searchResourceWithName:(NSString *)resourceName inSectionWithName:(NSString *)sectionName
+- (void)performSearchResourceWithName:(NSString *)resourceName
+                    inSectionWithName:(NSString *)sectionName
 {
     if ([sectionName isEqualToString:@"Library"]) {
         [self openLibrarySection];
         // TODO: replace with specific element - JMLibraryPageAccessibilityId
-        [self searchResourceWithName:resourceName
-        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+        [self performSearchResourceWithName:resourceName
+               inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     } else if ([sectionName isEqualToString:@"Repository"]) {
         [self openRepositorySection];
         // TODO: replace with specific element - JMRepositoryPageAccessibilityId
-        [self searchResourceWithName:resourceName
-        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+        [self performSearchResourceWithName:resourceName
+               inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     } else if ([sectionName isEqualToString:@"Favorites"]) {
         [self openFavoritesSection];
         // TODO: replace with specific element - JMRepositoryPageAccessibilityId
-        [self searchResourceWithName:resourceName
-        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+        [self performSearchResourceWithName:resourceName
+               inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
     } else {
         XCTFail(@"Wrong section for searching test dashboard: %@", sectionName);
     }
@@ -97,18 +83,11 @@
     XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
     [searchResourcesSearchField tap];
 
-    XCUIElement *clearTextButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                            text:@"Clear text"
-                                                   parentElement:searchResourcesSearchField
-                                                         timeout:0];
-    if (clearTextButton) {
-        [clearTextButton tap];
-    }
+    [self tapButtonWithText:@"Clear text"
+              parentElement:searchResourcesSearchField
+                shouldCheck:NO];
 
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                   identifier:@"Cancel"
-                                                      timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 - (XCUIElement *)searchFieldFromSectionWithAccessibilityId:(NSString *)accessibilityId
@@ -116,9 +95,19 @@
     XCUIElement *section = [self waitElementMatchingType:XCUIElementTypeOther
                                               identifier:accessibilityId
                                                  timeout:kUITestsBaseTimeout];
-    XCUIElement *searchField = section.searchFields[@"Search resources"];
-    [self waitElementReady:searchField
-                   timeout:kUITestsBaseTimeout];
+    XCUIElement *searchField;
+    if (section.exists) {
+        searchField = [self waitElementMatchingType:XCUIElementTypeSearchField
+                                               text:accessibilityId
+                                      parentElement:section
+                                            timeout:kUITestsBaseTimeout];
+        if (!searchField.exists) {
+            XCTFail(@"Search field wasn't found");
+        }
+    } else {
+        XCTFail(@"Section wasn't found");
+    }
+    
     return searchField;
 }
 
@@ -126,22 +115,12 @@
 
 - (void)givenThatCollectionViewContainsListOfCellsInSectionWithName:(NSString *)sectionName
 {
-    NSInteger countOfListCells = [self countOfListCells];
-    if (countOfListCells > 0) {
-        return;
-    } else {
-        [self switchViewFromListToGridInSectionWithTitle:sectionName];
-    }
+    [self switchViewFromGridToListInSectionWithTitle:sectionName];
 }
 
 - (void)givenThatCollectionViewContainsGridOfCellsInSectionWithName:(NSString *)sectionName
 {
-    NSInteger countOfGridCells = [self countOfGridCells];
-    if (countOfGridCells > 0) {
-        return;
-    } else {
-        [self switchViewFromGridToListInSectionWithTitle:sectionName];
-    }
+    [self switchViewFromListToGridInSectionWithTitle:sectionName];
 }
 
 - (NSInteger)countOfGridCells

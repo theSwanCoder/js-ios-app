@@ -9,6 +9,7 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
@@ -85,15 +86,9 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     XCUIElement *loadingPopup = [self waitElementMatchingType:XCUIElementTypeOther
                                                    identifier:@"JMCancelRequestPopupAccessibilityId"
                                                       timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                parentElement:loadingPopup
-                                                      timeout:0];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
+              parentElement:loadingPopup
+                shouldCheck:YES];
 }
 
 - (void)refreshDashboard
@@ -114,17 +109,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)closePrintDashboardPage
 {
     // verify that 'print report' page is on the screen
-    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
-                                                        timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:JMLocalizedString(@"dialog_button_cancel")
-                                                parentElement:printNavBar
-                                                      timeout:0];
-    if (cancelButton.exists) {
-        [cancelButton tap];
-    } else {
-        XCTFail(@"Cancel button wasn't found");
-    }
+    [self tapCancelButtonOnNavBarWithTitle:@"Printer Options"];
 }
 
 #pragma mark - Helpers

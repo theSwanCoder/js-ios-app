@@ -10,7 +10,7 @@
 #import "JMBaseUITestCase+SavedItems.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Report.h"
-#import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMSavedItemInfoScreenUITests
 
@@ -187,14 +187,8 @@
 
 - (void)verifyThatBackButtonOnInfoPageHasCorrectTitle
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *backButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                         text:@"Back"
-                                                parentElement:navBar
-                                                      timeout:0];
-    if (!backButton.exists) {
-        XCTFail(@"Back button wasn't found");
-    }
+    [self verifyBackButtonExistWithAlternativeTitle:nil
+                                  onNavBarWithTitle:nil];
 }
 
 - (void)verifyThatInfoPageHasCorrectTitle
