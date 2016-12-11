@@ -632,12 +632,17 @@
         case JSReportLoaderErrorTypeEmtpyReport:
             // TODO: this isn't an error
             break;
-        case JSInvalidCredentialsErrorCode: {
-            [JMUtils showLoginViewAnimated:YES completion:^{
-                [self exitAction];
-            }];
+        case JSReportLoaderErrorTypeUndefined:
+            [JMUtils presentAlertControllerWithError:error
+                                          completion:nil];
             break;
-        }
+        // TODO: Does this case still work?
+//        case JSInvalidCredentialsErrorCode: {
+//            [JMUtils showLoginViewAnimated:YES completion:^{
+//                [self exitAction];
+//            }];
+//            break;
+//        }
         default: {
             __weak typeof(self) weakSelf = self;
             [JMUtils presentAlertControllerWithError:error completion:^{

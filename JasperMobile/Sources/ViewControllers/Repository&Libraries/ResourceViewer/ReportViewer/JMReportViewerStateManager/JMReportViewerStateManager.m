@@ -115,7 +115,6 @@
         }
         case JMReportViewerStateResourceFailed: {
             [self hideProgress];
-            [self showResourceNotExistView];
             break;
         }
         case JMReportViewerStateResourceReady: {
