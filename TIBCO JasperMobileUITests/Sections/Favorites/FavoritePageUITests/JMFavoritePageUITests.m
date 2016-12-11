@@ -18,6 +18,13 @@
 
 @implementation JMFavoritePageUITests
 
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 15;
+}
+
 #pragma mark - Tests
     
 //    User should see Favorites screen

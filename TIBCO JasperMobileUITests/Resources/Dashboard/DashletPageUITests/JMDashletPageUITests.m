@@ -15,6 +15,8 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 @implementation JMDashletPageUITests
 
+#pragma mark - Setup
+
 - (void)setUp
 {
     [super setUp];
@@ -28,6 +30,13 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     [self closeTestDashboardPage];
     
     [super tearDown];
+}
+
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 8;
 }
 
 #pragma mark - Tests

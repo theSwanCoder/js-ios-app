@@ -33,6 +33,13 @@
     [super tearDown];
 }
 
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 14;
+}
+
 #pragma mark - Tests
 
 //User should see the saved report as HTML

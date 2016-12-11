@@ -30,6 +30,13 @@
     [super tearDown];
 }
 
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 16;
+}
+
 #pragma mark - Test 'Main' features
 
 - (void)testThatLibraryPageHasCorrectTitle

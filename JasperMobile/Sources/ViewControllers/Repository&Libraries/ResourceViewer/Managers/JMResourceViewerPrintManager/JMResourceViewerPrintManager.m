@@ -127,6 +127,9 @@
                          completion:^(NSURL * _Nullable savedReportURL, NSError * _Nullable error) {
                              if (error) {
                                  if (error.code == JSSessionExpiredErrorCode) {
+                                     if (completion) {
+                                         completion(nil);
+                                     }
                                      [JMUtils showLoginViewAnimated:YES completion:nil];
                                  } else {
                                      [JMUtils presentAlertControllerWithError:error completion:nil];
@@ -154,6 +157,9 @@
                                        if (error.code == JSSessionExpiredErrorCode) {
                                            [JMUtils showLoginViewAnimated:YES completion:nil];
                                        } else {
+                                           if (completion) {
+                                               completion(nil);
+                                           }
                                            [JMUtils presentAlertControllerWithError:error completion:nil];
                                        }
                                    } else {

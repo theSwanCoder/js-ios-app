@@ -22,6 +22,13 @@
     [super tearDown];
 }
 
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 9;
+}
+
 #pragma mark - Tests
 
 //User should see Filters screen

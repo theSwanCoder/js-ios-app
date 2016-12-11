@@ -31,6 +31,13 @@
     [super tearDown];
 }
 
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 4;
+}
+
 #pragma mark - Tests
 
 //  User should see Info Dialog about the report

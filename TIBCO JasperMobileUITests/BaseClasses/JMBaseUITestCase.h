@@ -15,7 +15,9 @@ extern NSTimeInterval kUITestsResourceWaitingTimeout;
 extern NSTimeInterval kUITestsElementAvailableTimeout;
 
 @protocol JMBaseUITestProtocol <NSObject>
-- (BOOL) shouldLoginBeforeStartTest;
+- (BOOL)shouldPerformSuperSetup; // This need for ability to skip some steps and improve time of tests execution
+- (NSInteger)testsCount;
+- (BOOL)shouldLoginBeforeStartTest;
 @end
 
 @interface JMBaseUITestCase : XCTestCase <JMBaseUITestProtocol>

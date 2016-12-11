@@ -12,6 +12,13 @@
 
 @implementation JMLibraryInfoPageUITests
 
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 4;
+}
+
 #pragma mark - Tests - Main
 - (void)testThatReportInfoPageCanBeViewed
 {

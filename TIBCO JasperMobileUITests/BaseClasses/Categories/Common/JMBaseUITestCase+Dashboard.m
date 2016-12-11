@@ -99,6 +99,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self performSearchResourceWithName:kTestDashboardName
                       inSectionWithName:sectionName];
 
+    sleep(1);
     [self verifyThatCollectionViewContainsCells];
 
     XCUIElement *testCell = [self testDashboardCell];

@@ -12,6 +12,8 @@
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+Buttons.h"
 
+static NSString *JMUIBaseTestCaseExecutedTestNumberKey = @"JMUIBaseTestCaseExecutedTestNumberKey";
+
 NSTimeInterval kUITestsBaseTimeout = 15;
 NSTimeInterval kUITestsResourceWaitingTimeout = 60;
 NSTimeInterval kUITestsElementAvailableTimeout = 3;
@@ -32,6 +34,10 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     } @catch(NSException *exception) {
         NSLog(@"Exception: %@", exception);
         XCTFail(@"Failed to launch application");
+    }
+
+    if (![self shouldPerformSuperSetup]) {
+        return;
     }
 
     if ([self shouldLoginBeforeStartTest]) {
@@ -70,10 +76,40 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 }
 
 #pragma mark - JMBaseUITestProtocol
+- (BOOL)shouldPerformSuperSetup
+{
+    NSInteger testsCount = [self testsCount];
+    NSNumber *executedTestNumber = [[NSUserDefaults standardUserDefaults] objectForKey:JMUIBaseTestCaseExecutedTestNumberKey];
+    NSInteger executedTestCount = executedTestNumber ? executedTestNumber.integerValue : 0;
+    NSLog(@"Executed '%@' from '%@' tests", @(executedTestCount), @(testsCount));
+    if (executedTestCount == 0) { // First execution of each test case
+        [self saveExecutedTestCount:(testsCount == 1) ? 0 : ++executedTestCount];
+        return YES;
+    } else if (executedTestCount < testsCount - 1) { // In the middle of test case
+        [self saveExecutedTestCount:++executedTestCount];
+        return NO;
+    } else { // Reset execution count after executing of all tests in test case
+        [self saveExecutedTestCount:0];
+        return NO;
+    }
+}
+
+- (NSInteger)testsCount
+{
+    return 1;
+}
+
 - (BOOL) shouldLoginBeforeStartTest
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return YES;
+}
+
+- (void)saveExecutedTestCount:(NSInteger)testCount
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@(testCount)
+                                              forKey:JMUIBaseTestCaseExecutedTestNumberKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark - Helper Actions

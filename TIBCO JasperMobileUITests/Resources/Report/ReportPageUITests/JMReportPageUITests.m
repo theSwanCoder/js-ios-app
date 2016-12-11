@@ -15,6 +15,13 @@
 
 @implementation JMReportPageUITests
 
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 7;
+}
+
 #pragma mark - Tests - Main
 - (void)testThatReportCanBeRun
 {
