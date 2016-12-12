@@ -69,12 +69,16 @@
     [self openTestReportPage];
     [self openReportFiltersPage];
 
-    [self tapButtonWithText:@"Run Report"
-              parentElement:nil
-                shouldCheck:YES];
-    [self givenLoadingPopupNotVisible];
+    XCUIElement *errorAlert = [self findAlertWithTitle:@"JSErrorDomain"];
+    if (errorAlert.exists) {
+        XCTFail(@"Error of fetching filters for report");
+    } else {
+        [self tapButtonWithText:@"Run Report"
+                  parentElement:nil
+                    shouldCheck:YES];
+        [self givenLoadingPopupNotVisible];
+    }
 
-    [self closeReportFiltersPage];
     [self closeTestReportPage];
 }
 
