@@ -21,7 +21,7 @@
     [super setUp];
 
     [self givenThatLibraryPageOnScreen];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
 - (void)tearDown
@@ -75,7 +75,7 @@
 
     // TODO: implement by detecting 'loading' cell
 //    [self verifyThatCollectionViewNotContainsCells];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
 - (void)testThatUserCanScrollDown
@@ -83,8 +83,8 @@
     XCUIElement *collectionViewElement = [self.application.collectionViews elementBoundByIndex:0];
     XCUIElement *cellElement = [collectionViewElement.cells elementBoundByIndex:2];
     [cellElement swipeUp];
-    
-    [self verifyThatCollectionViewContainsCells];
+
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
 #pragma mark - Test 'Search' feature
@@ -103,7 +103,7 @@
     // Reset search
     [self tryClearSearchBar];
     // verify result
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
 - (void)testThatSearchShowsNoResults
@@ -160,7 +160,7 @@
         [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
         [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
-        [self verifyThatCollectionViewContainsCells];
+        [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
         [self verifyThatCollectionViewContainsGridOfCells];
         
         // Change Page to Repository
@@ -170,7 +170,7 @@
         // Change Page to Library
         [self openLibrarySectionIfNeed];
         [self givenThatLibraryPageOnScreen];
-        [self verifyThatCollectionViewContainsCells];
+        [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
         
         [self verifyThatCollectionViewContainsGridOfCells];
         
@@ -197,7 +197,7 @@
 - (void)testThatUserCanSortListItemsByName
 {
     [self trySortByName];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 
     [self verifyThatCellsSortedByName];
 }
@@ -205,7 +205,7 @@
 - (void)testThatUserCanSortListItemsByCreationDate
 {
     [self trySortByCreationDate];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     
     [self verifyThatCellsSortedByCreationDate];
 }
@@ -213,7 +213,7 @@
 - (void)testThatUserCanSortListItemsByModifiedDate
 {
     [self trySortByModifiedDate];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 
     [self verifyThatCellsSortedByModifiedDate];
 }
@@ -222,7 +222,7 @@
 - (void)testThatUserCanFilterByAllItems
 {
     [self givenThatLibraryPageOnScreen];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     
     [self verifyThatCellsFiltredByAll];
 }
@@ -230,14 +230,14 @@
 - (void)testThatUserCanFilterByReports
 {
     [self tryFilterByReports];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     [self verifyThatCellsFiltredByReports];
 }
 
 - (void)testThatUserCanFilterByDashboards
 {
     [self tryFilterByDashboards];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     [self verifyThatCellsFiltredByDashboards];
 }
 

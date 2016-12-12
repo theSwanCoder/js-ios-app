@@ -96,8 +96,8 @@
     
     [self selectFilterBy:@"HTML"
       inSectionWithTitle:@"Saved Items"];
-    
-    [self verifyThatCollectionViewContainsCells];
+
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     
     [self deleteSavedItemWithName:kTestReportName
                            format:@"html"];
@@ -145,8 +145,8 @@
     
     [self selectFilterBy:@"PDF"
       inSectionWithTitle:@"Saved Items"];
-    
-    [self verifyThatCollectionViewContainsCells];
+
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     
     [self deleteSavedItemWithName:kTestReportName
                            format:@"pdf"];

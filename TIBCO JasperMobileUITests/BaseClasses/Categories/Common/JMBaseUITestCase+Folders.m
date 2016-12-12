@@ -29,7 +29,7 @@ NSString *const kTestFolderName = @"Public";
     [self performSearchResourceWithName:@"Samples"
                       inSectionWithName:sectionName];
 
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 
     XCUIElement *testCell = [self folderCellWithName:@"Samples"];
     return testCell;

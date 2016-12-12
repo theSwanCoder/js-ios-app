@@ -99,8 +99,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self performSearchResourceWithName:kTestDashboardName
                       inSectionWithName:sectionName];
 
-    sleep(1);
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 
     XCUIElement *testCell = [self testDashboardCell];
     return testCell;
@@ -108,7 +107,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (void)tryOpenTestDashboard
 {
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     XCUIElement *testCell = [self testDashboardCell];
     [testCell tap];
 }

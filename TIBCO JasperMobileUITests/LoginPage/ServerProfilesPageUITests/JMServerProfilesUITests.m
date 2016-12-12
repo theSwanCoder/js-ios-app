@@ -20,7 +20,7 @@
 - (void)testThatListOfServerProfilesVisible
 {
     [self tryOpenServerProfilesPage];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     XCUIElement *collectionView = self.application.collectionViews.allElementsBoundByIndex.firstObject;
     if (collectionView.exists) {
         [collectionView swipeUp];

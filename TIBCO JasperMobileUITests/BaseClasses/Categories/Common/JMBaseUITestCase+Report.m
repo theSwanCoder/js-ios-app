@@ -81,7 +81,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
                                                       timeout:kUITestsBaseTimeout];;
     [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
               parentElement:loadingPopup
-                shouldCheck:YES];
+                shouldCheck:NO];
 }
 
 - (void)openReportFiltersPage
@@ -154,8 +154,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self performSearchResourceWithName:kTestReportName
                       inSectionWithName:sectionName];
 
-    // TODO: replace with real check 'loading' message
-    sleep(3);
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 
     XCUIElement *testCell = [self testReportCell];
     return testCell;
@@ -175,7 +174,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)tryOpenTestReportWithMandatoryFilters
 {
     [self searchTestReportWithMandatoryFilters];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 
     XCUIElement *testCell = [self testReportWithMandatoryFiltersCell];
     [testCell tap];
@@ -202,7 +201,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)tryOpenTestReportWithSingleSelectedControl
 {
     [self searchTestReportWithSingleSelectedControl];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     
     XCUIElement *testCell = [self testReportWithSingleSelectedControl];
     [testCell tap];

@@ -168,7 +168,7 @@
     [self verifyThatCollectionViewContainsGridOfCells];
 
     [self openLibrarySectionIfNeed];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     [self verifyThatCollectionViewContainsListOfCells];
 
     [self openFavoritesSectionIfNeed];

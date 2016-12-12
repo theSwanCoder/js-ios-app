@@ -76,20 +76,29 @@
     XCTAssertTrue(countOfListCells == 0, @"Should be 'List' presentation");
 }
 
-- (void)verifyThatCollectionViewContainsCells
+- (void)waitCollectionViewContainsCellsWithTimeout:(NSTimeInterval)timeout
+{
+    NSTimeInterval remain = timeout;
+    BOOL countMoreThanZero;
+    do {
+        remain -= kUITestsElementAvailableTimeout;
+        sleep(kUITestsElementAvailableTimeout);
+        countMoreThanZero = [self countAllActiveCells] > 0;
+        NSLog(@"remain: %@", @(remain));
+    } while ( remain >= 0 && !countMoreThanZero);
+
+    if (!countMoreThanZero) {
+        XCTFail(@"Cells weren't found");
+    }
+}
+
+- (NSInteger)countAllActiveCells
 {
     NSArray *allCells = [self.application.cells allElementsBoundByAccessibilityElement];
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement  * _Nullable cell, NSDictionary<NSString *,id> * _Nullable bindings) {
         return cell.exists == true && cell.isHittable == true;
     }];
-    NSInteger filtredResultCount = [allCells filteredArrayUsingPredicate:predicate].count;
-    XCTAssertTrue(filtredResultCount > 0, @"Should be some cells");
-}
-
-- (void)verifyThatCollectionViewNotContainsCells
-{
-    // TODO: implement
-    XCTFail(@"Not implemented");
+    return [allCells filteredArrayUsingPredicate:predicate].count;
 }
 
 #pragma mark - Helpers - Menu Sort By

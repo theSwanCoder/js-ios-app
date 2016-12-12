@@ -11,6 +11,9 @@
 - (void)waitElementReady:(XCUIElement *)element
                  timeout:(NSTimeInterval)timeout
 {
+    if (!element) {
+        XCTFail(@"Element isn't exist");
+    }
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
     BOOL elementExist;
@@ -78,6 +81,17 @@
                           identifier:(NSString *)identifier
                        parentElement:(XCUIElement *)parentElement
 {
+    return [self elementMatchingType:elementType
+                          identifier:identifier
+                       parentElement:parentElement
+                     filterPredicate:nil];
+}
+
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                          identifier:(NSString *)identifier
+                       parentElement:(XCUIElement *)parentElement
+                     filterPredicate:(NSPredicate *)filterPredicate
+{
     if (parentElement == nil) {
         parentElement = self.application;
     }
@@ -113,6 +127,11 @@
                                                           identifier:identifier];
             break;
         }
+        case XCUIElementTypeCell: {
+            elementsQuery = [parentElement.cells matchingType:XCUIElementTypeCell
+                                                          identifier:identifier];
+            break;
+        }
         default: {
             XCTFail(@"Unknown type");
             break;
@@ -122,13 +141,17 @@
     NSLog(@"All matching elements: %@", allMatchingElements);
     if (allMatchingElements.count == 0) {
         return nil;
-    } else if (allMatchingElements.count > 1) {
-        // TODO: should this be interpreted as an error?
-        NSLog(@"Several other elements with id: %@", identifier);
+    } else if (filterPredicate) {
+        allMatchingElements = [allMatchingElements filteredArrayUsingPredicate:filterPredicate];
     }
+
+    if (allMatchingElements.count > 1) {
+        // TODO: should this be interpreted as an error?
+        NSLog(@"Several other elements: %@", allMatchingElements);
+    }
+
     return allMatchingElements.firstObject;
 }
-
 
 #pragma mark - Elements with text
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
@@ -294,18 +317,9 @@
     NSLog(@"labelAccessibilityId - %@", labelAccessibilityId);
     NSLog(@"labelText - %@", labelText);
 
-    XCUIApplication *app = self.application;
-    XCUIElement *collectionView = [app.collectionViews elementBoundByIndex:0]; // TODO: replace with explicit accessibilityId
-    NSArray *allCells;
+    XCTAssertNotNil(accessibilityId, @"AccessibilityId shouldn't be 'nil'");
 
-    if (accessibilityId) {
-        NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
-        XCUIElementQuery *cellsQuery = [[collectionView childrenMatchingType:XCUIElementTypeCell] matchingPredicate:identifierPredicate];
-        allCells = cellsQuery.allElementsBoundByAccessibilityElement;
-    } else {
-        XCUIElementQuery *cellsQuery = [collectionView childrenMatchingType:XCUIElementTypeCell];
-        allCells = cellsQuery.allElementsBoundByAccessibilityElement;
-    }
+    NSLog(@"All cells in collection view: %@", self.application.cells.allElementsBoundByAccessibilityElement);
 
     NSPredicate *labelPredicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *cell, NSDictionary<NSString *, id> *bindings) {
         NSLog(@"All labels in cell: %@", cell.staticTexts.allElementsBoundByAccessibilityElement);
@@ -320,12 +334,13 @@
         return [label.label isEqualToString:labelText];
     }];
 
-    allCells = [allCells filteredArrayUsingPredicate:labelPredicate];
-
-    NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
-    allCells = [allCells filteredArrayUsingPredicate:hittablePredicate];
-
-    return allCells.firstObject;
+    XCUIElement *cell = [self elementMatchingType:XCUIElementTypeCell
+                                       identifier:accessibilityId
+                                    parentElement:nil
+                                  filterPredicate:labelPredicate];
+    [self waitElementReady:cell
+                   timeout:kUITestsElementAvailableTimeout];
+    return cell;
 }
 
 - (XCUIElement *)findTableViewCellWithAccessibilityId:(NSString *)accessibilityId

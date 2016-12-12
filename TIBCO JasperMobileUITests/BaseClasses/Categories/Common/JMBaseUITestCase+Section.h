@@ -17,8 +17,9 @@
 - (void)givenThatCollectionViewContainsGridOfCellsInSectionWithName:(NSString *)sectionName;
 - (NSInteger)countOfGridCells;
 - (NSInteger)countOfListCells;
-- (void)verifyThatCollectionViewContainsCells;
-- (void)verifyThatCollectionViewNotContainsCells;
+
+- (void)waitCollectionViewContainsCellsWithTimeout:(NSTimeInterval)timeout;
+
 - (void)verifyThatCollectionViewContainsListOfCells;
 - (void)verifyThatCollectionViewContainsGridOfCells;
 

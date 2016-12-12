@@ -24,7 +24,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 - (void)setUp {
     [super setUp];
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"From super: %@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
     // In UI tests it is usually best to stop immediately when a failure occurs.
@@ -34,35 +34,35 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     @try {
         [app launch];
     } @catch(NSException *exception) {
-        NSLog(@"Exception: %@", exception);
-        XCTFail(@"Failed to launch application");
+        NSLog(@"From super: Exception: %@", exception);
+        XCTFail(@"From super: Failed to launch application");
     }
 
     if (![self shouldPerformSuperSetup]) {
-        NSLog(@"Skip performing 'super' setup");
+        NSLog(@"From super: Skip performing 'super' setup");
         return;
     } else {
-        NSLog(@"Do performing 'super' setup");
+        NSLog(@"From super: Do performing 'super' setup");
     }
 
     if ([self shouldLoginBeforeStartTest]) {
-        NSLog(@"Try to log in before performing tests");
+        NSLog(@"From super: Try to log in before performing tests");
         [self loginWithTestProfileIfNeed];
         [self givenThatLibraryPageOnScreen];
     } else {
         NSLog(@"Perform tests without logging in");
         XCUIElement *libraryPageView = [self libraryPageViewElement];
         if (libraryPageView.exists) {
-            NSLog(@"Library page on screen");
+            NSLog(@"From super: Library page on screen");
             [self logout];
         } else {
-            NSLog(@"Login page on screen");
+            NSLog(@"From super: Login page on screen");
         }
     }
 }
 
 - (void)tearDown {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"From super: %@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIApplication *app = self.application;
     [app terminate];
     self.application = nil;
@@ -73,8 +73,8 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 #pragma mark - Custom Accessors
 - (XCUIApplication *)application
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (!_application) {
+        NSLog(@"From super: %@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
         _application = [XCUIApplication new];
     }
     return _application;
@@ -90,7 +90,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     NSInteger testsCount = [self testsCount];
     NSNumber *executedTestNumber = [[NSUserDefaults standardUserDefaults] objectForKey:JMUIBaseTestCaseExecutedTestNumberKey];
     NSInteger executedTestCount = executedTestNumber ? executedTestNumber.integerValue : 0;
-    NSLog(@"Executed '%@' from '%@' tests", @(executedTestCount), @(testsCount));
+    NSLog(@"From super: Executed '%@' from '%@' tests", @(executedTestCount), @(testsCount));
     if (executedTestCount == 0) { // First execution of each test case
         [self saveExecutedTestCount:(testsCount == 1) ? 0 : ++executedTestCount];
         return YES;
@@ -149,7 +149,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
                                    shouldBeInHierarchy:YES
                                                timeout:kUITestsResourceWaitingTimeout];
     if (!popup.exists) {
-        XCTFail(@"Loading popup isn't visible");
+        XCTFail(@"From super: Loading popup isn't visible");
     }
 }
 
@@ -162,7 +162,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
                                    shouldBeInHierarchy:NO
                                                timeout:kUITestsResourceWaitingTimeout];
     if (popup.exists) {
-        XCTFail(@"Loading popup visible");
+        XCTFail(@"From super: Loading popup visible");
     }
 }
 

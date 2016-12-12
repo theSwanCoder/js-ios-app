@@ -128,11 +128,11 @@
 {
     [self performSearchResourceWithName:@"Samples"
                       inSectionWithName:@"Repository"];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     
     [self performSearchResourceWithName:@"Templates"
                       inSectionWithName:@"Repository"];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
 //  Error message when no search result
@@ -178,7 +178,7 @@
 
     [self openLibrarySectionIfNeed];
     [self openRepositorySectionIfNeed];
-    [self verifyThatCollectionViewContainsCells];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     [self verifyThatCollectionViewContainsGridOfCells];
     
     [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
@@ -233,7 +233,7 @@
     if (cellsCount > 0) {
         // Some instances hasn't the folder
         [self openFolderWithName:@"Monitoring"];
-        [self verifyThatCollectionViewContainsCells];
+        [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
         [self openFolderWithName:@"Monitoring Domains"];
         XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                               text:@"No Results."
