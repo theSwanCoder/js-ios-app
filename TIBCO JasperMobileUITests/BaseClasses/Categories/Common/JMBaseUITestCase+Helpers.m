@@ -34,7 +34,7 @@
     return [self waitElementMatchingType:elementType
                               identifier:identifier
                            parentElement:nil
-                             shouldExist:YES
+                     shouldBeInHierarchy:YES
                                  timeout:timeout];
 }
 
@@ -46,14 +46,14 @@
     return [self waitElementMatchingType:elementType
                               identifier:identifier
                            parentElement:parentElement
-                             shouldExist:YES
+                     shouldBeInHierarchy:YES
                                  timeout:timeout];
 }
 
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
                               identifier:(NSString *)identifier
                            parentElement:(XCUIElement *)parentElement
-                             shouldExist:(BOOL)shouldExist
+                     shouldBeInHierarchy:(BOOL)shouldBeInHierarchy
                                  timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
@@ -68,8 +68,8 @@
                               parentElement:parentElement];
         elementExist = element.exists;
         NSLog(@"remain: %@", @(remain));
-        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
-    } while ( remain >= 0 && elementExist != shouldExist );
+        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldBeInHierarchy ? @"YES" : @"NO");
+    } while ( remain >= 0 && elementExist != shouldBeInHierarchy );
 
     return element;
 }
@@ -138,7 +138,7 @@
     return [self waitElementMatchingType:elementType
                                     text:text
                            parentElement:nil
-                             shouldExist:YES
+                     shouldBeInHierarchy:YES
                                  timeout:timeout];
 }
 
@@ -150,14 +150,14 @@
     return [self waitElementMatchingType:elementType
                                     text:text
                            parentElement:parentElement
-                             shouldExist:YES
+                     shouldBeInHierarchy:YES
                                  timeout:timeout];
 }
 
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
                                     text:(NSString *)text
                            parentElement:(XCUIElement *)parentElement
-                             shouldExist:(BOOL)shouldExist
+                     shouldBeInHierarchy:(BOOL)shouldBeInHierarchy
                                  timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
@@ -172,8 +172,8 @@
                               parentElement:parentElement];
         elementExist = element.exists;
         NSLog(@"remain: %@", @(remain));
-        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
-    } while ( remain >= 0 && elementExist != shouldExist);
+        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldBeInHierarchy ? @"YES" : @"NO");
+    } while ( remain >= 0 && elementExist != shouldBeInHierarchy);
 
     return element;
 }
@@ -290,6 +290,10 @@
                                                  labelText:(NSString *)labelText
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"accessibilityId - %@",accessibilityId);
+    NSLog(@"labelAccessibilityId - %@", labelAccessibilityId);
+    NSLog(@"labelText - %@", labelText);
+
     XCUIApplication *app = self.application;
     XCUIElement *collectionView = [app.collectionViews elementBoundByIndex:0]; // TODO: replace with explicit accessibilityId
     NSArray *allCells;
@@ -304,10 +308,11 @@
     }
 
     NSPredicate *labelPredicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *cell, NSDictionary<NSString *, id> *bindings) {
+        NSLog(@"All labels in cell: %@", cell.staticTexts.allElementsBoundByAccessibilityElement);
         XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                 identifier:labelAccessibilityId
                                              parentElement:cell
-                                               shouldExist:YES
+                                       shouldBeInHierarchy:YES
                                                    timeout:0];
         if (!label.exists) {
             return NO;
@@ -344,7 +349,7 @@
         XCUIElement *labelElement = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                              text:labelText
                                                     parentElement:cell
-                                                      shouldExist:YES
+                                              shouldBeInHierarchy:YES
                                                           timeout:0];
         return labelElement.exists;
     }];

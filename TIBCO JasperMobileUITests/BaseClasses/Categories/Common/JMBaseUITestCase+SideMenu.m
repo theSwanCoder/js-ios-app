@@ -182,7 +182,7 @@
     XCUIElement *sideMenu = [self waitElementMatchingType:XCUIElementTypeOther
                                                identifier:@"JMSideApplicationMenuAccessibilityId"
                                             parentElement:nil
-                                              shouldExist:NO
+                                      shouldBeInHierarchy:NO
                                                   timeout:kUITestsBaseTimeout];
     if (sideMenu.exists) {
         XCTFail(@"Side menu should not be visible");

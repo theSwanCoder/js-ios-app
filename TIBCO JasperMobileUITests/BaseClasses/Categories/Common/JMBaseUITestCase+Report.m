@@ -155,9 +155,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
                       inSectionWithName:sectionName];
 
     // TODO: replace with real check 'loading' message
-    sleep(1);
-
-    [self verifyThatCollectionViewContainsCells];
+    sleep(3);
 
     XCUIElement *testCell = [self testReportCell];
     return testCell;
