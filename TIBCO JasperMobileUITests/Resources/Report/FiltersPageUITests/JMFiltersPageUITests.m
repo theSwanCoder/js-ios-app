@@ -14,14 +14,6 @@
 
 @implementation JMFiltersPageUITests
 
-- (void)tearDown
-{
-    [self closeReportFiltersPage];
-    [self closeTestReportPage];
-
-    [super tearDown];
-}
-
 #pragma mark - JMBaseUITestCaseProtocol
 
 - (NSInteger)testsCount
@@ -43,6 +35,9 @@
     [self openReportFiltersPage];
     
     [self verifyThatReportFiltersPageOnScreen];
+
+    [self closeReportFiltersPage];
+    [self closeTestReportPage];
 }
 
 //Filters title
@@ -57,6 +52,9 @@
     [self openReportFiltersPage];
     
     [self verifyThatReportFiltersPageHasCorrectTitle];
+
+    [self closeReportFiltersPage];
+    [self closeTestReportPage];
 }
 
 //Run Report button
@@ -75,6 +73,9 @@
               parentElement:nil
                 shouldCheck:YES];
     [self givenLoadingPopupNotVisible];
+
+    [self closeReportFiltersPage];
+    [self closeTestReportPage];
 }
 
 //Back button like title of previous screen
@@ -90,6 +91,9 @@
     [self openReportFiltersPage];
     
     [self verifyThatFiltersPageHasCorrentBackButton];
+
+    [self closeReportFiltersPage];
+    [self closeTestReportPage];
 }
 
 //Mandatory IC
@@ -111,6 +115,9 @@
     [self stopEditMandatoryFilter];
 
     [self verifyMandatoryCellContainsErrorMessage];
+
+    [self closeReportFiltersPage];
+    [self closeTestReportPage];
 }
 
 //Multiselect IC
@@ -131,6 +138,9 @@
     [self unmarkTestControlItemForFilterWithMultipleSelectedItems];
 
     [self stopEditFilterWithMultiItems];
+
+    [self closeReportFiltersPage];
+    [self closeTestReportPage];
 }
 
 //Single select IC
@@ -151,6 +161,9 @@
 
     [self markTestControlItemForFilterWithSingleSelectedItems];    
     [self verifyThatReportFiltersPageOnScreen];
+
+    [self closeReportFiltersPage];
+    [self closeTestReportPage];
 }
 
 //Text IC
