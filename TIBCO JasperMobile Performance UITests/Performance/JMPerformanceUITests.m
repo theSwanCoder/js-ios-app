@@ -66,7 +66,7 @@ NSInteger static kJMRunReportTestCellIndex = 2;
         NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
         NSLog(@"all buttons: %@", allButtons);
         for (XCUIElement *button in allButtons) {
-            if ([button.label isEqualToString:@"Library"]) {
+            if ([button.label isEqualToString:JMLocalizedString(@"menuitem_library_label")]) {
                 [button tap];
                 break;
             }

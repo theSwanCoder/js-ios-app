@@ -186,7 +186,7 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestDashboardName
                                                    timeout:kUITestsBaseTimeout];
-    [self verifyButtonExistWithText:@"Library"
+    [self verifyButtonExistWithText:JMLocalizedString(@"menuitem_library_label")
                       parentElement:navBar];
 }
 

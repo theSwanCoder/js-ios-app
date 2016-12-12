@@ -288,11 +288,11 @@
 
 - (void)verifyThatUserDidLoginIntoDemoServer
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:nil];
     [self verifyAccountWithUsername:@"phoneuser"
                        organization:@"organization_1"
                         profileName:@"Jaspersoft Mobile Demo"];
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:nil];
 }
 
 - (void)verifyThatErrorAlertOnScreenWithTitle:(NSString *)title message:(NSString *)message
@@ -311,11 +311,11 @@
 - (void)verifyThatUserDidLoginIntoTestServer
 {
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:nil];
     [self verifyAccountWithUsername:testServerProfile.username
                        organization:testServerProfile.organization
                         profileName:testServerProfile.name];
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:nil];
 }
 
 - (void)verifyAccountWithUsername:(NSString *)username

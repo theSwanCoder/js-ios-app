@@ -22,20 +22,20 @@
 #pragma mark - Tests - Main
 - (void)testThatReportInfoPageCanBeViewed
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Library"];
+    [self openInfoPageForTestReportFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self closeInfoPageForTestReport];
 }
 
 - (void)testThatReportInfoPageHasTitleAsReportLabel
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Library"];
+    [self openInfoPageForTestReportFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifyThatInfoPageForTestReportHasCorrectTitle];
     [self closeInfoPageForTestReport];
 }
 
 - (void)testThatReportInfoPageHasFullReportInfo
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Library"];
+    [self openInfoPageForTestReportFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifyThatInfoPageForTestReportContainsCorrectData];
     [self closeInfoPageForTestReport];
 }
@@ -43,7 +43,7 @@
 #pragma mark - Tests - Menu
 - (void)testThatReportCanBeMarkAsFavorite
 {
-    [self openInfoPageForTestReportFromSectionWithName:@"Library"];
+    [self openInfoPageForTestReportFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self markAsFavoriteFromMenuActions];
     [self unmarkFromFavoritesFromMenuActions];
     [self closeInfoPageForTestReport];

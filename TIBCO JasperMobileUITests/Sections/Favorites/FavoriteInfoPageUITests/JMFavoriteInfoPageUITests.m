@@ -44,8 +44,8 @@
     [self givenThatFavoritesSectionIsEmpty];
 
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
 
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
@@ -59,8 +59,8 @@
     [self givenThatFavoritesSectionIsEmpty];
 
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
 
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
@@ -98,8 +98,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
@@ -114,8 +114,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
@@ -153,8 +153,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
@@ -169,8 +169,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
@@ -226,8 +226,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
@@ -260,8 +260,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
@@ -417,8 +417,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
@@ -434,8 +434,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
@@ -476,8 +476,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
@@ -492,8 +492,8 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];

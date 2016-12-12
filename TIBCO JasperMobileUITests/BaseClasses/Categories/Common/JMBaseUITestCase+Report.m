@@ -39,7 +39,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openTestReportWithMandatoryFiltersPage
 {
-    [self givenThatReportCellsOnScreenInSectionWithName:@"Library"];
+    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
     [self tryOpenTestReportWithMandatoryFilters];
     // We can have two times when loading up and down
@@ -49,7 +49,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openTestReportWithSingleSelectedControlPage
 {
-    [self givenThatReportCellsOnScreenInSectionWithName:@"Library"];
+    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     
     [self tryOpenTestReportWithSingleSelectedControl];
     // We can have two times when loading up and down
@@ -145,7 +145,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)tryOpenTestReport
 {
-    XCUIElement *testCell = [self searchTestReportInSectionWithName:@"Library"];
+    XCUIElement *testCell = [self searchTestReportInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [testCell tap];
 }
 

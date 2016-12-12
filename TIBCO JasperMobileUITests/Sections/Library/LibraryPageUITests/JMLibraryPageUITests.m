@@ -46,7 +46,7 @@
 
 - (void)testThatLibraryContainsListOfCells
 {
-    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
@@ -60,8 +60,8 @@
 
 - (void)testMenuButton
 {
-    [self showSideMenuInSectionWithName:@"Library"];
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self hideSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)testThatUserCanPullDownToRefresh
@@ -92,11 +92,11 @@
 - (void)testThatSearchWorkWithCorrectWords
 {
     // start find some text
-    [self switchViewFromGridToListInSectionWithTitle:@"Library"];
-    [self givenThatReportCellsOnScreenInSectionWithName:@"Library"];
+    [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
     [self performSearchResourceWithName:kJMTestLibrarySearchTextExample
-                      inSectionWithName:@"Library"];
+                      inSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     NSInteger cellsCount = [self countOfListCells];
     XCTAssertTrue(cellsCount > 0, @"Should one or more results");
 
@@ -139,12 +139,12 @@
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
         
-        [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
+        [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-        [self switchViewFromListToGridInSectionWithTitle:@"Library"];
+        [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
         [self verifyThatCollectionViewContainsGridOfCells];
 
-        [self switchViewFromGridToListInSectionWithTitle:@"Library"];
+        [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
         [self verifyThatCollectionViewContainsListOfCells];
         
     } else {
@@ -157,9 +157,9 @@
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
         
-        [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
+        [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-        [self switchViewFromListToGridInSectionWithTitle:@"Library"];
+        [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
         [self verifyThatCollectionViewContainsCells];
         [self verifyThatCollectionViewContainsGridOfCells];
         
@@ -181,9 +181,9 @@
 
 - (void)testThatViewPresentationNotChangeWhenUserUseSearch
 {
-    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-    [self switchViewFromListToGridInSectionWithTitle:@"Library"];
+    [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self verifyThatCollectionViewContainsGridOfCells];
     
     // start find some text

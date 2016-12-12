@@ -36,7 +36,7 @@
 - (void)performSearchResourceWithName:(NSString *)resourceName
                     inSectionWithName:(NSString *)sectionName
 {
-    if ([sectionName isEqualToString:@"Library"]) {
+    if ([sectionName isEqualToString:JMLocalizedString(@"menuitem_library_label")]) {
         [self openLibrarySectionIfNeed];
         // TODO: replace with specific element - JMLibraryPageAccessibilityId
         [self performSearchResourceWithName:resourceName

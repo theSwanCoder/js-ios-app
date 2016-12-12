@@ -128,7 +128,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 - (void)tryBackToPreviousPage
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self tapBackButtonWithAlternativeTitle:@"Library"
+    [self tapBackButtonWithAlternativeTitle:JMLocalizedString(@"menuitem_library_label")
                           onNavBarWithTitle:nil];
 }
 

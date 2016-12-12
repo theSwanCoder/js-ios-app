@@ -38,7 +38,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self givenThatLibraryPageOnScreen];
     [self givenThatDashboardCellsOnScreen];
 
-    [self searchTestDashboardInSectionWithName:@"Library"];
+    [self searchTestDashboardInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self tryOpenTestDashboard];
 
     [self givenLoadingPopupNotVisible];
@@ -165,8 +165,9 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)givenThatDashboardCellsOnScreen
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self selectFilterBy:@"Dashboards" inSectionWithTitle:@"Library"];
-    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 }
 
 @end

@@ -34,11 +34,11 @@
 
 - (void)openLibrarySectionIfNeed
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Library"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMLocalizedString(@"menuitem_library_label")];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Library"
+    [self tryOpenPageWithName:JMLocalizedString(@"menuitem_library_label")
           fromSectionWithName:nil];
 }
 

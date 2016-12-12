@@ -142,9 +142,9 @@
     [self selectSortBy:@"Name"
     inSectionWithTitle:@"Saved Items"];
     [self selectSortBy:@"Creation Date"
-    inSectionWithTitle:@"Library"];
+    inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self selectSortBy:@"Modified Date"
-    inSectionWithTitle:@"Library"];
+    inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
 //Filter button

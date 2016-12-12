@@ -18,10 +18,10 @@
 #pragma mark - Tests
 - (void)testThatMenuViewCanBeViewedByTappingMenuButton
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifySideMenuVisible];
 
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifySideMenuNotVisible];
 }
 
@@ -36,14 +36,14 @@
 
 - (void)testThatMenuViewIsScrollable
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifySideMenuVisible];
 
     XCUIElement *menuView = [self sideMenuElement];
     [menuView swipeUp];
     [menuView swipeDown];
 
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifySideMenuNotVisible];
 }
 
@@ -85,7 +85,7 @@
 
 - (void)testThatServerProfileInfoIsAppeared
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifySideMenuVisible];
 
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
@@ -99,7 +99,7 @@
         [self verifyLabelWithTextExist:testServerProfile.organization];
     }
 
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 }
 
 

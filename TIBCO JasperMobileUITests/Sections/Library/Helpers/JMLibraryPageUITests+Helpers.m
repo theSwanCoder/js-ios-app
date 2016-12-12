@@ -56,19 +56,19 @@
 - (void)trySortByName
 {
     [self selectSortBy:@"Name"
-    inSectionWithTitle:@"Library"];
+    inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)trySortByCreationDate
 {
     [self selectSortBy:@"Creation Date"
-    inSectionWithTitle:@"Library"];
+    inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)trySortByModifiedDate
 {
     [self selectSortBy:@"Modified Date"
-    inSectionWithTitle:@"Library"];
+    inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
 #pragma mark - Helpers - Filter By
@@ -77,14 +77,14 @@
 - (void)tryFilterByReports
 {
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self givenThatReportCellsOnScreenInSectionWithName:@"Libarary"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)tryFilterByDashboards
 {
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self givenThatDashboardCellsOnScreen];
 }
 
