@@ -128,7 +128,7 @@
                                                    text:JMLocalizedString(@"back_button_title")
                                           parentElement:navBar
                                                 timeout:0];
-    if (!button.exists) {
+    if (!button.exists && alternativeTitle) {
         button = [self waitElementMatchingType:XCUIElementTypeButton
                                           text:alternativeTitle
                                  parentElement:navBar
