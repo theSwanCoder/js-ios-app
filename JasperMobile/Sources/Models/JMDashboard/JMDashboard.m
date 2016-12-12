@@ -34,7 +34,7 @@
 @interface JMDashboard()
 // setters
 @property (nonatomic, strong, readwrite) JMResource *resource;
-@property (nonatomic, copy, readwrite) NSString *resourceURI;
+
 @end
 
 @implementation JMDashboard
@@ -47,10 +47,9 @@
 
 - (instancetype)initWithResource:(JMResource *)resource
 {
-    self = [super init];
+    self = [super initWithResourceLookup:resource.resourceLookup];
     if (self) {
         _resource = resource;
-        _resourceURI = resource.resourceLookup.uri;
     }
     return self;
 }

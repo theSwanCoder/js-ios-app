@@ -41,7 +41,7 @@
     self = [super init];
     if (self) {
         _resourceLookup = resourceLookup;
-        _type = [self typeForResourceLookup:resourceLookup];
+        _type = [[self class] typeForResourceLookupType:resourceLookup.resourceType];
     }
     return self;
 }
@@ -59,12 +59,14 @@
     switch (self.type) {
         case JMResourceTypeFile: {break;}
         case JMResourceTypeFolder: {break;}
-        case JMResourceTypeSavedResource: {break;}
+        case JMResourceTypeSavedReport: {break;}
+        case JMResourceTypeSavedDashboard: {break;}
         case JMResourceTypeReport: {
             model = [JSReport reportWithResourceLookup:self.resourceLookup];
             break;
         }
         case JMResourceTypeTempExportedReport: {break;}
+        case JMResourceTypeTempExportedDashboard: {break;}
         case JMResourceTypeDashboard: {
             model = [JMDashboard dashboardWithResource:self];
             break;
@@ -90,7 +92,11 @@
             localizedResourceType = JMLocalizedString(@"resources_type_folder");
             break;
         }
-        case JMResourceTypeSavedResource: {
+        case JMResourceTypeSavedReport: {
+            localizedResourceType = JMLocalizedString(@"resources_type_saved_reportUnit");
+            break;
+        }
+        case JMResourceTypeSavedDashboard: {
             localizedResourceType = JMLocalizedString(@"resources_type_saved_reportUnit");
             break;
         }
@@ -99,6 +105,10 @@
             break;
         }
         case JMResourceTypeTempExportedReport: {
+            localizedResourceType = JMLocalizedString(@"resources_type_saved_reportUnit");
+            break;
+        }
+        case JMResourceTypeTempExportedDashboard: {
             localizedResourceType = JMLocalizedString(@"resources_type_saved_reportUnit");
             break;
         }
@@ -127,7 +137,8 @@
             break;
         }
         case JMResourceTypeFolder: {break;}
-        case JMResourceTypeSavedResource: {
+        case JMResourceTypeSavedReport:
+        case JMResourceTypeSavedDashboard:{
             vcIdentifier = @"JMSavedResourceViewerViewController";
             break;
         }
@@ -136,6 +147,7 @@
             break;
         }
         case JMResourceTypeTempExportedReport: {break;}
+        case JMResourceTypeTempExportedDashboard: {break;}
         case JMResourceTypeDashboard: {
             vcIdentifier = @"JMDashboardViewerVC";
             break;
@@ -164,7 +176,8 @@
             vcIdentifier = @"JMRepositoryResourceInfoViewController";
             break;
         }
-        case JMResourceTypeSavedResource: {
+        case JMResourceTypeSavedReport:
+        case JMResourceTypeSavedDashboard:{
             vcIdentifier = @"JMSavedItemsInfoViewController";
             break;
         }
@@ -173,6 +186,7 @@
             break;
         }
         case JMResourceTypeTempExportedReport: {break;}
+        case JMResourceTypeTempExportedDashboard: {break;}
         case JMResourceTypeDashboard: {
             vcIdentifier = @"JMDashboardInfoViewController";
             break;
@@ -190,23 +204,27 @@
 }
 
 #pragma mark - Helpers
-- (JMResourceType)typeForResourceLookup:(JSResourceLookup *)resourceLookup
++ (JMResourceType)typeForResourceLookupType:(NSString *)resourceLookupType
 {
-    if ([resourceLookup.resourceType isEqualToString:kJS_WS_TYPE_FOLDER]) {
+    if ([resourceLookupType isEqualToString:kJS_WS_TYPE_FOLDER]) {
         return JMResourceTypeFolder;
-    } else if([resourceLookup.resourceType isEqualToString:kJS_WS_TYPE_REPORT_UNIT]) {
+    } else if([resourceLookupType isEqualToString:kJS_WS_TYPE_REPORT_UNIT]) {
         return JMResourceTypeReport;
-    } else if([resourceLookup.resourceType isEqualToString:kJMSavedReportUnit]) {
-        return JMResourceTypeSavedResource;
-    } else if([resourceLookup.resourceType isEqualToString:kJMTempExportedReportUnit]) {
+    } else if([resourceLookupType isEqualToString:kJMSavedReportUnit]) {
+        return JMResourceTypeSavedReport;
+    } else if([resourceLookupType isEqualToString:kJMTempExportedReportUnit]) {
         return JMResourceTypeTempExportedReport;
-    } else if([resourceLookup.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD]) {
+    } else if([resourceLookupType isEqualToString:kJMSavedDashboard]) {
+        return JMResourceTypeSavedDashboard;
+    } else if([resourceLookupType isEqualToString:kJMTempExportedDashboard]) {
+        return JMResourceTypeTempExportedDashboard;
+    } else if([resourceLookupType isEqualToString:kJS_WS_TYPE_DASHBOARD]) {
         return JMResourceTypeDashboard;
-    } else if([resourceLookup.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD_LEGACY]) {
+    } else if([resourceLookupType isEqualToString:kJS_WS_TYPE_DASHBOARD_LEGACY]) {
         return JMResourceTypeLegacyDashboard;
-    } else if([resourceLookup.resourceType isEqualToString:kJS_WS_TYPE_FILE]) {
+    } else if([resourceLookupType isEqualToString:kJS_WS_TYPE_FILE]) {
         return JMResourceTypeFile;
-    } else if([resourceLookup.resourceType isEqualToString:kJMScheduleUnit]) {
+    } else if([resourceLookupType isEqualToString:kJMScheduleUnit]) {
         return JMResourceTypeSchedule;
     }
     return NSNotFound;

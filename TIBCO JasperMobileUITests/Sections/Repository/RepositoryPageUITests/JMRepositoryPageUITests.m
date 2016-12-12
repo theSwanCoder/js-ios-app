@@ -11,6 +11,8 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Folders.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Search.h"
 
 @implementation JMRepositoryPageUITests
 
@@ -18,7 +20,7 @@
 {
     [super setUp];
 
-    [self openRepositorySection];
+    [self openRepositorySectionIfNeed];
 }
 
 #pragma mark - Tests
@@ -46,8 +48,10 @@
 //    - After:
 - (void)testThatRepositoryPageHasSideMenuButton
 {
-    [self waitMenuButtonWithTimeout:kUITestsBaseTimeout
-                  inSectionWithName:@"Repository"];
+    XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:@"Repository"];
+    if (!menuButton) {
+        XCTFail(@"Menu button isn't found in Repository section");
+    }
 }
     
 //  Repository Title
@@ -75,8 +79,7 @@
 //    - After:
 - (void)testThatOpendFolderHasCorrectTitle
 {
-    [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Repository"];
     
     [self openFolderWithName:kTestFolderName];
     [self verifyCorrectTitleForFolderWithName:kTestFolderName];
@@ -95,13 +98,14 @@
 //    - After:
 - (void)testThatOpenedFolderHasBackButtonWithCorrectTitle
 {
-    [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Repository"];
     
     [self openFolderWithName:kTestFolderName];
-    [self waitBackButtonWithAccessibilityId:@"Repository"
-                          onNavBarWithLabel:kTestFolderName
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestFolderName
+                                                   timeout:kUITestsBaseTimeout];
+    [self verifyButtonExistWithText:@"Repository"
+                      parentElement:navBar];
+
     [self backToFolderWithName:@"Repository"];
 }
 
@@ -122,13 +126,13 @@
 //    - After:
 - (void)testThatSearchOnRepositoryPageWorkCorrectly
 {
-    [self searchResourceWithName:@"Samples"
-               inSectionWithName:@"Repository"];
-    [self givenThatCellsAreVisible];
+    [self performSearchResourceWithName:@"Samples"
+                      inSectionWithName:@"Repository"];
+    [self verifyThatCollectionViewContainsCells];
     
-    [self searchResourceWithName:@"Templates"
-               inSectionWithName:@"Repository"];
-    [self givenThatCellsAreVisible];
+    [self performSearchResourceWithName:@"Templates"
+                      inSectionWithName:@"Repository"];
+    [self verifyThatCollectionViewContainsCells];
 }
 
 //  Error message when no search result
@@ -142,12 +146,12 @@
 //    - After:
 - (void)testThatSearchWithEmptyResultOnRepositoryPageHasCorrectMessage
 {
-    [self searchResourceWithName:@"NoSearchResults"
-               inSectionWithName:@"Repository"];
+    [self performSearchResourceWithName:@"NoSearchResults"
+                      inSectionWithName:@"Repository"];
 
-    XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
-                                                parentElement:nil
-                                                      timeout:kUITestsBaseTimeout];
+    XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                          text:@"No Results."
+                                                       timeout:kUITestsBaseTimeout];
     if (!noResultLabel.exists) {
         XCTFail(@"There isn't 'No Results.' label");
     }
@@ -171,10 +175,10 @@
 {
     [self switchViewFromListToGridInSectionWithTitle:@"Repository"];
     [self verifyThatCollectionViewContainsGridOfCells];
-    
-    [self openLibrarySection];
-    [self openRepositorySection];
-    [self givenThatCellsAreVisible];
+
+    [self openLibrarySectionIfNeed];
+    [self openRepositorySectionIfNeed];
+    [self verifyThatCollectionViewContainsCells];
     [self verifyThatCollectionViewContainsGridOfCells];
     
     [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
@@ -222,18 +226,18 @@
 - (void)testThatEmptyFolderHasCorrectMessage
 {
     [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
-    [self searchResourceWithName:@"Monitoring"
-               inSectionWithName:@"Repository"];
+    [self performSearchResourceWithName:@"Monitoring"
+                      inSectionWithName:@"Repository"];
 
     NSInteger cellsCount = [self countOfListCells];
     if (cellsCount > 0) {
         // Some instances hasn't the folder
         [self openFolderWithName:@"Monitoring"];
-        [self givenThatCellsAreVisible];
+        [self verifyThatCollectionViewContainsCells];
         [self openFolderWithName:@"Monitoring Domains"];
-        XCUIElement *noResultLabel = [self waitStaticTextWithText:@"No Results."
-                                                    parentElement:nil
-                                                          timeout:kUITestsBaseTimeout];
+        XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                              text:@"No Results."
+                                                           timeout:kUITestsBaseTimeout];
         if (!noResultLabel.exists) {
             XCTFail(@"There isn't 'No Results.' label");
         }

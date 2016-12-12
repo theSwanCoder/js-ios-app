@@ -82,6 +82,8 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
 - (void)addResourcesWithResources:(NSArray <JMResource *>*)resources;
 - (JMResource *)resourceAtIndex:(NSInteger)index;
 
+- (BOOL)validateResourceFilteringBeforeAdding:(JMResource *)resource;
+
 // search
 - (void)searchWithQuery:(NSString *)query;
 - (void)clearSearchResults;
@@ -89,7 +91,6 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOptionType) {
 //
 - (NSArray <JMResourceLoaderOption *>*)listItemsWithOption:(JMResourcesListLoaderOptionType)option;
 - (id)parameterForQueryWithOptionType:(JMResourcesListLoaderOptionType)optionType;
-- (NSString *)titleForPopupWithOptionType:(JMResourcesListLoaderOptionType)optionType;
 
 - (void)finishLoadingWithError:(NSError *)error;
 @end

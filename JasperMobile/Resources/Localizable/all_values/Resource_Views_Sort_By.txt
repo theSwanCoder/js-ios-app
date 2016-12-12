@@ -41,12 +41,12 @@
 		zh = 修改日期
 		tags = ios
 	[resources_sortby_accessTime]
-		en = Access Time
-		de = Zugriffszeit
-		fr = Heure d'accès
-		es = Hora de acceso
-		it = Ora di accesso
-		pt = Hora do Acesso
-		ja = アクセス時間
-		zh = 访问时间
-		tags = ios
+        en = Recently Viewed
+        de = Zuletzt angesehen
+        fr = Vu récemment
+        es = Recientemente visto
+        it = Visualizzato recentemente
+        pt = Recently Viewed
+        ja = 最近表示した項目
+        zh = 最近浏览
+        tags = ios

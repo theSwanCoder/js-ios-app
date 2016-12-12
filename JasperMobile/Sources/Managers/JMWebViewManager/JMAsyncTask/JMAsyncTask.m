@@ -35,6 +35,15 @@
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 }
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.state = JMAsyncTaskStateReady;
+    }
+    return self;
+}
+
 #pragma mark - Custom Accessors
 
 - (void)setState:(JMAsyncTaskState)state
@@ -68,19 +77,19 @@
 
 - (BOOL)isReady
 {
-    BOOL isReady = super.isReady && self.state == JMAsyncTaskStateReady;
+    BOOL isReady = super.isReady && (self.state == JMAsyncTaskStateReady);
     return isReady;
 }
 
 - (BOOL)isExecuting
 {
-    BOOL isExecuting = self.state == JMAsyncTaskStateExecuting;
+    BOOL isExecuting = (self.state == JMAsyncTaskStateExecuting);
     return isExecuting;
 }
 
 - (BOOL)isFinished
 {
-    BOOL isFinished = self.state == JMAsyncTaskStateFinished;
+    BOOL isFinished = (self.state == JMAsyncTaskStateFinished);
     return isFinished;
 }
 
@@ -88,7 +97,8 @@
 
 - (void)start
 {
-    if (self.cancelled) {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    if (self.isCancelled) {
         self.state = JMAsyncTaskStateFinished;
         return;
     }
@@ -99,6 +109,7 @@
 
 - (void)cancel
 {
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     self.state = JMAsyncTaskStateFinished;
 }
 

@@ -39,7 +39,7 @@
 //    > User should see Print Dashboard dialog (screen for iPhone)
 - (void)testThatUserCanSeePrintDialog
 {
-    [self verifyThatPrintDashboardPageOnScreen];
+    [self verifyThatPrintPageOnScreen];
 }
 
 //Cancel button on Print Options dialog
@@ -51,7 +51,7 @@
 //    > Dashboard View screen should appears
 - (void)testThatCancelButtonWorkCorrectly
 {
-    [self verifyThatPrintDashboardPageHasCancelButton];
+    [self verifyThatPrintPageHasCancelButton];
 }
 
 //Printer Options title
@@ -62,7 +62,7 @@
 //    > User should see title like "Printer Options"
 - (void)testThatPrinterOptionsPageHasCorrectTitle
 {
-    [self verifyThatPrintDashboardPageHasCorrectTitle];
+    [self verifyThatPrintPageHasCorrectTitle];
 }
 
 //Printer button
@@ -91,7 +91,7 @@
 - (void)testThatPrinterOptionsBackButtonWorkCorrectly
 {
     [self openSelectPrinterPage];
-    [self verifyThatPrintersPageHasCorrentBackButton];
+    [self verifyThatPrintersPageHasCorrectBackButton];
     [self closeSelectPrinterPage];
 }
 
@@ -166,39 +166,6 @@
     [self openSelectPrinterPage];
     // We need come up something with a test printer on CI to test this
     [self closeSelectPrinterPage];
-}
-
-#pragma mark - Verifying
-
-- (void)verifyThatPrintDashboardPageOnScreen
-{
-    [self verifyThatPrintDashboardPageHasCorrectTitle];
-}
-
-- (void)verifyThatPrintDashboardPageHasCorrectTitle
-{
-    [self waitNavigationBarWithLabel:@"Printer Options"
-                             timeout:kUITestsBaseTimeout];
-}
-
-- (void)verifyThatPrintDashboardPageHasCancelButton
-{
-    [self waitBackButtonWithAccessibilityId:@"Cancel"
-                          onNavBarWithLabel:@"Printer Options"
-                                    timeout:kUITestsBaseTimeout];
-}
-
-- (void)verifyThatPrintersPageHasCorrentBackButton
-{
-    [self waitBackButtonWithAccessibilityId:@"Printer Options"
-                          onNavBarWithLabel:@"Printer"
-                                    timeout:kUITestsBaseTimeout];
-}
-
-- (void)verifyThatPrintersPageOnScreen
-{
-    [self waitNavigationBarWithLabel:@"Printer"
-                             timeout:kUITestsBaseTimeout];
 }
 
 @end

@@ -46,7 +46,6 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 - (void)handleMemoryWarnings
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    self.webEnvironments = [NSMutableArray array];
 }
 
 #pragma mark - Lifecycle
@@ -172,24 +171,7 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
         JMLog(@"new cookies: %@", self.cookies);
         // TODO: what need we do if cookies if nil?
         for (JMWebEnvironment *webEnvironment in self.webEnvironments) {
-            switch(webEnvironment.cookiesState) {
-                case JMWebEnvironmentCookiesStateEmpty: {
-                    // TODO: do not change this state
-                    break;
-                }
-                case JMWebEnvironmentCookiesStateValid: {
-                    webEnvironment.cookiesState = JMWebEnvironmentCookiesStateNotValid;
-                    break;
-                }
-                case JMWebEnvironmentCookiesStateNotValid: {
-                    webEnvironment.cookiesState = JMWebEnvironmentCookiesStateNotValid;
-                    break;
-                }
-                case JMWebEnvironmentCookiesStateNeedUpdate: {
-                    // TODO: do not change this state
-                    break;
-                }
-            }
+            webEnvironment.cookiesState = JMWebEnvironmentCookiesStateInvalid;
         }
     } else {
         // TODO: need handle this case?

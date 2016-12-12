@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Printer.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMPrintReportUITests
 
@@ -224,8 +225,8 @@
 
 - (void)verifyThatPrintersPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Printer Options"
-                          onNavBarWithLabel:@"Printer"
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self findNavigationBarWithLabel:@"Printer"];
+    [self verifyButtonExistWithText:@"Printer Options"
+                      parentElement:navBar];
 }
 @end

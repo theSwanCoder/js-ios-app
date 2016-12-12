@@ -10,6 +10,9 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMUITestServerProfileManager.h"
 #import "JMUITestServerProfile.h"
+#import "JMBaseUITestCase+LoginPage.h"
+#import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMServerProfilesUITests
 
@@ -17,7 +20,7 @@
 - (void)testThatListOfServerProfilesVisible
 {
     [self tryOpenServerProfilesPage];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     XCUIElement *collectionView = self.application.collectionViews.allElementsBoundByIndex.firstObject;
     if (collectionView.exists) {
         [collectionView swipeUp];
@@ -38,8 +41,12 @@
     }
     
     // verify server profile field has value that equal demo profile
-    XCUIElement *serverProfileTextField = [self waitTextFieldWithAccessibilityId:@"JMLoginPageServerProfileTextFieldAccessibilityId"
-                                                                         timeout:kUITestsBaseTimeout];
+    XCUIElement *serverProfileTextField = [self waitElementMatchingType:XCUIElementTypeTextField
+                                                             identifier:@"JMLoginPageServerProfileTextFieldAccessibilityId"
+                                                                timeout:kUITestsBaseTimeout];
+    if (!serverProfileTextField.exists) {
+        XCTFail(@"Server profile text field wasn't found");
+    }
     NSString *stringValueInServerField = serverProfileTextField.value;
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
     NSString *testProfileName = testServerProfile.name;
@@ -114,16 +121,14 @@
         [menu tap];
         [self givenThatNewProfilePageOnScreen];
         // Save a new created profile
-        XCUIElement *saveButton = [self waitButtonWithAccessibilityId:@"Save" 
-                                                              timeout:kUITestsBaseTimeout];
-        [saveButton tap];
+        [self verifyButtonExistWithText:@"Save"
+                          parentElement:nil];
 
         // Confirm if need http end point
         XCUIElement *securityWarningAlert = [self waitAlertWithTitle:@"Warning"
                                                              timeout:kUITestsBaseTimeout];
-        XCUIElement *okButton = [self findButtonWithTitle:JMLocalizedString(@"dialog_button_ok")
-                                            parentElement:securityWarningAlert];
-        [okButton tap];
+        [self verifyButtonExistWithText:JMLocalizedString(@"dialog_button_ok")
+                          parentElement:securityWarningAlert];
     } else {
         XCTFail(@"'Clone Profile' menu item doesn't exist.");
     }
@@ -167,12 +172,10 @@
     XCUIElement *menu = self.application.menuItems[@"Delete"];
     if (menu) {
         [menu tap];
-        XCUIElement *alertView = [self.application.alerts[@"Confirmation"].collectionViews elementBoundByIndex:0];
-        XCUIElement *deleteButton = [self waitButtonWithAccessibilityId:@"Delete" 
-                                                          parentElement:alertView
-                                                                timeout:kUITestsBaseTimeout];
-        
-        [deleteButton tap];
+        XCUIElement *alertView = [self waitAlertWithTitle:@"Confirmation"
+                                                  timeout:kUITestsBaseTimeout];
+        [self verifyButtonExistWithText:@"Delete"
+                          parentElement:alertView];
     } else {
         XCTFail(@"Delete menu item doesn't exist.");
     }

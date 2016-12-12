@@ -53,11 +53,10 @@ NSInteger static kJMRunReportTestCellIndex = 2;
         
         [self verifyThatReportPageOnScreenWithReportName:reportInfoLabel];
     } else {
-        XCTFail(@"'Test Cell' isn't visible");
+        XCTFail(@"'Test Cell' wasn't visible");
     }
-    
-    sleep(2);
-    [self verifyThatLoadingPopupNotVisible];
+
+    [self givenLoadingPopupNotVisible];
 }
 
 - (void)backToLibrary

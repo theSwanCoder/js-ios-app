@@ -11,6 +11,8 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+Search.h"
 
 @implementation JMLibraryPageUITests
 
@@ -19,13 +21,20 @@
     [super setUp];
 
     [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 }
 
 - (void)tearDown
 {
 
     [super tearDown];
+}
+
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 16;
 }
 
 #pragma mark - Test 'Main' features
@@ -37,7 +46,7 @@
 
 - (void)testThatLibraryContainsListOfCells
 {
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
     
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
@@ -61,9 +70,11 @@
     XCUIElement *firstCellElement = [collectionViewElement.cells elementBoundByIndex:0];
     XCUIElement *secondCellElement = [collectionViewElement.cells elementBoundByIndex:4];
     
-    [firstCellElement pressForDuration:1 thenDragToElement:secondCellElement];
-    
-    [self verifyThatCollectionViewNotContainsCells];
+    [firstCellElement pressForDuration:1
+                     thenDragToElement:secondCellElement];
+
+    // TODO: implement by detecting 'loading' cell
+//    [self verifyThatCollectionViewNotContainsCells];
     [self verifyThatCollectionViewContainsCells];
 }
 
@@ -82,8 +93,10 @@
 {
     // start find some text
     [self switchViewFromGridToListInSectionWithTitle:@"Library"];
-    [self searchResourceWithName:kJMTestLibrarySearchTextExample
-               inSectionWithName:@"Library"];
+    [self givenThatReportCellsOnScreenInSectionWithName:@"Library"];
+
+    [self performSearchResourceWithName:kJMTestLibrarySearchTextExample
+                      inSectionWithName:@"Library"];
     NSInteger cellsCount = [self countOfListCells];
     XCTAssertTrue(cellsCount > 0, @"Should one or more results");
 
@@ -126,7 +139,7 @@
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
         
-        [self givenThatCollectionViewContainsListOfCells];
+        [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
 
         [self switchViewFromListToGridInSectionWithTitle:@"Library"];
         [self verifyThatCollectionViewContainsGridOfCells];
@@ -144,20 +157,20 @@
     XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
     if (contentView.exists) {
         
-        [self givenThatCollectionViewContainsListOfCells];
+        [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
 
         [self switchViewFromListToGridInSectionWithTitle:@"Library"];
-        [self givenThatCellsAreVisible];
+        [self verifyThatCollectionViewContainsCells];
         [self verifyThatCollectionViewContainsGridOfCells];
         
         // Change Page to Repository
-        [self openRepositorySection];
+        [self openRepositorySectionIfNeed];
         [self givenThatRepositoryPageOnScreen];
         
         // Change Page to Library
-        [self openLibrarySection];
+        [self openLibrarySectionIfNeed];
         [self givenThatLibraryPageOnScreen];
-        [self givenThatCellsAreVisible];
+        [self verifyThatCollectionViewContainsCells];
         
         [self verifyThatCollectionViewContainsGridOfCells];
         
@@ -168,7 +181,7 @@
 
 - (void)testThatViewPresentationNotChangeWhenUserUseSearch
 {
-    [self givenThatCollectionViewContainsListOfCells];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
 
     [self switchViewFromListToGridInSectionWithTitle:@"Library"];
     [self verifyThatCollectionViewContainsGridOfCells];
@@ -184,7 +197,7 @@
 - (void)testThatUserCanSortListItemsByName
 {
     [self trySortByName];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 
     [self verifyThatCellsSortedByName];
 }
@@ -192,7 +205,7 @@
 - (void)testThatUserCanSortListItemsByCreationDate
 {
     [self trySortByCreationDate];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     
     [self verifyThatCellsSortedByCreationDate];
 }
@@ -200,7 +213,7 @@
 - (void)testThatUserCanSortListItemsByModifiedDate
 {
     [self trySortByModifiedDate];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
 
     [self verifyThatCellsSortedByModifiedDate];
 }
@@ -209,7 +222,7 @@
 - (void)testThatUserCanFilterByAllItems
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     
     [self verifyThatCellsFiltredByAll];
 }
@@ -217,14 +230,14 @@
 - (void)testThatUserCanFilterByReports
 {
     [self tryFilterByReports];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     [self verifyThatCellsFiltredByReports];
 }
 
 - (void)testThatUserCanFilterByDashboards
 {
     [self tryFilterByDashboards];
-    [self givenThatCellsAreVisible];
+    [self verifyThatCollectionViewContainsCells];
     [self verifyThatCellsFiltredByDashboards];
 }
 

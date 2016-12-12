@@ -20,5 +20,15 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+    <key>JMUITestsServerProfileName</key>
+    <string>Test Profile</string>
+    <key>JMUITestsServerProfileURL</key>
+    <string>https://mobiledemo.jaspersoft.com/jasperserver-pro</string>
+    <key>JMUITestsServerProfileUsername</key>
+    <string>phoneuser</string>
+    <key>JMUITestsServerProfilePassword</key>
+    <string>phoneuser</string>
+    <key>JMUITestsServerProfileOrganization</key>
+    <string></string>
 </dict>
 </plist>

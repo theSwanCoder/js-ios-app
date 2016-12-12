@@ -11,8 +11,18 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Favorites.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Printer.h"
+#import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Section.h"
 
 @implementation JMDashboardPageUITests
+
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 8;
+}
 
 #pragma mark - Tests
 
@@ -107,9 +117,18 @@
 - (void)testThatPrintButtonWorkCorrectly
 {
     [self openTestDashboardPage];
-
     [self openPrintDashboardPage];
-    [self closePrintDashboardPage];
+    
+    XCUIElement *errorAlert = [self findAlertWithTitle:@"JSErrorDomain"];
+    if (errorAlert.exists) {
+    // TODO: should this case be considered as a failure?
+        [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+                  parentElement:errorAlert
+                    shouldCheck:YES];
+    } else {
+        [self verifyThatPrintPageOnScreen];
+        [self closePrintDashboardPage];
+    }
 
     [self closeTestDashboardPage];
 }
@@ -165,9 +184,10 @@
 
 - (void)verifyBackButtonHasCorrectTitle
 {
-    [self waitBackButtonWithAccessibilityId:@"Library"
-                          onNavBarWithLabel:kTestDashboardName
-                                    timeout:kUITestsBaseTimeout];
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestDashboardName
+                                                   timeout:kUITestsBaseTimeout];
+    [self verifyButtonExistWithText:@"Library"
+                      parentElement:navBar];
 }
 
 @end

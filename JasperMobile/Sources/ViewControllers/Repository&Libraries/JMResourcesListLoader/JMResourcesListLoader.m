@@ -160,7 +160,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 {
     if (resource.type == JMResourceTypeFolder) {
         [self.resourcesFolders addObject:resource];
-    } else {
+    } else if ([self validateResourceFilteringBeforeAdding:resource]) {
         [self.resourcesItems addObject:resource];
     }
     self.allResources = nil;
@@ -171,6 +171,14 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     for (id resource in resources) {
         [self addResourcesWithResource:resource];
     }
+}
+
+- (BOOL)validateResourceFilteringBeforeAdding:(JMResource *)resource
+{
+    // FIX for http://jira.jaspersoft.com/browse/JRS-11049
+    id value = [self parameterForQueryWithOptionType:JMResourcesListLoaderOptionType_Filter];
+    NSSet *availableResourceTypes = [value isKindOfClass:[NSArray class]] ? [NSSet setWithArray:value] : [NSSet setWithObject:value];
+    return [availableResourceTypes containsObject:resource.resourceLookup.resourceType];
 }
 
 #pragma mark - JMPagination
@@ -267,7 +275,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
             NSArray *allOptions;
             if ([JMUtils isServerProEdition]) {
                 // reports
-                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_UNKNOW]; //We should send kJS_WS_TYPE_UNKNOW here according to http://jira.jaspersoft.com/browse/JRS-11049
+                NSArray *reportsValues = @[kJS_WS_TYPE_REPORT_UNIT];
                 JMResourceLoaderOption *reportFilterOption = [JMResourceLoaderOption optionWithTitle:JMLocalizedString(@"resources_filterby_type_reportUnit")
                                                                                                value:reportsValues];
                 // dashboards
@@ -315,17 +323,6 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                 return [[self listItemsWithOption:optionType].firstObject value];
             }
             break;
-    }
-    return nil;
-}
-
-- (NSString *)titleForPopupWitOptionType:(JMResourcesListLoaderOptionType)optionType
-{
-    switch (optionType) {
-        case JMResourcesListLoaderOptionType_Filter:
-            return JMLocalizedString(@"resources_filterby_title");
-        case JMResourcesListLoaderOptionType_Sort:
-            return JMLocalizedString(@"resources_sortby_title");
     }
     return nil;
 }

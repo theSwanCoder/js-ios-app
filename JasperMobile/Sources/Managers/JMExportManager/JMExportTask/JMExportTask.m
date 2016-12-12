@@ -27,7 +27,7 @@
 //
 
 #import "JMExportTask.h"
-#import "JMUtils.h"
+#import "JMSavedResources+Helpers.h"
 
 @interface JMExportTask ()
 @property (nonatomic, strong, readwrite) JMExportResource *exportResource;
@@ -42,50 +42,18 @@
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 }
 
-- (instancetype)initWithResource:(JMResource *)resource name:(NSString *)name format:(NSString *)format
+- (instancetype)initWithResource:(JMExportResource *)resource
 {
     self = [super init];
     if (self) {
-        self.name = name;
-        _exportResource = [self exportResourceFromResource:resource
-                                                    format:format];
+        self.exportResource = resource;
     }
     return self;
 }
 
-+ (instancetype)taskWithResource:(JMResource *)resource name:(NSString *)name format:(NSString *)format
++ (instancetype)taskWithResource:(JMExportResource *)resource
 {
-    return [[self alloc] initWithResource:resource name:name format:format];
-}
-
-- (JMExportResource *)exportResourceFromResource:(JMResource *)resource format:(NSString *)format
-{
-    JSResourceLookup *resourceLookup = [JSResourceLookup new];
-    resourceLookup.label = self.name;
-    resourceLookup.uri = [self resourceURIForResourceWithFormat:format];
-    resourceLookup.resourceDescription = resource.resourceLookup.resourceDescription;
-    resourceLookup.resourceType = [self resourceTypeForResource];
-    resourceLookup.version = @1;
-    resourceLookup.permissionMask = @(JSPermissionMask_Administration);
-    resourceLookup.creationDate = [NSDate date];
-    resourceLookup.updateDate = [NSDate date];
-
-    JMExportResource *exportResource = [JMExportResource resourceWithResourceLookup:resourceLookup];
-    exportResource.format = format;
-
-    return exportResource;
-}
-
-- (NSString *)resourceTypeForResource
-{
-    NSString *messageString = [NSString stringWithFormat:@"You need to implement \"resourceTypeForResource:\" method in %@",NSStringFromClass([self class])];
-    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:messageString userInfo:nil];
-}
-
-- (NSString *)resourceURIForResourceWithFormat:(NSString *)format
-{
-    NSString *messageString = [NSString stringWithFormat:@"You need to implement \"resourceURIForResourceWithFormat:\" method in %@",NSStringFromClass([self class])];
-    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:messageString userInfo:nil];
+    return [[self alloc] initWithResource:resource];
 }
 
 - (NSString *)description
