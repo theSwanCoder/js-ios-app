@@ -91,7 +91,7 @@
 {
     // start find some text
     [self switchViewFromGridToListInSectionWithTitle:@"Library"];
-    [self givenThatReportCellsOnScreen];
+    [self givenThatReportCellsOnScreenInSectionWithName:@"Library"];
 
     [self performSearchResourceWithName:kJMTestLibrarySearchTextExample
                       inSectionWithName:@"Library"];
