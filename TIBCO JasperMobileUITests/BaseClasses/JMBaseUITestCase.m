@@ -12,6 +12,8 @@
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+Buttons.h"
 
+#define JMUITestLocalDebugState 0
+
 static NSString *JMUIBaseTestCaseExecutedTestNumberKey = @"JMUIBaseTestCaseExecutedTestNumberKey";
 
 NSTimeInterval kUITestsBaseTimeout = 15;
@@ -37,7 +39,10 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     }
 
     if (![self shouldPerformSuperSetup]) {
+        NSLog(@"Skip performing 'super' setup");
         return;
+    } else {
+        NSLog(@"Do performing 'super' setup");
     }
 
     if ([self shouldLoginBeforeStartTest]) {
@@ -78,6 +83,10 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 #pragma mark - JMBaseUITestProtocol
 - (BOOL)shouldPerformSuperSetup
 {
+#if JMUITestLocalDebugState
+    // FOR LOCAL DEBUG ONLY
+    return NO;
+#else
     NSInteger testsCount = [self testsCount];
     NSNumber *executedTestNumber = [[NSUserDefaults standardUserDefaults] objectForKey:JMUIBaseTestCaseExecutedTestNumberKey];
     NSInteger executedTestCount = executedTestNumber ? executedTestNumber.integerValue : 0;
@@ -92,10 +101,12 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
         [self saveExecutedTestCount:0];
         return NO;
     }
+#endif
 }
 
 - (NSInteger)testsCount
 {
+    [self saveExecutedTestCount:0];
     return 1;
 }
 
@@ -135,7 +146,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     XCUIElement *popup = [self waitElementMatchingType:XCUIElementTypeOther
                                             identifier:@"JMCancelRequestPopupAccessibilityId"
                                          parentElement:nil
-                                           shouldExist:YES
+                                   shouldBeInHierarchy:YES
                                                timeout:kUITestsResourceWaitingTimeout];
     if (!popup.exists) {
         XCTFail(@"Loading popup isn't visible");
@@ -148,7 +159,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     XCUIElement *popup = [self waitElementMatchingType:XCUIElementTypeOther
                                             identifier:@"JMCancelRequestPopupAccessibilityId"
                                          parentElement:nil
-                                           shouldExist:NO
+                                   shouldBeInHierarchy:NO
                                                timeout:kUITestsResourceWaitingTimeout];
     if (popup.exists) {
         XCTFail(@"Loading popup visible");

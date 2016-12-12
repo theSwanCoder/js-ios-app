@@ -39,7 +39,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openTestReportWithMandatoryFiltersPage
 {
-    [self givenThatReportCellsOnScreen];
+    [self givenThatReportCellsOnScreenInSectionWithName:@"Library"];
 
     [self tryOpenTestReportWithMandatoryFilters];
     // We can have two times when loading up and down
@@ -49,7 +49,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openTestReportWithSingleSelectedControlPage
 {
-    [self givenThatReportCellsOnScreen];
+    [self givenThatReportCellsOnScreenInSectionWithName:@"Library"];
     
     [self tryOpenTestReportWithSingleSelectedControl];
     // We can have two times when loading up and down
@@ -155,9 +155,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
                       inSectionWithName:sectionName];
 
     // TODO: replace with real check 'loading' message
-    sleep(1);
-
-    [self verifyThatCollectionViewContainsCells];
+    sleep(3);
 
     XCUIElement *testCell = [self testReportCell];
     return testCell;
@@ -283,12 +281,12 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
                           timeout:kUITestsBaseTimeout];
 }
 
-- (void)givenThatReportCellsOnScreen
+- (void)givenThatReportCellsOnScreenInSectionWithName:(NSString *)sectionName
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
+      inSectionWithTitle:sectionName];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:sectionName];
 }
 
 @end

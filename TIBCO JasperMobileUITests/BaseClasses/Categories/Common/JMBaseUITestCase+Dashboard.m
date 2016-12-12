@@ -51,7 +51,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
         [self waitElementMatchingType:XCUIElementTypeStaticText
                                  text:@"Loading..."
                         parentElement:nil
-                          shouldExist:NO
+                  shouldBeInHierarchy:NO
                               timeout:kUITestsResourceWaitingTimeout];
     }
 }

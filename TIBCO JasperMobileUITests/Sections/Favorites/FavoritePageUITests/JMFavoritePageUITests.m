@@ -91,12 +91,11 @@
     [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
 
     [self openFavoritesSectionIfNeed];
-    [self givenThatReportCellsOnScreen];
+    [self givenThatReportCellsOnScreenInSectionWithName:@"Favorites"];
     
     [self performSearchResourceWithName:kTestReportName
            inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-
-    [self verifyThatCollectionViewContainsCells];
+    [self givenThatReportCellsOnScreenInSectionWithName:@"Favorites"];
 
     [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }

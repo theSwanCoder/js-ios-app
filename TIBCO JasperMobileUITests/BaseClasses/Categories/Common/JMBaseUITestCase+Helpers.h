@@ -27,7 +27,7 @@
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
                               identifier:(NSString *)identifier
                            parentElement:(XCUIElement *)parentElement
-                             shouldExist:(BOOL)shouldExist
+                     shouldBeInHierarchy:(BOOL)shouldBeInHierarchy
                                  timeout:(NSTimeInterval)timeout;
 
 // Elements with text
@@ -41,7 +41,7 @@
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
                                     text:(NSString *)text
                            parentElement:(XCUIElement *)parentElement
-                             shouldExist:(BOOL)shouldExist
+                     shouldBeInHierarchy:(BOOL)shouldBeInHierarchy
                                  timeout:(NSTimeInterval)timeout;
 
 // Cells

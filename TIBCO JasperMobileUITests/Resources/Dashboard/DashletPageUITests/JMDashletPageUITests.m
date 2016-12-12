@@ -26,7 +26,6 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)tearDown
 {
-    [self closeTestDashlet];
     [self closeTestDashboardPage];
     
     [super tearDown];
@@ -50,6 +49,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 - (void)testThatUserCanSeeSelectedDashlet
 {
     [self openTestDashletWithHyperlinks];
+    [self closeTestDashlet];
 }
 
 //Back button like title of the dashboard
@@ -63,6 +63,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 {
     [self openTestDashletWithHyperlinks];
     [self verifyThatDashletPageHasCorrentBackButton];
+    [self closeTestDashlet];
 }
 
 //Title like name of the dashlet
@@ -75,6 +76,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 {
     [self openTestDashletWithHyperlinks];
     [self verifyThatDashletPageHasCorrectTitle];
+    [self closeTestDashlet];
 }
 
 //Zoom on Dashlet View screen
@@ -100,6 +102,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     [webView pinchWithScale:2
                    velocity:1];
     sleep(kUITestsElementAvailableTimeout);
+    [self closeTestDashlet];
 }
 
 //Hyperlinks
@@ -116,6 +119,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     [self openTestHyperlinkPage];
     [self verifyThatReportFromTestHypelinkOnScreen];
     [self closeTestHyperlinkPage];
+    [self closeTestDashlet];
 }
 
 //Input Controls
@@ -130,6 +134,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 {
 //    TODO: remove this case, because of 'native input controls change' feature.
     [self openTestDashletWithHyperlinks];
+    [self closeTestDashlet];
 }
 
 //Change Chart Type of report
@@ -155,6 +160,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
         XCTFail(@"Chart type element wasn't found");
     }
     sleep(3);
+    [self closeTestDashlet];
 }
 
 //JIVE

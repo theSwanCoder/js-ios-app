@@ -55,17 +55,20 @@
 
 - (void)trySortByName
 {
-    [self selectSortBy:@"Name" inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Name"
+    inSectionWithTitle:@"Library"];
 }
 
 - (void)trySortByCreationDate
 {
-    [self selectSortBy:@"Creation Date" inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Creation Date"
+    inSectionWithTitle:@"Library"];
 }
 
 - (void)trySortByModifiedDate
 {
-    [self selectSortBy:@"Modified Date" inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Modified Date"
+    inSectionWithTitle:@"Library"];
 }
 
 #pragma mark - Helpers - Filter By
@@ -73,15 +76,15 @@
 
 - (void)tryFilterByReports
 {
-    [self selectFilterBy:@"Reports" inSectionWithTitle:@"Library"];
-
-    [self givenThatReportCellsOnScreen];
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:@"Library"];
+    [self givenThatReportCellsOnScreenInSectionWithName:@"Libarary"];
 }
 
 - (void)tryFilterByDashboards
 {
-    [self selectFilterBy:@"Dashboards" inSectionWithTitle:@"Library"];
-
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:@"Library"];
     [self givenThatDashboardCellsOnScreen];
 }
 
