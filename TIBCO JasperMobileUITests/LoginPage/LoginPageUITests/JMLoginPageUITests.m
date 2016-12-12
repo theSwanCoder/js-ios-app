@@ -357,8 +357,9 @@
     XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
                                                        identifier:@"JMLoginPageAccessibilityId"
                                                           timeout:0];
-    [self verifyButtonExistWithId:@"JMLoginPageTryButtonAccessibilityId"
-                    parentElement:loginPageElement];
+    [self tapButtonWithId:@"JMLoginPageTryButtonAccessibilityId"
+            parentElement:loginPageElement
+              shouldCheck:YES];
 }
 
 - (void)tapLoginButton
@@ -366,8 +367,9 @@
     XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
                                                        identifier:@"JMLoginPageAccessibilityId"
                                                           timeout:0];
-    [self verifyButtonExistWithId:@"JMLoginPageLoginButtonAccessibilityId"
-                    parentElement:loginPageElement];
+    [self tapButtonWithId:@"JMLoginPageLoginButtonAccessibilityId"
+            parentElement:loginPageElement
+              shouldCheck:YES];
 }
 
 - (void)waitLoginProcessDidFinish
@@ -400,6 +402,7 @@
 
 - (void)closeErrorAlertWithTitle:(NSString *)title
 {
+    // TODO: move for using all tests
     XCUIElement *alert = [self findAlertWithTitle:title];
     [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
               parentElement:alert
