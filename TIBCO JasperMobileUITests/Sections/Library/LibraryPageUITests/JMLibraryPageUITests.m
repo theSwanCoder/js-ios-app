@@ -27,6 +27,7 @@
 
 - (void)tearDown
 {
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
     [super tearDown];
 }
@@ -42,7 +43,10 @@
 
 - (void)testThatLibraryPageHasCorrectTitle
 {
-    // verify that library page has correct title
+    XCUIElement *navBar = [self findNavigationBarWithLabel:JMLocalizedString(@"menuitem_library_label")];
+    if (!navBar.exists) {
+        XCTFail(@"Nav bar with %@ wasn't found", JMLocalizedString(@"menuitem_library_label"));
+    }
 }
 
 - (void)testThatLibraryContainsListOfCells
