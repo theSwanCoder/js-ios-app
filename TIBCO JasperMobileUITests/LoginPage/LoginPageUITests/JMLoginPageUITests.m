@@ -302,7 +302,7 @@
     XCUIElement *errorMessageElement = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                                 text:message
                                                        parentElement:alert
-                                                             timeout:0];
+                                                             timeout:kUITestsElementAvailableTimeout];
     if (!errorMessageElement.exists) {
         XCTFail(@"Wrong message on '%@' alert", title);
     }
@@ -328,7 +328,7 @@
     XCUIElement *usernameStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                                text:username
                                                       parentElement:sideMenuElement
-                                                            timeout:0];
+                                                            timeout:kUITestsElementAvailableTimeout];
     if (!usernameStaticText) {
         XCTFail(@"Error of verifying 'Demo' account: username - is wrong");
     }
@@ -336,7 +336,7 @@
         XCUIElement *organizationStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                                        text:organization
                                                               parentElement:sideMenuElement
-                                                                    timeout:0];
+                                                                    timeout:kUITestsElementAvailableTimeout];
         if (!organizationStaticText) {
             XCTFail(@"Error of verifying 'Demo' account: organization - is wrong");
         }
@@ -344,7 +344,7 @@
     XCUIElement *serverProfileStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                                     text:profileName
                                                            parentElement:sideMenuElement
-                                                                 timeout:0];
+                                                                 timeout:kUITestsElementAvailableTimeout];
     if (!serverProfileStaticText) {
         XCTFail(@"Error of verifying 'Demo' account: server profile - is wrong");
     }
@@ -356,7 +356,7 @@
 {
     XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
                                                        identifier:@"JMLoginPageAccessibilityId"
-                                                          timeout:0];
+                                                          timeout:kUITestsElementAvailableTimeout];
     [self tapButtonWithId:@"JMLoginPageTryButtonAccessibilityId"
             parentElement:loginPageElement
               shouldCheck:YES];
@@ -366,7 +366,7 @@
 {
     XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
                                                        identifier:@"JMLoginPageAccessibilityId"
-                                                          timeout:0];
+                                                          timeout:kUITestsElementAvailableTimeout];
     [self tapButtonWithId:@"JMLoginPageLoginButtonAccessibilityId"
             parentElement:loginPageElement
               shouldCheck:YES];
@@ -382,7 +382,7 @@
 {
     XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
                                                        identifier:@"JMLoginPageAccessibilityId"
-                                                          timeout:0];
+                                                          timeout:kUITestsElementAvailableTimeout];
     [self enterText:username intoTextFieldWithAccessibilityId:@"JMLoginPageUserNameTextFieldAccessibilityId"
    placeholderValue:nil
       parentElement:loginPageElement
@@ -393,7 +393,7 @@
 {
     XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
                                                        identifier:@"JMLoginPageAccessibilityId"
-                                                          timeout:0];
+                                                          timeout:kUITestsElementAvailableTimeout];
     [self enterText:password intoTextFieldWithAccessibilityId:@"JMLoginPagePasswordTextFieldAccessibilityId"
    placeholderValue:nil
       parentElement:loginPageElement

@@ -13,6 +13,7 @@
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 @implementation JMServerProfilesUITests
 
@@ -35,7 +36,7 @@
     
     XCUIElement *testProfile = [self findTestProfileCell];
     if (testProfile.exists) {
-        [testProfile tap];
+        [testProfile tapByWaitingHittable];
     } else {
         XCTFail(@"Test profile doesn't visible or exist");
     }
@@ -118,7 +119,7 @@
     
     XCUIElement *menu = self.application.menuItems[@"Clone Profile"];
     if (menu) {
-        [menu tap];
+        [menu tapByWaitingHittable];
         [self givenThatNewProfilePageOnScreen];
         // Save a new created profile
         [self verifyButtonExistWithText:@"Save"
@@ -171,7 +172,7 @@
     [element pressForDuration:1.1];
     XCUIElement *menu = self.application.menuItems[@"Delete"];
     if (menu) {
-        [menu tap];
+        [menu tapByWaitingHittable];
         XCUIElement *alertView = [self waitAlertWithTitle:@"Confirmation"
                                                   timeout:kUITestsBaseTimeout];
         [self verifyButtonExistWithText:@"Delete"

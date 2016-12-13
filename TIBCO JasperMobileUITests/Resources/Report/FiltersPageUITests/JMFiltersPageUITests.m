@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 @implementation JMFiltersPageUITests
 
@@ -205,7 +206,7 @@
 {
     XCUIElement *cellWithMandatoryFilter = [self findTableViewCellWithAccessibilityId:nil
                                                                 containsLabelWithText:@"* ProductFamily"];
-    [cellWithMandatoryFilter tap];
+    [cellWithMandatoryFilter tapByWaitingHittable];
 }
 
 - (void)stopEditMandatoryFilter
@@ -221,22 +222,22 @@
 {
     XCUIElement *drinkItem = [self findTableViewCellWithAccessibilityId:nil
                                                   containsLabelWithText:@"Drink"];
-    [drinkItem tap];
+    [drinkItem tapByWaitingHittable];
 
     XCUIElement *foodItem = [self findTableViewCellWithAccessibilityId:nil
                                                  containsLabelWithText:@"Food"];
-    [foodItem tap];
+    [foodItem tapByWaitingHittable];
 
     XCUIElement *nonConsumableItem = [self findTableViewCellWithAccessibilityId:nil
                                                           containsLabelWithText:@"Non-Consumable"];
-    [nonConsumableItem tap];
+    [nonConsumableItem tapByWaitingHittable];
 }
 
 - (void)startEditFilterWithMultiItems
 {
     XCUIElement *cellWithMandatoryFilter = [self findTableViewCellWithAccessibilityId:nil
                                                                 containsLabelWithText:@"Low Fat"];
-    [cellWithMandatoryFilter tap];
+    [cellWithMandatoryFilter tapByWaitingHittable];
 }
 
 - (void)stopEditFilterWithMultiItems
@@ -252,21 +253,21 @@
 {
     XCUIElement *trueItem = [self findTableViewCellWithAccessibilityId:nil
                                                   containsLabelWithText:@"true"];
-    [trueItem tap];
+    [trueItem tapByWaitingHittable];
 }
 
 - (void)unmarkTestControlItemForFilterWithMultipleSelectedItems
 {
     XCUIElement *trueItem = [self findTableViewCellWithAccessibilityId:nil
                                                   containsLabelWithText:@"true"];;
-    [trueItem tap];
+    [trueItem tapByWaitingHittable];
 }
 
 - (void)startEditFilterWithSingleSelectedItem
 {
     XCUIElement *cell = [self findTableViewCellWithAccessibilityId:nil
                                              containsLabelWithText:@"Country"];
-    [cell tap];
+    [cell tapByWaitingHittable];
 }
 
 - (void)stopEditFilterWithSingleSelectedItem
@@ -282,7 +283,7 @@
 {
     XCUIElement *cell = [self findTableViewCellWithAccessibilityId:nil
                                              containsLabelWithText:@"Mexico"];
-    [cell tap];
+    [cell tapByWaitingHittable];
 }
 
 - (void)startEditTestTextField
@@ -293,7 +294,7 @@
                                                       text:@"19"
                                              parentElement:cell
                                                    timeout:kUITestsBaseTimeout];
-    [textField tap];
+    [textField tapByWaitingHittable];
 
 }
 

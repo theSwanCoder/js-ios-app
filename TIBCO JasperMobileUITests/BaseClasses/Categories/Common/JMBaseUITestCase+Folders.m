@@ -8,6 +8,7 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+Search.h"
+#import "XCUIElement+Tappable.h"
 
 NSString *const kTestFolderName = @"Public";
 
@@ -16,7 +17,7 @@ NSString *const kTestFolderName = @"Public";
 - (void)openFolderWithName:(NSString *)folderName
 {
     XCUIElement *cell = [self folderCellWithName:folderName];
-    [cell tap];
+    [cell tapByWaitingHittable];
 }
 
 - (void)backToFolderWithName:(NSString *)folderName

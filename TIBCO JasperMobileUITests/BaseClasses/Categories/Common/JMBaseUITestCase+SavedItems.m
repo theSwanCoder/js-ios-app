@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMBaseUITestCase (SavedItems)
@@ -50,7 +51,7 @@
 - (void)verifyThatReportDidSaveWithReportName:(NSString *)reportName
                                        format:(NSString *)format
 {
-    [self waitNotificationOnMenuButtonWithTimeout:kUITestsResourceWaitingTimeout];
+    [self waitNotificationOnMenuButtonWithTimeout:kUITestsResourceLoadingTimeout];
     [self openSavedItemsSectionIfNeed];
     [self verifyExistSavedItemWithName:reportName
                                 format:format];
@@ -86,7 +87,7 @@
 
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                              format:@"html"];
-    [testItem tap];
+    [testItem tapByWaitingHittable];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -135,7 +136,7 @@
 
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                              format:@"pdf"];
-    [testItem tap];
+    [testItem tapByWaitingHittable];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -186,7 +187,7 @@
 
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                              format:@"xls"];
-    [testItem tap];
+    [testItem tapByWaitingHittable];
     [self givenLoadingPopupNotVisible];
 }
 

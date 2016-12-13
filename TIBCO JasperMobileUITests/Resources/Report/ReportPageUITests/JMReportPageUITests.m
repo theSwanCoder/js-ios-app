@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Favorites.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Section.h"
 
 @implementation JMReportPageUITests
 
@@ -33,8 +34,8 @@
 - (void)testThatUserCanCancelLoadingReport
 {
     [self openTestReportPageWithWaitingFinish:NO];
-    [self givenLoadingPopupNotVisible];
     [self cancelOpeningTestReportPage];
+    [self givenThatLibraryPageOnScreen];
 }
 
 // Title like name of the report

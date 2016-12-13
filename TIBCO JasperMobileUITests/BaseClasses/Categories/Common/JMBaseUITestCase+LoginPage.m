@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+TextFields.h"
 #import "JMBaseUITestCase+OtherElements.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMBaseUITestCase (LoginPage)
@@ -106,7 +107,7 @@
         [profile pressForDuration:1.1];
         XCUIElement *menu = app.menuItems[@"Delete"];
         if (menu) {
-            [menu tap];
+            [menu tapByWaitingHittable];
             XCUIElement *alert = [self waitAlertWithTitle:@"Confirmation"
                                                   timeout:kUITestsBaseTimeout];
             [self tapButtonWithText:@"Delete"
@@ -185,12 +186,12 @@
     // Test Profile Name
     XCUIElement *profileNameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                              text:testServerProfile.name
-                                                          timeout:0];
+                                                          timeout:kUITestsElementAvailableTimeout];
     BOOL isProfileNameLabelExist = profileNameLabel.exists;
     // Test Profile Username
     XCUIElement *profileUsernameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                                  text:testServerProfile.username
-                                                              timeout:0];
+                                                              timeout:kUITestsElementAvailableTimeout];
     BOOL isProfileUsernameLabelExist = profileUsernameLabel.exists;
 
     [self hideSideMenuInSectionWithName:nil];
@@ -211,7 +212,7 @@
                                                              identifier:@"JMLoginPageServerProfileTextFieldAccessibilityId"
                                                                 timeout:kUITestsBaseTimeout];
     if (serverProfileTextField.exists) {
-        [serverProfileTextField tap];
+        [serverProfileTextField tapByWaitingHittable];
     } else {
         XCTFail(@"Server profile text field wasn't found");
     }
@@ -289,7 +290,7 @@
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *testProfile = [self findTestProfileCell];
     if (testProfile.exists) {
-        [testProfile tap];
+        [testProfile tapByWaitingHittable];
     } else {
         XCTFail(@"Test profile doesn't visible or exist");
     }

@@ -15,6 +15,7 @@
 #import "JMBaseUITestCase+TextFields.h"
 #import "JMBaseUITestCase+Buttons.h"
 #import "JMBaseUITestCase+Search.h"
+#import "XCUIElement+Tappable.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";
@@ -45,6 +46,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
     [self givenLoadingPopupNotVisible];
+    [self givenLoadingPopupNotVisible];
 }
 
 - (void)openTestReportWithSingleSelectedControlPage
@@ -55,6 +57,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
     [self givenLoadingPopupNotVisible];
+    [self givenLoadingPopupNotVisible];
 }
 
 - (void)openTestReportPageWithWaitingFinish:(BOOL)waitingFinish
@@ -64,6 +67,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     if (waitingFinish) {
         // We can have two times when loading up and down
         // first time loading 'report info' and second one - loading report
+        [self givenLoadingPopupNotVisible];
         [self givenLoadingPopupNotVisible];
     }
 }
@@ -78,10 +82,10 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     // TODO: the same code is for dashboard - may be make it common?
     XCUIElement *loadingPopup = [self waitElementMatchingType:XCUIElementTypeOther
                                                    identifier:@"JMCancelRequestPopupAccessibilityId"
-                                                      timeout:kUITestsBaseTimeout];;
+                                                      timeout:0];
     [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
               parentElement:loadingPopup
-                shouldCheck:NO];
+                shouldCheck:YES];
 }
 
 - (void)openReportFiltersPage
@@ -122,7 +126,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     // Select format
     XCUIElement *htmlCell = [self findTableViewCellWithAccessibilityId:nil
                                                  containsLabelWithText:format];
-    [htmlCell tap];
+    [htmlCell tapByWaitingHittable];
 
     // Perform saving
     [self tapButtonWithText:@"Save"
@@ -146,7 +150,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)tryOpenTestReport
 {
     XCUIElement *testCell = [self searchTestReportInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
-    [testCell tap];
+    [testCell tapByWaitingHittable];
 }
 
 - (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName
@@ -177,7 +181,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 
     XCUIElement *testCell = [self testReportWithMandatoryFiltersCell];
-    [testCell tap];
+    [testCell tapByWaitingHittable];
 }
 
 - (void)searchTestReportWithMandatoryFilters
@@ -204,7 +208,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     
     XCUIElement *testCell = [self testReportWithSingleSelectedControl];
-    [testCell tap];
+    [testCell tapByWaitingHittable];
 }
 
 - (void)searchTestReportWithSingleSelectedControl

@@ -7,6 +7,7 @@
 //
 
 #import "JMPerformanceUITests.h"
+#import "XCUIElement+Tappable.h"
 
 NSInteger static kJMRunReportTestCellIndex = 2;
 
@@ -49,7 +50,7 @@ NSInteger static kJMRunReportTestCellIndex = 2;
         XCUIElement *reportNameLabel = testCell.staticTexts[@"JMResourceCellResourceNameLabelAccessibilityId"];
         NSString *reportInfoLabel = reportNameLabel.label;
         
-        [testCell tap];
+        [testCell tapByWaitingHittable];
         
         [self verifyThatReportPageOnScreenWithReportName:reportInfoLabel];
     } else {
@@ -67,7 +68,7 @@ NSInteger static kJMRunReportTestCellIndex = 2;
         NSLog(@"all buttons: %@", allButtons);
         for (XCUIElement *button in allButtons) {
             if ([button.label isEqualToString:JMLocalizedString(@"menuitem_library_label")]) {
-                [button tap];
+                [button tapByWaitingHittable];
                 break;
             }
         }

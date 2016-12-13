@@ -363,7 +363,7 @@
 {
     XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
                                                      text:JMLocalizedString(@"dialog_button_ok")
-                                                  timeout:0];
+                                                  timeout:kUITestsElementAvailableTimeout];
     if (okButton.isEnabled) {
         XCTFail(@"OK button should be inactive");
     }

@@ -6,6 +6,7 @@
 #import "JMBaseUITestCase+Printer.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMBaseUITestCase (Printer)
@@ -16,7 +17,7 @@
                                                           text:@"Select Printer"
                                                        timeout:kUITestsBaseTimeout];
     if (selectPrinter.exists) {
-        [selectPrinter tap];
+        [selectPrinter tapByWaitingHittable];
     } else {
         XCTFail(@"Select printer button doesn't exist");
     }

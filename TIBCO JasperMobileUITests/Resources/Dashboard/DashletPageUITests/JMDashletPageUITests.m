@@ -10,6 +10,7 @@
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 static NSString *const kDashletName = @"13. Top Fives Report";
 
@@ -155,7 +156,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
                                                              text:@"Store Sales"
                                                           timeout:kUITestsBaseTimeout];
     if (chartTypeElement.exists) {
-        [chartTypeElement tap];
+        [chartTypeElement tapByWaitingHittable];
     } else {
         XCTFail(@"Chart type element wasn't found");
     }
@@ -202,6 +203,9 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     [self tapOnElementWithText:@"Ida Rodriguez"];
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
+    [self givenLoadingPopupVisible];
+    [self givenLoadingPopupNotVisible];
+    [self givenLoadingPopupVisible];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -213,7 +217,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
                                            parentElement:webView
                                                  timeout:kUITestsBaseTimeout];
     if (element) {
-        [element tap];
+        [element tapByWaitingHittable];
     } else {
         XCTFail(@"Element with text '%@' not found", text);
     }

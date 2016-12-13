@@ -6,6 +6,7 @@
 #import "JMBaseUITestCase+TextFields.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMBaseUITestCase (TextFields)
@@ -50,7 +51,7 @@
     intoTextField:(XCUIElement *)textField
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [textField tap];
+    [textField tapByWaitingHittable];
     NSString *oldValueString = textField.value;
     BOOL isTextFieldContainText = oldValueString.length > 0;
     BOOL isTextFieldContainTheSameText = [oldValueString isEqualToString:text];
@@ -85,7 +86,7 @@
     XCUIElement *deleteSymbolButton = keyboard.keys[@"delete"];
     if (deleteSymbolButton.exists) {
         for (int i = 0; i < oldValueString.length; ++i) {
-            [deleteSymbolButton tap];
+            [deleteSymbolButton tapByWaitingHittable];
         }
     }
 }

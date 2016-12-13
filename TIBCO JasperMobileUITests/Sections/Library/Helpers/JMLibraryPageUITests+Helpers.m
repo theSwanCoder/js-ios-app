@@ -9,6 +9,7 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Dashboard.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMLibraryPageUITests (Helpers)
@@ -20,12 +21,12 @@
     // start find some text
     XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
     if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tap];
+        [searchResourcesSearchField tapByWaitingHittable];
         [searchResourcesSearchField typeText:text];
 
         XCUIElement *searchButton = self.application.buttons[@"Search"];
         if (searchButton.exists) {
-            [searchButton tap];
+            [searchButton tapByWaitingHittable];
         } else {
             XCTFail(@"Search button doesn't exist.");
         }
@@ -38,11 +39,11 @@
 {
     XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
     if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tap];
+        [searchResourcesSearchField tapByWaitingHittable];
 
         XCUIElement *cancelButton = self.application.buttons[@"Cancel"];
         if (cancelButton.exists) {
-            [cancelButton tap];
+            [cancelButton tapByWaitingHittable];
         } else {
             XCTFail(@"Cancel button doesn't exist.");
         }

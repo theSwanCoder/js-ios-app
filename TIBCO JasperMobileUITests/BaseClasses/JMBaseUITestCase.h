@@ -11,7 +11,7 @@
 #import "JMLocalization.h"
 
 extern NSTimeInterval kUITestsBaseTimeout;
-extern NSTimeInterval kUITestsResourceWaitingTimeout;
+extern NSTimeInterval kUITestsResourceLoadingTimeout;
 extern NSTimeInterval kUITestsElementAvailableTimeout;
 
 @protocol JMBaseUITestProtocol <NSObject>

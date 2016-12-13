@@ -9,6 +9,7 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+OtherElements.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMBaseUITestCase (Section)
@@ -121,7 +122,7 @@
     if (sortOptionsViewElement.exists) {
         XCUIElement *sortOptionElement = sortOptionsViewElement.staticTexts[sortTypeString];
         if (sortOptionElement.exists) {
-            [sortOptionElement tap];
+            [sortOptionElement tapByWaitingHittable];
         } else {
             XCTFail(@"'%@' Sort Option isn't visible", sortTypeString);
         }
@@ -135,7 +136,7 @@
     XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
     XCUIElement *sortActionElement = menuActionsElement.staticTexts[@"Sort by"];
     if (sortActionElement.exists) {
-        [sortActionElement tap];
+        [sortActionElement tapByWaitingHittable];
 
         // Wait until sort view appears
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
@@ -155,7 +156,7 @@
     if (navBar.exists) {
         XCUIElement *sortButton = navBar.buttons[@"sort action"];
         if (sortButton.exists) {
-            [sortButton tap];
+            [sortButton tapByWaitingHittable];
         } else {
             XCTFail(@"Sort Button isn't visible");
         }
@@ -182,7 +183,7 @@
     XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
     XCUIElement *filterActionElement = menuActionsElement.staticTexts[@"Filter by"];
     if (filterActionElement.exists) {
-        [filterActionElement tap];
+        [filterActionElement tapByWaitingHittable];
 
         // Wait until sort view appears
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
@@ -202,7 +203,7 @@
     if (navBar.exists) {
         XCUIElement *filterButton = navBar.buttons[@"filter action"];
         if (filterButton.exists) {
-            [filterButton tap];
+            [filterButton tapByWaitingHittable];
         } else {
             XCTFail(@"Filter Button isn't visible");
         }
@@ -220,7 +221,7 @@
     if (filterOptionsViewElement.exists) {
         XCUIElement *filterOptionElement = filterOptionsViewElement.staticTexts[filterTypeString];
         if (filterOptionElement.exists) {
-            [filterOptionElement tap];
+            [filterOptionElement tapByWaitingHittable];
         } else {
             XCTFail(@"'%@' Filter Option isn't visible", filterTypeString);
         }
@@ -253,7 +254,7 @@
 {
     XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeOther
                                               identifier:@"JMBaseCollectionContentViewAccessibilityId"
-                                                 timeout:0];
+                                                 timeout:kUITestsElementAvailableTimeout];
     return element;
 }
 

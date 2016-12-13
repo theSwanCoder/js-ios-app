@@ -17,7 +17,7 @@
 static NSString *JMUIBaseTestCaseExecutedTestNumberKey = @"JMUIBaseTestCaseExecutedTestNumberKey";
 
 NSTimeInterval kUITestsBaseTimeout = 15;
-NSTimeInterval kUITestsResourceWaitingTimeout = 60;
+NSTimeInterval kUITestsResourceLoadingTimeout = 60;
 NSTimeInterval kUITestsElementAvailableTimeout = 3;
 
 @implementation JMBaseUITestCase
@@ -147,9 +147,11 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
                                             identifier:@"JMCancelRequestPopupAccessibilityId"
                                          parentElement:nil
                                    shouldBeInHierarchy:YES
-                                               timeout:kUITestsResourceWaitingTimeout];
+                                               timeout:kUITestsResourceLoadingTimeout];
     if (!popup.exists) {
-        XCTFail(@"From super: Loading popup isn't visible");
+        XCTFail(@"From super: Loading popup was hidden");
+    } else {
+        NSLog(@"From super: Loading popup visible");
     }
 }
 
@@ -160,9 +162,11 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
                                             identifier:@"JMCancelRequestPopupAccessibilityId"
                                          parentElement:nil
                                    shouldBeInHierarchy:NO
-                                               timeout:kUITestsResourceWaitingTimeout];
+                                               timeout:kUITestsResourceLoadingTimeout];
     if (popup.exists) {
         XCTFail(@"From super: Loading popup visible");
+    } else {
+        NSLog(@"From super: Loading popup was hidden");
     }
 }
 

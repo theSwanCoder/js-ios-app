@@ -5,6 +5,7 @@
 
 #import "JMBaseUITestCase+Buttons.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMBaseUITestCase (Buttons)
@@ -16,7 +17,7 @@
     XCUIElement *button = [self waitElementMatchingType:XCUIElementTypeButton
                                              identifier:buttonId
                                           parentElement:parentElement
-                                                timeout:kUITestsBaseTimeout];
+                                                timeout:kUITestsElementAvailableTimeout];
     if (!button.exists && shouldCheck) {
         NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
         XCTFail(@"Button with id: %@, wasn't found", buttonId);
@@ -31,7 +32,7 @@
     XCUIElement *button = [self waitElementMatchingType:XCUIElementTypeButton
                                                    text:text
                                           parentElement:parentElement
-                                                timeout:0]; // It's suggested that element on which button lies have been already found
+                                                timeout:kUITestsElementAvailableTimeout]; // It's suggested that element on which button lies have been already found
     if (!button.exists && shouldCheck) {
         NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
         XCTFail(@"Button with text: %@, wasn't found", text);
@@ -49,7 +50,7 @@
                                parentElement:parentElement
                                  shouldCheck:shouldCheck];
     if (button.exists) {
-        [button tap];
+        [button tapByWaitingHittable];
     }
 }
 
@@ -61,7 +62,7 @@
                                parentElement:parentElement
                                  shouldCheck:shouldCheck];
     if (button.exists) {
-        [button tap];
+        [button tapByWaitingHittable];
     }
 }
 
@@ -70,7 +71,7 @@
     XCUIElement *button = [self waitElementMatchingType:XCUIElementTypeButton
                                              identifier:buttonId
                                           parentElement:parentElement
-                                                timeout:kUITestsBaseTimeout];
+                                                timeout:kUITestsElementAvailableTimeout];
     if (!button.exists) {
         NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
         XCTFail(@"Button with id: %@, wasn't found", buttonId);
@@ -82,7 +83,7 @@
     XCUIElement *button = [self waitElementMatchingType:XCUIElementTypeButton
                                                    text:text
                                           parentElement:parentElement
-                                                timeout:0]; // It's suggested that element on which button lies have been already found
+                                                timeout:kUITestsElementAvailableTimeout]; // It's suggested that element on which button lies have been already found
     if (!button.exists) {
         NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
         XCTFail(@"Button with text: %@, wasn't found", text);
@@ -127,16 +128,16 @@
     XCUIElement *button = [self waitElementMatchingType:XCUIElementTypeButton
                                                    text:JMLocalizedString(@"back_button_title")
                                           parentElement:navBar
-                                                timeout:0];
+                                                timeout:kUITestsElementAvailableTimeout];
     if (!button.exists && alternativeTitle) {
         button = [self waitElementMatchingType:XCUIElementTypeButton
                                           text:alternativeTitle
                                  parentElement:navBar
-                                       timeout:0];
+                                       timeout:kUITestsElementAvailableTimeout];
     }
 
     if (button.exists) {
-        [button tap];
+        [button tapByWaitingHittable];
     } else {
         NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
         XCTFail(@"Back Button wasn't found");
@@ -149,12 +150,12 @@
     XCUIElement *button = [self waitElementMatchingType:XCUIElementTypeButton
                                                    text:JMLocalizedString(@"back_button_title")
                                           parentElement:navBar
-                                                timeout:0];
+                                                timeout:kUITestsElementAvailableTimeout];
     if (!button.exists) {
         button = [self waitElementMatchingType:XCUIElementTypeButton
                                           text:alternativeTitle
                                  parentElement:navBar
-                                       timeout:0];
+                                       timeout:kUITestsElementAvailableTimeout];
     }
 
     if (!button.exists) {
@@ -170,12 +171,12 @@
     XCUIElement *menuButton = [self waitElementMatchingType:XCUIElementTypeButton
                                                  identifier:@"menu icon"
                                               parentElement:navBar
-                                                    timeout:0];
+                                                    timeout:kUITestsElementAvailableTimeout];
     if (!menuButton) {
         menuButton = [self waitElementMatchingType:XCUIElementTypeButton
                                         identifier:@"menu icon note"
                                      parentElement:navBar
-                                           timeout:0];
+                                           timeout:kUITestsElementAvailableTimeout];
     }
     return menuButton;
 }

@@ -13,6 +13,7 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Search.h"
+#import "XCUIElement+Tappable.h"
 
 @implementation JMLibraryPageUITests
 
@@ -111,12 +112,12 @@
     // start find wrong text
     XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
     if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tap];
+        [searchResourcesSearchField tapByWaitingHittable];
         [searchResourcesSearchField typeText:@"ababababababababa"];
         
         XCUIElement *searchButton = self.application.buttons[@"Search"];
         if (searchButton.exists) {
-            [searchButton tap];
+            [searchButton tapByWaitingHittable];
             
             // verify result
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.hittable == true"];

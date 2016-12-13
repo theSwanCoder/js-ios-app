@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 @implementation JMInputControlPageUITests
 
@@ -166,7 +167,7 @@
 {
     XCUIElement *cellWithMandatoryFilter = [self findTableViewCellWithAccessibilityId:nil
                                                                 containsLabelWithText:@"Low Fat"];
-    [cellWithMandatoryFilter tap];
+    [cellWithMandatoryFilter tapByWaitingHittable];
 }
 
 - (void)stopEditFilterWithMultiItems
@@ -182,7 +183,7 @@
 {
     XCUIElement *cell = [self findTableViewCellWithAccessibilityId:nil
                                              containsLabelWithText:@"Country"];
-    [cell tap];
+    [cell tapByWaitingHittable];
 }
 
 - (void)stopEditFilterWithSingleSelectedItem

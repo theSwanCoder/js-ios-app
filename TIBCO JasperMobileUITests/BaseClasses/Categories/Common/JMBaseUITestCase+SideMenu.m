@@ -6,6 +6,7 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMBaseUITestCase (SideMenu)
@@ -120,7 +121,7 @@
 {
     XCUIElement *menuView = [self waitElementMatchingType:XCUIElementTypeOther
                                                identifier:@"JMSideApplicationMenuAccessibilityId"
-                                                  timeout:0];
+                                                  timeout:kUITestsElementAvailableTimeout];
     if (!menuView.exists) {
         XCTFail(@"Menu view wasn't found");
     }
@@ -144,7 +145,7 @@
         NSString *pageNameWithNote = [NSString stringWithFormat:@"%@ note", pageName];
         pageMenuItem = [self findSideMenuItemForActionName:pageNameWithNote];
     }
-    [pageMenuItem tap];
+    [pageMenuItem tapByWaitingHittable];
 }
 
 - (XCUIElement *)findSideMenuItemForActionName:(NSString *)pageName
@@ -158,7 +159,7 @@
         XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                       text:pageName
                                              parentElement:menuItem
-                                                   timeout:0];;
+                                                   timeout:kUITestsElementAvailableTimeout];;
         if (label.exists) {
             pageMenuItem = menuItem;
             break;
@@ -193,7 +194,7 @@
 {
     XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:sectionName];
     if (menuButton.exists) {
-        [menuButton tap];
+        [menuButton tapByWaitingHittable];
     } else {
         XCTFail(@"Menu button wasn't found");
     }

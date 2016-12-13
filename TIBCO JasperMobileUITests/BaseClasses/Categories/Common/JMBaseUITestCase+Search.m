@@ -7,6 +7,7 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Buttons.h"
 #import "JMBaseUITestCase+SideMenu.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMBaseUITestCase (Search)
@@ -15,15 +16,15 @@
          inSectionWithAccessibilityId:(NSString *)sectionId
 {
     XCUIElement *searchField = [self searchFieldFromSectionWithAccessibilityId:sectionId];
-    [searchField tap];
+    [searchField tapByWaitingHittable];
 
     // Clear text if exist
     XCUIElement *clearTextButton = [self waitElementMatchingType:XCUIElementTypeButton
                                                             text:@"Clear text"
                                                    parentElement:searchField
-                                                         timeout:0];
+                                                         timeout:kUITestsElementAvailableTimeout];
     if (clearTextButton.exists) {
-        [clearTextButton tap];
+        [clearTextButton tapByWaitingHittable];
     }
 
     [searchField typeText:resourceName];
@@ -59,7 +60,7 @@
 - (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
 {
     XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
-    [searchResourcesSearchField tap];
+    [searchResourcesSearchField tapByWaitingHittable];
 
     [self tapButtonWithText:@"Clear text"
               parentElement:searchResourcesSearchField

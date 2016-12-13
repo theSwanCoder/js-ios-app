@@ -5,6 +5,7 @@
 
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 @implementation JMBaseUITestCase (Helpers)
 
@@ -16,13 +17,17 @@
     }
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
-    BOOL elementExist;
-    do {
-        remain -= kUITestsElementAvailableTimeout;
-        sleep(kUITestsElementAvailableTimeout);
+    NSInteger waitingInterval = 1;
+    BOOL elementExist = element.exists;
+    NSLog(@"Element exists: %@", elementExist ? @"YES" : @"NO");
+    while ( remain >= 0 && !elementExist) {
+        remain -= waitingInterval;
+        sleep(waitingInterval);
+
         elementExist = element.exists;
         NSLog(@"remain: %@", @(remain));
-    } while ( remain >= 0 && !elementExist);
+        NSLog(@"Element exists: %@", elementExist ? @"YES" : @"NO");
+    }
 
     if (!element.exists) {
         XCTFail(@"Element isn't exist");
@@ -56,23 +61,41 @@
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
                               identifier:(NSString *)identifier
                            parentElement:(XCUIElement *)parentElement
-                     shouldBeInHierarchy:(BOOL)shouldBeInHierarchy
+                     shouldBeInHierarchy:(BOOL)shouldExist
                                  timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
-    XCUIElement *element;
-    BOOL elementExist;
-    do {
-        remain -= kUITestsElementAvailableTimeout;
-        sleep(kUITestsElementAvailableTimeout);
+    NSInteger waitingInterval = 1;
+    XCUIElement *element = [self elementMatchingType:elementType
+                                          identifier:identifier
+                                       parentElement:parentElement];
+    BOOL elementExist = element.exists;
+    BOOL condition;
+    if (shouldExist) {
+        condition = remain >= 0 && !elementExist && shouldExist;
+    } else {
+        condition = remain >= 0 && elementExist && !shouldExist;
+    }
+    NSLog(@"element.exists: %@ and should exist: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
+    NSLog(@"condition: %@", condition ? @"true" : @"false");
+    NSLog(@"remain: %@", @(remain));
+    while ( condition ) {
+        remain -= waitingInterval;
+        sleep(waitingInterval);
         element = [self elementMatchingType:elementType
                                  identifier:identifier
                               parentElement:parentElement];
         elementExist = element.exists;
+        if (shouldExist) {
+            condition = remain >= 0 && !elementExist && shouldExist;
+        } else {
+            condition = remain >= 0 && elementExist && !shouldExist;
+        }
+        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
+        NSLog(@"condition: %@", condition ? @"true" : @"false");
         NSLog(@"remain: %@", @(remain));
-        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldBeInHierarchy ? @"YES" : @"NO");
-    } while ( remain >= 0 && elementExist != shouldBeInHierarchy );
+    }
 
     return element;
 }
@@ -180,23 +203,41 @@
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
                                     text:(NSString *)text
                            parentElement:(XCUIElement *)parentElement
-                     shouldBeInHierarchy:(BOOL)shouldBeInHierarchy
+                     shouldBeInHierarchy:(BOOL)shouldExist
                                  timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
-    XCUIElement *element;
-    BOOL elementExist;
-    do {
-        remain -= kUITestsElementAvailableTimeout;
-        sleep(kUITestsElementAvailableTimeout);
+    NSInteger waitingInterval = 1;
+    XCUIElement *element = [self elementMatchingType:elementType
+                                                text:text
+                                       parentElement:parentElement];
+    BOOL condition;
+    BOOL elementExist = element.exists;
+    if (shouldExist) {
+        condition = remain >= 0 && !elementExist && shouldExist;
+    } else {
+        condition = remain >= 0 && elementExist && !shouldExist;
+    }
+    NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
+    NSLog(@"condition: %@", condition ? @"true" : @"false");
+    NSLog(@"remain: %@", @(remain));
+    while ( condition ) {
+        remain -= waitingInterval;
+        sleep(waitingInterval);
         element = [self elementMatchingType:elementType
-                                 text:text
+                                       text:text
                               parentElement:parentElement];
         elementExist = element.exists;
+        if (shouldExist) {
+            condition = remain >= 0 && !elementExist && shouldExist;
+        } else {
+            condition = remain >= 0 && elementExist && !shouldExist;
+        }
+        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
+        NSLog(@"condition: %@", condition ? @"true" : @"false");
         NSLog(@"remain: %@", @(remain));
-        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldBeInHierarchy ? @"YES" : @"NO");
-    } while ( remain >= 0 && elementExist != shouldBeInHierarchy);
+    }
 
     return element;
 }
@@ -327,7 +368,7 @@
                                                 identifier:labelAccessibilityId
                                              parentElement:cell
                                        shouldBeInHierarchy:YES
-                                                   timeout:0];
+                                                   timeout:kUITestsElementAvailableTimeout];
         if (!label.exists) {
             return NO;
         }
@@ -365,7 +406,7 @@
                                                              text:labelText
                                                     parentElement:cell
                                               shouldBeInHierarchy:YES
-                                                          timeout:0];
+                                                          timeout:kUITestsElementAvailableTimeout];
         return labelElement.exists;
     }];
 
@@ -386,7 +427,7 @@
     [self waitElementReady:searchField
                    timeout:kUITestsBaseTimeout];
 
-    [searchField tap];
+    [searchField tapByWaitingHittable];
     [searchField typeText:searchText];
     [self tapButtonWithText:@"Search"
               parentElement:nil

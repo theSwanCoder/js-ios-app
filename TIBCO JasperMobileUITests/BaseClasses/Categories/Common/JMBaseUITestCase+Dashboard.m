@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+Buttons.h"
 #import "JMBaseUITestCase+Search.h"
+#import "XCUIElement+Tappable.h"
 
 NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
@@ -41,18 +42,18 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self searchTestDashboardInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self tryOpenTestDashboard];
 
-    [self givenLoadingPopupNotVisible];
     if (waitingFinish) {
         // We can have two times when loading up and down
         // first time loading 'dashboard info' and second one - loading dashboard
         [self givenLoadingPopupNotVisible];
-        
+        [self givenLoadingPopupNotVisible];
+
         // Could be several hover items which visible while dashlet in loading process (in test dashboard - 5)
         [self waitElementMatchingType:XCUIElementTypeStaticText
                                  text:@"Loading..."
                         parentElement:nil
                   shouldBeInHierarchy:NO
-                              timeout:kUITestsResourceWaitingTimeout];
+                              timeout:kUITestsResourceLoadingTimeout];
     }
 }
 
@@ -65,7 +66,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 {
     XCUIElement *loadingPopup = [self waitElementMatchingType:XCUIElementTypeOther
                                                    identifier:@"JMCancelRequestPopupAccessibilityId"
-                                                      timeout:kUITestsBaseTimeout];
+                                                      timeout:0];
     [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
               parentElement:loadingPopup
                 shouldCheck:YES];
@@ -109,7 +110,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 {
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     XCUIElement *testCell = [self testDashboardCell];
-    [testCell tap];
+    [testCell tapByWaitingHittable];
 }
 
 - (XCUIElement *)testDashboardCell
