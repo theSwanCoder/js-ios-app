@@ -33,7 +33,7 @@
 
 - (NSString *)description
 {
-    NSString *description = [NSString stringWithFormat:@"\nJMJavascriptCallback: %@\ntype: %@\nparams:%@", [super description], @(self.type), self.parameters];
+    NSString *description = [NSString stringWithFormat:@"\nJMJavascriptCallback: %@\ncommand: %@\ntype: %@\nparams:%@", [super description], self.command, @(self.type), self.parameters];
     return description;
 }
 

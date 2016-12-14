@@ -493,11 +493,13 @@ initialDestination:(nullable JSReportDestination *)destination
                                                                             @"chartType" : chartType.name
                                                                         }
                                                                 }];
+    __weak __typeof(self) weakSelf = self;
     [self.webEnvironment sendJavascriptRequest:request
                                     completion:^(NSDictionary *params, NSError *error) {
                                         JMLog(@"params: %@", params);
+                                        __strong __typeof(self) strongSelf = weakSelf;
                                         if (error) {
-                                            heapBlock(NO, error);
+                                            heapBlock(NO, [strongSelf loaderErrorFromBridgeError:error]);
                                         } else {
                                             heapBlock(YES, nil);
                                         }
@@ -955,11 +957,11 @@ initialDestination:(nullable JSReportDestination *)destination
 {
     JSReportLoaderErrorType errorCode = JSReportLoaderErrorTypeUndefined;
     switch(error.code) {
-        case JMJavascriptRequestErrorTypeAuth: {
+        case JMJavascriptRequestErrorTypeSessionDidExpire: {
             errorCode = JSReportLoaderErrorTypeSessionDidExpired;
             break;
         }
-        case JMJavascriptRequestErrorSessionDidRestore: {
+        case JMJavascriptRequestErrorTypeSessionDidRestore: {
             errorCode = JSReportLoaderErrorTypeSessionDidRestore;
             break;
         }

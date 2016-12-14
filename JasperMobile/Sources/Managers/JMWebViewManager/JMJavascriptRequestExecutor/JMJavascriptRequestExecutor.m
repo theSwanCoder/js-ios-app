@@ -47,6 +47,7 @@ NSString *const JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestE
     self = [super init];
     if (self) {
         JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+        // TODO: move this funtionality into separate class (something like storage)
         _requestCompletions = [NSMutableDictionary dictionary];
         _events = [NSMutableArray array];
         _webView = webView;
@@ -366,19 +367,22 @@ NSString *const JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestE
             for (JMJavascriptRequest *request in self.requestCompletions) {
                 if ([request.fullCommand isEqualToString:response.command]) {
                     foundRequest = request;
-                    JMJavascriptRequestCompletion completion = self.requestCompletions[request];
-                    if (response.parameters && response.parameters[@"error"]) {
-                        NSDictionary *errorJSON = response.parameters[@"error"];
-                        NSError *error = [self makeErrorFromWebViewError:errorJSON];
-                        completion(nil, error);
-                    } else {
-                        completion(response, nil);
-                    }
                     break;
                 }
             }
+            // We should always have a corresponded request on response in storage.
+            NSAssert(foundRequest != nil, @"Request wasn't found for response: %@", response);
             if (foundRequest) {
+                JMLog(@"foundRequest:%@", foundRequest);
+                JMJavascriptRequestCompletion completion = self.requestCompletions[foundRequest];
                 [self.requestCompletions removeObjectForKey:foundRequest];
+                if (response.parameters && response.parameters[@"error"]) {
+                    NSDictionary *errorJSON = response.parameters[@"error"];
+                    NSError *error = [self makeErrorFromWebViewError:errorJSON];
+                    completion(nil, error);
+                } else {
+                    completion(response, nil);
+                }
             }
             break;
         }
@@ -442,7 +446,10 @@ NSString *const JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestE
         } else if ([errorCodeString isEqualToString:@"unexpected.error"]) {
             code = JMJavascriptRequestErrorTypeUnexpected;
         } else if ([errorCodeString isEqualToString:@"authentication.error"]) {
-            code = JMJavascriptRequestErrorTypeAuth;
+            code = JMJavascriptRequestErrorTypeSessionDidExpire;
+        } else if ([errorCodeString isEqualToString:@"resource.not.found"]) {
+            // It is assumed that this code could be only when session was restored
+            code = JMJavascriptRequestErrorTypeSessionDidExpire;
         }
     }
     // TODO: need add handle integer codes?

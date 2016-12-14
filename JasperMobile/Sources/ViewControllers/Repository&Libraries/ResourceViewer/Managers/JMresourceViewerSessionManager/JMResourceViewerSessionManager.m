@@ -68,18 +68,9 @@
     }
 }
 
-- (void)handleSessionDidChangeWithAlert:(BOOL)needAlert
+- (void)handleSessionDidRestore
 {
-    if (self.cleanAction) {
-        self.cleanAction();
-    }
-    if (needAlert) {
-        [self showSessionDidChangeAlert];
-    } else {
-        if (self.executeAction) {
-            self.executeAction();
-        }
-    }
+    [self showSessionDidRestoreAlert];
 }
 
 
@@ -106,14 +97,16 @@
                                                  strongSelf.executeAction();
                                              }
                                          }];
-    [self.controller presentViewController:alertController animated:YES completion:nil];
+    [self.controller presentViewController:alertController
+                                  animated:YES
+                                completion:nil];
 }
 
-- (void)showSessionDidChangeAlert
+- (void)showSessionDidRestoreAlert
 {
     __weak typeof(self) weakSelf = self;
     // TODO: add translations
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was expired"
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Session was restored"
                                                                                       message:@"Reload?"
                                                                             cancelButtonTitle:@"dialog_button_cancel"
                                                                       cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {

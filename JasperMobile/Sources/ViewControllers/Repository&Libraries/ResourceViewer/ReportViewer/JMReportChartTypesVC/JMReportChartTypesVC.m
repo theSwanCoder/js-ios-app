@@ -54,7 +54,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ReportChartTypeCell" forIndexPath:indexPath];
     JMReportChartType *chartType = self.chartTypes[indexPath.row];
     cell.textLabel.text = chartType.name;
-    cell.imageView.image = [UIImage imageNamed:chartType.imageName];
+    // TODO: enable showing icons after getting API or other way
+//    cell.imageView.image = [UIImage imageNamed:chartType.imageName];
     return cell;
 }
 

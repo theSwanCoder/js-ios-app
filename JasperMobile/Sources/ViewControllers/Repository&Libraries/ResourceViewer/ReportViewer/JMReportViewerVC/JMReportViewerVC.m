@@ -577,6 +577,11 @@
     return [JMResourceViewerSessionManager new];
 }
 
+- (BOOL)shouldWorkWithChartTypes
+{
+    return [JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6];
+}
+
 #pragma mark - JMReportViewerToolBarDelegate
 - (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage
 {
@@ -621,18 +626,23 @@
             break;
         }
         case JSReportLoaderErrorTypeSessionDidRestore: {
-            [self.sessionManager handleSessionDidChangeWithAlert:YES];
+            [self.sessionManager handleSessionDidRestore];
             break;
         }
         case JSReportLoaderErrorTypeEmtpyReport:
             // TODO: this isn't an error
             break;
-        case JSInvalidCredentialsErrorCode: {
-            [JMUtils showLoginViewAnimated:YES completion:^{
-                [self exitAction];
-            }];
+        case JSReportLoaderErrorTypeUndefined:
+            [JMUtils presentAlertControllerWithError:error
+                                          completion:nil];
             break;
-        }
+        // TODO: Does this case still work?
+//        case JSInvalidCredentialsErrorCode: {
+//            [JMUtils showLoginViewAnimated:YES completion:^{
+//                [self exitAction];
+//            }];
+//            break;
+//        }
         default: {
             __weak typeof(self) weakSelf = self;
             [JMUtils presentAlertControllerWithError:error completion:^{
@@ -661,7 +671,7 @@
     availableAction |= JMMenuActionsViewAction_Share | JMMenuActionsViewAction_Print;
 
     // TODO: For now use for show chart types, but there could be other components
-    if ([self report].reportComponents.count) {
+    if ([self report].reportComponents.count && [self shouldWorkWithChartTypes]) {
         availableAction |= JMMenuActionsViewAction_ShowReportChartTypes;
     }
     JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -804,7 +814,7 @@
     __weak __typeof(self) weakSelf = self;
     saveReportVC.sessionExpiredBlock = ^{
         __weak __typeof(self) strongSelf = weakSelf;
-        [strongSelf.sessionManager handleSessionDidChangeWithAlert:YES];
+        [strongSelf.sessionManager handleSessionDidExpire];
     };
 
     [self.navigationController pushViewController:saveReportVC animated:YES];

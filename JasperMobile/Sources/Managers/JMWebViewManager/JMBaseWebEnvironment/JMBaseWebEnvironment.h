@@ -69,7 +69,9 @@ typedef NS_ENUM(NSInteger, JMWebEnvironmentState) {
 
 typedef NS_ENUM(NSInteger, JMWebEnvironmentCookiesState) {
     JMWebEnvironmentCookiesStateValid,
-    JMWebEnvironmentCookiesStateInvalid
+    JMWebEnvironmentCookiesStateExpire,
+    JMWebEnvironmentCookiesStateRestoreAfterJavascriptRequestFailed,
+    JMWebEnvironmentCookiesStateRestoreAfterNetworkRequestFailed
 };
 
 @interface JMBaseWebEnvironment : NSObject <JMJavascriptRequestExecutionProtocol, JMWebEnvironmentLoadingProtocol>

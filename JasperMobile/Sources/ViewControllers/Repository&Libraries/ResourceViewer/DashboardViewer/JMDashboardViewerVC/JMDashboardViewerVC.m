@@ -575,12 +575,12 @@
 {
     [[self stateManager] setupPageForState:JMDashboardViewerStateResourceFailed];
     switch (error.code) {
-        case JMJavascriptRequestErrorTypeAuth: {
+        case JMJavascriptRequestErrorTypeSessionDidExpire: {
             [self.configurator.sessionManager handleSessionDidExpire];
             break;
         }
-        case JMJavascriptRequestErrorSessionDidRestore: {
-            [self.configurator.sessionManager handleSessionDidChangeWithAlert:YES];
+        case JMJavascriptRequestErrorTypeSessionDidRestore: {
+            [self.configurator.sessionManager handleSessionDidRestore];
             break;
         }
         case JMJavascriptRequestErrorTypeUnexpected:

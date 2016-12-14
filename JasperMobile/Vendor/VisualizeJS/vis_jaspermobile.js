@@ -1224,7 +1224,7 @@ JasperMobile.VIS.Report.privateAPI = {
             .done(success)
             .fail(fail);
     },
-    updateReportWithParameters: function(report, parameters, success, fail) {
+    applyReportParams: function(report, parameters, success, fail) {
         report.object.params(parameters).run()
             .done(success)
             .fail(fail);
@@ -1338,7 +1338,7 @@ JasperMobile.VIS.Report.API = {
         }
         JasperMobile.VIS.Report.privateAPI.executeOperation(
             undefined,
-            "updateReportWithParameters",
+            "applyReportParams",
             parameters,
             success
         );
