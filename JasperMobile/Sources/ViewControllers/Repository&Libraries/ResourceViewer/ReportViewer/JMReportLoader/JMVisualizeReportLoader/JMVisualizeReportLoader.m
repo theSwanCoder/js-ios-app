@@ -957,11 +957,11 @@ initialDestination:(nullable JSReportDestination *)destination
 {
     JSReportLoaderErrorType errorCode = JSReportLoaderErrorTypeUndefined;
     switch(error.code) {
-        case JMJavascriptRequestErrorTypeAuth: {
+        case JMJavascriptRequestErrorTypeSessionDidExpire: {
             errorCode = JSReportLoaderErrorTypeSessionDidExpired;
             break;
         }
-        case JMJavascriptRequestErrorSessionDidRestore: {
+        case JMJavascriptRequestErrorTypeSessionDidRestore: {
             errorCode = JSReportLoaderErrorTypeSessionDidRestore;
             break;
         }

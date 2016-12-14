@@ -626,7 +626,7 @@
             break;
         }
         case JSReportLoaderErrorTypeSessionDidRestore: {
-            [self.sessionManager handleSessionDidChangeWithAlert:YES];
+            [self.sessionManager handleSessionDidRestore];
             break;
         }
         case JSReportLoaderErrorTypeEmtpyReport:
@@ -813,7 +813,7 @@
     __weak __typeof(self) weakSelf = self;
     saveReportVC.sessionExpiredBlock = ^{
         __weak __typeof(self) strongSelf = weakSelf;
-        [strongSelf.sessionManager handleSessionDidChangeWithAlert:YES];
+        [strongSelf.sessionManager handleSessionDidExpire];
     };
 
     [self.navigationController pushViewController:saveReportVC animated:YES];

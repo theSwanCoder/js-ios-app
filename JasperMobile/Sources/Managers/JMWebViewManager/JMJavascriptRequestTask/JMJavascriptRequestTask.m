@@ -69,6 +69,8 @@
     NSString *commandString = self.request.fullCommand;
     JMLog(@"%@: start execute operation: %@", self, commandString);
     __weak __typeof(self) weakSelf = self;
+    JMLog(@"self.requestExecutor: %@", self.requestExecutor);
+    JMLog(@"self.request: %@", self.request);
     [self.requestExecutor sendJavascriptRequest:self.request
                                          completion:^(JMJavascriptResponse *response, NSError *error) {
                                              __typeof(self) strongSelf = weakSelf;
