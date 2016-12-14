@@ -97,6 +97,9 @@
                   Identifier = "JMDashboardPrintDialogUITests">
                </Test>
                <Test
+                  Identifier = "JMDashletPageUITests">
+               </Test>
+               <Test
                   Identifier = "JMFavoriteInfoPageUITests">
                </Test>
                <Test
@@ -134,6 +137,9 @@
                </Test>
                <Test
                   Identifier = "JMSavedItemInfoScreenUITests">
+               </Test>
+               <Test
+                  Identifier = "JMSavedItemPageUITests">
                </Test>
                <Test
                   Identifier = "JMSavedItemsPageUITests">

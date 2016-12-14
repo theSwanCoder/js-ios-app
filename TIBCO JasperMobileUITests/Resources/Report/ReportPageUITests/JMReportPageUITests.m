@@ -11,8 +11,17 @@
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+Favorites.h"
+#import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Section.h"
 
 @implementation JMReportPageUITests
+
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 7;
+}
 
 #pragma mark - Tests - Main
 - (void)testThatReportCanBeRun
@@ -25,8 +34,8 @@
 - (void)testThatUserCanCancelLoadingReport
 {
     [self openTestReportPageWithWaitingFinish:NO];
-    [self givenLoadingPopupNotVisible];
     [self cancelOpeningTestReportPage];
+    [self givenThatLibraryPageOnScreen];
 }
 
 // Title like name of the report
@@ -99,8 +108,9 @@
     [self selectActionWithName:@"Save"];
 
     // verify that 'save report' page is on the screen
-    [self waitElementWithAccessibilityId:@"JMSaveReportViewControllerAccessibilityIdentifier"
-                                 timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeOther
+                       identifier:@"JMSaveReportViewControllerAccessibilityIdentifier"
+                          timeout:kUITestsBaseTimeout];
     // back from save report page
     [self tryBackToPreviousPage];
     
@@ -122,6 +132,7 @@
     [self openTestReportPage];
 
     [self openPrintReportPage];
+    
     // verify that 'print report' page is on the screen
     XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
                                                         timeout:kUITestsBaseTimeout];
@@ -199,8 +210,9 @@
     isFilterPage = filtersNavBar.exists;
 
     // verify that 'edit values' page is on the screen
-    [self waitElementWithAccessibilityId:@"JMInputControlsViewControllerAccessibilityIdentifier"
-                                 timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeOther
+                       identifier:@"JMInputControlsViewControllerAccessibilityIdentifier"
+                          timeout:kUITestsBaseTimeout];
 
     return isFilterPage;
 }
@@ -213,17 +225,14 @@
 
 - (void)verifyThatReportInfoPageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMReportInfoViewControllerAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeOther
+                       identifier:@"JMReportInfoViewControllerAccessibilityId"
+                          timeout:kUITestsBaseTimeout];
 }
 
 - (void)closeReportInfoPage
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:navBar
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 @end

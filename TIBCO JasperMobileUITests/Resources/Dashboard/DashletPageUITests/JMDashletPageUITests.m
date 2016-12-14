@@ -9,10 +9,14 @@
 #import "JMDashletPageUITests.h"
 #import "JMBaseUITestCase+Dashboard.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 static NSString *const kDashletName = @"13. Top Fives Report";
 
 @implementation JMDashletPageUITests
+
+#pragma mark - Setup
 
 - (void)setUp
 {
@@ -23,10 +27,16 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)tearDown
 {
-    [self closeTestDashlet];
     [self closeTestDashboardPage];
     
     [super tearDown];
+}
+
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 8;
 }
 
 #pragma mark - Tests
@@ -40,6 +50,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 - (void)testThatUserCanSeeSelectedDashlet
 {
     [self openTestDashletWithHyperlinks];
+    [self closeTestDashlet];
 }
 
 //Back button like title of the dashboard
@@ -53,6 +64,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 {
     [self openTestDashletWithHyperlinks];
     [self verifyThatDashletPageHasCorrentBackButton];
+    [self closeTestDashlet];
 }
 
 //Title like name of the dashlet
@@ -65,6 +77,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 {
     [self openTestDashletWithHyperlinks];
     [self verifyThatDashletPageHasCorrectTitle];
+    [self closeTestDashlet];
 }
 
 //Zoom on Dashlet View screen
@@ -90,6 +103,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     [webView pinchWithScale:2
                    velocity:1];
     sleep(kUITestsElementAvailableTimeout);
+    [self closeTestDashlet];
 }
 
 //Hyperlinks
@@ -106,6 +120,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     [self openTestHyperlinkPage];
     [self verifyThatReportFromTestHypelinkOnScreen];
     [self closeTestHyperlinkPage];
+    [self closeTestDashlet];
 }
 
 //Input Controls
@@ -120,6 +135,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 {
 //    TODO: remove this case, because of 'native input controls change' feature.
     [self openTestDashletWithHyperlinks];
+    [self closeTestDashlet];
 }
 
 //Change Chart Type of report
@@ -136,10 +152,16 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 {
     [self openTestDashletWithChartTypes];
     
-    XCUIElement *chartTypeElement = [self waitStaticTextWithAccessibilityId:@"Store Sales"
-                                                                    timeout:kUITestsBaseTimeout];
-    [chartTypeElement tap];
+    XCUIElement *chartTypeElement = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                             text:@"Store Sales"
+                                                          timeout:kUITestsBaseTimeout];
+    if (chartTypeElement.exists) {
+        [chartTypeElement tapByWaitingHittable];
+    } else {
+        XCTFail(@"Chart type element wasn't found");
+    }
     sleep(3);
+    [self closeTestDashlet];
 }
 
 //JIVE
@@ -153,7 +175,6 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 - (void)testThatJIVEWorkCorrectly
 {
 //    XCTFail(@"Not implemented tests");
-    [self openTestDashletWithHyperlinks];
 }
 
 #pragma mark - Helpers
@@ -166,9 +187,8 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)closeTestDashlet
 {
-    XCUIElement *backButton = [self waitBackButtonWithAccessibilityId:@"Back"
-                                                              timeout:kUITestsBaseTimeout];
-    [backButton tap];
+    [self tapBackButtonWithAlternativeTitle:nil
+                          onNavBarWithTitle:nil];
     [self givenLoadingPopupNotVisible];
 }
 
@@ -183,18 +203,21 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     [self tapOnElementWithText:@"Ida Rodriguez"];
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
+    [self givenLoadingPopupVisible];
     [self givenLoadingPopupNotVisible];
+    [self givenLoadingPopupVisible];
     [self givenLoadingPopupNotVisible];
 }
 
 - (void)tapOnElementWithText:(NSString *)text
 {
     XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
-    XCUIElement *element = [self waitStaticTextWithText:text
-                                                       parentElement:webView
-                                                         timeout:kUITestsBaseTimeout];
+    XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                    text:text
+                                           parentElement:webView
+                                                 timeout:kUITestsBaseTimeout];
     if (element) {
-        [element tap];
+        [element tapByWaitingHittable];
     } else {
         XCTFail(@"Element with text '%@' not found", text);
     }
@@ -209,9 +232,8 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)verifyThatDashletPageHasCorrentBackButton
 {
-    [self waitBackButtonWithAccessibilityId:@"Back"
-                          onNavBarWithLabel:kDashletName
-                                    timeout:kUITestsBaseTimeout];
+    [self verifyBackButtonExistWithAlternativeTitle:nil
+                                  onNavBarWithTitle:kDashletName];
 }
 
 - (void)verifyThatDashletPageHasCorrectTitle

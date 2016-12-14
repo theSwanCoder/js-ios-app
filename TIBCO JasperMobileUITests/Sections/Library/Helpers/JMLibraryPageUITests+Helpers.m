@@ -7,6 +7,9 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Report.h"
+#import "JMBaseUITestCase+Dashboard.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMLibraryPageUITests (Helpers)
@@ -18,12 +21,12 @@
     // start find some text
     XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
     if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tap];
+        [searchResourcesSearchField tapByWaitingHittable];
         [searchResourcesSearchField typeText:text];
 
         XCUIElement *searchButton = self.application.buttons[@"Search"];
         if (searchButton.exists) {
-            [searchButton tap];
+            [searchButton tapByWaitingHittable];
         } else {
             XCTFail(@"Search button doesn't exist.");
         }
@@ -36,11 +39,11 @@
 {
     XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
     if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tap];
+        [searchResourcesSearchField tapByWaitingHittable];
 
         XCUIElement *cancelButton = self.application.buttons[@"Cancel"];
         if (cancelButton.exists) {
-            [cancelButton tap];
+            [cancelButton tapByWaitingHittable];
         } else {
             XCTFail(@"Cancel button doesn't exist.");
         }
@@ -53,17 +56,20 @@
 
 - (void)trySortByName
 {
-    [self selectSortBy:@"Name" inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Name"
+    inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)trySortByCreationDate
 {
-    [self selectSortBy:@"Creation Date" inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Creation Date"
+    inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)trySortByModifiedDate
 {
-    [self selectSortBy:@"Modified Date" inSectionWithTitle:@"Library"];
+    [self selectSortBy:@"Modified Date"
+    inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
 #pragma mark - Helpers - Filter By
@@ -71,15 +77,15 @@
 
 - (void)tryFilterByReports
 {
-    [self selectFilterBy:@"Reports" inSectionWithTitle:@"Library"];
-
-    [self givenThatReportCellsOnScreen];
+    [self selectFilterBy:@"Reports"
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)tryFilterByDashboards
 {
-    [self selectFilterBy:@"Dashboards" inSectionWithTitle:@"Library"];
-
+    [self selectFilterBy:@"Dashboards"
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self givenThatDashboardCellsOnScreen];
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "JMPerformanceUITests.h"
+#import "XCUIElement+Tappable.h"
 
 NSInteger static kJMRunReportTestCellIndex = 2;
 
@@ -49,14 +50,13 @@ NSInteger static kJMRunReportTestCellIndex = 2;
         XCUIElement *reportNameLabel = testCell.staticTexts[@"JMResourceCellResourceNameLabelAccessibilityId"];
         NSString *reportInfoLabel = reportNameLabel.label;
         
-        [testCell tap];
+        [testCell tapByWaitingHittable];
         
         [self verifyThatReportPageOnScreenWithReportName:reportInfoLabel];
     } else {
-        XCTFail(@"'Test Cell' isn't visible");
+        XCTFail(@"'Test Cell' wasn't visible");
     }
-    
-    sleep(2);
+
     [self givenLoadingPopupNotVisible];
 }
 
@@ -67,8 +67,8 @@ NSInteger static kJMRunReportTestCellIndex = 2;
         NSArray *allButtons = navBar.buttons.allElementsBoundByAccessibilityElement;
         NSLog(@"all buttons: %@", allButtons);
         for (XCUIElement *button in allButtons) {
-            if ([button.label isEqualToString:@"Library"]) {
-                [button tap];
+            if ([button.label isEqualToString:JMLocalizedString(@"menuitem_library_label")]) {
+                [button tapByWaitingHittable];
                 break;
             }
         }

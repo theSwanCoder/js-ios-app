@@ -7,6 +7,9 @@
 #import "JMBaseUITestCase+Helpers.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+SideMenu.h"
+#import "JMBaseUITestCase+OtherElements.h"
+#import "JMBaseUITestCase+Buttons.h"
+#import "XCUIElement+Tappable.h"
 
 
 @implementation JMBaseUITestCase (Section)
@@ -16,102 +19,30 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *gridButton = [self findButtonWithAccessibilityId:@"grid button"
-                                                    parentElement:navBar];
-    if (gridButton) {
-        [gridButton tap];
-    }
+    [self tapButtonWithText:@"grid button"
+              parentElement:navBar
+                shouldCheck:NO];
 }
 
 - (void)switchViewFromGridToListInSectionWithTitle:(NSString *)sectionTitle
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
                                                    timeout:kUITestsBaseTimeout];
-    XCUIElement *listButton = [self findButtonWithAccessibilityId:@"horizontal list button"
-                                                    parentElement:navBar];
-    if (listButton) {
-        [listButton tap];
-    }
-}
-
-#pragma mark - Search
-- (void)searchResourceWithName:(NSString *)resourceName
-  inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
-{
-    XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
-    [searchResourcesSearchField tap];
-
-    XCUIElement *clearTextButton = [self findButtonWithTitle:@"Clear text"
-                                               parentElement:searchResourcesSearchField];
-    if (clearTextButton) {
-        [clearTextButton tap];
-    }
-
-    [searchResourcesSearchField typeText:resourceName];
-
-    XCUIElement *searchButton = [self waitButtonWithAccessibilityId:@"Search"
-                                                            timeout:kUITestsBaseTimeout];
-    [searchButton tap];
-}
-
-- (void)searchResourceWithName:(NSString *)resourceName inSectionWithName:(NSString *)sectionName
-{
-    if ([sectionName isEqualToString:@"Library"]) {
-        [self openLibrarySection];
-        // TODO: replace with specific element - JMLibraryPageAccessibilityId
-        [self searchResourceWithName:resourceName
-        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else if ([sectionName isEqualToString:@"Repository"]) {
-        [self openRepositorySection];
-        // TODO: replace with specific element - JMRepositoryPageAccessibilityId
-        [self searchResourceWithName:resourceName
-        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else if ([sectionName isEqualToString:@"Favorites"]) {
-        [self openFavoritesSection];
-        // TODO: replace with specific element - JMRepositoryPageAccessibilityId
-        [self searchResourceWithName:resourceName
-        inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-    } else {
-        XCTFail(@"Wrong section for searching test dashboard: %@", sectionName);
-    }
-}
-
-- (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId
-{
-    XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
-    [searchResourcesSearchField tap];
-
-    XCUIElement *clearTextButton = [self findButtonWithTitle:@"Clear text"
-                                               parentElement:searchResourcesSearchField];
-    if (clearTextButton) {
-        [clearTextButton tap];
-    }
-
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
-}
-
-- (XCUIElement *)searchFieldFromSectionWithAccessibilityId:(NSString *)accessibilityId
-{
-    XCUIElement *section = [self waitElementWithAccessibilityId:accessibilityId
-                                                        timeout:kUITestsBaseTimeout];
-    XCUIElement *searchField = section.searchFields[@"Search resources"];
-    [self waitElementReady:searchField
-                   timeout:kUITestsBaseTimeout];
-    return searchField;
+    [self tapButtonWithText:@"horizontal list button"
+              parentElement:navBar
+                shouldCheck:NO];
 }
 
 #pragma mark - Cells
 
-- (void)givenThatCollectionViewContainsListOfCells
+- (void)givenThatCollectionViewContainsListOfCellsInSectionWithName:(NSString *)sectionName
 {
-    NSInteger countOfListCells = [self countOfListCells];
-    if (countOfListCells > 0) {
-        return;
-    } else {
-        [self switchViewFromListToGridInSectionWithTitle:@"Library"];
-    }
+    [self switchViewFromGridToListInSectionWithTitle:sectionName];
+}
+
+- (void)givenThatCollectionViewContainsGridOfCellsInSectionWithName:(NSString *)sectionName
+{
+    [self switchViewFromListToGridInSectionWithTitle:sectionName];
 }
 
 - (NSInteger)countOfGridCells
@@ -146,19 +77,29 @@
     XCTAssertTrue(countOfListCells == 0, @"Should be 'List' presentation");
 }
 
-- (void)verifyThatCollectionViewContainsCells
+- (void)waitCollectionViewContainsCellsWithTimeout:(NSTimeInterval)timeout
+{
+    NSTimeInterval remain = timeout;
+    BOOL countMoreThanZero;
+    do {
+        remain -= kUITestsElementAvailableTimeout;
+        sleep(kUITestsElementAvailableTimeout);
+        countMoreThanZero = [self countAllActiveCells] > 0;
+        NSLog(@"remain: %@", @(remain));
+    } while ( remain >= 0 && !countMoreThanZero);
+
+    if (!countMoreThanZero) {
+        XCTFail(@"Cells weren't found");
+    }
+}
+
+- (NSInteger)countAllActiveCells
 {
     NSArray *allCells = [self.application.cells allElementsBoundByAccessibilityElement];
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement  * _Nullable cell, NSDictionary<NSString *,id> * _Nullable bindings) {
         return cell.exists == true && cell.isHittable == true;
     }];
-    NSInteger filtredResultCount = [allCells filteredArrayUsingPredicate:predicate].count;
-    XCTAssertTrue(filtredResultCount > 0, @"Should be some cells");
-}
-
-- (void)verifyThatCollectionViewNotContainsCells
-{
-    // TODO: implement
+    return [allCells filteredArrayUsingPredicate:predicate].count;
 }
 
 #pragma mark - Helpers - Menu Sort By
@@ -174,12 +115,28 @@
     }
 }
 
+- (void)selectSortBy:(NSString *)sortTypeString inSectionWithTitle:(NSString *)sectionTitle
+{
+    [self openSortMenuInSectionWithTitle:sectionTitle];
+    XCUIElement *sortOptionsViewElement = [self.application.tables elementBoundByIndex:0];
+    if (sortOptionsViewElement.exists) {
+        XCUIElement *sortOptionElement = sortOptionsViewElement.staticTexts[sortTypeString];
+        if (sortOptionElement.exists) {
+            [sortOptionElement tapByWaitingHittable];
+        } else {
+            XCTFail(@"'%@' Sort Option isn't visible", sortTypeString);
+        }
+    } else {
+        XCTFail(@"Sort Options View isn't visible");
+    }
+}
+
 - (void)tryOpenSortMenuFromMenuActions
 {
     XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
     XCUIElement *sortActionElement = menuActionsElement.staticTexts[@"Sort by"];
     if (sortActionElement.exists) {
-        [sortActionElement tap];
+        [sortActionElement tapByWaitingHittable];
 
         // Wait until sort view appears
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
@@ -199,28 +156,12 @@
     if (navBar.exists) {
         XCUIElement *sortButton = navBar.buttons[@"sort action"];
         if (sortButton.exists) {
-            [sortButton tap];
+            [sortButton tapByWaitingHittable];
         } else {
             XCTFail(@"Sort Button isn't visible");
         }
     } else {
         XCTFail(@"Navigation bar isn't visible");
-    }
-}
-
-- (void)selectSortBy:(NSString *)sortTypeString inSectionWithTitle:(NSString *)sectionTitle
-{
-    [self openSortMenuInSectionWithTitle:sectionTitle];
-    XCUIElement *sortOptionsViewElement = [self.application.tables elementBoundByIndex:0];
-    if (sortOptionsViewElement.exists) {
-        XCUIElement *sortOptionElement = sortOptionsViewElement.staticTexts[sortTypeString];
-        if (sortOptionElement.exists) {
-            [sortOptionElement tap];
-        } else {
-            XCTFail(@"'%@' Sort Option isn't visible", sortTypeString);
-        }
-    } else {
-        XCTFail(@"Sort Options View isn't visible");
     }
 }
 
@@ -242,7 +183,7 @@
     XCUIElement *menuActionsElement = [self.application.tables elementBoundByIndex:0];
     XCUIElement *filterActionElement = menuActionsElement.staticTexts[@"Filter by"];
     if (filterActionElement.exists) {
-        [filterActionElement tap];
+        [filterActionElement tapByWaitingHittable];
 
         // Wait until sort view appears
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.tables.count == 1"];
@@ -262,7 +203,7 @@
     if (navBar.exists) {
         XCUIElement *filterButton = navBar.buttons[@"filter action"];
         if (filterButton.exists) {
-            [filterButton tap];
+            [filterButton tapByWaitingHittable];
         } else {
             XCTFail(@"Filter Button isn't visible");
         }
@@ -280,7 +221,7 @@
     if (filterOptionsViewElement.exists) {
         XCUIElement *filterOptionElement = filterOptionsViewElement.staticTexts[filterTypeString];
         if (filterOptionElement.exists) {
-            [filterOptionElement tap];
+            [filterOptionElement tapByWaitingHittable];
         } else {
             XCTFail(@"'%@' Filter Option isn't visible", filterTypeString);
         }
@@ -293,8 +234,9 @@
 
 - (XCUIElement *)collectionViewElementFromSectionWithAccessibilityId:(NSString *)accessibilityId
 {
-    XCUIElement *section = [self waitElementWithAccessibilityId:accessibilityId
-                                                        timeout:kUITestsBaseTimeout];
+    XCUIElement *section = [self waitElementMatchingType:XCUIElementTypeOther
+                                              identifier:accessibilityId
+                                                 timeout:kUITestsBaseTimeout];
     return section;
 }
 
@@ -304,6 +246,50 @@
 {
     [self waitNavigationBarWithLabel:sectionTitle
                              timeout:kUITestsBaseTimeout];
+}
+
+#pragma mark - Sections
+
+- (XCUIElement *)libraryPageViewElement
+{
+    XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeOther
+                                              identifier:@"JMBaseCollectionContentViewAccessibilityId"
+                                                 timeout:kUITestsElementAvailableTimeout];
+    return element;
+}
+
+- (void)givenThatLibraryPageOnScreen
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    // Verify Library Page
+    [self verifyThatCurrentPageIsLibrary];
+}
+
+- (void)givenThatRepositoryPageOnScreen
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self verifyThatCurrentPageIsRepository];
+}
+
+
+- (void)verifyThatCurrentPageIsLibrary
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    // TODO: replace with specific element - JMLibraryPageAccessibilityId
+    [self verifyThatElementWithIdExist:@"JMBaseCollectionContentViewAccessibilityId"];
+}
+
+- (void)verifyThatCurrentPageIsRepository
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    XCUIElement *repositoryNavBar = self.application.navigationBars[@"Repository"];
+    NSPredicate *repositoryPagePredicate = [NSPredicate predicateWithFormat:@"self.exists == true"];
+
+    [self expectationForPredicate:repositoryPagePredicate
+              evaluatedWithObject:repositoryNavBar
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:kUITestsBaseTimeout
+                                 handler:nil];
 }
 
 @end

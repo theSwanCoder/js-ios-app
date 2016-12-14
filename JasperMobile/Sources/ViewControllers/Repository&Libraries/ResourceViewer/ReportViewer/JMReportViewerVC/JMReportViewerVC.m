@@ -727,9 +727,10 @@
             JMReportViewerState currentState = [self stateManager].state;
             [[self stateManager] setupPageForState:JMReportViewerStateLoading];
             self.configurator.printManager.controller = self;
-            [self.configurator.printManager printResource:self.resource completion:^{
-                [[self stateManager] setupPageForState:currentState];
-            }];
+            [self.configurator.printManager printResource:self.resource
+                                     prepearingCompletion:^{
+                                         [[self stateManager] setupPageForState:currentState];
+                                     } printCompletion:nil];
             break;
         }
         case JMMenuActionsViewAction_Share:{

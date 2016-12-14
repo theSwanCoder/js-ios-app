@@ -11,6 +11,9 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMUITestServerProfileManager.h"
 #import "JMUITestServerProfile.h"
+#import "JMBaseUITestCase+LoginPage.h"
+#import "JMBaseUITestCase+TextFields.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMLoginPageUITests
 
@@ -270,8 +273,9 @@
 
 - (void)verifyThatLoginPageOnScreen
 {
-    [self waitElementWithAccessibilityId:@"JMLoginPageAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeOther
+                       identifier:@"JMLoginPageAccessibilityId"
+                          timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatLoginPageHasCorrectTrademarks
@@ -284,20 +288,22 @@
 
 - (void)verifyThatUserDidLoginIntoDemoServer
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:nil];
     [self verifyAccountWithUsername:@"phoneuser"
                        organization:@"organization_1"
                         profileName:@"Jaspersoft Mobile Demo"];
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:nil];
 }
 
 - (void)verifyThatErrorAlertOnScreenWithTitle:(NSString *)title message:(NSString *)message
 {
     XCUIElement *alert = [self waitAlertWithTitle:title
                                           timeout:kUITestsBaseTimeout];
-    XCUIElement *errorMessageElement = [self findStaticTextWithText:message
-                                                      parentElement:alert];
-    if (!errorMessageElement) {
+    XCUIElement *errorMessageElement = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                                text:message
+                                                       parentElement:alert
+                                                             timeout:kUITestsElementAvailableTimeout];
+    if (!errorMessageElement.exists) {
         XCTFail(@"Wrong message on '%@' alert", title);
     }
 }
@@ -305,33 +311,40 @@
 - (void)verifyThatUserDidLoginIntoTestServer
 {
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:nil];
     [self verifyAccountWithUsername:testServerProfile.username
                        organization:testServerProfile.organization
                         profileName:testServerProfile.name];
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:nil];
 }
 
 - (void)verifyAccountWithUsername:(NSString *)username
                      organization:(NSString *)organization
                       profileName:(NSString *)profileName
 {
-    XCUIElement *sideMenuElement = [self waitElementWithAccessibilityId:@"JMSideApplicationMenuAccessibilityId"
-                                                                timeout:kUITestsBaseTimeout];
-    XCUIElement *usernameStaticText = [self findStaticTextWithText:username
-                                                     parentElement:sideMenuElement];
+    XCUIElement *sideMenuElement = [self waitElementMatchingType:XCUIElementTypeOther
+                                                      identifier:@"JMSideApplicationMenuAccessibilityId"
+                                                         timeout:kUITestsBaseTimeout];
+    XCUIElement *usernameStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                               text:username
+                                                      parentElement:sideMenuElement
+                                                            timeout:kUITestsElementAvailableTimeout];
     if (!usernameStaticText) {
         XCTFail(@"Error of verifying 'Demo' account: username - is wrong");
     }
     if (organization && organization.length) {
-        XCUIElement *organizationStaticText = [self findStaticTextWithText:organization
-                                                             parentElement:sideMenuElement];
+        XCUIElement *organizationStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                                       text:organization
+                                                              parentElement:sideMenuElement
+                                                                    timeout:kUITestsElementAvailableTimeout];
         if (!organizationStaticText) {
             XCTFail(@"Error of verifying 'Demo' account: organization - is wrong");
         }
     }
-    XCUIElement *serverProfileStaticText = [self findStaticTextWithText:profileName
-                                                          parentElement:sideMenuElement];
+    XCUIElement *serverProfileStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                                    text:profileName
+                                                           parentElement:sideMenuElement
+                                                                 timeout:kUITestsElementAvailableTimeout];
     if (!serverProfileStaticText) {
         XCTFail(@"Error of verifying 'Demo' account: server profile - is wrong");
     }
@@ -341,41 +354,35 @@
 
 - (void)tapTryDemoButton
 {
-    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    XCUIElement *demoButton = [self findButtonWithAccessibilityId:@"JMLoginPageTryButtonAccessibilityId"
-                                                    parentElement:loginPageElement];
-    if (demoButton) {
-        [demoButton tap];
-    } else {
-        XCTFail(@"There isn't an 'Try Demo' button on Login Page");
-    }
+    XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
+                                                       identifier:@"JMLoginPageAccessibilityId"
+                                                          timeout:kUITestsElementAvailableTimeout];
+    [self tapButtonWithId:@"JMLoginPageTryButtonAccessibilityId"
+            parentElement:loginPageElement
+              shouldCheck:YES];
 }
 
 - (void)tapLoginButton
 {
-    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
-    XCUIElement *loginButton = [self findButtonWithAccessibilityId:@"JMLoginPageLoginButtonAccessibilityId"
-                                                    parentElement:loginPageElement];
-    if (loginButton) {
-        [loginButton tap];
-    } else {
-        XCTFail(@"There isn't an 'Login' button on Login Page");
-    }
+    XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
+                                                       identifier:@"JMLoginPageAccessibilityId"
+                                                          timeout:kUITestsElementAvailableTimeout];
+    [self tapButtonWithId:@"JMLoginPageLoginButtonAccessibilityId"
+            parentElement:loginPageElement
+              shouldCheck:YES];
 }
 
 - (void)waitLoginProcessDidFinish
 {
     [self givenLoadingPopupNotVisible];
-
     [self verifyThatLoginWasSuccess];
-
-    [self skipRateAlertIfNeed];
-    [self skipIntroPageIfNeed];
 }
 
 - (void)enterUsername:(NSString *)username
 {
-    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
+    XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
+                                                       identifier:@"JMLoginPageAccessibilityId"
+                                                          timeout:kUITestsElementAvailableTimeout];
     [self enterText:username intoTextFieldWithAccessibilityId:@"JMLoginPageUserNameTextFieldAccessibilityId"
    placeholderValue:nil
       parentElement:loginPageElement
@@ -384,23 +391,22 @@
 
 - (void)enterPassword:(NSString *)password
 {
-    XCUIElement *loginPageElement = [self findElementWithAccessibilityId:@"JMLoginPageAccessibilityId"];
+    XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
+                                                       identifier:@"JMLoginPageAccessibilityId"
+                                                          timeout:kUITestsElementAvailableTimeout];
     [self enterText:password intoTextFieldWithAccessibilityId:@"JMLoginPagePasswordTextFieldAccessibilityId"
    placeholderValue:nil
       parentElement:loginPageElement
       isSecureField:true];
 }
 
-    - (void)closeErrorAlertWithTitle:(NSString *)title
+- (void)closeErrorAlertWithTitle:(NSString *)title
 {
+    // TODO: move for using all tests
     XCUIElement *alert = [self findAlertWithTitle:title];
-    XCUIElement *okButton = [self findButtonWithTitle:@"OK"
-                                        parentElement:alert];
-    if (okButton) {
-        [okButton tap];
-    } else {
-        XCTFail(@"Error of finding 'OK' button");
-    }
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+              parentElement:alert
+                shouldCheck:YES];
 }
 
 @end

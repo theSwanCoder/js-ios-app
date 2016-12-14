@@ -142,7 +142,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     [super viewWillAppear:animated];
 
-    self.screenName = NSStringFromClass(self.class);
     [self addKeyboardObservers];
 
     self.needLayoutUI = YES;

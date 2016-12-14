@@ -11,16 +11,17 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMUITestServerProfileManager.h"
 #import "JMUITestServerProfile.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMAppMenuUITests
 
 #pragma mark - Tests
 - (void)testThatMenuViewCanBeViewedByTappingMenuButton
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifySideMenuVisible];
 
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifySideMenuNotVisible];
 }
 
@@ -35,14 +36,14 @@
 
 - (void)testThatMenuViewIsScrollable
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifySideMenuVisible];
 
     XCUIElement *menuView = [self sideMenuElement];
     [menuView swipeUp];
     [menuView swipeDown];
 
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifySideMenuNotVisible];
 }
 
@@ -75,40 +76,30 @@
     // Check About item
     [self selectAbout];
     // Close About page
-    XCUIElement *doneButton = [self waitDoneButtonWithTimeout:kUITestsBaseTimeout];
-    [doneButton tap];
+    [self tapDoneButtonOnNavBarWithTitle:nil];
 
     // Check Settings item
     [self selectSettings];
-    // Close Settings page
-    XCUIElement *cancelButton = [self waitButtonWithTitle:@"Cancel"
-                                                  timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self closeSettingsPage];
 }
 
 - (void)testThatServerProfileInfoIsAppeared
 {
-    [self showSideMenuInSectionWithName:@"Library"];
+    [self showSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self verifySideMenuVisible];
 
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
 
-    [self waitStaticTextWithText:testServerProfile.username
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyLabelWithTextExist:testServerProfile.username];
 
     NSString *fullServerNameString = [NSString stringWithFormat:@"%@ (v.%@)", testServerProfile.name, @"6.3.0"];
-    [self waitStaticTextWithText:fullServerNameString
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyLabelWithTextExist:fullServerNameString];
 
     if (testServerProfile.organization.length > 0) {
-        [self waitStaticTextWithText:testServerProfile.organization
-                       parentElement:nil
-                             timeout:kUITestsBaseTimeout];
+        [self verifyLabelWithTextExist:testServerProfile.organization];
     }
 
-    [self hideSideMenuInSectionWithName:@"Library"];
+    [self hideSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 }
 
 
@@ -133,4 +124,20 @@
         XCTFail(@"'Main' window doesn't exist.");
     }
 }
+
+- (void)verifyLabelWithTextExist:(NSString *)labelText
+{
+    XCUIElement *usernameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                          text:labelText
+                                                       timeout:kUITestsBaseTimeout];
+    if (!usernameLabel.exists) {
+        XCTFail(@"Label with text: %@, wasn't fount", labelText);
+    }
+}
+
+- (void)closeSettingsPage
+{
+    [self tapCancelButtonOnNavBarWithTitle:nil];
+}
+
 @end

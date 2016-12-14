@@ -12,8 +12,33 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+ActionsMenu.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+TextFields.h"
+#import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+SideMenu.h"
 
 @implementation JMSavedItemPageUITests
+
+- (void)setUp
+{
+    [super setUp];
+
+    [self openSavedItemsSectionIfNeed];
+    [self givenThatSavedItemsEmpty];
+}
+
+- (void)tearDown
+{
+    [self givenThatSavedItemsEmpty];
+
+    [super tearDown];
+}
+
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 14;
+}
 
 #pragma mark - Tests
 
@@ -24,13 +49,8 @@
 //    > User should see Saved Report View Screen
 - (void)testThatUserCanSeeSavedItemAsHTML
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     [self closeTestSavedItem];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //User should see the saved report as PDF
@@ -40,13 +60,8 @@
 //    > User should see Saved Report View Screen
 - (void)testThatUserCanSeeSavedItemAsPDF
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInPDFFormat];
-    
-    [self openTestSavedItemInPDFFormat];
+    [self saveTestReportInPDFFormatNeedOpen:YES];
     [self closeTestSavedItem];
-    
-    [self deleteTestReportInPDFFormat];
 }
 
 //Back button like "Saved Items"
@@ -57,14 +72,9 @@
 //    > Saved Items screen should appears
 - (void)testThatBackButtonHasCorrectTitle
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     [self verifyThatBackButtonHasCorrectTitle];
     [self closeTestSavedItem];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Saved Report View title
@@ -74,14 +84,9 @@
 //        > User should see title like name of the saved report
 - (void)testThatPageHasCorrectTitle
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     [self verifyThatSavedItemPageHasCorrectTitle];
     [self closeTestSavedItem];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Favorite button
@@ -93,17 +98,12 @@
 //    > Star should be empty after removing the item from favorites
 - (void)testThatFavoriteButtonWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
 
     [self markTestSavedItemAsFavoriteFromViewerPage];
     [self unmarkTestSavedItemAsFavoriteFromViewerPage];
     
     [self closeTestSavedItem];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Cancel deleting
@@ -115,16 +115,13 @@
 //    > Report isn't deleted
 - (void)testThatDeletingCanBeCanceled
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
 
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Delete"];
     [self cancelDeletingAction];
 
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Cancel rename
@@ -137,16 +134,13 @@
 //    > Report isn't renamed
 - (void)testThatRenamingCanBeCanceled
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Rename"];
     [self cancelRenamingAction];
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Rename the saved file
@@ -159,16 +153,13 @@
 //    > Rename report dialog should disappear and Saved Item View screen should be displayed
 - (void)testThatRenameWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Rename"];
     [self performRenameAction];
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Try to rename the saved file with empty name
@@ -180,17 +171,14 @@
 //    < Tap "OK" button
 //    > "OK" button disabled. Report is not saved.
 - (void)testThatRenameNotWorkWithEmptyName
-{ 
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+{
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Rename"];
     [self performRenameActionWithEmptyName];
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Try to rename the saved file if saved file name includes only spaces
@@ -203,16 +191,13 @@
 //    > "OK" button disabled. Report is not saved.
 - (void)testThatRenameNotWorkWithSpacesInName
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Rename"];
     [self performRenameActionWithSpacesInName];
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Try to rename the saved file if report name already exist
@@ -224,16 +209,13 @@
 //    > Report is not saved. User should see error message "This name has been already taken, please choose different name"
 - (void)testThatRenameNotWorkForExistingName
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
     [self selectActionWithName:@"Rename"];
     [self performRenameActionWithTheSameName];
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Rename the saved item with same name in different output formats
@@ -256,14 +238,11 @@
 //    > Info dialog (screen for iPhone) about the report should appear
 - (void)testThatInfoButtonWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    
-    [self showInfoPageTestSavedItemFromSavedItemsSection];
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
+
+    [self openInfoPageTestSavedItemFromSavedItemsSection];
     [self verifyThatInfoPageOnScreen];
     [self closeInfoPageTestSavedItemFromSavedItemsSection];
-    
-    [self deleteTestReportInHTMLFormat];
 }
 
 //Zoom on Report View screen
@@ -278,9 +257,7 @@
 //    > Report shouldn't be scalled
 - (void)testThatZoomWorkCorrectly
 {
-    [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     XCUIElement *webView = [self.application.webViews elementBoundByIndex:0];
     [self waitElementReady:webView
@@ -290,23 +267,22 @@
     sleep(kUITestsElementAvailableTimeout);
     
     [self closeTestSavedItem];
-    [self deleteTestReportInHTMLFormat];
 }
 
 #pragma mark - Helpers
 
 - (void)cancelDeletingAction
 {
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 - (void)cancelRenamingAction
 {
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 - (void)performRenameAction
@@ -315,10 +291,10 @@
     [self waitElementReady:textField
                    timeout:kUITestsBaseTimeout];
     [textField typeText:@"1"];
-    
-    XCUIElement *okButton = [self waitButtonWithAccessibilityId:@"OK"
-                                                        timeout:kUITestsBaseTimeout];
-    [okButton tap];
+
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+              parentElement:nil
+                shouldCheck:YES];
 }
 
 - (void)performRenameActionWithEmptyName
@@ -329,14 +305,9 @@
     [textField typeText:@"1"]; 
     [self deleteTextFromTextField:textField];
 
-    XCUIElement *okButton = [self findButtonWithAccessibilityId:@"OK"];
-    if (okButton.isEnabled) {
-        XCTFail(@"OK button should be inactive");
-    }
-    
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self verifyOKButtonEnabled];
+
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 - (void)performRenameActionWithSpacesInName
@@ -347,16 +318,10 @@
     [textField typeText:@"1"]; 
     [self deleteTextFromTextField:textField];
     [textField typeText:@"  "];
-    
-    XCUIElement *okButton = [self findButtonWithAccessibilityId:@"OK"];
-    if (okButton.isEnabled) {
-        XCTFail(@"OK button should be inactive");
-    }
-    
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
 
+    [self verifyOKButtonEnabled];
+
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 - (void)performRenameActionWithTheSameName
@@ -367,25 +332,18 @@
     [textField typeText:@"1"]; 
     [self deleteTextFromTextField:textField];
     [textField typeText:kTestReportName];
-    
-    XCUIElement *okButton = [self findButtonWithAccessibilityId:@"OK"];
-    if (okButton.isEnabled) {
-        XCTFail(@"OK button should be inactive");
-    }
-    
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
-    
+
+    [self verifyOKButtonEnabled];
+
+    [self tapCancelButtonOnNavBarWithTitle:nil];
 }
 
 #pragma mark - Verifying
 
 - (void)verifyThatBackButtonHasCorrectTitle
 {
-    [self waitBackButtonWithAccessibilityId:@"Back"
-                          onNavBarWithLabel:kTestReportName
-                                    timeout:kUITestsBaseTimeout];
+    [self verifyBackButtonExistWithAlternativeTitle:nil
+                                  onNavBarWithTitle:kTestReportName];
 }
 
 - (void)verifyThatSavedItemPageHasCorrectTitle
@@ -397,6 +355,18 @@
 - (void)verifyThatInfoPageOnScreen
 {
     [self verifyThatSavedItemInfoPageOnScreen];
+}
+
+#pragma mark - Helpers
+
+- (void)verifyOKButtonEnabled
+{
+    XCUIElement *okButton = [self waitElementMatchingType:XCUIElementTypeButton
+                                                     text:JMLocalizedString(@"dialog_button_ok")
+                                                  timeout:kUITestsElementAvailableTimeout];
+    if (okButton.isEnabled) {
+        XCTFail(@"OK button should be inactive");
+    }
 }
 
 @end

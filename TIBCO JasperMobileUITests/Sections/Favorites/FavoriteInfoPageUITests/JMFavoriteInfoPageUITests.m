@@ -44,9 +44,9 @@
     [self givenThatFavoritesSectionIsEmpty];
 
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
 
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self closeInfoPageForTestReport];
@@ -59,9 +59,9 @@
     [self givenThatFavoritesSectionIsEmpty];
 
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
 
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self closeInfoPageForTestDashboard];
@@ -98,9 +98,9 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestReportHasBackButton];
@@ -114,9 +114,9 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestDashboardHasBackButton];
@@ -153,9 +153,9 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestReportHasCorrectTitle];
@@ -169,9 +169,9 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestDashboardHasCorrectTitle];
@@ -226,9 +226,9 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestReportContainsCorrectData];
@@ -260,9 +260,9 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self verifyThatInfoPageForTestDashboardContainsCorrectData];
@@ -417,9 +417,9 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self unmarkFromFavoritesFromMenuActions];
@@ -434,9 +434,9 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self unmarkFromFavoritesFromMenuActions];
@@ -476,9 +476,9 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestReportFromSectionWithName:@"Favorites"];
     [self openTestReportFromInfoPage];
@@ -492,9 +492,9 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openFavoritesSectionIfNeed];
     
     [self openInfoPageForTestDashboardFromSectionWithName:@"Favorites"];
     [self openTestDashboardFromInfoPage];

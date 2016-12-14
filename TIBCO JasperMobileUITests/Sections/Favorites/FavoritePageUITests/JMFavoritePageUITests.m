@@ -13,8 +13,17 @@
 #import "JMBaseUITestCase+Favorites.h"
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+Dashboard.h"
+#import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Search.h"
 
 @implementation JMFavoritePageUITests
+
+#pragma mark - JMBaseUITestCaseProtocol
+
+- (NSInteger)testsCount
+{
+    return 15;
+}
 
 #pragma mark - Tests
     
@@ -26,7 +35,7 @@
 //      - User should see Favorites screen
 - (void)testThatUserCanSeeFavoritesPage
 {
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
 
     [self verifyThatFavoritePageOnScreen];
 }
@@ -39,7 +48,7 @@
 //      - User should see Left Panel (side menu) button on the Favorites screen
 - (void)testThatFavoritesPageHasSideMenuButton
 {
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self verifyThatFavoritePageHasSideMenuButton];
 }
@@ -52,7 +61,7 @@
 //      - User should see title like “Favorites”
 - (void)testThatUserFavoritesPageHasCorrectTitle
 {
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
     
     [self verifyThatFavoritePageHasCorrectTitle];
 }
@@ -78,16 +87,15 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-    [self openFavoritesSection];
-    [self givenThatReportCellsOnScreen];
+    [self openFavoritesSectionIfNeed];
+    [self givenThatReportCellsOnScreenInSectionWithName:@"Favorites"];
     
-    [self searchResourceWithName:kTestReportName
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-
-    [self givenThatCellsAreVisible];
+    [self performSearchResourceWithName:kTestReportName
+           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self givenThatReportCellsOnScreenInSectionWithName:@"Favorites"];
 
     [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
@@ -108,16 +116,14 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    
-    [self openFavoritesSection];
-    [self searchResourceWithName:@"Search without result text"
-    inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-    [self waitStaticTextWithText:@"No Favorited Items"
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self openFavoritesSectionIfNeed];
+    [self performSearchResourceWithName:@"Search without result text"
+           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+
+    [self verifyThatCorrectMessageAppearForEmptyResult];
 
     [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
@@ -153,19 +159,19 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
 
     [self switchViewFromListToGridInSectionWithTitle:@"Favorites"];
     [self verifyThatCollectionViewContainsGridOfCells];
 
-    [self openLibrarySection];
-    [self givenThatCellsAreVisible];
+    [self openLibrarySectionIfNeed];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     [self verifyThatCollectionViewContainsListOfCells];
-    
-    [self openFavoritesSection];
+
+    [self openFavoritesSectionIfNeed];
     [self verifyThatCollectionViewContainsGridOfCells];
 
     [self switchViewFromGridToListInSectionWithTitle:@"Favorites"];
@@ -192,10 +198,10 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+
+    [self openFavoritesSectionIfNeed];
     
     [self selectSortBy:@"Name"
     inSectionWithTitle:@"Favorites"];
@@ -238,10 +244,10 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+
+    [self openFavoritesSectionIfNeed];
     [self verifyThatCollectionViewContainsListOfCells];
     
     [self selectFilterBy:@"Reports"
@@ -250,32 +256,34 @@
     
     [self selectFilterBy:@"Saved Items"
     inSectionWithTitle:@"Favorites"];
-    [self waitStaticTextWithText:@"No Favorited Items"
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyThatCorrectMessageAppearForEmptyResult];
     
     [self selectFilterBy:@"Dashboards"
     inSectionWithTitle:@"Favorites"];
-    [self waitStaticTextWithText:@"No Favorited Items"
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyThatCorrectMessageAppearForEmptyResult];
     
     [self selectFilterBy:@"Folders"
     inSectionWithTitle:@"Favorites"];
-    [self waitStaticTextWithText:@"No Favorited Items"
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyThatCorrectMessageAppearForEmptyResult];
     
     [self selectFilterBy:@"Content Resources"
     inSectionWithTitle:@"Favorites"];
-    [self waitStaticTextWithText:@"No Favorited Items"
-                   parentElement:nil
-                         timeout:kUITestsBaseTimeout];
+    [self verifyThatCorrectMessageAppearForEmptyResult];
     
     [self selectFilterBy:@"All"
       inSectionWithTitle:@"Favorites"];
 
     [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+}
+
+- (void)verifyThatCorrectMessageAppearForEmptyResult
+{
+    XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                    text:@"No Favorited Items"
+                                                 timeout:kUITestsBaseTimeout];
+    if (!element.exists) {
+        XCTFail(@"Label 'No Favorited Items' wasn't found");
+    }
 }
 
 //    Pull down to refresh all items
@@ -294,13 +302,13 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
 
     [self performPullDownToRefresh];
 
@@ -325,10 +333,10 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-    [self openFavoritesSection];
+    [self openFavoritesSectionIfNeed];
 
     [self performSwipeToScrool];
 
@@ -391,10 +399,10 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Reports"
-      inSectionWithTitle:@"Library"];
-    [self markTestReportAsFavoriteFromSectionWithName:@"Library"];
-    
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+
+    [self openFavoritesSectionIfNeed];
 
     [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
@@ -414,10 +422,10 @@
     [self givenThatFavoritesSectionIsEmpty];
     
     [self selectFilterBy:@"Dashboards"
-      inSectionWithTitle:@"Library"];
-    [self markTestDashboardAsFavoriteFromSectionWithName:@"Library"];
-    
-    [self openFavoritesSection];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+
+    [self openFavoritesSectionIfNeed];
 
     [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
 }
@@ -442,13 +450,17 @@
 - (void)verifyThatFavoritePageOnScreen
 {
     // TODO: replace with specific element - JMFavoritesPageAccessibilityId
-    [self waitElementWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"
-                                 timeout:kUITestsBaseTimeout];
+    XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeOther
+                                              identifier:@"JMBaseCollectionContentViewAccessibilityId"
+                                                 timeout:kUITestsBaseTimeout];
+    if (!element.exists) {
+        XCTFail(@"Favorite page wasn't found");
+    }
 }
 
 - (void)verifyThatFavoritePageHasSideMenuButton
 {
-    XCUIElement *menuButton = [self findMenuButtonInSectionWithName:@"Favorites"];
+    XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:@"Favorites"];
     if (!menuButton || !menuButton.exists) {
         XCTFail(@"There isn't menu button");
     }

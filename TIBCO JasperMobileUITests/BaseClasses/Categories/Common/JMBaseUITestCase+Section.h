@@ -12,20 +12,14 @@
 - (void)switchViewFromListToGridInSectionWithTitle:(NSString *)sectionTitle;
 - (void)switchViewFromGridToListInSectionWithTitle:(NSString *)sectionTitle;
 
-// Search
-- (void)searchResourceWithName:(NSString *)resourceName
-  inSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
-- (void)searchResourceWithName:(NSString *)resourceName
-             inSectionWithName:(NSString *)sectionName;
-
-- (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionAccessibilityId;
-
 // Cells
-- (void)givenThatCollectionViewContainsListOfCells;
+- (void)givenThatCollectionViewContainsListOfCellsInSectionWithName:(NSString *)sectionName;
+- (void)givenThatCollectionViewContainsGridOfCellsInSectionWithName:(NSString *)sectionName;
 - (NSInteger)countOfGridCells;
 - (NSInteger)countOfListCells;
-- (void)verifyThatCollectionViewContainsCells;
-- (void)verifyThatCollectionViewNotContainsCells;
+
+- (void)waitCollectionViewContainsCellsWithTimeout:(NSTimeInterval)timeout;
+
 - (void)verifyThatCollectionViewContainsListOfCells;
 - (void)verifyThatCollectionViewContainsGridOfCells;
 
@@ -45,4 +39,8 @@
 // Verifying
 - (void)verifyThatSectionOnScreenWithTitle:(NSString *)sectionTitle;
 
+// Sections
+- (XCUIElement *)libraryPageViewElement;
+- (void)givenThatLibraryPageOnScreen;
+- (void)givenThatRepositoryPageOnScreen;
 @end

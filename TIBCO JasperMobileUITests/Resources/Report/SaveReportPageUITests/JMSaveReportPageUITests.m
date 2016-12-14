@@ -11,6 +11,7 @@
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+SavedItems.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 @implementation JMSaveReportPageUITests
 
@@ -25,8 +26,8 @@
 - (void)testThatUserCanSeeSaveReportScreen
 {
     [self openTestReportPage];
-    
-    [self openSaveReportPage];
+
+    [self openSavingReportPage];
     [self verifyThatSaveReportPageOnScreen];
     [self closeSaveReportPage];
     
@@ -42,8 +43,8 @@
 - (void)testThatScreenHasCorrectTitle
 {
     [self openTestReportPage];
-    
-    [self openSaveReportPage];
+
+    [self openSavingReportPage];
     [self verifyThatSaveReportPageHasCorrectTitle];
     [self closeSaveReportPage];
     
@@ -59,9 +60,10 @@
 //    > Report is saved successfully and Report View should appear
 - (void)testThatSaveButtonWorkCorrectly
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    
-    [self saveTestReportInHTMLFormat];
+
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
 }
 
 //Back button like name of the report
@@ -74,8 +76,8 @@
 - (void)testThatBackButtonHasCorrectName
 {
     [self openTestReportPage];
-    
-    [self openSaveReportPage];
+
+    [self openSavingReportPage];
     [self verifyThatSaveReportPageHasCorrectBackButtonName];
     [self closeSaveReportPage];
     
@@ -92,8 +94,8 @@
 //    > Report is not saved. User should see error message "This field is required"
 - (void)testThatErrorAppearsForSavingWithEmptyName
 {
-    [self openTestReportPage];    
-    [self openSaveReportPage];
+    [self openTestReportPage];
+    [self openSavingReportPage];
     
     [self saveTestReportWithName:@"" 
                           format:@"html"];
@@ -113,8 +115,8 @@
 //    > Report is not saved. User should see error message "This field is required"
 - (void)testThatErrorAppearsForSavingWithSpacesInName
 {
-    [self openTestReportPage];    
-    [self openSaveReportPage];
+    [self openTestReportPage];
+    [self openSavingReportPage];
     
     [self saveTestReportWithName:@"  " 
                           format:@"html"];
@@ -134,8 +136,8 @@
 //    > Report is not saved. User should see error message "Characters '-', '/', ':', ';', '(', ')', '$', '&', '@', ',', '?', '!', ''', '"' are not allowed"
 - (void)testThatErrorAppearsForSavingWithUnsupportedSymbolsInName
 {
-    [self openTestReportPage];    
-    [self openSaveReportPage];
+    [self openTestReportPage];
+    [self openSavingReportPage];
     
     [self saveTestReportWithName:@"-" 
                           format:@"html"];
@@ -160,12 +162,14 @@
 //    2. Should appears dialogbox with title 'Error' and message 'This name already exist, do you want to overwrite it?'
 - (void)testThatErrorAppearsForSavingWithTheSameName
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    
-    [self saveTestReportInHTMLFormat];
-    
-    [self openTestReportPage];    
-    [self openSaveReportPage];
+
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
+
+    [self openLibrarySectionIfNeed];
+    [self openTestReportPage];
+    [self openSavingReportPage];
     
     [self saveTestReportWithName:kTestReportName
                           format:@"html"];
@@ -191,12 +195,14 @@
 //    > Existing report should not be overwritten
 - (void)testThatErrorAppearsForSavingWithTheSameNameAndChooseCancelAction
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    
-    [self saveTestReportInHTMLFormat];
-    
-    [self openTestReportPage];    
-    [self openSaveReportPage];
+
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
+
+    [self openLibrarySectionIfNeed];
+    [self openTestReportPage];
+    [self openSavingReportPage];
     
     [self saveTestReportWithName:kTestReportName
                           format:@"html"];
@@ -221,12 +227,14 @@
 //    > Existing report should be overwritten
 - (void)testThatReportCanBeOverwritten
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    
-    [self saveTestReportInHTMLFormat];
-    
-    [self openTestReportPage];    
-    [self openSaveReportPage];
+
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
+
+    [self openLibrarySectionIfNeed];
+    [self openTestReportPage];
+    [self openSavingReportPage];
     
     [self saveTestReportWithName:kTestReportName
                           format:@"html"];
@@ -236,7 +244,7 @@
     
     [self verifyThatReportDidSaveWithReportName:kTestReportName
                                          format:@"html"];
-    [self openLibrarySection];
+    [self openLibrarySectionIfNeed];
 }
 
 //Save the report as html-file
@@ -250,9 +258,11 @@
 //    > Report is saved as html-file
 - (void)testThatReportCanBeSavedInHTMLformat
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    
-    [self saveTestReportInHTMLFormat];
+
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
+    [self closeTestSavedItem];
 }
 
 //Save the report as pdf-file
@@ -266,9 +276,11 @@
 //    > Report is saved as pdf-file
 - (void)testThatReportCanBeSavedInPDFformat
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    
-    [self saveTestReportInPDFFormat];
+
+    [self saveTestReportInPDFFormatNeedOpen:YES];
+    [self closeTestSavedItem];
 }
 
 //Save the report as xls-file
@@ -282,9 +294,11 @@
 //    > Report is saved as xls-file
 - (void)testThatReportCanBeSavedInXLSformat
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    
-    [self saveTestReportInXLSFormat];
+
+    [self saveTestReportInXLSFormatNeedOpen:YES];
+    [self closeTestSavedItem];
 }
 
 //Save the report with same name but in different output formats
@@ -306,10 +320,11 @@
 //    > All report are saved with same name but in different output formats
 - (void)testThatReportCanBeSavedWithTheSameNameButDifferentFormat
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    
-    [self saveTestReportInHTMLFormat];    
-    [self saveTestReportInXLSFormat];
+
+    [self saveTestReportInHTMLFormatNeedOpen:NO];
+    [self saveTestReportInXLSFormatNeedOpen:NO];
 }
 
 //Cancel saving
@@ -332,20 +347,18 @@
 {
     XCUIElement *alert = [self waitAlertWithTitle:@"Error"
                                           timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel" 
-                                                      parentElement:alert
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
+              parentElement:alert
+                shouldCheck:YES];
 }
 
 - (void)confirmOverridingTestReport
 {
     XCUIElement *alert = [self waitAlertWithTitle:@"Error"
                                           timeout:kUITestsBaseTimeout];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"OK" 
-                                                      parentElement:alert
-                                                            timeout:kUITestsBaseTimeout];
-    [cancelButton tap];
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+              parentElement:alert
+                shouldCheck:YES];
 }
 
 #pragma mark - Verifying
@@ -366,27 +379,28 @@
 - (void)verifyThatSaveReportPageHasCorrectBackButtonName
 {
     // TODO: need make general case for all devices, 'Back' on iPhones
-    [self waitBackButtonWithAccessibilityId:@"Back"
-                          onNavBarWithLabel:@"Save Report"
-                                    timeout:kUITestsBaseTimeout];
+    [self verifyBackButtonExistWithAlternativeTitle:nil
+                                  onNavBarWithTitle:@"Save Report"];
 }
 
 - (void)verifyErrorOfSavingReportWithEmptyName
 {
     XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
     XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
-    [self waitStaticTextWithText:@"This field is required." 
-                   parentElement:nameCell
-                         timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"This field is required."
+                    parentElement:nameCell
+                          timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyErrorOfSavingReportWithWrongSymbolsInName
 {
     XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
     XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
-    [self waitStaticTextWithText:@"are not allowed." 
-                   parentElement:nameCell
-                         timeout:kUITestsBaseTimeout];
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"are not allowed."
+                    parentElement:nameCell
+                          timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatAlertItemExistsVisible

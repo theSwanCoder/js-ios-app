@@ -11,6 +11,8 @@
 #import "JMBaseUITestCase+SavedItems.h"
 #import "JMBaseUITestCase+Report.h"
 #import "JMBaseUITestCase+InfoPage.h"
+#import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+SideMenu.h"
 
 @implementation JMSavedItemInfoDialogUITests
 
@@ -25,7 +27,7 @@
 - (void)testThatUserCanSeeInfoDialog
 {
     [self createAndOpenTestSavedItemInHTMLFormat];
-    [self showInfoPageTestSavedItemFromViewer];
+    [self openInfoPageTestSavedItemFromViewer];
     
     [self verifyThatInfoPageOnScreen];
 
@@ -43,7 +45,7 @@
 - (void)testThatCancelButtonWorkCorrectly
 {
     [self createAndOpenTestSavedItemInHTMLFormat];
-    [self showInfoPageTestSavedItemFromViewer];
+    [self openInfoPageTestSavedItemFromViewer];
     
     [self verifyThatInfoPageHasCancelButton];
 
@@ -60,7 +62,7 @@
 - (void)testThatDialogHasCorrectTitle
 {
     [self createAndOpenTestSavedItemInHTMLFormat];
-    [self showInfoPageTestSavedItemFromViewer];
+    [self openInfoPageTestSavedItemFromViewer];
     
     [self verifyThatInfoPageHasCorrectTitle];
 
@@ -89,7 +91,7 @@
 - (void)testThatDialogHasNeededFieldsForHTMLfile
 {
     [self createAndOpenTestSavedItemInHTMLFormat];
-    [self showInfoPageTestSavedItemFromViewer];
+    [self openInfoPageTestSavedItemFromViewer];
     
     [self verifyThatInfoPageHasNeededFieldsForHTMLFile];
 
@@ -118,7 +120,7 @@
 - (void)testThatDialogHasNeededFieldsForPDFfile
 {
     [self createAndOpenTestSavedItemInPDFFormat];
-    [self showInfoPageTestSavedItemFromViewer];
+    [self openInfoPageTestSavedItemFromViewer];
     
     [self verifyThatInfoPageHasNeededFieldsForPDFFile];
 
@@ -138,7 +140,7 @@
 - (void)testThatFavoriteButtonWorkCorrectly
 {
     [self createAndOpenTestSavedItemInHTMLFormat];
-    [self showInfoPageTestSavedItemFromViewer];
+    [self openInfoPageTestSavedItemFromViewer];
     
     [self markSavedAsFavoriteFromInfoPage];
     [self unmarkSavedAsFavoriteFromInfoPage];
@@ -151,18 +153,16 @@
 
 - (void)createAndOpenTestSavedItemInHTMLFormat
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    [self saveTestReportInHTMLFormat];
-
-    [self openTestSavedItemInHTMLFormat];
+    [self saveTestReportInHTMLFormatNeedOpen:YES];
 }
 
 - (void)createAndOpenTestSavedItemInPDFFormat
 {
+    [self openSavedItemsSectionIfNeed];
     [self givenThatSavedItemsEmpty];
-    [self saveTestReportInPDFFormat];
-
-    [self openTestSavedItemInPDFFormat];
+    [self saveTestReportInPDFFormatNeedOpen:YES];
 }
 
 - (void)closeAndDeleteTestSavedItemInHTMLFormat
@@ -186,13 +186,7 @@
 
 - (void)verifyThatInfoPageHasCancelButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:nil];
-    XCUIElement *cancelButton = [self waitButtonWithAccessibilityId:@"Cancel"
-                                                      parentElement:navBar
-                                                            timeout:kUITestsBaseTimeout];
-    if (!cancelButton) {
-        XCTFail(@"Cancel button should be on navigation bar");
-    }
+    [self verifyCancelButtonExistOnNavBarWithTitle:nil];
 }
 
 - (void)verifyThatInfoPageHasCorrectTitle

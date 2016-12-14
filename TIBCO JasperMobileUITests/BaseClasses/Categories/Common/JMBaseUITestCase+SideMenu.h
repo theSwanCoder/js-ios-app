@@ -13,12 +13,12 @@
 
 - (void)waitNotificationOnMenuButtonWithTimeout:(NSTimeInterval)timeout;
 
-- (void)openLibrarySection;
-- (void)openRepositorySection;
-- (void)openRecentlyViewedSection;
-- (void)openSavedItemsSection;
-- (void)openFavoritesSection;
-- (void)openSchedulesSection;
+- (void)openLibrarySectionIfNeed;
+- (void)openRepositorySectionIfNeed;
+- (void)openRecentlyViewedSectionIfNeed;
+- (void)openSavedItemsSectionIfNeed;
+- (void)openFavoritesSectionIfNeed;
+- (void)openSchedulesSectionIfNeed;
 
 - (void)selectAbout;
 - (void)selectSettings;
@@ -29,5 +29,5 @@
 
 - (void)selectMenuItemForPageWithName:(NSString *)pageName;
 
-- (XCUIElement *)findMenuItemForPageName:(NSString *)pageName;
+- (XCUIElement *)findSideMenuItemForActionName:(NSString *)pageName;
 @end

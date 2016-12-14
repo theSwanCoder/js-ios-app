@@ -44,13 +44,18 @@
 
 #pragma mark - Public API
 
-- (void)printResource:(JMResource *)resource completion:(void(^)(void))completion
+- (void)printResource:(JMResource * __nonnull)resource
+ prepearingCompletion:(void(^ __nullable)(void))prepearingCompletion
+      printCompletion:(void(^ __nullable)(void))printCompletion
 {
     self.resource = resource;
     self.printSettingsPreferredContentSize = CGSizeMake(540, 580);
 
     __weak __typeof(self) weakSelf = self;
     [self preparePreviewForPrintWithCompletion:^(id printItem) {
+        if (prepearingCompletion) {
+            prepearingCompletion();
+        }
         if (printItem) {
             __typeof(self) strongSelf = weakSelf;
             __weak __typeof(self) weakSelf = strongSelf;
@@ -65,12 +70,12 @@
                            if(error){
                                JMLog(@"FAILED! due to error in domain %@ with error code %ld", error.domain, (long)error.code);
                            }
-                           if (completion) {
-                               completion();
+                           if (printCompletion) {
+                               printCompletion();
                            }
                        }];
-        } else if (completion) {
-            completion();
+        } else if (printCompletion) {
+            printCompletion();
         }
     }];
 }
@@ -85,7 +90,7 @@
         if (self.resource.type == JMResourceTypeReport) {
             [self prepareReportForPrintingWithCompletion:completion];
         } else if (self.resource.type == JMResourceTypeDashboard) {
-            // TODO: implement
+            [self prepareDashboardForPrintingWithCompletion:completion];
         } else {
             // TODO: extend for other resources
         }
@@ -122,6 +127,9 @@
                          completion:^(NSURL * _Nullable savedReportURL, NSError * _Nullable error) {
                              if (error) {
                                  if (error.code == JSSessionExpiredErrorCode) {
+                                     if (completion) {
+                                         completion(nil);
+                                     }
                                      [JMUtils showLoginViewAnimated:YES completion:nil];
                                  } else {
                                      [JMUtils presentAlertControllerWithError:error completion:nil];
@@ -134,6 +142,34 @@
                                  }
                              }
                          }];
+}
+
+- (void)prepareDashboardForPrintingWithCompletion:(void(^)(NSURL *resourceURL))completion
+{
+    JSDashboard *dashboard = [self.resource modelOfResource];
+    JSDashboardSaver *dashboardSaver = [[JSDashboardSaver alloc] initWithDashboard:dashboard
+                                                                        restClient:self.restClient];
+    NSString *dashboardName = [[NSUUID UUID] UUIDString];
+    [dashboardSaver saveDashboardWithName:dashboardName
+                                   format:kJS_CONTENT_TYPE_PDF
+                               completion:^(NSURL * _Nullable savedDashboardFolderURL, NSError * _Nullable error) {
+                                   if (error) {
+                                       if (error.code == JSSessionExpiredErrorCode) {
+                                           [JMUtils showLoginViewAnimated:YES completion:nil];
+                                       } else {
+                                           if (completion) {
+                                               completion(nil);
+                                           }
+                                           [JMUtils presentAlertControllerWithError:error completion:nil];
+                                       }
+                                   } else {
+                                       NSString *fullResourceName = [dashboardName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
+                                       NSURL *resourceURL = [savedDashboardFolderURL URLByAppendingPathComponent:fullResourceName];
+                                       if (completion) {
+                                           completion(resourceURL);
+                                       }
+                                   }
+                               }];
 }
 
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion
