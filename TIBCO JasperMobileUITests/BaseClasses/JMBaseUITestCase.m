@@ -12,7 +12,7 @@
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+Buttons.h"
 
-#define JMUITestLocalDebugState 0
+#define JMUITestLocalDebugState 1
 
 static NSString *JMUIBaseTestCaseExecutedTestNumberKey = @"JMUIBaseTestCaseExecutedTestNumberKey";
 
@@ -85,7 +85,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 {
 #if JMUITestLocalDebugState
     // FOR LOCAL DEBUG ONLY
-    return NO;
+    return YES;
 #else
     NSInteger testsCount = [self testsCount];
     NSNumber *executedTestNumber = [[NSUserDefaults standardUserDefaults] objectForKey:JMUIBaseTestCaseExecutedTestNumberKey];
