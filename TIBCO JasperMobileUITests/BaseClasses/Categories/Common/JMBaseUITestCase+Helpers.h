@@ -49,10 +49,6 @@
 // Search
 - (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText;
 
-// Alerts
-- (XCUIElement *)findAlertWithTitle:(NSString *)title;
-- (XCUIElement *)waitAlertWithTitle:(NSString *)title timeout:(NSTimeInterval)timeout;
-
 // Images
 - (XCUIElement *)findImageWithAccessibilityId:(NSString *)accessibilityId;
 @end

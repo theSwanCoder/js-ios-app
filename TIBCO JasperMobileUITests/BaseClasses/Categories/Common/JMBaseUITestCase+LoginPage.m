@@ -14,6 +14,7 @@
 #import "JMBaseUITestCase+OtherElements.h"
 #import "XCUIElement+Tappable.h"
 #import "JMBaseUITestCase+Cells.h"
+#import "JMBaseUITestCase+Alerts.h"
 
 
 @implementation JMBaseUITestCase (LoginPage)

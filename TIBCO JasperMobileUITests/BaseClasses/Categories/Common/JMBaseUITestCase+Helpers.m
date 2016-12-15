@@ -347,54 +347,6 @@
                 shouldCheck:YES];
 }
 
-#pragma mark - Alerts
-
-- (XCUIElement *)waitAlertInHierarchyWithTitle:(NSString *)title
-                                       timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSTimeInterval remain = timeout;
-    XCUIElement *alert;
-    do {
-        remain -= kUITestsElementAvailableTimeout;
-        alert = [self findAlertWithTitle:title];;
-    } while (alert == nil && remain >= 0);
-
-    return alert;
-}
-
-- (XCUIElement *)findAlertWithTitle:(NSString *)title
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    sleep(kUITestsElementAvailableTimeout);
-    
-    NSLog(@"All alerts : %@", self.application.alerts.allElementsBoundByAccessibilityElement);
-    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *evaluatedObject, NSDictionary<NSString *, id> *bindings) {
-        BOOL isEqualIdentifiers = [evaluatedObject.identifier isEqualToString:title];
-        BOOL isEqualLabel = [evaluatedObject.label isEqualToString:title];
-        return isEqualIdentifiers || isEqualLabel;
-    }];
-    XCUIElementQuery *elementQuery = [self.application.alerts matchingPredicate:predicate];
-    NSArray *allElements = elementQuery.allElementsBoundByAccessibilityElement;
-    XCUIElement *alert = allElements.firstObject;
-    NSLog(@"All found alerts (with title %@): %@", title, allElements);
-    return alert;
-}
-
-- (XCUIElement *)waitAlertWithTitle:(NSString *)title
-                            timeout:(NSTimeInterval)timeout
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *alert = [self findAlertWithTitle:title];
-    if (!alert) {
-        alert = [self waitAlertInHierarchyWithTitle:title
-                                            timeout:timeout];
-    }
-    [self waitElementReady:alert
-                   timeout:timeout];
-    return alert;
-}
-
 #pragma mark - Images
 
 - (XCUIElement *)findImageWithAccessibilityId:(NSString *)accessibilityId

@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+SideMenu.h"
 #import "JMBaseUITestCase+SavedItems.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Alerts.h"
 
 @implementation JMSaveReportPageUITests
 

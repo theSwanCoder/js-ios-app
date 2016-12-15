@@ -14,6 +14,7 @@
 #import "JMBaseUITestCase+Printer.h"
 #import "JMBaseUITestCase+Buttons.h"
 #import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+Alerts.h"
 
 @implementation JMDashboardPageUITests
 

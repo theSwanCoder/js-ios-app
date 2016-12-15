@@ -14,6 +14,7 @@
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+TextFields.h"
 #import "JMBaseUITestCase+Buttons.h"
+#import "JMBaseUITestCase+Alerts.h"
 
 @implementation JMLoginPageUITests
 
