@@ -61,11 +61,7 @@
     // wait until report has being refreshed
     // back to the 'library' page
     [self openTestReportPage];
-
-    [self openMenuActions];
-    [self selectActionWithName:@"Refresh"];
-    [self givenLoadingPopupNotVisible];
-    
+    [self refreshReport];
     [self closeTestReportPage];
 }
 

@@ -17,6 +17,7 @@
 #import "JMBaseUITestCase+Search.h"
 #import "XCUIElement+Tappable.h"
 #import "JMBaseUITestCase+Cells.h"
+#import "JMBaseUITestCase+Alerts.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";
@@ -26,7 +27,55 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (void)openTestReportPage
 {
-    [self openTestReportPageWithWaitingFinish:YES];
+    [self openTestReportPageWithName:kTestReportName
+                       waitingFinish:YES];
+}
+
+- (void)openTestReportPageWithWaitingFinish:(BOOL)waitingFinish
+{
+    [self openTestReportPageWithName:kTestReportName
+                       waitingFinish:waitingFinish];
+}
+
+- (void)openTestReportWithMandatoryFiltersPage
+{
+    [self openTestReportPageWithName:kTestReportWithMandatoryFiltersName
+                       waitingFinish:YES];
+}
+
+- (void)openTestReportWithSingleSelectedControlPage
+{
+    [self openTestReportPageWithName:kTestReportWithSingleSelectedControlName
+                       waitingFinish:YES];
+}
+
+- (void)openTestReportPageWithName:(NSString *)reportName
+                     waitingFinish:(BOOL)waitingFinish
+{
+    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self openTestReportWithName:reportName];
+
+    if (waitingFinish) {
+        // We can have two times when loading up and down
+        // first time loading 'report info' and second one - loading report
+        [self givenLoadingPopupNotVisible];
+        [self givenLoadingPopupNotVisible];
+
+        [self processErrorAlertsIfExistWithTitles:@[@"Visualize Error Domain"] actionBlock:^{
+            XCTFail(@"Error of opening report");
+        }];
+    }
+}
+
+- (void)refreshReport
+{
+    [self openMenuActions];
+    [self selectActionWithName:@"Refresh"];
+    [self givenLoadingPopupNotVisible];
+
+    [self processErrorAlertsIfExistWithTitles:@[@"Visualize Error Domain"] actionBlock:^{
+        XCTFail(@"Error of refreshing report");
+    }];
 }
 
 - (void)openTestReportFromInfoPage
@@ -34,43 +83,16 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [self openMenuActions];
     [self selectActionWithName:@"Run"];
 
+    // We can have two times when loading up and down
+    // first time loading 'report info' and second one - loading report
     [self givenLoadingPopupNotVisible];
+    [self givenLoadingPopupNotVisible];
+
+    [self processErrorAlertsIfExistWithTitles:@[@"Visualize Error Domain"] actionBlock:^{
+        XCTFail(@"Error of opening report");
+    }];
 
     [self tryBackToPreviousPage];
-}
-
-- (void)openTestReportWithMandatoryFiltersPage
-{
-    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
-
-    [self tryOpenTestReportWithMandatoryFilters];
-    // We can have two times when loading up and down
-    // first time loading 'report info' and second one - loading report
-    [self givenLoadingPopupNotVisible];
-    [self givenLoadingPopupNotVisible];
-}
-
-- (void)openTestReportWithSingleSelectedControlPage
-{
-    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
-    
-    [self tryOpenTestReportWithSingleSelectedControl];
-    // We can have two times when loading up and down
-    // first time loading 'report info' and second one - loading report
-    [self givenLoadingPopupNotVisible];
-    [self givenLoadingPopupNotVisible];
-}
-
-- (void)openTestReportPageWithWaitingFinish:(BOOL)waitingFinish
-{
-    [self tryOpenTestReport];
-
-    if (waitingFinish) {
-        // We can have two times when loading up and down
-        // first time loading 'report info' and second one - loading report
-        [self givenLoadingPopupNotVisible];
-        [self givenLoadingPopupNotVisible];
-    }
 }
 
 - (void)closeTestReportPage
@@ -100,6 +122,13 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)closeReportFiltersPage
 {
     [self tryBackToPreviousPage];
+}
+
+- (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName
+{
+    XCUIElement *testCell = [self searchTestReportWithName:kTestReportName
+                                         inSectionWithName:sectionName];
+    return testCell;
 }
 
 #pragma mark - Saving
@@ -148,79 +177,24 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 #pragma mark - Helpers
 
-- (void)tryOpenTestReport
+- (void)openTestReportWithName:(NSString *)reportName
 {
-    XCUIElement *testCell = [self searchTestReportInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    XCUIElement *testCell = [self searchTestReportWithName:reportName
+                                         inSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [testCell tapByWaitingHittable];
 }
 
-- (XCUIElement *)searchTestReportInSectionWithName:(NSString *)sectionName
+- (XCUIElement *)searchTestReportWithName:(NSString *)reportName
+                        inSectionWithName:(NSString *)sectionName
 {
-    [self performSearchResourceWithName:kTestReportName
+    [self performSearchResourceWithName:reportName
                       inSectionWithName:sectionName];
 
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 
-    XCUIElement *testCell = [self testReportCell];
-    return testCell;
-}
-
-- (XCUIElement *)testReportCell
-{
-    XCUIElement *testCell = [self waitCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
+    XCUIElement *testCell = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
                                            containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
-                                                                  labelText:kTestReportName
-                                                                    timeout:kUITestsElementAvailableTimeout];
-    return testCell;
-}
-
-- (void)tryOpenTestReportWithMandatoryFilters
-{
-    [self searchTestReportWithMandatoryFilters];
-    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
-
-    XCUIElement *testCell = [self testReportWithMandatoryFiltersCell];
-    [testCell tapByWaitingHittable];
-}
-
-- (void)searchTestReportWithMandatoryFilters
-{
-    // TODO: replace with specific element - JMLibraryPageAccessibilityId
-    [self performSearchResourceWithName:kTestReportWithMandatoryFiltersName
-           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-}
-
-- (XCUIElement *)testReportWithMandatoryFiltersCell
-{
-    XCUIElement *testCell = [self waitCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
-                                           containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
-                                                                  labelText:kTestReportWithMandatoryFiltersName
-                                                                    timeout:kUITestsElementAvailableTimeout];
-    return testCell;
-}
-
-- (void)tryOpenTestReportWithSingleSelectedControl
-{
-    [self searchTestReportWithSingleSelectedControl];
-    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
-    
-    XCUIElement *testCell = [self testReportWithSingleSelectedControl];
-    [testCell tapByWaitingHittable];
-}
-
-- (void)searchTestReportWithSingleSelectedControl
-{
-    // TODO: replace with specific element - JMLibraryPageAccessibilityId
-    [self performSearchResourceWithName:kTestReportWithSingleSelectedControlName
-           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
-}
-
-- (XCUIElement *)testReportWithSingleSelectedControl
-{
-    XCUIElement *testCell = [self waitCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
-                                           containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
-                                                                  labelText:kTestReportWithSingleSelectedControlName
-                                                                    timeout:kUITestsElementAvailableTimeout];
+                                                                  labelText:reportName];
     return testCell;
 }
 

@@ -9,4 +9,6 @@
 @interface JMBaseUITestCase (Alerts)
 - (XCUIElement *)findAlertWithTitle:(NSString *)title;
 - (XCUIElement *)waitAlertWithTitle:(NSString *)title timeout:(NSTimeInterval)timeout;
+- (void)processErrorAlertsIfExistWithTitles:(NSArray *)titles
+                                actionBlock:(void(^)(void))actionBlock;
 @end

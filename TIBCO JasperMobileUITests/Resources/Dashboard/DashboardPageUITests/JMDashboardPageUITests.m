@@ -120,16 +120,11 @@
     [self openTestDashboardPage];
     [self openPrintDashboardPage];
     
-    XCUIElement *errorAlert = [self findAlertWithTitle:@"JSErrorDomain"];
-    if (errorAlert.exists) {
     // TODO: should this case be considered as a failure?
-        [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
-                  parentElement:errorAlert
-                    shouldCheck:YES];
-    } else {
+    [self processErrorAlertsIfExistWithTitles:@[@"JSErrorDomain"] actionBlock:^{
         [self verifyThatPrintPageOnScreen];
         [self closePrintDashboardPage];
-    }
+    }];
 
     [self closeTestDashboardPage];
 }

@@ -14,6 +14,7 @@ extern NSString *const kTestReportWithSingleSelectedControlName;
 
 @interface JMBaseUITestCase (Report)
 - (void)openTestReportPage;
+- (void)refreshReport;
 - (void)openTestReportFromInfoPage;
 - (void)openTestReportWithMandatoryFiltersPage;
 - (void)openTestReportWithSingleSelectedControlPage;

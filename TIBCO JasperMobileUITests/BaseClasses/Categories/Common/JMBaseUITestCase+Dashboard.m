@@ -13,6 +13,7 @@
 #import "JMBaseUITestCase+Search.h"
 #import "XCUIElement+Tappable.h"
 #import "JMBaseUITestCase+Cells.h"
+#import "JMBaseUITestCase+Alerts.h"
 
 NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
@@ -30,7 +31,14 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self openMenuActions];
     [self selectActionWithName:@"Run"];
 
+    // We can have two times when loading up and down
+    // first time loading 'dashboard info' and second one - loading dashboard
     [self givenLoadingPopupNotVisible];
+    [self givenLoadingPopupNotVisible];
+
+    [self processErrorAlertsIfExistWithTitles:@[@"Visualize Error Domain"] actionBlock:^{
+        XCTFail(@"Error of opening dashboard");
+    }];
 
     [self tryBackToPreviousPage];
 }
@@ -48,6 +56,10 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
         // first time loading 'dashboard info' and second one - loading dashboard
         [self givenLoadingPopupNotVisible];
         [self givenLoadingPopupNotVisible];
+
+        [self processErrorAlertsIfExistWithTitles:@[@"Visualize Error Domain"] actionBlock:^{
+            XCTFail(@"Error of opening dashboard");
+        }];
 
         // Could be several hover items which visible while dashlet in loading process (in test dashboard - 5)
         [self waitElementMatchingType:XCUIElementTypeStaticText
@@ -79,6 +91,10 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
     [self selectActionWithName:@"Refresh"];
 
     [self givenLoadingPopupNotVisible];
+
+    [self processErrorAlertsIfExistWithTitles:@[@"Visualize Error Domain"] actionBlock:^{
+        XCTFail(@"Error of refreshing dashboard");
+    }];
 }
 
 - (void)openPrintDashboardPage

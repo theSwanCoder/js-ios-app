@@ -5,6 +5,7 @@
 
 #import "JMBaseUITestCase+Alerts.h"
 #import "JMBaseUITestCase+Helpers.h"
+#import "JMBaseUITestCase+Buttons.h"
 
 
 @implementation JMBaseUITestCase (Alerts)
@@ -53,6 +54,35 @@
     [self waitElementReady:alert
                    timeout:timeout];
     return alert;
+}
+
+- (void)processErrorAlertsIfExistWithTitles:(NSArray *)titles
+                                actionBlock:(void(^)(void))actionBlock
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    sleep(kUITestsElementAvailableTimeout);
+    NSLog(@"All alerts: %@", [self.application.alerts allElementsBoundByAccessibilityElement]);
+
+    XCUIElement *alert;
+
+    for(NSString *title in titles) {
+        alert = [self findAlertWithTitle:title];
+        if (alert.exists) {
+            break;
+        }
+    }
+
+    if (alert.exists) {
+        [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+                  parentElement:alert
+                    shouldCheck:YES];
+
+        if (actionBlock) {
+            actionBlock();
+        }
+    } else {
+        NSLog(@"There are no any error alerts");
+    }
 }
 
 @end
