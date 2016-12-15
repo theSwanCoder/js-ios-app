@@ -379,8 +379,19 @@
                                        identifier:accessibilityId
                                     parentElement:nil
                                   filterPredicate:labelPredicate];
+    return cell;
+}
+
+- (XCUIElement *)waitCollectionViewCellWithAccessibilityId:(NSString *)accessibilityId
+                          containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
+                                                 labelText:(NSString *)labelText
+                                                   timeout:(NSTimeInterval)timeout
+{
+    XCUIElement *cell = [self findCollectionViewCellWithAccessibilityId:accessibilityId
+                                       containsLabelWithAccessibilityId:labelAccessibilityId
+                                                              labelText:labelText];
     [self waitElementReady:cell
-                   timeout:kUITestsElementAvailableTimeout];
+                   timeout:timeout];
     return cell;
 }
 

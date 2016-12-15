@@ -115,12 +115,10 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
 - (XCUIElement *)testDashboardCell
 {
-    XCUIElement *testCell = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
+    XCUIElement *testCell = [self waitCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
                                            containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
-                                                                  labelText:kTestDashboardName];
-    if (!testCell) {
-        XCTFail(@"There isn't test cell");
-    }
+                                                                  labelText:kTestDashboardName
+                                                                    timeout:kUITestsElementAvailableTimeout];
     return testCell;
 }
 

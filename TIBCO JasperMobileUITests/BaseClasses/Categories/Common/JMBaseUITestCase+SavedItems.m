@@ -316,9 +316,10 @@
                             format:(NSString *)format
 {
     NSString *fullSavedItemName = [NSString stringWithFormat:@"%@.%@", itemName, format.lowercaseString];
-    XCUIElement *savedItem = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
+    XCUIElement *savedItem = [self waitCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
                                             containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
-                                                                   labelText:fullSavedItemName];
+                                                                   labelText:fullSavedItemName
+                                                                     timeout:kUITestsElementAvailableTimeout];
     return savedItem;
 }
 

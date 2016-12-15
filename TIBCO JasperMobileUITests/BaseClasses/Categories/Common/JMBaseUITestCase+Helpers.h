@@ -50,6 +50,10 @@
 - (XCUIElement *)findCollectionViewCellWithAccessibilityId:(NSString *)accessibilityId
                           containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
                                                  labelText:(NSString *)labelText;
+- (XCUIElement *)waitCollectionViewCellWithAccessibilityId:(NSString *)accessibilityId
+                          containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
+                                                 labelText:(NSString *)labelText
+                                                   timeout:(NSTimeInterval)timeout;
 - (XCUIElement *)findTableViewCellWithAccessibilityId:(NSString *)accessibilityId
                                 containsLabelWithText:(NSString *)labelText;
 // Search

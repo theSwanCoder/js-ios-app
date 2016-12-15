@@ -166,12 +166,10 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (XCUIElement *)testReportCell
 {
-    XCUIElement *testCell = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
+    XCUIElement *testCell = [self waitCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
                                            containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
-                                                                  labelText:kTestReportName];
-    if (!testCell) {
-        XCTFail(@"Test cell wasn't found");
-    }
+                                                                  labelText:kTestReportName
+                                                                    timeout:kUITestsElementAvailableTimeout];
     return testCell;
 }
 
@@ -193,12 +191,10 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (XCUIElement *)testReportWithMandatoryFiltersCell
 {
-    XCUIElement *testCell = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
+    XCUIElement *testCell = [self waitCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
                                            containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
-                                                                  labelText:kTestReportWithMandatoryFiltersName];
-    if (!testCell) {
-        XCTFail(@"There isn't test cell");
-    }
+                                                                  labelText:kTestReportWithMandatoryFiltersName
+                                                                    timeout:kUITestsElementAvailableTimeout];
     return testCell;
 }
 
@@ -220,12 +216,10 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 
 - (XCUIElement *)testReportWithSingleSelectedControl
 {
-    XCUIElement *testCell = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
+    XCUIElement *testCell = [self waitCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
                                            containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
-                                                                  labelText:kTestReportWithSingleSelectedControlName];
-    if (!testCell) {
-        XCTFail(@"There isn't test cell");
-    }
+                                                                  labelText:kTestReportWithSingleSelectedControlName
+                                                                    timeout:kUITestsElementAvailableTimeout];
     return testCell;
 }
 

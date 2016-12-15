@@ -87,12 +87,10 @@ NSString *const kTestFolderName = @"Public";
 
 - (XCUIElement *)folderCellWithName:(NSString *)folderName
 {
-    XCUIElement *testCell = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
+    XCUIElement *testCell = [self waitCollectionViewCellWithAccessibilityId:@"JMCollectionViewListCellAccessibilityId"
                                            containsLabelWithAccessibilityId:@"JMResourceCellResourceNameLabelAccessibilityId"
-                                                                  labelText:folderName];
-    if (!testCell) {
-        XCTFail(@"There isn't test cell");
-    }
+                                                                  labelText:folderName
+                                                                    timeout:kUITestsElementAvailableTimeout];
     return testCell;
 }
 
