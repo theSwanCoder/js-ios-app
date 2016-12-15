@@ -14,6 +14,7 @@
 #import "JMBaseUITestCase+Section.h"
 #import "JMBaseUITestCase+Buttons.h"
 #import "XCUIElement+Tappable.h"
+#import "JMBaseUITestCase+Cells.h"
 
 @implementation JMServerProfilesUITests
 

@@ -30,12 +30,14 @@
         textField =  [self waitElementMatchingType:XCUIElementTypeSecureTextField
                                         identifier:accessibilityId
                                      parentElement:parentElement
+                                   filterPredicate:nil
                                            timeout:kUITestsBaseTimeout];
     } else {
         // TODO: do we need placeholder yet?
         textField =  [self waitElementMatchingType:XCUIElementTypeTextField
                                         identifier:accessibilityId
                                      parentElement:parentElement
+                                   filterPredicate:nil
                                            timeout:kUITestsBaseTimeout];
     }
 

@@ -12,6 +12,7 @@
 #import "JMBaseUITestCase+Buttons.h"
 #import "JMBaseUITestCase+Search.h"
 #import "XCUIElement+Tappable.h"
+#import "JMBaseUITestCase+Cells.h"
 
 NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 

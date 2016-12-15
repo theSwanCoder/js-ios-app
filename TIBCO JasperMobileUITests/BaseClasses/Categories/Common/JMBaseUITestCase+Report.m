@@ -16,6 +16,7 @@
 #import "JMBaseUITestCase+Buttons.h"
 #import "JMBaseUITestCase+Search.h"
 #import "XCUIElement+Tappable.h"
+#import "JMBaseUITestCase+Cells.h"
 
 NSString *const kTestReportName = @"01. Geographic Results by Segment Report";
 NSString *const kTestReportWithMandatoryFiltersName = @"06. Profit Detail Report";

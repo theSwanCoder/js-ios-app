@@ -23,10 +23,12 @@
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
                               identifier:(NSString *)identifier
                            parentElement:(XCUIElement *)parentElement
+                         filterPredicate:(NSPredicate *)filterPredicate
                                  timeout:(NSTimeInterval)timeout;
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
                               identifier:(NSString *)identifier
                            parentElement:(XCUIElement *)parentElement
+                         filterPredicate:(NSPredicate *)filterPredicate
                      shouldBeInHierarchy:(BOOL)shouldBeInHierarchy
                                  timeout:(NSTimeInterval)timeout;
 
@@ -44,18 +46,6 @@
                      shouldBeInHierarchy:(BOOL)shouldBeInHierarchy
                                  timeout:(NSTimeInterval)timeout;
 
-// Cells
-- (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId;
-- (XCUIElement *)cellWithAccessibilityId:(NSString *)accessibilityId forIndex:(NSUInteger)index;
-- (XCUIElement *)findCollectionViewCellWithAccessibilityId:(NSString *)accessibilityId
-                          containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
-                                                 labelText:(NSString *)labelText;
-- (XCUIElement *)waitCollectionViewCellWithAccessibilityId:(NSString *)accessibilityId
-                          containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
-                                                 labelText:(NSString *)labelText
-                                                   timeout:(NSTimeInterval)timeout;
-- (XCUIElement *)findTableViewCellWithAccessibilityId:(NSString *)accessibilityId
-                                containsLabelWithText:(NSString *)labelText;
 // Search
 - (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText;
 

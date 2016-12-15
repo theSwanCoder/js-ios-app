@@ -145,8 +145,6 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *popup = [self waitElementMatchingType:XCUIElementTypeOther
                                             identifier:@"JMCancelRequestPopupAccessibilityId"
-                                         parentElement:nil
-                                   shouldBeInHierarchy:YES
                                                timeout:kUITestsResourceLoadingTimeout];
     if (!popup.exists) {
         XCTFail(@"From super: Loading popup was hidden");
@@ -161,6 +159,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     XCUIElement *popup = [self waitElementMatchingType:XCUIElementTypeOther
                                             identifier:@"JMCancelRequestPopupAccessibilityId"
                                          parentElement:nil
+                                       filterPredicate:nil
                                    shouldBeInHierarchy:NO
                                                timeout:kUITestsResourceLoadingTimeout];
     if (popup.exists) {

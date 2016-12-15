@@ -9,6 +9,7 @@
 #import "JMBaseUITestCase+InfoPage.h"
 #import "JMBaseUITestCase+Search.h"
 #import "XCUIElement+Tappable.h"
+#import "JMBaseUITestCase+Cells.h"
 
 NSString *const kTestFolderName = @"Public";
 

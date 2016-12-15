@@ -42,6 +42,7 @@
     return [self waitElementMatchingType:elementType
                               identifier:identifier
                            parentElement:nil
+                         filterPredicate:nil
                      shouldBeInHierarchy:YES
                                  timeout:timeout];
 }
@@ -49,11 +50,13 @@
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
                               identifier:(NSString *)identifier
                            parentElement:(XCUIElement *)parentElement
+                         filterPredicate:(NSPredicate *)filterPredicate
                                  timeout:(NSTimeInterval)timeout
 {
     return [self waitElementMatchingType:elementType
                               identifier:identifier
                            parentElement:parentElement
+                         filterPredicate:filterPredicate
                      shouldBeInHierarchy:YES
                                  timeout:timeout];
 }
@@ -61,7 +64,8 @@
 - (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
                               identifier:(NSString *)identifier
                            parentElement:(XCUIElement *)parentElement
-                     shouldBeInHierarchy:(BOOL)shouldExist
+                         filterPredicate:(NSPredicate *)filterPredicate
+                     shouldBeInHierarchy:(BOOL)shouldBeInHierarchy
                                  timeout:(NSTimeInterval)timeout
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
@@ -69,15 +73,16 @@
     NSInteger waitingInterval = 1;
     XCUIElement *element = [self elementMatchingType:elementType
                                           identifier:identifier
-                                       parentElement:parentElement];
+                                       parentElement:parentElement
+                                     filterPredicate:filterPredicate];
     BOOL elementExist = element.exists;
     BOOL condition;
-    if (shouldExist) {
-        condition = remain >= 0 && !elementExist && shouldExist;
+    if (shouldBeInHierarchy) {
+        condition = remain >= 0 && !elementExist && shouldBeInHierarchy;
     } else {
-        condition = remain >= 0 && elementExist && !shouldExist;
+        condition = remain >= 0 && elementExist && !shouldBeInHierarchy;
     }
-    NSLog(@"element.exists: %@ and should exist: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
+    NSLog(@"element.exists: %@ and should exist: %@", elementExist ? @"YES" : @"NO", shouldBeInHierarchy ? @"YES" : @"NO");
     NSLog(@"condition: %@", condition ? @"true" : @"false");
     NSLog(@"remain: %@", @(remain));
     while ( condition ) {
@@ -87,12 +92,12 @@
                                  identifier:identifier
                               parentElement:parentElement];
         elementExist = element.exists;
-        if (shouldExist) {
-            condition = remain >= 0 && !elementExist && shouldExist;
+        if (shouldBeInHierarchy) {
+            condition = remain >= 0 && !elementExist && shouldBeInHierarchy;
         } else {
-            condition = remain >= 0 && elementExist && !shouldExist;
+            condition = remain >= 0 && elementExist && !shouldBeInHierarchy;
         }
-        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
+        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldBeInHierarchy ? @"YES" : @"NO");
         NSLog(@"condition: %@", condition ? @"true" : @"false");
         NSLog(@"remain: %@", @(remain));
     }
@@ -324,109 +329,6 @@
     [self waitElementReady:navBar
                    timeout:timeout];
     return navBar;
-}
-
-#pragma mark - Cells
-
-- (NSInteger)countCellsWithAccessibilityId:(NSString *)accessibilityId
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
-    XCUIElementQuery *cellsQuery = [self.application.cells matchingPredicate:identifierPredicate];
-    NSArray *allCells = cellsQuery.allElementsBoundByAccessibilityElement;
-    return allCells.count;
-}
-
-- (XCUIElement *)cellWithAccessibilityId:(NSString *)accessibilityId forIndex:(NSUInteger)index
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
-    XCUIElementQuery *cellsQuery = [self.application.cells matchingPredicate:identifierPredicate];
-    NSArray *allCells = cellsQuery.allElementsBoundByAccessibilityElement;
-    if (index < allCells.count) {
-        return allCells[index];
-    }
-    return nil;
-}
-
-- (XCUIElement *)findCollectionViewCellWithAccessibilityId:(NSString *)accessibilityId
-                          containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
-                                                 labelText:(NSString *)labelText
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"accessibilityId - %@",accessibilityId);
-    NSLog(@"labelAccessibilityId - %@", labelAccessibilityId);
-    NSLog(@"labelText - %@", labelText);
-
-    XCTAssertNotNil(accessibilityId, @"AccessibilityId shouldn't be 'nil'");
-
-    NSLog(@"All cells in collection view: %@", self.application.cells.allElementsBoundByAccessibilityElement);
-
-    NSPredicate *labelPredicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *cell, NSDictionary<NSString *, id> *bindings) {
-        NSLog(@"All labels in cell: %@", cell.staticTexts.allElementsBoundByAccessibilityElement);
-        XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                identifier:labelAccessibilityId
-                                             parentElement:cell
-                                       shouldBeInHierarchy:YES
-                                                   timeout:kUITestsElementAvailableTimeout];
-        if (!label.exists) {
-            return NO;
-        }
-        return [label.label isEqualToString:labelText];
-    }];
-
-    XCUIElement *cell = [self elementMatchingType:XCUIElementTypeCell
-                                       identifier:accessibilityId
-                                    parentElement:nil
-                                  filterPredicate:labelPredicate];
-    return cell;
-}
-
-- (XCUIElement *)waitCollectionViewCellWithAccessibilityId:(NSString *)accessibilityId
-                          containsLabelWithAccessibilityId:(NSString *)labelAccessibilityId
-                                                 labelText:(NSString *)labelText
-                                                   timeout:(NSTimeInterval)timeout
-{
-    XCUIElement *cell = [self findCollectionViewCellWithAccessibilityId:accessibilityId
-                                       containsLabelWithAccessibilityId:labelAccessibilityId
-                                                              labelText:labelText];
-    [self waitElementReady:cell
-                   timeout:timeout];
-    return cell;
-}
-
-- (XCUIElement *)findTableViewCellWithAccessibilityId:(NSString *)accessibilityId
-                                containsLabelWithText:(NSString *)labelText
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIApplication *app = self.application;
-    XCUIElement *tableView = [app.tables elementBoundByIndex:0]; // TODO: replace with explicit accessibilityId
-    NSArray *allCells;
-
-    if (accessibilityId) {
-        NSPredicate *identifierPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"identifier", accessibilityId];
-        XCUIElementQuery *cellsQuery = [[tableView childrenMatchingType:XCUIElementTypeCell] matchingPredicate:identifierPredicate];
-        allCells = cellsQuery.allElementsBoundByAccessibilityElement;
-    } else {
-        XCUIElementQuery *cellsQuery = [tableView childrenMatchingType:XCUIElementTypeCell];
-        allCells = cellsQuery.allElementsBoundByAccessibilityElement;
-    }
-
-    NSPredicate *labelPredicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *cell, NSDictionary<NSString *, id> *bindings) {
-        XCUIElement *labelElement = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                             text:labelText
-                                                    parentElement:cell
-                                              shouldBeInHierarchy:YES
-                                                          timeout:kUITestsElementAvailableTimeout];
-        return labelElement.exists;
-    }];
-
-    allCells = [allCells filteredArrayUsingPredicate:labelPredicate];
-
-    NSPredicate *hittablePredicate = [NSPredicate predicateWithFormat:@"%K = true", @"hittable"];
-    allCells = [allCells filteredArrayUsingPredicate:hittablePredicate];
-
-    return allCells.firstObject;
 }
 
 #pragma mark - Search

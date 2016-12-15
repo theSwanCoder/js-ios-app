@@ -13,6 +13,7 @@
 #import "JMBaseUITestCase+TextFields.h"
 #import "JMBaseUITestCase+OtherElements.h"
 #import "XCUIElement+Tappable.h"
+#import "JMBaseUITestCase+Cells.h"
 
 
 @implementation JMBaseUITestCase (LoginPage)

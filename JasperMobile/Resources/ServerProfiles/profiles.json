@@ -74,6 +74,11 @@
       "mAlias" : "local 6.3 remote",
       "mServerUrl" : "http://194.29.62.80:8090/jasperserver-pro-630",
       "mOrganization" : ""
+    },
+    {
+      "mAlias" : "my local 6.3",
+      "mServerUrl" : "http://192.168.88.102:8080/jasperserver-pro",
+      "mOrganization" : ""
     }
   ]
 }

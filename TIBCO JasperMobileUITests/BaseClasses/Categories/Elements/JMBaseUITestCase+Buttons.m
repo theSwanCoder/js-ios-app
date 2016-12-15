@@ -17,6 +17,7 @@
     XCUIElement *button = [self waitElementMatchingType:XCUIElementTypeButton
                                              identifier:buttonId
                                           parentElement:parentElement
+                                        filterPredicate:nil
                                                 timeout:kUITestsElementAvailableTimeout];
     if (!button.exists && shouldCheck) {
         NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
@@ -71,6 +72,7 @@
     XCUIElement *button = [self waitElementMatchingType:XCUIElementTypeButton
                                              identifier:buttonId
                                           parentElement:parentElement
+                                        filterPredicate:nil
                                                 timeout:kUITestsElementAvailableTimeout];
     if (!button.exists) {
         NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
@@ -171,11 +173,13 @@
     XCUIElement *menuButton = [self waitElementMatchingType:XCUIElementTypeButton
                                                  identifier:@"menu icon"
                                               parentElement:navBar
+                                            filterPredicate:nil
                                                     timeout:kUITestsElementAvailableTimeout];
     if (!menuButton) {
         menuButton = [self waitElementMatchingType:XCUIElementTypeButton
                                         identifier:@"menu icon note"
                                      parentElement:navBar
+                                   filterPredicate:nil
                                            timeout:kUITestsElementAvailableTimeout];
     }
     return menuButton;

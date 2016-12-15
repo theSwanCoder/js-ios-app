@@ -183,6 +183,7 @@
     XCUIElement *sideMenu = [self waitElementMatchingType:XCUIElementTypeOther
                                                identifier:@"JMSideApplicationMenuAccessibilityId"
                                             parentElement:nil
+                                          filterPredicate:nil
                                       shouldBeInHierarchy:NO
                                                   timeout:kUITestsBaseTimeout];
     if (sideMenu.exists) {

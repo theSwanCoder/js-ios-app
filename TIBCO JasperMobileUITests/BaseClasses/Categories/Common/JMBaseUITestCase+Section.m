@@ -10,6 +10,7 @@
 #import "JMBaseUITestCase+OtherElements.h"
 #import "JMBaseUITestCase+Buttons.h"
 #import "XCUIElement+Tappable.h"
+#import "JMBaseUITestCase+Cells.h"
 
 
 @implementation JMBaseUITestCase (Section)
