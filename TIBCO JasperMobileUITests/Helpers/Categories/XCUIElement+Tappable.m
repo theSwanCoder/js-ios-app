@@ -11,8 +11,8 @@
 - (void)tapByWaitingHittable
 {
     // TODO: Do we need variable timeout
-    NSInteger timeout = 3;
-    NSInteger waitingInterval = 1;
+    NSTimeInterval timeout = 3;
+    NSTimeInterval waitingInterval = 1;
     NSTimeInterval remain = timeout;
     BOOL elementHittable = self.isHittable;
     NSLog(@"Element isHittable: %@", elementHittable ? @"YES" : @"NO");
@@ -27,7 +27,6 @@
 
     if (!self.isHittable) {
         // TODO: Should we interpret it as an error?
-        XCTFail(@"Element isn't hittable");
     } else {
         [self tap];
     }
