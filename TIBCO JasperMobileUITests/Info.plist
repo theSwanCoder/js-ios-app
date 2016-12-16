@@ -23,11 +23,11 @@
 	<key>JMUITestsServerProfileName</key>
 	<string>Test Profile</string>
 	<key>JMUITestsServerProfileURL</key>
-	<string>http://infra-platforms-phase2-5660-mbenstei.pfa.jaspersoft.com:8080/jasperserver-pro</string>
+	<string>https://mobiledemo.jaspersoft.com/jasperserver-pro</string>
 	<key>JMUITestsServerProfileUsername</key>
-	<string>superuser</string>
+	<string>phoneuser</string>
 	<key>JMUITestsServerProfilePassword</key>
-	<string>superuser</string>
+	<string>phoneuser</string>
 	<key>JMUITestsServerProfileOrganization</key>
 	<string></string>
 </dict>
