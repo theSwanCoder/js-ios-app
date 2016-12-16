@@ -25,17 +25,26 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 - (void)setUp {
     [super setUp];
     NSLog(@"From super: %@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-    
+
     // In UI tests it is usually best to stop immediately when a failure occurs.
     self.continueAfterFailure = NO;
     // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-    XCUIApplication *app = self.application;
-    @try {
-        [app launch];
-    } @catch(NSException *exception) {
-        NSLog(@"From super: Exception: %@", exception);
-        XCTFail(@"From super: Failed to launch application");
+    [self.application launch];
+    
+    NSLog(@"From super: self.application.exists: %@", self.application.exists ? @"YES" : @"NO");
+    NSLog(@"From super: self.application.isEnabled: %@", self.application.isEnabled ? @"YES" : @"NO");
+    
+    if (!self.application.exists) {
+        NSLog(@"From super: Clean up");
+        [self.application terminate];
+        self.application = nil;
+        [self.application launch];
+        NSLog(@"From super: Try another time to lauch application");
+        NSLog(@"From super: self.application.exists: %@", self.application.exists ? @"YES" : @"NO");
+        NSLog(@"From super: self.application.isEnabled: %@", self.application.isEnabled ? @"YES" : @"NO");
+        if (!self.application.exists) {
+            XCTFail(@"From super: Failed to launch application");
+        }
     }
 
     if (![self shouldPerformSuperSetup]) {
