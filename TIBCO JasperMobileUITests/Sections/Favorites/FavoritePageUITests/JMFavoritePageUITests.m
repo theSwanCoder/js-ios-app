@@ -90,11 +90,8 @@
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-    [self openFavoritesSectionIfNeed];
-    [self givenThatReportCellsOnScreenInSectionWithName:@"Favorites"];
-    
     [self performSearchResourceWithName:kTestReportName
-           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+                      inSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
     [self givenThatReportCellsOnScreenInSectionWithName:@"Favorites"];
 
     [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
@@ -119,9 +116,8 @@
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-    [self openFavoritesSectionIfNeed];
     [self performSearchResourceWithName:@"Search without result text"
-           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+                      inSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
 
     [self verifyThatCorrectMessageAppearForEmptyResult];
 

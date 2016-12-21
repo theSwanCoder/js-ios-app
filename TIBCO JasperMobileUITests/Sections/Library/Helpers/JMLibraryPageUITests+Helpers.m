@@ -14,44 +14,6 @@
 
 @implementation JMLibraryPageUITests (Helpers)
 
-#pragma mark - Helpers - Search
-
-- (void)trySearchText:(NSString *)text
-{
-    // start find some text
-    XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
-    if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tapByWaitingHittable];
-        [searchResourcesSearchField typeText:text];
-
-        XCUIElement *searchButton = self.application.buttons[@"Search"];
-        if (searchButton.exists) {
-            [searchButton tapByWaitingHittable];
-        } else {
-            XCTFail(@"Search button doesn't exist.");
-        }
-    } else {
-        XCTFail(@"Search field doesn't exist.");
-    }
-}
-
-- (void)tryClearSearchBar
-{
-    XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
-    if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tapByWaitingHittable];
-
-        XCUIElement *cancelButton = self.application.buttons[@"Cancel"];
-        if (cancelButton.exists) {
-            [cancelButton tapByWaitingHittable];
-        } else {
-            XCTFail(@"Cancel button doesn't exist.");
-        }
-    } else {
-        XCTFail(@"Search field doesn't exist.");
-    }
-}
-
 #pragma mark - Helpers - Sort By
 
 - (void)trySortByName
@@ -79,14 +41,12 @@
 {
     [self selectFilterBy:@"Reports"
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
-    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)tryFilterByDashboards
 {
     [self selectFilterBy:@"Dashboards"
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
-    [self givenThatDashboardCellsOnScreen];
 }
 
 #pragma mark - Verfies

@@ -25,10 +25,11 @@
         NSLog(@"Element isHittable: %@", elementHittable ? @"YES" : @"NO");
     }
 
-    if (!self.isHittable) {
-        // TODO: Should we interpret it as an error?
-    } else {
+    if (elementHittable) {
         [self tap];
+    } else {
+        // TODO: Should we interpret it as an error?
+        NSLog(@"Element isHittable: NO");
     }
 }
 

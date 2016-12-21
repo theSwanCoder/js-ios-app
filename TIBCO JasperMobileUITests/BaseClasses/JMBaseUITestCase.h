@@ -30,4 +30,6 @@ extern NSTimeInterval kUITestsElementAvailableTimeout;
 - (void)givenLoadingPopupVisible;
 - (void)givenLoadingPopupNotVisible;
 
+- (void)performTestFailedWithMessage:(NSString *)message logMessage:(NSString *)logMessage;
+
 @end

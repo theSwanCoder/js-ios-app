@@ -24,12 +24,12 @@
 - (void)verifyThatCollectionViewContainsGridOfCells;
 
 // Sort Action
-- (void)openSortMenuInSectionWithTitle:(NSString *)sectionTitle;
+//- (void)openSortMenuInSectionWithTitle:(NSString *)sectionTitle;
 - (void)selectSortBy:(NSString *)sortTypeString
   inSectionWithTitle:(NSString *)sectionTitle;
 
 // Filter Action
-- (void)openFilterMenuInSectionWithTitle:(NSString *)sectionTitle;
+//- (void)openFilterMenuInSectionWithTitle:(NSString *)sectionTitle;
 - (void)selectFilterBy:(NSString *)filterTypeString
     inSectionWithTitle:(NSString *)sectionTitle;
 

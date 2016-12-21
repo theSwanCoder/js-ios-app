@@ -29,7 +29,12 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     // In UI tests it is usually best to stop immediately when a failure occurs.
     self.continueAfterFailure = NO;
     // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-    [self.application launch];
+
+    @try {
+        [self.application launch];
+    } @catch(NSException *exception) {
+        NSLog(@"From super: Exception: %@", exception);
+    }
     
     NSLog(@"From super: self.application.exists: %@", self.application.exists ? @"YES" : @"NO");
     NSLog(@"From super: self.application.isEnabled: %@", self.application.isEnabled ? @"YES" : @"NO");
@@ -38,7 +43,13 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
         NSLog(@"From super: Clean up");
         [self.application terminate];
         self.application = nil;
-        [self.application launch];
+
+        @try {
+            [self.application launch];
+        } @catch(NSException *exception) {
+            NSLog(@"From super: Exception: %@", exception);
+        }
+
         NSLog(@"From super: Try another time to lauch application");
         NSLog(@"From super: self.application.exists: %@", self.application.exists ? @"YES" : @"NO");
         NSLog(@"From super: self.application.isEnabled: %@", self.application.isEnabled ? @"YES" : @"NO");
@@ -94,7 +105,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 {
 #if JMUITestLocalDebugState
     // FOR LOCAL DEBUG ONLY
-    return YES;
+    return NO;
 #else
     NSInteger testsCount = [self testsCount];
     NSNumber *executedTestNumber = [[NSUserDefaults standardUserDefaults] objectForKey:JMUIBaseTestCaseExecutedTestNumberKey];
@@ -130,6 +141,13 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     [[NSUserDefaults standardUserDefaults] setObject:@(testCount)
                                               forKey:JMUIBaseTestCaseExecutedTestNumberKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark - Perform Fail
+- (void)performTestFailedWithMessage:(NSString *)message logMessage:(NSString *)logMessage
+{
+    NSLog(@"Before perform XCTFail log message:\n%@", logMessage);
+    XCTFail(@"Button with text: %@, wasn't found", message);
 }
 
 #pragma mark - Helper Actions
