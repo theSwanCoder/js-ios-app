@@ -82,9 +82,9 @@
       inSectionWithTitle:@"Saved Items"];
     
     [self performSearchResourceWithName:kTestReportName
-           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+                      inSectionWithName:JMLocalizedString(@"menuitem_saveditems_label")];
     [self verifyTestReportInHTMLFormatIsInSearchResult];
-    [self clearSearchResultInSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self clearSearchResultInSectionWithName:JMLocalizedString(@"menuitem_saveditems_label")];
 }
 
 //Error message when no search result
@@ -97,9 +97,9 @@
     [self saveTestReportInHTMLFormatNeedOpen:NO];
 
     [self performSearchResourceWithName:@"Not Existed Test Saved Item"
-           inSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+                      inSectionWithName:JMLocalizedString(@"menuitem_saveditems_label")];
     [self verifyThatNoResultsOnScreen];
-    [self clearSearchResultInSectionWithAccessibilityId:@"JMBaseCollectionContentViewAccessibilityId"];
+    [self clearSearchResultInSectionWithName:JMLocalizedString(@"menuitem_saveditems_label")];
 }
 
 //Viev type button

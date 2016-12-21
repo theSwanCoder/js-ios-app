@@ -135,6 +135,7 @@
 {
     [self givenSideMenuNotVisible];
     [self tryTapSideApplicationMenuInSectionWithName:sectionName];
+    [self givenSideMenuVisible];
     [self selectMenuItemForPageWithName:pageName];
 }
 
@@ -152,20 +153,25 @@
 {
     XCUIElement *menuView = [self waitElementMatchingType:XCUIElementTypeOther
                                                identifier:@"JMSideApplicationMenuAccessibilityId"
-                                                  timeout:kUITestsBaseTimeout];
-    XCUIElement *pageMenuItem;
-    NSArray *allMenuItems = menuView.cells.allElementsBoundByAccessibilityElement;
-    for (XCUIElement *menuItem in allMenuItems) {
-        XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                      text:pageName
-                                             parentElement:menuItem
-                                                   timeout:kUITestsElementAvailableTimeout];;
-        if (label.exists) {
-            pageMenuItem = menuItem;
-            break;
-        }
-    }
-    return pageMenuItem;
+                                                  timeout:0];
+//    XCUIElement *pageMenuItem;
+//    NSArray *allMenuItems = menuView.cells.allElementsBoundByAccessibilityElement;
+//    for (XCUIElement *menuItem in allMenuItems) {
+//        XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
+//                                                      text:pageName
+//                                             parentElement:menuItem
+//                                                   timeout:kUITestsElementAvailableTimeout];
+//        if (label.exists) {
+//            pageMenuItem = menuItem;
+//            break;
+//        }
+//    }
+
+    XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                  text:pageName
+                                         parentElement:menuView
+                                               timeout:kUITestsElementAvailableTimeout];
+    return label;
 }
 
 - (void)givenSideMenuVisible

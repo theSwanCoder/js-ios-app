@@ -45,6 +45,29 @@
                            parentElement:(XCUIElement *)parentElement
                      shouldBeInHierarchy:(BOOL)shouldBeInHierarchy
                                  timeout:(NSTimeInterval)timeout;
+// Elemets with predicate
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                           parentElement:(XCUIElement *)parentElement
+                         filterPredicate:(NSPredicate *)filterPredicate
+                                 timeout:(NSTimeInterval)timeout;
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                       parentElement:(XCUIElement *)parentElement
+                     filterPredicate:(NSPredicate *)filterPredicate;
+
+// Elements by index
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                          identifier:(NSString *)identifier
+                       parentElement:(XCUIElement *)parentElement
+                             atIndex:(NSUInteger)index;
+
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                                text:(NSString *)text
+                       parentElement:(XCUIElement *)parentElement
+                             atIndex:(NSUInteger)index;
+
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                       parentElement:(XCUIElement *)parentElement
+                             atIndex:(NSUInteger)index;
 
 // Search
 - (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText;

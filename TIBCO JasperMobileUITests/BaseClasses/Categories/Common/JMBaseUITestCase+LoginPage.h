@@ -9,7 +9,10 @@
 @interface JMBaseUITestCase (LoginPage)
 
 - (void)loginWithTestProfileIfNeed;
-- (void)verifyThatLoginWasSuccess;
+- (void)verifyThatLoginProcessWasSuccess;
+- (BOOL)isProfileWasLoggedWithUsername:(NSString *)username
+                          organization:(NSString *)organization
+                                 alias:(NSString *)alias;
 - (void)logout;
 
 - (void)selectTestProfile;
@@ -18,9 +21,6 @@
 - (void)tryOpenServerProfilesPage;
 - (void)tryOpenNewServerProfilePage;
 - (void)tryCreateNewTestServerProfile;
-//- (void)trySelectNewTestServerProfile;
-//- (void)tryEnterTestCredentials;
-//- (void)tryTapLoginButton;
 - (void)givenThatLoginPageOnScreen;
 - (void)givenThatServerProfilesPageOnScreen;
 - (void)givenThatNewProfilePageOnScreen;

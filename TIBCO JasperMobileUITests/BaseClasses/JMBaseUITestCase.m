@@ -12,7 +12,7 @@
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+Buttons.h"
 
-#define JMUITestLocalDebugState 1
+#define JMUITestLocalDebugState 0
 
 static NSString *JMUIBaseTestCaseExecutedTestNumberKey = @"JMUIBaseTestCaseExecutedTestNumberKey";
 
@@ -25,17 +25,37 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 - (void)setUp {
     [super setUp];
     NSLog(@"From super: %@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-    
+
     // In UI tests it is usually best to stop immediately when a failure occurs.
     self.continueAfterFailure = NO;
     // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-    XCUIApplication *app = self.application;
+
     @try {
-        [app launch];
+        [self.application launch];
     } @catch(NSException *exception) {
         NSLog(@"From super: Exception: %@", exception);
-        XCTFail(@"From super: Failed to launch application");
+    }
+    
+    NSLog(@"From super: self.application.exists: %@", self.application.exists ? @"YES" : @"NO");
+    NSLog(@"From super: self.application.isEnabled: %@", self.application.isEnabled ? @"YES" : @"NO");
+    
+    if (!self.application.exists) {
+        NSLog(@"From super: Clean up");
+        [self.application terminate];
+        self.application = nil;
+
+        @try {
+            [self.application launch];
+        } @catch(NSException *exception) {
+            NSLog(@"From super: Exception: %@", exception);
+        }
+
+        NSLog(@"From super: Try another time to lauch application");
+        NSLog(@"From super: self.application.exists: %@", self.application.exists ? @"YES" : @"NO");
+        NSLog(@"From super: self.application.isEnabled: %@", self.application.isEnabled ? @"YES" : @"NO");
+        if (!self.application.exists) {
+            XCTFail(@"From super: Failed to launch application");
+        }
     }
 
     if (![self shouldPerformSuperSetup]) {
@@ -50,7 +70,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
         [self loginWithTestProfileIfNeed];
         [self givenThatLibraryPageOnScreen];
     } else {
-        NSLog(@"Perform tests without logging in");
+        NSLog(@"From super: Perform tests without logging in");
         XCUIElement *libraryPageView = [self libraryPageViewElement];
         if (libraryPageView.exists) {
             NSLog(@"From super: Library page on screen");
@@ -85,7 +105,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 {
 #if JMUITestLocalDebugState
     // FOR LOCAL DEBUG ONLY
-    return YES;
+    return NO;
 #else
     NSInteger testsCount = [self testsCount];
     NSNumber *executedTestNumber = [[NSUserDefaults standardUserDefaults] objectForKey:JMUIBaseTestCaseExecutedTestNumberKey];
@@ -121,6 +141,13 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
     [[NSUserDefaults standardUserDefaults] setObject:@(testCount)
                                               forKey:JMUIBaseTestCaseExecutedTestNumberKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark - Perform Fail
+- (void)performTestFailedWithMessage:(NSString *)message logMessage:(NSString *)logMessage
+{
+    NSLog(@"Before perform XCTFail log message:\n%@", logMessage);
+    XCTFail(@"Button with text: %@, wasn't found", message);
 }
 
 #pragma mark - Helper Actions

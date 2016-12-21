@@ -11,4 +11,7 @@
 - (XCUIElement *)waitAlertWithTitle:(NSString *)title timeout:(NSTimeInterval)timeout;
 - (void)processErrorAlertsIfExistWithTitles:(NSArray *)titles
                                 actionBlock:(void(^)(void))actionBlock;
+- (void)processErrorAlertIfExistWithTitle:(NSString *)title
+                                  message:(NSString *)message
+                              actionBlock:(void(^)(void))actionBlock;
 @end

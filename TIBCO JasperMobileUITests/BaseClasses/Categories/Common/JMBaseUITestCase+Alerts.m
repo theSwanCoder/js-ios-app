@@ -63,6 +63,10 @@
     sleep(kUITestsElementAvailableTimeout);
     NSLog(@"All alerts: %@", [self.application.alerts allElementsBoundByAccessibilityElement]);
 
+    if ([self.application.alerts allElementsBoundByAccessibilityElement].count == 0) {
+        return;
+    }
+
     XCUIElement *alert;
 
     for(NSString *title in titles) {
@@ -82,6 +86,28 @@
         }
     } else {
         NSLog(@"There are no any error alerts");
+    }
+}
+
+- (void)processErrorAlertIfExistWithTitle:(NSString *)title
+                                  message:(NSString *)message
+                              actionBlock:(void(^)(void))actionBlock
+{
+    XCUIElement *alert = [self waitAlertWithTitle:title
+                                          timeout:kUITestsBaseTimeout];
+    XCUIElement *errorMessageElement = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                                text:message
+                                                       parentElement:alert
+                                                             timeout:kUITestsElementAvailableTimeout];
+    if (errorMessageElement.exists) {
+        [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
+                  parentElement:alert
+                    shouldCheck:YES];
+        if (actionBlock) {
+            actionBlock();
+        }
+    } else {
+        XCTFail(@"Wrong message on '%@' alert", title);
     }
 }
 

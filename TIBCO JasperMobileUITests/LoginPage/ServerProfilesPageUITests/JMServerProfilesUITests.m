@@ -52,7 +52,7 @@
     }
     NSString *stringValueInServerField = serverProfileTextField.value;
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
-    NSString *testProfileName = testServerProfile.name;
+    NSString *testProfileName = testServerProfile.alias;
     BOOL hasTestProfileName = [stringValueInServerField isEqualToString:testProfileName];
     XCTAssert(hasTestProfileName, @"Value in 'Sever' field doesn't equal 'Test Profile'");
 }
@@ -62,7 +62,7 @@
     [self tryOpenServerProfilesPage];
 
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
-    NSString *testProfileName = testServerProfile.name;
+    NSString *testProfileName = testServerProfile.alias;
     XCUIElement *testProfile = self.application.collectionViews.staticTexts[testProfileName];
     if (testProfile.exists) {
         [self removeTestProfile];
@@ -163,7 +163,7 @@
 - (void)removeTestProfile
 {
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
-    NSString *testProfileName = testServerProfile.name;
+    NSString *testProfileName = testServerProfile.alias;
     XCUIElement *testProfileElement = self.application.collectionViews.staticTexts[testProfileName];
     [self removeProfileWithElement:testProfileElement];
 }

@@ -8,6 +8,8 @@
 
 #import "JMPerformanceUITests.h"
 #import "XCUIElement+Tappable.h"
+#import "JMBaseUITestCase+Section.h"
+#import "JMBaseUITestCase+LoginPage.h"
 
 NSInteger static kJMRunReportTestCellIndex = 2;
 
@@ -31,8 +33,8 @@ NSInteger static kJMRunReportTestCellIndex = 2;
 - (void)testRunReport
 {
     [self givenThatLibraryPageOnScreen];
-    [self givenThatListCellsAreVisible];
-    
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Library"];
+
     [self runTestReport];
     [self backToLibrary];
     
