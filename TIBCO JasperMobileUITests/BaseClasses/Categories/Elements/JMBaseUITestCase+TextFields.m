@@ -31,14 +31,14 @@
                                         identifier:accessibilityId
                                      parentElement:parentElement
                                    filterPredicate:nil
-                                           timeout:kUITestsBaseTimeout];
+                                           timeout:0];
     } else {
         // TODO: do we need placeholder yet?
         textField =  [self waitElementMatchingType:XCUIElementTypeTextField
                                         identifier:accessibilityId
                                      parentElement:parentElement
                                    filterPredicate:nil
-                                           timeout:kUITestsBaseTimeout];
+                                           timeout:0];
     }
 
     if (textField.exists) {

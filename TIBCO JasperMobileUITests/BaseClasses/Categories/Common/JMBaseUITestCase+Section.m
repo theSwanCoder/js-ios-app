@@ -310,7 +310,7 @@
 {
     XCUIElement *element = [self waitElementMatchingType:XCUIElementTypeOther
                                               identifier:@"JMBaseCollectionContentViewAccessibilityId"
-                                                 timeout:kUITestsElementAvailableTimeout];
+                                                 timeout:0];
     return element;
 }
 

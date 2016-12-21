@@ -362,7 +362,7 @@
     NSPredicate *predicate;
     if (text) {
         predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *element, NSDictionary<NSString *, id> *bindings) {
-            return [element.identifier isEqualToString:text] || [element.label isEqualToString:text];
+            return [element.identifier isEqualToString:text] || [element.label isEqualToString:text] || [element.label containsString:text];
         }];
     }
 

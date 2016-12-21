@@ -12,7 +12,7 @@
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+Buttons.h"
 
-#define JMUITestLocalDebugState 1
+#define JMUITestLocalDebugState 0
 
 static NSString *JMUIBaseTestCaseExecutedTestNumberKey = @"JMUIBaseTestCaseExecutedTestNumberKey";
 
@@ -70,7 +70,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
         [self loginWithTestProfileIfNeed];
         [self givenThatLibraryPageOnScreen];
     } else {
-        NSLog(@"Perform tests without logging in");
+        NSLog(@"From super: Perform tests without logging in");
         XCUIElement *libraryPageView = [self libraryPageViewElement];
         if (libraryPageView.exists) {
             NSLog(@"From super: Library page on screen");

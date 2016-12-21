@@ -83,26 +83,6 @@
     [self closeSettingsPage];
 }
 
-- (void)testThatServerProfileInfoIsAppeared
-{
-    [self showSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
-    [self verifySideMenuVisible];
-
-    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
-
-    [self verifyLabelWithTextExist:testServerProfile.username];
-
-    NSString *fullServerNameString = [NSString stringWithFormat:@"%@ (v.%@)", testServerProfile.name, @"6.3.0"];
-    [self verifyLabelWithTextExist:fullServerNameString];
-
-    if (testServerProfile.organization.length > 0) {
-        [self verifyLabelWithTextExist:testServerProfile.organization];
-    }
-
-    [self hideSideMenuInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
-}
-
-
 #pragma mark - Helpers
 
 - (void)tryOpenSideApplicationMenuBySwipe
@@ -122,16 +102,6 @@
         [mainWindow swipeLeft];
     } else {
         XCTFail(@"'Main' window doesn't exist.");
-    }
-}
-
-- (void)verifyLabelWithTextExist:(NSString *)labelText
-{
-    XCUIElement *usernameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                          text:labelText
-                                                       timeout:kUITestsBaseTimeout];
-    if (!usernameLabel.exists) {
-        XCTFail(@"Label with text: %@, wasn't fount", labelText);
     }
 }
 
