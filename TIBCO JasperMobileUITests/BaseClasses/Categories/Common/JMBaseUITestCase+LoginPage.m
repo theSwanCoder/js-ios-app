@@ -32,7 +32,7 @@
         }
     }
     [self loginWithTestProfile];
-    [self verifyThatLoginWasSuccess];
+    [self verifyThatLoginProcessWasSuccess];
 }
 
 - (void)loginWithTestProfile
@@ -64,7 +64,7 @@
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
-    NSString *testProfileName = testServerProfile.name;
+    NSString *testProfileName = testServerProfile.alias;
     XCUIElement *testProfile = [self findCollectionViewCellWithAccessibilityId:@"JMCollectionViewServerGridAccessibilityId"
                                               containsLabelWithAccessibilityId:testProfileName
                                                                      labelText:testProfileName];
@@ -123,18 +123,18 @@
     }
 }
 
-- (void)verifyThatLoginWasSuccess
+- (void)verifyThatLoginProcessWasSuccess
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSLog(@"Verify that there isn't an error after trying to log into test JRS");
 
-    NSLog(@"All 'other elements': %@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
-    NSLog(@"All static texts: %@", [self.application.staticTexts allElementsBoundByAccessibilityElement]);
-    NSLog(@"All text fields: %@", [self.application.textFields allElementsBoundByAccessibilityElement]);
-    NSLog(@"All security text fields: %@", [self.application.secureTextFields allElementsBoundByAccessibilityElement]);
-
     NSArray *titles = @[@"JSHTTPErrorDomain", @"Invalid credentials supplied."];
     [self processErrorAlertsIfExistWithTitles:titles actionBlock:^{
+        NSLog(@"All 'other elements': %@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
+        NSLog(@"All static texts: %@", [self.application.staticTexts allElementsBoundByAccessibilityElement]);
+        NSLog(@"All text fields: %@", [self.application.textFields allElementsBoundByAccessibilityElement]);
+        NSLog(@"All security text fields: %@", [self.application.secureTextFields allElementsBoundByAccessibilityElement]);
+
         NSLog(@"Try recreate test JRS profile");
         [self tryOpenServerProfilesPage];
         [self removeAllServerProfiles];
@@ -153,22 +153,43 @@
 - (BOOL)isTestProfileWasLogged
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
+    return [self isProfileWasLoggedWithUsername:testServerProfile.username
+                                   organization:testServerProfile.organization
+                                          alias:testServerProfile.alias];
+}
+
+- (BOOL)isProfileWasLoggedWithUsername:(NSString *)username
+                          organization:(NSString *)organization
+                                 alias:(NSString *)alias
+{
     [self showSideMenuInSectionWithName:nil];
 
-    JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
-    // Test Profile Name
-    XCUIElement *profileNameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                             text:testServerProfile.name
-                                                          timeout:kUITestsElementAvailableTimeout];
-    BOOL isProfileNameLabelExist = profileNameLabel.exists;
-    // Test Profile Username
-    XCUIElement *profileUsernameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                                 text:testServerProfile.username
-                                                              timeout:kUITestsElementAvailableTimeout];
-    BOOL isProfileUsernameLabelExist = profileUsernameLabel.exists;
+    XCUIElement *sideMenuElement = [self waitElementMatchingType:XCUIElementTypeOther
+                                                      identifier:@"JMSideApplicationMenuAccessibilityId"
+                                                         timeout:0];
+    XCUIElement *usernameStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                               text:username
+                                                      parentElement:sideMenuElement
+                                                            timeout:kUITestsElementAvailableTimeout];
+    BOOL isUsernameCorrect = usernameStaticText.exists;
 
+    BOOL isOrganizationCorrect = YES;
+    if (organization && organization.length) {
+        XCUIElement *organizationStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                                       text:organization
+                                                              parentElement:sideMenuElement
+                                                                    timeout:kUITestsElementAvailableTimeout];
+        isOrganizationCorrect = organizationStaticText.exists;
+    }
+    XCUIElement *aliasStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                            text:alias
+                                                   parentElement:sideMenuElement
+                                                         timeout:kUITestsElementAvailableTimeout];
+    BOOL isAliasCorrect = aliasStaticText.exists;
     [self hideSideMenuInSectionWithName:nil];
-    return isProfileNameLabelExist && isProfileUsernameLabelExist;
+
+    return isUsernameCorrect && isOrganizationCorrect && isAliasCorrect;
 }
 
 - (void)logout
@@ -183,7 +204,7 @@
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *serverProfileTextField = [self waitElementMatchingType:XCUIElementTypeTextField
                                                              identifier:@"JMLoginPageServerProfileTextFieldAccessibilityId"
-                                                                timeout:kUITestsBaseTimeout];
+                                                                timeout:0];
     if (serverProfileTextField.exists) {
         [serverProfileTextField tapByWaitingHittable];
     } else {
@@ -208,14 +229,14 @@
 
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
     NSLog(@"All text fields: %@", [app.textFields allElementsBoundByAccessibilityElement]);
-    NSLog(@"testServerProfile.name: %@", testServerProfile.name);
+    NSLog(@"testServerProfile.name: %@", testServerProfile.alias);
     NSLog(@"testServerProfile.url: %@", testServerProfile.url);
     NSLog(@"testServerProfile.username: %@", testServerProfile.username);
     NSLog(@"testServerProfile.password: %@", testServerProfile.password);
     NSLog(@"testServerProfile.organization: %@", testServerProfile.organization);
 
     // Profile Name TextField
-    [self enterText:testServerProfile.name intoTextFieldWithAccessibilityId:@"Profile name"
+    [self enterText:testServerProfile.alias intoTextFieldWithAccessibilityId:@"Profile name"
    placeholderValue:@"Profile name"
       parentElement:table
       isSecureField:false];

@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @interface JMUITestServerProfile : NSObject
-@property(nonatomic, copy, readonly) NSString *name;
+@property(nonatomic, copy, readonly) NSString *alias;
 @property(nonatomic, copy, readonly) NSString *url;
 @property(nonatomic, copy, readonly) NSString *username;
 @property(nonatomic, copy, readonly) NSString *password;
 @property(nonatomic, copy, readonly) NSString *organization;
-- (instancetype)initWithName:(NSString *)name
-                         URL:(NSString *)url
-                    username:(NSString *)username
-                    password:(NSString *)password
-                organization:(NSString *)organization;
+- (instancetype)initWithAlias:(NSString *)alias
+                          URL:(NSString *)url
+                     username:(NSString *)username
+                     password:(NSString *)password
+                 organization:(NSString *)organization;
 @end

@@ -13,14 +13,15 @@
                  timeout:(NSTimeInterval)timeout
 {
     if (!element) {
-        XCTFail(@"Element isn't exist");
+        [self performTestFailedWithErrorMessage:@"Element hasn't passed"
+                                     logMessage:NSStringFromSelector(_cmd)];
     }
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
     NSInteger waitingInterval = 1;
     BOOL elementExist = element.exists;
     NSLog(@"Element exists: %@", elementExist ? @"YES" : @"NO");
-    while ( remain >= 0 && !elementExist) {
+    while ( remain > 0 && !elementExist) {
         remain -= waitingInterval;
         sleep(waitingInterval);
 
@@ -30,7 +31,8 @@
     }
 
     if (!element.exists) {
-        XCTFail(@"Element isn't exist");
+        [self performTestFailedWithErrorMessage:@"Element wasn't found"
+                                     logMessage:NSStringFromSelector(_cmd)];
     }
 }
 
@@ -76,12 +78,7 @@
                                        parentElement:parentElement
                                      filterPredicate:filterPredicate];
     BOOL elementExist = element.exists;
-    BOOL condition;
-    if (shouldBeInHierarchy) {
-        condition = remain >= 0 && !elementExist && shouldBeInHierarchy;
-    } else {
-        condition = remain >= 0 && elementExist && !shouldBeInHierarchy;
-    }
+    BOOL condition = (remain > 0) && (shouldBeInHierarchy == !elementExist);
     NSLog(@"element.exists: %@ and should exist: %@", elementExist ? @"YES" : @"NO", shouldBeInHierarchy ? @"YES" : @"NO");
     NSLog(@"condition: %@", condition ? @"true" : @"false");
     NSLog(@"remain: %@", @(remain));
@@ -90,95 +87,16 @@
         sleep(waitingInterval);
         element = [self elementMatchingType:elementType
                                  identifier:identifier
-                              parentElement:parentElement];
+                              parentElement:parentElement
+                            filterPredicate:filterPredicate];
         elementExist = element.exists;
-        if (shouldBeInHierarchy) {
-            condition = remain >= 0 && !elementExist && shouldBeInHierarchy;
-        } else {
-            condition = remain >= 0 && elementExist && !shouldBeInHierarchy;
-        }
+        condition = (remain > 0) && (shouldBeInHierarchy == !elementExist);
         NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldBeInHierarchy ? @"YES" : @"NO");
         NSLog(@"condition: %@", condition ? @"true" : @"false");
         NSLog(@"remain: %@", @(remain));
     }
 
     return element;
-}
-
-- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
-                          identifier:(NSString *)identifier
-                       parentElement:(XCUIElement *)parentElement
-{
-    return [self elementMatchingType:elementType
-                          identifier:identifier
-                       parentElement:parentElement
-                     filterPredicate:nil];
-}
-
-- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
-                          identifier:(NSString *)identifier
-                       parentElement:(XCUIElement *)parentElement
-                     filterPredicate:(NSPredicate *)filterPredicate
-{
-    if (parentElement == nil) {
-        parentElement = self.application;
-    }
-    XCUIElementQuery *elementsQuery;
-    switch (elementType) {
-        case XCUIElementTypeOther: {
-            elementsQuery = [parentElement.otherElements matchingType:XCUIElementTypeOther
-                                                           identifier:identifier];
-            break;
-        }
-        case XCUIElementTypeButton: {
-            elementsQuery = [parentElement.buttons matchingType:XCUIElementTypeButton
-                                                     identifier:identifier];
-            break;
-        }
-        case XCUIElementTypeStaticText: {
-            elementsQuery = [parentElement.staticTexts matchingType:XCUIElementTypeStaticText
-                                                         identifier:identifier];
-            break;
-        }
-        case XCUIElementTypeSecureTextField: {
-            elementsQuery = [parentElement.secureTextFields matchingType:XCUIElementTypeSecureTextField
-                                                              identifier:identifier];
-            break;
-        }
-        case XCUIElementTypeTextField: {
-            elementsQuery = [parentElement.textFields matchingType:XCUIElementTypeTextField
-                                                        identifier:identifier];
-            break;
-        }
-        case XCUIElementTypeSearchField: {
-            elementsQuery = [parentElement.searchFields matchingType:XCUIElementTypeSearchField
-                                                          identifier:identifier];
-            break;
-        }
-        case XCUIElementTypeCell: {
-            elementsQuery = [parentElement.cells matchingType:XCUIElementTypeCell
-                                                          identifier:identifier];
-            break;
-        }
-        default: {
-            XCTFail(@"Unknown type");
-            break;
-        }
-    }
-    NSArray *allMatchingElements = elementsQuery.allElementsBoundByAccessibilityElement;
-    NSLog(@"All matching elements: %@", allMatchingElements);
-    if (allMatchingElements.count == 0) {
-        return nil;
-    } else if (filterPredicate) {
-        allMatchingElements = [allMatchingElements filteredArrayUsingPredicate:filterPredicate];
-    }
-
-    if (allMatchingElements.count > 1) {
-        // TODO: should this be interpreted as an error?
-        NSLog(@"Several other elements: %@", allMatchingElements);
-    }
-
-    return allMatchingElements.firstObject;
 }
 
 #pragma mark - Elements with text
@@ -217,13 +135,8 @@
     XCUIElement *element = [self elementMatchingType:elementType
                                                 text:text
                                        parentElement:parentElement];
-    BOOL condition;
     BOOL elementExist = element.exists;
-    if (shouldExist) {
-        condition = remain >= 0 && !elementExist && shouldExist;
-    } else {
-        condition = remain >= 0 && elementExist && !shouldExist;
-    }
+    BOOL condition = (remain > 0) && (shouldExist == !elementExist);
     NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
     NSLog(@"condition: %@", condition ? @"true" : @"false");
     NSLog(@"remain: %@", @(remain));
@@ -234,11 +147,54 @@
                                        text:text
                               parentElement:parentElement];
         elementExist = element.exists;
-        if (shouldExist) {
-            condition = remain >= 0 && !elementExist && shouldExist;
-        } else {
-            condition = remain >= 0 && elementExist && !shouldExist;
-        }
+        condition = (remain > 0) && (shouldExist == !elementExist);
+        NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
+        NSLog(@"condition: %@", condition ? @"true" : @"false");
+        NSLog(@"remain: %@", @(remain));
+    }
+
+    return element;
+}
+
+#pragma mark - Elements with predicate
+
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                           parentElement:(XCUIElement *)parentElement
+                         filterPredicate:(NSPredicate *)filterPredicate
+                                 timeout:(NSTimeInterval)timeout
+{
+    return [self waitElementMatchingType:elementType
+                           parentElement:parentElement
+                         filterPredicate:filterPredicate
+                     shouldBeInHierarchy:YES
+                                 timeout:timeout];
+}
+
+- (XCUIElement *)waitElementMatchingType:(XCUIElementType)elementType
+                           parentElement:(XCUIElement *)parentElement
+                         filterPredicate:(NSPredicate *)filterPredicate
+                     shouldBeInHierarchy:(BOOL)shouldExist
+                                 timeout:(NSTimeInterval)timeout
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSTimeInterval remain = timeout;
+    NSInteger waitingInterval = 1;
+    XCUIElement *element = [self elementMatchingType:elementType
+                                       parentElement:parentElement
+                                     filterPredicate:filterPredicate];
+    BOOL elementExist = element.exists;
+    BOOL condition = (remain > 0) && (shouldExist == !elementExist);
+    NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
+    NSLog(@"condition: %@", condition ? @"true" : @"false");
+    NSLog(@"remain: %@", @(remain));
+    while ( condition ) {
+        remain -= waitingInterval;
+        sleep(waitingInterval);
+        element = [self elementMatchingType:elementType
+                              parentElement:parentElement
+                            filterPredicate:filterPredicate];
+        elementExist = element.exists;
+        condition = (remain > 0) && (shouldExist == !elementExist);
         NSLog(@"element.exists: %@ and should be in hierarchy: %@", elementExist ? @"YES" : @"NO", shouldExist ? @"YES" : @"NO");
         NSLog(@"condition: %@", condition ? @"true" : @"false");
         NSLog(@"remain: %@", @(remain));
@@ -248,55 +204,46 @@
 }
 
 - (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                       parentElement:(XCUIElement *)parentElement
+                     filterPredicate:(NSPredicate *)filterPredicate
+{
+    return [[self elementQueryMatchingType:elementType
+                                identifier:nil
+                                      text:nil
+                             parentElement:parentElement].allElementsBoundByAccessibilityElement filteredArrayUsingPredicate:filterPredicate].firstObject;
+}
+
+#pragma mark - Elements by index
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                          identifier:(NSString *)identifier
+                       parentElement:(XCUIElement *)parentElement
+                             atIndex:(NSUInteger)index
+{
+    return [[self elementQueryMatchingType:elementType
+                                identifier:identifier
+                                      text:nil
+                             parentElement:parentElement] elementBoundByIndex:index];
+}
+
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
                                 text:(NSString *)text
                        parentElement:(XCUIElement *)parentElement
+                             atIndex:(NSUInteger)index
 {
-    if (parentElement == nil) {
-        parentElement = self.application;
-    }
+    return [[self elementQueryMatchingType:elementType
+                                identifier:nil
+                                     text:text
+                            parentElement:parentElement] elementBoundByIndex:index];
+}
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"label CONTAINS %@", text];
-
-    XCUIElementQuery *elementsQuery;
-    switch (elementType) {
-        case XCUIElementTypeOther: {
-            elementsQuery = [parentElement.otherElements matchingPredicate:predicate];
-            break;
-        }
-        case XCUIElementTypeButton: {
-            elementsQuery = [parentElement.buttons matchingPredicate:predicate];
-            break;
-        }
-        case XCUIElementTypeStaticText: {
-            elementsQuery = [parentElement.staticTexts matchingPredicate:predicate];
-            break;
-        }
-        case XCUIElementTypeSecureTextField: {
-            elementsQuery = [parentElement.secureTextFields matchingPredicate:predicate];
-            break;
-        }
-        case XCUIElementTypeTextField: {
-            elementsQuery = [parentElement.textFields matchingPredicate:predicate];
-            break;
-        }
-        case XCUIElementTypeSearchField: {
-            elementsQuery = [parentElement.searchFields matchingPredicate:predicate];
-            break;
-        }
-        default: {
-            XCTFail(@"Unknown type");
-            break;
-        }
-    }
-    NSArray *allMatchingElements = elementsQuery.allElementsBoundByAccessibilityElement;
-    NSLog(@"All matching elements: %@", allMatchingElements);
-    if (allMatchingElements.count == 0) {
-        return nil;
-    } else if (allMatchingElements.count > 1) {
-        // TODO: should this be interpreted as an error?
-        NSLog(@"Several other elements with 'text': %@", text);
-    }
-    return allMatchingElements.firstObject;
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                       parentElement:(XCUIElement *)parentElement
+                             atIndex:(NSUInteger)index
+{
+    return [[self elementQueryMatchingType:elementType
+                                identifier:nil
+                                      text:nil
+                             parentElement:parentElement] elementBoundByIndex:index];
 }
 
 #pragma mark -  NavigationBars
@@ -305,8 +252,6 @@
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSLog(@"Label: %@", label);
-    NSLog(@"All 'other elements':\n%@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
-    NSLog(@"All nav bars:\n%@", [self.application.navigationBars allElementsBoundByAccessibilityElement]);
     XCUIApplication *app = self.application;
     XCUIElement *navBar;
     if (label == nil) {
@@ -355,6 +300,183 @@
     XCUIElementQuery *alertsQuery = self.application.images;
     XCUIElement *image = [alertsQuery matchingIdentifier:accessibilityId].element;
     return image;
+}
+
+#pragma mark - Utils
+
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                          identifier:(NSString *)identifier
+                       parentElement:(XCUIElement *)parentElement
+{
+    return [self elementMatchingType:elementType
+                          identifier:identifier
+                       parentElement:parentElement
+                     filterPredicate:nil];
+}
+
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                          identifier:(NSString *)identifier
+                       parentElement:(XCUIElement *)parentElement
+                     filterPredicate:(NSPredicate *)filterPredicate
+{
+    XCUIElementQuery *query = [self elementQueryMatchingType:elementType
+                                                  identifier:identifier
+                                                        text:nil
+                                               parentElement:parentElement];
+
+    NSArray *allMatchingElements = query.allElementsBoundByAccessibilityElement;
+    if (allMatchingElements.count == 0) {
+        return nil;
+    } else if (filterPredicate) {
+        allMatchingElements = [allMatchingElements filteredArrayUsingPredicate:filterPredicate];
+    }
+
+    if (allMatchingElements.count > 1) {
+        // TODO: should this be interpreted as an error?
+        NSLog(@"Several other elements: %@", allMatchingElements);
+    }
+
+    return allMatchingElements.firstObject;
+}
+
+- (XCUIElement *)elementMatchingType:(XCUIElementType)elementType
+                                text:(NSString *)text
+                       parentElement:(XCUIElement *)parentElement
+{
+    XCUIElementQuery *query = [self elementQueryMatchingType:elementType
+                                                  identifier:nil
+                                                        text:text
+                                               parentElement:parentElement];
+    return [query elementBoundByIndex:0];
+}
+
+- (XCUIElementQuery *)elementQueryMatchingType:(XCUIElementType)elementType
+                                    identifier:(NSString *)identifier
+                                          text:(NSString *)text
+                                 parentElement:(XCUIElement *)parentElement
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    if (parentElement == nil) {
+        parentElement = self.application;
+    }
+
+    NSPredicate *predicate;
+    if (text) {
+        predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *element, NSDictionary<NSString *, id> *bindings) {
+            NSLog(@"Text for matching: %@", text);
+            NSLog(@"element: %@", element);
+            return [element.identifier isEqualToString:text] || [element.label isEqualToString:text] || [element.label containsString:text];
+        }];
+    }
+
+    XCUIElementQuery *elementsQuery;
+    switch (elementType) {
+        case XCUIElementTypeOther: {
+            if (predicate) {
+                elementsQuery = [parentElement.otherElements matchingPredicate:predicate];
+            } else if (identifier) {
+                elementsQuery = [parentElement.otherElements matchingType:XCUIElementTypeOther
+                                                               identifier:identifier];
+            } else {
+                elementsQuery = parentElement.otherElements;
+            }
+            break;
+        }
+        case XCUIElementTypeButton: {
+            if (predicate) {
+                elementsQuery = [parentElement.buttons matchingPredicate:predicate];
+            } else if(identifier) {
+                elementsQuery = [parentElement.buttons matchingType:XCUIElementTypeButton
+                                                         identifier:identifier];
+            } else {
+                elementsQuery = parentElement.buttons;
+            }
+            break;
+        }
+        case XCUIElementTypeStaticText: {
+            if (predicate) {
+                elementsQuery = [parentElement.staticTexts matchingPredicate:predicate];
+            } else if (identifier) {
+                elementsQuery = [parentElement.staticTexts matchingType:XCUIElementTypeStaticText
+                                                             identifier:identifier];
+            } else {
+                elementsQuery = parentElement.staticTexts;
+            }
+            break;
+        }
+        case XCUIElementTypeSecureTextField: {
+            if (predicate) {
+                elementsQuery = [parentElement.secureTextFields matchingPredicate:predicate];
+            } else if (identifier) {
+                elementsQuery = [parentElement.secureTextFields matchingType:XCUIElementTypeSecureTextField
+                                                                  identifier:identifier];
+            } else {
+                elementsQuery = parentElement.secureTextFields;
+            }
+            break;
+        }
+        case XCUIElementTypeTextField: {
+            if (predicate) {
+                elementsQuery = [parentElement.textFields matchingPredicate:predicate];
+            } else if (identifier) {
+                elementsQuery = [parentElement.textFields matchingType:XCUIElementTypeTextField
+                                                            identifier:identifier];
+            } else {
+                elementsQuery = parentElement.textFields;
+            }
+            break;
+        }
+        case XCUIElementTypeSearchField: {
+            if (predicate) {
+                elementsQuery = [parentElement.searchFields matchingPredicate:predicate];
+            } else if (identifier) {
+                elementsQuery = [parentElement.searchFields matchingType:XCUIElementTypeSearchField
+                                                              identifier:identifier];
+            } else {
+                elementsQuery = parentElement.searchFields;
+            }
+            break;
+        }
+        case XCUIElementTypeCell: {
+            if (predicate) {
+                elementsQuery = [parentElement.cells matchingPredicate:predicate];
+            } else if (identifier) {
+                elementsQuery = [parentElement.cells matchingType:XCUIElementTypeCell
+                                                       identifier:identifier];
+            } else {
+                elementsQuery = parentElement.cells;
+            }
+            break;
+        }
+        case XCUIElementTypeCollectionView: {
+            if (predicate) {
+                elementsQuery = [parentElement.collectionViews matchingPredicate:predicate];
+            } else if (identifier) {
+                elementsQuery = [parentElement.collectionViews matchingType:XCUIElementTypeCollectionView
+                                                                 identifier:identifier];
+            } else {
+                elementsQuery = parentElement.collectionViews;
+            }
+            break;
+        }
+        case XCUIElementTypeTable: {
+            if (predicate) {
+                elementsQuery = [parentElement.tables matchingPredicate:predicate];
+            } else if (identifier) {
+                elementsQuery = [parentElement.tables matchingType:XCUIElementTypeTable
+                                                        identifier:identifier];
+            } else {
+                elementsQuery = parentElement.tables;
+            }
+            break;
+        }
+        default: {
+            [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Unknown type was supplied: %@", @(elementType)]
+                                         logMessage:NSStringFromSelector(_cmd)];
+            break;
+        }
+    }
+    return elementsQuery;
 }
 
 @end

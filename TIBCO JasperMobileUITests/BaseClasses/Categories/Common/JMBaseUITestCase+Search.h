@@ -7,9 +7,12 @@
 #import "JMBaseUITestCase.h"
 
 @interface JMBaseUITestCase (Search)
-- (void)performSearchResourceWithName:(NSString *)resourceName
-         inSectionWithAccessibilityId:(NSString *)sectionId;
+// TODO: uncomment after implementing accessibility id for all sections
+//- (void)performSearchResourceWithName:(NSString *)resourceName
+//         inSectionWithAccessibilityId:(NSString *)sectionId;
 - (void)performSearchResourceWithName:(NSString *)resourceName
                     inSectionWithName:(NSString *)sectionName;
-- (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionId;
+// TODO: uncomment after implementing accessibility id for all sections
+//- (void)clearSearchResultInSectionWithAccessibilityId:(NSString *)sectionId;
+- (void)clearSearchResultInSectionWithName:(NSString *)sectionName;
 @end

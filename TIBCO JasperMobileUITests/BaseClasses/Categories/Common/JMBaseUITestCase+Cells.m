@@ -49,7 +49,6 @@
                                                 identifier:labelAccessibilityId
                                              parentElement:cell
                                            filterPredicate:nil
-                                       shouldBeInHierarchy:YES
                                                    timeout:kUITestsElementAvailableTimeout];
         if (!label.exists) {
             return NO;

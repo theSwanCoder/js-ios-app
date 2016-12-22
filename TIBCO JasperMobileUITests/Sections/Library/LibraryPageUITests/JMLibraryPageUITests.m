@@ -22,12 +22,11 @@
     [super setUp];
 
     [self givenThatLibraryPageOnScreen];
-    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
 - (void)tearDown
 {
-    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 
     [super tearDown];
 }
@@ -45,22 +44,15 @@
 {
     XCUIElement *navBar = [self findNavigationBarWithLabel:JMLocalizedString(@"menuitem_library_label")];
     if (!navBar.exists) {
-        XCTFail(@"Nav bar with %@ wasn't found", JMLocalizedString(@"menuitem_library_label"));
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Nav bar with %@ wasn't found", JMLocalizedString(@"menuitem_library_label")]
+                                     logMessage:NSStringFromSelector(_cmd)];
     }
 }
 
 - (void)testThatLibraryContainsListOfCells
 {
     [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
-    
-    XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
-    if (contentView.exists) {
-
-        [self verifyThatCollectionViewContainsListOfCells];
-        
-    } else {
-        XCTFail(@"Content View doesn't visible");
-    }
+    [self verifyThatCollectionViewContainsListOfCells];
 }
 
 - (void)testMenuButton
@@ -71,22 +63,34 @@
 
 - (void)testThatUserCanPullDownToRefresh
 {
-    XCUIElement *collectionViewElement = [self.application.collectionViews elementBoundByIndex:0];
-    XCUIElement *firstCellElement = [collectionViewElement.cells elementBoundByIndex:0];
-    XCUIElement *secondCellElement = [collectionViewElement.cells elementBoundByIndex:4];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
+
+    XCUIElement *collectionView = [self waitElementMatchingType:XCUIElementTypeCollectionView
+                                                     identifier:@"JMBaseCollectionContentViewAccessibilityId"
+                                                        timeout:0];
+    XCUIElement *firstCellElement = [self elementMatchingType:XCUIElementTypeCell
+                                                parentElement:collectionView
+                                                      atIndex:0];
+    XCUIElement *secondCellElement = [self elementMatchingType:XCUIElementTypeCell
+                                                 parentElement:collectionView
+                                                       atIndex:4];
     
     [firstCellElement pressForDuration:1
                      thenDragToElement:secondCellElement];
 
-    // TODO: implement by detecting 'loading' cell
-//    [self verifyThatCollectionViewNotContainsCells];
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
 - (void)testThatUserCanScrollDown
 {
-    XCUIElement *collectionViewElement = [self.application.collectionViews elementBoundByIndex:0];
-    XCUIElement *cellElement = [collectionViewElement.cells elementBoundByIndex:2];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
+
+    XCUIElement *collectionView = [self waitElementMatchingType:XCUIElementTypeCollectionView
+                                                     identifier:@"JMBaseCollectionContentViewAccessibilityId"
+                                                        timeout:0];
+    XCUIElement *cellElement = [self elementMatchingType:XCUIElementTypeCell
+                                           parentElement:collectionView
+                                                 atIndex:2];
     [cellElement swipeUp];
 
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
@@ -96,92 +100,65 @@
 
 - (void)testThatSearchWorkWithCorrectWords
 {
-    // start find some text
-    [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
-    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
-
     [self performSearchResourceWithName:kJMTestLibrarySearchTextExample
                       inSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
+
     NSInteger cellsCount = [self countOfListCells];
     XCTAssertTrue(cellsCount > 0, @"Should one or more results");
 
-    // Reset search
-    [self tryClearSearchBar];
-    // verify result
+    [self clearSearchResultInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
 - (void)testThatSearchShowsNoResults
 {
-    // start find wrong text
-    XCUIElement *searchResourcesSearchField = self.application.searchFields[@"Search resources"];
-    if (searchResourcesSearchField.exists) {
-        [searchResourcesSearchField tapByWaitingHittable];
-        [searchResourcesSearchField typeText:@"ababababababababa"];
-        
-        XCUIElement *searchButton = self.application.buttons[@"Search"];
-        if (searchButton.exists) {
-            [searchButton tapByWaitingHittable];
-            
-            // verify result
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.hittable == true"];
-            NSInteger filtredResultCount = [[self.application.cells allElementsBoundByIndex] filteredArrayUsingPredicate:predicate].count;
-            XCTAssertTrue(filtredResultCount == 0, @"Should not be any results");
-            
-        } else {
-            XCTFail(@"Search button doesn't exist.");
-        }
-        
-    } else {
-        XCTFail(@"Search field doesn't exist.");
+    [self performSearchResourceWithName:@"ababababababababa"
+                      inSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+
+    XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                          text:@"No Results."
+                                                       timeout:kUITestsBaseTimeout];
+    if (!noResultLabel.exists) {
+        [self performTestFailedWithErrorMessage:@"There isn't 'No Results.' label"
+                                     logMessage:[NSString stringWithFormat:@"All static texts: %@", self.application.staticTexts.allElementsBoundByAccessibilityElement]];
     }
+
+    [self clearSearchResultInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
 #pragma mark - Test 'Changing View Presentation' feature
 
 - (void)testThatViewTypeButtonChangeViewPresentation
 {
-    XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
-    if (contentView.exists) {
-        
-        [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-        [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
-        [self verifyThatCollectionViewContainsGridOfCells];
+    [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self verifyThatCollectionViewContainsGridOfCells];
 
-        [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
-        [self verifyThatCollectionViewContainsListOfCells];
-        
-    } else {
-        XCTFail(@"Content View doesn't visible");
-    }
+    [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self verifyThatCollectionViewContainsListOfCells];
 }
 
 - (void)testThatViewPresentationNotChangeAfterChangingPages
 {
-    XCUIElement *contentView = self.application.otherElements[@"JMBaseCollectionContentViewAccessibilityId"];
-    if (contentView.exists) {
-        
-        [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
-        [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
-        [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
-        [self verifyThatCollectionViewContainsGridOfCells];
-        
-        // Change Page to Repository
-        [self openRepositorySectionIfNeed];
-        [self givenThatRepositoryPageOnScreen];
-        
-        // Change Page to Library
-        [self openLibrarySectionIfNeed];
-        [self givenThatLibraryPageOnScreen];
-        [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
-        
-        [self verifyThatCollectionViewContainsGridOfCells];
-        
-    } else {
-        XCTFail(@"Content View doesn't visible");
-    }
+    [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
+    [self verifyThatCollectionViewContainsGridOfCells];
+
+    // Change Page to Repository
+    [self openRepositorySectionIfNeed];
+    [self givenThatRepositoryPageOnScreen];
+
+    // Change Page to Library
+    [self openLibrarySectionIfNeed];
+    [self givenThatLibraryPageOnScreen];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
+
+    [self verifyThatCollectionViewContainsGridOfCells];
 }
 
 - (void)testThatViewPresentationNotChangeWhenUserUseSearch
@@ -192,10 +169,14 @@
     [self verifyThatCollectionViewContainsGridOfCells];
     
     // start find some text
-    [self trySearchText:kJMTestLibrarySearchTextExample];
+    [self performSearchResourceWithName:kJMTestLibrarySearchTextExample
+                      inSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
+
     [self verifyThatCollectionViewContainsGridOfCells];
-    
-    [self tryClearSearchBar];
+
+    [self clearSearchResultInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
+    [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
 #pragma mark - Test 'Sort' feature
@@ -226,9 +207,7 @@
 #pragma mark - Test 'Filter' feature
 - (void)testThatUserCanFilterByAllItems
 {
-    [self givenThatLibraryPageOnScreen];
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
-    
     [self verifyThatCellsFiltredByAll];
 }
 

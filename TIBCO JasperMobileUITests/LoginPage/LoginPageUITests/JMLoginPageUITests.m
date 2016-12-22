@@ -71,8 +71,8 @@
 {
     [self tapTryDemoButton];
     [self waitLoginProcessDidFinish];
-
     [self verifyThatUserDidLoginIntoDemoServer];
+    [self logout];
 }
 
 //- Try login with empty username
@@ -94,9 +94,9 @@
     [self selectTestProfile];
     [self tapLoginButton];
 
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Error" message:@"Specify a valid username."];
-    
-    [self closeErrorAlertWithTitle:@"Error"];
+    [self processErrorAlertIfExistWithTitle:@"Error"
+                                    message:@"Specify a valid username."
+                                actionBlock:nil];
 }
 
 //- Try login if username includes only spaces
@@ -117,10 +117,10 @@
     [self enterPassword:testServerProfile.password];
     [self selectTestProfile];
     [self tapLoginButton];
-    
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Invalid credentials supplied." message:@"Could not login to JasperReports Server."];
-    
-    [self closeErrorAlertWithTitle:@"Invalid credentials supplied."];
+
+    [self processErrorAlertIfExistWithTitle:@"Invalid credentials supplied."
+                                    message:@"Could not login to JasperReports Server."
+                                actionBlock:nil];
 }
 
 //- Try login if username is incorrect
@@ -141,10 +141,10 @@
     [self enterPassword:testServerProfile.password];
     [self selectTestProfile];
     [self tapLoginButton];
-    
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Invalid credentials supplied." message:@"Could not login to JasperReports Server."];
-    
-    [self closeErrorAlertWithTitle:@"Invalid credentials supplied."];
+
+    [self processErrorAlertIfExistWithTitle:@"Invalid credentials supplied."
+                                    message:@"Could not login to JasperReports Server."
+                                actionBlock:nil];
 }
 
 //- Try login with empty password
@@ -165,10 +165,10 @@
     [self enterPassword:@""];
     [self selectTestProfile];
     [self tapLoginButton];
-    
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Error" message:@"Specify a valid password."];
-    
-    [self closeErrorAlertWithTitle:@"Error"];
+
+    [self processErrorAlertIfExistWithTitle:@"Error"
+                                    message:@"Specify a valid password."
+                                actionBlock:nil];
 }
 
 //- Try login if password includes only spaces
@@ -190,9 +190,9 @@
     [self selectTestProfile];
     [self tapLoginButton];
 
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Invalid credentials supplied." message:@"Could not login to JasperReports Server."];
-    
-    [self closeErrorAlertWithTitle:@"Invalid credentials supplied."];
+    [self processErrorAlertIfExistWithTitle:@"Invalid credentials supplied."
+                                    message:@"Could not login to JasperReports Server."
+                                actionBlock:nil];
 }
 
 //- Try login if password is incorrect
@@ -213,10 +213,10 @@
     [self enterPassword:@"Wrong password"];
     [self selectTestProfile];
     [self tapLoginButton];
-    
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Invalid credentials supplied." message:@"Could not login to JasperReports Server."];
-    
-    [self closeErrorAlertWithTitle:@"Invalid credentials supplied."];
+
+    [self processErrorAlertIfExistWithTitle:@"Invalid credentials supplied."
+                                    message:@"Could not login to JasperReports Server."
+                                actionBlock:nil];
 }
 
 //- Try login with empty server
@@ -236,10 +236,10 @@
     [self enterUsername:testServerProfile.username];
     [self enterPassword:testServerProfile.password];
     [self tapLoginButton];
-    
-    [self verifyThatErrorAlertOnScreenWithTitle:@"Error" message:@"Select a server profile."];
-    
-    [self closeErrorAlertWithTitle:@"Error"];
+
+    [self processErrorAlertIfExistWithTitle:@"Error"
+                                    message:@"Select a server profile."
+                                actionBlock:nil];
 }
 
 //- Try login with valid credentials
@@ -263,6 +263,7 @@
 
     [self waitLoginProcessDidFinish];
     [self verifyThatUserDidLoginIntoTestServer];
+    [self logout];
 }
 
 #pragma mark - Verifying
@@ -274,9 +275,12 @@
 
 - (void)verifyThatLoginPageOnScreen
 {
-    [self waitElementMatchingType:XCUIElementTypeOther
-                       identifier:@"JMLoginPageAccessibilityId"
-                          timeout:kUITestsBaseTimeout];
+    XCUIElement *loginPage = [self waitElementMatchingType:XCUIElementTypeOther
+                                                identifier:@"JMLoginPageAccessibilityId"
+                                                   timeout:kUITestsBaseTimeout];
+    if (!loginPage.exists) {
+        XCTFail(@"Login Page isn't on screen");
+    }
 }
 
 - (void)verifyThatLoginPageHasCorrectTrademarks
@@ -289,65 +293,22 @@
 
 - (void)verifyThatUserDidLoginIntoDemoServer
 {
-    [self showSideMenuInSectionWithName:nil];
-    [self verifyAccountWithUsername:@"phoneuser"
-                       organization:@"organization_1"
-                        profileName:@"Jaspersoft Mobile Demo"];
-    [self hideSideMenuInSectionWithName:nil];
-}
-
-- (void)verifyThatErrorAlertOnScreenWithTitle:(NSString *)title message:(NSString *)message
-{
-    XCUIElement *alert = [self waitAlertWithTitle:title
-                                          timeout:kUITestsBaseTimeout];
-    XCUIElement *errorMessageElement = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                                text:message
-                                                       parentElement:alert
-                                                             timeout:kUITestsElementAvailableTimeout];
-    if (!errorMessageElement.exists) {
-        XCTFail(@"Wrong message on '%@' alert", title);
+    BOOL isSuccess = [self isProfileWasLoggedWithUsername:@"phoneuser"
+                                             organization:@"organization_1"
+                                                    alias:@"Jaspersoft Mobile Demo"];
+    if (!isSuccess) {
+        XCTFail(@"Login within incorrect account");
     }
 }
 
 - (void)verifyThatUserDidLoginIntoTestServer
 {
     JMUITestServerProfile *testServerProfile = [JMUITestServerProfileManager sharedManager].testProfile;
-    [self showSideMenuInSectionWithName:nil];
-    [self verifyAccountWithUsername:testServerProfile.username
-                       organization:testServerProfile.organization
-                        profileName:testServerProfile.name];
-    [self hideSideMenuInSectionWithName:nil];
-}
-
-- (void)verifyAccountWithUsername:(NSString *)username
-                     organization:(NSString *)organization
-                      profileName:(NSString *)profileName
-{
-    XCUIElement *sideMenuElement = [self waitElementMatchingType:XCUIElementTypeOther
-                                                      identifier:@"JMSideApplicationMenuAccessibilityId"
-                                                         timeout:kUITestsBaseTimeout];
-    XCUIElement *usernameStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                               text:username
-                                                      parentElement:sideMenuElement
-                                                            timeout:kUITestsElementAvailableTimeout];
-    if (!usernameStaticText) {
-        XCTFail(@"Error of verifying 'Demo' account: username - is wrong");
-    }
-    if (organization && organization.length) {
-        XCUIElement *organizationStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                                       text:organization
-                                                              parentElement:sideMenuElement
-                                                                    timeout:kUITestsElementAvailableTimeout];
-        if (!organizationStaticText) {
-            XCTFail(@"Error of verifying 'Demo' account: organization - is wrong");
-        }
-    }
-    XCUIElement *serverProfileStaticText = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                                    text:profileName
-                                                           parentElement:sideMenuElement
-                                                                 timeout:kUITestsElementAvailableTimeout];
-    if (!serverProfileStaticText) {
-        XCTFail(@"Error of verifying 'Demo' account: server profile - is wrong");
+    BOOL isSuccess = [self isProfileWasLoggedWithUsername:testServerProfile.username
+                                             organization:testServerProfile.organization
+                                                    alias:testServerProfile.alias];
+    if (!isSuccess) {
+        XCTFail(@"Login within incorrect account");
     }
 }
 
@@ -376,14 +337,14 @@
 - (void)waitLoginProcessDidFinish
 {
     [self givenLoadingPopupNotVisible];
-    [self verifyThatLoginWasSuccess];
+    [self verifyThatLoginProcessWasSuccess];
 }
 
 - (void)enterUsername:(NSString *)username
 {
     XCUIElement *loginPageElement = [self waitElementMatchingType:XCUIElementTypeOther
                                                        identifier:@"JMLoginPageAccessibilityId"
-                                                          timeout:kUITestsElementAvailableTimeout];
+                                                          timeout:0];
     [self enterText:username intoTextFieldWithAccessibilityId:@"JMLoginPageUserNameTextFieldAccessibilityId"
    placeholderValue:nil
       parentElement:loginPageElement
@@ -399,15 +360,6 @@
    placeholderValue:nil
       parentElement:loginPageElement
       isSecureField:true];
-}
-
-- (void)closeErrorAlertWithTitle:(NSString *)title
-{
-    // TODO: move for using all tests
-    XCUIElement *alert = [self findAlertWithTitle:title];
-    [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
-              parentElement:alert
-                shouldCheck:YES];
 }
 
 @end

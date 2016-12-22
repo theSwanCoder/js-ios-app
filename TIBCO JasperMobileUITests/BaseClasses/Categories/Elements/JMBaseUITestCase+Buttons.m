@@ -14,14 +14,18 @@
                 parentElement:(XCUIElement *)parentElement
                   shouldCheck:(BOOL)shouldCheck
 {
+    NSTimeInterval timeout = 0;
+    if (shouldCheck) {
+        timeout = kUITestsElementAvailableTimeout;
+    }
     XCUIElement *button = [self waitElementMatchingType:XCUIElementTypeButton
                                              identifier:buttonId
                                           parentElement:parentElement
                                         filterPredicate:nil
-                                                timeout:kUITestsElementAvailableTimeout];
+                                                timeout:timeout];
     if (!button.exists && shouldCheck) {
-        NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
-        XCTFail(@"Button with id: %@, wasn't found", buttonId);
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Button with id: %@, wasn't found", buttonId]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
     return button;
 }
@@ -30,13 +34,17 @@
                   parentElement:(XCUIElement *)parentElement
                     shouldCheck:(BOOL)shouldCheck
 {
+    NSTimeInterval timeout = 0;
+    if (shouldCheck) {
+        timeout = kUITestsElementAvailableTimeout;
+    }
     XCUIElement *button = [self waitElementMatchingType:XCUIElementTypeButton
                                                    text:text
                                           parentElement:parentElement
-                                                timeout:kUITestsElementAvailableTimeout]; // It's suggested that element on which button lies have been already found
+                                                timeout:timeout]; // It's suggested that element on which button lies have been already found
     if (!button.exists && shouldCheck) {
-        NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
-        XCTFail(@"Button with text: %@, wasn't found", text);
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Button with text: %@, wasn't found", text]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
     return button;
 }
@@ -60,8 +68,8 @@
               shouldCheck:(BOOL)shouldCheck
 {
     XCUIElement *button = [self buttonWithText:text
-                               parentElement:parentElement
-                                 shouldCheck:shouldCheck];
+                                 parentElement:parentElement
+                                   shouldCheck:shouldCheck];
     if (button.exists) {
         [button tapByWaitingHittable];
     }
@@ -75,8 +83,8 @@
                                         filterPredicate:nil
                                                 timeout:kUITestsElementAvailableTimeout];
     if (!button.exists) {
-        NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
-        XCTFail(@"Button with id: %@, wasn't found", buttonId);
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Button with id: %@, wasn't found", buttonId]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
 }
 
@@ -87,8 +95,8 @@
                                           parentElement:parentElement
                                                 timeout:kUITestsElementAvailableTimeout]; // It's suggested that element on which button lies have been already found
     if (!button.exists) {
-        NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
-        XCTFail(@"Button with text: %@, wasn't found", text);
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Button with text: %@, wasn't found", text]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
 }
 
@@ -141,8 +149,8 @@
     if (button.exists) {
         [button tapByWaitingHittable];
     } else {
-        NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
-        XCTFail(@"Back Button wasn't found");
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Back Button wasn't found"]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
 }
 
@@ -161,8 +169,8 @@
     }
 
     if (!button.exists) {
-        NSLog(@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement);
-        XCTFail(@"Back Button wasn't found");
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Back Button wasn't found"]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
 }
 

@@ -9,7 +9,7 @@
 #import "JMUITestServerProfile.h"
 
 @interface JMUITestServerProfile()
-@property(nonatomic, copy, readwrite) NSString *name;
+@property(nonatomic, copy, readwrite) NSString *alias;
 @property(nonatomic, copy, readwrite) NSString *url;
 @property(nonatomic, copy, readwrite) NSString *username;
 @property(nonatomic, copy, readwrite) NSString *password;
@@ -18,15 +18,15 @@
 
 @implementation JMUITestServerProfile
 
-- (instancetype)initWithName:(NSString *)name
-                         URL:(NSString *)url
-                    username:(NSString *)username
-                    password:(NSString *)password
-                organization:(NSString *)organization
+- (instancetype)initWithAlias:(NSString *)alias
+                          URL:(NSString *)url
+                     username:(NSString *)username
+                     password:(NSString *)password
+                 organization:(NSString *)organization
 {
     self = [super init];
     if (self) {
-        _name = name;
+        _alias = alias;
         _url = url;
         _username = username;
         _password = password;
