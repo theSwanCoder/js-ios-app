@@ -13,8 +13,8 @@
                  timeout:(NSTimeInterval)timeout
 {
     if (!element) {
-        [self performTestFailedWithMessage:@"Element hasn't passed"
-                                logMessage:NSStringFromSelector(_cmd)];
+        [self performTestFailedWithErrorMessage:@"Element hasn't passed"
+                                     logMessage:NSStringFromSelector(_cmd)];
     }
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSTimeInterval remain = timeout;
@@ -31,8 +31,8 @@
     }
 
     if (!element.exists) {
-        [self performTestFailedWithMessage:@"Element wasn't found"
-                                logMessage:NSStringFromSelector(_cmd)];
+        [self performTestFailedWithErrorMessage:@"Element wasn't found"
+                                     logMessage:NSStringFromSelector(_cmd)];
     }
 }
 
@@ -355,6 +355,7 @@
                                           text:(NSString *)text
                                  parentElement:(XCUIElement *)parentElement
 {
+    NSLog(@"%@", NSStringFromSelector(_cmd));
     if (parentElement == nil) {
         parentElement = self.application;
     }
@@ -362,6 +363,11 @@
     NSPredicate *predicate;
     if (text) {
         predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *element, NSDictionary<NSString *, id> *bindings) {
+            NSLog(@"Text for matching: %@", text);
+            NSLog(@"element: %@", element);
+//            NSLog(@"[element.identifier isEqualToString:text]: %@", [element.identifier isEqualToString:text] ? @"YES": @"NO");
+//            NSLog(@"[element.label isEqualToString:text]: %@", [element.label isEqualToString:text] ? @"YES": @"NO");
+//            NSLog(@"[element.label containsString:text]: %@", [element.label containsString:text] ? @"YES": @"NO");
             return [element.identifier isEqualToString:text] || [element.label isEqualToString:text] || [element.label containsString:text];
         }];
     }
@@ -468,8 +474,8 @@
             break;
         }
         default: {
-            [self performTestFailedWithMessage:[NSString stringWithFormat:@"Unknown type was supplied: %@", @(elementType)]
-                                    logMessage:NSStringFromSelector(_cmd)];
+            [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Unknown type was supplied: %@", @(elementType)]
+                                         logMessage:NSStringFromSelector(_cmd)];
             break;
         }
     }

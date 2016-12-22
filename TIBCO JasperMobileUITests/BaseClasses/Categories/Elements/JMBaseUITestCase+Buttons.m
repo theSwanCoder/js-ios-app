@@ -24,8 +24,8 @@
                                         filterPredicate:nil
                                                 timeout:timeout];
     if (!button.exists && shouldCheck) {
-        [self performTestFailedWithMessage:[NSString stringWithFormat:@"Button with id: %@, wasn't found", buttonId]
-                                logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Button with id: %@, wasn't found", buttonId]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
     return button;
 }
@@ -43,8 +43,8 @@
                                           parentElement:parentElement
                                                 timeout:timeout]; // It's suggested that element on which button lies have been already found
     if (!button.exists && shouldCheck) {
-        [self performTestFailedWithMessage:[NSString stringWithFormat:@"Button with text: %@, wasn't found", text]
-                                logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Button with text: %@, wasn't found", text]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
     return button;
 }
@@ -83,8 +83,8 @@
                                         filterPredicate:nil
                                                 timeout:kUITestsElementAvailableTimeout];
     if (!button.exists) {
-        [self performTestFailedWithMessage:[NSString stringWithFormat:@"Button with id: %@, wasn't found", buttonId]
-                                logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Button with id: %@, wasn't found", buttonId]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
 }
 
@@ -95,8 +95,8 @@
                                           parentElement:parentElement
                                                 timeout:kUITestsElementAvailableTimeout]; // It's suggested that element on which button lies have been already found
     if (!button.exists) {
-        [self performTestFailedWithMessage:[NSString stringWithFormat:@"Button with text: %@, wasn't found", text]
-                                logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Button with text: %@, wasn't found", text]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
 }
 
@@ -149,8 +149,8 @@
     if (button.exists) {
         [button tapByWaitingHittable];
     } else {
-        [self performTestFailedWithMessage:[NSString stringWithFormat:@"Back Button wasn't found"]
-                                logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Back Button wasn't found"]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
 }
 
@@ -169,8 +169,8 @@
     }
 
     if (!button.exists) {
-        [self performTestFailedWithMessage:[NSString stringWithFormat:@"Back Button wasn't found"]
-                                logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Back Button wasn't found"]
+                                     logMessage:[NSString stringWithFormat:@"All buttons: %@", self.application.buttons.allElementsBoundByAccessibilityElement]];
     }
 }
 

@@ -84,12 +84,12 @@
 {
     NSTimeInterval remain = timeout;
     NSInteger waitingInterval = 1;
-    BOOL countMoreThanZero = [self countAllActiveCells] > 0;
+    BOOL countMoreThanZero = [self isCountOfCollectionViewCellsMoreThanZero];
     BOOL condition = (remain > 0) && !countMoreThanZero;
     while ( condition ) {
         remain -= kUITestsElementAvailableTimeout;
         sleep(waitingInterval);
-        countMoreThanZero = [self countAllActiveCells] > 0;
+        countMoreThanZero = [self isCountOfCollectionViewCellsMoreThanZero];
         condition = (remain > 0) && !countMoreThanZero;
         NSLog(@"remain: %@", @(remain));
     }
@@ -99,21 +99,28 @@
     }
 }
 
-- (NSInteger)countAllActiveCells
+- (BOOL)isCountOfCollectionViewCellsMoreThanZero
 {
-    NSArray *allCells = self.application.cells.allElementsBoundByAccessibilityElement;
-    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement  * _Nullable cell, NSDictionary<NSString *,id> * _Nullable bindings) {
-        BOOL exists = cell.exists;
-        NSLog(@"cell exists: %@", exists ? @"YES" : @"NO");
-        if (!exists) {
-            return NO;
-        } else {
-            BOOL isHittable = cell.isHittable;
-            NSLog(@"isHittable: %@", isHittable ? @"YES" : @"NO");
-            return cell.isHittable;
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    XCUIElement *collectionView = [self waitElementMatchingType:XCUIElementTypeOther
+                                                     identifier:@"JMBaseCollectionContentViewAccessibilityId"
+                                                        timeout:0];
+    if (!collectionView.exists) {
+        [self performTestFailedWithErrorMessage:@"Collection view wasn't found"
+                                     logMessage:NSStringFromSelector(_cmd)];
+    }
+
+    NSArray <XCUIElement *>* allCells = collectionView.cells.allElementsBoundByAccessibilityElement;
+    for (XCUIElement *cell in allCells) {
+        BOOL isExists = cell.exists;
+        if (isExists) {
+            BOOL isHittable = [cell respondsToSelector:@selector(isHittable)] && cell.isHittable;
+            if (isHittable) {
+                return YES;
+            }
         }
-    }];
-    return [allCells filteredArrayUsingPredicate:predicate].count;
+    }
+    return NO;
 }
 
 #pragma mark - Helpers - Menu Sort By
@@ -287,8 +294,8 @@
                                                parentElement:nil
                                                      timeout:kUITestsElementAvailableTimeout];
     if (!filtersMenu.exists) {
-        [self performTestFailedWithMessage:@"Filters menu wasn't found"
-                                logMessage:NSStringFromSelector(_cmd)];
+        [self performTestFailedWithErrorMessage:@"Filters menu wasn't found"
+                                     logMessage:NSStringFromSelector(_cmd)];
     }
 }
 
@@ -299,8 +306,8 @@
                                             parentElement:nil
                                                   timeout:kUITestsElementAvailableTimeout];
     if (!sortMenu.exists) {
-        [self performTestFailedWithMessage:@"Sort menu wasn't found"
-                                logMessage:NSStringFromSelector(_cmd)];
+        [self performTestFailedWithErrorMessage:@"Sort menu wasn't found"
+                                     logMessage:NSStringFromSelector(_cmd)];
     }
 }
 

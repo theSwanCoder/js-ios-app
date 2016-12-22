@@ -44,8 +44,8 @@
 {
     XCUIElement *navBar = [self findNavigationBarWithLabel:JMLocalizedString(@"menuitem_library_label")];
     if (!navBar.exists) {
-        [self performTestFailedWithMessage:[NSString stringWithFormat:@"Nav bar with %@ wasn't found", JMLocalizedString(@"menuitem_library_label")]
-                                logMessage:NSStringFromSelector(_cmd)];
+        [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Nav bar with %@ wasn't found", JMLocalizedString(@"menuitem_library_label")]
+                                     logMessage:NSStringFromSelector(_cmd)];
     }
 }
 
@@ -120,8 +120,8 @@
                                                           text:@"No Results."
                                                        timeout:kUITestsBaseTimeout];
     if (!noResultLabel.exists) {
-        [self performTestFailedWithMessage:@"There isn't 'No Results.' label"
-                                logMessage:[NSString stringWithFormat:@"All static texts: %@", self.application.staticTexts.allElementsBoundByAccessibilityElement]];
+        [self performTestFailedWithErrorMessage:@"There isn't 'No Results.' label"
+                                     logMessage:[NSString stringWithFormat:@"All static texts: %@", self.application.staticTexts.allElementsBoundByAccessibilityElement]];
     }
 
     [self clearSearchResultInSectionWithName:JMLocalizedString(@"menuitem_library_label")];

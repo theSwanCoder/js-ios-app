@@ -144,7 +144,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 }
 
 #pragma mark - Perform Fail
-- (void)performTestFailedWithMessage:(NSString *)message logMessage:(NSString *)logMessage
+- (void)performTestFailedWithErrorMessage:(NSString *)message logMessage:(NSString *)logMessage
 {
     NSLog(@"Before perform XCTFail log message:\n%@", logMessage);
     XCTFail(@"Button with text: %@, wasn't found", message);
