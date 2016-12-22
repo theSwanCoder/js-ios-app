@@ -365,9 +365,6 @@
         predicate = [NSPredicate predicateWithBlock:^BOOL(XCUIElement *element, NSDictionary<NSString *, id> *bindings) {
             NSLog(@"Text for matching: %@", text);
             NSLog(@"element: %@", element);
-//            NSLog(@"[element.identifier isEqualToString:text]: %@", [element.identifier isEqualToString:text] ? @"YES": @"NO");
-//            NSLog(@"[element.label isEqualToString:text]: %@", [element.label isEqualToString:text] ? @"YES": @"NO");
-//            NSLog(@"[element.label containsString:text]: %@", [element.label containsString:text] ? @"YES": @"NO");
             return [element.identifier isEqualToString:text] || [element.label isEqualToString:text] || [element.label containsString:text];
         }];
     }
