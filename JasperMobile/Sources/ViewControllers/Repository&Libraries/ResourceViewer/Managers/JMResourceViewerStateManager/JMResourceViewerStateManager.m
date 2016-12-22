@@ -77,6 +77,10 @@
 }
 
 #pragma mark - Public API
+- (void)setupPageForState:(JMResourceViewerState)state
+{
+    _state = state;
+}
 
 - (void)updatePageForToolbarState:(JMResourceViewerToolbarState)toolbarState
 {

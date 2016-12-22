@@ -21,7 +21,7 @@
  */
 
 //
-//  JMDashboardViewerStateManager.m
+//  JMResourceViewerStateManager.m
 //  TIBCO JasperMobile
 //
 
@@ -39,21 +39,18 @@
 #import "NSObject+Additions.h"
 #import "JMLocalization.h"
 
-@interface JMDashboardViewerStateManager()
-@property (nonatomic, assign, readwrite) JMDashboardViewerState state;
-@end
-
 @implementation JMDashboardViewerStateManager
 
 #pragma mark - Public API
 
-- (void)setupPageForState:(JMDashboardViewerState)state
+- (void)setupPageForState:(JMResourceViewerState)state
 {
-    self.state = state;
+    [super setupPageForState:state];
+    
     [self setupNavigationItemForState:state];
     [self setupMainViewForState:state];
     switch(state) {
-        case JMDashboardViewerStateInitial: {
+        case JMResourceViewerStateInitial: {
             [self.toolbarsHelper updatePageForToolbarState:JMResourceViewerToolbarStateInitial];
         }
         default: {
@@ -73,85 +70,98 @@
 
 #pragma mark - Helpers
 
-- (void)setupNavigationItemForState:(JMDashboardViewerState)state
+- (void)setupNavigationItemForState:(JMResourceViewerState)state
 {
     self.needFavoriteButton = YES;
     switch (state) {
-        case JMDashboardViewerStateInitial: {
+        case JMResourceViewerStateInitial: {
             [self initialSetupNavigationItems];
             break;
         }
-        case JMDashboardViewerStateLoading: {
+        case JMResourceViewerStateLoading: {
             break;
         }
-        case JMDashboardViewerStateResourceFailed: {
+        case JMResourceViewerStateLoadingForPrint: {
             break;
         }
-        case JMDashboardViewerStateResourceReady: {
+        case JMResourceViewerStateResourceFailed: {
+            break;
+        }
+        case JMResourceViewerStateResourceReady: {
             [self setupNavigationItems];
             break;
         }
-        case JMDashboardViewerStateResourceNotExist: {
+        case JMResourceViewerStateResourceNotExist: {
             break;
         }
-        case JMDashboardViewerStateMaximizedDashlet: {
+        case JMResourceViewerStateMaximizedDashlet: {
             [self setupNavigationItemsForMaximizedDashlet];
             break;
         }
-        case JMDashboardViewerStateNestedResource: {
+        case JMResourceViewerStateNestedResource: {
             self.needFavoriteButton = NO;
             [self setupNavigationItemsForNestedResource];
             break;
         }
-        case JMDashboardViewerStateResourceOnWExternalWindow: {
+        case JMResourceViewerStateResourceOnWExternalWindow: {
             [self setupNavigationItems];
             break;
         }
-        case JMDashboardViewerStateDestroy: {
+        case JMResourceViewerStateDestroy: {
+            break;
+        }
+        case JMResourceViewerStateNotVisible: {
             break;
         }
     }
 }
 
-- (void)setupMainViewForState:(JMDashboardViewerState)state
+- (void)setupMainViewForState:(JMResourceViewerState)state
 {
     switch (state) {
-        case JMDashboardViewerStateInitial: {
+        case JMResourceViewerStateInitial: {
             self.controller.title = self.controller.resource.resourceLookup.label;
             [self hideProgress];
             break;
         }
-        case JMDashboardViewerStateLoading: {
+        case JMResourceViewerStateLoading: {
             [self showProgress];
             [self hideMainView];
             break;
         }
-        case JMDashboardViewerStateResourceFailed: {
+        case JMResourceViewerStateLoadingForPrint: {
+            [self showProgress];
+            break;
+        }
+        case JMResourceViewerStateResourceFailed: {
             [self hideProgress];
             break;
         }
-        case JMDashboardViewerStateResourceReady: {
-            [self hideProgress];
-            [self showMainView];
-            break;
-        }
-        case JMDashboardViewerStateResourceNotExist: {
-            break;
-        }
-        case JMDashboardViewerStateMaximizedDashlet: {
+        case JMResourceViewerStateResourceReady: {
             [self hideProgress];
             [self showMainView];
             break;
         }
-        case JMDashboardViewerStateNestedResource: {
+        case JMResourceViewerStateResourceNotExist: {
+            break;
+        }
+        case JMResourceViewerStateMaximizedDashlet: {
+            [self hideProgress];
+            [self showMainView];
+            break;
+        }
+        case JMResourceViewerStateNestedResource: {
             [self hideProgress];
             break;
         }
-        case JMDashboardViewerStateResourceOnWExternalWindow: {
+        case JMResourceViewerStateResourceOnWExternalWindow: {
             break;
         }
-        case JMDashboardViewerStateDestroy: {
+        case JMResourceViewerStateDestroy: {
             [self hideProgress];
+            break;
+        }
+        case JMResourceViewerStateNotVisible: {
             break;
         }
     }
@@ -173,7 +183,7 @@
     if ([URL.host isEqualToString:serverURL.host]) {
         NSURLRequest *request = [NSURLRequest requestWithURL:URL];
         [((JMDashboardViewerVC *)self.controller).configurator.webEnvironment.webView loadRequest:request];
-        [self setupPageForState:JMDashboardViewerStateNestedResource];
+        [self setupPageForState:JMResourceViewerStateNestedResource];
     } else {
         if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
             [[UIApplication sharedApplication] openURL:URL];
@@ -192,18 +202,18 @@
 
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     [((JMDashboardViewerVC *)self.controller).configurator.webEnvironment.webView loadRequest:request];
-    [self setupPageForState:JMDashboardViewerStateNestedResource];
+    [self setupPageForState:JMResourceViewerStateNestedResource];
 }
 
 - (void)hyperlinksManagerNeedShowLoading:(JMResourceViewerHyperlinksManager *__nullable)manager
 {
-    [self setupPageForState:JMDashboardViewerStateLoading];
+    [self setupPageForState:JMResourceViewerStateLoading];
 }
 
 - (void)hyperlinksManagerNeedHideLoading:(JMResourceViewerHyperlinksManager *__nullable)manager
 {
     // TODO: investigate, does it posible navigate to hyperlink not from dashlet?
-    [self setupPageForState:JMDashboardViewerStateMaximizedDashlet];
+    [self setupPageForState:JMResourceViewerStateMaximizedDashlet];
 }
 
 - (void)hyperlinksManager:(JMResourceViewerHyperlinksManager *__nullable)manager needShowOpenInMenuForLocalResourceFromURL:(NSURL *__nullable)URL

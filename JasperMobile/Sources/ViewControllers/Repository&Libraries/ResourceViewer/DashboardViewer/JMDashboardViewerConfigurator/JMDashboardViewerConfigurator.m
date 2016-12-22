@@ -37,11 +37,6 @@
 #import "JMResource.h"
 #import "JMVIZWebEnvironment.h"
 #import "JMDashboardViewerStateManager.h"
-#import "JMResourceViewerInfoPageManager.h"
-#import "JMResourceViewerPrintManager.h"
-#import "JMResourceViewerShareManager.h"
-#import "JMResourceViewerHyperlinksManager.h"
-#import "JMResourceViewerDocumentManager.h"
 #import "JMResourceViewerSessionManager.h"
 #import "JMUtils.h"
 #import "NSObject+Additions.h"
@@ -49,53 +44,16 @@
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMDashboardLoader> dashboardLoader;
-@property (nonatomic, strong, readwrite) JMWebEnvironment *webEnvironment;
 @end
 
 @implementation JMDashboardViewerConfigurator
-
-- (void)dealloc
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-}
-
-#pragma mark - Initializers
-- (instancetype __nullable)initWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment
-{
-    self = [super init];
-    if (self) {
-        _webEnvironment = webEnvironment;
-    }
-    return self;
-}
-
-+ (instancetype __nullable)configuratorWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment
-{
-    return [[self alloc] initWithWebEnvironment:webEnvironment];
-}
-
-#pragma mark - Public API
-- (void)setup
-{
-    [self configWithWebEnvironment:self.webEnvironment];
-}
-
-- (void)reset
-{
-    [self.webEnvironment reset];
-    [self.stateManager setupPageForState:JMDashboardViewerStateDestroy];
-}
-
-- (void)updateReportLoaderDelegateWithObject:(id <JMDashboardLoaderDelegate>)delegate
-{
-    [self dashboardLoader].delegate = delegate;
-}
 
 #pragma mark - Helpers
 
 - (void)configWithWebEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    _webEnvironment = webEnvironment;
+    [super configWithWebEnvironment:webEnvironment];
+    
     JMResourceFlowType flowType = webEnvironment.flowType;
     switch(flowType) {
         case JMResourceFlowTypeUndefined: {
@@ -114,45 +72,19 @@
             break;
         }
     }
-    _stateManager = [self createStateManager];
-    _infoPageManager = [self createInfoPageManager];
-    _printManager = [self createPrintManager];
-    _shareManager = [self createShareManager];
-    _hyperlinksManager = [self createHyperlinksManager];
-    _hyperlinksManager.delegate = self.stateManager;
-    _documentManager = [self createDocumentManager];
-    _sessionManager = [self createSessionManager];
-    _externalScreenManager = [self createExternalScreenManager];
 }
 
-- (JMDashboardViewerStateManager *)createStateManager
+- (JMResourceViewerSessionManager *)sessionManager
+{
+    if (!_sessionManager) {
+        _sessionManager = [self createSessionManager];
+    }
+    return _sessionManager;
+}
+
+- (JMResourceViewerStateManager *)createStateManager
 {
     return [JMDashboardViewerStateManager new];
-}
-
-- (JMResourceViewerInfoPageManager *)createInfoPageManager
-{
-    return [JMResourceViewerInfoPageManager new];
-}
-
-- (JMResourceViewerPrintManager *)createPrintManager
-{
-    return [JMResourceViewerPrintManager new];
-}
-
-- (JMResourceViewerShareManager *)createShareManager
-{
-    return [JMResourceViewerShareManager new];
-}
-
-- (JMResourceViewerHyperlinksManager *)createHyperlinksManager
-{
-    return [JMResourceViewerHyperlinksManager new];
-}
-
-- (JMResourceViewerDocumentManager *)createDocumentManager
-{
-    return [JMResourceViewerDocumentManager new];
 }
 
 - (JMResourceViewerSessionManager *)createSessionManager

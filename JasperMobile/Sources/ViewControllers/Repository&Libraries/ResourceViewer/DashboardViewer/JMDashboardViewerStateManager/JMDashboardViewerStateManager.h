@@ -36,20 +36,6 @@
 
 @class JMDashboardViewerVC;
 
-typedef NS_ENUM(NSInteger, JMDashboardViewerState) {
-    JMDashboardViewerStateInitial,
-    JMDashboardViewerStateLoading,
-    JMDashboardViewerStateResourceReady,
-    JMDashboardViewerStateResourceFailed,
-    JMDashboardViewerStateResourceNotExist,
-    JMDashboardViewerStateNestedResource,
-    JMDashboardViewerStateResourceOnWExternalWindow,
-    JMDashboardViewerStateMaximizedDashlet,
-    JMDashboardViewerStateDestroy
-};
-
 @interface JMDashboardViewerStateManager : JMResourceViewerStateManager <JMResourceViewerHyperlinksManagerDelegate>
-@property (nonatomic, assign, readonly) JMDashboardViewerState state;
 @property (nonatomic, copy, nullable) void(^minimizeDashletActionBlock)(void);
-- (void)setupPageForState:(JMDashboardViewerState)state;
 @end

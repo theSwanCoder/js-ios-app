@@ -34,6 +34,20 @@
 #import <UIKit/UIKit.h>
 #import "JMResourceViewerToolbarsHelper.h"
 
+typedef NS_ENUM(NSInteger, JMResourceViewerState) {
+    JMResourceViewerStateInitial,
+    JMResourceViewerStateLoading,
+    JMResourceViewerStateLoadingForPrint,
+    JMResourceViewerStateResourceReady,
+    JMResourceViewerStateResourceFailed,
+    JMResourceViewerStateResourceNotExist,
+    JMResourceViewerStateNestedResource,
+    JMResourceViewerStateResourceOnWExternalWindow,
+    JMResourceViewerStateMaximizedDashlet,
+    JMResourceViewerStateDestroy,
+    JMResourceViewerStateNotVisible
+};
+
 @class JMResourceViewerMenuHelper;
 @class JMResourceViewerFavoritesHelper;
 
@@ -53,6 +67,9 @@
 @property (nonatomic, copy) void(^openDocumentActionBlock)(void);
 @property (nonatomic, weak) UIViewController <JMResourceClientHolder, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol, JMResourceViewerProtocol>*controller;
 @property (nonatomic, weak) id <JMResourceViewerStateManagerDelegate> delegate;
+@property (nonatomic, assign, readonly) JMResourceViewerState state;
+- (void)setupPageForState:(JMResourceViewerState)state NS_REQUIRES_SUPER;
+
 - (void)updatePageForToolbarState:(JMResourceViewerToolbarState)toolbarState;
 - (void)updatePageForChangingSizeClass;
 - (void)updateFavoriteState;
@@ -68,6 +85,7 @@
 - (void)hideProgress;
 - (void)showResourceNotExistView;
 - (void)hideResourceNotExistView;
+
 @end
 
 @protocol JMResourceViewerStateManagerDelegate <NSObject>

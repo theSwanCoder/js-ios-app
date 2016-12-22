@@ -416,6 +416,8 @@
 		BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */; };
 		BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */; };
 		BD6DB2A01C981E5F002DEFDF /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */; };
+		BDA6165F1E0ABEB600B44C75 /* JMResourceViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA6165E1E0ABEB600B44C75 /* JMResourceViewerConfigurator.m */; };
+		BDA616661E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA616651E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.m */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8B9ED1B57D90B00758441 /* JMThemesManager.m */; };
@@ -1050,6 +1052,10 @@
 		BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		BDA6165D1E0ABEB600B44C75 /* JMResourceViewerConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceViewerConfigurator.h; sourceTree = "<group>"; };
+		BDA6165E1E0ABEB600B44C75 /* JMResourceViewerConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceViewerConfigurator.m; sourceTree = "<group>"; };
+		BDA616641E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardPrintPrepearingTask.h; sourceTree = "<group>"; };
+		BDA616651E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardPrintPrepearingTask.m; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -1332,6 +1338,7 @@
 		088662221DF02D0400B8009B /* ResourceViewer */ = {
 			isa = PBXGroup;
 			children = (
+				BDA6165C1E0ABEB600B44C75 /* JMResourceViewerConfigurator */,
 				0886632B1DF05DA000B8009B /* JMSaveResourceViewController */,
 				088662231DF02D0400B8009B /* BaseViewer */,
 				0886622A1DF02D0400B8009B /* ContentResourceViewer */,
@@ -1566,6 +1573,7 @@
 		0886625D1DF02D0400B8009B /* JMResourceViewerPrintManager */ = {
 			isa = PBXGroup;
 			children = (
+				BDA616631E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask */,
 				0886625E1DF02D0400B8009B /* JMResourceViewerPrintManager.h */,
 				0886625F1DF02D0400B8009B /* JMResourceViewerPrintManager.m */,
 			);
@@ -3776,6 +3784,24 @@
 			path = JMHTMLParser;
 			sourceTree = "<group>";
 		};
+		BDA6165C1E0ABEB600B44C75 /* JMResourceViewerConfigurator */ = {
+			isa = PBXGroup;
+			children = (
+				BDA6165D1E0ABEB600B44C75 /* JMResourceViewerConfigurator.h */,
+				BDA6165E1E0ABEB600B44C75 /* JMResourceViewerConfigurator.m */,
+			);
+			path = JMResourceViewerConfigurator;
+			sourceTree = "<group>";
+		};
+		BDA616631E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask */ = {
+			isa = PBXGroup;
+			children = (
+				BDA616641E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.h */,
+				BDA616651E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.m */,
+			);
+			path = JMDashboardPrintPrepearingTask;
+			sourceTree = "<group>";
+		};
 		BDABBD231A41D8CC00EDA100 /* RNCachingURLProtocol */ = {
 			isa = PBXGroup;
 			children = (
@@ -4178,7 +4204,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		2AB04D4F231FAF1088FD3FCA /* [CP] Embed Pods Frameworks */ = {
@@ -4268,7 +4294,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		7374BB82ACEE814A84562BE7 /* [CP] Check Pods Manifest.lock */ = {
@@ -4283,7 +4309,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		935E06761BD7969C007F8DDA /* Run Script (Fabric) */ = {
@@ -4341,7 +4367,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		EFF801C1055C36DB5204C0B0 /* [CP] Embed Pods Frameworks */ = {
@@ -4651,6 +4677,7 @@
 				088662EE1DF02D0400B8009B /* JMShareViewController.m in Sources */,
 				089B15B11AA756BD0021A915 /* JasperMobileAppDelegate.m in Sources */,
 				088662F31DF02D0400B8009B /* JMRestReportLoader.m in Sources */,
+				BDA6165F1E0ABEB600B44C75 /* JMResourceViewerConfigurator.m in Sources */,
 				089B15AB1AA756BD0021A915 /* JMMenuActionsView.m in Sources */,
 				088662E81DF02D0400B8009B /* JMResourceViewerSessionManager.m in Sources */,
 				BDE6A0861B5A891000A7FDEC /* JMTextField.m in Sources */,
@@ -4687,6 +4714,7 @@
 				A14788CFC02FE10C3B77213E /* JMFavorites+Helpers.m in Sources */,
 				A14787F66450947BD9F35A1E /* JMSavedResources+Helpers.m in Sources */,
 				A1478AF726712130E4DF974A /* JMServerProfile+Helpers.m in Sources */,
+				BDA616661E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.m in Sources */,
 				A1478005B3B1C5EA078F8199 /* JMResource.m in Sources */,
 				0886630A1DF02D0400B8009B /* JMFiltersVCResult.m in Sources */,
 				A1478EAB974E0D8B2645494C /* JMScheduleInfoViewController.m in Sources */,

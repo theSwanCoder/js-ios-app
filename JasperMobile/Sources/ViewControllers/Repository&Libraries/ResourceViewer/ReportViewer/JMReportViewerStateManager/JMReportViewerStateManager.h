@@ -33,21 +33,7 @@
 #import "JMResourceViewerStateManager.h"
 #import "JMResourceViewerHyperlinksManager.h"
 
-@class JMReportViewerVC;
-
-typedef NS_ENUM(NSInteger, JMReportViewerState) {
-    JMReportViewerStateInitial,
-    JMReportViewerStateLoading,
-    JMReportViewerStateResourceReady,
-    JMReportViewerStateResourceFailed,
-    JMReportViewerStateResourceNotExist,
-    JMReportViewerStateNestedResource,
-    JMReportViewerStateResourceOnWExternalWindow,
-    JMReportViewerStateNotVisible,
-    JMReportViewerStateDestroy
-};
 
 @interface JMReportViewerStateManager : JMResourceViewerStateManager <JMResourceViewerHyperlinksManagerDelegate>
-@property (nonatomic, assign, readonly) JMReportViewerState state;
-- (void)setupPageForState:(JMReportViewerState)state;
+
 @end

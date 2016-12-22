@@ -33,33 +33,11 @@
 */
 
 #import <UIKit/UIKit.h>
+#import "JMResourceViewerConfigurator.h"
 
-@protocol JMReportLoaderProtocol, JMReportLoaderDelegate;
-@class JSReport;
-@class JMWebEnvironment;
-@class JMReportViewerStateManager;
-@class JMResourceViewerPrintManager;
-@class JMResourceViewerInfoPageManager;
-@class JMResourceViewerShareManager;
-@class JMResourceViewerHyperlinksManager;
-@class JMResourceViewerDocumentManager;
-@class JMReportViewerExternalScreenManager;
+@protocol JMReportLoaderProtocol;
 
-@interface JMReportViewerConfigurator : NSObject
+@interface JMReportViewerConfigurator : JMResourceViewerConfigurator
 @property (nonatomic, strong, readonly) id <JMReportLoaderProtocol> __nonnull reportLoader;
-@property (nonatomic, strong, readonly) JMWebEnvironment * __nonnull webEnvironment;
-@property (nonatomic, strong) JMReportViewerStateManager * __nonnull stateManager;
-@property (nonatomic, strong) JMResourceViewerPrintManager * __nonnull printManager;
-@property (nonatomic, strong) JMResourceViewerInfoPageManager * __nonnull infoPageManager;
-@property (nonatomic, strong) JMResourceViewerShareManager * __nonnull shareManager;
-@property (nonatomic, strong) JMResourceViewerHyperlinksManager * __nonnull hyperlinksManager;
-@property (nonatomic, strong) JMResourceViewerDocumentManager * __nonnull documentManager;
-@property (nonatomic, strong) JMReportViewerExternalScreenManager * __nonnull externalScreenManager;
-@property (nonatomic, assign) CGFloat viewportScaleFactor;
 
-- (instancetype __nonnull)initWithWebEnvironment:(JMWebEnvironment * __nonnull)webEnvironment;
-+ (instancetype __nullable)configuratorWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment;
-
-- (void)setup;
-- (void)reset;
 @end

@@ -38,6 +38,9 @@
 @property (nonatomic, strong) JMResource *resource;
 @property (nonatomic, strong) UINavigationController *printNavController;
 @property (nonatomic, assign) CGSize printSettingsPreferredContentSize;
+
+@property (nonatomic, strong) id saver;
+
 @end
 
 @implementation JMResourceViewerPrintManager
@@ -52,11 +55,17 @@
     self.printSettingsPreferredContentSize = CGSizeMake(540, 580);
 
     __weak __typeof(self) weakSelf = self;
-    [self preparePreviewForPrintWithCompletion:^(id printItem) {
+    [self preparePreviewForPrintWithCompletion:^(id printItem, NSError *error) {
         if (prepearingCompletion) {
             prepearingCompletion();
         }
-        if (printItem) {
+        if (error) {
+            if (error.code == JSSessionExpiredErrorCode) {
+                [JMUtils showLoginViewAnimated:YES completion:nil];
+            } else {
+                [JMUtils presentAlertControllerWithError:error completion:nil];
+            }
+        } else if (printItem) {
             __typeof(self) strongSelf = weakSelf;
             __weak __typeof(self) weakSelf = strongSelf;
             [strongSelf printItem:printItem
@@ -82,18 +91,14 @@
 
 #pragma mark - Helpers
 
-- (void)preparePreviewForPrintWithCompletion:(void(^)(id printItem))completion
+- (void)preparePreviewForPrintWithCompletion:(void(^)(id printItem, NSError *error))completion
 {
-    if (self.prepareBlock) {
-        completion(self.prepareBlock());
-    } else {
-        if (self.resource.type == JMResourceTypeReport) {
-            [self prepareReportForPrintingWithCompletion:completion];
-        } else if (self.resource.type == JMResourceTypeDashboard) {
-            [self prepareDashboardForPrintingWithCompletion:completion];
-        } else {
-            // TODO: extend for other resources
-        }
+    if (self.resource.type == JMResourceTypeReport) {
+        [self prepareReportForPrintingWithCompletion:completion];
+    } else if (self.resource.type == JMResourceTypeDashboard) {
+        [self prepareDashboardForPrintingWithCompletion:completion];
+    } else if (self.userPrepareBlock) {
+        completion(self.userPrepareBlock(), nil);
     }
 }
 
@@ -114,62 +119,65 @@
     }
 }
 
-- (void)prepareReportForPrintingWithCompletion:(void(^)(NSURL *resourceURL))completion
+- (void)prepareReportForPrintingWithCompletion:(void(^)(NSURL *resourceURL, NSError *error))completion
 {
     JSReport *report = [self.resource modelOfResource];
     JSReportSaver *reportSaver = [[JSReportSaver alloc] initWithReport:report
                                                             restClient:self.restClient];
 
-    NSString *reportName = [self tempReportName];
+    NSString *reportName = [self tempResourceName];
     [reportSaver saveReportWithName:reportName
                              format:kJS_CONTENT_TYPE_PDF
                          pagesRange:[JSReportPagesRange allPagesRange]
                          completion:^(NSURL * _Nullable savedReportURL, NSError * _Nullable error) {
                              if (error) {
-                                 if (error.code == JSSessionExpiredErrorCode) {
-                                     if (completion) {
-                                         completion(nil);
-                                     }
-                                     [JMUtils showLoginViewAnimated:YES completion:nil];
-                                 } else {
-                                     [JMUtils presentAlertControllerWithError:error completion:nil];
+                                 if (completion) {
+                                     completion(nil, error);
                                  }
                              } else {
                                  NSString *fullReportName = [reportName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
                                  NSURL *reportURL = [savedReportURL URLByAppendingPathComponent:fullReportName];
                                  if (completion) {
-                                     completion(reportURL);
+                                     completion(reportURL, nil);
                                  }
                              }
                          }];
 }
 
-- (void)prepareDashboardForPrintingWithCompletion:(void(^)(NSURL *resourceURL))completion
+- (void)prepareDashboardForPrintingWithCompletion:(void(^)(NSURL *resourceURL, NSError *error))completion
 {
-    JSDashboard *dashboard = [self.resource modelOfResource];
-    JSDashboardSaver *dashboardSaver = [[JSDashboardSaver alloc] initWithDashboard:dashboard
-                                                                        restClient:self.restClient];
-    NSString *dashboardName = [[NSUUID UUID] UUIDString];
-    [dashboardSaver saveDashboardWithName:dashboardName
-                                   format:kJS_CONTENT_TYPE_PDF
-                               completion:^(NSURL * _Nullable savedDashboardFolderURL, NSError * _Nullable error) {
-                                   if (error) {
-                                       if (error.code == JSSessionExpiredErrorCode) {
-                                           [JMUtils showLoginViewAnimated:YES completion:nil];
-                                       } else {
-                                           if (completion) {
-                                               completion(nil);
+    if (self.restClient.serverInfo.versionAsFloat < kJS_SERVER_VERSION_CODE_JADE_6_2_0) {
+        if (completion && self.userPrepareBlock) {
+            completion(self.userPrepareBlock(), nil);
+        }
+    } else {
+        JSDashboard *dashboard = [self.resource modelOfResource];
+        JSDashboardSaver *dashboardSaver = [[JSDashboardSaver alloc] initWithDashboard:dashboard
+                                                                            restClient:self.restClient];
+        self.saver = dashboardSaver;
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            NSString *dashboardName = [self tempResourceName];
+            [dashboardSaver saveDashboardWithName:dashboardName
+                                           format:kJS_CONTENT_TYPE_PDF
+                                       completion:^(NSURL * _Nullable savedDashboardFolderURL, NSError * _Nullable error) {
+                                           if (error) {
+                                               if (completion) {
+                                                   if (self.userPrepareBlock) {
+                                                       completion(self.userPrepareBlock(), nil);
+                                                   } else  {
+                                                       completion(nil, error);
+                                                   }
+                                               }
+                                           } else {
+                                               NSString *fullResourceName = [dashboardName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
+                                               NSURL *resourceURL = [savedDashboardFolderURL URLByAppendingPathComponent:fullResourceName];
+                                               if (completion) {
+                                                   completion(resourceURL, nil);
+                                               }
                                            }
-                                           [JMUtils presentAlertControllerWithError:error completion:nil];
-                                       }
-                                   } else {
-                                       NSString *fullResourceName = [dashboardName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
-                                       NSURL *resourceURL = [savedDashboardFolderURL URLByAppendingPathComponent:fullResourceName];
-                                       if (completion) {
-                                           completion(resourceURL);
-                                       }
-                                   }
-                               }];
+                                       }];
+        }];
+    }
 }
 
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion
@@ -211,7 +219,7 @@
     }
 }
 
-- (NSString *)tempReportName
+- (NSString *)tempResourceName
 {
     return [[NSUUID UUID] UUIDString];
 }

@@ -35,60 +35,22 @@
 #import "JMWebEnvironment.h"
 #import "JMVIZWebEnvironment.h"
 #import "JMReportViewerStateManager.h"
-#import "JMResourceViewerPrintManager.h"
-#import "JMResourceViewerInfoPageManager.h"
-#import "JMResourceViewerShareManager.h"
-#import "JMResourceViewerHyperlinksManager.h"
-#import "JMResourceViewerDocumentManager.h"
 #import "JMUtils.h"
 #import "NSObject+Additions.h"
 #import "JMReportViewerExternalScreenManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, strong, readwrite) id <JMReportLoaderProtocol> reportLoader;
-@property (nonatomic, strong, readwrite) JMWebEnvironment *webEnvironment;
 @end
 
 @implementation JMReportViewerConfigurator
-
-#pragma mark - Public API
-
-- (void)dealloc
-{
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-}
-
-- (instancetype)initWithWebEnvironment:(JMWebEnvironment *)webEnvironment
-{
-    NSAssert(webEnvironment != nil, @"WebEnvironment is nil");
-    self = [super init];
-    if (self) {
-        _webEnvironment = webEnvironment;
-    }
-    return self;
-}
-
-+ (instancetype)configuratorWithWebEnvironment:(JMWebEnvironment *)webEnvironment
-{
-    return [[self alloc] initWithWebEnvironment:webEnvironment];
-}
-
-- (void)setup
-{
-    [self configWithWebEnvironment:self.webEnvironment];
-}
-
-- (void)reset
-{
-    [self.webEnvironment reset];
-    [self.stateManager setupPageForState:JMReportViewerStateDestroy];
-}
 
 #pragma mark - Helpers
 
 - (void)configWithWebEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    _webEnvironment = webEnvironment;
+    [super configWithWebEnvironment:webEnvironment];
+    
     if ([JMUtils flowTypeForReportViewer] == JMResourceFlowTypeVIZ) {
         JMLog(@"run with VIZ");
         _reportLoader = [JMVisualizeReportLoader loaderWithRestClient:self.restClient
@@ -99,15 +61,6 @@
         _reportLoader = (id <JMReportLoaderProtocol>) [JMRestReportLoader loaderWithRestClient:self.restClient
                                                                                 webEnvironment:webEnvironment];
     }
-    NSAssert(_reportLoader != nil, @"Report Loader wasn't created");
-    _stateManager = [self createStateManager];
-    _printManager = [self createPrintManager];
-    _infoPageManager = [self createInfoPageManager];
-    _shareManager = [self createShareManager];
-    _hyperlinksManager = [self createHyperlinksManager];
-    _hyperlinksManager.delegate = self.stateManager;
-    _documentManager = [self createDocumentManager];
-    _externalScreenManager = [self createExternaScreenManager];
 }
 
 - (JMReportViewerStateManager *)createStateManager
@@ -115,32 +68,7 @@
     return [JMReportViewerStateManager new];
 }
 
-- (JMResourceViewerPrintManager *)createPrintManager
-{
-    return [JMResourceViewerPrintManager new];
-}
-
-- (JMResourceViewerInfoPageManager *)createInfoPageManager
-{
-    return [JMResourceViewerInfoPageManager new];
-}
-
-- (JMResourceViewerShareManager *)createShareManager
-{
-    return [JMResourceViewerShareManager new];
-}
-
-- (JMResourceViewerHyperlinksManager *)createHyperlinksManager
-{
-    return [JMResourceViewerHyperlinksManager new];
-}
-
-- (JMResourceViewerDocumentManager *)createDocumentManager
-{
-    return [JMResourceViewerDocumentManager new];
-}
-
-- (JMReportViewerExternalScreenManager *)createExternaScreenManager
+- (JMReportViewerExternalScreenManager *)createExternalScreenManager
 {
     return [JMReportViewerExternalScreenManager new];
 }

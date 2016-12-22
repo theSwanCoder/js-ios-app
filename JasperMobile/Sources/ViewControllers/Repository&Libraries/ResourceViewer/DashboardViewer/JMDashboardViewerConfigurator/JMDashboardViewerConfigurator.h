@@ -31,36 +31,13 @@
 */
 
 #import <UIKit/UIKit.h>
+#import "JMResourceViewerConfigurator.h"
 
 @protocol JMDashboardLoader;
-@protocol JMDashboardLoaderDelegate;
-@class JMDashboard;
-@class JMWebEnvironment;
-@class JMDashboardViewerStateManager;
-@class JMResourceViewerInfoPageManager;
-@class JMResourceViewerPrintManager;
-@class JMResourceViewerShareManager;
-@class JMResourceViewerHyperlinksManager;
-@class JMResourceViewerDocumentManager;
 @class JMResourceViewerSessionManager;
-@class JMDashboardViewerExternalScreenManager;
 
-@interface JMDashboardViewerConfigurator : NSObject
+@interface JMDashboardViewerConfigurator : JMResourceViewerConfigurator
 @property (nonatomic, strong, readonly, nonnull) id<JMDashboardLoader> dashboardLoader;
-@property (nonatomic, strong, readonly, nonnull) JMWebEnvironment *webEnvironment;
-@property (nonatomic, strong, nonnull) JMDashboardViewerStateManager *stateManager;
-@property (nonatomic, strong, nonnull) JMResourceViewerInfoPageManager * infoPageManager;
-@property (nonatomic, strong, nonnull) JMResourceViewerPrintManager * printManager;
-@property (nonatomic, strong, nonnull) JMResourceViewerShareManager * shareManager;
-@property (nonatomic, strong, nonnull) JMResourceViewerHyperlinksManager * hyperlinksManager;
-@property (nonatomic, strong, nonnull) JMResourceViewerDocumentManager * documentManager;
 @property (nonatomic, strong, nonnull) JMResourceViewerSessionManager *sessionManager;
-@property (nonatomic, strong, nonnull) JMDashboardViewerExternalScreenManager *externalScreenManager;
-@property (nonatomic, assign) CGFloat viewportScaleFactor;
 
-- (instancetype __nullable)initWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment;
-+ (instancetype __nullable)configuratorWithWebEnvironment:(JMWebEnvironment *__nonnull)webEnvironment;
-
-- (void)setup;
-- (void)reset;
 @end

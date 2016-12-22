@@ -115,7 +115,7 @@
     [self stateManager].minimizeDashletActionBlock = ^{
         [weakSelf minimizeDashlet];
     };
-    [[self stateManager] setupPageForState:JMDashboardViewerStateInitial];
+    [[self stateManager] setupPageForState:JMResourceViewerStateInitial];
 }
 
 - (void)setupSessionManager
@@ -173,12 +173,12 @@
 
 - (JMDashboardViewerStateManager *)stateManager
 {
-    return self.configurator.stateManager;
+    return (JMDashboardViewerStateManager *)self.configurator.stateManager;
 }
 
 - (JMDashboardViewerExternalScreenManager *)externalScreenManager
 {
-    return self.configurator.externalScreenManager;
+    return (JMDashboardViewerExternalScreenManager *)self.configurator.externalScreenManager;
 }
 
 #pragma mark - JMResourceViewProtocol
@@ -222,7 +222,7 @@
 - (void)backActionInWebView
 {
     [[self webEnvironment].webView goBack];
-    [[self stateManager] setupPageForState:JMDashboardViewerStateMaximizedDashlet];
+    [[self stateManager] setupPageForState:JMResourceViewerStateMaximizedDashlet];
     [self.configurator.hyperlinksManager reset];
 }
 
@@ -295,7 +295,7 @@
 {
     JMDashboard *dashboard = [self.resource modelOfResource];
     if (self.resource.type != JMResourceTypeLegacyDashboard && [JMUtils isSupportVisualize]) {
-        [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+        [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
 
         __weak __typeof(self) weakSelf = self;
         [self fetchDashboardMetaDataWithCompletion:^(NSArray *components, NSArray *inputControls, NSError *error) {
@@ -306,7 +306,7 @@
                                                   [strongSelf exitAction];
                                               }];
             } else {
-                [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateInitial];
+                [[strongSelf stateManager] setupPageForState:JMResourceViewerStateInitial];
                 dashboard.components = components;
                 dashboard.inputControls = inputControls;
                 [strongSelf startShowDashboard:dashboard];
@@ -319,12 +319,12 @@
 
 - (void)startShowDashboard:(JMDashboard *)dashboard
 {
-    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
     __weak typeof(self)weakSelf = self;
     [[self dashboardLoader] runDashboard:dashboard completion:^(BOOL success, NSError *error) {
         __weak typeof(self)strongSelf = weakSelf;
         if (success) {
-            [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+            [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
             // Analytics
             NSString *label = ([JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6]) ? kJMAnalyticsResourceLabelDashboardVisualize : kJMAnalyticsResourceLabelDashboardFlow;
             [[JMAnalyticsManager sharedManager] sendAnalyticsEventWithInfo:@{
@@ -354,28 +354,28 @@
         }
     }
 
-    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
     __weak __typeof(self) weakSelf = self;
     [[self dashboardLoader] applyParameters:parameters completion:^(BOOL success, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
         if (error) {
             [strongSelf handleError:error];
         } else {
-            [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+            [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
         }
     }];
 }
 
 - (void)reloadDashboard
 {
-    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
     __weak typeof(self)weakSelf = self;
     [[self dashboardLoader] reloadWithCompletion:^(BOOL success, NSError *error) {
         __weak typeof(self)strongSelf = weakSelf;
         if (error) {
             [strongSelf handleError:error];
         } else {
-            [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+            [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
         }
     }];
 }
@@ -383,7 +383,7 @@
 - (void)reloadDashlet
 {
     NSAssert([self dashboard].maximizedComponent != nil, @"Should be maximized component");
-    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
     __weak typeof(self)weakSelf = self;
     [[self dashboardLoader] reloadDashboardComponent:[self dashboard].maximizedComponent
                                           completion:^(BOOL success, NSError *error) {
@@ -391,7 +391,7 @@
                                               if (error) {
                                                   [strongSelf handleError:error];
                                               } else {
-                                                  [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+                                                  [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
                                               }
                                           }];
 }
@@ -401,7 +401,7 @@
     [self.webEnvironment resetZoom];
 
     __weak typeof(self)weakSelf = self;
-    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
     [[self dashboardLoader] minimizeDashboardComponent:[self dashboard].maximizedComponent
                                             completion:^(BOOL success, NSError *error) {
                                                 __weak typeof(self)strongSelf = weakSelf;
@@ -409,7 +409,7 @@
                                                     [strongSelf handleError:error];
                                                 } else {
                                                     strongSelf.navigationItem.title = strongSelf.resource.resourceLookup.label;
-                                                    [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+                                                    [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceReady];
                                                 }
                                             }];
 }
@@ -431,7 +431,7 @@
     JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate *)[UIApplication sharedApplication].delegate;
     if ([appDelegate isExternalScreenAvailable]) {
         // TODO: extend by considering other states
-        availableAction |= ([self stateManager].state == JMDashboardViewerStateResourceOnWExternalWindow) ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+        availableAction |= ([self stateManager].state == JMResourceViewerStateResourceOnWExternalWindow) ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
     }
 
     if ([self isFiltersAvailable]) {
@@ -505,15 +505,13 @@
     
 - (void)printDashboard
 {
-    JMDashboardViewerState currentState = [self stateManager].state;
-    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    JMResourceViewerState currentState = [self stateManager].state;
+    [[self stateManager] setupPageForState:JMResourceViewerStateLoadingForPrint];
     self.configurator.printManager.controller = self;
-    if (self.restClient.serverInfo.versionAsFloat < kJS_SERVER_VERSION_CODE_JADE_6_2_0) {
-        UIImage *renderedImage = [[self contentView] renderedImage];
-        self.configurator.printManager.prepareBlock = (id)^{
-            return renderedImage;
-        };
-    }
+    UIImage *renderedImage = [[self contentView] renderedImage];
+    self.configurator.printManager.userPrepareBlock = (id)^{
+        return renderedImage;
+    };
     [self.configurator.printManager printResource:self.resource
                              prepearingCompletion:^{
                                  [[self stateManager] setupPageForState:currentState];
@@ -524,7 +522,7 @@
 #pragma mark - JMDashboardLoaderDelegate
 - (void)dashboardLoaderDidStartMaximizeDashlet:(id<JMDashboardLoader> __nonnull)loader
 {
-    [[self stateManager] setupPageForState:JMDashboardViewerStateLoading];
+    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
 }
 
 - (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didEndMaximazeDashboardComponent:(JSDashboardComponent *__nonnull)component
@@ -532,7 +530,7 @@
     [self.webEnvironment resetZoom];
 
     self.navigationItem.title = component.label;
-    [[self stateManager] setupPageForState:JMDashboardViewerStateMaximizedDashlet];
+    [[self stateManager] setupPageForState:JMResourceViewerStateMaximizedDashlet];
 }
 
 - (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didReceiveEventWithHyperlink:(JMHyperlink *__nonnull)hyperlink
@@ -573,7 +571,7 @@
 #pragma mark - Error handling
 - (void)handleError:(NSError *)error
 {
-    [[self stateManager] setupPageForState:JMDashboardViewerStateResourceFailed];
+    [[self stateManager] setupPageForState:JMResourceViewerStateResourceFailed];
     switch (error.code) {
         case JMJavascriptRequestErrorTypeSessionDidExpire: {
             [self.configurator.sessionManager handleSessionDidExpire];
@@ -634,13 +632,13 @@
 #pragma mark - Work with external window
 - (void)showOnTV
 {
-    [[self stateManager] setupPageForState:JMDashboardViewerStateResourceOnWExternalWindow];
+    [[self stateManager] setupPageForState:JMResourceViewerStateResourceOnWExternalWindow];
     [[self externalScreenManager] showContentOnTV];
 }
 
 - (void)switchFromTV
 {
-    [[self stateManager] setupPageForState:JMDashboardViewerStateResourceReady];
+    [[self stateManager] setupPageForState:JMResourceViewerStateResourceReady];
     [[self externalScreenManager] backContentOnDevice];
 }
 
@@ -655,7 +653,7 @@
             if (error) {
                 [strongSelf handleError:error];
             } else {
-                [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateMaximizedDashlet];
+                [[strongSelf stateManager] setupPageForState:JMResourceViewerStateMaximizedDashlet];
             }
         }];
     }
@@ -671,7 +669,7 @@
                 [strongSelf handleError:error];
             } else {
                 strongSelf.navigationItem.title = strongSelf.resource.resourceLookup.label;
-                [[strongSelf stateManager] setupPageForState:JMDashboardViewerStateResourceOnWExternalWindow];
+                [[strongSelf stateManager] setupPageForState:JMResourceViewerStateResourceOnWExternalWindow];
             }
         }];
     }

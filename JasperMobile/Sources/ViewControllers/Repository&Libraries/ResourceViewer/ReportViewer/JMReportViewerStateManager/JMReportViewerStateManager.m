@@ -34,17 +34,14 @@
 #import "JMResourceViewerMenuHelper.h"
 #import "NSObject+Additions.h"
 
-@interface JMReportViewerStateManager()
-@property (nonatomic, assign, readwrite) JMReportViewerState state;
-@end
-
 @implementation JMReportViewerStateManager
 
 #pragma mark - Public API
 
-- (void)setupPageForState:(JMReportViewerState)state
+- (void)setupPageForState:(JMResourceViewerState)state
 {
-    self.state = state;
+    [super setupPageForState:state];
+    
     [self setupNavigationItemForState:state];
     [self setupMainViewForState:state];
     [self setupToolbarsForState:state];
@@ -52,40 +49,46 @@
 
 #pragma mark - Helpers
 
-- (void)setupNavigationItemForState:(JMReportViewerState)state
+- (void)setupNavigationItemForState:(JMResourceViewerState)state
 {
     self.needFavoriteButton = YES;
     switch (state) {
-        case JMReportViewerStateInitial: {
+        case JMResourceViewerStateInitial: {
             [self initialSetupNavigationItems];
             break;
         }
-        case JMReportViewerStateDestroy: {
+        case JMResourceViewerStateDestroy: {
             break;
         }
-        case JMReportViewerStateLoading: {
+        case JMResourceViewerStateMaximizedDashlet: {
             break;
         }
-        case JMReportViewerStateResourceFailed: {
+        case JMResourceViewerStateLoading: {
             break;
         }
-        case JMReportViewerStateResourceReady: {
+        case JMResourceViewerStateLoadingForPrint: {
+            break;
+        }
+        case JMResourceViewerStateResourceFailed: {
+            break;
+        }
+        case JMResourceViewerStateResourceReady: {
             [self setupNavigationItems];
             break;
         }
-        case JMReportViewerStateResourceNotExist: {
+        case JMResourceViewerStateResourceNotExist: {
             break;
         }
-        case JMReportViewerStateResourceOnWExternalWindow: {
+        case JMResourceViewerStateResourceOnWExternalWindow: {
             break;
         }
-        case JMReportViewerStateNotVisible: {
+        case JMResourceViewerStateNotVisible: {
             if (self.menuHelper.isMenuVisible) {
                 [self.menuHelper hideMenu];
             }
             break;
         }
-        case JMReportViewerStateNestedResource: {
+        case JMResourceViewerStateNestedResource: {
             self.needFavoriteButton = NO;
             [self setupNavigationItemsForNestedResource];
             break;
@@ -93,49 +96,57 @@
     }
 }
 
-- (void)setupMainViewForState:(JMReportViewerState)state
+- (void)setupMainViewForState:(JMResourceViewerState)state
 {
     switch (state) {
-        case JMReportViewerStateInitial: {
+        case JMResourceViewerStateInitial: {
             self.controller.title = self.controller.resource.resourceLookup.label;
             [self showResourceNotExistView];
             [self hideProgress];
             [self hideMainView];
             break;
         }
-        case JMReportViewerStateDestroy: {
+        case JMResourceViewerStateDestroy: {
             [self reset];
             break;
         }
-        case JMReportViewerStateLoading: {
+        case JMResourceViewerStateMaximizedDashlet: {
+            break;
+        }
+        case JMResourceViewerStateLoading: {
             [self showProgress];
             [self hideResourceNotExistView];
             [self hideMainView];
             break;
         }
-        case JMReportViewerStateResourceFailed: {
+        case JMResourceViewerStateLoadingForPrint: {
+            [self showProgress];
+            [self hideResourceNotExistView];
+            break;
+        }
+        case JMResourceViewerStateResourceFailed: {
             [self hideProgress];
             break;
         }
-        case JMReportViewerStateResourceReady: {
+        case JMResourceViewerStateResourceReady: {
             [self showMainView];
             [self hideProgress];
             [self hideResourceNotExistView];
             break;
         }
-        case JMReportViewerStateResourceNotExist: {
+        case JMResourceViewerStateResourceNotExist: {
             [self hideProgress];
             [self showResourceNotExistView];
             break;
         }
-        case JMReportViewerStateResourceOnWExternalWindow: {
+        case JMResourceViewerStateResourceOnWExternalWindow: {
             break;
         }
-        case JMReportViewerStateNotVisible: {
+        case JMResourceViewerStateNotVisible: {
             [self hideProgress];
             break;
         }
-        case JMReportViewerStateNestedResource: {
+        case JMResourceViewerStateNestedResource: {
             [self hideResourceNotExistView];
             [self hideProgress];
             break;
@@ -143,39 +154,45 @@
     }
 }
 
-- (void)setupToolbarsForState:(JMReportViewerState)state
+- (void)setupToolbarsForState:(JMResourceViewerState)state
 {
     switch (state) {
-        case JMReportViewerStateInitial: {
+        case JMResourceViewerStateInitial: {
             [self.toolbarsHelper updatePageForToolbarState:JMResourceViewerToolbarStateInitial];
             break;
         }
-        case JMReportViewerStateDestroy: {
+        case JMResourceViewerStateDestroy: {
             break;
         }
-        case JMReportViewerStateLoading: {
+        case JMResourceViewerStateMaximizedDashlet: {
             break;
         }
-        case JMReportViewerStateResourceFailed: {
+        case JMResourceViewerStateLoading: {
+            break;
+        }
+        case JMResourceViewerStateLoadingForPrint: {
+            break;
+        }
+        case JMResourceViewerStateResourceFailed: {
             [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
             [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
             break;
         }
-        case JMReportViewerStateResourceReady: {
+        case JMResourceViewerStateResourceReady: {
             break;
         }
-        case JMReportViewerStateResourceNotExist: {
+        case JMResourceViewerStateResourceNotExist: {
             [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
             [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
             break;
         }
-        case JMReportViewerStateResourceOnWExternalWindow: {
+        case JMResourceViewerStateResourceOnWExternalWindow: {
             break;
         }
-        case JMReportViewerStateNotVisible: {
+        case JMResourceViewerStateNotVisible: {
             break;
         }
-        case JMReportViewerStateNestedResource: {
+        case JMResourceViewerStateNestedResource: {
             [self updatePageForToolbarState:JMResourceViewerToolbarStateBottomHidden];
             [self updatePageForToolbarState:JMResourceViewerToolbarStateTopHidden];
             break;
@@ -191,7 +208,7 @@
     if ([URL.host isEqualToString:serverURL.host]) {
         NSURLRequest *request = [NSURLRequest requestWithURL:URL];
         [((JMReportViewerVC *)self.controller).configurator.webEnvironment.webView loadRequest:request];
-        [self setupPageForState:JMReportViewerStateNestedResource];
+        [self setupPageForState:JMResourceViewerStateNestedResource];
     } else {
         if (URL && [[UIApplication sharedApplication] canOpenURL:URL]) {
             [[UIApplication sharedApplication] openURL:URL];
@@ -210,17 +227,17 @@
 
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     [((JMReportViewerVC *)self.controller).configurator.webEnvironment.webView loadRequest:request];
-    [self setupPageForState:JMReportViewerStateNestedResource];
+    [self setupPageForState:JMResourceViewerStateNestedResource];
 }
 
 - (void)hyperlinksManagerNeedShowLoading:(JMResourceViewerHyperlinksManager *__nullable)manager
 {
-    [self setupPageForState:JMReportViewerStateLoading];
+    [self setupPageForState:JMResourceViewerStateLoading];
 }
 
 - (void)hyperlinksManagerNeedHideLoading:(JMResourceViewerHyperlinksManager *__nullable)manager
 {
-    [self setupPageForState:JMReportViewerStateResourceReady];
+    [self setupPageForState:JMResourceViewerStateResourceReady];
 }
 
 - (void)hyperlinksManager:(JMResourceViewerHyperlinksManager *__nullable)manager needShowOpenInMenuForLocalResourceFromURL:(NSURL *__nullable)URL

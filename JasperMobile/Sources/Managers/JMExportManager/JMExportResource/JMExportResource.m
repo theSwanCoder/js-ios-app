@@ -32,7 +32,6 @@
 @implementation JMExportResource
 - (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup format:(NSString *)format
 {
-#warning NEED CHECK RESOURCELOOKUP COPYING!!
     self = [super initWithResourceLookup:[resourceLookup copy]];
     if (self) {
         self.format = format;
