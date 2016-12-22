@@ -417,7 +417,6 @@
 		BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */; };
 		BD6DB2A01C981E5F002DEFDF /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */; };
 		BDA6165F1E0ABEB600B44C75 /* JMResourceViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA6165E1E0ABEB600B44C75 /* JMResourceViewerConfigurator.m */; };
-		BDA616661E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA616651E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.m */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8B9ED1B57D90B00758441 /* JMThemesManager.m */; };
@@ -1054,8 +1053,6 @@
 		BD6DB29F1C981E5F002DEFDF /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		BDA6165D1E0ABEB600B44C75 /* JMResourceViewerConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceViewerConfigurator.h; sourceTree = "<group>"; };
 		BDA6165E1E0ABEB600B44C75 /* JMResourceViewerConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceViewerConfigurator.m; sourceTree = "<group>"; };
-		BDA616641E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardPrintPrepearingTask.h; sourceTree = "<group>"; };
-		BDA616651E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardPrintPrepearingTask.m; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -1573,7 +1570,6 @@
 		0886625D1DF02D0400B8009B /* JMResourceViewerPrintManager */ = {
 			isa = PBXGroup;
 			children = (
-				BDA616631E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask */,
 				0886625E1DF02D0400B8009B /* JMResourceViewerPrintManager.h */,
 				0886625F1DF02D0400B8009B /* JMResourceViewerPrintManager.m */,
 			);
@@ -3793,15 +3789,6 @@
 			path = JMResourceViewerConfigurator;
 			sourceTree = "<group>";
 		};
-		BDA616631E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask */ = {
-			isa = PBXGroup;
-			children = (
-				BDA616641E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.h */,
-				BDA616651E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.m */,
-			);
-			path = JMDashboardPrintPrepearingTask;
-			sourceTree = "<group>";
-		};
 		BDABBD231A41D8CC00EDA100 /* RNCachingURLProtocol */ = {
 			isa = PBXGroup;
 			children = (
@@ -4714,7 +4701,6 @@
 				A14788CFC02FE10C3B77213E /* JMFavorites+Helpers.m in Sources */,
 				A14787F66450947BD9F35A1E /* JMSavedResources+Helpers.m in Sources */,
 				A1478AF726712130E4DF974A /* JMServerProfile+Helpers.m in Sources */,
-				BDA616661E0AEC5300B44C75 /* JMDashboardPrintPrepearingTask.m in Sources */,
 				A1478005B3B1C5EA078F8199 /* JMResource.m in Sources */,
 				0886630A1DF02D0400B8009B /* JMFiltersVCResult.m in Sources */,
 				A1478EAB974E0D8B2645494C /* JMScheduleInfoViewController.m in Sources */,
