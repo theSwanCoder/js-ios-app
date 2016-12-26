@@ -88,6 +88,9 @@
                   Identifier = "JMBaseUITestCase">
                </Test>
                <Test
+                  Identifier = "JMCreateSchedulePageUITests">
+               </Test>
+               <Test
                   Identifier = "JMDashboardInfoDialogUITests">
                </Test>
                <Test
@@ -101,6 +104,9 @@
                </Test>
                <Test
                   Identifier = "JMDashletPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMEditSchedulePageUITests">
                </Test>
                <Test
                   Identifier = "JMFavoriteInfoPageUITests">
@@ -161,6 +167,12 @@
                </Test>
                <Test
                   Identifier = "JMSavedItemsPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMScheduleInfoPageUITests">
+               </Test>
+               <Test
+                  Identifier = "JMSchedulesPageUITests">
                </Test>
                <Test
                   Identifier = "JMServerProfilesUITests">
