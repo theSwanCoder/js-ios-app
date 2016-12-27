@@ -41,4 +41,7 @@
 - (void)printResource:(JMResource * __nonnull)resource
  prepearingCompletion:(void(^ __nullable)(void))prepearingCompletion
       printCompletion:(void(^ __nullable)(void))printCompletion;
+
+- (void)cancel;
+
 @end

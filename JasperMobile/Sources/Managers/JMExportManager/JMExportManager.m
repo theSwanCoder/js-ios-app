@@ -28,6 +28,7 @@
 
 #import "JMExportManager.h"
 #import "JMExportTask.h"
+#import "JMSavedResources+Helpers.h"
 
 @interface JMExportManager()
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
@@ -56,9 +57,37 @@
 }
 
 #pragma mark - Public API
-- (void)addExportTask:(JMExportTask *)task
+- (void)saveResourceWithTask:(JMExportTask *)newTask
 {
-    [self.operationQueue addOperation:task];
+    [newTask addSavingCompletionBlock:^(JMExportTask * _Nonnull task, NSURL * _Nullable savedResourceFolderURL, NSError * _Nullable error) {
+        if ([task isCancelled]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kJMExportedResourceDidCancelNotification object:task.exportResource userInfo:nil];
+        } else {
+            if (error) {
+                if (error.code == JSSessionExpiredErrorCode) {
+                    [JMUtils showLoginViewAnimated:YES completion:nil];
+                } else {
+                    [JMUtils presentAlertControllerWithError:error completion:nil];
+                }
+            } else if(savedResourceFolderURL){
+                [JMSavedResources addResource:task.exportResource sourcesURL:savedResourceFolderURL];
+            }
+
+            [[NSNotificationCenter defaultCenter] postNotificationName:kJMExportedResourceDidLoadNotification object:task.exportResource userInfo:nil];
+            
+            UILocalNotification* notification = [UILocalNotification new];
+            notification.fireDate = [NSDate date];
+            notification.alertBody = task.exportResource.resourceLookup.label;
+            [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        }
+    }];
+    
+    [self.operationQueue addOperation:newTask];
+}
+
+- (void)addExportTask:(JMExportTask *)newTask
+{
+    [self.operationQueue addOperation:newTask];
 }
 
 - (void)cancelAll

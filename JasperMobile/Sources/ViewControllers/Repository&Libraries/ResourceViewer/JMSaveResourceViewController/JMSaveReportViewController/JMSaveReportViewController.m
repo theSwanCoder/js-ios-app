@@ -168,6 +168,19 @@ NSString * const kJMSaveResourcePageRangeCellIdentifier = @"PageRangeCell";
     [self reloadSectionForType:JMSaveResourceSectionTypePageRange];
 }
 
+- (void)verifyExportDataWithCompletion:(void(^)(BOOL success))completion
+{
+    __weak typeof(self) weakSelf = self;
+    [super verifyExportDataWithCompletion:^(BOOL success) {
+        if (success) {
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf verifyRangePagesWithCompletion:completion];
+        } else{
+            completion(NO);
+        }
+    }];
+}
+
 - (void)verifyRangePagesWithCompletion:(void(^)(BOOL success))completion
 {
     BOOL isNotPDF = ![self.selectedFormat isEqualToString:kJS_CONTENT_TYPE_PDF];
@@ -215,7 +228,7 @@ NSString * const kJMSaveResourcePageRangeCellIdentifier = @"PageRangeCell";
                                                                      name:self.resourceName
                                                                    format:self.selectedFormat
                                                                     pages:self.pagesRange];
-    [[JMExportManager sharedInstance] addExportTask:task];
+    [[JMExportManager sharedInstance] saveResourceWithTask:task];
     
     [super saveResource];
 }

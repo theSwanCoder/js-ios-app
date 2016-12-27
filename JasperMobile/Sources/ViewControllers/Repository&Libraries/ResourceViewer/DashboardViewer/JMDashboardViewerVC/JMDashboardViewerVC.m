@@ -196,7 +196,11 @@
 
 - (void)stateManagerWillCancel:(JMResourceViewerStateManager *)stateManager
 {
-    [self cancelAction];
+    if (stateManager.state == JMResourceViewerStateLoadingForPrint) {
+        [self.configurator.printManager cancel];
+    } else {
+        [self cancelAction];
+    }
 }
 
 - (void)stateManagerWillBackFromNestedResource:(JMResourceViewerStateManager *)stateManager

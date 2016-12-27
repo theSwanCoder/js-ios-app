@@ -49,23 +49,40 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-
-    [self addObsevers];
+    [self addObservers];
 }
 
-
 #pragma mark - Notifications
-- (void)addObsevers
+- (void)addObservers
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportLoaderDidSetReport:)
+                                                 name:JSReportLoaderDidSetReportNotification
+                                               object:nil];
+}
+
+- (void)reportLoaderDidSetReport:(NSNotification *)notification
+{
+    [self addObseversForReport:notification.object];
+}
+
+- (void)addObseversForReport:(JSReport *)report
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:JSReportCurrentPageDidChangeNotification
+                                                  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportLoaderDidChangeCurrentPage:)
                                                  name:JSReportCurrentPageDidChangeNotification
-                                               object:nil]; // TODO: restrict object with an correct report object
+                                               object:report];
 
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:JSReportPartsDidUpdateNotification
+                                                  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportDidUpdateParts:)
                                                  name:JSReportPartsDidUpdateNotification
-                                               object:nil]; // TODO: restrict object with an correct report object
+                                               object:report];
 }
 
 - (void)reportLoaderDidChangeCurrentPage:(NSNotification *)notification

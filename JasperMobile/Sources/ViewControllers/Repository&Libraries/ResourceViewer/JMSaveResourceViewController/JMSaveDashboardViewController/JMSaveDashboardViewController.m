@@ -53,7 +53,7 @@
 - (void) saveResource
 {
     JMDashboardExportTask *task = [[JMDashboardExportTask alloc] initWithDashboard:self.dashboard name:self.resourceName format:self.selectedFormat];
-    [[JMExportManager sharedInstance] addExportTask:task];
+    [[JMExportManager sharedInstance] saveResourceWithTask:task];
     
     [super saveResource];
 }

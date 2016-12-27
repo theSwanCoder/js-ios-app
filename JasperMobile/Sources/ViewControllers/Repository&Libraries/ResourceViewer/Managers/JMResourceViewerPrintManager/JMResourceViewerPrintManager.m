@@ -33,14 +33,16 @@
 #import "NSObject+Additions.h"
 #import "JMThemesManager.h"
 #import "JMConstants.h"
+#import "JMReportExportTask.h"
+#import "JMDashboardExportTask.h"
+#import "JMExportManager.h"
 
 @interface JMResourceViewerPrintManager() <UIPrintInteractionControllerDelegate>
 @property (nonatomic, strong) JMResource *resource;
 @property (nonatomic, strong) UINavigationController *printNavController;
 @property (nonatomic, assign) CGSize printSettingsPreferredContentSize;
 
-@property (nonatomic, strong) id saver;
-
+@property (nonatomic, weak) JMExportTask *currentExportTask;
 @end
 
 @implementation JMResourceViewerPrintManager
@@ -51,6 +53,8 @@
  prepearingCompletion:(void(^ __nullable)(void))prepearingCompletion
       printCompletion:(void(^ __nullable)(void))printCompletion
 {
+    NSAssert(!self.currentExportTask, @"Not finished printing task!!!");
+    
     self.resource = resource;
     self.printSettingsPreferredContentSize = CGSizeMake(540, 580);
 
@@ -89,6 +93,11 @@
     }];
 }
 
+- (void)cancel
+{
+    [[JMExportManager sharedInstance] cancelTask:self.currentExportTask];
+}
+
 #pragma mark - Helpers
 
 - (void)preparePreviewForPrintWithCompletion:(void(^)(id printItem, NSError *error))completion
@@ -104,16 +113,8 @@
 
 - (void)cleaningUpAfterPrintingItem:(id)printItem
 {
-    if (self.resource.type == JMResourceTypeReport) {
-        if ([printItem isKindOfClass:[NSURL class]]) {
-            NSURL *resourceURL = printItem;
-            [self removeResourceWithURL:resourceURL];
-        }
-    } else if (self.resource.type == JMResourceTypeDashboard) {
-        if ([printItem isKindOfClass:[NSURL class]]) {
-            NSURL *resourceURL = printItem;
-            [self removeResourceWithURL:resourceURL];
-        }
+    if ((self.resource.type == JMResourceTypeReport || self.resource.type == JMResourceTypeDashboard) && [printItem isKindOfClass:[NSURL class]]) {
+        [self removeResourceWithURL:printItem];
     } else {
         // TODO: extend for other resources
     }
@@ -122,26 +123,25 @@
 - (void)prepareReportForPrintingWithCompletion:(void(^)(NSURL *resourceURL, NSError *error))completion
 {
     JSReport *report = [self.resource modelOfResource];
-    JSReportSaver *reportSaver = [[JSReportSaver alloc] initWithReport:report
-                                                            restClient:self.restClient];
-
     NSString *reportName = [self tempResourceName];
-    [reportSaver saveReportWithName:reportName
-                             format:kJS_CONTENT_TYPE_PDF
-                         pagesRange:[JSReportPagesRange allPagesRange]
-                         completion:^(NSURL * _Nullable savedReportURL, NSError * _Nullable error) {
-                             if (error) {
-                                 if (completion) {
-                                     completion(nil, error);
-                                 }
-                             } else {
-                                 NSString *fullReportName = [reportName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
-                                 NSURL *reportURL = [savedReportURL URLByAppendingPathComponent:fullReportName];
-                                 if (completion) {
-                                     completion(reportURL, nil);
-                                 }
-                             }
-                         }];
+    JMReportExportTask *task = [[JMReportExportTask alloc] initWithReport:report
+                                                                     name:reportName
+                                                                   format:kJS_CONTENT_TYPE_PDF
+                                                                    pages:[JSReportPagesRange allPagesRange]];
+    
+    [task addSavingCompletionBlock:^(JMExportTask * _Nonnull task, NSURL * _Nullable savedResourceFolderURL, NSError * _Nullable error) {
+        if (completion) {
+            if (error) {
+                completion(nil, error);
+            } else {
+                NSString *fullReportName = [reportName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
+                NSURL *reportURL = [savedResourceFolderURL URLByAppendingPathComponent:fullReportName];
+                completion(reportURL, nil);
+            }
+        }
+    }];
+    [[JMExportManager sharedInstance] addExportTask:task];
+    self.currentExportTask = task;
 }
 
 - (void)prepareDashboardForPrintingWithCompletion:(void(^)(NSURL *resourceURL, NSError *error))completion
@@ -152,31 +152,28 @@
         }
     } else {
         JSDashboard *dashboard = [self.resource modelOfResource];
-        JSDashboardSaver *dashboardSaver = [[JSDashboardSaver alloc] initWithDashboard:dashboard
-                                                                            restClient:self.restClient];
-        self.saver = dashboardSaver;
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            NSString *dashboardName = [self tempResourceName];
-            [dashboardSaver saveDashboardWithName:dashboardName
-                                           format:kJS_CONTENT_TYPE_PDF
-                                       completion:^(NSURL * _Nullable savedDashboardFolderURL, NSError * _Nullable error) {
-                                           if (error) {
-                                               if (completion) {
-                                                   if (self.userPrepareBlock) {
-                                                       completion(self.userPrepareBlock(), nil);
-                                                   } else  {
-                                                       completion(nil, error);
-                                                   }
-                                               }
-                                           } else {
-                                               NSString *fullResourceName = [dashboardName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
-                                               NSURL *resourceURL = [savedDashboardFolderURL URLByAppendingPathComponent:fullResourceName];
-                                               if (completion) {
-                                                   completion(resourceURL, nil);
-                                               }
-                                           }
-                                       }];
+        NSString *dashboardName = [self tempResourceName];
+        JMDashboardExportTask *task = [[JMDashboardExportTask alloc] initWithDashboard:dashboard
+                                                                                  name:dashboardName
+                                                                                format:kJS_CONTENT_TYPE_PDF];
+        
+        [task addSavingCompletionBlock:^(JMExportTask * _Nonnull task, NSURL * _Nullable savedResourceFolderURL, NSError * _Nullable error) {
+            if (completion) {
+                if (error) {
+                    if (self.userPrepareBlock) {
+                        completion(self.userPrepareBlock(), nil);
+                    } else  {
+                        completion(nil, error);
+                    }
+                } else {
+                    NSString *fullResourceName = [dashboardName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
+                    NSURL *resourceURL = [savedResourceFolderURL URLByAppendingPathComponent:fullResourceName];
+                    completion(resourceURL, nil);
+                }
+            }
         }];
+        [[JMExportManager sharedInstance] addExportTask:task];
+        self.currentExportTask = task;
     }
 }
 

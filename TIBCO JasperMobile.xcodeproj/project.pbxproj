@@ -1335,13 +1335,13 @@
 		088662221DF02D0400B8009B /* ResourceViewer */ = {
 			isa = PBXGroup;
 			children = (
+				088662461DF02D0400B8009B /* Helpers */,
+				088662501DF02D0400B8009B /* Managers */,
 				BDA6165C1E0ABEB600B44C75 /* JMResourceViewerConfigurator */,
 				0886632B1DF05DA000B8009B /* JMSaveResourceViewController */,
 				088662231DF02D0400B8009B /* BaseViewer */,
 				0886622A1DF02D0400B8009B /* ContentResourceViewer */,
 				0886622E1DF02D0400B8009B /* DashboardViewer */,
-				088662461DF02D0400B8009B /* Helpers */,
-				088662501DF02D0400B8009B /* Managers */,
 				088662781DF02D0400B8009B /* ReportViewer */,
 			);
 			path = ResourceViewer;

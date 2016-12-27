@@ -147,6 +147,8 @@
 
 - (void)cancelAction
 {
+    [((JMBaseResourceView *)self.controller.view).activityIndicator stopAnimating];
+
     if ([self.delegate respondsToSelector:@selector(stateManagerWillCancel:)]) {
         [self.delegate stateManagerWillCancel:self];
     }

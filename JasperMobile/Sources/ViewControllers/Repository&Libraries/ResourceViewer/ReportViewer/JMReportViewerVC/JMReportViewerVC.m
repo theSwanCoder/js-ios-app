@@ -37,9 +37,9 @@
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerInfoPageManager.h"
 #import "JMResourceViewerShareManager.h"
+#import "JMResourceViewerSessionManager.h"
 #import "PopoverView.h"
 #import "JMFiltersVCResult.h"
-#import "JMResourceViewerSessionManager.h"
 #import "JMFiltersNetworkManager.h"
 #import "JMRestReportLoader.h"
 #import "JMVisualizeReportLoader.h"
@@ -56,7 +56,6 @@
 #import "JMReportViewerStateManager.h"
 
 @interface JMReportViewerVC () <JMSaveResourceViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
-@property (nonatomic, strong) JMResourceViewerSessionManager * __nonnull sessionManager;
 // TODO: temporary solution, remove in the next release
 @property (nonatomic, strong) JMFiltersNetworkManager *filtersNetworkManager;
 @property (nonatomic, assign) BOOL shouldShowFiltersActionInMenu;
@@ -138,15 +137,14 @@
 
 - (void)setupSessionManager
 {
-    self.sessionManager = [self createSessionManager];
-    self.sessionManager.controller = self;
+    self.configurator.sessionManager.controller = self;
 
     __weak typeof(self) weakSelf = self;
-    self.sessionManager.cleanAction = ^{
+    self.configurator.sessionManager.cleanAction = ^{
         __strong typeof(self) strongSelf = weakSelf;
         [strongSelf.configurator reset];
     };
-    self.sessionManager.executeAction = ^{
+    self.configurator.sessionManager.executeAction = ^{
         __strong typeof(self) strongSelf = weakSelf;
         [[strongSelf reportLoader] resetWithCompletion:^{
             [strongSelf.configurator setup];
@@ -156,7 +154,7 @@
             [strongSelf startResourceViewing];
         }];
     };
-    self.sessionManager.exitAction = ^{
+    self.configurator.sessionManager.exitAction = ^{
         __strong typeof(self) strongSelf = weakSelf;
         [strongSelf exitAction];
     };
@@ -269,7 +267,7 @@
     [self addReportPropertiesObservers];
 }
 
-#pragma mark - JMResourceViewProtocol
+#pragma mark - JMResourceViewerProtocol
 - (UIView *)contentView
 {
     return [self webEnvironment].webView;
@@ -307,7 +305,12 @@
 
 - (void)stateManagerWillCancel:(JMResourceViewerStateManager *)stateManager
 {
-    [self exitAction];
+    if (stateManager.state == JMResourceViewerStateLoadingForPrint) {
+        [self.configurator.printManager cancel];
+    } else {
+        [self exitAction];
+    }
+
 }
 
 - (void)stateManagerWillBackFromNestedResource:(JMResourceViewerStateManager *)stateManager
@@ -574,11 +577,6 @@
     return (JMReportViewerExternalScreenManager *)self.configurator.externalScreenManager;
 }
 
-- (JMResourceViewerSessionManager *)createSessionManager
-{
-    return [JMResourceViewerSessionManager new];
-}
-
 - (BOOL)shouldWorkWithChartTypes
 {
     return [JMUtils isServerProEdition] && [JMUtils isServerVersionUpOrEqual6];
@@ -624,11 +622,11 @@
 
     switch (error.code) {
         case JSReportLoaderErrorTypeSessionDidExpired: {
-            [self.sessionManager handleSessionDidExpire];
+            [self.configurator.sessionManager handleSessionDidExpire];
             break;
         }
         case JSReportLoaderErrorTypeSessionDidRestore: {
-            [self.sessionManager handleSessionDidRestore];
+            [self.configurator.sessionManager handleSessionDidRestore];
             break;
         }
         case JSReportLoaderErrorTypeEmtpyReport:
@@ -816,7 +814,7 @@
     __weak __typeof(self) weakSelf = self;
     saveReportVC.sessionExpiredBlock = ^{
         __weak __typeof(self) strongSelf = weakSelf;
-        [strongSelf.sessionManager handleSessionDidExpire];
+        [strongSelf.configurator.sessionManager handleSessionDidExpire];
     };
 
     [self.navigationController pushViewController:saveReportVC animated:YES];

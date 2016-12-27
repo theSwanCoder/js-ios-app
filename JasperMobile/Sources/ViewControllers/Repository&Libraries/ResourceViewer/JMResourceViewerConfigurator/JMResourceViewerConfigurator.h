@@ -41,6 +41,7 @@
 @class JMResourceViewerHyperlinksManager;
 @class JMResourceViewerDocumentManager;
 @class JMResourceViewerExternalScreenManager;
+@class JMResourceViewerSessionManager;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -52,8 +53,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) JMResourceViewerShareManager *shareManager;
 @property (nonatomic, strong) JMResourceViewerHyperlinksManager *hyperlinksManager;
 @property (nonatomic, strong) JMResourceViewerDocumentManager *documentManager;
+@property (nonatomic, strong) JMResourceViewerSessionManager *sessionManager;
 @property (nonatomic, strong) JMResourceViewerExternalScreenManager *externalScreenManager;
 @property (nonatomic, assign) CGFloat viewportScaleFactor;
+
 
 - (instancetype)initWithWebEnvironment:(JMWebEnvironment *)webEnvironment;
 + (instancetype)configuratorWithWebEnvironment:(JMWebEnvironment *)webEnvironment;

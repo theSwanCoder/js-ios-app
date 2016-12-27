@@ -48,8 +48,14 @@
     self.currentPageField.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
     self.currentPageField.inputView = self.pickerView;
     self.currentPageField.inputAccessoryView = [self pickerToolbar];
-
-    [self addObsevers];
+    
+    if ([JMUtils isSystemVersionEqualOrUp9]) {
+        self.currentPageField.inputAssistantItem.leadingBarButtonGroups = @[];
+        self.currentPageField.inputAssistantItem.trailingBarButtonGroups = @[];
+    }
+    
+    self.countOfPages = NSNotFound;
+    [self addObservers];
 }
 
 - (void)dealloc
@@ -60,17 +66,36 @@
 }
 
 #pragma mark - Notifications
-- (void)addObsevers
+- (void)addObservers
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportLoaderDidSetReport:)
+                                                 name:JSReportLoaderDidSetReportNotification
+                                               object:nil];
+}
+
+- (void)reportLoaderDidSetReport:(NSNotification *)notification
+{
+    [self addObseversForReport:notification.object];
+}
+
+- (void)addObseversForReport:(JSReport *)report
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:JSReportCountOfPagesDidChangeNotification
+                                                  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportLoaderDidChangeCountOfPages:)
                                                  name:JSReportCountOfPagesDidChangeNotification
-                                               object:nil]; // TODO: restrict object with an correct report object
+                                               object:report];
 
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:JSReportCurrentPageDidChangeNotification
+                                                  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportLoaderDidChangeCurrentPage:)
                                                  name:JSReportCurrentPageDidChangeNotification
-                                               object:nil]; // TODO: restrict object with an correct report object
+                                               object:report];
 }
 
 - (void)reportLoaderDidChangeCountOfPages:(NSNotification *)notification

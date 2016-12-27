@@ -37,7 +37,6 @@
 #import "JMResource.h"
 #import "JMVIZWebEnvironment.h"
 #import "JMDashboardViewerStateManager.h"
-#import "JMResourceViewerSessionManager.h"
 #import "JMUtils.h"
 #import "NSObject+Additions.h"
 #import "JMDashboardViewerExternalScreenManager.h"
@@ -74,22 +73,9 @@
     }
 }
 
-- (JMResourceViewerSessionManager *)sessionManager
-{
-    if (!_sessionManager) {
-        _sessionManager = [self createSessionManager];
-    }
-    return _sessionManager;
-}
-
 - (JMResourceViewerStateManager *)createStateManager
 {
     return [JMDashboardViewerStateManager new];
-}
-
-- (JMResourceViewerSessionManager *)createSessionManager
-{
-    return [JMResourceViewerSessionManager new];
 }
 
 - (JMDashboardViewerExternalScreenManager *)createExternalScreenManager

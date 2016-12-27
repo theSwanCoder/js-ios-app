@@ -39,6 +39,7 @@
 @interface JMExportManager : NSObject
 + (instancetype)sharedInstance;
 
+- (void)saveResourceWithTask:(JMExportTask *)task;
 - (void)addExportTask:(JMExportTask *)task;
 
 - (void)cancelAll;
@@ -46,8 +47,6 @@
 - (void)cancelTaskForResource:(JMExportResource *)resource;
 
 - (NSArray <JMExportResource *> *)exportedResources;
-
-- (JMExportTask *)taskForResource:(JMExportResource *)resource;
 
 + (JMExportResource *)exportResourceWithName:(NSString *)resourceName format:(NSString *)reportFormat;
 

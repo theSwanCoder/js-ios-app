@@ -33,11 +33,22 @@
  */
 
 #import "JMExportResource.h"
+@class JMExportTask;
 
-@interface JMExportTask : NSOperation
-@property (nonatomic, strong, readonly) JMExportResource *exportResource;
+typedef void(^JMSavingCompletion)(JMExportTask * _Nonnull task, NSURL * _Nullable savedResourceFolderURL, NSError * _Nullable error);
 
-- (instancetype)initWithResource:(JMExportResource *)resource;
-+ (instancetype)taskWithResource:(JMExportResource *)resource;
+@interface JMExportTask : NSOperation {
+    NSURL *_savedResourceFolderURL;
+    NSError *_savingError;
+}
+
+@property (nonatomic, strong, nonnull, readonly) JMExportResource *exportResource;
+
+- (nonnull instancetype)initWithResource:(nonnull JMExportResource *)resource;
++ (nonnull instancetype)taskWithResource:(nonnull JMExportResource *)resource;
+
+- (void)completeOperation NS_REQUIRES_SUPER;
+
+- (void)addSavingCompletionBlock:(nonnull JMSavingCompletion)completionBlock;
 
 @end

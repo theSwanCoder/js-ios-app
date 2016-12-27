@@ -74,7 +74,7 @@ NSString * const kJMSavedResourcesDefaultOrganization = @"organization_1";
     NSError *error = [self moveResourceContentFromPath:[sourcesURL path] toPath:[JMSavedResources pathToFolderForSavedResource:savedResource] resourceType:resource.type];
     if (error) {
         NSLog(@"%@", [error localizedDescription]);
-        [[JMCoreDataManager sharedInstance] resetPersistentStore];
+        [[JMCoreDataManager sharedInstance].managedObjectContext reset];
         return nil;
     } else {
         [[JMCoreDataManager sharedInstance] save:nil];

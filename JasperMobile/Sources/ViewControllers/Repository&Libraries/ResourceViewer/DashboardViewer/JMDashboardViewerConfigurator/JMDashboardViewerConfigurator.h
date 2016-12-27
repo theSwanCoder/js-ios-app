@@ -34,10 +34,8 @@
 #import "JMResourceViewerConfigurator.h"
 
 @protocol JMDashboardLoader;
-@class JMResourceViewerSessionManager;
 
 @interface JMDashboardViewerConfigurator : JMResourceViewerConfigurator
 @property (nonatomic, strong, readonly, nonnull) id<JMDashboardLoader> dashboardLoader;
-@property (nonatomic, strong, nonnull) JMResourceViewerSessionManager *sessionManager;
 
 @end

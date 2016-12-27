@@ -66,7 +66,7 @@
 
 - (void) saveResource NS_REQUIRES_SUPER;
 
-- (void)verifyExportDataWithCompletion:(void(^)(BOOL success))completion;
+- (void)verifyExportDataWithCompletion:(void(^)(BOOL success))completion NS_REQUIRES_SUPER;
 
 - (JMSaveResourceSection *)sectionForType:(JMSaveResourceSectionType)sectionType;
 

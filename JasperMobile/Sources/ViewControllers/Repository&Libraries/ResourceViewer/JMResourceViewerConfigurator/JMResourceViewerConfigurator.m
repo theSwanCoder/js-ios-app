@@ -39,6 +39,7 @@
 #import "JMUtils.h"
 #import "NSObject+Additions.h"
 #import "JMResourceViewerExternalScreenManager.h"
+#import "JMResourceViewerSessionManager.h"
 
 @implementation JMResourceViewerConfigurator
 
@@ -131,6 +132,14 @@
     return _documentManager;
 }
 
+- (JMResourceViewerSessionManager *)sessionManager
+{
+    if (!_sessionManager) {
+        _sessionManager = [self createSessionManager];
+    }
+    return _sessionManager;
+}
+
 - (JMResourceViewerExternalScreenManager *)externalScreenManager
 {
     if (!_externalScreenManager) {
@@ -169,6 +178,11 @@
 - (JMResourceViewerDocumentManager *)createDocumentManager
 {
     return [JMResourceViewerDocumentManager new];
+}
+
+- (JMResourceViewerSessionManager *)createSessionManager
+{
+    return [JMResourceViewerSessionManager new];
 }
 
 - (JMResourceViewerExternalScreenManager *)createExternalScreenManager
