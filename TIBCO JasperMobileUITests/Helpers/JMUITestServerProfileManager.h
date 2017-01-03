@@ -10,4 +10,5 @@
 @interface JMUITestServerProfileManager : NSObject
 @property (nonatomic, strong) JMUITestServerProfile *testProfile;
 + (instancetype)sharedManager;
+- (void)switchToDemoProfile;
 @end
