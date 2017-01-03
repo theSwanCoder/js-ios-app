@@ -221,7 +221,7 @@
     __weak __typeof(self) weakSelf = self;
     ((JMReportViewerVC *)self.controller).configurator.stateManager.openDocumentActionBlock = ^{
         __typeof(self) strongSelf = weakSelf;
-        ((JMReportViewerVC *)strongSelf.controller).configurator.documentManager.controller = weakSelf.controller;
+        ((JMReportViewerVC *)strongSelf.controller).configurator.documentManager.controller = strongSelf.controller;
         [((JMReportViewerVC *)strongSelf.controller).configurator.documentManager showOpenInMenuForResourceWithURL:URL];
     };
 

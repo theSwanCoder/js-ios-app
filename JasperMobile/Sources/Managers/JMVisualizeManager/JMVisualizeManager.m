@@ -80,10 +80,16 @@
     } else {
         htmlFileName = @"resource_viewer_rest";
     }
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:htmlFileName ofType:@"html"];
-    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+    NSBundle *bundle = [NSBundle bundleForClass:self.class];
+    NSString *htmlPath = [bundle pathForResource:htmlFileName
+                                          ofType:@"html"];
+    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath
+                                                     encoding:NSUTF8StringEncoding
+                                                        error:nil];
     // If need we can add some dependencies like scripts, styles and so on.
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"STATIC_DEPENDENCIES" withString:@""];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"STATIC_DEPENDENCIES"
+                                                       withString:@""];
+    NSAssert(htmlString != nil, @"HTML page wasn't found");
     return htmlString;
 }
 

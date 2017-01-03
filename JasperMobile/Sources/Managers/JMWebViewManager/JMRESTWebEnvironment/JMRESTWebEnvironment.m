@@ -35,58 +35,6 @@
 
 @implementation JMRESTWebEnvironment
 
-- (NSOperation *__nullable)taskForPreparingWebView
-{
-    NSString *htmlStringPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer_rest" ofType:@"html"];
-    NSString *htmlString = [NSString stringWithContentsOfFile:htmlStringPath encoding:NSUTF8StringEncoding error:nil];
-
-    // add static dependencies
-    // fusion chart dependencies need to be loaded first
-    NSString *jrsURI = self.restClient.serverProfile.serverUrl;
-    NSString *staticDependencies = @"";
-    staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/FusionCharts.js\"></script>", jrsURI];
-//    staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/jquery.min.js\"></script>", jrsURI];
-    staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/FusionCharts.HC.js\"></script>", jrsURI];
-    staticDependencies = [staticDependencies stringByAppendingFormat:@"<script type=\"text/javascript\" src=\"%@/fusion/maps/../widgets/FusionCharts.HC.Widgets.js\"></script>", jrsURI];
-
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"STATIC_DEPENDENCIES" withString:staticDependencies];
-
-    __weak __typeof(self) weakSelf = self;
-    JMWebEnvironmentLoadingTask *loadingTask = [JMWebEnvironmentLoadingTask taskWithRequestExecutor:self.requestExecutor
-                                                                                         HTMLString:htmlString
-                                                                                            baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]
-                                                                                         completion:^{
-                                                                                             __strong __typeof(self) strongSelf = weakSelf;
-                                                                                             strongSelf.cookiesState = JMWebEnvironmentCookiesStateValid;
-                                                                                         }];
-    return loadingTask;
-}
-
-- (NSOperation *__nullable)taskForPreparingEnvironment
-{
-    JMJavascriptRequest *requireJSLoadRequest = [JMJavascriptRequest requestWithCommand:@"JasperMobile.Helper.loadScripts"
-                                                                            inNamespace:JMJavascriptNamespaceDefault
-                                                                             parameters:@{
-                                                                                     @"scriptURLs" : @[
-                                                                                             @"https://code.jquery.com/jquery.min.js"
-                                                                                     ]
-                                                                             }];
-    __weak  __typeof(self) weakSelf = self;
-    JMJavascriptRequestTask *requestTask = [JMJavascriptRequestTask taskWithRequestExecutor:self.requestExecutor
-                                                                                    request:requireJSLoadRequest
-                                                                                 completion:^(NSDictionary *params, NSError *error) {
-                                                                                     if (!weakSelf) {
-                                                                                         return;
-                                                                                     }
-                                                                                     if (error) {
-                                                                                         JMLog(@"Error of loading scripts: %@", error);
-                                                                                     } else {
-                                                                                         weakSelf.state = JMWebEnvironmentStateEnvironmentReady;
-                                                                                     }
-                                                                                 }];
-    return requestTask;
-}
-
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));

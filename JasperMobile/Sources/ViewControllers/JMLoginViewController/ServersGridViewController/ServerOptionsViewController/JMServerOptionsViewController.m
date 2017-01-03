@@ -41,7 +41,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (nonatomic, strong) JMServerOptionManager *serverOptionManager;
 @property (nonatomic, copy) NSArray <JMServerOption *>*serverOptions;
-@property (nonatomic, strong) JSRESTBase *restBase;
 @end
 
 @implementation JMServerOptionsViewController
@@ -127,7 +126,7 @@
 - (void)makeSessionObsolete
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    [[JMSessionManager sharedManager] obsolete];
+    [[JMSessionManager sharedManager] obsoleteSession];
 }
 
 #pragma mark - Custom Accessors

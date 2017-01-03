@@ -36,6 +36,12 @@
 @class JMJavascriptRequestExecutor;
 
 @interface JMWebEnvironmentUpdateCookiesTask : JMAsyncTask
-- (instancetype)initWithRESTClient:(JSRESTBase *)RESTClient requestExecutor:(JMJavascriptRequestExecutor *)requestExecutor cookies:(NSArray <NSHTTPCookie *>*)cookies competion:(void(^)(void))completion;
-+ (instancetype)taskWithRESTClient:(JSRESTBase *)RESTClient requestExecutor:(JMJavascriptRequestExecutor *)requestExecutor cookies:(NSArray <NSHTTPCookie *>*)cookies competion:(void(^)(void))completion;
+- (instancetype __nullable)initWithRESTClient:(JSRESTBase * __nonnull)RESTClient
+                              requestExecutor:(JMJavascriptRequestExecutor * __nonnull)requestExecutor
+                                      cookies:(NSArray <NSHTTPCookie *>* __nullable)cookies
+                                    competion:(void(^__nullable)(void))completion;
++ (instancetype __nullable)taskWithRESTClient:(JSRESTBase *__nonnull)RESTClient
+                              requestExecutor:(JMJavascriptRequestExecutor *__nonnull)requestExecutor
+                                      cookies:(NSArray <NSHTTPCookie *>*__nullable)cookies
+                                    competion:(void(^__nullable)(void))completion;
 @end

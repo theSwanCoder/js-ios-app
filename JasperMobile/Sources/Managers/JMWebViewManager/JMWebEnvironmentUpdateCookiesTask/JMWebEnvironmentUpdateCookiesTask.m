@@ -44,6 +44,8 @@
 {
     self = [super init];
     if (self) {
+        NSAssert(RESTClient != nil, @"REST Client is nil");
+        NSAssert(requestExecutor != nil, @"Request executor is nil");
         _RESTClient = RESTClient;
         _requestExecutor = requestExecutor;
         _cookies = cookies;
@@ -70,8 +72,9 @@
     JMLog(@"%@ - start updating cookies", self);
     __weak __typeof(self) weakSelf = self;
     [self updateCookiesWithCookies:self.cookies completion:^(BOOL success){
-        __weak __typeof(self) strongSelf = weakSelf;
+        __typeof(self) strongSelf = weakSelf;
         if (strongSelf.isCancelled) {
+            // TODO: add sending a canceling error
             return;
         }
         JMLog(@"%@ - end updating cookies", strongSelf);

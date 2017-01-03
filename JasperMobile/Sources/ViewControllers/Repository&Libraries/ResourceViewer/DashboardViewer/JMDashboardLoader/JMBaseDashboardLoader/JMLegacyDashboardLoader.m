@@ -87,6 +87,12 @@
     [self loadLegacyDashboardWithCompletion:completion];
 }
 
+- (void)reloadWithCompletion:(JMDashboardLoaderCompletion __nonnull) completion
+{
+    [self.webEnvironment clean];
+    [self loadLegacyDashboardWithCompletion:completion];
+}
+
 - (void)destroy
 {
     NSAssert(self.dashboard != nil, @"Dashboard is nil");

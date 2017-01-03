@@ -553,21 +553,33 @@ JasperMobile.REST.Report.API = {
         }
     },
     applyZoomForReport: function() {
-        var tableNode = document.getElementsByClassName("jrPage")[0];
-        if (tableNode.nodeName == "TABLE") {
-            document.body.innerHTML = "<div id='container'></div>";
-            var container = document.getElementById("container");
-            container.appendChild(tableNode);
-            var table = tableNode;
-            var scale = "scale(" + innerWidth / parseInt(table.style.width) + ")";
-            var origin = "50% 0%";
-            JasperMobile.Helper.updateTransformStyles(table, scale, origin);
-            JasperMobile.Callback.callback("JasperMobile.REST.Report.API.applyZoomForReport", {});
-        } else {
+        JasperMobile.Callback.log("Start 'applyZoomForReport'");
+        try {
+            var tableNode = document.getElementsByClassName("jrPage")[0];
+            JasperMobile.Callback.logObject("table nodes", document.getElementsByClassName("jrPage"));
+            if (tableNode.nodeName == "TABLE") {
+                JasperMobile.Callback.log("there is an jrPage");
+                document.body.innerHTML = "<div id='container'></div>";
+                var container = document.getElementById("container");
+                container.appendChild(tableNode);
+                var table = tableNode;
+                var scale = "scale(" + innerWidth / parseInt(table.style.width) + ")";
+                var origin = "50% 0%";
+                JasperMobile.Helper.updateTransformStyles(table, scale, origin);
+                JasperMobile.Callback.callback("JasperMobile.REST.Report.API.applyZoomForReport", {});
+            } else {
+                JasperMobile.Callback.callback("JasperMobile.REST.Report.API.applyZoomForReport", {
+                    "error" : {
+                        "code"    : "internal.error", // TODO: need error codes?
+                        "message" : "No table with class 'jrPage'."
+                    }
+                });
+            }
+        } catch(error) {
             JasperMobile.Callback.callback("JasperMobile.REST.Report.API.applyZoomForReport", {
                 "error" : {
                     "code"    : "internal.error", // TODO: need error codes?
-                    "message" : "No table with class 'jrPage'."
+                    "message" : error
                 }
             });
         }

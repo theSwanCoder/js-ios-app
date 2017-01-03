@@ -45,6 +45,7 @@
 {
     self = [super init];
     if (self) {
+        JMLog(@"%@SEL: '%@'", self, NSStringFromSelector(_cmd));
         _requestExecutor = requestExecutor;
         _request = request;
         _completion = [completion copy];
@@ -63,26 +64,35 @@
 
 - (void)main
 {
+    JMLog(@"%@SEL: '%@'", self, NSStringFromSelector(_cmd));
     if (self.isCancelled) {
         return;
     }
     NSString *commandString = self.request.fullCommand;
-    JMLog(@"%@: start execute operation: %@", self, commandString);
+    JMLog(@"start execute operation: %@", commandString);
     __weak __typeof(self) weakSelf = self;
-    JMLog(@"self.requestExecutor: %@", self.requestExecutor);
-    JMLog(@"self.request: %@", self.request);
     [self.requestExecutor sendJavascriptRequest:self.request
                                          completion:^(JMJavascriptResponse *response, NSError *error) {
                                              __typeof(self) strongSelf = weakSelf;
-                                             JMLog(@"%@: end execute operation: %@", strongSelf, commandString);
+                                             JMLog(@"%@end execute operation: %@", strongSelf, commandString);
                                              if (strongSelf.isCancelled) {
-                                                 return;
-                                             }
-                                             strongSelf.state = JMAsyncTaskStateFinished;
-                                             if (strongSelf.completion) {
-                                                 strongSelf.completion(response.parameters, error);
+                                                 if (strongSelf.completion) {
+                                                     strongSelf.completion(nil, [self createCancelTaskErrorWithErrorCode:JMJavascriptRequestErrorTypeCancel]);
+                                                 }
+                                             } else {
+                                                 strongSelf.state = JMAsyncTaskStateFinished;
+                                                 if (strongSelf.completion) {
+                                                     strongSelf.completion(response.parameters, error);
+                                                 }
                                              }
                                          }];
+}
+
+#pragma mark - Description
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@\nself.request: %@\nself.requestExecutor: %@\n", super.description, self.request, self.requestExecutor];
 }
 
 @end

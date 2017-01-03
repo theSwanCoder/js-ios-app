@@ -38,6 +38,7 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 
 @interface JMWebViewManager()
 @property (nonatomic, strong) NSMutableArray *webEnvironments;
+@property (nonatomic, strong, readwrite) NSArray *__nullable cookies;
 @end
 
 @implementation JMWebViewManager
@@ -83,7 +84,7 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 }
 
 #pragma mark - Custom Accessors
-- (NSArray *)cookies
+- (NSArray <NSHTTPCookie *>*)cookies
 {
     if(!_cookies) {
         _cookies = self.restClient.cookies;
@@ -92,10 +93,6 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
 }
 
 #pragma mark - Public API
-- (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier
-{
-    return [self reusableWebEnvironmentWithId:identifier flowType:JMResourceFlowTypeUndefined];
-}
 
 - (JMWebEnvironment * __nonnull)reusableWebEnvironmentWithId:(NSString * __nonnull)identifier flowType:(JMResourceFlowType)flowType
 {
@@ -121,6 +118,15 @@ NSString *const JMWebviewManagerDidResetWebviewsNotification = @"JMWebviewManage
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMWebEnvironment *webEnvironment = [self createNewWebEnvironmentWithId:nil flowType:flowType needReuse:NO];
     return webEnvironment;
+}
+
+// USE FOR TESTS ONLY
+- (void)updateCookiesWithCookies:(NSArray <NSHTTPCookie *>*)cookies
+{
+    self.cookies = cookies;
+    for (JMWebEnvironment *webEnvironment in self.webEnvironments) {
+        [webEnvironment updateCookiesInWebView:cookies];
+    }
 }
 
 #pragma mark - Private API

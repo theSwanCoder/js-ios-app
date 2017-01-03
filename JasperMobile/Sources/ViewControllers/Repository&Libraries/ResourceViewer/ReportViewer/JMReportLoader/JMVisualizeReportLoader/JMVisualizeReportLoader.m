@@ -423,14 +423,6 @@ initialDestination:(nullable JSReportDestination *)destination
         return;
     }
 
-
-    if (![self.webEnvironment canSendJavascriptRequest]) {
-        if (completion) {
-            completion();
-        }
-        return;
-    }
-
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.destroy"
                                                                inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters:nil];
@@ -539,18 +531,20 @@ initialDestination:(nullable JSReportDestination *)destination
     self.state = JSReportLoaderStateLoading;
 
     BOOL shouldUseCache = NO;
-    JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-    if (activeProfile.cacheReports.boolValue) {
-        shouldUseCache = YES;
-    }
+    // TODO: This code was disabled because an app is crushed under tests
+    // and anyway we don't use caching feature yet.
+//    JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+//    if (activeProfile.cacheReports.boolValue) {
+//        shouldUseCache = YES;
+//    }
 
     JMJavascriptRequest *request = [JMJavascriptRequest requestWithCommand:@"API.run"
                                                                inNamespace:JMJavascriptNamespaceVISReport
                                                                 parameters: @{
-                                                                        @"uri"        : self.report.reportURI,
-                                                                        @"params"     : [self configureParameters:parameters],
-                                                                        @"pages"      : pages,
-                                                                        @"is_for_6_0" : @([JMUtils isServerAmber]),
+                                                                        @"uri"            : self.report.reportURI,
+                                                                        @"params"         : [self configureParameters:parameters],
+                                                                        @"pages"          : pages,
+                                                                        @"is_for_6_0"     : @([JMUtils isServerAmber]),
                                                                         @"shouldUseCache" : @(shouldUseCache),
                                                                 }];
     __weak __typeof(self) weakSelf = self;
@@ -613,16 +607,14 @@ initialDestination:(nullable JSReportDestination *)destination
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(reportCompletedListenerId);
                                 JMLog(@"parameters: %@", params);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
 
                                 } else {
                                     // In this point report is ready
                                     if (params[@"components"]) {
-                                        NSArray <JSReportComponent *>*components = [weakSelf parseReportComponentsWithRawData:params[@"components"]];
-                                        weakSelf.report.reportComponents = components;
+                                        NSArray <JSReportComponent *>*components = [strongSelf parseReportComponentsWithRawData:params[@"components"]];
+                                        strongSelf.report.reportComponents = components;
                                     }
                                 }
                             }];
@@ -632,18 +624,16 @@ initialDestination:(nullable JSReportDestination *)destination
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(changeTotalPagesListenerId);
                                 JMLog(@"parameters: %@", params);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
 
                                 } else {
                                     // TODO: move into separate method
                                     NSInteger countOfPages = ((NSNumber *)params[@"pages"]).integerValue;
-                                    [weakSelf.report updateCountOfPages:countOfPages];
+                                    [strongSelf.report updateCountOfPages:countOfPages];
                                     // We need this because sometimes an event 'MultipageReport' hasn't been received.
-                                    if (countOfPages > 1 && !weakSelf.report.isMultiPageReport) {
-                                        [weakSelf.report updateIsMultiPageReport:YES];
+                                    if (countOfPages > 1 && !strongSelf.report.isMultiPageReport) {
+                                        [strongSelf.report updateIsMultiPageReport:YES];
                                     }
                                 }
                             }];
@@ -653,11 +643,9 @@ initialDestination:(nullable JSReportDestination *)destination
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(changePagesStateListenerId);
                                 JMLog(@"parameters: %@", params);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 NSString *locationString = params[@"page"];
-                                [weakSelf.report updateCurrentPage:locationString.integerValue];
+                                [strongSelf.report updateCurrentPage:locationString.integerValue];
                             }];
     NSString *bookmarsReadyListenerId = @"JasperMobile.Report.Event.bookmarksReady";
     [self.webEnvironment addListener:self
@@ -665,15 +653,13 @@ initialDestination:(nullable JSReportDestination *)destination
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(bookmarsReadyListenerId);
                                 JMLog(@"parameters: %@", params);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
                                     // TODO: handle error
                                 } else {
                                     if (params[@"bookmarks"]) {
-                                        NSArray *bookmarks = [weakSelf mapBookmarksFromParams:params[@"bookmarks"]];
-                                        weakSelf.report.bookmarks = bookmarks;
+                                        NSArray *bookmarks = [strongSelf mapBookmarksFromParams:params[@"bookmarks"]];
+                                        strongSelf.report.bookmarks = bookmarks;
                                     } else {
                                         // empty array;
                                     }
@@ -685,15 +671,13 @@ initialDestination:(nullable JSReportDestination *)destination
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(partsReadyListenerId);
                                 JMLog(@"parameters: %@", params);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
                                     // TODO: handle error
                                 } else {
                                     if (params[@"parts"]) {
-                                        NSArray *parts = [weakSelf mapReportPartsFromParams:params[@"parts"]];
-                                        weakSelf.report.parts = parts;
+                                        NSArray *parts = [strongSelf mapReportPartsFromParams:params[@"parts"]];
+                                        strongSelf.report.parts = parts;
                                     } else {
                                         // empty array;
                                     }
@@ -704,13 +688,11 @@ initialDestination:(nullable JSReportDestination *)destination
                           forEventId:mulitpageReportListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(mulitpageReportListenerId);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
                                     // TODO: handle error
                                 } else {
-                                    [weakSelf.report updateIsMultiPageReport:YES];
+                                    [strongSelf.report updateIsMultiPageReport:YES];
                                 }
                             }];
 
@@ -721,13 +703,11 @@ initialDestination:(nullable JSReportDestination *)destination
                           forEventId:reportExecutionLinkOptionListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(reportExecutionLinkOptionListenerId);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
-                                    [weakSelf handleHyperlinksError:error];
+                                    [strongSelf handleHyperlinksError:error];
                                 } else {
-                                    [weakSelf handleRunReportWithParameters:params];
+                                    [strongSelf handleRunReportWithParameters:params];
                                 }
                             }];
     NSString *localPageLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.LocalPage";
@@ -735,14 +715,12 @@ initialDestination:(nullable JSReportDestination *)destination
                           forEventId:localPageLinkOptionListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(localPageLinkOptionListenerId);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
-                                    [weakSelf handleHyperlinksError:error];
+                                    [strongSelf handleHyperlinksError:error];
                                 } else {
                                     NSString *locationString = params[@"destination"];
-                                    [weakSelf.report updateCurrentPage:locationString.integerValue];
+                                    [strongSelf.report updateCurrentPage:locationString.integerValue];
                                 }
                             }];
     NSString *localAnchorLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.LocalAnchor";
@@ -750,8 +728,9 @@ initialDestination:(nullable JSReportDestination *)destination
                           forEventId:localAnchorLinkOptionListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(localAnchorLinkOptionListenerId);
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
-                                    [weakSelf handleHyperlinksError:error];
+                                    [strongSelf handleHyperlinksError:error];
                                 }
                             }];
     NSString *referenceLinkOptionListenerId = @"JasperMobile.VIS.Report.Event.Link.Reference";
@@ -759,19 +738,18 @@ initialDestination:(nullable JSReportDestination *)destination
                           forEventId:referenceLinkOptionListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(referenceLinkOptionListenerId);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
-                                    [weakSelf handleHyperlinksError:error];
+                                    [strongSelf handleHyperlinksError:error];
                                 } else {
                                     NSString *locationString = params[@"destination"];
                                     if (locationString) {
-                                        if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                        if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
                                             JMHyperlink *hyperlink = [JMHyperlink new];
                                             hyperlink.type = JMHyperlinkTypeReference;
                                             hyperlink.href = locationString;
-                                            [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                            [strongSelf.delegate reportLoader:strongSelf
+                                                 didReceiveEventWithHyperlink:hyperlink];
                                         }
                                     }
                                 }
@@ -781,20 +759,19 @@ initialDestination:(nullable JSReportDestination *)destination
                           forEventId:remoteAnchorListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(remoteAnchorListenerId);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
-                                    [weakSelf handleHyperlinksError:error];
+                                    [strongSelf handleHyperlinksError:error];
                                 } else {
                                     JMLog(@"parameters: %@", params);
                                     NSString *href = params[@"location"];
                                     if (href) {
-                                        if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                        if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
                                             JMHyperlink *hyperlink = [JMHyperlink new];
                                             hyperlink.type = JMHyperlinkTypeRemoteAnchor;
                                             hyperlink.href = href;
-                                            [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                            [strongSelf.delegate reportLoader:strongSelf
+                                                 didReceiveEventWithHyperlink:hyperlink];
                                         }
                                     } else {
                                         // TODO: need handle this case?
@@ -806,20 +783,19 @@ initialDestination:(nullable JSReportDestination *)destination
                           forEventId:remotePageListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(remotePageListenerId);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __strong __typeof(self) strongSelf = weakSelf;
                                 if (error) {
-                                    [weakSelf handleHyperlinksError:error];
+                                    [strongSelf handleHyperlinksError:error];
                                 } else {
                                     JMLog(@"parameters: %@", params);
                                     NSString *href = params[@"location"];
                                     if (href) {
-                                        if ([weakSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
+                                        if ([strongSelf.delegate respondsToSelector:@selector(reportLoader:didReceiveEventWithHyperlink:)]) {
                                             JMHyperlink *hyperlink = [JMHyperlink new];
                                             hyperlink.type = JMHyperlinkTypeRemotePage;
                                             hyperlink.href = href;
-                                            [weakSelf.delegate reportLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                            [strongSelf.delegate reportLoader:strongSelf
+                                                 didReceiveEventWithHyperlink:hyperlink];
                                         }
                                     } else {
                                         // TODO: need handle this case?
@@ -971,6 +947,10 @@ initialDestination:(nullable JSReportDestination *)destination
         }
         case JMJavascriptRequestErrorTypeWindow: {
             errorCode = JSReportLoaderErrorTypeUndefined;
+            break;
+        }
+        case JMJavascriptRequestErrorTypeCancel: {
+            errorCode = JSReportLoaderErrorTypeLoadingCanceled;
             break;
         }
         default:

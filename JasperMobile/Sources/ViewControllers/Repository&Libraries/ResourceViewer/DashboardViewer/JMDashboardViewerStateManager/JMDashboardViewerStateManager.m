@@ -196,7 +196,7 @@
     __weak __typeof(self) weakSelf = self;
     ((JMDashboardViewerVC *)self.controller).configurator.stateManager.openDocumentActionBlock = ^{
         __typeof(self) strongSelf = weakSelf;
-        ((JMDashboardViewerVC *)strongSelf.controller).configurator.documentManager.controller = weakSelf.controller;
+        ((JMDashboardViewerVC *)strongSelf.controller).configurator.documentManager.controller = strongSelf.controller;
         [((JMDashboardViewerVC *)strongSelf.controller).configurator.documentManager showOpenInMenuForResourceWithURL:URL];
     };
 

@@ -58,8 +58,8 @@
         ((JMVIZWebEnvironment *)webEnvironment).visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
     } else {
         JMLog(@"run with REST");
-        _reportLoader = (id <JMReportLoaderProtocol>) [JMRestReportLoader loaderWithRestClient:self.restClient
-                                                                                webEnvironment:webEnvironment];
+        _reportLoader = [JMRestReportLoader loaderWithRestClient:self.restClient
+                                                  webEnvironment:webEnvironment];
     }
 }
 

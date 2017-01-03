@@ -42,6 +42,9 @@ typedef void(^JMWebEnvironmentLoadingCompletion)(BOOL isReady, NSError * __nulla
 - (BOOL)canSendJavascriptRequest;
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion;
+- (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
+                   completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
+             needSessionValid:(BOOL)needSessionValid;
 - (void)addListener:(id __nonnull)listener
          forEventId:(NSString * __nonnull)eventId
            callback:(JMWebEnvironmentRequestParametersCompletion __nonnull)callback;
@@ -77,10 +80,10 @@ typedef NS_ENUM(NSInteger, JMWebEnvironmentCookiesState) {
 @interface JMBaseWebEnvironment : NSObject <JMJavascriptRequestExecutionProtocol, JMWebEnvironmentLoadingProtocol>
 @property (nonatomic, assign) JMWebEnvironmentState state;
 @property (nonatomic, assign) JMWebEnvironmentCookiesState cookiesState;
-@property (nonatomic, strong, readonly) WKWebView * __nullable webView;
-@property (nonatomic, copy, readonly) NSString * __nonnull identifier;
+@property (nonatomic, strong, readonly, nullable) WKWebView *webView;
+@property (nonatomic, copy, readonly, nonnull) NSString *identifier;
 @property (nonatomic, assign, getter=isReusable) BOOL reusable; // TODO: remove
-@property (nonatomic, strong) JMJavascriptRequestExecutor * __nonnull requestExecutor;
+@property (nonatomic, strong, nullable) JMJavascriptRequestExecutor *requestExecutor;
 
 - (instancetype __nullable)initWithId:(NSString *__nonnull)identifier initialCookies:(NSArray *__nullable)cookies;
 + (instancetype __nullable)webEnvironmentWithId:(NSString *__nullable)identifier initialCookies:(NSArray *__nullable)cookies;
@@ -90,5 +93,6 @@ typedef NS_ENUM(NSInteger, JMWebEnvironmentCookiesState) {
 - (NSString *__nonnull)stateNameForState:(JMWebEnvironmentState)state;
 - (void)resetZoom;
 - (void)clean;
+- (void)cancel;
 - (void)reset;
 @end

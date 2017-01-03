@@ -36,9 +36,9 @@
 #import "UIView+Additions.h"
 
 @interface JMBaseWebEnvironment() <JMJavascriptRequestExecutorDelegate>
-@property (nonatomic, strong, readwrite) WKWebView * __nullable webView;
-@property (nonatomic, copy, readwrite) NSString * __nonnull identifier;
-@property (nonatomic, strong) NSOperationQueue *operationQueue;
+@property (nonatomic, strong, readwrite) WKWebView *webView;
+@property (nonatomic, copy, readwrite) NSString *identifier;
+@property (nonatomic, strong, nonnull) NSOperationQueue *operationQueue;
 @end
 
 @implementation JMBaseWebEnvironment
@@ -146,16 +146,18 @@
 
 - (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
                    completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
+             needSessionValid:(BOOL)needSessionValid
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     JMLog(@"request: %@", request.fullCommand);
     JMLog(@"state: %@", [self stateNameForState:self.state]);
     JMLog(@"cookies state: %@", [self stateNameForCookiesState:self.cookiesState]);
+    JMLog(@"operation queue operations: %@", self.operationQueue.operations);
 
     if (self.state == JMWebEnvironmentStateCancel) {
         // TODO: How handle this case
         NSError *error = [[NSError alloc] initWithDomain:@"Visualize Domain Error"
-                                                    code:JMJavascriptRequestErrorTypeUnexpected
+                                                    code:JMJavascriptRequestErrorTypeCancel
                                                 userInfo:@{
                                                         NSLocalizedDescriptionKey: @"All javascript requests were canceled"
                                                 }];
@@ -166,6 +168,12 @@
     }
 
     [self verifyWebEnvironmentState];
+
+    if (!needSessionValid) {
+        [self processRequest:request
+                  completion:completion];
+        return;
+    }
 
     switch(self.cookiesState) {
         case JMWebEnvironmentCookiesStateValid: {
@@ -195,6 +203,14 @@
             break;
         }
     }
+}
+
+- (void)sendJavascriptRequest:(JMJavascriptRequest *__nonnull)request
+                   completion:(JMWebEnvironmentRequestParametersCompletion __nullable)completion
+{
+    [self sendJavascriptRequest:request
+                     completion:completion
+               needSessionValid:YES];
 }
 
 - (void)verifyWebEnvironmentState
@@ -261,9 +277,17 @@
     self.state = JMWebEnvironmentStateEmptyWebView;
 }
 
+- (void)cancel
+{
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"operation queue operations: %@", self.operationQueue.operations);
+    [self.operationQueue cancelAllOperations];
+    JMLog(@"operation queue operations: %@", self.operationQueue.operations);
+    [self reset];
+}
+
 - (void)reset
 {
-    [self.operationQueue cancelAllOperations];
     [self resetZoom];
     [self.webView removeFromSuperview];
     // TODO: need reset requestExecutor because will be leak
@@ -314,11 +338,12 @@
     [self.operationQueue addOperation:[JMJavascriptRequestTask taskWithRequestExecutor:self.requestExecutor
                                                                                request:request
                                                                             completion:^(NSDictionary *params, NSError *error) {
+                                                                                __strong __typeof(self) strongSelf = weakSelf;
                                                                                 if (error.code == JMJavascriptRequestErrorTypeSessionDidExpire) {
                                                                                     JMLog(@"cookies are not valid");
-                                                                                    weakSelf.cookiesState = JMWebEnvironmentCookiesStateExpire;
+                                                                                    strongSelf.cookiesState = JMWebEnvironmentCookiesStateExpire;
                                                                                     if (completion) {
-                                                                                        completion(nil, [self createSessionDidExpireError]);
+                                                                                        completion(nil, [strongSelf createSessionDidExpireError]);
                                                                                     }
                                                                                 } else {
                                                                                     if (completion) {
@@ -356,8 +381,12 @@
 
 - (void)addOperationsForPreparingWebViewAndEnvironment
 {
-    [self.operationQueue addOperation:[self taskForPreparingWebView]];
-    [self.operationQueue addOperation:[self taskForPreparingEnvironment]];
+    if ([self taskForPreparingWebView]) {
+        [self.operationQueue addOperation:[self taskForPreparingWebView]];
+    }
+    if ([self taskForPreparingEnvironment]) {
+        [self.operationQueue addOperation:[self taskForPreparingEnvironment]];
+    }
 }
 
 - (void)addOperationsForPreparingWebEnvironment

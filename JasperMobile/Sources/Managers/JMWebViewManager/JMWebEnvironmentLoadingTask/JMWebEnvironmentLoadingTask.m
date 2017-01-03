@@ -106,6 +106,7 @@
                                                                  __typeof(self) strongSelf = weakSelf;
                                                                  JMLog(@"%@: Event was received: DOMContentLoaded", strongSelf);
                                                                  if (strongSelf.isCancelled) {
+                                                                     // TODO: add sending a canceling error
                                                                      return;
                                                                  }
                                                                  strongSelf.state = JMAsyncTaskStateFinished;

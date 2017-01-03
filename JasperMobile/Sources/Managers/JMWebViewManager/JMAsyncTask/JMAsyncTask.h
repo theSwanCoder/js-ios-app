@@ -38,6 +38,12 @@ typedef NS_ENUM(NSInteger, JMAsyncTaskState) {
     JMAsyncTaskStateFinished
 };
 
+typedef void(^JMAsyncTaskFinishBlock)(void);
+typedef void(^JMAsyncTaskExecutionBlock)(JMAsyncTaskFinishBlock);
+
 @interface JMAsyncTask : NSOperation
 @property (nonatomic) JMAsyncTaskState state;
+- (instancetype)initWithExecutionBlock:(JMAsyncTaskExecutionBlock)executionBlock;
++ (instancetype)taskWithExecutionBlock:(JMAsyncTaskExecutionBlock)executionBlock;
+- (NSError *)createCancelTaskErrorWithErrorCode:(NSInteger)errorCode;
 @end

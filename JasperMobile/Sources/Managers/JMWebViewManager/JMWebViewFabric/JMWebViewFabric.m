@@ -78,9 +78,14 @@
 
 - (WKUserScript *)jaspermobileScript
 {
-    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"vis_jaspermobile" ofType:@"js"];
-    NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
-
+    NSBundle *bundle = [NSBundle bundleForClass:self.class];
+    NSString *jaspermobilePath = [bundle pathForResource:@"vis_jaspermobile"
+                                                  ofType:@"js"];
+    NSAssert(jaspermobilePath != nil, @"JasperMobile path should not be nil");
+    NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath
+                                                             encoding:NSUTF8StringEncoding
+                                                                error:nil];
+    NSAssert(jaspermobileString != nil, @"JasperMobile should not be nil");
     WKUserScript *script = [[WKUserScript alloc] initWithSource:jaspermobileString
                                                   injectionTime:WKUserScriptInjectionTimeAtDocumentStart
                                                forMainFrameOnly:YES];

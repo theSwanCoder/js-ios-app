@@ -41,4 +41,6 @@
 
 - (void)verifyJasperMobileEnableWithCompletion:(void (^ __nonnull)(BOOL isEnable))completion;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
+// USE FOR TESTS ONLY
+- (void)updateCookiesInWebView:(NSArray <NSHTTPCookie *>* __nonnull)cookies;
 @end

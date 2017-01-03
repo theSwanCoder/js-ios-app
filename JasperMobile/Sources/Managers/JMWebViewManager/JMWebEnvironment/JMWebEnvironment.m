@@ -29,6 +29,7 @@
 #import "JMWebEnvironment.h"
 #import "JMUtils.h"
 #import "JMReportChartType.h"
+#import "JMWebEnvironmentUpdateCookiesTask.h"
 
 @interface JMWebEnvironment()
 
@@ -55,6 +56,16 @@
         BOOL isEnable = !error && isObject;
         completion(isEnable);
     }];
+}
+
+// USE FOR TESTS ONLY
+- (void)updateCookiesInWebView:(NSArray <NSHTTPCookie *>*)cookies
+{
+    JMWebEnvironmentUpdateCookiesTask *task = [JMWebEnvironmentUpdateCookiesTask taskWithRESTClient:self.restClient
+                                                                                    requestExecutor:self.requestExecutor
+                                                                                            cookies:cookies
+                                                                                          competion:nil];
+    [task start];
 }
 
 @end

@@ -50,7 +50,8 @@
 
 - (void) reset;
 
-- (void)obsolete;
+- (void)obsoleteSession;
+- (void)obsoleteSessionInWebView;
 
 - (void) logout;
 

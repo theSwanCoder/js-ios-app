@@ -59,12 +59,10 @@ NSString *const JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestE
         JMJavascriptEvent *windowOnErrorEvent = [JMJavascriptEvent eventWithIdentifier:@"JasperMobile.Events.Window.OnError"
                                                                               listener:self
                                                                               callback:^(JMJavascriptResponse *response, NSError *error) {
-                                                                                  if (!weakSelf) {
-                                                                                      return;
-                                                                                  }
-                                                                                  if ([weakSelf.delegate respondsToSelector:@selector(javascriptRequestExecutor:didReceiveError:)]) {
-                                                                                      [weakSelf.delegate javascriptRequestExecutor:weakSelf
-                                                                                                                   didReceiveError:error];
+                                                                                  __strong __typeof(self) strongSelf = weakSelf;
+                                                                                  if ([strongSelf.delegate respondsToSelector:@selector(javascriptRequestExecutor:didReceiveError:)]) {
+                                                                                      [strongSelf.delegate javascriptRequestExecutor:strongSelf
+                                                                                                                     didReceiveError:error];
                                                                                   }
                                                                               }];
         [self addListenerWithEvent:windowOnErrorEvent];
@@ -107,14 +105,12 @@ NSString *const JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestE
     __weak __typeof(self) weakSelf = self;
     [self.webView evaluateJavaScript:[request fullJavascriptRequestString]
                    completionHandler:^(id result, NSError *error) {
+                       __strong __typeof(self) strongSelf = weakSelf;
 //                       JMLog(@"request: %@", request);
 //                       JMLog(@"error: %@", error);
 //                       JMLog(@"result: %@", result);
-                       if (!weakSelf) {
-                           return;
-                       }
                        if (error) {
-                           [weakSelf.requestCompletions removeObjectForKey:request];
+                           [strongSelf.requestCompletions removeObjectForKey:request];
                            if (completion) {
                                completion(nil, error);
                            }

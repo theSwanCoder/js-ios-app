@@ -28,11 +28,15 @@
 #import "JMAsyncTask.h"
 #import "JMUtils.h"
 
+@interface JMAsyncTask()
+@property (nonatomic, copy) JMAsyncTaskExecutionBlock executionBlock;
+@end
+
 @implementation JMAsyncTask
 
 - (void)dealloc
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"%@SEL: '%@'", self, NSStringFromSelector(_cmd));
 }
 
 - (instancetype)init
@@ -42,6 +46,21 @@
         self.state = JMAsyncTaskStateReady;
     }
     return self;
+}
+
+- (instancetype)initWithExecutionBlock:(JMAsyncTaskExecutionBlock)executionBlock
+{
+    self = [super init];
+    if (self) {
+        self.state = JMAsyncTaskStateReady;
+        self.executionBlock = executionBlock;
+    }
+    return self;
+}
+
++ (instancetype)taskWithExecutionBlock:(JMAsyncTaskExecutionBlock)executionBlock
+{
+    return [[self alloc] initWithExecutionBlock:executionBlock];
 }
 
 #pragma mark - Custom Accessors
@@ -73,7 +92,7 @@
     return stringValue;
 }
 
-#pragma mark - Overridded Properties
+#pragma mark - Overrode Properties of 'NSOperation'
 
 - (BOOL)isReady
 {
@@ -89,28 +108,65 @@
 
 - (BOOL)isFinished
 {
-    BOOL isFinished = (self.state == JMAsyncTaskStateFinished);
+    JMLog(@"%@SEL: '%@'", self, NSStringFromSelector(_cmd));
+    BOOL isFinished = self.isCancelled || (self.state == JMAsyncTaskStateFinished);
     return isFinished;
 }
 
-#pragma mark - Overridded Methods
+#pragma mark - Overrode Methods of 'NSOperation'
 
 - (void)start
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    JMLog(@"%@SEL: '%@'", self, NSStringFromSelector(_cmd));
     if (self.isCancelled) {
-        self.state = JMAsyncTaskStateFinished;
         return;
     }
 
-    [self main];
     self.state = JMAsyncTaskStateExecuting;
+    [self main];
+}
+
+- (void)main
+{
+    JMLog(@"%@SEL: '%@'", self, NSStringFromSelector(_cmd));
+    if (self.isCancelled) {
+        return;
+    }
+    JMLog(@"Start async task");
+    if (self.executionBlock) {
+        __weak __typeof(self) weakSelf = self;
+        self.executionBlock(^{
+            JMLog(@"Finish async task");
+            __typeof(self) strongSelf = weakSelf;
+            strongSelf.state = JMAsyncTaskStateFinished;
+        });
+    }
 }
 
 - (void)cancel
 {
-    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    self.state = JMAsyncTaskStateFinished;
+    JMLog(@"%@SEL: '%@'", self, NSStringFromSelector(_cmd));
+    [super cancel];
+}
+
+#pragma mark - Common methods
+
+- (NSError *)createCancelTaskErrorWithErrorCode:(NSInteger)errorCode
+{
+    NSErrorDomain domain = @"JMAsyncTask Cancel Error";
+    NSError *error = [[NSError alloc] initWithDomain:domain
+                                                code:errorCode
+                                            userInfo:@{
+                                                    NSLocalizedDescriptionKey : @"Async task was canceled"
+                                            }];
+    return error;
+}
+
+#pragma mark - Description
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"\nself: %@\nstate: %@\nisCancelled: %@\n", super.description, [self stringValueForState:self.state], self.isCancelled ? @"YES" : @"NO"];
 }
 
 @end

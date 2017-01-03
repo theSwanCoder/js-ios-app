@@ -408,20 +408,19 @@
                           forEventId:remoteAnchorListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(remoteAnchorListenerId);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __typeof(self) strongSelf = weakSelf;
                                 if (error) {
-                                    [weakSelf handleHyperlinksError:error];
+                                    [strongSelf handleHyperlinksError:error];
                                 } else {
                                     JMLog(@"parameters: %@", params);
                                     NSString *href = params[@"location"];
                                     if (href) {
-                                        if ([weakSelf.delegate respondsToSelector:@selector(dashboardLoader:didReceiveEventWithHyperlink:)]) {
+                                        if ([strongSelf.delegate respondsToSelector:@selector(dashboardLoader:didReceiveEventWithHyperlink:)]) {
                                             JMHyperlink *hyperlink = [JMHyperlink new];
                                             hyperlink.type = JMHyperlinkTypeRemoteAnchor;
                                             hyperlink.href = href;
-                                            [weakSelf.delegate dashboardLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                            [strongSelf.delegate dashboardLoader:strongSelf
+                                                    didReceiveEventWithHyperlink:hyperlink];
                                         }
                                     } else {
                                         // TODO: need handle this case?
@@ -433,20 +432,19 @@
                           forEventId:remotePageListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(remotePageListenerId);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __typeof(self) strongSelf = weakSelf;
                                 if (error) {
-                                    [weakSelf handleHyperlinksError:error];
+                                    [strongSelf handleHyperlinksError:error];
                                 } else {
                                     JMLog(@"parameters: %@", params);
                                     NSString *href = params[@"location"];
                                     if (href) {
-                                        if ([weakSelf.delegate respondsToSelector:@selector(dashboardLoader:didReceiveEventWithHyperlink:)]) {
+                                        if ([strongSelf.delegate respondsToSelector:@selector(dashboardLoader:didReceiveEventWithHyperlink:)]) {
                                             JMHyperlink *hyperlink = [JMHyperlink new];
                                             hyperlink.type = JMHyperlinkTypeRemotePage;
                                             hyperlink.href = href;
-                                            [weakSelf.delegate dashboardLoader:weakSelf didReceiveEventWithHyperlink:hyperlink];
+                                            [strongSelf.delegate dashboardLoader:strongSelf
+                                                    didReceiveEventWithHyperlink:hyperlink];
                                         }
                                     } else {
                                         // TODO: need handle this case?
@@ -458,15 +456,13 @@
                           forEventId:dashletHyperlinkListenerId
                             callback:^(NSDictionary *params, NSError *error) {
                                 JMLog(remotePageListenerId);
-                                if (!weakSelf) {
-                                    return;
-                                }
+                                __typeof(self) strongSelf = weakSelf;
                                 if (error) {
-                                    [weakSelf handleHyperlinksError:error];
+                                    [strongSelf handleHyperlinksError:error];
                                 } else {
                                     JMLog(@"parameters: %@", params);
-                                    if ([self.delegate respondsToSelector:@selector(dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
-                                        [self.delegate dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:self];
+                                    if ([strongSelf.delegate respondsToSelector:@selector(dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:)]) {
+                                        [strongSelf.delegate dashboardLoaderDidReceiveEventWithUnsupportedHyperlink:strongSelf];
                                     }
                                 }
                             }];

@@ -327,6 +327,7 @@
     [resourceView.contentView fillWithView:contentView];
     self.contentView = contentView;
 
+    // TODO: come up with lazy loading
     if ([self.controller respondsToSelector:@selector(topToolbarView)]) {
         UIView *topToolbarView = [self.controller topToolbarView];
         [resourceView.topView fillWithView:topToolbarView];

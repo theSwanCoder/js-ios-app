@@ -155,10 +155,11 @@ static JMSessionManager *_sharedManager = nil;
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
-- (void)obsolete
+- (void)obsoleteSession
 {
+    JMLog(@"%@ - %@", self.class.description, NSStringFromSelector(_cmd));
     // USE ONLY FOR DEBUG PURPOSES
-    NSArray *cookies = [NSHTTPCookieStorage sharedHTTPCookieStorage].cookies;
+    NSArray <NSHTTPCookie *>*cookies = [NSHTTPCookieStorage sharedHTTPCookieStorage].cookies;
     JMLog(@"Current cookies: %@", cookies);
     NSHTTPCookie *sessionCookie = [self selectSessionCookieFromCookies:cookies];
     NSMutableArray *newCookies = [NSMutableArray arrayWithArray:cookies];
@@ -172,6 +173,22 @@ static JMSessionManager *_sharedManager = nil;
 
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:sessionCookie];
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:newSessionCookie];
+}
+
+- (void)obsoleteSessionInWebView
+{
+    JMLog(@"%@ - %@", self.class.description, NSStringFromSelector(_cmd));
+    // USE ONLY FOR DEBUG PURPOSES
+    NSArray <NSHTTPCookie *>*cookies = [NSHTTPCookieStorage sharedHTTPCookieStorage].cookies;
+    JMLog(@"Current cookies: %@", cookies);
+    NSHTTPCookie *sessionCookie = [self selectSessionCookieFromCookies:cookies];
+    NSMutableArray *newCookies = [NSMutableArray arrayWithArray:cookies];
+    [newCookies removeObject:sessionCookie];
+    JMLog(@"sessionCookie: %@", sessionCookie);
+    NSHTTPCookie *newSessionCookie = [self changeValueForCookie:sessionCookie
+                                                      withValue:@"SomeNewValue"];
+    [newCookies addObject:newSessionCookie];
+    [[JMWebViewManager sharedInstance] updateCookiesWithCookies:newCookies];
 }
 
 - (NSHTTPCookie *)selectSessionCookieFromCookies:(NSArray <NSHTTPCookie *>*)cookies
@@ -229,6 +246,16 @@ static JMSessionManager *_sharedManager = nil;
     [predicates addObject:[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:nilServerProfilepredicates]];
     
     return [[NSCompoundPredicate alloc] initWithType:NSOrPredicateType subpredicates:predicates];
+}
+
+#pragma mark - Tests
+
+- (void)updateRestClientWithClient:(JSRESTBase *)restClient
+{
+    NSLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
+    NSLog(@"restClient before: %@", self.restClient);
+    self.restClient = restClient;
+    NSLog(@"restClient after: %@", self.restClient);
 }
 
 @end

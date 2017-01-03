@@ -70,6 +70,7 @@
 - (void)dealloc
 {
     [self removeAllObservers];
+    JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
 }
 
 #pragma mark - UIViewController LifeCycle
@@ -308,6 +309,8 @@
     if (stateManager.state == JMResourceViewerStateLoadingForPrint) {
         [self.configurator.printManager cancel];
     } else {
+        // TODO: consider cases when these actions should be separated
+        [self cancelAction];
         [self exitAction];
     }
 
@@ -330,6 +333,11 @@
     }
     [[self webEnvironment] reset];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)cancelAction
+{
+    [[self reportLoader] cancel];
 }
 
 - (void)backActionInWebView
@@ -426,17 +434,10 @@
 
     [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
     JSReport *report = [self.resource modelOfResource];
-    if ([[self reportLoader] respondsToSelector:@selector(runReport:initialDestination:initialParameters:completion:)]) {
-        [[self reportLoader] runReport:report
-                  initialDestination:destination
-                   initialParameters:self.initialReportParameters
-                          completion:self.runReportCompletion];
-    } else {
-        [[self reportLoader] runReport:report
-                         initialPage:@(destination.page)
-                   initialParameters:self.initialReportParameters
-                          completion:self.runReportCompletion];
-    }
+    [[self reportLoader] runReport:report
+                initialDestination:destination
+                 initialParameters:self.initialReportParameters
+                        completion:self.runReportCompletion];
 }
 
 - (void)runReportWithReportURI:(NSString *)reportURI
@@ -643,6 +644,12 @@
 //            }];
 //            break;
 //        }
+        case JSReportLoaderErrorTypeLoadingCanceled: {
+            // TODO: consider cases when these actions should be separated
+            [self cancelAction];
+            [self exitAction];
+            break;
+        }
         default: {
             __weak typeof(self) weakSelf = self;
             [JMUtils presentAlertControllerWithError:error completion:^{
@@ -813,7 +820,7 @@
     saveReportVC.delegate = self;
     __weak __typeof(self) weakSelf = self;
     saveReportVC.sessionExpiredBlock = ^{
-        __weak __typeof(self) strongSelf = weakSelf;
+        __typeof(self) strongSelf = weakSelf;
         [strongSelf.configurator.sessionManager handleSessionDidExpire];
     };
 
@@ -909,8 +916,9 @@
 {
     __weak __typeof(self) weakSelf = self;
     [[self reportLoader] fetchAvailableChartTypesWithCompletion:^(NSArray<JMReportChartType *> *chartTypes, NSError *error) {
+        __strong __typeof(self) strongSelf = weakSelf;
         if (error) {
-            [weakSelf handleError:error];
+            [strongSelf handleError:error];
         } else {
             JMReportChartTypesVC *chartTypesVC = [weakSelf.storyboard instantiateViewControllerWithIdentifier:@"JMReportChartTypesVC"];
             chartTypesVC.chartTypes = chartTypes;
@@ -921,19 +929,19 @@
             selectedChartType.name = chartStructure.charttype;
             chartTypesVC.selectedChartType = selectedChartType;
             chartTypesVC.exitBlock = ^(JMReportChartType *chartType) {
-                [[weakSelf reportLoader] updateComponent:reportComponent
-                                        withNewChartType:chartType
-                                              completion:^(BOOL success, NSError *error) {
-                                                  if (error) {
-                                                      [weakSelf handleError:error];
-                                                  } else {
-                                                      JMLog(@"success of updating chart type");
-                                                  }
+                [[strongSelf reportLoader] updateComponent:reportComponent
+                                          withNewChartType:chartType
+                                                completion:^(BOOL success, NSError *error) {
+                                                    if (error) {
+                                                        [strongSelf handleError:error];
+                                                    } else {
+                                                        JMLog(@"success of updating chart type");
+                                                    }
                                               }];
-                [weakSelf.navigationController popViewControllerAnimated:YES];
+                [strongSelf.navigationController popViewControllerAnimated:YES];
             };
-            [weakSelf.navigationController pushViewController:chartTypesVC
-                                                     animated:YES];
+            [strongSelf.navigationController pushViewController:chartTypesVC
+                                                       animated:YES];
         }
     }];
 }

@@ -49,6 +49,9 @@ static NSString * const kGAITrackingID      = @"UA-57445224-1";
 static NSString * const kGAITrackingDebugID = @"UA-76950527-1";
 static const NSInteger kSplashViewTag = 100;
 
+@interface JasperMobileAppDelegate()
+@end
+
 @implementation JasperMobileAppDelegate
 
 @synthesize window = _window;
@@ -102,6 +105,8 @@ static const NSInteger kSplashViewTag = 100;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    JMLog(@"%@ - %@", self.class.description, NSStringFromSelector(_cmd));
+
     if ([self isExternalScreenAvailable]) {
         UIScreen *externalScreen = [UIScreen screens][1];
         self.externalWindow = [self createWindowWithScreen:externalScreen];
@@ -148,6 +153,8 @@ static const NSInteger kSplashViewTag = 100;
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    JMLog(@"%@ - %@", self.class.description, NSStringFromSelector(_cmd));
+
     [self discardScreenConnectionNotifications];
     [self destroyExternalWindow];
     [self addSplashView];
