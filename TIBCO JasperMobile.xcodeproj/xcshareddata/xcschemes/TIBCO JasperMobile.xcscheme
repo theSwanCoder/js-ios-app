@@ -176,6 +176,17 @@
                BlueprintName = "TIBCO JasperMobile Tests"
                ReferencedContainer = "container:TIBCO JasperMobile.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "JMDashboardLoaderTests">
+               </Test>
+               <Test
+                  Identifier = "JMRESTReportLoaderTests">
+               </Test>
+               <Test
+                  Identifier = "JMVisualizeReportLoaderTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
