@@ -31,9 +31,16 @@
     return self;
 }
 
+- (void)switchToDemoProfile
+{
+    self.testProfile = [self mobileDemoProfile];
+}
+
+#pragma mark - Profiles
+
 - (JMUITestServerProfile *)mobileDemoProfile
 {
-    return [[JMUITestServerProfile alloc] initWithAlias:@"Test Profile"
+    return [[JMUITestServerProfile alloc] initWithAlias:@"Demo Profile"
                                                     URL:@"https://mobiledemo.jaspersoft.com/jasperserver-pro"
                                                username:@"phoneuser"
                                                password:@"phoneuser"

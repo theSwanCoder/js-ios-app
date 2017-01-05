@@ -93,8 +93,13 @@
                                   message:(NSString *)message
                               actionBlock:(void(^)(void))actionBlock
 {
-    XCUIElement *alert = [self waitAlertWithTitle:title
-                                          timeout:kUITestsBaseTimeout];
+    XCUIElement *alert = [self waitElementMatchingType:XCUIElementTypeAlert
+                                                  text:title
+                                               timeout:kUITestsElementAvailableTimeout];
+    if (!alert.exists) {
+        return;
+    }
+
     XCUIElement *errorMessageElement = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                                 text:message
                                                        parentElement:alert

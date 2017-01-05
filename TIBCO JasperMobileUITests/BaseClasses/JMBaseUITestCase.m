@@ -12,7 +12,7 @@
 #import "JMBaseUITestCase+LoginPage.h"
 #import "JMBaseUITestCase+Buttons.h"
 
-#define JMUITestLocalDebugState 0
+#define JMUITestLocalDebugState 1
 
 static NSString *JMUIBaseTestCaseExecutedTestNumberKey = @"JMUIBaseTestCaseExecutedTestNumberKey";
 
@@ -65,6 +65,12 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
         NSLog(@"From super: Do performing 'super' setup");
     }
 
+    [self waitElementMatchingType:XCUIElementTypeStaticText
+                             text:@"TIBCO® JasperMobile™"
+                    parentElement:nil
+              shouldBeInHierarchy:NO
+                          timeout:kUITestsBaseTimeout];
+                          
     if ([self shouldLoginBeforeStartTest]) {
         NSLog(@"From super: Try to log in before performing tests");
         [self loginWithTestProfileIfNeed];
@@ -105,7 +111,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
 {
 #if JMUITestLocalDebugState
     // FOR LOCAL DEBUG ONLY
-    return NO;
+    return YES;
 #else
     NSInteger testsCount = [self testsCount];
     NSNumber *executedTestNumber = [[NSUserDefaults standardUserDefaults] objectForKey:JMUIBaseTestCaseExecutedTestNumberKey];

@@ -470,6 +470,17 @@
             }
             break;
         }
+        case XCUIElementTypeAlert: {
+            if (predicate) {
+                elementsQuery = [parentElement.alerts matchingPredicate:predicate];
+            } else if (identifier) {
+                elementsQuery = [parentElement.alerts matchingType:XCUIElementTypeAlert
+                                                        identifier:identifier];
+            } else {
+                elementsQuery = parentElement.alerts;
+            }
+            break;
+        }
         default: {
             [self performTestFailedWithErrorMessage:[NSString stringWithFormat:@"Unknown type was supplied: %@", @(elementType)]
                                          logMessage:NSStringFromSelector(_cmd)];

@@ -31,23 +31,18 @@
             [self logout];
         }
     }
+    [self givenThatLoginPageOnScreen];
     [self loginWithTestProfile];
+    [self givenLoadingPopupNotVisible];
     [self verifyThatLoginProcessWasSuccess];
 }
 
 - (void)loginWithTestProfile
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self givenThatLoginPageOnScreen];
     [self selectTestProfile];
-
-    [self givenThatLoginPageOnScreen];
     [self tryEnterTestCredentials];
-
-    [self givenThatLoginPageOnScreen];
     [self tryTapLoginButton];
-
-    [self givenLoadingPopupNotVisible];
 }
 
 - (void)selectTestProfile
@@ -57,7 +52,7 @@
 
     [self givenThatServerProfilesPageOnScreen];
 
-    [self trySelectNewTestServerProfile];
+    [self trySelectTestServerProfile];
 }
 
 - (XCUIElement *)findTestProfileCell
@@ -128,6 +123,25 @@
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSLog(@"Verify that there isn't an error after trying to log into test JRS");
 
+    [self processErrorAlertIfExistWithTitle:@"JSErrorDomain"
+                                    message:@"403 - Permission Denied. The request is understood, but it has been refused"
+                                actionBlock:^{
+                                    NSLog(@"Need use other server profile");
+
+                                    [self tryOpenServerProfilesPage];
+                                    [self removeAllServerProfiles];
+                                    NSLog(@"Switch to Demo Profile");
+                                    [[JMUITestServerProfileManager sharedManager] switchToDemoProfile];
+
+                                    [self tryOpenNewServerProfilePage];
+                                    [self tryCreateNewTestServerProfile];
+                                    [self trySelectTestServerProfile];
+
+                                    NSLog(@"Try log into test JRS again");
+                                    [self loginWithTestProfile];
+                                    [self givenLoadingPopupNotVisible];
+                                }];
+
     NSArray *titles = @[@"JSHTTPErrorDomain", @"Invalid credentials supplied."];
     [self processErrorAlertsIfExistWithTitles:titles actionBlock:^{
         NSLog(@"All 'other elements': %@", [self.application.otherElements allElementsBoundByAccessibilityElement]);
@@ -138,15 +152,18 @@
         NSLog(@"Try recreate test JRS profile");
         [self tryOpenServerProfilesPage];
         [self removeAllServerProfiles];
-        [self trySelectNewTestServerProfile];
+
+        [self tryOpenNewServerProfilePage];
+        [self tryCreateNewTestServerProfile];
+        [self trySelectTestServerProfile];
 
         NSLog(@"Try log into test JRS again");
-        [self tryTapLoginButton];
+        [self loginWithTestProfile];
         [self givenLoadingPopupNotVisible];
-    }];
-
-    [self processErrorAlertsIfExistWithTitles:titles actionBlock:^{
-        XCTFail(@"Failure to log into test JRS");
+        
+        [self processErrorAlertsIfExistWithTitles:titles actionBlock:^{
+            XCTFail(@"Failure to log into test JRS");
+        }];
     }];
 }
 
@@ -279,7 +296,7 @@
     [self tryBackToPreviousPage];
 }
 
-- (void)trySelectNewTestServerProfile
+- (void)trySelectTestServerProfile
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     XCUIElement *testProfile = [self findTestProfileCell];
