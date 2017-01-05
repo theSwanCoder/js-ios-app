@@ -97,11 +97,14 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
             NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.restClient generateThumbnailImageUrl:self.resource.resourceLookup.uri]]];
 
-
             AFImageDownloader *downloader = [[UIImageView class] sharedImageDownloader];
             id <AFImageRequestCache> imageCache = downloader.imageCache;
             UIImage *cachedImage = [imageCache imageforRequest:imageRequest withAdditionalIdentifier:nil];
-            if (!cachedImage) {
+            if (cachedImage) {
+                if (!CGSizeEqualToSize(cachedImage.size, CGSizeZero)) {
+                    self.thumbnailImage = cachedImage;
+                }
+            } else {
                 [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
                 __weak typeof(self)weakSelf = self;
                 [self.resourceImage setImageWithURLRequest:imageRequest
@@ -120,13 +123,6 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                        }
                                                    }
                                                    failure:nil];
-            } else {
-                if (cachedImage.size.width == CGSizeZero.width && cachedImage.size.height == CGSizeZero.height) {
-                    self.resourceImage.image = [UIImage imageNamed:@"res_type_report"];
-                } else {
-                    self.thumbnailImage = cachedImage;
-                    [self updateResourceImage:self.thumbnailImage thumbnails:YES];
-                }
             }
         }
     } else if (self.resource.type == JMResourceTypeSavedReport || self.resource.type == JMResourceTypeSavedDashboard) {
