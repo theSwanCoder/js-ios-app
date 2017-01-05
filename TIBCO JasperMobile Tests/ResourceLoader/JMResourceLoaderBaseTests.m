@@ -77,6 +77,16 @@
     return profile;
 }
 
+- (JSProfile *)localPRO630Profile
+{
+    JSProfile *profile = [[JSProfile alloc] initWithAlias:@"Test Profile Local 6.3.0 Pro"
+                                                serverUrl:@"http://192.168.88.55:8090/jasperserver-pro-630"
+                                             organization:nil
+                                                 username:@"superuser"
+                                                 password:@"superuser"];
+    return profile;
+}
+
 #pragma mark - Helpers
 
 - (NSOperation *)authorizeTask

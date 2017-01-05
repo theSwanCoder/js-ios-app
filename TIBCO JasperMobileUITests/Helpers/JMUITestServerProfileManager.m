@@ -50,7 +50,7 @@
 - (JMUITestServerProfile *)localInstanceProfile
 {
     return [[JMUITestServerProfile alloc] initWithAlias:@"Test Profile"
-                                                    URL:@"http://192.168.88.55:8092/jasperserver-pro-630-ui-tests"
+                                                    URL:@"http://192.168.88.55:8090/jasperserver-pro-630"
                                                username:@"superuser"
                                                password:@"superuser"
                                            organization:@""];
