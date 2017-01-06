@@ -95,6 +95,7 @@
                                                          completion:^(BOOL success, NSError *error) {
                                                              if (!success) {
                                                                  XCTFail(@"Run report wasn't success: %@", error.userInfo);
+                                                                 [self reset];
                                                              }
                                                          }]];
     // TODO: consider add a listener about changing multipage status 
@@ -129,6 +130,7 @@
                                                          completion:^(BOOL success, NSError *error) {
                                                              if (!success) {
                                                                  XCTFail(@"Run report wasn't success: %@", error.userInfo);
+                                                                 [self reset];
                                                              }
                                                          }]];
     [self.operationQueue addOperation:[self refreshReportTaskWithCompletion:^(BOOL success, NSError *error) {
@@ -161,6 +163,7 @@
                                                          completion:^(BOOL success, NSError *error) {
                                                              if (!success) {
                                                                  XCTFail(@"Run report wasn't success: %@", error.userInfo);
+                                                                 [self reset];
                                                              }
                                                          }]];
     [self.operationQueue addOperation:[self obsoleteSessionTask]];

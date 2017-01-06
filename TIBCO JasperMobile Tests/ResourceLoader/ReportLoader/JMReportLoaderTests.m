@@ -89,8 +89,9 @@
             initialDestination:initialDestination
              initialParameters:nil
                     completion:^(BOOL success, NSError *error) {
-                        finishBlock();
                         completion(success, error);
+                        finishBlock();
+                        NSLog(@"End run report task");
                     }];
     }];
     return runReportTask;
@@ -101,8 +102,9 @@
     JMAsyncTask *refreshReportTask = [[JMAsyncTask alloc] initWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
         NSLog(@"Start refresh report task");
         [self.loader refreshReportWithCompletion:^(BOOL success, NSError *error) {
-            finishBlock();
             completion(success, error);
+            finishBlock();
+            NSLog(@"End refresh report task");
         }];
     }];
     return refreshReportTask;
@@ -113,11 +115,11 @@
 {
     JMAsyncTask *prepareWebEnvironmentTask = [[JMAsyncTask alloc] initWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
         NSLog(@"Start navigating to page task");
-
         [self.loader fetchPage:@(page)
                     completion:^(BOOL success, NSError *error) {
-                        finishBlock();
                         completion(success, error);
+                        finishBlock();
+                        NSLog(@"End navigating to page task");
                     }];
     }];
     return prepareWebEnvironmentTask;

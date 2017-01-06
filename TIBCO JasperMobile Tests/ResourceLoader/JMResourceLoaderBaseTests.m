@@ -17,7 +17,10 @@
 {
     [super setUp];
 
+    NSLog(@"Super: start setUp");
     self.operationQueue = [NSOperationQueue mainQueue];
+    NSLog(@"Super: self.operationQueue: %@", self.operationQueue);
+    self.operationQueue.maxConcurrentOperationCount = 1;
 
     self.webManager = [JMWebViewManager new];
     // TODO: Do we need separate tests on different JRS (trunk PRO, trunk CE) or change them if need
@@ -25,17 +28,14 @@
                                                          keepLogged:YES];
     self.sessionManager = [JMSessionManager sharedManager];
     [self.sessionManager updateRestClientWithClient:self.testRestClient];
+    NSLog(@"Super: end setUp");
 }
 
 - (void)tearDown
 {
-    [self.testRestClient deleteCookies];
-    self.testRestClient = nil;
-    [self.operationQueue cancelAllOperations];
-    self.operationQueue = nil;
-    self.webEnvironment = nil;
-    self.webManager = nil;
-    self.sessionManager = nil;
+    NSLog(@"Super: start tearDown");
+    [self reset];
+    NSLog(@"Super: end tearDown");
 
     [super tearDown];
 }
@@ -95,6 +95,7 @@
         NSLog(@"Start authorize task");
         [self.testRestClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult * _Nullable result) {
             NSLog(@"Result: %@", result);
+            NSLog(@"Finish authorize task");
             finishBlock();
         }];
     }];
@@ -106,6 +107,7 @@
     JMAsyncTask *authorizeTask = [[JMAsyncTask alloc] initWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
         NSLog(@"Start obsolete session task");
         [self.sessionManager obsoleteSession];
+        NSLog(@"End obsolete session task");
         finishBlock();
     }];
     return authorizeTask;
@@ -116,6 +118,17 @@
     @throw [NSException exceptionWithName:@"Not implemented"
                                    reason:@"Should be implemented in child"
                                  userInfo:nil];
+}
+
+- (void)reset
+{
+    [self.testRestClient deleteCookies];
+    self.testRestClient = nil;
+    [self.operationQueue cancelAllOperations];
+    self.operationQueue = nil;
+    self.webEnvironment = nil;
+    self.webManager = nil;
+    self.sessionManager = nil;
 }
 
 @end

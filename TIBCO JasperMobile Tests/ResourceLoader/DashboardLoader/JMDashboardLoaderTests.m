@@ -91,6 +91,7 @@
                                                             completion:^(BOOL success, NSError *error) {
                                                                 if (!success) {
                                                                     XCTFail(@"Run dashboard wasn't success: %@", error.userInfo);
+                                                                    [self reset];
                                                                 }
                                                             }]];
     [self.operationQueue addOperation:[self reloadDashboardTaskWithCompletion:^(BOOL success, NSError *error) {
@@ -123,6 +124,7 @@
                                                             completion:^(BOOL success, NSError *error) {
                                                                 if (!success) {
                                                                     XCTFail(@"Run dashboard wasn't success: %@", error.userInfo);
+                                                                    [self reset];
                                                                 }
                                                             }]];
     [self.operationQueue addOperation:[self obsoleteSessionTask]];
