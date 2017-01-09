@@ -122,10 +122,15 @@
 
 - (void)reset
 {
+    NSLog(@"%@", NSStringFromSelector(_cmd));
     [self.testRestClient deleteCookies];
     self.testRestClient = nil;
-    [self.operationQueue cancelAllOperations];
-    self.operationQueue = nil;
+    NSLog(@"BEFORE self.operationQueue: %@", self.operationQueue);
+    NSLog(@"BEFORE operations: %@", self.operationQueue.operations);
+    // Because of we are using a main queue to execute operations, for canceling we need use this approach
+    [self.operationQueue.operations makeObjectsPerformSelector:@selector(cancel)];
+    NSLog(@"AFTER operations: %@", self.operationQueue.operations);
+    //self.operationQueue = nil;
     self.webEnvironment = nil;
     self.webManager = nil;
     self.sessionManager = nil;

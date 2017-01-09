@@ -18,6 +18,7 @@
 
 - (void)tearDown
 {
+    [self.loader reset];
     self.loader = nil;
     [super tearDown];
 }
