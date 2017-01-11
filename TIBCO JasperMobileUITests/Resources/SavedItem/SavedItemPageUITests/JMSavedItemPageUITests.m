@@ -118,7 +118,7 @@
     [self saveTestReportInHTMLFormatNeedOpen:YES];
 
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Delete"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_delete")];
     [self cancelDeletingAction];
 
     [self closeTestSavedItem];
@@ -137,7 +137,7 @@
     [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Rename"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_rename")];
     [self cancelRenamingAction];
     
     [self closeTestSavedItem];
@@ -156,7 +156,7 @@
     [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Rename"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_rename")];
     [self performRenameAction];
     
     [self closeTestSavedItem];
@@ -175,7 +175,7 @@
     [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Rename"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_rename")];
     [self performRenameActionWithEmptyName];
     
     [self closeTestSavedItem];
@@ -194,7 +194,7 @@
     [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Rename"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_rename")];
     [self performRenameActionWithSpacesInName];
     
     [self closeTestSavedItem];
@@ -212,7 +212,7 @@
     [self saveTestReportInHTMLFormatNeedOpen:YES];
     
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Rename"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_rename")];
     [self performRenameActionWithTheSameName];
     
     [self closeTestSavedItem];

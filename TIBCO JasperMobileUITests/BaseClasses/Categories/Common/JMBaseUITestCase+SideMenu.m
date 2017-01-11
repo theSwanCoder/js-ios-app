@@ -29,7 +29,7 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:nil
                                                    timeout:timeout];
-    [self verifyButtonExistWithId:@"menu icon note"
+    [self verifyButtonExistWithId:@"menu icon note" // We don't have translation for this button
                     parentElement:navBar];
 }
 
@@ -45,75 +45,75 @@
 
 - (void)openRepositorySectionIfNeed
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Repository"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMLocalizedString(@"menuitem_repository_label")];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Repository"
+    [self tryOpenPageWithName:JMLocalizedString(@"menuitem_repository_label")
           fromSectionWithName:nil];
 }
 
 - (void)openRecentlyViewedSectionIfNeed
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Recently Viewed"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMLocalizedString(@"menuitem_recentviews_label")];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Recently Viewed"
+    [self tryOpenPageWithName:JMLocalizedString(@"menuitem_recentviews_label")
           fromSectionWithName:nil];
 }
 
 - (void)openSavedItemsSectionIfNeed
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Saved Items"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMLocalizedString(@"menuitem_saveditems_label")];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Saved Items"
+    [self tryOpenPageWithName:JMLocalizedString(@"menuitem_saveditems_label")
           fromSectionWithName:nil];
 }
 
 - (void)openFavoritesSectionIfNeed
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Favorites"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMLocalizedString(@"menuitem_favorites_label")];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Favorites"
+    [self tryOpenPageWithName:JMLocalizedString(@"menuitem_favorites_label")
           fromSectionWithName:nil];
 }
 
 - (void)openSchedulesSectionIfNeed
 {
-    XCUIElement *navigationBar = [self findNavigationBarWithLabel:@"Schedules"];
+    XCUIElement *navigationBar = [self findNavigationBarWithLabel:JMLocalizedString(@"menuitem_schedules_label")];
     if (navigationBar.exists) {
         return;
     }
-    [self tryOpenPageWithName:@"Schedules"
+    [self tryOpenPageWithName:JMLocalizedString(@"menuitem_schedules_label")
           fromSectionWithName:nil];
 }
 
 - (void)selectAbout
 {
-    [self tryOpenPageWithName:@"About"
+    [self tryOpenPageWithName:JMLocalizedString(@"menuitem_about_label")
           fromSectionWithName:nil];
 }
 
 - (void)selectSettings
 {
-    [self tryOpenPageWithName:@"Settings"
+    [self tryOpenPageWithName:JMLocalizedString(@"menuitem_settings_label")
           fromSectionWithName:nil];
 }
 
 - (void)selectFeedback
 {
-    [self tryOpenPageWithName:@"Feedback by email"
+    [self tryOpenPageWithName:JMLocalizedString(@"menuitem_feedback_label")
           fromSectionWithName:nil];
 }
 
 - (void)selectLogOut
 {
-    [self tryOpenPageWithName:@"Log Out"
+    [self tryOpenPageWithName:JMLocalizedString(@"menuitem_logout_label")
           fromSectionWithName:nil];
 }
 
@@ -154,18 +154,6 @@
     XCUIElement *menuView = [self waitElementMatchingType:XCUIElementTypeOther
                                                identifier:@"JMSideApplicationMenuAccessibilityId"
                                                   timeout:0];
-//    XCUIElement *pageMenuItem;
-//    NSArray *allMenuItems = menuView.cells.allElementsBoundByAccessibilityElement;
-//    for (XCUIElement *menuItem in allMenuItems) {
-//        XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
-//                                                      text:pageName
-//                                             parentElement:menuItem
-//                                                   timeout:kUITestsElementAvailableTimeout];
-//        if (label.exists) {
-//            pageMenuItem = menuItem;
-//            break;
-//        }
-//    }
 
     XCUIElement *label = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                   text:pageName

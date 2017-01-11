@@ -102,12 +102,12 @@
     XCUIElement *profile = [app.collectionViews.cells elementBoundByIndex:0];
     if (profile) {
         [profile pressForDuration:1.1];
-        XCUIElement *menu = app.menuItems[@"Delete"];
+        XCUIElement *menu = app.menuItems[JMLocalizedString(@"action_title_delete")];
         if (menu) {
             [menu tapByWaitingHittable];
-            XCUIElement *alert = [self waitAlertWithTitle:@"Confirmation"
+            XCUIElement *alert = [self waitAlertWithTitle:JMLocalizedString(@"dialod_title_confirmation")
                                                   timeout:kUITestsBaseTimeout];
-            [self tapButtonWithText:@"Delete"
+            [self tapButtonWithText:JMLocalizedString(@"dialog_button_delete")
                       parentElement:alert
                         shouldCheck:YES];
         } else {
@@ -253,25 +253,25 @@
     NSLog(@"testServerProfile.organization: %@", testServerProfile.organization);
 
     // Profile Name TextField
-    [self enterText:testServerProfile.alias intoTextFieldWithAccessibilityId:@"Profile name"
-   placeholderValue:@"Profile name"
+    [self enterText:testServerProfile.alias intoTextFieldWithAccessibilityId:JMLocalizedString(@"servers_name_label")
+   placeholderValue:JMLocalizedString(@"servers_name_label")
       parentElement:table
       isSecureField:false];
 
     // Profile URL TextField
-    [self enterText:testServerProfile.url intoTextFieldWithAccessibilityId:@"Server address"
-   placeholderValue:@"Server address"
+    [self enterText:testServerProfile.url intoTextFieldWithAccessibilityId:JMLocalizedString(@"servers_url_label")
+   placeholderValue:JMLocalizedString(@"servers_url_label")
       parentElement:table
       isSecureField:false];
 
     // Organization TextField
-    [self enterText:testServerProfile.organization intoTextFieldWithAccessibilityId:@"Organization ID"
-   placeholderValue:@"Organization ID"
+    [self enterText:testServerProfile.organization intoTextFieldWithAccessibilityId:JMLocalizedString(@"servers_orgid_label")
+   placeholderValue:JMLocalizedString(@"servers_orgid_label")
       parentElement:table
       isSecureField:false];
 
     // Save a new created profile
-    [self tapButtonWithText:@"Save"
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_save")
               parentElement:nil
                 shouldCheck:YES];
 
@@ -282,7 +282,7 @@
 - (void)closeSecurityWarningAlert
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *securityWarningAlert = self.application.alerts[@"Warning"];
+    XCUIElement *securityWarningAlert = self.application.alerts[JMLocalizedString(@"dialod_title_attention")];
     if (securityWarningAlert.exists) {
         [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
                   parentElement:securityWarningAlert

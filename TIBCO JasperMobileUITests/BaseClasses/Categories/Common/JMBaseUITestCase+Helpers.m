@@ -281,12 +281,13 @@
 - (void)searchInMultiSelectedInputControlWithText:(NSString *)searchText
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    XCUIElement *searchField = self.application.searchFields[@"Search Values"];
+    XCUIElement *searchField = self.application.searchFields[JMLocalizedString(@"report_viewer_options_search_value_placeholder")];
     [self waitElementReady:searchField
                    timeout:kUITestsBaseTimeout];
 
     [searchField tapByWaitingHittable];
     [searchField typeText:searchText];
+    // We don't have translate for this string
     [self tapButtonWithText:@"Search"
               parentElement:nil
                 shouldCheck:YES];
@@ -394,6 +395,7 @@
             break;
         }
         case XCUIElementTypeStaticText: {
+            NSLog(@"All static texts: %@", parentElement.staticTexts.allElementsBoundByAccessibilityElement);
             if (predicate) {
                 elementsQuery = [parentElement.staticTexts matchingPredicate:predicate];
             } else if (identifier) {
@@ -402,6 +404,7 @@
             } else {
                 elementsQuery = parentElement.staticTexts;
             }
+            NSLog(@"All static texts in query: %@", elementsQuery.allElementsBoundByAccessibilityElement);
             break;
         }
         case XCUIElementTypeSecureTextField: {

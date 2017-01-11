@@ -55,31 +55,31 @@ NSString *const kTestFolderName = @"Public";
 {
     XCUIElement *infoPage = self.application.otherElements[@"JMRepositoryResourceInfoViewControllerAccessibilityId"];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Name"
+                             text:JMLocalizedString(@"resource_label_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Description"
+                             text:JMLocalizedString(@"resource_description_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"URI"
+                             text:JMLocalizedString(@"resource_uri_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Type"
+                             text:JMLocalizedString(@"resource_type_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Version"
+                             text:JMLocalizedString(@"resource_version_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Creation Date"
+                             text:JMLocalizedString(@"resource_creationDate_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Modified Date"
+                             text:JMLocalizedString(@"resource_modifiedDate_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
 }

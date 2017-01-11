@@ -86,15 +86,15 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
-    [self selectFilterBy:@"Reports"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
     [self performSearchResourceWithName:kTestReportName
                       inSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
-    [self givenThatReportCellsOnScreenInSectionWithName:@"Favorites"];
+    [self givenThatReportCellsOnScreenInSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
 }
 
 //    Error message when no search result
@@ -112,7 +112,7 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
-    [self selectFilterBy:@"Reports"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
@@ -121,7 +121,7 @@
 
     [self verifyThatCorrectMessageAppearForEmptyResult];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
 }
 
 //    View type button
@@ -154,13 +154,13 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
-    [self selectFilterBy:@"Reports"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
     [self openFavoritesSectionIfNeed];
 
-    [self switchViewFromListToGridInSectionWithTitle:@"Favorites"];
+    [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     [self verifyThatCollectionViewContainsGridOfCells];
 
     [self openLibrarySectionIfNeed];
@@ -170,9 +170,9 @@
     [self openFavoritesSectionIfNeed];
     [self verifyThatCollectionViewContainsGridOfCells];
 
-    [self switchViewFromGridToListInSectionWithTitle:@"Favorites"];
+    [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
 }
 
 //    Sorting button
@@ -193,25 +193,25 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
-    [self selectFilterBy:@"Reports"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
     [self openFavoritesSectionIfNeed];
     
-    [self selectSortBy:@"Name"
-    inSectionWithTitle:@"Favorites"];
+    [self selectSortBy:JMLocalizedString(@"resources_sortby_name")
+    inSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     [self verifyThatCollectionViewContainsListOfCells];
     
-    [self selectSortBy:@"Creation Date"
-    inSectionWithTitle:@"Favorites"];
+    [self selectSortBy:JMLocalizedString(@"resources_sortby_creationDate")
+    inSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     [self verifyThatCollectionViewContainsListOfCells];
     
     [self selectSortBy:@"Modified Date"
-    inSectionWithTitle:@"Favorites"];
+    inSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     [self verifyThatCollectionViewContainsListOfCells];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
 }
 
 //    Filter button
@@ -239,35 +239,35 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
-    [self selectFilterBy:@"Reports"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
     [self openFavoritesSectionIfNeed];
     [self verifyThatCollectionViewContainsListOfCells];
     
-    [self selectFilterBy:@"Reports"
-    inSectionWithTitle:@"Favorites"];
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
+    inSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     [self verifyThatCollectionViewContainsListOfCells];
     
-    [self selectFilterBy:@"Saved Items"
-    inSectionWithTitle:@"Favorites"];
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_saved_reportUnit")
+    inSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     [self verifyThatCorrectMessageAppearForEmptyResult];
     
-    [self selectFilterBy:@"Dashboards"
-    inSectionWithTitle:@"Favorites"];
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_dashboard")
+    inSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     [self verifyThatCorrectMessageAppearForEmptyResult];
     
-    [self selectFilterBy:@"Folders"
-    inSectionWithTitle:@"Favorites"];
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_folder")
+    inSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     [self verifyThatCorrectMessageAppearForEmptyResult];
     
-    [self selectFilterBy:@"Content Resources"
-    inSectionWithTitle:@"Favorites"];
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_files")
+    inSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     [self verifyThatCorrectMessageAppearForEmptyResult];
     
-    [self selectFilterBy:@"All"
-      inSectionWithTitle:@"Favorites"];
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_all")
+      inSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
 
     [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
 }
@@ -297,10 +297,10 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
-    [self selectFilterBy:@"Reports"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
-    [self selectFilterBy:@"Dashboards"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_dashboard")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
@@ -308,8 +308,8 @@
 
     [self performPullDownToRefresh];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
-    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
 }
 
 //    Scrolling of the list/grid
@@ -328,7 +328,7 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
-    [self selectFilterBy:@"Reports"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
@@ -336,7 +336,7 @@
 
     [self performSwipeToScrool];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
 }
 
 //    User should see only favorites items which he/she added they
@@ -394,13 +394,13 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
-    [self selectFilterBy:@"Reports"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestReportAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
     [self openFavoritesSectionIfNeed];
 
-    [self unmarkTestReportFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestReportFromFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
 }
 
 //    Remove button on the dashboard
@@ -417,13 +417,13 @@
 {
     [self givenThatFavoritesSectionIsEmpty];
     
-    [self selectFilterBy:@"Dashboards"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_dashboard")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self markTestDashboardAsFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
     [self openFavoritesSectionIfNeed];
 
-    [self unmarkTestDashboardFromFavoriteFromSectionWithName:@"Favorites"];
+    [self unmarkTestDashboardFromFavoriteFromSectionWithName:JMLocalizedString(@"menuitem_favorites_label")];
 }
     
 //    Remove button on the folder
@@ -456,7 +456,7 @@
 
 - (void)verifyThatFavoritePageHasSideMenuButton
 {
-    XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:@"Favorites"];
+    XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     if (!menuButton || !menuButton.exists) {
         XCTFail(@"There isn't menu button");
     }
@@ -464,7 +464,7 @@
 
 - (void)verifyThatFavoritePageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Favorites"
+    [self waitNavigationBarWithLabel:JMLocalizedString(@"menuitem_favorites_label")
                              timeout:kUITestsBaseTimeout];
 }
 

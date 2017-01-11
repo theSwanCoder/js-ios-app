@@ -35,7 +35,7 @@
 //    - After:
 - (void)testThatUserCanOpenRepositoryPage
 {
-    [self verifyThatSectionOnScreenWithTitle:@"Repository"];
+    [self verifyThatSectionOnScreenWithTitle:JMLocalizedString(@"menuitem_repository_label")];
 }
 
 //  Left Panel button
@@ -48,7 +48,7 @@
 //    - After:
 - (void)testThatRepositoryPageHasSideMenuButton
 {
-    XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:@"Repository"];
+    XCUIElement *menuButton = [self findMenuButtonOnNavBarWithTitle:JMLocalizedString(@"menuitem_repository_label")];
     if (!menuButton) {
         XCTFail(@"Menu button isn't found in Repository section");
     }
@@ -64,7 +64,7 @@
 //    - After:
 - (void)testThatRepositoryPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Repository"
+    [self waitNavigationBarWithLabel:JMLocalizedString(@"menuitem_repository_label")
                              timeout:kUITestsBaseTimeout];
 }
     
@@ -79,11 +79,11 @@
 //    - After:
 - (void)testThatOpendFolderHasCorrectTitle
 {
-    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Repository"];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_repository_label")];
     
     [self openFolderWithName:kTestFolderName];
     [self verifyCorrectTitleForFolderWithName:kTestFolderName];
-    [self backToFolderWithName:@"Repository"];
+    [self backToFolderWithName:JMLocalizedString(@"menuitem_repository_label")];
 }
     
 //  Back button on the folder screen like name of the parent folder
@@ -98,15 +98,15 @@
 //    - After:
 - (void)testThatOpenedFolderHasBackButtonWithCorrectTitle
 {
-    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:@"Repository"];
+    [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_repository_label")];
     
     [self openFolderWithName:kTestFolderName];
     XCUIElement *navBar = [self waitNavigationBarWithLabel:kTestFolderName
                                                    timeout:kUITestsBaseTimeout];
-    [self verifyButtonExistWithText:@"Repository"
+    [self verifyButtonExistWithText:JMLocalizedString(@"menuitem_repository_label")
                       parentElement:navBar];
 
-    [self backToFolderWithName:@"Repository"];
+    [self backToFolderWithName:JMLocalizedString(@"menuitem_repository_label")];
 }
 
 //  Search result
@@ -126,12 +126,12 @@
 //    - After:
 - (void)testThatSearchOnRepositoryPageWorkCorrectly
 {
-    [self performSearchResourceWithName:@"Samples"
-                      inSectionWithName:@"Repository"];
+    [self performSearchResourceWithName:@"Samples" // We don't have translation for this string
+                      inSectionWithName:JMLocalizedString(@"menuitem_repository_label")];
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     
-    [self performSearchResourceWithName:@"Templates"
-                      inSectionWithName:@"Repository"];
+    [self performSearchResourceWithName:@"Templates" // We don't have translation for this string
+                      inSectionWithName:JMLocalizedString(@"menuitem_repository_label")];
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
 }
 
@@ -146,11 +146,11 @@
 //    - After:
 - (void)testThatSearchWithEmptyResultOnRepositoryPageHasCorrectMessage
 {
-    [self performSearchResourceWithName:@"NoSearchResults"
-                      inSectionWithName:@"Repository"];
+    [self performSearchResourceWithName:@"NoSearchResults" // We don't have translation for this string
+                      inSectionWithName:JMLocalizedString(@"menuitem_repository_label")];
 
     XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                          text:@"No Results."
+                                                          text:JMLocalizedString(@"resources_noresults_msg")
                                                        timeout:kUITestsBaseTimeout];
     if (!noResultLabel.exists) {
         XCTFail(@"There isn't 'No Results.' label");
@@ -173,7 +173,7 @@
 //    - After:
 - (void)testThatUserCanChangeViewTypeOnRepositoryPage
 {
-    [self switchViewFromListToGridInSectionWithTitle:@"Repository"];
+    [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_repository_label")];
     [self verifyThatCollectionViewContainsGridOfCells];
 
     [self openLibrarySectionIfNeed];
@@ -181,7 +181,7 @@
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     [self verifyThatCollectionViewContainsGridOfCells];
     
-    [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
+    [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_repository_label")];
     [self verifyThatCollectionViewContainsListOfCells];
 }
     
@@ -225,18 +225,18 @@
 //    - After:
 - (void)testThatEmptyFolderHasCorrectMessage
 {
-    [self switchViewFromGridToListInSectionWithTitle:@"Repository"];
-    [self performSearchResourceWithName:@"Monitoring"
-                      inSectionWithName:@"Repository"];
+    [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_repository_label")];
+    [self performSearchResourceWithName:@"Monitoring" // We don't have translation for this string
+                      inSectionWithName:JMLocalizedString(@"menuitem_repository_label")];
 
     NSInteger cellsCount = [self countOfListCells];
     if (cellsCount > 0) {
         // Some instances hasn't the folder
-        [self openFolderWithName:@"Monitoring"];
+        [self openFolderWithName:@"Monitoring"]; // We don't have translation for this string
         [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
-        [self openFolderWithName:@"Monitoring Domains"];
+        [self openFolderWithName:@"Monitoring Domains"]; // We don't have translation for this string
         XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                              text:@"No Results."
+                                                              text:JMLocalizedString(@"resources_noresults_msg")
                                                            timeout:kUITestsBaseTimeout];
         if (!noResultLabel.exists) {
             XCTFail(@"There isn't 'No Results.' label");

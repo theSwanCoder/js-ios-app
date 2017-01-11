@@ -64,7 +64,7 @@
     if (label) {
         navBar = [self findNavigationBarWithLabel:label];
     }
-    XCUIElement *actionsButton = [self buttonWithId:@"Share"
+    XCUIElement *actionsButton = [self buttonWithId:JMLocalizedString(@"action_title_share")
                                       parentElement:navBar
                                         shouldCheck:YES];
     return actionsButton;
@@ -87,7 +87,7 @@
                                           timeout:timeout];
     }
 
-    XCUIElement *actionsButton = [self buttonWithId:@"Share"
+    XCUIElement *actionsButton = [self buttonWithId:JMLocalizedString(@"action_title_share")
                                       parentElement:navBar
                                         shouldCheck:YES];
     return actionsButton;

@@ -20,7 +20,7 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
                                                    timeout:kUITestsBaseTimeout];
-    [self tapButtonWithText:@"grid button"
+    [self tapButtonWithText:@"grid button" // We don't have translation for this button
               parentElement:navBar
                 shouldCheck:NO];
 }
@@ -29,7 +29,7 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:sectionTitle
                                                    timeout:kUITestsBaseTimeout];
-    [self tapButtonWithText:@"horizontal list button"
+    [self tapButtonWithText:@"horizontal list button" // We don't have translation for this button
               parentElement:navBar
                 shouldCheck:NO];
 }
@@ -175,7 +175,7 @@
     }
 
     XCUIElement *sortActionElement = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                              text:@"Sort by"
+                                                              text:JMLocalizedString(@"action_title_sort")
                                                      parentElement:sortOptionsView
                                                            timeout:0];
     if (sortActionElement.exists) {
@@ -191,7 +191,7 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:navBarTitle
                                                    timeout:kUITestsBaseTimeout];
-    [self tapButtonWithText:@"sort action"
+    [self tapButtonWithText:@"sort action" // We don't have translation for this button
               parentElement:navBar
                 shouldCheck:YES];
 }
@@ -248,7 +248,7 @@
     }
 
     XCUIElement *filterActionElement = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                                text:@"Filter by"
+                                                                text:JMLocalizedString(@"action_title_filter")
                                                        parentElement:resourceTypeView
                                                              timeout:0];
     if (filterActionElement.exists) {
@@ -264,7 +264,7 @@
 {
     XCUIElement *navBar = [self waitNavigationBarWithLabel:navBarTitle
                                                    timeout:kUITestsBaseTimeout];
-    [self tapButtonWithText:@"filter action"
+    [self tapButtonWithText:@"filter action" // We don't have translation for this button
               parentElement:navBar
                 shouldCheck:YES];
 }
@@ -290,7 +290,7 @@
 - (void)verifyFiltersMenuDidAppear
 {
     XCUIElement *filtersMenu = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                        text:@"Resource Type"
+                                                        text:JMLocalizedString(@"resources_filterby_title")
                                                parentElement:nil
                                                      timeout:kUITestsElementAvailableTimeout];
     if (!filtersMenu.exists) {
@@ -302,7 +302,7 @@
 - (void)verifySortMenuDidAppear
 {
     XCUIElement *sortMenu = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                     text:@"Sort Options"
+                                                     text:JMLocalizedString(@"resources_sortby_title")
                                             parentElement:nil
                                                   timeout:kUITestsElementAvailableTimeout];
     if (!sortMenu.exists) {
@@ -344,7 +344,7 @@
 - (void)verifyThatCurrentPageIsRepository
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self waitNavigationBarWithLabel:@"Repository"
+    [self waitNavigationBarWithLabel:JMLocalizedString(@"menuitem_repository_label")
                              timeout:kUITestsBaseTimeout];
 }
 

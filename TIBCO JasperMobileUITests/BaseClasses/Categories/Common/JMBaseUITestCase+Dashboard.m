@@ -29,7 +29,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)openTestDashboardFromInfoPage
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Run"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_run")];
 
     // We can have two times when loading up and down
     // first time loading 'dashboard info' and second one - loading dashboard
@@ -63,7 +63,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 
         // Could be several hover items which visible while dashlet in loading process (in test dashboard - 5)
         [self waitElementMatchingType:XCUIElementTypeStaticText
-                                 text:@"Loading..."
+                                 text:JMLocalizedString(@"status_loading")
                         parentElement:nil
                   shouldBeInHierarchy:NO
                               timeout:kUITestsResourceLoadingTimeout];
@@ -88,7 +88,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)refreshDashboard
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Refresh"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_refresh")];
 
     [self givenLoadingPopupNotVisible];
 
@@ -100,13 +100,14 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)openPrintDashboardPage
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Print"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_print")];
     [self givenLoadingPopupNotVisible];
 }
 
 - (void)closePrintDashboardPage
 {
     // verify that 'print report' page is on the screen
+    // We don't have localization for this string
     [self tapCancelButtonOnNavBarWithTitle:@"Printer Options"];
 }
 
@@ -148,31 +149,31 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 {
     XCUIElement *infoPage = self.application.otherElements[@"JMDashboardInfoViewControllerAccessibilityId"];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Name"
+                             text:JMLocalizedString(@"resource_label_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Description"
+                             text:JMLocalizedString(@"resource_description_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"URI"
+                             text:JMLocalizedString(@"resource_uri_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Type"
+                             text:JMLocalizedString(@"resource_type_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Version"
+                             text:JMLocalizedString(@"resource_version_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Creation Date"
+                             text:JMLocalizedString(@"resource_creationDate_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Modified Date"
+                             text:JMLocalizedString(@"resource_modifiedDate_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
 }
@@ -180,7 +181,7 @@ NSString *const kTestDashboardName = @"1. Supermart Dashboard";
 - (void)givenThatDashboardCellsOnScreen
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self selectFilterBy:@"Dashboards"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_dashboard")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
     [self givenThatCollectionViewContainsListOfCellsInSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 }

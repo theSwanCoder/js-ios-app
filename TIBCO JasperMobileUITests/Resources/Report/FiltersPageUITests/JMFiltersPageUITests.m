@@ -76,7 +76,7 @@
     if (errorAlert.exists) {
         XCTFail(@"Error of fetching filters for report");
     } else {
-        [self tapButtonWithText:@"Run Report"
+        [self tapButtonWithText:JMLocalizedString(@"dialog_button_run_report")
                   parentElement:nil
                     shouldCheck:YES];
         [self givenLoadingPopupNotVisible];
@@ -207,15 +207,15 @@
 - (void)startEditMandatoryFilter
 {
     XCUIElement *cellWithMandatoryFilter = [self findTableViewCellWithAccessibilityId:nil
-                                                                containsLabelWithText:@"* ProductFamily"];
+                                                                containsLabelWithText:@"* ProductFamily"]; // We don't have translation for this string
     [cellWithMandatoryFilter tapByWaitingHittable];
 }
 
 - (void)stopEditMandatoryFilter
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"ProductFamily"
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"ProductFamily" // We don't have translation for this string
                                                    timeout:kUITestsBaseTimeout];
-    [self tapButtonWithText:@"Filters"
+    [self tapButtonWithText:JMLocalizedString(@"action_title_edit_filters")
               parentElement:navBar
                 shouldCheck:YES];
 }
@@ -223,30 +223,30 @@
 - (void)unmarkAllControlItemsForMandatoryFilter
 {
     XCUIElement *drinkItem = [self findTableViewCellWithAccessibilityId:nil
-                                                  containsLabelWithText:@"Drink"];
+                                                  containsLabelWithText:@"Drink"]; // We don't have translation for this string
     [drinkItem tapByWaitingHittable];
 
     XCUIElement *foodItem = [self findTableViewCellWithAccessibilityId:nil
-                                                 containsLabelWithText:@"Food"];
+                                                 containsLabelWithText:@"Food"]; // We don't have translation for this string
     [foodItem tapByWaitingHittable];
 
     XCUIElement *nonConsumableItem = [self findTableViewCellWithAccessibilityId:nil
-                                                          containsLabelWithText:@"Non-Consumable"];
+                                                          containsLabelWithText:@"Non-Consumable"]; // We don't have translation for this string
     [nonConsumableItem tapByWaitingHittable];
 }
 
 - (void)startEditFilterWithMultiItems
 {
     XCUIElement *cellWithMandatoryFilter = [self findTableViewCellWithAccessibilityId:nil
-                                                                containsLabelWithText:@"Low Fat"];
+                                                                containsLabelWithText:@"Low Fat"]; // We don't have translation for this string
     [cellWithMandatoryFilter tapByWaitingHittable];
 }
 
 - (void)stopEditFilterWithMultiItems
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat"
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat" // We don't have translation for this string
                                                    timeout:kUITestsBaseTimeout];
-    [self tapButtonWithText:@"Filters"
+    [self tapButtonWithText:JMLocalizedString(@"action_title_edit_filters")
               parentElement:navBar
                 shouldCheck:YES];
 }
@@ -254,29 +254,29 @@
 - (void)markTestControlItemForFilterWithMultipleSelectedItems
 {
     XCUIElement *trueItem = [self findTableViewCellWithAccessibilityId:nil
-                                                  containsLabelWithText:@"true"];
+                                                  containsLabelWithText:@"true"]; // We don't have translation for this string
     [trueItem tapByWaitingHittable];
 }
 
 - (void)unmarkTestControlItemForFilterWithMultipleSelectedItems
 {
     XCUIElement *trueItem = [self findTableViewCellWithAccessibilityId:nil
-                                                  containsLabelWithText:@"true"];;
+                                                  containsLabelWithText:@"true"]; // We don't have translation for this string
     [trueItem tapByWaitingHittable];
 }
 
 - (void)startEditFilterWithSingleSelectedItem
 {
     XCUIElement *cell = [self findTableViewCellWithAccessibilityId:nil
-                                             containsLabelWithText:@"Country"];
+                                             containsLabelWithText:@"Country"]; // We don't have translation for this string
     [cell tapByWaitingHittable];
 }
 
 - (void)stopEditFilterWithSingleSelectedItem
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Country"
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Country" // We don't have translation for this string
                                                    timeout:kUITestsBaseTimeout];
-    [self tapButtonWithText:@"Filters"
+    [self tapButtonWithText:JMLocalizedString(@"action_title_edit_filters")
               parentElement:navBar
                 shouldCheck:YES];
 }
@@ -284,16 +284,16 @@
 - (void)markTestControlItemForFilterWithSingleSelectedItems
 {
     XCUIElement *cell = [self findTableViewCellWithAccessibilityId:nil
-                                             containsLabelWithText:@"Mexico"];
+                                             containsLabelWithText:@"Mexico"]; // We don't have translation for this string
     [cell tapByWaitingHittable];
 }
 
 - (void)startEditTestTextField
 {
     XCUIElement *cell = [self findTableViewCellWithAccessibilityId:nil
-                                             containsLabelWithText:@"Store Sales 2013 is greater than"];
+                                             containsLabelWithText:@"Store Sales 2013 is greater than"]; // We don't have translation for this string
     XCUIElement *textField = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                      text:@"19"
+                                                      text:@"19" // We don't have translation for this string
                                              parentElement:cell
                                                    timeout:kUITestsBaseTimeout];
     [textField tapByWaitingHittable];
@@ -314,14 +314,14 @@
 
 - (void)verifyThatReportFiltersPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Filters"
+    [self waitNavigationBarWithLabel:JMLocalizedString(@"action_title_edit_filters")
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatFiltersPageHasCorrentBackButton
 {
     [self verifyBackButtonExistWithAlternativeTitle:nil
-                                  onNavBarWithTitle:@"Filters"];
+                                  onNavBarWithTitle:JMLocalizedString(@"report_viewer_options_title")];
 }
 
 - (void)verifyMandatoryCellContainsErrorMessage

@@ -119,7 +119,7 @@
     
     [serverProfileElement pressForDuration:1.1];
     
-    XCUIElement *menu = self.application.menuItems[@"Clone Profile"];
+    XCUIElement *menu = self.application.menuItems[JMLocalizedString(@"servers_action_profile_clone")];
     if (menu) {
         [menu tapByWaitingHittable];
         [self givenThatNewProfilePageOnScreen];
@@ -128,7 +128,7 @@
                           parentElement:nil];
 
         // Confirm if need http end point
-        XCUIElement *securityWarningAlert = [self waitAlertWithTitle:@"Warning"
+        XCUIElement *securityWarningAlert = [self waitAlertWithTitle:JMLocalizedString(@"dialod_title_attention")
                                                              timeout:kUITestsBaseTimeout];
         [self verifyButtonExistWithText:JMLocalizedString(@"dialog_button_ok")
                           parentElement:securityWarningAlert];
@@ -172,12 +172,12 @@
 {
     [element pressForDuration:1.0];
     [element pressForDuration:1.1];
-    XCUIElement *menu = self.application.menuItems[@"Delete"];
+    XCUIElement *menu = self.application.menuItems[JMLocalizedString(@"action_title_delete")];
     if (menu) {
         [menu tapByWaitingHittable];
-        XCUIElement *alertView = [self waitAlertWithTitle:@"Confirmation"
+        XCUIElement *alertView = [self waitAlertWithTitle:JMLocalizedString(@"dialod_title_confirmation")
                                                   timeout:kUITestsBaseTimeout];
-        [self verifyButtonExistWithText:@"Delete"
+        [self verifyButtonExistWithText:JMLocalizedString(@"dialog_button_delete")
                           parentElement:alertView];
     } else {
         XCTFail(@"Delete menu item doesn't exist.");

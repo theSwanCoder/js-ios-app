@@ -50,9 +50,9 @@
 //    > User should see Left Panel button on the Saved Items screen
 - (void)testThatMenuButtonWorkCorrectly
 {
-    [self showSideMenuInSectionWithName:@"Saved Items"];
+    [self showSideMenuInSectionWithName:JMLocalizedString(@"menuitem_saveditems_label")];
     [self verifySideMenuVisible];
-    [self hideSideMenuInSectionWithName:@"Saved Items"];
+    [self hideSideMenuInSectionWithName:JMLocalizedString(@"menuitem_saveditems_label")];
 }
 
 //Saved Items title
@@ -78,8 +78,8 @@
 {
     [self saveTestReportInHTMLFormatNeedOpen:NO];
 
-    [self selectFilterBy:@"HTML"
-      inSectionWithTitle:@"Saved Items"];
+    [self selectFilterBy:@"HTML" // We don't have translation for this string
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
     
     [self performSearchResourceWithName:kTestReportName
                       inSectionWithName:JMLocalizedString(@"menuitem_saveditems_label")];
@@ -96,7 +96,7 @@
 {
     [self saveTestReportInHTMLFormatNeedOpen:NO];
 
-    [self performSearchResourceWithName:@"Not Existed Test Saved Item"
+    [self performSearchResourceWithName:@"Not Existed Test Saved Item" // We don't have translation for this string
                       inSectionWithName:JMLocalizedString(@"menuitem_saveditems_label")];
     [self verifyThatNoResultsOnScreen];
     [self clearSearchResultInSectionWithName:JMLocalizedString(@"menuitem_saveditems_label")];
@@ -115,9 +115,9 @@
     [self saveTestReportInHTMLFormatNeedOpen:NO];
 
     [self verifyThatListOfCellsVisible];
-    [self switchViewFromListToGridInSectionWithTitle:@"Saved Items"];
+    [self switchViewFromListToGridInSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
     [self verifyThatGridOfCellsVisible];
-    [self switchViewFromGridToListInSectionWithTitle:@"Saved Items"];
+    [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
     [self verifyThatListOfCellsVisible];
 }
 
@@ -139,12 +139,12 @@
 
     // TODO: improve this test
 
-    [self selectSortBy:@"Name"
-    inSectionWithTitle:@"Saved Items"];
-    [self selectSortBy:@"Creation Date"
-    inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
-    [self selectSortBy:@"Modified Date"
-    inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
+    [self selectSortBy:JMLocalizedString(@"resources_sortby_name")
+    inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
+    [self selectSortBy:JMLocalizedString(@"resources_sortby_creationDate")
+    inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
+    [self selectSortBy:JMLocalizedString(@"resources_sortby_modifiedDate")
+    inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
 }
 
 //Filter button
@@ -168,20 +168,20 @@
     // TODO: improve this test
     // add saving into pdf and xls formats
 
-    [self selectFilterBy:@"All"
-      inSectionWithTitle:@"Saved Items"];
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_all")
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
     // Verify 3 cells visible
 
-    [self selectFilterBy:@"HTML"
-      inSectionWithTitle:@"Saved Items"];
+    [self selectFilterBy:@"HTML" // We don't have translation for this string
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
     // Verify 1 cell for html file visible
 
-    [self selectFilterBy:@"PDF"
-      inSectionWithTitle:@"Saved Items"];
+    [self selectFilterBy:@"PDF" // We don't have translation for this string
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
     // Verify 1 cell for pdf file visible
 
-    [self selectFilterBy:@"XLS"
-      inSectionWithTitle:@"Saved Items"];
+    [self selectFilterBy:@"XLS" // We don't have translation for this string
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
     // Verify 1 cell for xls file visible
 }
 
@@ -328,7 +328,7 @@
 - (void)verifyThatSavedItemsSectionOnScreen
 {
     // TODO: replace with waiting element (collection view) by accessibility id
-    [self waitNavigationBarWithLabel:@"Saved Items"
+    [self waitNavigationBarWithLabel:JMLocalizedString(@"menuitem_saveditems_label")
                              timeout:kUITestsBaseTimeout];
 }
 
@@ -342,20 +342,20 @@
 
 - (void)verifyThatSavedItemsSectionHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Saved Items"
+    [self waitNavigationBarWithLabel:JMLocalizedString(@"menuitem_saveditems_label")
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyTestReportInHTMLFormatIsInSearchResult
 {
     [self verifyExistSavedItemWithName:kTestReportName
-                                format:@"html"];
+                                format:@"html"]; // We don't have translation for this string
 }
 
 - (void)verifyThatNoResultsOnScreen
 {
     XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                          text:@"No Saved Items."
+                                                          text:JMLocalizedString(@"resources_noresults_saveditems_msg")
                                                        timeout:kUITestsBaseTimeout];
     if (!noResultLabel.exists) {
         XCTFail(@"Message 'No Saved Item' is missed");
@@ -381,7 +381,7 @@
 - (void)verifyThatCellHasIconForHTMLFormat
 {
     XCUIElement *cell = [self savedItemWithName:kTestReportName
-                                         format:@"html"];
+                                         format:@"html"]; // We don't have translation for this string
 
     XCUIElement *image = [cell.images elementBoundByIndex:0];
     NSString *imageIdentifier = image.identifier;
@@ -393,7 +393,7 @@
 - (void)verifyThatCellHasIconForPDFFormat
 {
     XCUIElement *cell = [self savedItemWithName:kTestReportName
-                                         format:@"pdf"];
+                                         format:@"pdf"]; // We don't have translation for this string
 
     XCUIElement *image = [cell.images elementBoundByIndex:0];
     NSString *imageIdentifier = image.identifier;
@@ -405,9 +405,9 @@
 - (void)verifyThatTestSavedItemHasHTMLFormat
 {
     XCUIElement *cell = [self savedItemWithName:kTestReportName
-                                         format:@"html"];
+                                         format:@"html"]; // We don't have translation for this string
     
-    NSString *fullName = [NSString stringWithFormat:@"%@.html", kTestReportName];
+    NSString *fullName = [NSString stringWithFormat:@"%@.html", kTestReportName]; // We don't have translation for this string
     XCUIElement *nameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                       text:fullName
                                              parentElement:cell
@@ -421,9 +421,9 @@
 - (void)verifyThatTestSavedItemHasPDFFormat
 {
     XCUIElement *cell = [self savedItemWithName:kTestReportName
-                                         format:@"pdf"];
+                                         format:@"pdf"]; // We don't have translation for this string
     
-    NSString *fullName = [NSString stringWithFormat:@"%@.pdf", kTestReportName];
+    NSString *fullName = [NSString stringWithFormat:@"%@.pdf", kTestReportName]; // We don't have translation for this string
     XCUIElement *nameLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                       text:fullName
                                              parentElement:cell

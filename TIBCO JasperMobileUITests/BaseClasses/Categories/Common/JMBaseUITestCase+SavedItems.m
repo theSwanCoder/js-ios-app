@@ -19,9 +19,9 @@
 
 - (void)givenThatSavedItemsEmpty
 {
-    [self switchViewFromGridToListInSectionWithTitle:@"Saved Items"];
-    [self selectFilterBy:@"All"
-      inSectionWithTitle:@"Saved Items"];
+    [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_all")
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
     [self deleteAllSavedItemsIfNeed];
 }
 
@@ -84,7 +84,7 @@
     [self openSavedItemsSectionIfNeed];
 
     [self selectFilterBy:@"HTML"
-      inSectionWithTitle:@"Saved Items"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
 
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                              format:@"html"];
@@ -97,7 +97,7 @@
     [self openSavedItemsSectionIfNeed];
     
     [self selectFilterBy:@"HTML"
-      inSectionWithTitle:@"Saved Items"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
 
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     
@@ -133,7 +133,7 @@
     [self openSavedItemsSectionIfNeed];
 
     [self selectFilterBy:@"PDF"
-      inSectionWithTitle:@"Saved Items"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
 
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                              format:@"pdf"];
@@ -146,7 +146,7 @@
     [self openSavedItemsSectionIfNeed];
     
     [self selectFilterBy:@"PDF"
-      inSectionWithTitle:@"Saved Items"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
 
     [self waitCollectionViewContainsCellsWithTimeout:kUITestsBaseTimeout];
     
@@ -184,7 +184,7 @@
     [self openSavedItemsSectionIfNeed];
 
     [self selectFilterBy:@"XLS"
-      inSectionWithTitle:@"Saved Items"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
 
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                              format:@"xls"];
@@ -197,7 +197,7 @@
     [self openSavedItemsSectionIfNeed];
 
     [self selectFilterBy:@"XLS"
-      inSectionWithTitle:@"Saved Items"];
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
     
     [self deleteSavedItemWithName:kTestReportName
                            format:@"xls"];
@@ -209,7 +209,7 @@
 - (void)openTestSavedItemFromInfoPage
 {
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Run"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_run")];
 }
 
 - (void)closeTestSavedItem
@@ -231,7 +231,8 @@
 {
     [self openSavedItemsSectionIfNeed];
     
-    [self selectFilterBy:@"HTML" inSectionWithTitle:@"Saved Items"];
+    [self selectFilterBy:@"HTML"
+      inSectionWithTitle:JMLocalizedString(@"menuitem_saveditems_label")];
     
     XCUIElement *testItem = [self savedItemWithName:kTestReportName
                                              format:@"html"];
@@ -264,25 +265,25 @@
 - (void)markTestSavedItemAsFavoriteFromMenuOnInfoPage
 {
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Mark as Favorite"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_markasfavorite")];
 }
 
 - (void)unmarkTestSavedItemAsFavoriteFromMenuOnInfoPage
 {
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Remove From Favorites"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_markasunfavorite")];
 }
 
 - (void)markTestSavedItemAsFavoriteFromViewerPage
 {
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Mark as Favorite"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_markasfavorite")];
 }
 
 - (void)unmarkTestSavedItemAsFavoriteFromViewerPage
 {
     [self openMenuActionsOnNavBarWithLabel:kTestReportName];
-    [self selectActionWithName:@"Remove From Favorites"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_markasunfavorite")];
 }
 
 #pragma mark - Helpers
@@ -302,7 +303,7 @@
     [self verifyThatSavedItemInfoPageOnScreen];
 
     [self openMenuActions];
-    [self selectActionWithName:@"Delete"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_delete")];
     [self confirmDeleteAction];
 }
 

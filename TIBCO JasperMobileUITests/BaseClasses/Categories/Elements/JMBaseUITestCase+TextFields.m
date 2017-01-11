@@ -14,7 +14,7 @@
 - (void)closeKeyboardWithDoneButton
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self tapButtonWithText:@"Done"
+    [self tapButtonWithText:@"Done" // We don't have translation for this string
               parentElement:nil
                 shouldCheck:YES];
 }
@@ -85,7 +85,7 @@
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSString *oldValueString = textField.value;
     XCUIElement *keyboard = [self.application.keyboards elementBoundByIndex:0];
-    XCUIElement *deleteSymbolButton = keyboard.keys[@"delete"];
+    XCUIElement *deleteSymbolButton = keyboard.keys[@"delete"]; // We don't have translation for this string
     if (deleteSymbolButton.exists) {
         for (int i = 0; i < oldValueString.length; ++i) {
             [deleteSymbolButton tapByWaitingHittable];

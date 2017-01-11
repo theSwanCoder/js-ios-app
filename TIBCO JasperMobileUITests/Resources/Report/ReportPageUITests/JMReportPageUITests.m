@@ -101,7 +101,7 @@
     [self openTestReportPage];
 
     [self openMenuActions];
-    [self selectActionWithName:@"Save"];
+    [self selectActionWithName:JMLocalizedString(@"dialog_button_save")];
 
     // verify that 'save report' page is on the screen
     [self waitElementMatchingType:XCUIElementTypeOther
@@ -130,7 +130,7 @@
     [self openPrintReportPage];
     
     // verify that 'print report' page is on the screen
-    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options"
+    XCUIElement *printNavBar = [self waitNavigationBarWithLabel:@"Printer Options" // We don't have translation for this string
                                                         timeout:kUITestsBaseTimeout];
 
     if (!printNavBar.exists) {
@@ -156,7 +156,7 @@
     [self openTestReportPage];
 
     [self openMenuActions];
-    [self selectActionWithName:@"Info"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_info")];
 
     [self verifyThatReportInfoPageOnScreen];
     [self closeReportInfoPage];
@@ -202,7 +202,7 @@
     [self givenLoadingPopupNotVisible];
 
     BOOL isFilterPage = NO;
-    XCUIElement *filtersNavBar = [self findNavigationBarWithLabel:@"Filters"];
+    XCUIElement *filtersNavBar = [self findNavigationBarWithLabel:JMLocalizedString(@"report_viewer_options_title")];
     isFilterPage = filtersNavBar.exists;
 
     // verify that 'edit values' page is on the screen

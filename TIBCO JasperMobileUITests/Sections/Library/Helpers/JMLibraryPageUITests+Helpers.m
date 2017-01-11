@@ -18,19 +18,19 @@
 
 - (void)trySortByName
 {
-    [self selectSortBy:@"Name"
+    [self selectSortBy:JMLocalizedString(@"resources_sortby_name")
     inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)trySortByCreationDate
 {
-    [self selectSortBy:@"Creation Date"
+    [self selectSortBy:JMLocalizedString(@"resources_sortby_creationDate")
     inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)trySortByModifiedDate
 {
-    [self selectSortBy:@"Modified Date"
+    [self selectSortBy:JMLocalizedString(@"resources_sortby_modifiedDate")
     inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
@@ -39,13 +39,13 @@
 
 - (void)tryFilterByReports
 {
-    [self selectFilterBy:@"Reports"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 
 - (void)tryFilterByDashboards
 {
-    [self selectFilterBy:@"Dashboards"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_dashboard")
       inSectionWithTitle:JMLocalizedString(@"menuitem_library_label")];
 }
 

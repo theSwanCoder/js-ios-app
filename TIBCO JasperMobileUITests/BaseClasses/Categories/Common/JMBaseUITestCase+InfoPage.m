@@ -16,6 +16,7 @@
 #pragma mark - Info Page
 - (void)openInfoPageFromCell:(XCUIElement *)cell
 {
+    // We don't have translate for this string
     [self tapButtonWithText:@"More Info"
               parentElement:cell
                 shouldCheck:YES];
@@ -29,7 +30,7 @@
 - (void)openInfoPageFromMenuActions
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Info"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_info")];
 }
 
 - (void)closeInfoPageFromMenuActions
