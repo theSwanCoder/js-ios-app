@@ -167,15 +167,15 @@
 - (void)startEditFilterWithMultiItems
 {
     XCUIElement *cellWithMandatoryFilter = [self findTableViewCellWithAccessibilityId:nil
-                                                                containsLabelWithText:@"Low Fat"];
+                                                                containsLabelWithText:@"Low Fat"]; // We don't have translation for this string
     [cellWithMandatoryFilter tapByWaitingHittable];
 }
 
 - (void)stopEditFilterWithMultiItems
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat"
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat" // We don't have translation for this string
                                                    timeout:kUITestsBaseTimeout];
-    [self tapButtonWithText:@"Filters"
+    [self tapButtonWithText:JMLocalizedString(@"action_title_edit_filters")
               parentElement:navBar
                 shouldCheck:YES];
 }
@@ -183,15 +183,15 @@
 - (void)startEditFilterWithSingleSelectedItem
 {
     XCUIElement *cell = [self findTableViewCellWithAccessibilityId:nil
-                                             containsLabelWithText:@"Country"];
+                                             containsLabelWithText:@"Country"]; // We don't have translation for this string
     [cell tapByWaitingHittable];
 }
 
 - (void)stopEditFilterWithSingleSelectedItem
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Country"
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Country" // We don't have translation for this string
                                                    timeout:kUITestsBaseTimeout];
-    [self tapButtonWithText:@"Filters"
+    [self tapButtonWithText:JMLocalizedString(@"action_title_edit_filters")
               parentElement:navBar
                 shouldCheck:YES];
 }
@@ -199,12 +199,12 @@
 - (void)trySearchCorrectValue
 {
     //Search Values
-    [self searchInMultiSelectedInputControlWithText:@"true"];
+    [self searchInMultiSelectedInputControlWithText:@"true"]; // We don't have translation for this string
 }
 
 - (void)trySearchInCorrectValue
 {
-    [self searchInMultiSelectedInputControlWithText:@"incorrect text value"];
+    [self searchInMultiSelectedInputControlWithText:@"incorrect text value"]; // We don't have translation for this string
 }
 
 #pragma mark - Verifying
@@ -216,36 +216,36 @@
 
 - (void)verifyThatInputControlsPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Low Fat"
+    [self waitNavigationBarWithLabel:@"Low Fat" // We don't have translation for this string
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatInputControlsPageForMultiSelectHasCorrectSubtitle
 {
-    [self verifyStaticTextExistsWithText:@"Select one or more items"];
+    [self verifyStaticTextExistsWithText:JMLocalizedString(@"report_viewer_options_multiselect_titlelabel_title")];
 }
 
 - (void)verifyThatInputControlsPageForSingleSelectHasCorrectSubtitle
 {
-    [self verifyStaticTextExistsWithText:@"Select a single item"];
+    [self verifyStaticTextExistsWithText:JMLocalizedString(@"report_viewer_options_singleselect_titlelabel_title")];
 }
 
 - (void)verifyCorrectSearchResult
 {
     [self findTableViewCellWithAccessibilityId:nil
-                         containsLabelWithText:@"true"];
+                         containsLabelWithText:@"true"]; // We don't have translation for this string
 }
 
 - (void)verifyInCorrectSearchResult
 {
-    [self verifyStaticTextExistsWithText:@"No Results."];
+    [self verifyStaticTextExistsWithText:JMLocalizedString(@"resources_noresults_msg")];
 }
 
 - (void)verifyThatInputControlPageHasCorrentBackButton
 {
-    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat"
+    XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Low Fat" // We don't have translation for this string
                                                    timeout:kUITestsBaseTimeout];
-    [self verifyButtonExistWithText:@"Filters"
+    [self verifyButtonExistWithText:JMLocalizedString(@"action_title_edit_filters")
                       parentElement:navBar];
 }
 

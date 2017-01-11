@@ -20,9 +20,9 @@
 - (void)givenThatFavoritesSectionIsEmpty
 {
     [self openFavoritesSectionIfNeed];
-    [self selectFilterBy:@"All"
-      inSectionWithTitle:@"Favorites"];
-    [self switchViewFromGridToListInSectionWithTitle:@"Favorites"];
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_all")
+      inSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
+    [self switchViewFromGridToListInSectionWithTitle:JMLocalizedString(@"menuitem_favorites_label")];
     [self unmarkAllFavoritesResourcesIfNeed];
     [self openLibrarySectionIfNeed];
 }
@@ -76,17 +76,18 @@
 - (void)markAsFavoriteFromMenuActions
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Mark as Favorite"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_markasfavorite")];
 }
 
 - (void)unmarkFromFavoritesFromMenuActions
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Remove From Favorites"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_markasunfavorite")];
 }
 
 - (void)markAsFavoriteFromNavigationBar:(XCUIElement *)navigationBar
 {
+    // There isn't translation for this string
     [self tapButtonWithText:@"make favorite item"
               parentElement:navigationBar
                 shouldCheck:YES];
@@ -94,7 +95,8 @@
 
 - (void)unmarkFromFavoritesFromNavigationBar:(XCUIElement *)navigationBar
 {
-    [self tapButtonWithText:@"favorited item"
+    // There isn't translation for this string
+    [self tapButtonWithText:JMLocalizedString(@"menuitem_favorites_label")
               parentElement:navigationBar
                 shouldCheck:YES];
 }
@@ -115,7 +117,7 @@
     [self openInfoPageFromCell:favoriteItem];
 
     [self openMenuActions];
-    [self selectActionWithName:@"Remove From Favorites"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_markasunfavorite")];
 
     [self closeInfoPageFromCell];
 }

@@ -116,8 +116,19 @@
     [self performSearchResourceWithName:@"ababababababababa"
                       inSectionWithName:JMLocalizedString(@"menuitem_library_label")];
 
+
+    XCUIElement *loadingLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
+                                                         text:@"Loading."
+                                                parentElement:nil
+                                          shouldBeInHierarchy:NO
+                                                      timeout:kUITestsBaseTimeout];
+    if (loadingLabel.exists) {
+        [self performTestFailedWithErrorMessage:@"There shouldn't be 'Loading. Please wait...' label"
+                                     logMessage:[NSString stringWithFormat:@"All static texts: %@", self.application.staticTexts.allElementsBoundByAccessibilityElement]];
+    }
+
     XCUIElement *noResultLabel = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                          text:@"No Results."
+                                                          text:JMLocalizedString(@"resources_noresults_msg")
                                                        timeout:kUITestsBaseTimeout];
     if (!noResultLabel.exists) {
         [self performTestFailedWithErrorMessage:@"There isn't 'No Results.' label"

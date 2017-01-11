@@ -20,7 +20,7 @@
 
     // Clear text if exist
     XCUIElement *clearTextButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                            text:@"Clear text"
+                                                            text:@"Clear text" // We don't have translation for this button
                                                    parentElement:searchField
                                                          timeout:kUITestsElementAvailableTimeout];
     if (clearTextButton.exists) {
@@ -29,7 +29,7 @@
 
     [searchField typeText:resourceName];
 
-    [self tapButtonWithText:@"Search"
+    [self tapButtonWithText:@"Search" // We don't have translation for this button
               parentElement:nil
                 shouldCheck:YES];
 }
@@ -83,8 +83,8 @@
     XCUIElement *searchResourcesSearchField = [self searchFieldFromSectionWithAccessibilityId:sectionAccessibilityId];
     [searchResourcesSearchField tapByWaitingHittable];
 
-    [self tapButtonWithText:@"Clear text"
-              parentElement:searchResourcesSearchField
+    [self tapButtonWithText:@"Clear text" // We don't have translation for this string
+            parentElement:searchResourcesSearchField
                 shouldCheck:NO];
 
     [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
@@ -105,7 +105,7 @@
     XCUIElement *searchField;
     if (section.exists) {
         searchField = [self waitElementMatchingType:XCUIElementTypeSearchField
-                                               text:@"Search resources"
+                                               text:JMLocalizedString(@"resources_search_placeholder")
                                       parentElement:section
                                             timeout:kUITestsBaseTimeout];
         if (!searchField.exists) {
@@ -126,7 +126,7 @@
     XCUIElement *searchField;
     if (section.exists) {
         searchField = [self waitElementMatchingType:XCUIElementTypeSearchField
-                                               text:@"Search resources"
+                                               text:JMLocalizedString(@"resources_search_placeholder")
                                       parentElement:section
                                             timeout:kUITestsBaseTimeout];
         if (!searchField.exists) {

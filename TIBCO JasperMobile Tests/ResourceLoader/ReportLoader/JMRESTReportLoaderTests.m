@@ -22,18 +22,22 @@
 
 - (void)testRunReportAction
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"fetchSessionExpectation"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"testRunReportAction"];
     JMAsyncTask *expectationTask = [JMAsyncTask taskWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
         NSLog(@"Start expectation task");
-        finishBlock();
         [expectation fulfill];
+        finishBlock();
     }];
 
     [self.operationQueue addOperation:[self authorizeTask]];
     [self.operationQueue addOperation:[self prepareWebEnvironmentTask]];
     [self.operationQueue addOperation:[self runReportTaskWithReport:[self customersReportOnTrunkCE]
                                                          completion:^(BOOL success, NSError *error) {
+                                                             NSLog(@"Callback for 'RUN' from %@", NSStringFromSelector(_cmd));
                                                              if (!success) {
+                                                                 NSLog(@"Not success 'RUN'");
+                                                                 [self reset];
+                                                                 [expectation fulfill];
                                                                  XCTFail(@"Run report wasn't success: %@", error.userInfo);
                                                              }
                                                          }]];
@@ -47,13 +51,13 @@
     }];
 }
 
-- (void)_testRunReportWithSessionExpired
+- (void)testRunReportWithSessionExpired
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"fetchSessionExpectation"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"testRunReportWithSessionExpired"];
     JMAsyncTask *expectationTask = [JMAsyncTask taskWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
         NSLog(@"Start expectation task");
-        finishBlock();
         [expectation fulfill];
+        finishBlock();
     }];
 
     [self.operationQueue addOperation:[self authorizeTask]];
@@ -61,8 +65,12 @@
     [self.operationQueue addOperation:[self obsoleteSessionTask]];
     [self.operationQueue addOperation:[self runReportTaskWithReport:[self customersReportOnTrunkCE]
                                                          completion:^(BOOL success, NSError *error) {
+                                                             NSLog(@"Callback for 'RUN' from %@", NSStringFromSelector(_cmd));
                                                              NSLog(@"Error: %@", error);
                                                              if (!success) {
+                                                                 NSLog(@"Not success 'RUN'");
+                                                                 [self reset];
+                                                                 [expectation fulfill];
                                                                  XCTFail(@"Report should be run");
                                                              }
                                                          }]];
@@ -78,23 +86,31 @@
 
 - (void)testRefreshReportAction
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"fetchSessionExpectation"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"testRefreshReportAction"];
     JMAsyncTask *expectationTask = [JMAsyncTask taskWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
         NSLog(@"Start expectation task");
-        finishBlock();
         [expectation fulfill];
+        finishBlock();
     }];
 
     [self.operationQueue addOperation:[self authorizeTask]];
     [self.operationQueue addOperation:[self prepareWebEnvironmentTask]];
     [self.operationQueue addOperation:[self runReportTaskWithReport:[self customersReportOnTrunkCE]
                                                          completion:^(BOOL success, NSError *error) {
+                                                             NSLog(@"Callback for 'RUN' from %@", NSStringFromSelector(_cmd));
                                                              if (!success) {
+                                                                 NSLog(@"Not success 'RUN'");
+                                                                 [self reset];
+                                                                 [expectation fulfill];
                                                                  XCTFail(@"Run report wasn't success: %@", error.userInfo);
                                                              }
                                                          }]];
     [self.operationQueue addOperation:[self refreshReportTaskWithCompletion:^(BOOL success, NSError *error) {
+        NSLog(@"Callback for 'REFRESH' from %@", NSStringFromSelector(_cmd));
         if (!success) {
+            NSLog(@"Not success 'REFRESH'");
+            [self reset];
+            [expectation fulfill];
             XCTFail(@"Refresh report wasn't success: %@", error.userInfo);
         }
     }]];
@@ -108,28 +124,35 @@
     }];
 }
 
-- (void)_testRefreshReportActionAfterSessionExpired
+- (void)testRefreshReportActionAfterSessionExpired
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"fetchSessionExpectation"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"testRefreshReportActionAfterSessionExpired"];
     JMAsyncTask *expectationTask = [JMAsyncTask taskWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
         NSLog(@"Start expectation task");
-        finishBlock();
         [expectation fulfill];
+        finishBlock();
     }];
 
     [self.operationQueue addOperation:[self authorizeTask]];
     [self.operationQueue addOperation:[self prepareWebEnvironmentTask]];
     [self.operationQueue addOperation:[self runReportTaskWithReport:[self customersReportOnTrunkCE]
                                                          completion:^(BOOL success, NSError *error) {
+                                                             NSLog(@"Callback for 'RUN' from %@", NSStringFromSelector(_cmd));
                                                              if (!success) {
+                                                                 [self reset];
+                                                                 [expectation fulfill];
                                                                  XCTFail(@"Run report wasn't success: %@", error.userInfo);
                                                              }
                                                          }]];
     [self.operationQueue addOperation:[self obsoleteSessionTask]];
     [self.operationQueue addOperation:[self refreshReportTaskWithCompletion:^(BOOL success, NSError *error) {
+        NSLog(@"Callback for 'REFRESH' from %@", NSStringFromSelector(_cmd));
         NSLog(@"Error: %@", error);
-        if (!success) {
-            XCTFail(@"Report should be refreshed");
+        if (success) {
+            NSLog(@"Success 'REFRESH'");
+            [self reset];
+            [expectation fulfill];
+            XCTFail(@"Report should not be refreshed");
         }
     }]];
     [self.operationQueue addOperation:expectationTask];
@@ -144,25 +167,33 @@
 
 - (void)testNavigationOnPage
 {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"fetchSessionExpectation"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"testNavigationOnPage"];
     JMAsyncTask *expectationTask = [JMAsyncTask taskWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
         NSLog(@"Start expectation task");
-        finishBlock();
         [expectation fulfill];
+        finishBlock();
     }];
 
     [self.operationQueue addOperation:[self authorizeTask]];
     [self.operationQueue addOperation:[self prepareWebEnvironmentTask]];
     [self.operationQueue addOperation:[self runReportTaskWithReport:[self customersReportOnTrunkCE]
                                                          completion:^(BOOL success, NSError *error) {
+                                                             NSLog(@"Callback for 'RUN' from %@", NSStringFromSelector(_cmd));
                                                              if (!success) {
+                                                                 NSLog(@"Not success 'RUN'");
+                                                                 [self reset];
+                                                                 [expectation fulfill];
                                                                  XCTFail(@"Run report wasn't success: %@", error.userInfo);
                                                              }
                                                          }]];
     // TODO: consider add a listener about changing multipage status
     [self.operationQueue addOperation:[self navigateToTaskWithPage:2
                                                         completion:^(BOOL success, NSError *error) {
+                                                            NSLog(@"Callback for 'NAVIGATE TO' from %@", NSStringFromSelector(_cmd));
                                                             if (!success) {
+                                                                NSLog(@"Not success 'NAVIGATE TO'");
+                                                                [self reset];
+                                                                [expectation fulfill];
                                                                 XCTFail(@"Navigate to page wasn't success: %@", error.userInfo);
                                                             }
                                                         }]];
@@ -186,6 +217,7 @@
                                                                    flowType:JMResourceFlowTypeREST];
         self.loader = [JMRestReportLoader loaderWithRestClient:self.testRestClient
                                                 webEnvironment:self.webEnvironment];
+        NSLog(@"End preparing web environment task");
         finishBlock();
     }];
     return prepareWebEnvironmentTask;

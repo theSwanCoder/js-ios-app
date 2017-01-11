@@ -13,6 +13,7 @@
 
 - (void)openSelectPrinterPage
 {
+    // We don't have translate for this string
     XCUIElement *selectPrinter = [self waitElementMatchingType:XCUIElementTypeStaticText
                                                           text:@"Select Printer"
                                                        timeout:kUITestsBaseTimeout];
@@ -25,8 +26,10 @@
 
 - (void)closeSelectPrinterPage
 {
+    // We don't have translate for this string
     XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Printer"
                                                    timeout:kUITestsBaseTimeout];
+    // We don't have translate for this string
     [self tapButtonWithText:@"Printer Options"
               parentElement:navBar
                 shouldCheck:YES];
@@ -36,31 +39,37 @@
 
 - (void)verifyThatPrintPageOnScreen
 {
+    // We don't have translate for this string
     [self waitNavigationBarWithLabel:@"Printer Options"
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatPrintPageHasCorrectTitle
 {
+    // We don't have translate for this string
     [self waitNavigationBarWithLabel:@"Printer Options"
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatPrintPageHasCancelButton
 {
+    // We don't have translate for this string
     [self verifyCancelButtonExistOnNavBarWithTitle:@"Printer Options"];
 }
 
 - (void)verifyThatPrintersPageOnScreen
 {
+    // We don't have translate for this string
     [self waitNavigationBarWithLabel:@"Printer"
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatPrintersPageHasCorrectBackButton
 {
+    // We don't have translate for this string
     XCUIElement *navBar = [self waitNavigationBarWithLabel:@"Printer"
                                                    timeout:kUITestsBaseTimeout];
+    // We don't have translate for this string
     [self verifyButtonExistWithText:@"Printer Options"
                       parentElement:navBar];
 }

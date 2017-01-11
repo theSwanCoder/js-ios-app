@@ -120,7 +120,7 @@
 - (void)tapDoneButtonOnNavBarWithTitle:(NSString *)navBarTitle
 {
     XCUIElement *navBar = [self findNavigationBarWithLabel:navBarTitle];
-    [self tapButtonWithText:@"Done"
+    [self tapButtonWithText:@"Done" // We don't have translation for this button
               parentElement:navBar
                 shouldCheck:YES];
 }
@@ -128,7 +128,7 @@
 - (void)verifyDoneButtonExistOnNavBarWithTitle:(NSString *)navBarTitle
 {
     XCUIElement *navBar = [self findNavigationBarWithLabel:navBarTitle];
-    [self verifyButtonExistWithText:@"Done"
+    [self verifyButtonExistWithText:@"Done" // We don't have translation for this button
                       parentElement:navBar];
 }
 
@@ -179,13 +179,13 @@
 {
     XCUIElement *navBar = [self findNavigationBarWithLabel:navBarTitle];
     XCUIElement *menuButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                                 identifier:@"menu icon"
+                                                 identifier:@"menu icon" // We don't have translation for this string
                                               parentElement:navBar
                                             filterPredicate:nil
                                                     timeout:kUITestsElementAvailableTimeout];
     if (!menuButton) {
         menuButton = [self waitElementMatchingType:XCUIElementTypeButton
-                                        identifier:@"menu icon note"
+                                        identifier:@"menu icon note" // We don't have translation for this string
                                      parentElement:navBar
                                    filterPredicate:nil
                                            timeout:kUITestsElementAvailableTimeout];

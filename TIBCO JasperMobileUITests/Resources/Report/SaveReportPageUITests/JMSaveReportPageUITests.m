@@ -99,7 +99,7 @@
     [self openSavingReportPage];
     
     [self saveTestReportWithName:@"" 
-                          format:@"html"];
+                          format:@"html"]; // We don't have translation for this string
     [self verifyErrorOfSavingReportWithEmptyName];
     
     [self closeSaveReportPage];    
@@ -120,7 +120,7 @@
     [self openSavingReportPage];
     
     [self saveTestReportWithName:@"  " 
-                          format:@"html"];
+                          format:@"html"]; // We don't have translation for this string
     [self verifyErrorOfSavingReportWithEmptyName];
     
     [self closeSaveReportPage];    
@@ -141,7 +141,7 @@
     [self openSavingReportPage];
     
     [self saveTestReportWithName:@"-" 
-                          format:@"html"];
+                          format:@"html"]; // We don't have translation for this string
     [self verifyErrorOfSavingReportWithWrongSymbolsInName];
     
     [self closeSaveReportPage];    
@@ -173,7 +173,7 @@
     [self openSavingReportPage];
     
     [self saveTestReportWithName:kTestReportName
-                          format:@"html"];
+                          format:@"html"]; // We don't have translation for this string
     [self verifyThatAlertItemExistsVisible];
     [self cancelSavingTestReport];
     
@@ -206,7 +206,7 @@
     [self openSavingReportPage];
     
     [self saveTestReportWithName:kTestReportName
-                          format:@"html"];
+                          format:@"html"]; // We don't have translation for this string
     [self cancelSavingTestReport];
     
     [self closeSaveReportPage];    
@@ -238,13 +238,13 @@
     [self openSavingReportPage];
     
     [self saveTestReportWithName:kTestReportName
-                          format:@"html"];
+                          format:@"html"]; // We don't have translation for this string
     [self confirmOverridingTestReport];
     
     [self closeTestReportPage]; 
     
     [self verifyThatReportDidSaveWithReportName:kTestReportName
-                                         format:@"html"];
+                                         format:@"html"]; // We don't have translation for this string
     [self openLibrarySectionIfNeed];
 }
 
@@ -346,7 +346,7 @@
 
 - (void)cancelSavingTestReport
 {
-    XCUIElement *alert = [self waitAlertWithTitle:@"Error"
+    XCUIElement *alert = [self waitAlertWithTitle:JMLocalizedString(@"dialod_title_error")
                                           timeout:kUITestsBaseTimeout];
     [self tapButtonWithText:JMLocalizedString(@"dialog_button_cancel")
               parentElement:alert
@@ -355,7 +355,7 @@
 
 - (void)confirmOverridingTestReport
 {
-    XCUIElement *alert = [self waitAlertWithTitle:@"Error"
+    XCUIElement *alert = [self waitAlertWithTitle:JMLocalizedString(@"dialod_title_error")
                                           timeout:kUITestsBaseTimeout];
     [self tapButtonWithText:JMLocalizedString(@"dialog_button_ok")
               parentElement:alert
@@ -367,13 +367,13 @@
 - (void)verifyThatSaveReportPageOnScreen
 {
     // TODO: replace with accessibility id of view
-    [self waitNavigationBarWithLabel:@"Save Report"
+    [self waitNavigationBarWithLabel:@"Save Report" // We don't have translation for this string
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatSaveReportPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Save Report"
+    [self waitNavigationBarWithLabel:@"Save Report" // We don't have translation for this string
                              timeout:kUITestsBaseTimeout];
 }
 
@@ -381,7 +381,7 @@
 {
     // TODO: need make general case for all devices, 'Back' on iPhones
     [self verifyBackButtonExistWithAlternativeTitle:nil
-                                  onNavBarWithTitle:@"Save Report"];
+                                  onNavBarWithTitle:@"Save Report"]; // We don't have translation for this string
 }
 
 - (void)verifyErrorOfSavingReportWithEmptyName
@@ -389,7 +389,7 @@
     XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
     XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"This field is required."
+                             text:JMLocalizedString(@"resource_viewer_save_name_errmsg_empty")
                     parentElement:nameCell
                           timeout:kUITestsBaseTimeout];
 }
@@ -399,14 +399,14 @@
     XCUIElement *tableView = [self.application.tables elementBoundByIndex:0];
     XCUIElement *nameCell = [tableView.cells elementBoundByIndex:0];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"are not allowed."
+                             text:@"are not allowed." // We don't have translation for this string
                     parentElement:nameCell
                           timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatAlertItemExistsVisible
 {    
-    [self waitAlertWithTitle:@"Error"
+    [self waitAlertWithTitle:JMLocalizedString(@"dialod_title_error")
                      timeout:kUITestsBaseTimeout];
 }
 

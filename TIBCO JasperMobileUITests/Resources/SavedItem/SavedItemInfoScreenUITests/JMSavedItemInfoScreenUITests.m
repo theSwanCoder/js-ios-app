@@ -203,11 +203,11 @@
     [self verifyCommonFieldsOnInfoPage];
 
     XCUIElement *infoPageElement = self.application.otherElements[@"JMSavedItemsInfoViewControllerAccessibilityId"];
-    XCUIElement *formatLabel = infoPageElement.staticTexts[@"Format"];
+    XCUIElement *formatLabel = infoPageElement.staticTexts[JMLocalizedString(@"resource_format_title")];
     if (!formatLabel.exists) {
         XCTFail(@"'Format' Label isn't visible.");
     } else {
-        XCUIElement *formatValue = infoPageElement.staticTexts[@"html"];
+        XCUIElement *formatValue = infoPageElement.staticTexts[@"html"]; // We don't have translation for this string
         if (!formatValue.exists) {
             XCTFail(@"'Format' is not correct (%@).", formatValue);
         }
@@ -219,11 +219,11 @@
     [self verifyCommonFieldsOnInfoPage];
 
     XCUIElement *infoPageElement = self.application.otherElements[@"JMSavedItemsInfoViewControllerAccessibilityId"];
-    XCUIElement *formatLabel = infoPageElement.staticTexts[@"Format"];
+    XCUIElement *formatLabel = infoPageElement.staticTexts[JMLocalizedString(@"resource_format_title")];
     if (!formatLabel.exists) {
         XCTFail(@"'Format' Label isn't visible.");
     } else {
-        XCUIElement *formatValue = infoPageElement.staticTexts[@"pdf"];
+        XCUIElement *formatValue = infoPageElement.staticTexts[@"pdf"]; // We don't have translation for this string
         if (!formatValue.exists) {
             XCTFail(@"'Format' is not correct (%@).", formatValue);
         }
@@ -234,42 +234,42 @@
 {
     XCUIElement *infoPageElement = self.application.otherElements[@"JMSavedItemsInfoViewControllerAccessibilityId"];
 
-    XCUIElement *nameLabel = infoPageElement.staticTexts[@"Name"];
+    XCUIElement *nameLabel = infoPageElement.staticTexts[JMLocalizedString(@"resource_label_title")];
     if (!nameLabel.exists) {
         XCTFail(@"Name Label isn't visible.");
     }
 
-    XCUIElement *descriptionLabel = infoPageElement.staticTexts[@"Description"];
+    XCUIElement *descriptionLabel = infoPageElement.staticTexts[JMLocalizedString(@"resource_description_title")];
     if (!descriptionLabel.exists) {
         XCTFail(@"Description Label isn't visible.");
     }
 
-    XCUIElement *uriLabel = infoPageElement.staticTexts[@"URI"];
+    XCUIElement *uriLabel = infoPageElement.staticTexts[JMLocalizedString(@"resource_uri_title")];
     if (!uriLabel.exists) {
         XCTFail(@"URI Label isn't visible.");
     }
 
-    XCUIElement *typeLabel = infoPageElement.staticTexts[@"Type"];
+    XCUIElement *typeLabel = infoPageElement.staticTexts[JMLocalizedString(@"resource_type_title")];
     if (!typeLabel.exists) {
         XCTFail(@"Type Label isn't visible.");
     } else {
-        XCUIElement *typeValue = infoPageElement.staticTexts[@"Content Resource"];
+        XCUIElement *typeValue = infoPageElement.staticTexts[JMLocalizedString(@"resources_type_saved_reportUnit")];
         if (!typeValue.exists) {
             XCTFail(@"Type has incorrect value (%@)", typeValue);
         }
     }
 
-    XCUIElement *versionLabel = infoPageElement.staticTexts[@"Version"];
+    XCUIElement *versionLabel = infoPageElement.staticTexts[JMLocalizedString(@"resource_version_title")];
     if (!versionLabel.exists) {
         XCTFail(@"Version Label isn't visible.");
     }
 
-    XCUIElement *creatingDateLabel = infoPageElement.staticTexts[@"Creation Date"];
+    XCUIElement *creatingDateLabel = infoPageElement.staticTexts[JMLocalizedString(@"resource_creationDate_title")];
     if (!creatingDateLabel.exists) {
         XCTFail(@"'Creation Date' Label isn't visible.");
     }
 
-    XCUIElement *modifiedDateLabel = infoPageElement.staticTexts[@"Modified Date"];
+    XCUIElement *modifiedDateLabel = infoPageElement.staticTexts[JMLocalizedString(@"resource_modifiedDate_title")];
     if (!modifiedDateLabel.exists) {
         XCTFail(@"'Modified Date' Label isn't visible.");
     }

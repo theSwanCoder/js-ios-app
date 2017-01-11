@@ -66,7 +66,12 @@
 - (void)testThatMenuViewCanSelectItems
 {
     // Check all collection screen items
-    NSArray *itemsArray = @[@"Repository", @"Saved Items", @"Favorites", @"Schedules"];
+    NSArray *itemsArray = @[
+            JMLocalizedString(@"menuitem_repository_label"),
+            JMLocalizedString(@"menuitem_saveditems_label"),
+            JMLocalizedString(@"menuitem_favorites_label"),
+            JMLocalizedString(@"menuitem_schedules_label")
+    ];
     for (NSString *itemName in itemsArray) {
         [self showSideMenuInSectionWithName:nil];
         [self verifySideMenuVisible];

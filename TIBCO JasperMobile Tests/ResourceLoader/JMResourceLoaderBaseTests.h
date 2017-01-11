@@ -39,4 +39,5 @@ typedef void(^JMTestBooleanCompletion)(BOOL, NSError *__nullable);
 - (NSOperation * __nonnull)authorizeTask;
 - (NSOperation * __nonnull)obsoleteSessionTask;
 - (NSOperation * __nonnull)prepareWebEnvironmentTask;
+- (void)reset;
 @end

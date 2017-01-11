@@ -213,20 +213,20 @@
 
 - (void)verityThatPrintPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Printer Options"
+    [self waitNavigationBarWithLabel:@"Printer Options" // We don't have translation for this string
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatPrinterPageHasCorrectTitle
 {
-    [self waitNavigationBarWithLabel:@"Printer"
+    [self waitNavigationBarWithLabel:@"Printer" // We don't have translation for this string
                              timeout:kUITestsBaseTimeout];
 }
 
 - (void)verifyThatPrintersPageHasCorrentBackButton
 {
-    XCUIElement *navBar = [self findNavigationBarWithLabel:@"Printer"];
-    [self verifyButtonExistWithText:@"Printer Options"
+    XCUIElement *navBar = [self findNavigationBarWithLabel:@"Printer"]; // We don't have translation for this string
+    [self verifyButtonExistWithText:@"Printer Options" // We don't have translation for this string
                       parentElement:navBar];
 }
 @end

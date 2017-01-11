@@ -118,8 +118,8 @@
     [self selectTestProfile];
     [self tapLoginButton];
 
-    [self processErrorAlertIfExistWithTitle:@"Invalid credentials supplied."
-                                    message:@"Could not login to JasperReports Server."
+    [self processErrorAlertIfExistWithTitle:JMLocalizedString(@"error_authenication_dialog_title")
+                                    message:JMLocalizedString(@"error_authenication_dialog_msg")
                                 actionBlock:nil];
 }
 
@@ -142,8 +142,8 @@
     [self selectTestProfile];
     [self tapLoginButton];
 
-    [self processErrorAlertIfExistWithTitle:@"Invalid credentials supplied."
-                                    message:@"Could not login to JasperReports Server."
+    [self processErrorAlertIfExistWithTitle:JMLocalizedString(@"error_authenication_dialog_title")
+                                    message:JMLocalizedString(@"error_authenication_dialog_msg")
                                 actionBlock:nil];
 }
 
@@ -166,8 +166,8 @@
     [self selectTestProfile];
     [self tapLoginButton];
 
-    [self processErrorAlertIfExistWithTitle:@"Error"
-                                    message:@"Specify a valid password."
+    [self processErrorAlertIfExistWithTitle:JMLocalizedString(@"dialod_title_error")
+                                    message:JMLocalizedString(@"login_password_errmsg_empty")
                                 actionBlock:nil];
 }
 
@@ -190,8 +190,8 @@
     [self selectTestProfile];
     [self tapLoginButton];
 
-    [self processErrorAlertIfExistWithTitle:@"Invalid credentials supplied."
-                                    message:@"Could not login to JasperReports Server."
+    [self processErrorAlertIfExistWithTitle:JMLocalizedString(@"error_authenication_dialog_title")
+                                    message:JMLocalizedString(@"error_authenication_dialog_msg")
                                 actionBlock:nil];
 }
 
@@ -214,8 +214,8 @@
     [self selectTestProfile];
     [self tapLoginButton];
 
-    [self processErrorAlertIfExistWithTitle:@"Invalid credentials supplied."
-                                    message:@"Could not login to JasperReports Server."
+    [self processErrorAlertIfExistWithTitle:JMLocalizedString(@"error_authenication_dialog_title")
+                                    message:JMLocalizedString(@"error_authenication_dialog_msg")
                                 actionBlock:nil];
 }
 
@@ -237,8 +237,8 @@
     [self enterPassword:testServerProfile.password];
     [self tapLoginButton];
 
-    [self processErrorAlertIfExistWithTitle:@"Error"
-                                    message:@"Select a server profile."
+    [self processErrorAlertIfExistWithTitle:JMLocalizedString(@"dialod_title_error")
+                                    message:JMLocalizedString(@"login_server_profile_errmsg_empty")
                                 actionBlock:nil];
 }
 

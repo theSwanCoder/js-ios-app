@@ -70,7 +70,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)refreshReport
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Refresh"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_refresh")];
     [self givenLoadingPopupNotVisible];
 
     [self processErrorAlertsIfExistWithTitles:@[@"Visualize Error Domain"] actionBlock:^{
@@ -81,7 +81,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openTestReportFromInfoPage
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Run"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_run")];
 
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
@@ -114,7 +114,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openReportFiltersPage
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Edit Values"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_edit")];
 
     [self givenLoadingPopupNotVisible];
 }
@@ -136,7 +136,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openSavingReportPage
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Save"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_save")];
 }
 
 - (void)closeSaveReportPage
@@ -159,7 +159,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
     [htmlCell tapByWaitingHittable];
 
     // Perform saving
-    [self tapButtonWithText:@"Save"
+    [self tapButtonWithText:JMLocalizedString(@"dialog_button_save")
               parentElement:nil
                 shouldCheck:YES];
 }
@@ -203,13 +203,14 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)openPrintReportPage
 {
     [self openMenuActions];
-    [self selectActionWithName:@"Print"];
+    [self selectActionWithName:JMLocalizedString(@"action_title_print")];
     [self givenLoadingPopupNotVisible];
 }
 
 - (void)closePrintReportPage
 {
     // verify that 'print report' page is on the screen
+    // We don't have translation for this string
     [self tapCancelButtonOnNavBarWithTitle:@"Printer Options"];
 }
 
@@ -224,31 +225,31 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 {
     XCUIElement *infoPage = self.application.otherElements[@"JMReportInfoViewControllerAccessibilityId"];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Name"
+                             text:JMLocalizedString(@"resource_label_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Description"
+                             text:JMLocalizedString(@"resource_description_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"URI"
+                             text:JMLocalizedString(@"resource_uri_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Type"
+                             text:JMLocalizedString(@"resource_type_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Version"
+                             text:JMLocalizedString(@"resource_version_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Creation Date"
+                             text:JMLocalizedString(@"resource_creationDate_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
     [self waitElementMatchingType:XCUIElementTypeStaticText
-                             text:@"Modified Date"
+                             text:JMLocalizedString(@"resource_modifiedDate_title")
                     parentElement:infoPage
                           timeout:kUITestsBaseTimeout];
 }
@@ -256,7 +257,7 @@ NSString *const kTestReportWithSingleSelectedControlName = @"04. Product Results
 - (void)givenThatReportCellsOnScreenInSectionWithName:(NSString *)sectionName
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self selectFilterBy:@"Reports"
+    [self selectFilterBy:JMLocalizedString(@"resources_filterby_type_reportUnit")
       inSectionWithTitle:sectionName];
     [self givenThatCollectionViewContainsListOfCellsInSectionWithName:sectionName];
 }

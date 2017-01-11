@@ -153,7 +153,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
     [self openTestDashletWithChartTypes];
     
     XCUIElement *chartTypeElement = [self waitElementMatchingType:XCUIElementTypeStaticText
-                                                             text:@"Store Sales"
+                                                             text:@"Store Sales" // We don't have translation for this string
                                                           timeout:kUITestsBaseTimeout];
     if (chartTypeElement.exists) {
         [chartTypeElement tapByWaitingHittable];
@@ -181,7 +181,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)openTestDashletWithHyperlinks
 {
-    [self tapOnElementWithText:@"Customers"];
+    [self tapOnElementWithText:@"Customers"]; // We don't have translation for this string
     [self givenLoadingPopupNotVisible];
 }
 
@@ -194,13 +194,13 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)openTestDashletWithChartTypes
 {
-    [self tapOnElementWithText:@"Store Cost"];
+    [self tapOnElementWithText:@"Store Cost"]; // We don't have translation for this string
     [self givenLoadingPopupNotVisible];
 }
 
 - (void)openTestHyperlinkPage
 {
-    [self tapOnElementWithText:@"Ida Rodriguez"];
+    [self tapOnElementWithText:@"Ida Rodriguez"]; // We don't have translation for this string
     // We can have two times when loading up and down
     // first time loading 'report info' and second one - loading report
     [self givenLoadingPopupVisible];
@@ -244,7 +244,7 @@ static NSString *const kDashletName = @"13. Top Fives Report";
 
 - (void)verifyThatReportFromTestHypelinkOnScreen
 {
-    [self waitNavigationBarWithLabel:@"09. Customer Detail Report"
+    [self waitNavigationBarWithLabel:@"09. Customer Detail Report" // We don't have translation for this string
                              timeout:kUITestsBaseTimeout];
 }
 

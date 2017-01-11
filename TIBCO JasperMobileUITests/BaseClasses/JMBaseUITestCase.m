@@ -69,7 +69,7 @@ NSTimeInterval kUITestsElementAvailableTimeout = 3;
                              text:@"TIBCO® JasperMobile™"
                     parentElement:nil
               shouldBeInHierarchy:NO
-                          timeout:kUITestsBaseTimeout];
+                          timeout:kUITestsResourceLoadingTimeout];
                           
     if ([self shouldLoginBeforeStartTest]) {
         NSLog(@"From super: Try to log in before performing tests");
