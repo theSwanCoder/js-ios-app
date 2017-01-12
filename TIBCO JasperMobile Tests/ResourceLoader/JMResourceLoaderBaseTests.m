@@ -21,8 +21,7 @@
 
     self.webManager = [JMWebViewManager new];
     // TODO: Do we need separate tests on different JRS (trunk PRO, trunk CE) or change them if need
-    self.testRestClient = [[JSRESTBase alloc] initWithServerProfile:[self activeProfile]
-                                                         keepLogged:YES];
+    self.testRestClient = [[JSRESTBase alloc] initWithServerProfile:[self activeProfile]];
     self.sessionManager = [JMSessionManager sharedManager];
     [self.sessionManager updateRestClientWithClient:self.testRestClient];
 }
@@ -49,31 +48,34 @@
 
 - (JSProfile *)demoProfile
 {
-    JSProfile *profile = [[JSProfile alloc] initWithAlias:@"Test Profile Demo"
-                                                serverUrl:@"https://mobiledemo.jaspersoft.com/jasperserver-pro"
-                                             organization:nil
-                                                 username:@"phoneuser"
-                                                 password:@"phoneuser"];
+    JSUserProfile *profile = [[JSUserProfile alloc] initWithAlias:@"Test Profile Demo"
+                                                        serverUrl:@"https://mobiledemo.jaspersoft.com/jasperserver-pro"
+                                                     organization:nil
+                                                         username:@"phoneuser"
+                                                         password:@"phoneuser"];
+    profile.keepSession = YES;
     return profile;
 }
 
 - (JSProfile *)trunkPROProfile
 {
-    JSProfile *profile = [[JSProfile alloc] initWithAlias:@"Test Profile Trunk PRO"
-                                                serverUrl:@"http://build-master.jaspersoft.com:5980/jrs-pro-trunk"
-                                             organization:nil
-                                                 username:@"superuser"
-                                                 password:@"superuser"];
+    JSUserProfile *profile = [[JSUserProfile alloc] initWithAlias:@"Test Profile Trunk PRO"
+                                                        serverUrl:@"http://build-master.jaspersoft.com:5980/jrs-pro-trunk"
+                                                     organization:nil
+                                                         username:@"superuser"
+                                                         password:@"superuser"];
+    profile.keepSession = YES;
     return profile;
 }
 
 - (JSProfile *)trunkCEProfile
 {
-    JSProfile *profile = [[JSProfile alloc] initWithAlias:@"Test Profile Trunk CE"
-                                                serverUrl:@"http://build-master.jaspersoft.com:6080/jrs-ce-trunk-ce"
-                                             organization:nil
-                                                 username:@"jasperadmin"
-                                                 password:@"jasperadmin"];
+    JSUserProfile *profile = [[JSUserProfile alloc] initWithAlias:@"Test Profile Trunk CE"
+                                                        serverUrl:@"http://build-master.jaspersoft.com:6080/jrs-ce-trunk-ce"
+                                                     organization:nil
+                                                         username:@"jasperadmin"
+                                                         password:@"jasperadmin"];
+    profile.keepSession = YES;
     return profile;
 }
 

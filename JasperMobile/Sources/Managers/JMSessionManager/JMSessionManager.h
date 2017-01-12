@@ -42,9 +42,11 @@
 
 @property (nonatomic, strong, readonly) JSRESTBase *restClient;
 
+@property (nonatomic, strong, readonly) JSUserProfile *serverProfile;
+
 + (instancetype) sharedManager;
 
-- (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(NSError *error))completionBlock;
+- (void) createSessionWithServerProfile:(JSProfile *)serverProfile completion:(void(^)(NSError *error))completionBlock;
 
 - (void)restoreLastSessionWithCompletion:(void (^)(BOOL isSessionRestored))completion;
 

@@ -130,7 +130,9 @@
 
 #ifndef __RELEASE__
     // try track real profile count (not just users).
-    NSString *combinedString = [NSString stringWithFormat:@"%@+%@+%@", self.restClient.serverProfile.username, self.restClient.serverProfile.organization, self.restClient.serverProfile.serverUrl];
+    JSUserProfile *userServerProfile = [JMSessionManager sharedManager].serverProfile;
+
+    NSString *combinedString = [NSString stringWithFormat:@"%@+%@+%@", userServerProfile.username, userServerProfile.organization, userServerProfile.serverUrl];
     NSData *combinedStringData = [combinedString dataUsingEncoding:NSUTF8StringEncoding];
     NSString *uuid = [combinedStringData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
     [tracker set:kGAIUserId

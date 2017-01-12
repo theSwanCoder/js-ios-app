@@ -35,8 +35,7 @@ NSString * const kJMFavorites = @"Favorites";
 
 + (void)addToFavorites:(JMResource *)resource
 {
-    JSProfile *sessionServerProfile = [JMSessionManager sharedManager].restClient.serverProfile;
-    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    JMServerProfile *activeServerProfile = [JMUtils activeServerProfile];
     JMFavorites *favorites = [NSEntityDescription insertNewObjectForEntityForName:kJMFavorites inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
     favorites.uri = resource.resourceLookup.uri;
     favorites.label = resource.resourceLookup.label;
@@ -44,7 +43,7 @@ NSString * const kJMFavorites = @"Favorites";
     favorites.creationDate = resource.resourceLookup.creationDate;
     favorites.updateDate = resource.resourceLookup.updateDate;
     favorites.resourceDescription = resource.resourceLookup.resourceDescription;
-    favorites.username = sessionServerProfile.username;
+    favorites.username = [JMSessionManager sharedManager].serverProfile.username;
     favorites.version = resource.resourceLookup.version;
     [activeServerProfile  addFavoritesObject:favorites];
 

@@ -125,11 +125,12 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 #pragma mark - Utils
 - (void)updateServerInfo
 {
-    NSString *alias = self.restClient.serverProfile.alias;
-    NSString *version = self.restClient.serverProfile.serverInfo.version;
+    JSUserProfile *userServerProfile = [JMSessionManager sharedManager].serverProfile;
+    NSString *alias = userServerProfile.alias;
+    NSString *version = userServerProfile.serverInfo.version;
     self.serverNameLabel.text = [NSString stringWithFormat:@"%@ (v.%@)", alias, version];
-    self.userNameLabel.text = self.restClient.serverProfile.username;
-    self.organizationNameLabel.text = self.restClient.serverProfile.organization;
+    self.userNameLabel.text = userServerProfile.username;
+    self.organizationNameLabel.text = userServerProfile.organization;
 }
 
 - (void)unselectItems

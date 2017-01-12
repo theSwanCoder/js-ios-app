@@ -45,10 +45,10 @@
 /**
  Return server profile by server name
  
- @param profile JSProfile Server profile
+ @param profile JSUserProfile Server profile
  @return server profile with required name
 */
-+ (JMServerProfile *)serverProfileForJSProfile:(JSProfile *)profile;
++ (JMServerProfile *)serverProfileForJSProfile:(JSUserProfile *)profile;
 
 /**
  Create clone for server profile.

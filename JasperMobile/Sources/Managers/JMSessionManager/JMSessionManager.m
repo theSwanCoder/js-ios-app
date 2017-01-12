@@ -46,6 +46,7 @@ static JMSessionManager *_sharedManager = nil;
 
 @interface JMSessionManager ()
 @property (nonatomic, strong, readwrite) JSRESTBase *restClient;
+@property (nonatomic, strong, readwrite) JSUserProfile *serverProfile;
 
 @end
 
@@ -56,7 +57,7 @@ static JMSessionManager *_sharedManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedManager = [JMSessionManager new];
-        [[NSNotificationCenter defaultCenter] addObserver:_sharedManager selector:@selector(saveActiveSessionIfNeeded:) name:kJSSessionDidAuthorized object:_sharedManager.restClient];
+        [[NSNotificationCenter defaultCenter] addObserver:_sharedManager selector:@selector(saveActiveSessionIfNeeded:) name:kJSSessionDidAuthorizedNotification object:_sharedManager.restClient];
     });
 
     return _sharedManager;
@@ -67,9 +68,14 @@ static JMSessionManager *_sharedManager = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(NSError *error))completionBlock
+- (void)setRestClient:(JSRESTBase *)restClient
 {
-    self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile keepLogged:keepLogged];
+    _serverProfile = (JSUserProfile *)restClient.serverProfile;
+}
+
+- (void) createSessionWithServerProfile:(JSProfile *)serverProfile completion:(void(^)(NSError *error))completionBlock
+{
+    self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile];
     [self.restClient deleteCookies];
 
     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult * _Nullable result) {
@@ -82,7 +88,7 @@ static JMSessionManager *_sharedManager = nil;
 - (void) updateSessionServerProfileWith:(JMServerProfile *)changedServerProfile {
     // update current active server profile
     self.restClient.serverProfile.alias = changedServerProfile.alias;
-    self.restClient.keepSession = [changedServerProfile.keepSession boolValue];
+    self.restClient.serverProfile.keepSession = [changedServerProfile.keepSession boolValue];
     [self saveActiveSessionIfNeeded:nil];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:JMServerProfileDidChangeNotification
@@ -90,7 +96,7 @@ static JMSessionManager *_sharedManager = nil;
 }
 
 - (void) saveActiveSessionIfNeeded:(id)notification {
-    if (self.restClient && self.restClient.keepSession) {
+    if (self.restClient && self.restClient.serverProfile.keepSession) {
         NSData *archivedSession = [NSKeyedArchiver archivedDataWithRootObject:self.restClient];
         [[NSUserDefaults standardUserDefaults] setObject:archivedSession forKey:kJMSavedSessionKey];
     } else {
@@ -117,11 +123,11 @@ static JMSessionManager *_sharedManager = nil;
         }
     }
 
-    if (self.restClient && self.restClient.keepSession) { // try restore session
+    if (self.restClient && self.restClient.serverProfile.keepSession) { // try restore session
 
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
 
-            JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+            JMServerProfile *activeServerProfile = [JMUtils activeServerProfile];
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(JSOperationResult * _Nullable result) {
                     dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -232,10 +238,9 @@ static JMSessionManager *_sharedManager = nil;
 
 - (NSPredicate *)predicateForCurrentServerProfile
 {
-    JMServerProfile *activaServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
     NSMutableArray *currentServerProfilepredicates = [NSMutableArray array];
-    [currentServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"serverProfile = %@", activaServerProfile]];
-    [currentServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"username = %@", self.restClient.serverProfile.username]];
+    [currentServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"serverProfile = %@", [JMUtils activeServerProfile]]];
+    [currentServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"username = %@", [JMSessionManager sharedManager].serverProfile.username]];
 
     NSMutableArray *nilServerProfilepredicates = [NSMutableArray array];
     [nilServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"serverProfile = nil"]];
