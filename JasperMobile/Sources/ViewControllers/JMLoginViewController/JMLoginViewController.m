@@ -41,6 +41,7 @@
 #import "JMUtils.h"
 #import "JMConstants.h"
 #import "JMCoreDataManager.h"
+#import "JSUserProfile.h"
 
 @interface JMLoginViewController () <UITextFieldDelegate, JMServersGridViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
@@ -116,8 +117,10 @@
 {
     if (self.showForRestoreSession) {
         // setup previous session
-        self.userNameTextField.text = self.restClient.serverProfile.username;
-        self.selectedServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+        JSUserProfile *serverProfile = [JMSessionManager sharedManager].serverProfile;
+        self.userNameTextField.text = serverProfile.username;
+        self.selectedServerProfile = [JMUtils activeServerProfile];
+;
     } else {
         if ([JMUtils isAutofillLoginDataEnable]) {
             NSString *lastUserName = [JMUtils lastUserName];
@@ -249,33 +252,34 @@
 #pragma mark - Private
 - (void)loginWithServerProfile:(JMServerProfile *)serverProfile userName:(NSString *)username password:(NSString *)password
 {
-    JSProfile *jsServerProfile = [[JSProfile alloc] initWithAlias:serverProfile.alias
-                                                        serverUrl:serverProfile.serverUrl
-                                                     organization:serverProfile.organization
-                                                         username:username
-                                                         password:password];
-
+    JSUserProfile *jsServerProfile = [[JSUserProfile alloc] initWithAlias:serverProfile.alias
+                                                                serverUrl:serverProfile.serverUrl
+                                                             organization:serverProfile.organization
+                                                                 username:username
+                                                                 password:password];
+    jsServerProfile.keepSession = [serverProfile.keepSession boolValue];
+    
     __weak typeof(self)weakSelf = self;
     [JMCancelRequestPopup presentWithMessage:@"status_loading" cancelBlock:^(void) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf.restClient cancelAllRequests];
     }];
     
-    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:^(NSError *error) {
+    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile completion:^(NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [JMCancelRequestPopup dismiss];
         // Analytics
         [[JMAnalyticsManager sharedManager] sendAnalyticsEventAboutLoginSuccess:!error
                                                                    additionInfo:@{
-                                                                           kJMAnalyticsCategoryKey : kJMAnalyticsAuthenticationEventCategoryTitle,
-                                                                           kJMAnalyticsActionKey   : kJMAnalyticsAuthenticationEventActionLoginTitle,
-                                                                           kJMAnalyticsLabelKey    : kJMAnalyticsAuthenticationEventLabelSuccess
-                                        }];
+                                                                                  kJMAnalyticsCategoryKey : kJMAnalyticsAuthenticationEventCategoryTitle,
+                                                                                  kJMAnalyticsActionKey   : kJMAnalyticsAuthenticationEventActionLoginTitle,
+                                                                                  kJMAnalyticsLabelKey    : kJMAnalyticsAuthenticationEventLabelSuccess
+                                                                                  }];
         
         if (!error) {
             serverProfile.useVisualize = @([JMUtils isSupportVisualize]);
             [[JMCoreDataManager sharedInstance] save:nil];
-
+            
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
             if (strongSelf.completion) {
                 strongSelf.completion();

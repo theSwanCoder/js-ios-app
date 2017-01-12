@@ -54,7 +54,7 @@
     return demoServerProfile;
 }
 
-+ (JMServerProfile *)serverProfileForJSProfile:(JSProfile *)profile
++ (JMServerProfile *)serverProfileForJSProfile:(JSUserProfile *)profile
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
     
@@ -119,8 +119,7 @@
 
 - (BOOL) isActiveServerProfile
 {
-    JMServerProfile *activeProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-    return (self == activeProfile);
+    return (self == [JMUtils activeServerProfile]);
 }
 
 @end

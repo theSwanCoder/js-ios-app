@@ -133,7 +133,7 @@ static const NSInteger kSplashViewTag = 100;
         if (isSessionRestored) {
             loginCompletionBlock();
 
-            JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+            JMServerProfile *activeServerProfile = [JMUtils activeServerProfile];
             if (activeServerProfile && activeServerProfile.askPassword.boolValue) {
                 [JMUtils showLoginViewForRestoreSessionWithCompletion:loginCompletionBlock];
             } else {

@@ -57,13 +57,15 @@ NSString * const kJMSavedResourcesDefaultOrganization = @"organization_1";
     JMSavedResources *savedResource = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
     
     if (!savedResource) {
-        JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+        JSUserProfile *userServerProfile = [JMSessionManager sharedManager].serverProfile;
+
+        JMServerProfile *activeServerProfile = [JMUtils activeServerProfile];
         savedResource = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
         savedResource.label = resource.resourceLookup.label;
         savedResource.uri = [self uriForSavedResourceWithName:resource.resourceLookup.label format:resource.format resourceType:resource.type];
         savedResource.resourceDescription = resource.resourceLookup.resourceDescription;
         savedResource.format = resource.format;
-        savedResource.username = self.restClient.serverProfile.username;
+        savedResource.username = userServerProfile.username;
         savedResource.wsType = wsType;
         savedResource.version = resource.resourceLookup.version;
         [activeServerProfile addSavedResourcesObject:savedResource];
@@ -255,8 +257,9 @@ NSString * const kJMSavedResourcesDefaultOrganization = @"organization_1";
 #pragma mark - Private API fo Paths
 + (NSString *)pathComponent
 {
-    NSString *userName = self.restClient.serverProfile.username;
-    NSString *organization = self.restClient.serverProfile.organization;
+    JSUserProfile *userServerProfile = [JMSessionManager sharedManager].serverProfile;
+    NSString *userName = userServerProfile.username;
+    NSString *organization = userServerProfile.organization;
     if (!organization) {
         organization = kJMSavedResourcesDefaultOrganization;
     }

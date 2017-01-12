@@ -117,19 +117,18 @@ NSString *const kJMFiltersNetworkManagerTestReportWithoutReportOptions_URI = @"/
 
 - (JSProfile *)createDemoProfile
 {
-    JSProfile *demoProfile = [[JSProfile alloc] initWithAlias:@"Demo Profile"
-                                                    serverUrl:kJMFiltersNetworkManagerDemoServerURL
-                                                 organization:kJMFiltersNetworkManagerDemoServerOrganization
-                                                     username:kJMFiltersNetworkManagerDemoAccountName
-                                                     password:kJMFiltersNetworkManagerDemoAccountPassword];
-
+    JSUserProfile *demoProfile = [[JSUserProfile alloc] initWithAlias:@"Demo Profile"
+                                                            serverUrl:kJMFiltersNetworkManagerDemoServerURL
+                                                         organization:kJMFiltersNetworkManagerDemoServerOrganization
+                                                             username:kJMFiltersNetworkManagerDemoAccountName
+                                                             password:kJMFiltersNetworkManagerDemoAccountPassword];
+    demoProfile.keepSession = YES;
     return demoProfile;
 }
 
 - (JSRESTBase *)createRestClientWithServerProfile:(JSProfile *)profile
 {
-    JSRESTBase *restClient = [[JSRESTBase alloc] initWithServerProfile:profile
-                                                            keepLogged:YES];
+    JSRESTBase *restClient = [[JSRESTBase alloc] initWithServerProfile:profile];
     return restClient;
 }
 

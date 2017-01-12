@@ -478,19 +478,19 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isDemoAccount
 {
-    JSProfile *serverProfile = self.restClient.serverProfile;
+    JSUserProfile *userServerProfile = [JMSessionManager sharedManager].serverProfile;
     NSURL *demoURL = [NSURL URLWithString:kJMDemoServerUrl];
-    NSURL *serverURL = [NSURL URLWithString:serverProfile.serverUrl];
+    NSURL *serverURL = [NSURL URLWithString:userServerProfile.serverUrl];
     BOOL isDemoServer = [serverURL.host isEqualToString:demoURL.host];
-    BOOL isDemoUser = [serverProfile.username isEqualToString:kJMDemoServerUsername];
-    BOOL isDemoOrganization = [serverProfile.organization isEqualToString:kJMDemoServerOrganization];
+    BOOL isDemoUser = [userServerProfile.username isEqualToString:kJMDemoServerUsername];
+    BOOL isDemoOrganization = [userServerProfile.organization isEqualToString:kJMDemoServerOrganization];
     BOOL isDemoAccount = isDemoServer && isDemoUser && isDemoOrganization;
     return isDemoAccount;
 }
 
 + (JMServerProfile * __nullable)activeServerProfile
 {
-    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:[JMSessionManager sharedManager].serverProfile];
     return activeServerProfile;
 }
 

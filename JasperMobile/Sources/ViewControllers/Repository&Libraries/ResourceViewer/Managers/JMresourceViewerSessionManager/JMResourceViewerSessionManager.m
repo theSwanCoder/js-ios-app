@@ -38,7 +38,7 @@
 - (void)handleSessionDidExpire
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-    if (self.controller.restClient.keepSession) {
+    if (self.controller.restClient.serverProfile.keepSession) {
         if (self.cleanAction) {
             self.cleanAction();
         }
