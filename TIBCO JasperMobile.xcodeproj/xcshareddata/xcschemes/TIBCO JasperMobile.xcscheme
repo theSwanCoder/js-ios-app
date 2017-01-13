@@ -181,6 +181,12 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "JMRESTReportLoaderTests/testRefreshReportActionAfterSessionExpired">
+               </Test>
+               <Test
+                  Identifier = "JMRESTReportLoaderTests/testRunReportWithSessionExpired">
+               </Test>
+               <Test
                   Identifier = "JMVisualizeReportLoaderTests/testNavigationOnPage">
                </Test>
             </SkippedTests>
