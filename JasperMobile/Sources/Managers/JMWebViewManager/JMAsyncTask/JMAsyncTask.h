@@ -43,6 +43,7 @@ typedef void(^JMAsyncTaskExecutionBlock)(JMAsyncTaskFinishBlock);
 
 @interface JMAsyncTask : NSOperation
 @property (nonatomic) JMAsyncTaskState state;
+@property (nonatomic, copy) NSString *taskDescription;
 - (instancetype)initWithExecutionBlock:(JMAsyncTaskExecutionBlock)executionBlock;
 + (instancetype)taskWithExecutionBlock:(JMAsyncTaskExecutionBlock)executionBlock;
 - (NSError *)createCancelTaskErrorWithErrorCode:(NSInteger)errorCode;

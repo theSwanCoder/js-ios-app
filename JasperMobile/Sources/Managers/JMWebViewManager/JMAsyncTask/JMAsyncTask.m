@@ -147,6 +147,7 @@
 {
     JMLog(@"%@SEL: '%@'", self, NSStringFromSelector(_cmd));
     [super cancel];
+    self.state = JMAsyncTaskStateFinished;
 }
 
 #pragma mark - Common methods
@@ -166,7 +167,10 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"\nself: %@\nstate: %@\nisCancelled: %@\n", super.description, [self stringValueForState:self.state], self.isCancelled ? @"YES" : @"NO"];
+    return [NSString stringWithFormat:@"\nself: %@\nstate: %@\nisCancelled: %@\n%@",
+                    super.description,
+                    [self stringValueForState:self.state], self.isCancelled ? @"YES" : @"NO",
+                    self.taskDescription.length > 0 ? [NSString stringWithFormat:@"task description: %@\n", self.taskDescription] : @""];
 }
 
 @end

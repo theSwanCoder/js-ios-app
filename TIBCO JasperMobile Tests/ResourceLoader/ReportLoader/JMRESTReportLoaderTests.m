@@ -28,6 +28,7 @@
         [expectation fulfill];
         finishBlock();
     }];
+    expectationTask.taskDescription = [NSString stringWithFormat:@"expectationTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
 
     [self.operationQueue addOperation:[self authorizeTask]];
     [self.operationQueue addOperation:[self prepareWebEnvironmentTask]];
@@ -59,6 +60,7 @@
         [expectation fulfill];
         finishBlock();
     }];
+    expectationTask.taskDescription = [NSString stringWithFormat:@"expectationTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
 
     [self.operationQueue addOperation:[self authorizeTask]];
     [self.operationQueue addOperation:[self prepareWebEnvironmentTask]];
@@ -92,6 +94,7 @@
         [expectation fulfill];
         finishBlock();
     }];
+    expectationTask.taskDescription = [NSString stringWithFormat:@"expectationTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
 
     [self.operationQueue addOperation:[self authorizeTask]];
     [self.operationQueue addOperation:[self prepareWebEnvironmentTask]];
@@ -132,6 +135,7 @@
         [expectation fulfill];
         finishBlock();
     }];
+    expectationTask.taskDescription = [NSString stringWithFormat:@"expectationTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
 
     [self.operationQueue addOperation:[self authorizeTask]];
     [self.operationQueue addOperation:[self prepareWebEnvironmentTask]];
@@ -173,6 +177,7 @@
         [expectation fulfill];
         finishBlock();
     }];
+    expectationTask.taskDescription = [NSString stringWithFormat:@"expectationTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
 
     [self.operationQueue addOperation:[self authorizeTask]];
     [self.operationQueue addOperation:[self prepareWebEnvironmentTask]];
@@ -220,6 +225,7 @@
         NSLog(@"End preparing web environment task");
         finishBlock();
     }];
+    prepareWebEnvironmentTask.taskDescription = [NSString stringWithFormat:@"prepareWebEnvironmentTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
     return prepareWebEnvironmentTask;
 }
 

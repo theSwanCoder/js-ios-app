@@ -102,18 +102,20 @@
             finishBlock();
         }];
     }];
+    authorizeTask.taskDescription = [NSString stringWithFormat:@"authorizeTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
     return authorizeTask;
 }
 
 - (NSOperation *)obsoleteSessionTask
 {
-    JMAsyncTask *authorizeTask = [[JMAsyncTask alloc] initWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
+    JMAsyncTask *obsoleteTask = [[JMAsyncTask alloc] initWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
         NSLog(@"Start obsolete session task");
         [self.sessionManager obsoleteSession];
         NSLog(@"End obsolete session task");
         finishBlock();
     }];
-    return authorizeTask;
+    obsoleteTask.taskDescription = [NSString stringWithFormat:@"obsoleteTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
+    return obsoleteTask;
 }
 
 - (NSOperation *)prepareWebEnvironmentTask

@@ -14,6 +14,7 @@
 {
     [super setUp];
 
+    NSLog(@"Before start test, operations in queue: %@", self.operationQueue.operations);
 }
 
 - (void)tearDown
@@ -95,6 +96,7 @@
                         NSLog(@"End run report task");
                     }];
     }];
+    runReportTask.taskDescription = [NSString stringWithFormat:@"runReportTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
     return runReportTask;
 }
 
@@ -108,13 +110,14 @@
             NSLog(@"End refresh report task");
         }];
     }];
+    refreshReportTask.taskDescription = [NSString stringWithFormat:@"refreshReportTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
     return refreshReportTask;
 }
 
 - (NSOperation *)navigateToTaskWithPage:(NSInteger)page
                              completion:(JMTestBooleanCompletion __nonnull)completion
 {
-    JMAsyncTask *prepareWebEnvironmentTask = [[JMAsyncTask alloc] initWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
+    JMAsyncTask *navigateToTask = [[JMAsyncTask alloc] initWithExecutionBlock:^(JMAsyncTaskFinishBlock finishBlock) {
         NSLog(@"Start navigating to page task");
         [self.loader fetchPage:@(page)
                     completion:^(BOOL success, NSError *error) {
@@ -123,7 +126,8 @@
                         NSLog(@"End navigating to page task");
                     }];
     }];
-    return prepareWebEnvironmentTask;
+    navigateToTask.taskDescription = [NSString stringWithFormat:@"navigateToTask in [%@ %@]", self.class.description, NSStringFromSelector(_cmd)];
+    return navigateToTask;
 }
 
 @end
