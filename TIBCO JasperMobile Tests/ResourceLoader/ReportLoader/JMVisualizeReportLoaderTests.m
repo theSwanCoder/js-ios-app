@@ -16,7 +16,7 @@
 
 - (JSProfile *)activeProfile
 {
-    return [self demoProfile];
+    return [self trunkPROProfile];
 }
 
 #pragma mark - Tests

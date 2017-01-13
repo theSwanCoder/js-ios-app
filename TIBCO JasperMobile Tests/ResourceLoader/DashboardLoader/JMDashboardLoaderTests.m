@@ -12,6 +12,13 @@
 
 @implementation JMDashboardLoaderTests
 
+#pragma mark - Setups
+
+- (JSProfile *)activeProfile
+{
+    return [self trunkPROProfile];
+}
+
 #pragma mark - Tests
 
 - (void)testRunDashboardAction
