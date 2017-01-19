@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -20,19 +20,37 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  JMReportOptionsCell.h
+//  JMContentResourceViewerVC.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.0
+ @since 2.6
  */
 
-#import <UIKit/UIKit.h>
+#import "JMResourceViewerProtocol.h"
+#import "JMMenuActionsView.h"
+#import "JMResourceClientHolder.h"
+#import "JMExternalWindowDashboardControlsVC.h"
 
-@interface JMReportOptionsCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@class JMSavedResources;
+@class JMContentResourceViewerConfigurator;
+@class JMContentResourceViewerVC;
+@protocol JMContentResourceViewerVCDelegate <NSObject>
+@optional
+- (void)resourceViewer:(JMContentResourceViewerVC *)resourceViewer didDeleteResource:(JMResource *)resource;
+
+@end
+
+
+@interface JMContentResourceViewerVC : JMBaseViewController <JMResourceClientHolder, JMResourceViewerProtocol, JMMenuActionsViewDelegate, JMMenuActionsViewProtocol, JMExternalWindowDashboardControlsVCDelegate>
+@property (nonatomic, strong) JMContentResourceViewerConfigurator *configurator;
+@property (nonatomic, weak) id <JMContentResourceViewerVCDelegate>delegate;
+
+- (void)showOnTV;
+- (void)switchFromTV;
 
 @end

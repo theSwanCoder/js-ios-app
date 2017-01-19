@@ -34,6 +34,7 @@
 #import "JMConstants.h"
 #import "JMUtils.h"
 #import "UIAlertController+Additions.h"
+#import "JMCancelRequestPopup.h"
 
 @implementation JMScheduleInfoViewController
 

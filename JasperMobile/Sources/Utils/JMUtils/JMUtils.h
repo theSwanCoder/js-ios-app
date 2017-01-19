@@ -32,6 +32,7 @@
 
 @class JMReportViewerConfigurator;
 @class JMDashboardViewerConfigurator;
+@class JMContentResourceViewerConfigurator;
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
@@ -184,6 +185,8 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (JMDashboardViewerConfigurator * __nonnull)dashboardViewerConfiguratorReusableWebView;
 
 + (JMDashboardViewerConfigurator * __nonnull)dashboardViewerConfiguratorNonReusableWebView;
+
++ (JMContentResourceViewerConfigurator * __nonnull)contentResourceViewerConfigurator;
 
 + (BOOL)isCompactWidth;
 

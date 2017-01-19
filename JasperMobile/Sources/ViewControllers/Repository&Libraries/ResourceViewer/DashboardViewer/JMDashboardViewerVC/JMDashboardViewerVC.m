@@ -47,6 +47,7 @@
 #import "JMResourceViewerPrintManager.h"
 #import "JMResourceViewerShareManager.h"
 #import "JMResourceViewerSessionManager.h"
+#import "JMResourceViewerFavoritesHelper.h"
 #import "NSObject+Additions.h"
 #import "JMUtils.h"
 #import "JMConstants.h"
@@ -427,6 +428,10 @@
         availableAction |= JMMenuActionsViewAction_Refresh;
     }
     availableAction |= JMMenuActionsViewAction_Share | JMMenuActionsViewAction_Print;
+    
+    if (![[self stateManager].favoritesHelper shouldShowFavoriteBarButton]) {
+        availableAction |= ([[self stateManager].favoritesHelper isResourceInFavorites] ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite);
+    }
 
     if (self.restClient.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_JADE_6_2_0) {
         availableAction |= JMMenuActionsViewAction_Save;

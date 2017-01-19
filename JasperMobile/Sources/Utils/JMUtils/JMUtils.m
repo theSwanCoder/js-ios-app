@@ -42,6 +42,7 @@
 #import "JMReportViewerConfigurator.h"
 #import "JMWebViewManager.h"
 #import "JMDashboardViewerConfigurator.h"
+#import "JMContentResourceViewerConfigurator.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import "NSObject+Additions.h"
@@ -576,6 +577,12 @@ void jmDebugLog(NSString *format, ...) {
     JMWebEnvironment *webEnvironment = [[JMWebViewManager sharedInstance] reusableWebEnvironmentWithId:JMDashboardViewerVisualizeWebEnvironmentIdentifier
                                                                                               flowType:JMResourceFlowTypeVIZ];
     return webEnvironment;
+}
+
++ (JMContentResourceViewerConfigurator * __nonnull)contentResourceViewerConfigurator
+{
+    JMContentResourceViewerConfigurator *configurator = [JMContentResourceViewerConfigurator configuratorWithWebEnvironment:[[JMWebViewManager sharedInstance] webEnvironment]];
+    return configurator;
 }
 
 @end

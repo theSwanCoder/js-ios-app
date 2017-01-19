@@ -210,15 +210,16 @@ NSString * const kJMSavedResourcesDefaultOrganization = @"organization_1";
     
 - (JMResource *)wrapperFromSavedResources
 {
-    JSResourceLookup *resourceLookup = [JSResourceLookup new];
-    resourceLookup.uri = self.uri;
-    resourceLookup.label = self.label;
-    resourceLookup.resourceType = self.wsType;
-    resourceLookup.creationDate = self.creationDate;
-    resourceLookup.updateDate = self.updateDate;
-    resourceLookup.resourceDescription = self.resourceDescription;
-    resourceLookup.version = self.version;
-    return [JMResource resourceWithResourceLookup:resourceLookup];
+    JSContentResource *contentResource = [JSContentResource new];
+    contentResource.uri = self.uri;
+    contentResource.label = self.label;
+    contentResource.resourceType = self.wsType;
+    contentResource.creationDate = self.creationDate;
+    contentResource.updateDate = self.updateDate;
+    contentResource.resourceDescription = self.resourceDescription;
+    contentResource.version = self.version;
+    contentResource.fileFormat = self.format;
+    return [JMResource resourceWithResourceLookup:contentResource];
 }
     
 #pragma mark - Public API for Paths

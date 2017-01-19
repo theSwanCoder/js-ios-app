@@ -132,14 +132,11 @@
 {
     NSString *vcIdentifier;
     switch (self.type) {
-        case JMResourceTypeFile: {
-            vcIdentifier = @"JMSavedResourceViewerViewController";
-            break;
-        }
         case JMResourceTypeFolder: {break;}
+        case JMResourceTypeFile:
         case JMResourceTypeSavedReport:
         case JMResourceTypeSavedDashboard:{
-            vcIdentifier = @"JMSavedResourceViewerViewController";
+            vcIdentifier = @"JMContentResourceViewerVC";
             break;
         }
         case JMResourceTypeReport: {

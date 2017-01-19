@@ -21,18 +21,18 @@
  */
 
 //
-//  JMReportOptionsCell.h
+//  JMContentResourceViewerStateManager.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.0
+ @since 2.6
  */
 
-#import <UIKit/UIKit.h>
 
-@interface JMReportOptionsCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+#import "JMResourceViewerStateManager.h"
+
+@interface JMContentResourceViewerStateManager : JMResourceViewerStateManager
 
 @end

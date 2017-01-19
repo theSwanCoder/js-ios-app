@@ -53,6 +53,7 @@
 #import "JasperMobileAppDelegate.h"
 #import "JMReportViewerExternalScreenManager.h"
 #import "JMResourceViewerHyperlinksManager.h"
+#import "JMResourceViewerFavoritesHelper.h"
 #import "JMReportViewerStateManager.h"
 
 @interface JMReportViewerVC () <JMSaveResourceViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMReportPartViewToolbarDelegate, JMResourceViewerStateManagerDelegate>
@@ -677,6 +678,9 @@
     availableAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule;
     availableAction |= JMMenuActionsViewAction_Share | JMMenuActionsViewAction_Print;
 
+    if (![[self stateManager].favoritesHelper shouldShowFavoriteBarButton]) {
+        availableAction |= ([[self stateManager].favoritesHelper isResourceInFavorites] ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite);
+    }
     // TODO: For now use for show chart types, but there could be other components
     if ([self report].reportComponents.count && [self shouldWorkWithChartTypes]) {
         availableAction |= JMMenuActionsViewAction_ShowReportChartTypes;

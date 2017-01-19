@@ -28,7 +28,7 @@
 
 #import "JMSavedItemsInfoViewController.h"
 #import "JMSavedResources+Helpers.h"
-#import "JMSavedResourceViewerViewController.h"
+#import "JMContentResourceViewerVC.h"
 #import "JMFavorites.h"
 #import "JMFavorites+Helpers.h"
 #import "JMResource.h"
@@ -37,7 +37,7 @@
 #import "JMUtils.h"
 #import "UIAlertController+Additions.h"
 
-@interface JMSavedItemsInfoViewController () <UITextFieldDelegate>
+@interface JMSavedItemsInfoViewController () <UITextFieldDelegate, JMContentResourceViewerVCDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic) UIDocumentInteractionController *documentController;
 
@@ -150,7 +150,8 @@
 
 - (void)runReport
 {
-    JMSavedResourceViewerViewController *nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resource resourceViewerVCIdentifier]];
+    JMContentResourceViewerVC *nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resource resourceViewerVCIdentifier]];
+    nextVC.configurator = [JMUtils contentResourceViewerConfigurator];
     [nextVC setResource:self.resource];
     nextVC.delegate = self;
     
@@ -166,17 +167,12 @@
     return NO;
 }
 
-#pragma mark - JMBaseResourceViewerVCDelegate
-- (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JMResource *)resourceLookup
+#pragma mark - JMContentResourceViewerVCDelegate
+- (void)resourceViewer:(JMContentResourceViewerVC *)resourceViewer didDeleteResource:(JMResource *)resourceLookup
 {
     NSArray *viewControllers = self.navigationController.viewControllers;
     UIViewController *previousViewController = viewControllers[[viewControllers indexOfObject:self] - 1];
     [self.navigationController popToViewController:previousViewController animated:YES];
-}
-
-- (BOOL)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer shouldCloseViewerAfterDeletingResource:(JMResource *)resourceLookup
-{
-    return NO;
 }
 
 #pragma mark - Helpers

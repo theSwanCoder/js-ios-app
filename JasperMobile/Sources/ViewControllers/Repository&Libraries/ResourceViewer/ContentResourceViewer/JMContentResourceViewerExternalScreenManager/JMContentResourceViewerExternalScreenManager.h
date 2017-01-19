@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -20,19 +20,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
-//  JMSavedResourceViewerViewController.h
+//  JMContentResourceViewerExternalScreenManager.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
+ @since 2.6
  */
 
-#import "JMResourceViewerViewController.h"
 
-@interface JMSavedResourceViewerViewController : JMResourceViewerViewController
+#import "JMResourceViewerExternalScreenManager.h"
+@class JMContentResourceViewerVC;
+
+@interface JMContentResourceViewerExternalScreenManager : JMResourceViewerExternalScreenManager
+@property (nonatomic, weak, nullable) JMContentResourceViewerVC *controller;
 
 @end

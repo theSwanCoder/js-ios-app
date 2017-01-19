@@ -33,11 +33,10 @@
 
 #import "JMResourceClientHolder.h"
 #import "JMMenuActionsView.h"
-#import "JMBaseResourceViewerVC.h"
 
 extern NSString * __nonnull const kJMShowResourceInfoSegue;
 
-@interface JMResourceInfoViewController : JMBaseViewController <JMResourceClientHolder, JMMenuActionsViewDelegate, JMBaseResourceViewerVCDelegate>
+@interface JMResourceInfoViewController : JMBaseViewController <JMResourceClientHolder, JMMenuActionsViewDelegate>
 @property (nonatomic, strong, nullable) NSArray *resourceProperties;
 @property (nonatomic, copy, nullable) void(^exitBlock)(void);
 

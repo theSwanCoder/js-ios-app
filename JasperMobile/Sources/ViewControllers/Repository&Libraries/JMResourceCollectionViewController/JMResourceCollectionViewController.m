@@ -45,6 +45,7 @@
 #import "JMSchedule.h"
 #import "JMWebViewManager.h"
 #import "JMDashboardViewerVC.h"
+#import "JMContentResourceViewerVC.h"
 #import "JMLocalization.h"
 #import "JMUtils.h"
 #import "JMThemesManager.h"
@@ -616,6 +617,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             } else if (resource.type == JMResourceTypeLegacyDashboard) {
                 JMDashboardViewerVC *dashboardViewerVC = nextVC;
                 dashboardViewerVC.configurator = [JMUtils dashboardViewerConfiguratorNonReusableWebView];
+            } else if (resource.type == JMResourceTypeFile || resource.type == JMResourceTypeSavedReport || resource.type == JMResourceTypeSavedDashboard) {
+                JMContentResourceViewerVC *contentResourceViewerVC = nextVC;
+                contentResourceViewerVC.configurator = [JMUtils contentResourceViewerConfigurator];
             }
         }
     }

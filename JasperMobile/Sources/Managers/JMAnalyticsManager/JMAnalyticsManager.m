@@ -166,7 +166,7 @@
         readableName = @"Report viewer screen";
     } else if ([className isEqualToString:@"JMDashboardViewerVC"]) {
         readableName = @"Dashboard viewer screen";
-    } else if ([className isEqualToString:@"JMSavedResourceViewerViewController"]) {
+    } else if ([className isEqualToString:@"JMContentResourceViewerVC"]) {
         readableName = @"Saved files screen";
     } else if ([className isEqualToString:@"JMLibraryCollectionViewController"]) {
         readableName = @"Library Screen";

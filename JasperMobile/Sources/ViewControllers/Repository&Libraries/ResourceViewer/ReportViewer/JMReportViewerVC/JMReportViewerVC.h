@@ -31,9 +31,11 @@
 @since 2.1
 */
 
-#import "JMResourceViewerViewController.h"
-#import "JMReportLoaderProtocol.h"
+
 #import "JMResourceViewerProtocol.h"
+#import "JMMenuActionsView.h"
+#import "JMResourceClientHolder.h"
+#import "JMReportLoaderProtocol.h"
 
 @class JMReportViewerToolBar;
 @class JMReportPartViewToolbar;

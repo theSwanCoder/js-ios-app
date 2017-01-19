@@ -21,34 +21,39 @@
  */
 
 //
-//  JMReportOptionsCell.m
+//  JMContentResourceViewerConfigurator.m
 //  TIBCO JasperMobile
 //
 
 
-#import "JMReportOptionsCell.h"
-#import "JMThemesManager.h"
+#import "JMContentResourceViewerConfigurator.h"
+#import "JMContentResourceViewerStateManager.h"
+#import "JMContentResourceLoader.h"
+#import "JMContentResourceViewerExternalScreenManager.h"
 
-@implementation JMReportOptionsCell
+@interface JMContentResourceViewerConfigurator ()
+@property (nonatomic, strong, readwrite, nonnull) JMContentResourceLoader * contentResourceLoader;
 
-- (void)awakeFromNib
+@end
+
+@implementation JMContentResourceViewerConfigurator
+
+- (void)configWithWebEnvironment:(JMWebEnvironment *)webEnvironment
 {
-    [super awakeFromNib];
-    self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
-    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+    [super configWithWebEnvironment:webEnvironment];
+    
+    _contentResourceLoader = [JMContentResourceLoader loaderWithRESTClient:self.restClient
+                                                            webEnvironment:webEnvironment];
 }
-- (void)layoutSubviews
+
+- (JMResourceViewerStateManager *)createStateManager
 {
-    [super layoutSubviews];
-    
-    // Make sure the contentView does a layout pass here so that its subviews have their frames set, which we
-    // need to use to set the preferredMaxLayoutWidth below.
-    [self.contentView setNeedsLayout];
-    [self.contentView layoutIfNeeded];
-    
-    // Set the preferredMaxLayoutWidth of the mutli-line bodyLabel based on the evaluated width of the label's frame,
-    // as this will allow the text to wrap correctly, and as a result allow the label to take on the correct height.
-    self.titleLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.titleLabel.frame);
+    return [JMContentResourceViewerStateManager new];
+}
+
+- (JMResourceViewerExternalScreenManager *)createExternalScreenManager
+{
+    return [JMContentResourceViewerExternalScreenManager new];
 }
 
 @end

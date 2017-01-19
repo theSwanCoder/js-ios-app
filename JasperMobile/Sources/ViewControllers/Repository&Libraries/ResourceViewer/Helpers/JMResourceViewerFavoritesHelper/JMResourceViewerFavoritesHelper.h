@@ -40,4 +40,7 @@
 - (void)updateFavoriteState;
 - (void)removeFavoriteBarButton;
 - (BOOL)shouldShowFavoriteBarButton;
+
+- (BOOL)isResourceInFavorites;
+
 @end

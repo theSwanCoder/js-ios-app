@@ -21,18 +21,32 @@
  */
 
 //
-//  JMReportOptionsCell.h
+//  JMContentResourceLoader.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.0
+ @since 2.6
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+@class JMResource, JMSavedResources;
 
-@interface JMReportOptionsCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@interface JMContentResourceLoader : NSObject
+@property (nonatomic, strong, readonly) JMSavedResources *savedResource;
+@property (nonatomic, strong, readonly) JSContentResource *contentResource;
+@property (nonatomic, strong, readonly) NSURL *contentResourceURL;
+@property (nonatomic, copy, readonly) JSRESTBase *restClient;
+
+- (instancetype)initWithRESTClient:(JSRESTBase *)restClient
+                    webEnvironment:(JMWebEnvironment *)webEnvironment;
++ (instancetype)loaderWithRESTClient:(JSRESTBase *)restClient
+                      webEnvironment:(JMWebEnvironment *)webEnvironment;
+
+- (void)loadContentResourceForResource:(JMResource *)resource
+                            completion:(void (^)(NSURL *baseURL, NSError *error))completion;
+
+- (void)cancel;
 
 @end

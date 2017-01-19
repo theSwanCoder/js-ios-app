@@ -104,7 +104,7 @@
 
 - (void)favoriteAction
 {
-    if ([JMFavorites isResourceInFavorites:self.controller.resource]) {
+    if ([self isResourceInFavorites]) {
         [JMFavorites removeFromFavorites:self.controller.resource];
     } else {
         [JMFavorites addToFavorites:self.controller.resource];
@@ -145,7 +145,7 @@
 
 - (void)decorateFavoriteBarButton:(UIBarButtonItem *)favoriteButton
 {
-    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.controller.resource];
+    BOOL isResourceInFavorites = [self isResourceInFavorites];
     NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
     favoriteButton.image = [UIImage imageNamed:imageName];
     favoriteButton.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
@@ -167,13 +167,16 @@
 {
     BOOL shouldShowFavoriteButton = NO;
     BOOL isCompactWidth = [JMUtils isCompactWidth];
-    BOOL isRegularWidth = !isCompactWidth;
     BOOL isCompactHeight = [JMUtils isCompactHeight];
-    BOOL isRegularHeight = !isCompactHeight;
-    if ( (isCompactWidth && isCompactHeight) || (isRegularWidth && isRegularHeight) ) {
+    if ( !isCompactWidth || (isCompactWidth && isCompactHeight) ) {
         shouldShowFavoriteButton = YES;
     }
     return shouldShowFavoriteButton;
+}
+
+- (BOOL)isResourceInFavorites
+{
+    return [JMFavorites isResourceInFavorites:self.controller.resource];
 }
 
 @end

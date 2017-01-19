@@ -21,29 +21,27 @@
  */
 
 //
-//  JMReportViewerExternalScreenManager.m
+//  JMContentResourceViewerExternalScreenManager.m
 //  TIBCO JasperMobile
 //
 
-#import "JMReportViewerExternalScreenManager.h"
-#import "JMUtils.h"
+#import "JMContentResourceViewerExternalScreenManager.h"
 #import "JMExternalWindowControlsVC.h"
-#import "JMBaseResourceView.h"
-#import "JMVisualizeReportLoader.h"
-#import "JMReportViewerConfigurator.h"
+#import "JMContentResourceViewerVC.h"
 
-@interface JMReportViewerExternalScreenManager()
+
+@interface JMContentResourceViewerExternalScreenManager ()
 @property (nonatomic, strong) JMExternalWindowControlsVC *controlsVC;
+
 @end
 
-@implementation JMReportViewerExternalScreenManager
-
+@implementation JMContentResourceViewerExternalScreenManager
 #pragma mark - Public API
 
 - (void)showContentOnTV
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-
+    
     [super showContentOnTV];
     [self showControlsViewOnDevice];
 }
@@ -51,7 +49,7 @@
 - (void)backContentOnDevice
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
-
+    
     [super backContentOnDevice];
     [self removeControlsViewFromDevice];
 }
@@ -68,29 +66,16 @@
     [self.controller switchFromTV];
 }
 
-- (void)handleContentIsOnExternalScreen
-{
-    JMVisualizeReportLoader *reportLoader = self.controller.configurator.reportLoader;
-    [reportLoader fitReportViewToScreen];
-}
-
-- (void)handleContentIsOnDevice
-{
-#warning CORRECT!!!!
-    JMVisualizeReportLoader *reportLoader = self.controller.configurator.reportLoader;
-    [reportLoader fitReportViewToScreen];
-}
-
 #pragma mark - Helpers
 
 - (void)showControlsViewOnDevice
 {
     self.controlsVC = [[JMExternalWindowControlsVC alloc] initWithContentView:[self.controller contentView]];
-
+    
     CGRect controlViewFrame = self.controller.view.frame;
     controlViewFrame.origin.y = 0;
     self.controlsVC.view.frame = controlViewFrame;
-
+    
     [self.controller.view addSubview:self.controlsVC.view];
 }
 
