@@ -432,6 +432,10 @@
 		A1478F98EB35335FAA74595D /* JMBaseUITestCase+Favorites.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478A20648524A7E65A1C42 /* JMBaseUITestCase+Favorites.m */; };
 		A1478FAC077B6EC3EE3F7679 /* JMBaseUITestCase+Section.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478A0179DB809BCE095506 /* JMBaseUITestCase+Section.m */; };
 		A1478FF1F7F9EBB359329E79 /* JMBaseUITestCase+Search.m in Sources */ = {isa = PBXBuildFile; fileRef = A147880304DD4A20777E3C59 /* JMBaseUITestCase+Search.m */; };
+		BD0F25231E3202740039E1C0 /* JMContentResourceViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = BD11FBD81E2E6953002F4F7B /* JMContentResourceViewerConfigurator.m */; };
+		BD0F25241E3202C60039E1C0 /* JMContentResourceViewerExternalScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD1D31791E314776001CEF3B /* JMContentResourceViewerExternalScreenManager.m */; };
+		BD0F25251E3202D20039E1C0 /* JMContentResourceViewerStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD11FBDB1E2E6953002F4F7B /* JMContentResourceViewerStateManager.m */; };
+		BD0F25261E3202E30039E1C0 /* JMContentResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD11FBE31E2FBCB9002F4F7B /* JMContentResourceLoader.m */; };
 		BD11FBCF1E290884002F4F7B /* JMContentResourceViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BD11FBCE1E290884002F4F7B /* JMContentResourceViewerVC.m */; };
 		BD11FBDC1E2E6953002F4F7B /* JMContentResourceViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = BD11FBD81E2E6953002F4F7B /* JMContentResourceViewerConfigurator.m */; };
 		BD11FBDD1E2E6953002F4F7B /* JMContentResourceViewerStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD11FBDB1E2E6953002F4F7B /* JMContentResourceViewerStateManager.m */; };
@@ -4495,6 +4499,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD0F25261E3202E30039E1C0 /* JMContentResourceLoader.m in Sources */,
+				BD0F25251E3202D20039E1C0 /* JMContentResourceViewerStateManager.m in Sources */,
+				BD0F25241E3202C60039E1C0 /* JMContentResourceViewerExternalScreenManager.m in Sources */,
+				BD0F25231E3202740039E1C0 /* JMContentResourceViewerConfigurator.m in Sources */,
 				089F04421DF5B90200812A88 /* JMExportResource.m in Sources */,
 				937F69F31E13FEAA008A3E84 /* JMExportTask.m in Sources */,
 				089F04411DF5910000812A88 /* JMResourceViewerToolbarsHelper.m in Sources */,
