@@ -1,6 +1,5 @@
 TIBCO JasperMobile for iOS
 ==========================
-[![Build Status](https://travis-ci.org/Jaspersoft/js-ios-app.svg?branch=develop)](https://travis-ci.org/Jaspersoft/js-ios-app/builds)
 
 TIBCO JasperMobile for iOS is a native application which allows you to browse your JasperReports Server repository and view reports/dashboards in several formats.
 
@@ -18,7 +17,7 @@ http://community.jaspersoft.com/project/jaspermobile-ios
 Installation
 ------------
 
-The recommended approach for installing JaspersoftSDK for building application is via the [CocoaPods](http://cocoapods.org/) package manager, as it provides flexible dependency management and dead simple installation. For best results, it is recommended that you install via **CocoaPods >= 0.19.1g Git >= 1.8.0** installed via Homebrew.
+The recommended approach for installing JaspersoftSDK for building application is via the [CocoaPods](http://cocoapods.org/) package manager, as it provides flexible dependency management and dead simple installation. For best results, it is recommended that you install via ** the latest version of CocoaPods and Git >= 1.8.0** installed via Homebrew.
 
 ### via CocoaPods
 
