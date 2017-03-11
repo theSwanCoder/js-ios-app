@@ -367,6 +367,32 @@
                                 }
                             }];
 
+    NSString *dashletWillMinimizeListenerId = @"JasperMobile.VIS.Dashboard.API.events.dashlet.didStartMinimize";
+    [self.webEnvironment addListener:self forEventId:dashletWillMinimizeListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(dashletWillMinimizeListenerId);
+                                __typeof(self) strongSelf = weakSelf;
+                                if (error) {
+                                    [JMUtils presentAlertControllerWithError:error
+                                                                  completion:nil];
+                                } else {
+                                    [strongSelf handleDidStartMinimizeDashletWithParameters:params];
+                                }
+                            }];
+
+    NSString *dashletDidMinimizeListenerId = @"JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMinimize";
+    [self.webEnvironment addListener:self forEventId:dashletDidMinimizeListenerId
+                            callback:^(NSDictionary *params, NSError *error) {
+                                JMLog(dashletDidMinimizeListenerId);
+                                __typeof(self) strongSelf = weakSelf;
+                                if (error) {
+                                    [JMUtils presentAlertControllerWithError:error
+                                                                  completion:nil];
+                                } else {
+                                    [strongSelf handleDidEndMinimizeDashletWithParameters:params];
+                                }
+                            }];
+
     // Links
     NSString *reportExecutionLinkOptionListenerId = @"JasperMobile.VIS.Event.Link.ReportExecution";
     [self.webEnvironment addListener:self
@@ -481,8 +507,19 @@
         return;
     }
 
-    if ([self.delegate respondsToSelector:@selector(dashboardLoaderDidStartMaximizeDashlet:)]) {
-        [self.delegate dashboardLoaderDidStartMaximizeDashlet:self];
+    JMLog(@"parameters: %@", parameters);
+    if (![JMUtils isServerAmber]) {
+        NSString *componentId = parameters[@"component"][@"id"];
+        for(JSDashboardComponent *component in self.dashboard.components) {
+            if ([componentId isEqualToString:component.identifier]) {
+                self.dashboard.maximizedComponent = component;
+                break;
+            }
+        }
+    }
+
+    if ([self.delegate respondsToSelector:@selector(dashboardLoader:didStartMaximizeDashboardComponent:)]) {
+        [self.delegate dashboardLoader:self didStartMaximizeDashboardComponent:self.dashboard.maximizedComponent];
     }
 }
 
@@ -493,10 +530,7 @@
     }
 
     JMLog(@"parameters: %@", parameters);
-    if ([JMUtils isServerAmber]) {
-//        title = parameters[@"componentId"];
-    } else {
-//        title = parameters[@"component"][@"name"];
+    if (![JMUtils isServerAmber]) {
         NSString *componentId = parameters[@"component"][@"id"];
         for(JSDashboardComponent *component in self.dashboard.components) {
             if ([componentId isEqualToString:component.identifier]) {
@@ -508,6 +542,50 @@
 
     if ([self.delegate respondsToSelector:@selector(dashboardLoader:didEndMaximazeDashboardComponent:)]) {
         [self.delegate dashboardLoader:self didEndMaximazeDashboardComponent:self.dashboard.maximizedComponent];
+    }
+}
+
+- (void)handleDidStartMinimizeDashletWithParameters:(NSDictionary *)parameters
+{
+    if (self.state == JMDashboardLoaderStateCancel) {
+        return;
+    }
+
+    JMLog(@"parameters: %@", parameters);
+    if (![JMUtils isServerAmber]) {
+        NSString *componentId = parameters[@"component"][@"id"];
+        for(JSDashboardComponent *component in self.dashboard.components) {
+            if ([componentId isEqualToString:component.identifier]) {
+                self.dashboard.maximizedComponent = component;
+                break;
+            }
+        }
+    }
+
+    if ([self.delegate respondsToSelector:@selector(dashboardLoader:didStartMinimizeDashboardComponent:)]) {
+        [self.delegate dashboardLoader:self didStartMaximizeDashboardComponent:self.dashboard.maximizedComponent];
+    }
+}
+
+- (void)handleDidEndMinimizeDashletWithParameters:(NSDictionary *)parameters
+{
+    if (self.state == JMDashboardLoaderStateCancel) {
+        return;
+    }
+
+    JMLog(@"parameters: %@", parameters);
+    if (![JMUtils isServerAmber]) {
+        NSString *componentId = parameters[@"component"][@"id"];
+        for(JSDashboardComponent *component in self.dashboard.components) {
+            if ([componentId isEqualToString:component.identifier]) {
+                self.dashboard.maximizedComponent = component;
+                break;
+            }
+        }
+    }
+
+    if ([self.delegate respondsToSelector:@selector(dashboardLoader:didEndMinimizeDashboardComponent:)]) {
+        [self.delegate dashboardLoader:self didEndMinimizeDashboardComponent:self.dashboard.maximizedComponent];
     }
 }
 

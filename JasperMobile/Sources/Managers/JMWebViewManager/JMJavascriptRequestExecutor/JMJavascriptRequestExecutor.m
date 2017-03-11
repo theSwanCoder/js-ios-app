@@ -389,17 +389,14 @@ NSString *const JMJavascriptRequestExecutorErrorCodeKey = @"JMJavascriptRequestE
 {
     JMLog(@"%@ - %@", self, NSStringFromSelector(_cmd));
     NSArray <JMJavascriptEvent *> *events = [self findEventsForId:response.command];
-    if (events.count > 0) {
-        for (JMJavascriptEvent *event in events) {
-            JMJavascriptRequestCompletion completion = event.callback;
-            JMLog(@"event.listener: %@", event.listener);
-            if (response.parameters && response.parameters[@"error"]) {
-                NSDictionary *errorJSON = response.parameters[@"error"];
-                NSError *error = [self makeErrorFromWebViewError:errorJSON];
-                completion(nil, error);
-            } else {
-                completion(response, nil);
-            }
+    for (JMJavascriptEvent *event in events) {
+        JMJavascriptRequestCompletion completion = event.callback;
+        if (response.parameters && response.parameters[@"error"]) {
+            NSDictionary *errorJSON = response.parameters[@"error"];
+            NSError *error = [self makeErrorFromWebViewError:errorJSON];
+            completion(nil, error);
+        } else {
+            completion(response, nil);
         }
     }
 }

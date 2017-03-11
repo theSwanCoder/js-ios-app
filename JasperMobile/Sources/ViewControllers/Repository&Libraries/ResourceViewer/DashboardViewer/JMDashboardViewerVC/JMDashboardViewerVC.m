@@ -529,7 +529,7 @@
 }
     
 #pragma mark - JMDashboardLoaderDelegate
-- (void)dashboardLoaderDidStartMaximizeDashlet:(id<JMDashboardLoader> __nonnull)loader
+- (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didStartMaximizeDashboardComponent:(JSDashboardComponent *__nonnull)component
 {
     [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
 }
@@ -540,6 +540,17 @@
 
     self.navigationItem.title = component.label;
     [[self stateManager] setupPageForState:JMResourceViewerStateMaximizedDashlet];
+}
+
+- (void)dashboardLoader:(id <JMDashboardLoader> __nonnull)loader didStartMinimizeDashboardComponent:(JSDashboardComponent *__nonnull)component
+{
+    [[self stateManager] setupPageForState:JMResourceViewerStateLoading];
+}
+
+- (void)dashboardLoader:(id <JMDashboardLoader> __nonnull)loader didEndMinimizeDashboardComponent:(JSDashboardComponent *__nonnull)component
+{
+    self.navigationItem.title = self.resource.resourceLookup.label;
+    [[self stateManager] setupPageForState:JMResourceViewerStateResourceReady];
 }
 
 - (void)dashboardLoader:(id<JMDashboardLoader> __nonnull)loader didReceiveEventWithHyperlink:(JMHyperlink *__nonnull)hyperlink

@@ -1533,36 +1533,13 @@ JasperMobile.VIS.Dashboard.Setup = {
     },
     success: function() {
         setTimeout(function(){
+            JasperMobile.VIS.Dashboard.Helpers._overrideMaximizeClickAction();
             var data = JasperMobile.VIS.Dashboard.state.dashboardObject.data();
-            if (data.components) {
-                JasperMobile.VIS.Dashboard.Helpers._configureComponents(data.components);
-            }
-            if (JasperMobile.VIS.Dashboard.state.isAmber) {
-                JasperMobile.VIS.Dashboard.Helpers._defineComponentsClickEventAmber();
-            } else {
-                JasperMobile.VIS.Dashboard.Helpers._defineComponentsClickEvent();
-            }
-
             JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.run", {
                 "components" : data.components ? data.components : {},
                 "params" : data.parameters
             });
-
-            // TODO: Redo. This was used after failing refresh
-            // if (success != "null") {
-            //     success({
-            //         "components" : data.components ? data.components : {},
-            //         "params" : data.parameters
-            //     });
-            // }
-        }, 6000);
-
-        // hide input controls dashlet if it exists
-        var filterGroupNodes = document.querySelectorAll('[data-componentid="Filter_Group"]');
-        if (filterGroupNodes.length > 0) {
-            var filterGroup = filterGroupNodes[0];
-            filterGroup.style.display = "none";
-        }
+        }, 10000);
     },
     failed: function(error) {
         JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.run", {
@@ -1626,7 +1603,7 @@ JasperMobile.VIS.Dashboard.Setup = {
                 break;
             }
             case "AdHocExecution": {
-                if (typeof(defaultHandler) != "function") {
+                if (typeof(defaultHandler) !== "function") {
                     JasperMobile.VIS.Dashboard.Handlers.Hyperlinks.handleAdhocExecution(link);
                 } else {
                     JasperMobile.VIS.Dashboard.Handlers.Hyperlinks.adhocExectionWasClicked = true;
@@ -1641,7 +1618,7 @@ JasperMobile.VIS.Dashboard.Setup = {
     }
 };
 JasperMobile.VIS.Dashboard.Helpers = {
-    _findDashletMaximizeButtonWithDashletId: function(dashletId) {
+    _findMaximizeButtonWithDashletId: function(dashletId) {
         console.log("dashletId: " + dashletId);
         var allNodes = document.querySelector(".dashboardCanvas > div > div").childNodes;
         var maximizeButton = null;
@@ -1650,7 +1627,7 @@ JasperMobile.VIS.Dashboard.Helpers = {
             console.log("nodeElement: " + nodeElement);
             var componentId = nodeElement.attributes["data-componentid"].value;
             console.log("componentId: " + componentId);
-            if (componentId == dashletId) {
+            if (componentId === dashletId) {
                 console.log("found node: " + nodeElement);
                 maximizeButton = nodeElement.getElementsByClassName("maximizeDashletButton")[0];
                 break;
@@ -1658,195 +1635,94 @@ JasperMobile.VIS.Dashboard.Helpers = {
         }
         return maximizeButton;
     },
-    _configureComponents: function(components) {
-        components.forEach( function(component) {
-            if (component.type !== 'inputControl') {
-                JasperMobile.VIS.Dashboard.state.dashboardObject.updateComponent(component.id, {
-                    interactive: false,
-                    toolbar: false
-                });
+    _findMinimizeButton: function() {
+        var canvasOverlay = document.getElementsByClassName("canvasOverlay")[0];
+        if (canvasOverlay !== null && canvasOverlay.nodeName === "DIV") {
+            var minimizeButton = canvasOverlay.getElementsByClassName("minimizeDashlet")[0];
+            if (minimizeButton !== null && minimizeButton.nodeName === "BUTTON") {
+                return minimizeButton;
+            } else {
+                return undefined;
             }
-        });
+        } else {
+            return undefined;
+        }
     },
-    _defineComponentsClickEvent: function() {
-        var parentElement;
-        var dashboardId = JasperMobile.VIS.Dashboard.state.dashboardFunction.componentIdDomAttribute;
-        var dashlets = this._getDashlets(dashboardId); // DOM elements
-        var dashletsWithoutHyperlinks = dashlets["dashletsWithoutHyperlinks"];
-        for (var i = 0; i < dashletsWithoutHyperlinks.length; ++i) {
-            parentElement = dashletsWithoutHyperlinks[i].parentElement;
-            // set onClick listener for parent of dashlet
-
-            (function(self) {
-                parentElement.onclick = function(event) {
-                    JasperMobile.VIS.Dashboard.state.selectedDashlet = this;
-                    var targetClass = event.target.className;
-                    if (targetClass !== 'overlay') {
-                        return;
+    _allNodes: function() {
+        return document.querySelector(".dashboardCanvas > div > div").childNodes;
+    },
+    _componentForNode: function(node) {
+        var componentId = node.attributes["data-componentid"].value;
+        return JasperMobile.VIS.Dashboard.Helpers._getComponentById(componentId);
+    },
+    _overrideMaximizeClickAction: function() {
+        JasperMobile.Callback.log("_overrideMaximizeClickAction");
+        (function(self){
+            self._allNodes().forEach(function(node, index, arr) {
+                (function(node) {
+                    var component = self._componentForNode(node);
+                    var maximizeButton = self._findMaximizeButtonWithDashletId(component.id);
+                    if (maximizeButton !== undefined &&  maximizeButton.nodeName === "BUTTON" && !maximizeButton.disabled) {
+                        maximizeButton.componentId = component.id;
+                        self._extendClickAction(maximizeButton);
                     }
-
-                    // start showing buttons for changing chart type.
-                    var chartWrappers = document.querySelectorAll('.show_chartTypeSelector_wrapper');
-                    for (var i = 0; i < chartWrappers.length; ++i) {
-                        chartWrappers[i].style.display = 'block';
-                    }
-
-                    var component, id;
-                    id = this.getAttribute(dashboardId);
-                    component = self._getComponentById(id); // Model object
-
-                    // TODO: need this?
-                    //self._hideDashlets(dashboardId, dashlet);
-
-                    if (component && !component.maximized) {
-                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didStartMaximize", {
+                })(node);
+            });
+        })(this);
+    },
+    _extendClickAction: function(button) {
+        button.addEventListener("click", function(event) {
+            var maximizedComponent = JasperMobile.VIS.Dashboard.state.selectedComponent;
+            if (maximizedComponent === undefined) {
+                // Maximize action
+                var component = JasperMobile.VIS.Dashboard.Helpers._getComponentById(button.componentId);
+                JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didStartMaximize", {
+                    "component" : component
+                });
+                JasperMobile.VIS.Dashboard.PrivateAPI.maximizeDashletWithDashletId(
+                    component.id,
+                    function() {
+                        JasperMobile.VIS.Dashboard.state.selectedComponent = component;
+                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
                             "component" : component
                         });
-                        JasperMobile.VIS.Dashboard.state.selectedDashlet.className += "originalDashletInScaledCanvas";
-                        JasperMobile.VIS.Dashboard.state.dashboardObject.updateComponent(id, {
-                            maximized: true,
-                            interactive: true
-                        }, function() {
-                            JasperMobile.VIS.Dashboard.state.selectedComponent = component;
-                            setTimeout(function(){
-                                JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
-                                    "component" : component
-                                });
-                            }, 3000);
-                        }, function(error) {
-                            JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
-                                "error" : {
-                                    "code" : error.errorCode,
-                                    "message" : error.message
-                                },
-                                "component" : component
-                            });
+                    },
+                    function (error) {
+                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
+                            "error" : {
+                                "code" : error.errorCode,
+                                "message" : error.message
+                            },
+                            "component" : component
                         });
                     }
-                };
-            })(this);
-        }
-        var dashletsWithHyperlinks = dashlets["dashletsWithHyperlinks"];
-        for (var j = 0; j < dashletsWithHyperlinks.length; ++j) {
-            parentElement = dashletsWithHyperlinks[j].parentElement;
-            // set onClick listener for parent of dashlet
-            (function(self) {
-                parentElement.onclick = function(event) {
-                    JasperMobile.Callback.listener("JasperMobile.VIS.Event.Link.Dashlet", {});
-                };
-            })(this);
-        }
-    },
-    _defineComponentsClickEventAmber: function() {
-        var allNodes = document.querySelector(".dashboardCanvas > div > div").childNodes;
-        for (var i = 0; i < allNodes.length; i++) {
-            var nodeElement = allNodes[i];
-            var componentId = nodeElement.attributes["data-componentid"].value;
-            if (componentId == "Filter_Group") {
-                // JasperMobile.Callback.log("Filter_Group");
-            } else if (componentId == "Text") {
-                // JasperMobile.Callback.log("Text");
+                );
             } else {
-                // JasperMobile.Callback.log("componentId: " + componentId);
-                (function(nodeElement, componentId, self) {
-                    self._configureDashletForAmber(nodeElement, componentId);
-                })(nodeElement, componentId, this);
-            }
-        }
-    },
-    _configureDashletForAmber: function(dashletWrapper, componentId) {
-        var dashletContent = dashletWrapper.getElementsByClassName("dashletContent")[0];
-        if (dashletContent.nodeName == "DIV") {
-            // create overlay
-            var overlay = document.createElement("div");
-            overlay.style.opacity = 1;
-            overlay.style.zIndex = "1000";
-            overlay.style.position = "absolute";
-            overlay.style.height = "100%";
-            overlay.style.width = "100%";
-            overlay.className = "dashletOverlay";
-            dashletContent.insertBefore(overlay, dashletContent.childNodes[0]);
-
-            // hide dashlet toolbar
-            // var dashletToolbarNodes = dashletContent.getElementsByClassName("dashletToolbar");
-            // if (dashletToolbarNodes.length > 0) {
-            //     var dashletToolbar = dashletToolbarNodes[0];
-            //     dashletToolbar.style.display = "none";
-            // }
-
-            // add click listener
-            overlay.addEventListener("click", function(event) {
-                var maximizeButton = dashletWrapper.getElementsByClassName("maximizeDashletButton")[0];
-                if (maximizeButton != undefined &&  maximizeButton.nodeName == "BUTTON" && !maximizeButton.disabled) {
-                    JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didStartMaximize", {});
-                    maximizeButton.click();
-                    JasperMobile.VIS.Dashboard.Helpers._disableClicks();
-                    setTimeout(function(){
-                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
-                            "componentId" : componentId
+                // Minimize action
+                JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didStartMinimize", {
+                    "component" : maximizedComponent
+                });
+                JasperMobile.VIS.Dashboard.PrivateAPI.minimizeDashletWithDashletId(
+                    maximizedComponent.id,
+                    function () {
+                        JasperMobile.VIS.Dashboard.state.selectedDashlet = undefined;
+                        JasperMobile.VIS.Dashboard.state.selectedComponent = undefined;
+                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMinimize", {
+                            "component" : maximizedComponent
                         });
-                    }, 3000);
-                } else {
-                    JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
-                        "error" : {
-                            "code" : "maximize.button.error",
-                            "message" : "Component is not ready"
-                        }
-                    });
-                }
-            });
-        } else {
-            JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
-                "error" : {
-                    "code" : "maximize.button.error",
-                    "message" : "Component is not ready"
-                }
-            });
-        }
-    },
-    _disableClicks: function() {
-        var overlays = document.getElementsByClassName("dashletOverlay");
-        if (overlays != undefined) {
-            for (var i = 0; i < overlays.length; i++) {
-                var overlay = overlays[i];
-                overlay.style.pointerEvents = "none";
+                    },
+                    function (error) {
+                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMinimize", {
+                            "error" : {
+                                "code" : error.errorCode,
+                                "message" : error.message
+                            },
+                            "component" : maximizedComponent
+                        });
+                    }
+                );
             }
-        }
-    },
-    _enableClicks: function() {
-        var overlays = document.getElementsByClassName("dashletOverlay");
-        if (overlays != undefined) {
-            for (var i = 0; i < overlays.length; i++) {
-                var overlay = overlays[i];
-                overlay.style.pointerEvents = "auto";
-            }
-        }
-    },
-    _getDashlets: function(dashboardId) {
-        var allDashlets, dashletsWithoutHyperlinks, dashletsWithHyperlinks;
-        var query = ".dashlet";
-        if (dashboardId != null) {
-            query = "[" + dashboardId + "] > .dashlet";
-        }
-        allDashlets = document.querySelectorAll(query);
-        dashletsWithoutHyperlinks = [];
-        dashletsWithHyperlinks = [];
-        for (var i = 0; i < allDashlets.length; i++) {
-            var dashlet = allDashlets[i];
-            if (dashlet.nodeName != "DIV") {
-                continue;
-            }
-            var hyperlinks = dashlet.querySelectorAll(".dashletContent > .hyperlink");
-            if (hyperlinks.length == 0) {
-                dashletsWithoutHyperlinks.push(dashlet);
-            } else {
-                dashletsWithHyperlinks.push(dashlet)
-            }
-        }
-        return {
-            "dashletsWithoutHyperlinks" : dashletsWithoutHyperlinks,
-            "dashletsWithHyperlinks" : dashletsWithHyperlinks
-        };
+        });
     },
     _getComponentById: function(id) {
         var components = JasperMobile.VIS.Dashboard.state.dashboardObject.data().components;
@@ -1859,73 +1735,46 @@ JasperMobile.VIS.Dashboard.Helpers = {
 };
 JasperMobile.VIS.Dashboard.PrivateAPI = {
     minimizeDashlet: function(parameters) {
+        JasperMobile.Callback.log("minimizeDashlet");
+        JasperMobile.Callback.logObject("parameters", parameters);
         var dashletId = parameters["identifier"];
-        if (dashletId == "null") {
-            // TODO: need this?
-            //this._showDashlets();
-
-            // stop showing buttons for changing chart type.
-            var chartWrappers = document.querySelectorAll('.show_chartTypeSelector_wrapper');
-            for (var i = 0; i < chartWrappers.length; ++i) {
-                chartWrappers[i].style.display = 'none';
+        JasperMobile.VIS.Dashboard.PrivateAPI.minimizeDashletWithDashletId(
+            dashletId,
+            function () {
+                JasperMobile.VIS.Dashboard.state.selectedDashlet = undefined;
+                JasperMobile.VIS.Dashboard.state.selectedComponent = undefined;
+                JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.minimizeDashlet", {
+                    "component" : dashletId
+                });
+            },
+            function (error) {
+                JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.minimizeDashlet", {
+                    "error" : {
+                        "code" : error.errorCode,
+                        "message" : error.message
+                    }
+                });
             }
-
-            JasperMobile.VIS.Dashboard.state.selectedDashlet.classList.remove('originalDashletInScaledCanvas');
-
-            JasperMobile.VIS.Dashboard.state.dashboardObject.updateComponent(JasperMobile.VIS.Dashboard.state.selectedComponent.id, {
-                maximized: false,
-                interactive: false
-            }, function() {
-                JasperMobile.VIS.Dashboard.state.selectedDashlet = {};
-                JasperMobile.VIS.Dashboard.state.selectedComponent = {};
-                // TODO: need add callbacks?
-            }, function(error) {
-                JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.minimizeDashlet", {
-                    "error" : {
-                        "code" : error.errorCode,
-                        "message" : error.message
-                    }
-                });
-            });
-        } else {
-            JasperMobile.VIS.Dashboard.state.dashboardObject.updateComponent(dashletId, {
-                maximized: false,
-                interactive: false
-            }).done(function() {
-                setTimeout(function(){
-                    JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.minimizeDashlet", {
-                        "component" : dashletId
-                    });
-                }, 3000);
-            }).fail(function(error) {
-                JasperMobile.Callback.log("failed refresh with error: " + error);
-                JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.minimizeDashlet", {
-                    "error" : {
-                        "code" : error.errorCode,
-                        "message" : error.message
-                    }
-                });
-            });
+        );
+    },
+    minimizeDashletWithDashletId: function(dashletId, done, fail) {
+        if (dashletId === "null") {
+            // TODO: verify 'selectedComponent
+            dashletId = JasperMobile.VIS.Dashboard.state.selectedComponent.id;
         }
+
+        JasperMobile.VIS.Dashboard.state.dashboardObject
+            .updateComponent(dashletId, {
+                maximized: false,
+                interactive: true
+            })
+            .done(done)
+            .fail(fail);
     },
     minimizeDashletForAmber: function(parameters) {
-        var canvasOverlay = document.getElementsByClassName("canvasOverlay")[0];
-        if (canvasOverlay != null && canvasOverlay.nodeName == "DIV") {
-            var minimizeButton = canvasOverlay.getElementsByClassName("minimizeDashlet")[0];
-            if (minimizeButton != null && minimizeButton.nodeName == "BUTTON") {
-                minimizeButton.click();
-                JasperMobile.VIS.Dashboard.Helpers._enableClicks();
-                setTimeout(function(){
-                    JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.minimizeDashlet", {});
-                }, 3000);
-            } else {
-                JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.minimizeDashlet", {
-                    "error" : {
-                        "code" : "maximize.button.error",
-                        "message" : "Component is not ready"
-                    }
-                });
-            }
+        var minimizeButton = JasperMobile.VIS.Dashboard.Helpers._findMinimizeButton();
+        if (minimizeButton !== undefined) {
+            minimizeButton.click();
         } else {
             JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.minimizeDashlet", {
                 "error" : {
@@ -1937,31 +1786,43 @@ JasperMobile.VIS.Dashboard.PrivateAPI = {
     },
     maximizeDashlet: function (parameters) {
         var dashletId = parameters["identifier"];
-        if (dashletId) {
-            JasperMobile.VIS.Dashboard.state.dashboardObject.updateComponent(dashletId, {
-                maximized: true,
-                interactive: true
-            }).done(function() {
+        JasperMobile.VIS.Dashboard.PrivateAPI.maximizeDashletWithDashletId(
+            dashletId,
+            function() {
                 JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.maximizeDashlet", {
                     "component" : dashletId
                 });
-            }).fail(function(error) {
-                JasperMobile.Callback.log("failed refresh with error: " + error);
+            },
+            function (error) {
                 JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.maximizeDashlet", {
                     "error" : {
                         "code" : error.errorCode,
                         "message" : error.message
                     }
                 });
-            });
+            }
+        );
+    },
+    maximizeDashletWithDashletId: function(dashletId, done, fail) {
+        if (dashletId !== "null") {
+            JasperMobile.VIS.Dashboard.state.dashboardObject
+                .updateComponent(dashletId, {
+                    maximized: true,
+                    interactive: true
+                })
+                .done(done)
+                .fail(fail);
         } else {
-            JasperMobile.Callback.log("Trying maximize dashelt without 'id'");
+            fail({"error" : {
+                "code" : "maximize.button.error",
+                "message" : "Trying maximize dashelt without 'id'"
+            }});
         }
     },
     maximizeDashletForAmber: function (parameters) {
         var dashletId = parameters["identifier"];
-        var maximizeButton = JasperMobile.VIS.Dashboard.Helpers._findDashletMaximizeButtonWithDashletId(dashletId);
-        if (maximizeButton != null) {
+        var maximizeButton = JasperMobile.VIS.Dashboard.Helpers._findMaximizeButtonWithDashletId(dashletId);
+        if (maximizeButton !== null) {
             if (maximizeButton.disabled) {
                 JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
                     "error" : {
