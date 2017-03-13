@@ -1533,13 +1533,13 @@ JasperMobile.VIS.Dashboard.Setup = {
     },
     success: function() {
         setTimeout(function(){
-            JasperMobile.VIS.Dashboard.Helpers._overrideMaximizeClickAction();
+            JasperMobile.VIS.Dashboard.Helpers._setupButtonsAction();
             var data = JasperMobile.VIS.Dashboard.state.dashboardObject.data();
             JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.run", {
                 "components" : data.components ? data.components : {},
                 "params" : data.parameters
             });
-        }, 10000);
+        }, 3000);
     },
     failed: function(error) {
         JasperMobile.Callback.callback("JasperMobile.VIS.Dashboard.API.run", {
@@ -1655,14 +1655,14 @@ JasperMobile.VIS.Dashboard.Helpers = {
         var componentId = node.attributes["data-componentid"].value;
         return JasperMobile.VIS.Dashboard.Helpers._getComponentById(componentId);
     },
-    _overrideMaximizeClickAction: function() {
+    _setupButtonsAction: function() {
         JasperMobile.Callback.log("_overrideMaximizeClickAction");
         (function(self){
             self._allNodes().forEach(function(node, index, arr) {
                 (function(node) {
                     var component = self._componentForNode(node);
                     var maximizeButton = self._findMaximizeButtonWithDashletId(component.id);
-                    if (maximizeButton !== undefined &&  maximizeButton.nodeName === "BUTTON" && !maximizeButton.disabled) {
+                    if (maximizeButton !== undefined &&  maximizeButton.nodeName === "BUTTON") {
                         maximizeButton.componentId = component.id;
                         self._extendClickAction(maximizeButton);
                     }
@@ -1679,48 +1679,24 @@ JasperMobile.VIS.Dashboard.Helpers = {
                 JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didStartMaximize", {
                     "component" : component
                 });
-                JasperMobile.VIS.Dashboard.PrivateAPI.maximizeDashletWithDashletId(
-                    component.id,
-                    function() {
-                        JasperMobile.VIS.Dashboard.state.selectedComponent = component;
-                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
-                            "component" : component
-                        });
-                    },
-                    function (error) {
-                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
-                            "error" : {
-                                "code" : error.errorCode,
-                                "message" : error.message
-                            },
-                            "component" : component
-                        });
-                    }
-                );
+                setTimeout(function(){
+                    JasperMobile.VIS.Dashboard.state.selectedComponent = component;
+                    JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMaximize", {
+                        "component" : component
+                    });
+                }, 500);
             } else {
                 // Minimize action
                 JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didStartMinimize", {
                     "component" : maximizedComponent
                 });
-                JasperMobile.VIS.Dashboard.PrivateAPI.minimizeDashletWithDashletId(
-                    maximizedComponent.id,
-                    function () {
-                        JasperMobile.VIS.Dashboard.state.selectedDashlet = undefined;
-                        JasperMobile.VIS.Dashboard.state.selectedComponent = undefined;
-                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMinimize", {
-                            "component" : maximizedComponent
-                        });
-                    },
-                    function (error) {
-                        JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMinimize", {
-                            "error" : {
-                                "code" : error.errorCode,
-                                "message" : error.message
-                            },
-                            "component" : maximizedComponent
-                        });
-                    }
-                );
+                setTimeout(function(){
+                    JasperMobile.VIS.Dashboard.state.selectedDashlet = undefined;
+                    JasperMobile.VIS.Dashboard.state.selectedComponent = undefined;
+                    JasperMobile.Callback.listener("JasperMobile.VIS.Dashboard.API.events.dashlet.didEndMinimize", {
+                        "component" : maximizedComponent
+                    });
+                }, 500);
             }
         });
     },
