@@ -2,7 +2,7 @@
 //  JMBaseUITestCase+Report.m
 //  TIBCO JasperMobile
 //
-//  Created by Aleksandr Dakhno on 9/12/16.
+//  Created by Oleksandr Dahno on 9/12/16.
 //  Copyright © 2016 TIBCO JasperMobile. All rights reserved.
 //
 

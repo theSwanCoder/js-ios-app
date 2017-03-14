@@ -1,7 +1,12 @@
-//
-// Created by Aleksandr Dakhno on 12/27/16.
-// Copyright (c) 2016 TIBCO JasperMobile. All rights reserved.
-//
+/*
+ * Copyright ©  2016 - 2017. TIBCO Software Inc. All Rights Reserved. Confidential & Proprietary.
+ */
+
+
+/**
+ @author Oleksandr Dahno odahno@tibco.com
+ @since 2.6
+ */
 
 #import "JMResourceLoaderBaseTests.h"
 
